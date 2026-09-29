@@ -237,6 +237,7 @@ export function canAct(c: Creature, table: ConditionTable = defaultTable()): boo
 /** Walking speed after conditions, exhaustion and speed effects (Slow mastery, Haste ×2, slow spell ×½); never below 0. */
 export function effectiveSpeed(c: Creature, table: ConditionTable = defaultTable(), base = c.speed.walk): number {
   if (activeModifiers(c, table).some((m) => m.mods.speedZero)) return 0;
+  if (c.effects.some((e) => e.data.speedZero === true)) return 0;
   const mult = c.effects.reduce((m, e) => m * (typeof e.data.speedMultiplier === 'number' ? e.data.speedMultiplier : 1), 1);
   return Math.max(0, Math.floor((base - 5 * c.exhaustion - effectSpeedPenalty(c)) * mult));
 }

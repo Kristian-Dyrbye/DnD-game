@@ -13,6 +13,7 @@ import { canAct, saveModes } from './conditions';
 import { savingThrow, type D20TestResult } from './checks';
 import { createEffectContext, executeEffects, type EffectContext, type HookFn } from './effects';
 import { SPELL_HOOKS, revertExpiredEffects } from './spellHooks';
+import { SPELL_HOOKS_2 } from './spellHooks2';
 
 // ---------------------------------------------------------------- slot tables
 
@@ -208,6 +209,10 @@ export interface CastOptions {
   potentCantrip?: boolean;
   /** Creatures shielded by Sculpt Spells. */
   sculptTargetIds?: string[];
+  /** Player choice passed to hooks (damage type, command word...). */
+  choice?: string;
+  /** Darts/rays per target (Magic Missile, Scorching Ray). */
+  allocations?: Record<string, number>;
 }
 
 export interface CastResult {
@@ -234,6 +239,8 @@ export function castSpell(o: CastOptions): CastResult {
     spellMod: abilityModifier(o.caster.abilities[o.ability]),
     upcastLevels: o.spell.level > 0 ? level - o.spell.level : 0,
     slotLevel: level,
+    ...(o.choice && { choice: o.choice }),
+    ...(o.allocations && { allocations: o.allocations }),
     conditionSourceId: sourceId,
     ...(o.healBonus && { healBonus: o.healBonus }),
     ...(o.maxHealDice && { maxHealDice: true }),
@@ -244,7 +251,7 @@ export function castSpell(o: CastOptions): CastResult {
     ...(o.potentCantrip && o.spell.level === 0 && { potentCantrip: true }),
     ...(o.sculptTargetIds?.length && { sculptIds: new Set(o.sculptTargetIds) }),
     ...(o.distances && { distances: o.distances }),
-    hooks: { ...SPELL_HOOKS, ...(o.hooks ?? {}) },
+    hooks: { ...SPELL_HOOKS, ...SPELL_HOOKS_2, ...(o.hooks ?? {}) },
     onDamaged: (c, id, amount) => concentrationCheck(c, id, amount, o.rng),
   });
 

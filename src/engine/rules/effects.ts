@@ -42,6 +42,16 @@ export interface EffectContext {
   upcastLevels?: number;
   /** Level the spell was cast at (0 = cantrip). Hooks use it for slot-based durations. */
   slotLevel?: number;
+  /** All targets of the current cast (hooks that split darts/rays use it). */
+  targetIds?: string[];
+  /** Player choice for the cast (Chromatic Orb damage type, Command word, condition to end...). */
+  choice?: string;
+  /** Per-target allocation of darts/rays chosen by the player. */
+  allocations?: Record<string, number>;
+  /** Scratch space shared by hooks during one cast (shared rolls). */
+  scratch?: Map<string, unknown>;
+  /** Last damage dealt to each creature in this cast (Vampiric Touch). */
+  lastDamage?: Map<string, number>;
   /** Flat bonus added to each healing roll (Disciple of Life: 2 + slot level). */
   healBonus?: number;
   /** Healing dice count as their maximum (Supreme Healing). */
@@ -73,6 +83,9 @@ export function createEffectContext(init: Omit<EffectContext, 'creatures' | 'log
 
 /** Runs effects against targets. Returns the context (updated creatures + log). */
 export function executeEffects(effects: Effect[], targetIds: string[], ctx: EffectContext): EffectContext {
+  ctx.targetIds ??= targetIds;
+  ctx.scratch ??= new Map();
+  ctx.lastDamage ??= new Map();
   for (const effect of effects) runEffect(effect, targetIds, ctx, {});
   return ctx;
 }
@@ -205,13 +218,15 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
   }
 }
 
-function dealDamage(ctx: EffectContext, id: string, rolled: DamageRollResult, half: boolean): void {
+/** Applies an already-rolled damage result to a creature (defenses, 0 HP, concentration). Exported for hooks. */
+export function dealDamage(ctx: EffectContext, id: string, rolled: DamageRollResult, half: boolean): void {
   const target = ctx.creatures.get(id);
   if (!target || target.dead) return;
   const instances = rolled.parts.map((p) => ({ type: p.type, amount: half ? Math.floor(p.total / 2) : p.total }));
   const { creature, report } = applyDamage(target, instances, { resistAll: resistsAllDamage(target) });
   const outcome = resolveDamageAtZero(target, creature, report, { crit: rolled.crit });
   ctx.creatures.set(id, outcome.creature);
+  ctx.lastDamage?.set(id, report.totalAfterDefenses);
   const notes = report.adjusted.filter((a) => a.note).map((a) => `${a.type} ${a.note}`);
   ctx.log.push({
     targetId: id,

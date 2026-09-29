@@ -4,9 +4,9 @@
 
 ## Status
 - **State:** IN PROGRESS
-- **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A042a
-- **Notes for next session:** Start with A042b (spell hooks batch 2), then Phase 3 (A043). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Current phase:** 3 (Character Creation)
+- **Last completed assignment:** A042b
+- **Notes for next session:** Start with A043 (Phase 3: character creation UI). Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -68,7 +68,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ### Phase 3 — Character Creation
 - [done] A042a — Active effects + spell hooks batch 1 (buffs)
-- [todo] A042b — Spell hooks batch 2 (projectiles & utility) | Spec: §4 | Done: magic_missile, scorching_ray, chromatic_orb, chain_lightning, meteor_swarm, misty_step, dispel_magic, counterspell, revivify, power_word_kill/heal, lesser_restoration, command, sleep, hypnotic_pattern, bestow_curse, blindness_deafness, disintegrate, ice_knife, acid_arrow, vampiric_touch, divine_smite, prayer_of_healing; tests | Dep: A042a
+- [done] A042b — Spell hooks batch 2 (projectiles & utility)
 - [in-progress (helper)] A034c — Fix remaining partial auto spell effects | Spec: §4 | Done: overrides for banishment, conjure_*, contagion, divine_word, geas, dream, heat_metal etc. (audit all auto effects vs text); tests | Dep: A034a
 - [todo] A043 — Creator state machine + class step UI | Spec: §5 | Done: engine-side wizard state + validation; class step with summaries + beginner tags; tests | Dep: A035, A002
 - [todo] A044 — Background + species steps | Spec: §5 | Done: UI shows ASI options + origin feat; validation tests | Dep: A043
@@ -181,6 +181,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 
+- A042b — Spell hooks batch 2 (SPELL_HOOKS_2): magic_missile & scorching_ray (per-dart/ray, even split or ctx.allocations), chromatic_orb (ctx.choice type), disintegrate, power_word_kill/heal, lesser_restoration, revivify, command (word, grovel → prone), sleep (second save via endOfTurnSpellEffects), hypnotic_pattern (speed 0), bestow_curse (curseDamageRider), blindness_deafness, dispel_magic (auto ≤ 3+upcast, else check), counterspell (effect), vampiric_touch (ctx.lastDamage), divine_smite (fiend/undead bonus), ice_knife (shared burst roll), acid_arrow (miss half, delayed), misty_step (log); executor gains targetIds/choice/allocations/scratch/lastDamage + exported dealDamage — `src/engine/rules/spellHooks2.ts`
+
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
 - Owner decisions (fixed, from the planning session): Windows, 8 GB RAM, browser app, Ollama with a 3–4B model, full SRD 5.2 with feats and multiclassing, all 3 ability score methods, a starter arc plus one full linked arc, woven-in procedural side quests, a mixed-tone world, auto dice with visible math, Heroic/Hardcore modes, a 3D grid combat map, autosave plus manual slots in all modes, buttons plus free text, flexible AI/player companions, music + SFX + Piper TTS, a world map plus fog-of-war dungeons, a notes-only journal, factions, day/night, weather, dynamic shops, low-poly CC0 3D models for everyone with wounds, scars, and armor wear. Crafting and home base are future expansions only.
@@ -247,6 +249,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A042: Monsters keep printed save/skill totals in creature.saveBonuses/skillBonuses (checks.ts uses them first). Encounter XP uses no group multiplier (2024). Monster attack effects need ctx.attackBonus = action.attack.bonus.
 - A039c: Combat must use wildShapeCombatant(c, db) as the druid's combat creature and route attacks through the beast's stat block (statBlockId). Nature Magician (Archdruid) not automated.
 - A042a: Spell buffs = ActiveEffects keyed by spell id (slow spell = 'slow_spell', guiding bolt target = 'guided'), sourceId `<caster>:<spell>`, data = hook params. Combat must: use effectiveAc(c, wearingArmor); add rollEffectBonuses to attacks/saves; spread effectSaveAdjustments; add attackedEffectModes + consumeAttackedEffects; add effectDamageRiders on hits; call startOfTurnEffects; call revertExpiredEffects for expired effects; breakInvisibility on attack/cast. Haste lethargy on end and Slow repeat saves not automated yet.
+- A042b: castSpell options choice/allocations feed hooks. Combat must call endOfTurnSpellEffects(c, rng) before end-of-turn expiry, and treat 'counterspelled' / 'commanded' / 'hypnotized' (ends on damage) effects. Chain Lightning/Meteor Swarm/Ice Knife burst rely on the caller passing all affected targets.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -289,7 +292,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/rules/monsters.ts` — monsterToCreature, actionAvailable, spendAction, rollRecharges, multiattackSequence, actionEffects, actionRange
 - `src/engine/adventure/encounters.ts` — xpBudget, encounterXp, rateEncounter, buildEncounter
 - `assets/audio-manifest.json` + `scripts/audio-fetch.mjs` — music moods, ambience, sfx; files land in assets/audio/ (gitignored)
-- `src/engine/rules/spellHooks.ts` — SPELL_HOOKS + buff/debuff queries (see A042a)
+- `src/engine/rules/spellHooks.ts` — SPELL_HOOKS + buff/debuff queries (see A042a); `spellHooks2.ts` — SPELL_HOOKS_2, endOfTurnSpellEffects, curseDamageRider
 - `src/engine/data/common.ts` — IdSchema, DiceSchema, CostSchema(CP), DamageSchema, AreaSchema, DurationSchema, EffectSchema/Effect, toId
 - `src/engine/data/schemas.ts` — schemas for every data/srd file + RulesTablesSchema; SRD_FILES registry; record types
 - `src/engine/data/srd.ts` — validateSrdFile, SrdDatabase (maps by id, item(), spellsForClass)
