@@ -19,6 +19,7 @@ import { allScenes } from './validate';
 import { SKILL_ABILITY } from '../rules/basics';
 import type { FlagRegistry } from '../world/flags';
 import { TIME_COSTS } from '../world/clock';
+import { discover, getMap } from '../world/travel';
 
 export interface AdventureProgress {
   adventureId: string;
@@ -268,6 +269,8 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
     state.extensions.reputation = rep;
   }
   state.time += o.minutes;
+  const map = getMap(state);
+  if (o.discover.length && map) discover(map, o.discover);
   if (o.encounter) result.encounter = o.encounter;
   if (o.ending) {
     getProgress(state)!.ending = o.ending;

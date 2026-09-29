@@ -103,7 +103,7 @@ describe('time in play', () => {
     const events: ServerEvent[] = [];
     session.on((e) => events.push(e));
     await session.handle({ type: 'new_game', hero: hero(), mode: 'heroic' });
-    expect(session.current.extensions[VERSIONS_KEY]).toEqual({ clock: 1, weather: 1 });
+    expect(session.current.extensions[VERSIONS_KEY]).toEqual({ clock: 1, weather: 1, map: 1 });
     const t0 = session.current.time;
     await session.handle({ type: 'choose', actionId: 'talk_mayor' });
     expect(session.current.time).toBe(t0 + TIME_COSTS.explore_action);

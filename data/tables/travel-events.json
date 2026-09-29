@@ -1,0 +1,29 @@
+{
+  "$comment": "Random travel events (spec §11.1), rolled per travel day. regions: lore region ids (empty = anywhere). weather/timeOfDay filters are optional. Monster ids are SRD 5.2.1. Checks use SRD skills; DCs from the SRD DC table.",
+  "chancePerDay": 0.35,
+  "events": [
+    { "id": "merchant_caravan", "regions": ["aurelmark"], "routes": ["road"], "weight": 3, "kind": "flavor", "text": "A merchant caravan rumbles past, its drivers trading road gossip about bandits to the south." },
+    { "id": "knight_patrol", "regions": ["aurelmark"], "routes": ["road"], "weight": 2, "kind": "flavor", "text": "A patrol of the Dawn Lance rides by, banners snapping, and salutes travelers who keep to the road." },
+    { "id": "road_bandits", "regions": ["aurelmark"], "routes": ["road", "trail"], "weight": 2, "kind": "encounter", "text": "Bandits step out from behind a toppled cart, demanding a toll.", "monsters": [{ "id": "bandit", "count": 3 }] },
+    { "id": "wolf_pack", "regions": ["aurelmark"], "routes": ["trail"], "weight": 2, "kind": "encounter", "text": "A pack of wolves shadows the trail, then closes in.", "monsters": [{ "id": "wolf", "count": 3 }], "timeOfDay": ["dusk", "night", "dawn"] },
+    { "id": "washed_out_bridge", "regions": ["aurelmark"], "weight": 2, "kind": "hazard", "weather": ["rain", "storm"], "text": "The bridge ahead has washed out in the rain.", "check": { "skill": "athletics", "dc": 12, "success": "You ford the swollen stream without losing footing.", "failure": "The current drags you under before you scramble out, soaked and battered.", "failureMinutes": 60, "failureExhaustion": 0, "failureDamage": "1d6" } },
+    { "id": "old_shrine", "regions": ["aurelmark"], "weight": 1, "kind": "discovery", "text": "A moss-grown roadside shrine to a forgotten saint; someone has left fresh flowers." },
+
+    { "id": "fen_lights", "regions": ["gloamfen"], "weight": 2, "kind": "hazard", "timeOfDay": ["dusk", "night"], "text": "Pale lights bob over the marsh, beckoning off the path.", "check": { "skill": "survival", "dc": 13, "success": "You keep to the true path and let the lights drift away.", "failure": "You follow the lights for an hour before realising you have walked in a circle.", "failureMinutes": 60 } },
+    { "id": "bog_zombies", "regions": ["gloamfen"], "weight": 2, "kind": "encounter", "text": "Bloated shapes rise from the bog, reaching for warm flesh.", "monsters": [{ "id": "zombie", "count": 2 }] },
+    { "id": "giant_frogs", "regions": ["gloamfen"], "routes": ["trail"], "weight": 2, "kind": "encounter", "text": "Giant frogs lurk in the reeds beside the causeway.", "monsters": [{ "id": "giant_frog", "count": 2 }] },
+    { "id": "sinking_mud", "regions": ["gloamfen"], "weight": 2, "kind": "hazard", "weather": ["rain", "fog", "storm"], "text": "The causeway gives way to sucking mud.", "check": { "skill": "athletics", "dc": 13, "success": "You haul yourself free and find firmer ground.", "failure": "You lose an hour and most of your strength wrestling free of the mire.", "failureMinutes": 60, "failureExhaustion": 1 } },
+    { "id": "plague_cart", "regions": ["gloamfen"], "weight": 1, "kind": "flavor", "text": "A cart of shrouded bodies creaks past, its driver masked and silent." },
+    { "id": "stirge_swarm", "regions": ["gloamfen"], "weight": 1, "kind": "encounter", "timeOfDay": ["dusk", "night"], "text": "A whine fills the air as stirges descend.", "monsters": [{ "id": "stirge", "count": 3 }] },
+
+    { "id": "dolphins", "regions": ["brinescatter_isles"], "routes": ["sea"], "weight": 3, "kind": "flavor", "text": "Dolphins race the bow, and the crew cheer them on." },
+    { "id": "pirate_sail", "regions": ["brinescatter_isles"], "routes": ["sea"], "weight": 2, "kind": "encounter", "text": "A red-sailed sloop runs alongside and grappling hooks fly.", "monsters": [{ "id": "pirate", "count": 2 }] },
+    { "id": "squall", "regions": ["brinescatter_isles"], "routes": ["sea"], "weight": 2, "kind": "hazard", "weather": ["storm", "rain"], "text": "A squall slams into the ship and a wave sweeps the deck.", "check": { "skill": "acrobatics", "dc": 12, "success": "You grab a line and ride out the wave.", "failure": "You are hurled against the rail before the crew haul you back.", "failureDamage": "2d6" } },
+    { "id": "reef_sharks", "regions": ["brinescatter_isles"], "routes": ["sea"], "weight": 1, "kind": "encounter", "text": "Fins circle the becalmed ship as sharks scent the galley scraps.", "monsters": [{ "id": "reef_shark", "count": 2 }], "weather": ["clear", "heat"] },
+    { "id": "shore_crabs", "regions": ["brinescatter_isles"], "routes": ["road", "trail"], "weight": 2, "kind": "encounter", "text": "Giant crabs clatter out of the surf toward the coast path.", "monsters": [{ "id": "giant_crab", "count": 3 }] },
+    { "id": "floating_crate", "regions": ["brinescatter_isles"], "weight": 1, "kind": "discovery", "text": "A sealed crate bobs past, stamped with the mark of a company that sank years ago." },
+
+    { "id": "lost_traveler", "regions": [], "weight": 2, "kind": "flavor", "text": "A lost traveler asks for directions and shares a pipe of tobacco in thanks." },
+    { "id": "rainbow_campsite", "regions": [], "weight": 1, "kind": "flavor", "weather": ["clear"], "text": "You make camp under a sky full of stars; the night passes peacefully." }
+  ]
+}

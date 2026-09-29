@@ -74,6 +74,8 @@ export const OutcomeSchema = z
     encounter: Id.optional(),
     /** Minutes that pass. */
     minutes: z.number().int().min(0).default(0),
+    /** Lore location ids revealed on the world map (a map, a rumour, a signpost). */
+    discover: z.array(z.string()).default([]),
     /** Ends the adventure with this ending id. */
     ending: Id.optional(),
   })
