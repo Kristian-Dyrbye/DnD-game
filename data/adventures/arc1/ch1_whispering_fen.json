@@ -5210,17 +5210,20 @@
     {
       "id": "fen_cured",
       "name": "The Fen Cured",
-      "text": "Wick's cure saved Hollowmere, and the Wardens stood down. The Briarkin will remember; so will Grell."
+      "text": "Wick's cure saved Hollowmere, and the Wardens stood down. The Briarkin will remember; so will Grell.",
+      "next": "ch2_salt_and_treason"
     },
     {
       "id": "fen_purged",
       "name": "The Fen Purged",
-      "text": "Hollowmere burned. The Sickness there is ended, and so is everything else."
+      "text": "Hollowmere burned. The Sickness there is ended, and so is everything else.",
+      "next": "ch2_salt_and_treason"
     },
     {
       "id": "fen_abandoned",
       "name": "The Fen Abandoned",
-      "text": "Hollowmere was left to the Choir, and the Choir took it."
+      "text": "Hollowmere was left to the Choir, and the Choir took it.",
+      "next": "ch2_salt_and_treason"
     }
   ],
   "improvisedDifficulty": "medium"

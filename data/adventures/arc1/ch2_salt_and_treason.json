@@ -7508,17 +7508,20 @@
     {
       "id": "isles_free",
       "name": "The Free Isles",
-      "text": "The Red Gulls and the Tidewrights stood with you, and the Isles remember it. The Crown and its creditors will remember it too."
+      "text": "The Red Gulls and the Tidewrights stood with you, and the Isles remember it. The Crown and its creditors will remember it too.",
+      "next": "ch3_the_gilded_lie"
     },
     {
       "id": "isles_company",
       "name": "The Company's Peace",
-      "text": "The Saltwind Company brought order to the Isles with your help. The pirates call it a noose; the Company calls it a charter."
+      "text": "The Saltwind Company brought order to the Isles with your help. The pirates call it a noose; the Company calls it a charter.",
+      "next": "ch3_the_gilded_lie"
     },
     {
       "id": "isles_own_course",
       "name": "Under Your Own Colors",
-      "text": "You owed no flag in the Isles and left every flag owing you something."
+      "text": "You owed no flag in the Isles and left every flag owing you something.",
+      "next": "ch3_the_gilded_lie"
     }
   ],
   "improvisedDifficulty": "medium"

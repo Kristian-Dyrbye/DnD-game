@@ -7940,22 +7940,26 @@
     {
       "id": "court_unmasked",
       "name": "The Mask Falls",
-      "text": "You unmasked the Cantor before the whole court. The Crown knows its enemy now, and will muster openly against her."
+      "text": "You unmasked the Cantor before the whole court. The Crown knows its enemy now, and will muster openly against her.",
+      "next": "ch4_wyrmfire"
     },
     {
       "id": "court_secret",
       "name": "What the Hero Knows",
-      "text": "You know who the Cantor is, but the court does not. Whatever comes next, you will have to gather allies quietly."
+      "text": "You know who the Cantor is, but the court does not. Whatever comes next, you will have to gather allies quietly.",
+      "next": "ch4_wyrmfire"
     },
     {
       "id": "court_hunted",
       "name": "Hunted in Highcrown",
-      "text": "The Cantor is free, and you are the one the Crown is hunting. Only her own flight can clear your name now."
+      "text": "The Cantor is free, and you are the one the Crown is hunting. Only her own flight can clear your name now.",
+      "next": "ch4_wyrmfire"
     },
     {
       "id": "court_vanished",
       "name": "The Almoner Vanishes",
-      "text": "The Almoner is gone, and the court believes the Choir took her. The truth is still waiting for someone to find it."
+      "text": "The Almoner is gone, and the court believes the Choir took her. The truth is still waiting for someone to find it.",
+      "next": "ch4_wyrmfire"
     }
   ],
   "improvisedDifficulty": "medium"
