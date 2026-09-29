@@ -64,6 +64,12 @@ export function cantripMultiplier(characterLevel: number): number {
   return characterLevel >= 17 ? 4 : characterLevel >= 11 ? 3 : characterLevel >= 5 ? 2 : 1;
 }
 
+/** Value from a {"1": x, "5": y, ...} table for a level (highest key ≤ level). */
+export function levelTableValue(table: Record<string, number>, level: number): number {
+  const keys = Object.keys(table).map(Number).filter((k) => k <= level).sort((a, b) => b - a);
+  return keys.length ? table[String(keys[0])]! : 0;
+}
+
 /** Multiplies the dice count of every damage entry in cantrip effects (Fire Bolt 1d10 → 2d10 at level 5). */
 export function scaleCantripEffects(effects: Effect[], multiplier: number): Effect[] {
   if (multiplier <= 1) return effects;
@@ -268,14 +274,27 @@ export function castSpell(o: CastOptions): CastResult {
   }
 
   const baseEffects = o.spell.effects ?? [];
-  const effects = o.spell.level === 0 ? scaleCantripEffects(baseEffects, cantripMultiplier(o.characterLevel)) : baseEffects;
+  // Cantrips whose hook says noDiceScaling (Eldritch Blast) scale by extra beams instead of bigger dice.
+  const beamHook = baseEffects.find((e) => e.kind === 'hook' && e.params?.beamsByLevel) as Extract<Effect, { kind: 'hook' }> | undefined;
+  const noDiceScaling = baseEffects.some((e) => e.kind === 'hook' && e.params?.noDiceScaling === true);
+  const effects = o.spell.level === 0 && !noDiceScaling ? scaleCantripEffects(baseEffects, cantripMultiplier(o.characterLevel)) : baseEffects;
   ctx.log.push({
     targetId: o.caster.id,
     kind: 'info',
     text: `${o.caster.name} casts ${o.spell.name}${o.spell.level > 0 ? ` (level ${level}${o.slot.kind === 'ritual' ? ', ritual' : ''})` : ''}`,
   });
   if (effects.length === 0) ctx.log.push({ kind: 'info', text: `(${o.spell.name} has no automated effects yet)` });
-  executeEffects(effects, o.targets.map((t) => t.id), ctx);
+  if (beamHook) {
+    // One attack per beam; beams go to targets by allocation or round-robin.
+    const beams = levelTableValue(beamHook.params!.beamsByLevel as Record<string, number>, o.characterLevel);
+    const core = effects.filter((e) => e.kind !== 'hook');
+    const ids = o.targets.map((t) => t.id);
+    const order = o.allocations ? ids.flatMap((id) => new Array<string>(o.allocations![id] ?? 0).fill(id)) : Array.from({ length: beams }, (_, i) => ids[i % ids.length]!);
+    ctx.targetIds = ids;
+    for (const id of order.slice(0, beams)) executeEffects(core, [id], ctx);
+  } else {
+    executeEffects(effects, o.targets.map((t) => t.id), ctx);
+  }
 
   if (o.spell.duration.concentration) {
     const after = ctx.creatures.get(o.caster.id) as Character;

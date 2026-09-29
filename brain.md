@@ -6,7 +6,7 @@
 - **State:** IN PROGRESS
 - **Current phase:** 3 (Character Creation)
 - **Last completed assignment:** A043
-- **Notes for next session:** Start with A044 (background + species steps). Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Notes for next session:** Start with A044 (background + species steps). A096 (Piper voices) is with a helper. Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -69,7 +69,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ### Phase 3 — Character Creation
 - [done] A042a — Active effects + spell hooks batch 1 (buffs)
 - [done] A042b — Spell hooks batch 2 (projectiles & utility)
-- [in-progress (helper)] A034c — Fix remaining partial auto spell effects | Spec: §4 | Done: overrides for banishment, conjure_*, contagion, divine_word, geas, dream, heat_metal etc. (audit all auto effects vs text); tests | Dep: A034a
+- [done] A034c — Fix remaining partial auto spell effects
+- [todo] A042c — Spell hooks batch 3 (from A034c) | Spec: §4 | Done: implement cantrip riders (ray_of_frost, chill_touch, shocking_grasp, vicious_mockery, starry_wisp, sacred_flame cover, produce_flame/shillelagh/true_strike/sorcerous_burst own scaling), hold/dominate repeat saves (hook sibling with appliesIfCondition), charm/control riders (charm_person/monster, fear, suggestion, banishment, compulsion), common buffs (barkskin, enhance_ability, enlarge_reduce, fly, longstrider, mirror_image, protection_from_energy, protection_from_evil_and_good, resistance, guidance, sanctuary, stoneskin, magic_weapon, warding_bond, death_ward, beacon_of_hope, spider_climb, see_invisibility, darkvision); tests | Dep: A042b
 - [done] A043 — Creator state machine + class step UI
 - [todo] A044 — Background + species steps | Spec: §5 | Done: UI shows ASI options + origin feat; validation tests | Dep: A043
 - [todo] A045 — Ability score methods | Spec: §5 | Done: standard array, point buy (27, cost table), 4d6-drop-lowest animated with player assignment; engine tests | Dep: A043, A011
@@ -138,7 +139,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ### Phase 10 — Audio
 - [done] A094 — Audio assets
 - [todo] A095 — Music + SFX manager | Spec: §13 | Done: mood crossfade, SFX hooks (dice, hits, spells, UI, doors, steps), volumes | Dep: A094, A052
-- [todo] A096 — Piper install + voices | Spec: §13, §1 | Done: Setup downloads Piper for Windows + narrator/male/female voices; license in CREDITS | Dep: A006, A009
+- [in-progress (helper)] A096 — Piper install + voices | Spec: §13, §1 | Done: Setup downloads Piper for Windows + narrator/male/female voices; license in CREDITS | Dep: A006, A009
 - [todo] A097 — TTS narration pipeline | Spec: §13 | Done: background generation queue, skip, volume, toggle, never blocks; tests with MockTts | Dep: A096, A057
 
 ### Phase 11 — Content
@@ -184,6 +185,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A042b — Spell hooks batch 2 (SPELL_HOOKS_2): magic_missile & scorching_ray (per-dart/ray, even split or ctx.allocations), chromatic_orb (ctx.choice type), disintegrate, power_word_kill/heal, lesser_restoration, revivify, command (word, grovel → prone), sleep (second save via endOfTurnSpellEffects), hypnotic_pattern (speed 0), bestow_curse (curseDamageRider), blindness_deafness, dispel_magic (auto ≤ 3+upcast, else check), counterspell (effect), vampiric_touch (ctx.lastDamage), divine_smite (fiend/undead bonus), ice_knife (shared burst roll), acid_arrow (miss half, delayed), misty_step (log); executor gains targetIds/choice/allocations/scratch/lastDamage + exported dealDamage — `src/engine/rules/spellHooks2.ts`
 
 - A043 — Creator state machine (CreatorState, stepsFor skips Spells for non-casters, chooseClass/Background/Species clear dependent picks, stepProblems per step, next/prev/goToStep gating, toBuildInput) + client: screen signal (title/creator/game), title screen, creator shell (step rail, main, summary w/ 3D preview slot, Back/Next with first problem shown), ClassStep cards (role, blurb, hit die, primary, armor, magic, complexity, beginner tag) — `src/engine/character/creator.ts`, `src/client/ui/{App,state}.tsx`, `src/client/ui/creator/*`, `src/client/data.ts`
+
+- A034c (helper) — Spell audit: 171 overrides (63 wrong/partial auto effects fixed — summons, zones, delayed/conditional damage now hooks; 54 more spells covered); only 16 spells still use importer effects (all verified); guard tests in `src/engine/rules/spellAudit.test.ts`. Eldritch Blast beams by level (castSpell beamsByLevel + levelTableValue).
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -253,6 +256,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A042a: Spell buffs = ActiveEffects keyed by spell id (slow spell = 'slow_spell', guiding bolt target = 'guided'), sourceId `<caster>:<spell>`, data = hook params. Combat must: use effectiveAc(c, wearingArmor); add rollEffectBonuses to attacks/saves; spread effectSaveAdjustments; add attackedEffectModes + consumeAttackedEffects; add effectDamageRiders on hits; call startOfTurnEffects; call revertExpiredEffects for expired effects; breakInvisibility on attack/cast. Haste lethargy on end and Slow repeat saves not automated yet.
 - A042b: castSpell options choice/allocations feed hooks. Combat must call endOfTurnSpellEffects(c, rng) before end-of-turn expiry, and treat 'counterspelled' / 'commanded' / 'hypnotized' (ends on damage) effects. Chain Lightning/Meteor Swarm/Ice Knife burst rely on the caller passing all affected targets.
 - A043: Client imports loadSrd() directly (SRD bundled into the JS, 1.5 MB / 337 KB gz); code-split in A112. UI state = Preact signals in src/client/ui/state.ts. Class blurbs are original game text in classInfo.ts. Creator step components register in Creator.tsx STEP_COMPONENTS (placeholders until built).
+- A034c: hold_person/hold_monster hooks are top-level siblings with params.appliesIfCondition (hook must check the condition). Cantrips with hooks marked noDiceScaling are not dice-multiplied; beamsByLevel hooks fire one attack per beam (allocations or round-robin). beacon_of_hope has a stray `save: 'wis'` hint (harmless).
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map

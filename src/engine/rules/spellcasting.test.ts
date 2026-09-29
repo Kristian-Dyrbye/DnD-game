@@ -136,6 +136,18 @@ describe('castSpell', () => {
   });
 });
 
+describe('Eldritch Blast beams', () => {
+  it('fires more beams (not bigger dice) at higher levels, split across targets', () => {
+    const lock = wizard();
+    const r = castSpell({ rng: fixed(15, 6, 15, 6), caster: lock, spell: spell('eldritch_blast'), slot: { kind: 'cantrip' }, ability: 'int', targets: [orc('a'), orc('b')], characterLevel: 5 });
+    expect(r.ctx.log.filter((l) => l.kind === 'attack')).toHaveLength(2);
+    expect(r.ctx.creatures.get('a')!.hp).toBe(54);
+    expect(r.ctx.creatures.get('b')!.hp).toBe(54);
+    const focused = castSpell({ rng: fixed(15, 6, 15, 6, 15, 6), caster: lock, spell: spell('eldritch_blast'), slot: { kind: 'cantrip' }, ability: 'int', targets: [orc('a'), orc('b')], characterLevel: 11, allocations: { a: 3 } });
+    expect(focused.ctx.creatures.get('a')!.hp).toBe(60 - 18);
+  });
+});
+
 describe('concentration', () => {
   const hold = (caster: Character, target: Creature, save = 2) =>
     castSpell({ rng: fixed(save), caster, spell: spell('hold_person'), slot: { kind: 'slot', level: 2 }, ability: 'int', targets: [target], characterLevel: 5 });
