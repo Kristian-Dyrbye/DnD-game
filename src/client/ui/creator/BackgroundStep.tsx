@@ -4,7 +4,7 @@ import { ABILITY_NAMES, SKILL_NAMES } from '../../../engine/rules/basics';
 import type { Background } from '../../../engine/data/schemas';
 import { db } from '../../data';
 import { creator } from '../state';
-import { firstSentence, formatCoins } from '../text';
+import { firstSentence, formatCoins, itemDisplayName } from '../text';
 
 const CHOICE_LABEL: Record<string, string> = {
   holy_symbol: 'Holy Symbol',
@@ -13,7 +13,7 @@ const CHOICE_LABEL: Record<string, string> = {
 };
 
 function itemName(id: string): string {
-  return db.item(id)?.name ?? id;
+  return itemDisplayName(db.item(id)?.name ?? id);
 }
 
 function packageText(opt: Background['equipment']['a']): string {

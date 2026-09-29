@@ -12,6 +12,7 @@ import { GAME_VERSION } from '../shared/version';
 import { SettingsStore } from './settingsStore';
 import { Services, type ServiceOverrides } from './services';
 import { SaveError, SaveStore, type SaveMetaInput } from './saveStore';
+import { backstoryMessages, templateBackstory, type BackstorySummary } from '../llm/prompts/backstory';
 
 export interface AppOptions {
   /** Absolute path to the built client (dist/client). Static serving is skipped if it doesn't exist. */
@@ -46,6 +47,22 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   const services = new Services(settings, opts.rootDir ?? process.cwd(), opts.services);
   app.decorate('services', services);
   app.get('/api/status', async () => services.status());
+
+  // Backstory suggestion for the creator: LLM text, or a template when the LLM is unavailable/mocked.
+  app.post<{ Body: BackstorySummary }>('/api/llm/backstory', async (req, reply) => {
+    const summary = req.body;
+    if (!summary || typeof summary.className !== 'string') return reply.code(400).send({ error: 'Missing character summary' });
+    const llm = services.llm;
+    if (llm.name !== 'mock') {
+      try {
+        const text = (await llm.chat(backstoryMessages(summary), { task: 'backstory', maxTokens: 350, temperature: 0.9, timeoutMs: 60_000 })).trim();
+        if (text.length > 40) return { text, source: 'llm' };
+      } catch {
+        // fall through to the template
+      }
+    }
+    return { text: templateBackstory(summary), source: 'template' };
+  });
 
   const saves = new SaveStore(opts.savesDir ?? path.join(process.cwd(), 'saves'));
   app.decorate('saves', saves);

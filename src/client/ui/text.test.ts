@@ -14,3 +14,12 @@ describe('UI text helpers', () => {
     expect(formatCoins(0)).toBe('0 GP');
   });
 });
+
+describe('item display helpers', () => {
+  it('reorders comma names and groups duplicates', async () => {
+    const { itemDisplayName, groupNames } = await import('./text');
+    expect(itemDisplayName("Clothes, Traveler's")).toBe("Traveler's Clothes");
+    expect(itemDisplayName('Rope')).toBe('Rope');
+    expect(groupNames([{ name: 'Javelin', quantity: 1 }, { name: 'Javelin', quantity: 1 }, { name: 'Arrows', quantity: 20 }, { name: 'Shield', quantity: 1, note: 'equipped' }])).toEqual(['2 × Javelin', '20 × Arrows', 'Shield (equipped)']);
+  });
+});

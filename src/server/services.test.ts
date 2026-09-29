@@ -51,3 +51,25 @@ describe('Services', () => {
     expect(tts).toMatchObject({ provider: 'piper', ready: false, binaryFound: false });
   });
 });
+
+describe('POST /api/llm/backstory', () => {
+  it('uses the LLM when available and a template with the mock', async () => {
+    const llm = new MockLlm({ handlers: { backstory: () => 'You grew up under the grey peaks of the north, hauling ore until the mine collapsed.' } });
+    const withLlm = await buildApp({ userDataDir: dir, services: { llm: Object.assign(Object.create(Object.getPrototypeOf(llm)), llm, { name: 'ollama' }), tts: new MockTts() } });
+    const body = { name: 'Brenna', species: 'Dwarf', className: 'Fighter', background: 'Soldier' };
+    try {
+      const r = await withLlm.inject({ method: 'POST', url: '/api/llm/backstory', payload: body });
+      expect(r.json()).toMatchObject({ source: 'llm', text: expect.stringContaining('grey peaks') });
+    } finally {
+      await withLlm.close();
+    }
+    const mock = await buildApp({ userDataDir: dir, services: { llm: new MockLlm(), tts: new MockTts() } });
+    try {
+      const r = await mock.inject({ method: 'POST', url: '/api/llm/backstory', payload: body });
+      expect(r.json()).toMatchObject({ source: 'template', text: expect.stringContaining('Brenna') });
+      expect((await mock.inject({ method: 'POST', url: '/api/llm/backstory', payload: {} })).statusCode).toBe(400);
+    } finally {
+      await mock.close();
+    }
+  });
+});

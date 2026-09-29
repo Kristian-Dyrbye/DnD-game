@@ -2,7 +2,7 @@
 import { GAME_TITLE } from '../../shared/version';
 import { StatusIndicator } from './StatusIndicator';
 import { Creator } from './creator/Creator';
-import { screen, startNewCharacter } from './state';
+import { hero, screen, startNewCharacter } from './state';
 
 function TitleScreen() {
   return (
@@ -18,10 +18,22 @@ function TitleScreen() {
   );
 }
 
+/** Placeholder until the game screen (Phase 4). */
+function GameScreen() {
+  const h = hero.value;
+  return (
+    <main class="title-screen">
+      <h1>{h?.name ?? 'Your hero'}</h1>
+      <p>Your adventure begins in Millbrook… (the story screen arrives in the next build phase)</p>
+      <button type="button" onClick={() => (screen.value = 'title')}>Back to title</button>
+    </main>
+  );
+}
+
 export function App() {
   return (
     <>
-      {screen.value === 'creator' ? <Creator /> : <TitleScreen />}
+      {screen.value === 'creator' ? <Creator /> : screen.value === 'game' ? <GameScreen /> : <TitleScreen />}
       <StatusIndicator />
     </>
   );

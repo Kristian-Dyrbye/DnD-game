@@ -1,5 +1,7 @@
 /** Creator step 1: choose a class. Cards show role, hit die, primary ability, armor and a beginner tag. */
 import { chooseClass } from '../../../engine/character/creator';
+import { quickBuild } from '../../../engine/character/quickBuild';
+import { Rng } from '../../../engine/core/rng';
 import { ABILITY_NAMES } from '../../../engine/rules/basics';
 import { db } from '../../data';
 import { creator } from '../state';
@@ -14,6 +16,14 @@ export function ClassStep() {
     <section>
       <h2>Choose your class</h2>
       <p class="hint">Your class is your calling: how you fight, what magic you wield and how you solve problems.</p>
+      {selected && (
+        <p class="quick-build">
+          <button type="button" onClick={() => (creator.value = quickBuild(selected, db, Rng.fromSeed(`${Date.now()}`)))}>
+            Quick Build a {db.classes.get(selected)?.name}
+          </button>{' '}
+          <span class="hint">Fills every step with sensible choices and jumps to the review. You can still change anything.</span>
+        </p>
+      )}
       <div class="card-grid">
         {classes.map((c) => {
           const info = CLASS_INFO[c.id];

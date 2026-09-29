@@ -5,7 +5,7 @@
 import type { ComponentType } from 'preact';
 import { STEP_LABELS, canAdvance, goToStep, nextStep, prevStep, stepProblems, stepsFor, type CreatorStep } from '../../../engine/character/creator';
 import { db } from '../../data';
-import { creator, screen } from '../state';
+import { beginAdventure, creator, screen } from '../state';
 import { AbilitiesStep } from './AbilitiesStep';
 import { BackgroundStep } from './BackgroundStep';
 import { ClassStep } from './ClassStep';
@@ -13,6 +13,9 @@ import { EquipmentStep } from './EquipmentStep';
 import { SkillsStep } from './SkillsStep';
 import { SpeciesStep } from './SpeciesStep';
 import { SpellsStep } from './SpellsStep';
+import { IdentityStep } from './IdentityStep';
+import { DifficultyStep } from './DifficultyStep';
+import { ReviewStep } from './ReviewStep';
 
 const STEP_COMPONENTS: Partial<Record<CreatorStep, ComponentType>> = {
   class: ClassStep,
@@ -22,6 +25,9 @@ const STEP_COMPONENTS: Partial<Record<CreatorStep, ComponentType>> = {
   skills: SkillsStep,
   equipment: EquipmentStep,
   spells: SpellsStep,
+  identity: IdentityStep,
+  difficulty: DifficultyStep,
+  review: ReviewStep,
 };
 
 function Placeholder({ step }: { step: CreatorStep }) {
@@ -90,7 +96,7 @@ export function Creator() {
         <span class="step-problems" role="status">
           {problems[0] ?? ''}
         </span>
-        <button type="button" class="primary" onClick={() => (creator.value = nextStep(s, db))} disabled={!canAdvance(s, db) || isLast}>
+        <button type="button" class="primary" onClick={() => (isLast ? beginAdventure() : (creator.value = nextStep(s, db)))} disabled={!canAdvance(s, db)}>
           {isLast ? 'Begin adventure' : 'Next'}
         </button>
       </footer>

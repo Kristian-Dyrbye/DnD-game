@@ -69,9 +69,20 @@ export interface CreatorState {
   difficulty?: 'heroic' | 'hardcore';
 }
 
+/** Starting look; the appearance step (A049) edits it. */
+export const DEFAULT_APPEARANCE: Appearance = {
+  body: 'average',
+  face: 'face_1',
+  hair: 'short',
+  skinTone: '#c68c59',
+  primaryColor: '#7a2e2e',
+  secondaryColor: '#c8a15a',
+};
+
 export function newCreatorState(): CreatorState {
   return {
     step: 'class',
+    appearance: { ...DEFAULT_APPEARANCE },
     baseScores: {},
     backgroundBonus: {},
     classSkills: [],

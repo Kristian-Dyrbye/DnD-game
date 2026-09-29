@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 3 (Character Creation)
-- **Last completed assignment:** A046
-- **Notes for next session:** Start with A047 (identity, backstory, difficulty, Quick Build). Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A047
+- **Notes for next session:** Start with A049 (3D preview + appearance; A048 assets done — run `node scripts/assets-fetch.mjs` first). A042c (spell hooks 3) is with a helper. Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -70,12 +70,12 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A042a — Active effects + spell hooks batch 1 (buffs)
 - [done] A042b — Spell hooks batch 2 (projectiles & utility)
 - [done] A034c — Fix remaining partial auto spell effects
-- [todo] A042c — Spell hooks batch 3 (from A034c) | Spec: §4 | Done: implement cantrip riders (ray_of_frost, chill_touch, shocking_grasp, vicious_mockery, starry_wisp, sacred_flame cover, produce_flame/shillelagh/true_strike/sorcerous_burst own scaling), hold/dominate repeat saves (hook sibling with appliesIfCondition), charm/control riders (charm_person/monster, fear, suggestion, banishment, compulsion), common buffs (barkskin, enhance_ability, enlarge_reduce, fly, longstrider, mirror_image, protection_from_energy, protection_from_evil_and_good, resistance, guidance, sanctuary, stoneskin, magic_weapon, warding_bond, death_ward, beacon_of_hope, spider_climb, see_invisibility, darkvision); tests | Dep: A042b
+- [in-progress (helper)] A042c — Spell hooks batch 3 (from A034c) | Spec: §4 | Done: implement cantrip riders (ray_of_frost, chill_touch, shocking_grasp, vicious_mockery, starry_wisp, sacred_flame cover, produce_flame/shillelagh/true_strike/sorcerous_burst own scaling), hold/dominate repeat saves (hook sibling with appliesIfCondition), charm/control riders (charm_person/monster, fear, suggestion, banishment, compulsion), common buffs (barkskin, enhance_ability, enlarge_reduce, fly, longstrider, mirror_image, protection_from_energy, protection_from_evil_and_good, resistance, guidance, sanctuary, stoneskin, magic_weapon, warding_bond, death_ward, beacon_of_hope, spider_climb, see_invisibility, darkvision); tests | Dep: A042b
 - [done] A043 — Creator state machine + class step UI
 - [done] A044 — Background + species steps
 - [done] A045 — Ability score methods
 - [done] A046 — Skills, equipment, spells steps
-- [in-progress] A047 — Identity, backstory, difficulty, Quick Build | Spec: §5, §9 | Done: name/traits/backstory, LLM backstory suggestion (mock), Heroic/Hardcore pick, Quick Build per class; tests | Dep: A046, A005
+- [done] A047 — Identity, backstory, difficulty, Quick Build
 - [done] A048 — 3D asset research + import
 - [todo] A049 — 3D preview + appearance customization | Spec: §5, §12 | Done: three.js viewer in creator (rotate), body/face/hair/skin/colors saved to character; build passes | Dep: A048, A043
 
@@ -196,6 +196,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 - A096 (helper) — Piper TTS: rhasspy/piper 2023.11.14-2 Windows zip (MIT; bundles espeak-ng GPL-3 as a separate process) → tools/piper/piper.exe; 4 public-domain LibriVox voices by Bryce Beattie (en_GB-cori-medium narrator, en_US-norman-medium male, en_US-kristin-medium female, en_US-john-medium extra), ~264 MB; assets/voices-manifest.json + scripts/voices-fetch.mjs (--test synthesizes a sample: 9.6 s audio in 0.84 s, 185 MB peak); Setup runs it; default narrator changed to en_GB-cori-medium; credits merged.
 
+- A047 — Quick Build (curated background/species/lineage/picks/spells per class, Standard Array to primaries, suggested bg bonus, random species name; every class builds valid) + DEFAULT_APPEARANCE; backstory prompt + template fallback + POST /api/llm/backstory (mock → template); UI: IdentityStep (name + random, traits/ideals/bonds/flaws, backstory + Suggest), DifficultyStep (Heroic/Hardcore), ReviewStep (engine-built sheet: vitals, abilities, skills, attacks, grouped gear, spells, feats, backstory), Begin adventure → hero signal + game placeholder; `#quickbuild-<class>` test URL; item name helpers — `src/engine/character/quickBuild.ts`, `src/llm/prompts/backstory.ts`, `src/client/ui/creator/{Identity,Difficulty,Review}Step.tsx`
+
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
 - Infra decisions (A001–A012, condensed): TS 7 native tsc, Vite 8, Vitest 5, Preact 10; strict tsconfig w/ noUncheckedIndexedAccess + verbatimModuleSyntax, bundler resolution (no .js suffixes); server = tsx, 127.0.0.1:3210 (PORT env), opens browser itself (OPEN_BROWSER=1); zod 4 (.prefault({}) for nested defaults); settings in userdata/settings.json (salvage bad fields); LLM via injectable fetch, think:false only for reasoning models, keep_alive idle/60m, every call tagged with `task`; structured calls retry once (not when unreachable) then typed fallback; Piper spawned per utterance (--output_raw → WAV); providers in app.services (rebuilt on settings change); saves = {schemaVersion, meta, state} + migration chain, 3 rotating autosaves, slot-id regex; check-deps.mjs plain JS (DEFAULT_MODEL/GAME_PORT synced by test), allowScripts esbuild:false; RNG sfc32+cyrb128 (state in saves); math line format `d20: 14 + 5 (Persuasion) = 19 vs DC 15 — Success` with real minus sign; snake_case ids; Creature = current state, static data by id; exhaustion numeric; hit dice per die size.
@@ -251,6 +253,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A034c: hold_person/hold_monster hooks are top-level siblings with params.appliesIfCondition (hook must check the condition). Cantrips with hooks marked noDiceScaling are not dice-multiplied; beamsByLevel hooks fire one attack per beam (allocations or round-robin). beacon_of_hope has a stray `save: 'wis'` hint (harmless).
 - A046: Creator stores weapon masteries in state.weaponMasteries, rogue expertise in state.expertise, all other class picks in state.choices[key] (fighting_style, divine_order, primal_order, eldritch_invocation, tool_proficiencies).
 - A096: Lessac (old default narrator) and voices fine-tuned from it are research-only → not shipped. ryan/hfc voices are CC BY-NC-SA → rejected. Only public-domain voices are used.
+- A047: Heroic is the default difficulty. The hero is stored client-side in `hero` until the GameSession exists (A050 moves it to the server). Backstory homeland hint = Millbrook (starting town).
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -351,6 +354,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - Helper agents' worktrees live in `.claude/worktrees/` (gitignored). Never `git add` them.
 - TS strict + zod: a fallback lambda's return type widens enums to string; annotate it (`(e): T => ...`).
 - In .bat files escape `&` as `^&` (even in `title`). Edit .bat files with python (read bytes, normalize to CRLF); Git Bash `sed -i` mangles CRLF.
+- Never add `2>/dev/null` to `git add` with a path list: one missing/deleted path makes the whole add fail silently. Check `git status` after committing.
 - UI screenshots: build, run the server on a spare port, then `msedge.exe --headless=new --disable-gpu --window-size=1400,900 --virtual-time-budget=4000 --screenshot=<png> "http://127.0.0.1:<port>/#creator"` and Read the PNG.
 - Testing .bat from the PowerShell tool: native commands don't follow Push-Location; call `cmd /c "`"<absolute path>`""`. To dry-run Start Game.bat, copy it with `call npm start` replaced by an echo.
 - npm 11 blocks install scripts by default (`allow-scripts` warning for esbuild). Ignore it: tsx/vite work via esbuild's optional platform package. Don't run approve-scripts unless something breaks.

@@ -20,3 +20,19 @@ export function formatCoins(cp: number): string {
   const c = cp % 10;
   return [gp && `${gp} GP`, sp && `${sp} SP`, c && `${c} CP`].filter(Boolean).join(' ') || '0 GP';
 }
+
+/** "Clothes, Traveler's" → "Traveler's Clothes"; "Lantern, Hooded" → "Hooded Lantern". */
+export function itemDisplayName(name: string): string {
+  const m = /^([^,]+), (.+)$/.exec(name);
+  return m ? `${m[2]} ${m[1]}` : name;
+}
+
+/** Groups identical names: ["Javelin", "Javelin", "Rope"] → ["2 × Javelin", "Rope"]. */
+export function groupNames(entries: { name: string; quantity: number; note?: string }[]): string[] {
+  const map = new Map<string, number>();
+  for (const e of entries) {
+    const key = `${e.name}${e.note ? ` (${e.note})` : ''}`;
+    map.set(key, (map.get(key) ?? 0) + e.quantity);
+  }
+  return [...map].map(([k, n]) => (n > 1 ? `${n} × ${k}` : k));
+}

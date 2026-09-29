@@ -3,7 +3,7 @@ import type { CreatorState } from '../../../engine/character/creator';
 import type { ClassData } from '../../../engine/data/schemas';
 import { db } from '../../data';
 import { creator } from '../state';
-import { formatCoins } from '../text';
+import { formatCoins, itemDisplayName } from '../text';
 
 type Pkg = ClassData['startingEquipment'][number];
 
@@ -20,7 +20,7 @@ const CHOICE_OPTIONS: Record<string, { label: string; ids: () => string[] }> = {
 const letter = (i: number) => String.fromCharCode(65 + i);
 
 function PackageText({ pkg }: { pkg: Pkg }) {
-  const items = pkg.items.map(([id, n]) => `${n > 1 ? `${n} × ` : ''}${db.item(id)?.name ?? id}`);
+  const items = pkg.items.map(([id, n]) => `${n > 1 ? `${n} × ` : ''}${itemDisplayName(db.item(id)?.name ?? id)}`);
   const choices = pkg.choices.map((c) => CHOICE_OPTIONS[c]?.label ?? c);
   const parts = [...items, ...choices];
   return <span>{parts.length ? `${parts.join(', ')}${pkg.cost ? `, ${formatCoins(pkg.cost)}` : ''}` : formatCoins(pkg.cost)}</span>;
@@ -73,7 +73,7 @@ export function EquipmentStep() {
                   <option value="">Default</option>
                   {opt.ids().map((id) => (
                     <option key={id} value={id}>
-                      {db.item(id)?.name ?? id}
+                      {itemDisplayName(db.item(id)?.name ?? id)}
                     </option>
                   ))}
                 </select>

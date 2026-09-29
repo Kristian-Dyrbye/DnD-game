@@ -186,3 +186,19 @@ fieldset + fieldset { margin-top: 1rem; }
 .spell-name { font-weight: bold; }
 .spell-meta { font-size: 0.78rem; color: var(--accent); }
 .spell-card small { color: #b9ad98; }
+.quick-build { margin: 0 0 1rem; }
+.card-grid.two { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+.field { display: flex; flex-direction: column; gap: 0.25rem; margin-bottom: 0.8rem; max-width: 640px; }
+.field > span:first-child { color: #b9ad98; font-size: 0.9rem; }
+.field input, .field textarea { font: inherit; background: #211c16; color: var(--fg); border: 1px solid #4a3f30; border-radius: 6px; padding: 0.4rem 0.6rem; }
+.field-row { display: flex; gap: 0.5rem; }
+.field-row input { flex: 1; }
+.sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.sheet-block { background: #211c16; border: 1px solid #3a3226; border-radius: 8px; padding: 0.75rem 1rem; }
+.sheet-block h3 { margin: 0.4rem 0 0.2rem; font-size: 1rem; color: var(--accent); }
+.sheet-block p, .sheet-block ul { margin: 0; font-size: 0.9rem; }
+.vitals, .abilities { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: space-between; }
+.vitals div, .abilities div { display: flex; flex-direction: column; align-items: center; min-width: 3.2rem; }
+.vitals span, .abilities span { font-size: 0.75rem; color: #8d8270; }
+.vitals strong, .abilities strong { font-size: 1.4rem; color: var(--accent); }
+.backstory { margin: 1rem 0 0; padding: 0.75rem 1rem; border-left: 3px solid var(--accent); background: #211c16; font-style: italic; max-width: 760px; }
