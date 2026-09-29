@@ -15,39 +15,39 @@ Status values: todo | in-progress | done | failed | blocked
 Every assignment's Done also implicitly includes: `npm run typecheck` + `npm test` pass (and `npm run build` if it touches the client). -->
 
 ### Phase 0 — Bootstrap
-- [done] A000 — Plan the whole build | Spec: all | Done: git, .gitignore, ARCHITECTURE.md, queue, file map | Dep: none
+- [done] A000 — Plan the whole build
 
 ### Phase 1 — Foundation
-- [done] A001 — Project scaffold | Spec: §2, §17 | Done: package.json (scripts dev/build/test/typecheck), tsconfig strict, Vite+Preact client "hello" page, Vitest with 1 passing test, folder skeleton per ARCHITECTURE.md; build passes | Dep: A000
-- [done] A002 — Fastify server | Spec: §1, §2 | Done: serves built client, GET /api/health, WebSocket /ws echo, Vite dev proxy; route tests via fastify.inject | Dep: A001
-- [done] A003 — Settings/config system | Spec: §14, §2 | Done: zod settings schema (model name, LLM params, volumes, perf preset, accessibility, objectiveHint=false), defaults + userdata/settings.json load/save, GET/PUT /api/settings; tests | Dep: A002
-- [done] A004 — LLM provider + Ollama client + mock | Spec: §2, §3, §17 | Done: LlmProvider interface (chat, stream, json, listModels, status); Ollama client over fetch; deterministic MockLlm (scripted responses); tests with mocked fetch | Dep: A001
-- [done] A005 — Structured JSON helper | Spec: §3 | Done: llm/structured.ts: schema→Ollama format, zod validate, 1 retry, typed fallback, never throws; tests for bad JSON/timeouts | Dep: A004
-- [done] A006 — TTS provider + Piper adapter + mock | Spec: §2, §13 | Done: TtsProvider interface, Piper spawn adapter (path from settings), MockTts, status check; tests with mock | Dep: A001
-- [done] A007 — Status endpoint + indicator | Spec: §14, §17 | Done: GET /api/status (ollama up, model loaded, tts ready, RSS memory); small UI indicator; tests | Dep: A003, A004, A006
-- [done] A008 — Save system + migrations | Spec: §2, §9, §17 | Done: save/load/list/delete slots + autosave slot, meta (time, location, level, thumbnail, mode), migration chain with a sample v0→v1 fixture; REST routes; tests | Dep: A002
-- [done] A009 — Setup.bat + Start Game.bat | Spec: §1 | Done: CRLF .bat files + scripts/check-deps.mjs (Node, npm install, build, Ollama present/running, model pulled) with friendly messages; Start opens browser; runs clean with Ollama missing (warns, mock mode) | Dep: A002, A003
+- [done] A001 — Project scaffold
+- [done] A002 — Fastify server
+- [done] A003 — Settings/config system
+- [done] A004 — LLM provider + Ollama client + mock
+- [done] A005 — Structured JSON helper
+- [done] A006 — TTS provider + Piper adapter + mock
+- [done] A007 — Status endpoint + indicator
+- [done] A008 — Save system + migrations
+- [done] A009 — Setup.bat + Start Game.bat
 - [blocked] A010 — Pick & benchmark LLM (needs Ollama) | Spec: §2, §3 | Done: scripts/bench-llm.mjs tests JSON validity + speed for qwen3:4b vs llama3.2:3b (+ any newer 3–4B); result in Decisions Log; README note on swapping models | Dep: A005, owner installs Ollama
 
 ### Phase 2 — Rules Engine
-- [done] A011 — RNG + dice | Spec: §4, §8 | Done: seeded serializable RNG, dice notation parser (NdX+M, kh/kl), adv/dis, roll result with math string; tests | Dep: A001
-- [done] A012 — Core rule types | Spec: §4 | Done: abilities/mods, proficiency by level, skills, damage types, sizes, Creature/Character/Combatant types; tests | Dep: A011
-- [done] A013 — SRD 5.2 data pipeline + schemas | Spec: §4 | Done: decide source (official SRD 5.2 CC-BY-4.0 PDF → scripts/srd-extract, or CC-BY JSON source) and log it; zod schemas for every data/srd file; loader + validator test; CREDITS.md with SRD attribution | Dep: A012
-- [done] A014 — SRD data: conditions, exhaustion, core tables | Spec: §4 | Done: conditions.json, rules tables (XP/level, proficiency, spell slots full/half/third/pact, multiclass slots, encounter XP budgets, DC guide); validated + spot tests | Dep: A013
-- [done] A015 — SRD data: equipment | Spec: §4, §11.5 | Done: weapons (with mastery), armor, gear, tools, packs, prices; validated | Dep: A013
-- [done] A016 — SRD data: species + backgrounds | Spec: §4, §5 | Done: all SRD species and backgrounds (ASI options, origin feat, skills, tools, equipment); validated | Dep: A013
-- [done] A017 — SRD data: feats + epic boons | Spec: §4 | Done: origin, general, fighting style, epic boon feats with prereqs and effect refs; validated | Dep: A013
-- [done] A018 — SRD data: classes part 1 (Barbarian, Bard, Cleric, Druid) | Spec: §4 | Done: class tables 1–20, features, SRD subclass each; validated | Dep: A013
-- [done] A019 — SRD data: classes part 2 (Fighter, Monk, Paladin, Ranger) | Spec: §4 | Done: as A018 | Dep: A018
-- [done] A020 — SRD data: classes part 3 (Rogue, Sorcerer, Warlock, Wizard) | Spec: §4 | Done: as A018 | Dep: A018
-- [done] A021 — SRD data: spells cantrip–2 | Spec: §4 | Done: all SRD spells of these levels with effect data (damage, save, area, duration, conc, ritual, upcast); validated | Dep: A013
-- [done] A022 — SRD data: spells 3–5 | Spec: §4 | Done: as A021 | Dep: A021
-- [done] A023 — SRD data: spells 6–9 | Spec: §4 | Done: as A021 | Dep: A021
-- [done] A024 — SRD data: monsters A–F | Spec: §4 | Done: stat blocks (actions, multiattack, recharge, legendary, traits) validated | Dep: A013
-- [done] A025 — SRD data: monsters G–M | Spec: §4 | Done: as A024 | Dep: A024
-- [done] A026 — SRD data: monsters N–S | Spec: §4 | Done: as A024 | Dep: A024
-- [done] A027 — SRD data: monsters T–Z | Spec: §4 | Done: as A024 | Dep: A024
-- [done] A028 — SRD data: magic items | Spec: §4, §11.5 | Done: all SRD magic items with rarity, attunement, effect refs; validated (split if too big) | Dep: A013
+- [done] A011 — RNG + dice
+- [done] A012 — Core rule types
+- [done] A013 — SRD 5.2 data pipeline + schemas
+- [done] A014 — SRD data: conditions, exhaustion, core tables
+- [done] A015 — SRD data: equipment
+- [done] A016 — SRD data: species + backgrounds
+- [done] A017 — SRD data: feats + epic boons
+- [done] A018 — SRD data: classes part 1 (Barbarian, Bard, Cleric, Druid)
+- [done] A019 — SRD data: classes part 2 (Fighter, Monk, Paladin, Ranger)
+- [done] A020 — SRD data: classes part 3 (Rogue, Sorcerer, Warlock, Wizard)
+- [done] A021 — SRD data: spells cantrip–2
+- [done] A022 — SRD data: spells 3–5
+- [done] A023 — SRD data: spells 6–9
+- [done] A024 — SRD data: monsters A–F
+- [done] A025 — SRD data: monsters G–M
+- [done] A026 — SRD data: monsters N–S
+- [done] A027 — SRD data: monsters T–Z
+- [done] A028 — SRD data: magic items
 - [todo] A029 — Ability checks & saves | Spec: §4, §8 | Done: checks/saves with proficiency, expertise, adv/dis sources, DC, math string; tests | Dep: A012
 - [todo] A030 — Attacks & damage | Spec: §4 | Done: to-hit, nat 20/1, crit dice, resist/vuln/immune, temp HP, damage application; tests | Dep: A029
 - [todo] A031 — Conditions engine + exhaustion 2024 | Spec: §4 | Done: apply/remove/duration, data-driven roll modifiers, exhaustion −2/level d20 & −5 ft speed, death at 6; tests | Dep: A014, A030
@@ -162,27 +162,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ## Completed Log
 <!-- One line per assignment: A<id> — what was built — key files. Compress into per-phase summaries when long. -->
-- A000 — Build plan, repo, architecture — `.gitignore`, `.gitattributes`, `ARCHITECTURE.md`, `brain.md`
-- A001 — Scaffold: Vite+Preact client, strict TS, Vitest, folder skeleton — `package.json`, `tsconfig.json`, `vite.config.ts`, `src/client/*`, `src/shared/version.ts`
-- A002 — Fastify server: /api/health, /ws JSON echo, static client + SPA fallback, Vite dev proxy — `src/server/app.ts`, `src/server/main.ts`, `src/server/app.test.ts`
-- A003 — Settings: zod schema with defaults, SettingsStore (atomic write, salvages bad fields), GET/PUT /api/settings — `src/shared/settings.ts`, `src/server/settingsStore.ts`
-- A004 — LLM layer: LlmProvider interface, OllamaClient (chat, NDJSON stream, tags/ps status, typed LlmError), deterministic MockLlm (script queue, per-task handlers), createLlmProvider — `src/llm/*`
-- A005 — callStructured: zod schema → Ollama format, JSON extraction, 1 retry with error feedback, typed fallback, never throws — `src/llm/structured.ts`
-- A006 — TTS layer: TtsProvider, PiperTts (spawn per request, --output_raw → WAV), MockTts (silent WAV), pcm16ToWav, createTtsProvider — `src/tts/*`
-- A007 — GET /api/status (llm, tts, memory), Services holder (rebuilds providers on settings change), indicator lights logic + StatusIndicator UI — `src/server/services.ts`, `src/shared/status.ts`, `src/client/ui/StatusIndicator.tsx`
-- A008 — Save system: envelope schema, migration chain (v0 prototype → v1 fixture), SaveStore (atomic, rotating 3 autosaves, corrupt-file listing, slot-id guard), REST /api/saves — `src/shared/save.ts`, `src/engine/session/migrations.ts`, `src/server/saveStore.ts`
-- A009 — Launchers: Setup.bat (Node via winget if missing → check-deps --setup: npm install, build, Ollama via winget prompt, start ollama serve, pull model), Start Game.bat (check-deps --start, starts Ollama if installed, builds if needed, OPEN_BROWSER=1 npm start; exit 3 = already running → just open browser) — `Setup.bat`, `Start Game.bat`, `scripts/check-deps.mjs`, `scripts/check-deps-lib.mjs`
-- A011 — Seeded sfc32 Rng (saveable state), dice notation parser (NdX, kh/kl, +/- terms), roll, diceStats, d20 adv/dis + visible math formatting — `src/engine/core/rng.ts`, `src/engine/core/dice.ts`
-- A012 — Core rule vocabulary + formulas (abilities, 18 skills, damage types, sizes, creature types, 15 conditions, ability mod, PB by level/CR, CR parse) and zod Creature/Character/Combatant schemas — `src/engine/rules/basics.ts`, `src/engine/core/creature.ts`
-- A013 — SRD pipeline: source = SRD 5.2.1 Markdown (downfallx repo, pinned commit) fetched to data/srd/_source by `npm run srd:fetch`; zod schemas for all 12 data files + rules tables; Effect union; SrdDatabase + validateSrdFile; bundled loader; empty data files; CREDITS.md — `src/engine/data/*`, `scripts/srd-fetch.mjs`, `CREDITS.md`
-- A014 — conditions.json (15, text + hand-written structured modifiers) and rules-tables.json (XP/level, XP/CR, full/half/pact/multiclass slots, encounter budgets, DCs); importer lib + import-core — `scripts/srd/lib.ts`, `scripts/srd/import-core.ts`, `data/srd/overrides/conditions.json`
-- A015 — Equipment: 38 weapons (mastery, ranges, ammo ids, versatile), 13 armor, 149 gear (adventuring gear w/ text, ammo bundles, focuses, tools w/ ability/utilize/craft + gaming/instrument variants, packs with resolved contents, mounts, tack, drawn vehicles) — `scripts/srd/import-equipment.ts`, `data/srd/{weapons,armor,gear}.json`
-- A016 — Origins: 9 species (sizes, speed, darkvision, traits, lineages incl. dragon damage types + lineage spell ids by level) and 4 backgrounds (ability options, feat + option, skills, tool or choice, equipment A/B resolved to item ids) — `scripts/srd/import-origins.ts`
-- A017 — 17 feats (4 origin, 2 general, 4 fighting style, 7 epic boons) with prerequisites (level, abilities, feature id), repeatable, abilityIncrease — `scripts/srd/import-feats.ts`
-- A018–A020 — One generic importer for all 12 classes + 12 SRD subclasses: core traits, features 1–20, table columns (rages, sneak_attack...), cantrips/prepared arrays, starting equipment A/B(/C), multiclass prereqs + gains, Metamagic/Invocation option lists, subclass always-prepared spells (Circle of the Land keyed `arid:3`); added Spellbook gear item — `scripts/srd/import-classes.ts`
-- A021–A023 — All 339 spells (one importer): header fields, higherLevels/cantripUpgrade text, hints (attack, save, damage, area, conditions), auto effects for 93 unambiguous spells (spell attack, save-for-damage with area/half, heal + mod, save-or-condition), upcast dice — `scripts/srd/import-spells.ts`
-- A024–A027 — All 330 stat blocks (235 monsters + 95 animals, one importer): size/type/tags/swarm, AC, init, HP+dice, speeds, abilities+saves, skills, resist/immune/vuln/condition immunities, senses, CR/XP/PB, gear, traits/actions/bonus/reactions/legendary (attack bonus, reach/range, always-on damage, save DC/area/half, recharge, per-day, legendary cost), multiattack pairs, parsed spellcasting — `scripts/srd/import-monsters.ts`
-- A028 — 271 magic items: category, rarity, attunement (+ by whom), base item, charges; +1/+2/+3 items expanded per rarity (weapon_1..3, armor_1..3, shield_1..3, ammunition_1..3, wand_of_the_war_mage_1..3); Potions of Healing expanded into 4 potions with heal effects — `scripts/srd/import-magic-items.ts`
+- Phase 0–1 (A000–A009, A010 blocked): repo + ARCHITECTURE.md; Vite+Preact client, strict TS, Vitest; Fastify server (/api/health, /ws echo, static + SPA fallback, dev proxy); settings schema + store + /api/settings; LLM layer (LlmProvider, OllamaClient w/ NDJSON streaming + status, deterministic MockLlm, callStructured w/ zod + retry + fallback); TTS layer (PiperTts spawn-per-utterance → WAV, MockTts); /api/status + StatusIndicator; saves (envelope, migration chain, rotating autosaves, /api/saves); Setup.bat / Start Game.bat + scripts/check-deps.mjs. Key dirs: src/server, src/shared, src/llm, src/tts, src/client, scripts/.
+- Phase 2 part 1 (A011–A028): seeded Rng + dice/d20 math (engine/core); core vocabulary + Creature/Character schemas (engine/rules/basics, engine/core/creature); SRD data pipeline (engine/data schemas + SrdDatabase + loadSrd; scripts/srd importers; `npm run srd:fetch`, `npm run srd:import`). Data: 15 conditions (+modifiers), rules tables, 38 weapons, 13 armor, 150 gear, 9 species, 4 backgrounds, 17 feats, 12 classes + 12 subclasses, 339 spells (93 with auto effects), 330 monsters/animals, 271 magic items. Tests per file in src/engine/data/*Data.test.ts.
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -269,7 +250,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `scripts/srd/import-magic-items.ts` — magic items
 - `data/srd/overrides/` — hand fixes/mechanics merged by id into importer output
 - `data/srd/rules-tables.json` — core numeric tables
-- `data/srd/*.json` — SRD data (arrays; empty until A014–A028 fill them)
+- `data/srd/*.json` — SRD data arrays (complete)
 - `data/srd/_source/` — fetched SRD Markdown (gitignored; `npm run srd:fetch`)
 - `scripts/srd-fetch.mjs` — downloads SRD Markdown at a pinned commit
 - `CREDITS.md` — SRD CC-BY-4.0 attribution + asset credits
@@ -294,7 +275,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/llm/provider.ts` — createLlmProvider(settings.llm)
 - `src/shared/version.ts` — GAME_TITLE, GAME_VERSION, SAVE_SCHEMA_VERSION
 - `.gitattributes` — *.bat forced to CRLF
-- Planned folders (created with .gitkeep; see ARCHITECTURE.md §2): `src/engine`, `src/llm`, `src/tts`, `src/server`, `src/shared`, `src/client`, `data/srd`, `data/world`, `data/adventures`, `data/tables`, `scripts/`, `tests/`
+- Still-empty planned folders (.gitkeep): engine/{character,combat,world,adventure,party,appearance,systems}, client/{three,audio}, data/{world,adventures,tables}, assets/
 
 ## Gotchas & Lessons
 - git core.autocrlf=true on this machine. The .bat launchers must stay CRLF; `.gitattributes` forces `*.bat` to CRLF (done). LF→CRLF warnings on `git add` are harmless.
@@ -318,5 +299,4 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ## Blockers / Owner Review
 <!-- Blockers: what's wrong + the exact fix the owner should apply. Owner Review: non-urgent decisions the owner may want to revisit. -->
 - BLOCKER (A010): Ollama not installed (checked 2026-09-29). Fix: install from https://ollama.com/download (or run Setup.bat, which offers winget), then set A010 back to todo. Everything else proceeds with the mock.
-- Owner Review: install Ollama for Windows (https://ollama.com/download). Then `ollama --version` should work in a new terminal. Needed for A010 and real narration; everything else uses the mock.
 - Owner Review: default model qwen3:4b is provisional until A010 benchmarks it.
