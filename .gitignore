@@ -37,3 +37,7 @@ desktop.ini
 
 # Helper-agent git worktrees
 .claude/worktrees/
+
+# Downloaded 3D asset packs (fetched by scripts/assets-fetch.mjs; manifest is committed)
+assets/_packs/
+assets/models/
