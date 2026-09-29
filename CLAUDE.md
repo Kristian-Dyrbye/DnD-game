@@ -13,9 +13,12 @@ These rules **override** anything in the Build Prompt that conflicts with them.
 - **`brain.md` replaces `PROGRESS.md`.** Don't create or maintain `PROGRESS.md`.
 - The Build Prompt's "one question at a time" rule applies only to the owner reviewing `brain.md` later, not to you during a session.
 
-## 2. Work Alone: No Subagents
+## 2. Agents: Maximum Two at a Time
 
-- **Do not use the Task/Agent tool, subagents, background agents, or parallel sessions.** Do all reading, coding, testing, and research yourself, sequentially, in this session.
+- **At most 2 agents may work at once: you (the main coder) plus 1 helper subagent.** Never start a second helper while one is running, and helpers must not start agents of their own.
+- A helper must run in its own git worktree (`isolation: "worktree"`) and work on a **separate assignment** that shares no files with yours (e.g. data/content items such as hand-written spell effects or world lore while you do engine code). Mark its assignment `in-progress (helper)` in `brain.md`.
+- The helper does not edit `brain.md` or `loop_status.txt`. It commits on its worktree branch and reports back; you merge its branch, run the full tests, update `brain.md` for both assignments, and commit.
+- If the helper's work fails its tests or conflicts, don't merge it: mark its assignment `failed` with notes (see §6).
 - Don't launch other `claude` processes from the shell.
 - If a task feels too big for one session, it's too big for one assignment: split it in `brain.md` (see §5), do the first part, and stop.
 

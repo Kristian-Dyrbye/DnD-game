@@ -216,6 +216,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A028: `npm run srd:import` rebuilds all SRD JSON deterministically (verified no diff on rerun).
 - A029: All D20 Tests go through d20Test(); it takes adv/dis as lists of source names (cancel per SRD) and optional autoFail reason. Nat 20/1 only matter for attack rolls (A030). Proficiency modifier labels: 'Proficiency: Persuasion', 'Expertise: Stealth'.
 - A030: Creature updates are pure (return new creature + report). Resist and vulnerable on the same type: halve then double. Massive damage flag = overflow ≥ max HP after hitting 0; death/unconscious handling is A032.
+- Owner decision (2026-09-29): max 2 agents at once (main + 1 helper subagent in its own worktree, separate assignment, main merges + updates brain.md). CLAUDE.md §2, .claude/settings.json deny list and run-loop.bat prompt updated.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map

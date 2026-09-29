@@ -55,7 +55,7 @@ echo  Create STOP.txt in this folder to stop after this session.
 echo ================================================
 
 REM Each call is a brand-new session = fresh, cleared context.
-claude -p "Follow CLAUDE.md exactly: read brain.md, complete exactly ONE assignment using the Session Protocol, update brain.md, commit, and write loop_status.txt. Do not use subagents." --permission-mode acceptEdits --max-turns %MAX_TURNS% > "!LOG!" 2>&1
+claude -p "Follow CLAUDE.md exactly: read brain.md, complete exactly ONE assignment using the Session Protocol, update brain.md, commit, and write loop_status.txt. At most one helper subagent at a time (CLAUDE.md section 2)." --permission-mode acceptEdits --max-turns %MAX_TURNS% > "!LOG!" 2>&1
 
 set STATUS=
 set /p STATUS=<loop_status.txt

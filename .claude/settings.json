@@ -46,8 +46,6 @@
       "Bash(which *)"
     ],
     "deny": [
-      "Task",
-      "Agent",
       "Bash(claude*)",
       "Bash(git push*)",
       "Bash(git remote*)",
