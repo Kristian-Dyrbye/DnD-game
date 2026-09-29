@@ -17,7 +17,8 @@ import type { Ability } from '../rules/basics';
 import type { LogEntry } from '../rules/effects';
 import { castSpell, SpellError, type SlotChoice } from '../rules/spellcasting';
 import { dbOf, fail, type ActionResult, type CombatContext, type CombatEvent, type CombatEventKind, type CombatState } from './combatState';
-import { distanceFt } from './grid';
+import { distanceFt, type Point } from './grid';
+import { addZone, createZone, zoneStrike } from './zones';
 import { hasLineOfSight } from './los';
 import { spend, type EconomyKind } from './turns';
 
@@ -115,6 +116,10 @@ export interface CastInCombatOptions {
   areaTargets?: boolean;
   /** Override the casting cost (a readied spell is released with the Reaction). */
   economy?: EconomyKind;
+  /** Aimed square: where a zone spell (Web, Moonbeam, Spiritual Weapon...) is placed. */
+  aim?: Point;
+  /** Direction of a wall (Wall of Fire); default east. */
+  direction?: Point;
 }
 
 /** Cast a known spell on the map: pays the Action/Bonus Action, checks range and line, runs its effects. */
@@ -159,8 +164,23 @@ export function castInCombat(state: CombatState, ctx: CombatContext, o: CastInCo
       distances,
       ...opts,
     });
-    const next = merge({ ...state, turns: paid.state }, [...r.ctx.creatures.values(), r.caster]);
+    let next = merge({ ...state, turns: paid.state }, [...r.ctx.creatures.values(), r.caster]);
     const events: CombatEvent[] = r.ctx.log.map((e) => ({ kind: LOG_KIND[e.kind], actorId: o.casterId, ...(e.targetId && { targetId: e.targetId }), text: e.text }));
+    const zone = createZone(next, ctx, { caster: next.creatures[o.casterId]!, spell, ability: src.ability, levels: Math.max(0, r.castAtLevel - spell.level), ...(o.aim && { aim: o.aim }), ...(o.direction && { direction: o.direction }) });
+    if (zone) {
+      // Creatures caught by the casting itself aren't hit again by the zone this turn.
+      const stamp = `${next.turns.round}:${next.turns.currentIndex}`;
+      next = addZone(next, { ...zone, lastHit: Object.fromEntries(o.targetIds.map((id) => [id, stamp])) });
+      events.push({ kind: 'effect', actorId: o.casterId, text: `${spell.name} fills the area.` });
+      const firstTarget = o.targetIds.find((id) => id !== o.casterId);
+      if (zone.attack && firstTarget) {
+        const s = zoneStrike(next, ctx, zone.id, firstTarget);
+        if (s.ok) {
+          next = s.state;
+          events.push(...s.events);
+        } else events.push({ kind: 'info', actorId: o.casterId, text: s.error });
+      }
+    }
     return { ok: true, state: next, events, castAtLevel: r.castAtLevel };
   } catch (e) {
     if (e instanceof SpellError) return fail(state, e.message);

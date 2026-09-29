@@ -10,14 +10,14 @@
  */
 import type { Character, Creature } from '../core/creature';
 import { addEffect } from '../rules/activeEffects';
-import { SIZES, type Ability } from '../rules/basics';
-import { savingThrow, type D20TestResult } from '../rules/checks';
-import { applyCondition, saveModes } from '../rules/conditions';
+import { SIZES, type Ability, type Skill } from '../rules/basics';
+import { abilityCheck, savingThrow, type D20TestResult } from '../rules/checks';
+import { applyCondition, checkModes, saveModes } from '../rules/conditions';
 import type { ActionRider } from '../rules/monsters';
 import { effectSaveAdjustments } from '../rules/spellHooks';
-import { effectSaveAdjustments3 } from '../rules/spellHooks3';
-import { featureSaveModes } from '../character/features';
-import { dodgeSaveModes } from './actionEffects';
+import { effectCheckBonuses, effectCheckModes, effectSaveAdjustments3 } from '../rules/spellHooks3';
+import { featureCheckBonuses, featureCheckModes, featureSaveModes } from '../character/features';
+import { consumeHelpCheck, dodgeSaveModes, helpCheckModes } from './actionEffects';
 import { dbOf, withCreature, type CombatContext, type CombatEvent, type CombatState } from './combatState';
 
 const isCharacter = (c: Creature): c is Character => c.kind === 'character' && 'classes' in c;
@@ -40,6 +40,41 @@ export function combatSave(state: CombatState, ctx: CombatContext, id: string, a
     bonuses: [...e1.modifiers, ...e3.modifiers],
     ...(cond.autoFail && { autoFail: cond.autoFail }),
   });
+}
+
+/**
+ * An ability check made in combat with every mode source (conditions, features, effects, Help);
+ * consumes a Help bonus for that skill. Used by Hide, Search and grapple escapes.
+ */
+export function combatCheck(
+  state: CombatState,
+  ctx: CombatContext,
+  id: string,
+  ability: Ability,
+  skill: Skill | undefined,
+  dc: number | undefined,
+  opts: { requires?: ('sight' | 'hearing')[] } = {},
+): { state: CombatState; result: D20TestResult } {
+  const c = state.creatures[id] as Creature;
+  const cond = checkModes(c, opts.requires ? { requires: opts.requires } : {}, ctx.table);
+  const modes: { advantage: string[]; disadvantage: string[] }[] = [cond, effectCheckModes(c, ability), helpCheckModes(c, skill)];
+  const bonuses = [...effectCheckBonuses(c, skill, ctx.rng)];
+  if (isCharacter(c)) {
+    const db = dbOf(ctx);
+    modes.push(featureCheckModes(c, db, ability, skill));
+    bonuses.push(...featureCheckBonuses(c, db, ability, skill));
+  }
+  const autoFail = cond.autoFail;
+  const result = abilityCheck(c, ability, skill, {
+    rng: ctx.rng,
+    ...(dc !== undefined && { dc }),
+    advantage: modes.flatMap((m) => m.advantage),
+    disadvantage: modes.flatMap((m) => m.disadvantage),
+    bonuses,
+    ...(autoFail && { autoFail }),
+  });
+  const used = skill && helpCheckModes(c, skill).advantage.length ? consumeHelpCheck(c, skill) : c;
+  return { state: used === c ? state : withCreature(state, used), result };
 }
 
 /** Put the Grappled condition + 'grappled_by' marker (escape DC) on `target`. */

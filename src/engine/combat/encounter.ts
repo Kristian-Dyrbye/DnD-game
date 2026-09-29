@@ -19,6 +19,7 @@ import type { CombatContext, CombatEvent, CombatState } from './combatState';
 import { canPlace, createGrid, distanceFt, placeToken, setCell, type Grid, type Point } from './grid';
 import { rollInitiativeOrder, toEntries } from './initiative';
 import { currentId, livingSides, nextTurn, startCombat } from './turns';
+import { zonesAtTurn } from './zones';
 
 export type EncounterStatus = 'ongoing' | 'won' | 'lost';
 
@@ -128,11 +129,15 @@ function checkEnd(enc: Encounter): boolean {
 function advance(enc: Encounter, ctx: CombatContext, aiOpts: AiOptions = {}): void {
   for (let guard = 0; guard < 200; guard++) {
     if (checkEnd(enc)) return;
+    const ending = enc.state.turns.turnActive ? currentId(enc.state.turns) : undefined;
+    if (ending) zoneTurn(enc, ctx, ending, 'end');
     const r = nextTurn(enc.state.turns, enc.state.creatures, turnCtx(enc, ctx));
     enc.state = { ...enc.state, turns: r.state, creatures: r.creatures };
     push(enc, r.events.map((e) => e.text));
     const id = currentId(enc.state.turns);
     if (!id) return;
+    zoneTurn(enc, ctx, id, 'start');
+    if (checkEnd(enc)) return;
     if (isControlled(enc, id)) {
       const pc = enc.state.creatures[id];
       // A downed character rolls death saves in startTurn; nothing else to do this turn.
@@ -149,6 +154,14 @@ function advance(enc: Encounter, ctx: CombatContext, aiOpts: AiOptions = {}): vo
     enc.state = res.state;
     push(enc, res.events.map((e: CombatEvent) => e.text));
   }
+}
+
+/** Zone effects at the start/end of a creature's turn (Spirit Guardians, Web, Black Tentacles...). */
+function zoneTurn(enc: Encounter, ctx: CombatContext, id: string, when: 'start' | 'end'): void {
+  if (!enc.state.zones?.length) return;
+  const z = zonesAtTurn(enc.state, ctx, id, when);
+  enc.state = z.state;
+  push(enc, z.events.map((e) => e.text));
 }
 
 /** Creatures inside an area spell aimed at `aim` (self-centred shapes start at the caster). */
@@ -185,7 +198,13 @@ export function playerAct(enc: Encounter, ctx: CombatContext, a: PlayerAction): 
     const r =
       a.kind === 'feature'
         ? featureInCombat(enc.state, ctx, { actorId: id, actionId: a.actionId, ...(a.targetId && { targetId: a.targetId }) })
-        : castInCombat(enc.state, ctx, { casterId: id, spellId: a.spellId, targetIds: a.area ? areaTargets(enc, ctx, id, a.spellId, a.area) : a.targetIds, ...(a.area && { areaTargets: true }), ...(a.slotLevel && { slot: { kind: 'slot' as const, level: a.slotLevel } }) });
+        : castInCombat(enc.state, ctx, {
+            casterId: id,
+            spellId: a.spellId,
+            targetIds: a.area ? [...areaTargets(enc, ctx, id, a.spellId, a.area), ...a.targetIds] : a.targetIds,
+            ...(a.area && { areaTargets: true, aim: a.area }),
+            ...(a.slotLevel && { slot: { kind: 'slot' as const, level: a.slotLevel } }),
+          });
     push(enc, r.events.map((e) => e.text));
     if (!r.ok) return r.error;
     enc.state = r.state;

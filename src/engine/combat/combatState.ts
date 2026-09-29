@@ -11,11 +11,14 @@ import { loadSrd } from '../data/srdBundle';
 import type { ConditionTable } from '../rules/conditions';
 import type { Grid, GridToken } from './grid';
 import type { Creatures, TurnState } from './turns';
+import type { Zone } from './zones';
 
 export interface CombatState {
   grid: Grid;
   turns: TurnState;
   creatures: Creatures;
+  /** Persistent spell zones (Spirit Guardians, Web...), see zones.ts. */
+  zones?: Zone[];
 }
 
 export interface CombatContext {

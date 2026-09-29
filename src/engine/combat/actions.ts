@@ -41,10 +41,11 @@ import { computeCover } from './los';
 import { moveAlong, type MoveMode, type OpportunityTrigger } from './movement';
 import { addDash, canReact, currentId, movementLeft, setDisengaged, spend, spendMovement, type EconomyKind } from './turns';
 import { effectiveSpeed } from '../rules/conditions';
-import { combatSave, grappleTarget } from './saves';
+import { combatCheck, combatSave, grappleTarget } from './saves';
 import { endConcentration, expendSlot, slotProblem, type SlotChoice } from '../rules/spellcasting';
 import type { SpellcastingState } from '../core/creature';
 import { castInCombat, knowsSpell, lowestSlotFor, spellEconomy } from './castAction';
+import { zoneMembership, zonesAfterMove } from './zones';
 
 const isCharacter = (c: Creature): c is Character => c.kind === 'character' && 'classes' in c;
 
@@ -118,44 +119,7 @@ export function help(state: CombatState, ctx: CombatContext, id: string, opts: H
   return { ok: true, state: withCreature(p.state, marked), events: [{ kind: 'action', actorId: id, targetId: ally.id, text: `${helper.name} helps ${ally.name} with ${opts.skill}: Advantage on the next check.` }] };
 }
 
-// ---------------------------------------------------------------- ability checks in combat
-
-/**
- * An ability check made in combat with every mode source (conditions, features, effects, Help);
- * consumes a Help bonus for that skill. Used by Hide, Search and grapple escapes.
- */
-export function combatCheck(
-  state: CombatState,
-  ctx: CombatContext,
-  id: string,
-  ability: Ability,
-  skill: Skill | undefined,
-  dc: number | undefined,
-  opts: { requires?: ('sight' | 'hearing')[] } = {},
-): { state: CombatState; result: D20TestResult } {
-  const c = state.creatures[id] as Creature;
-  const cond = checkModes(c, opts.requires ? { requires: opts.requires } : {}, ctx.table);
-  const modes: { advantage: string[]; disadvantage: string[] }[] = [cond, effectCheckModes(c, ability), helpCheckModes(c, skill)];
-  const bonuses = [...effectCheckBonuses(c, skill, ctx.rng)];
-  if (isCharacter(c)) {
-    const db = dbOf(ctx);
-    modes.push(featureCheckModes(c, db, ability, skill));
-    bonuses.push(...featureCheckBonuses(c, db, ability, skill));
-  }
-  const autoFail = cond.autoFail;
-  const result = abilityCheck(c, ability, skill, {
-    rng: ctx.rng,
-    ...(dc !== undefined && { dc }),
-    advantage: modes.flatMap((m) => m.advantage),
-    disadvantage: modes.flatMap((m) => m.disadvantage),
-    bonuses,
-    ...(autoFail && { autoFail }),
-  });
-  const used = skill && helpCheckModes(c, skill).advantage.length ? consumeHelpCheck(c, skill) : c;
-  return { state: used === c ? state : withCreature(state, used), result };
-}
-
-export { combatSave } from './saves';
+export { combatCheck, combatSave } from './saves';
 
 // ---------------------------------------------------------------- Hide and Search
 
@@ -569,6 +533,7 @@ export function moveCreature(state: CombatState, ctx: CombatContext, id: string,
   const trail: Point[] = [];
   const disengaged = !opts.reactionMove && (state.turns.budgets[id]?.disengaged ?? false);
 
+  const zonesBefore = state.zones?.length ? zoneMembership(state) : undefined;
   const grid = cloneGridTokens(state.grid);
   let cur: CombatState = { ...state, grid };
   const events: CombatEvent[] = [];
@@ -634,6 +599,11 @@ export function moveCreature(state: CombatState, ctx: CombatContext, id: string,
       ...(ctx.table && { table: ctx.table }),
     });
     if (s.ok) cur = { ...cur, turns: s.state };
+  }
+  if (zonesBefore && result.stepsTaken > 0) {
+    const z = zonesAfterMove(cur, ctx, zonesBefore, { id, path: path.slice(0, result.stepsTaken) });
+    cur = z.state;
+    events.push(...z.events);
   }
   const dragText = draggedNames.length > 0 ? ` dragging ${draggedNames.join(' and ')}` : '';
   events.push({ kind: 'move', actorId: id, text: `${mover.name} moves ${spentFt} ft${dragText}${result.halted ? ' and is stopped' : ''}.` });

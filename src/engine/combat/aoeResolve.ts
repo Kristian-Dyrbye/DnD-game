@@ -20,7 +20,7 @@ import type { Ability, Condition } from '../rules/basics';
 import type { D20TestResult } from '../rules/checks';
 import { applyCondition } from '../rules/conditions';
 import { rollDamage, type DamageRollResult } from '../rules/damage';
-import { combatSave } from './actions';
+import { combatSave } from './saves';
 import { dealCombatDamage } from './attack';
 import { previewArea, type AoeTemplate } from './aoe';
 import { withCreature, type ActionResult, type CombatContext, type CombatEvent, type CombatState } from './combatState';
@@ -38,6 +38,8 @@ export interface AreaEffectOptions {
   /** Half damage on a successful save (default true). */
   halfOnSave?: boolean;
   conditionOnFail?: { condition: Condition; roundsLeft?: number; endSave?: { ability: Ability; dc: number } };
+  /** Source id stamped on the condition (default: the caster), e.g. `<caster>:<spell>` for concentration. */
+  conditionSourceId?: string;
   /** Override the affected creatures (e.g. the player unticked an ally in the preview). */
   targetIds?: readonly string[];
   /** Creatures never affected (e.g. a caster that chose to exclude itself). */
@@ -135,7 +137,7 @@ export function resolveAreaEffect(state: CombatState, ctx: CombatContext, o: Are
           target,
           {
             condition: cf.condition,
-            ...(o.casterId && { sourceId: o.casterId }),
+            ...((o.conditionSourceId ?? o.casterId) && { sourceId: o.conditionSourceId ?? o.casterId }),
             ...(cf.roundsLeft !== undefined && { roundsLeft: cf.roundsLeft }),
             ...(cf.endSave && { endSave: cf.endSave }),
           },
