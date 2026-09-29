@@ -11,8 +11,11 @@ import { toBuildInput } from '../src/engine/character/creator';
 import { quickBuild } from '../src/engine/character/quickBuild';
 import { Rng } from '../src/engine/core/rng';
 import { loadSrd } from '../src/engine/data/srdBundle';
-import { availableActions, describeScene, getProgress, npcsHere, perform, resolveEncounter, startAdventure, type RunContext } from '../src/engine/adventure/runner';
-import type { Adventure } from '../src/engine/adventure/schema';
+import companionsJson from '../data/companions.json';
+import { availableActions, describeScene, getProgress, npcsHere, perform as runnerPerform, resolveEncounter as runnerResolve, startAdventure, type RunContext, type StepResult } from '../src/engine/adventure/runner';
+import type { Adventure, Outcome } from '../src/engine/adventure/schema';
+import { scaleMonsters, xpBudget } from '../src/engine/adventure/encounters';
+import { changeApproval, CompanionRosterSchema, partWithCompanion, recruitCompanion } from '../src/engine/party/companions';
 import { LuckyRng, solveAdventure } from '../src/engine/adventure/solver';
 import { allScenes, flagRefs, validateAdventure } from '../src/engine/adventure/validate';
 import { newGameState } from '../src/engine/session/GameSession';
@@ -26,6 +29,31 @@ const chapter = (): Adventure => {
   return r.adventure;
 };
 const ADV = chapter();
+const roster = CompanionRosterSchema.parse(companionsJson);
+
+/**
+ * Applies a step's companion effects the way the session port does (sessionActions: recruits,
+ * then approvals, then partings), so runner-level tests see status and loyalty flags change.
+ */
+function applyParty(c: RunContext, r: StepResult): StepResult {
+  const def = (id: string) => roster.companions.find((d) => d.id === id)!;
+  for (const id of r.recruits ?? []) recruitCompanion(c.state, def(id), db);
+  for (const a of r.approvals ?? []) changeApproval(c.state, def(a.companion), a.delta);
+  for (const p of r.partings ?? []) partWithCompanion(c.state, def(p.id), p.status);
+  return r;
+}
+const perform = (c: RunContext, id: string): StepResult => applyParty(c, runnerPerform(c, id));
+const resolveEncounter = (c: RunContext, id: string, how: 'win' | 'lose' | 'flee'): StepResult => applyParty(c, runnerResolve(c, id, how));
+
+/** Every outcome in the chapter (actions, checks, scene entries, beats, encounters, deadlines...). */
+function outcomes(x: unknown = ADV, out: Outcome[] = []): Outcome[] {
+  if (Array.isArray(x)) for (const v of x) outcomes(v, out);
+  else if (x && typeof x === 'object') {
+    if (Array.isArray((x as Outcome).approval) && Array.isArray((x as Outcome).flags)) out.push(x as Outcome);
+    for (const v of Object.values(x)) outcomes(v, out);
+  }
+  return out;
+}
 
 function ctx(flags: Flags = {}, opts: { hour?: number; adventure?: Adventure; lucky?: boolean } = {}): RunContext {
   const hero = buildCharacter(toBuildInput(quickBuild('fighter', db, Rng.fromSeed('ch1'))), db);
@@ -75,12 +103,79 @@ describe('ch1_whispering_fen: data', () => {
     for (const id of reads) expect(reg.has(id) || docs.has(id), id).toBe(true);
     // The flags later chapters read are all written here.
     const written = new Set(writes.map((w) => w.id));
-    for (const id of ['arc.main.hollowmere_fate', 'arc.main.sallow_fate', 'arc.main.wick_fate', 'arc.main.tooth_abbey_holder', 'arc.main.tooth_wick_holder', 'arc.main.abbot_cendric_alive', 'arc.main.cure_recipe', 'world.sickness_cure', 'world.nettle_status', 'world.nettle_loyalty', 'world.briarkin_favor_owed']) {
+    for (const id of ['arc.main.hollowmere_fate', 'arc.main.sallow_fate', 'arc.main.wick_fate', 'arc.main.tooth_abbey_holder', 'arc.main.tooth_wick_holder', 'arc.main.abbot_cendric_alive', 'arc.main.cure_recipe', 'world.sickness_cure', 'world.nettle_status', 'world.briarkin_favor_owed']) {
       expect(written.has(id), id).toBe(true);
     }
     // Derived Tooth counts are never written by content.
     expect(written.has('arc.main.teeth_secured')).toBe(false);
     expect(written.has('arc.main.teeth_choir')).toBe(false);
+  });
+});
+
+describe('ch1_whispering_fen: companions and encounter scaling', () => {
+  const all = outcomes();
+
+  it('Nettle joins only through the recruit outcome, and every companion reference is on the roster', () => {
+    const known = new Set(roster.companions.map((d) => d.id));
+    const recruits = all.filter((o) => o.recruit);
+    expect(recruits.length).toBeGreaterThanOrEqual(3); // persuasion, shrine, after the child
+    for (const o of recruits) expect(known.has(o.recruit!), o.recruit).toBe(true);
+    for (const o of all) {
+      for (const a of o.approval) expect(known.has(a.companion), a.companion).toBe(true);
+      if (o.companionLeaves) expect(known.has(o.companionLeaves.id), o.companionLeaves.id).toBe(true);
+    }
+    expect(all.some((o) => o.companionLeaves?.id === 'nettle' && o.companionLeaves.status === 'left')).toBe(true);
+  });
+
+  it('never writes companion status (except "met") or loyalty flags directly', () => {
+    const status = new Set(roster.companions.map((d) => d.statusFlag));
+    const loyalty = new Set(roster.companions.map((d) => d.loyaltyFlag));
+    for (const o of all) {
+      for (const f of o.flags) {
+        const id = 'set' in f ? f.set : 'inc' in f ? f.inc : undefined;
+        if (!id) continue;
+        expect(loyalty.has(id), `direct loyalty write ${id}`).toBe(false);
+        if (status.has(id)) expect('value' in f && f.value, `direct status write ${id}`).toBe('met');
+      }
+    }
+  });
+
+  it('approval deltas follow the ±5 / ±10 / ±20 scale (the Choir offer is the design-mandated −30)', () => {
+    const deltas = all.flatMap((o) => o.approval.map((a) => a.delta));
+    expect(deltas.length).toBeGreaterThan(10);
+    for (const d of deltas) expect([5, 10, 20, -5, -10, -20, -30], String(d)).toContain(d);
+  });
+
+  it('encounters keep their authored groups and declare scaling pools of their own monsters', () => {
+    const counts = (id: string) => Object.fromEntries(ADV.encounters.find((e) => e.id === id)!.monsters.map((m) => [m.id, m.count]));
+    expect(counts('abbey_nave')).toEqual({ zombie: 4, ghoul: 1 });
+    expect(counts('abbey_nave_midnight')).toEqual({ zombie: 4, ghoul: 1, specter: 1 });
+    expect(counts('thornwife_raid')).toEqual({ scout: 2, giant_spider: 1 });
+    expect(counts('bells_choir')).toEqual({ cultist_fanatic: 1, cultist: 2, ghoul: 2, swarm_of_insects: 1 });
+    expect(counts('bells_choir_ashby')).toEqual({ cultist_fanatic: 2, cultist: 2, ghoul: 2, swarm_of_insects: 1 });
+    expect(counts('stilts_deacons_ambush')).toEqual({ cultist: 3, giant_toad: 1 });
+    for (const e of ADV.encounters) {
+      if (e.monsters.reduce((s, m) => s + m.count, 0) < 2) continue; // a lone monster can't be trimmed
+      expect(e.scaling, e.id).toBeDefined();
+      for (const id of e.scaling!.pool) {
+        expect(db.monsters.has(id), id).toBe(true);
+        expect(e.monsters.some((m) => m.id === id), `${e.id} pool ${id}`).toBe(true);
+      }
+    }
+  });
+
+  it('scaleMonsters trims fights for a lone hero and keeps them whole for a full party', () => {
+    const tables = db.tables!;
+    const xp = (ms: { id: string; count: number }[]) => ms.reduce((s, m) => s + db.monsters.get(m.id)!.xp * m.count, 0);
+    for (const e of ADV.encounters) {
+      const solo = scaleMonsters(e.monsters, [2], db, tables, { pool: e.scaling?.pool ?? [] });
+      const soloCount = solo.reduce((s, m) => s + m.count, 0);
+      expect(xp(solo) <= xpBudget([2], 'high', tables) || soloCount === 1, e.id).toBe(true);
+    }
+    const nave = ADV.encounters.find((e) => e.id === 'abbey_nave')!;
+    const full = scaleMonsters(nave.monsters, [3, 3, 3, 3], db, tables, { pool: nave.scaling!.pool });
+    for (const m of nave.monsters) expect(full.find((x) => x.id === m.id)!.count, m.id).toBeGreaterThanOrEqual(m.count);
+    expect(xp(full)).toBeGreaterThanOrEqual(xp(nave.monsters)); // the pool tops a big party up, never down
   });
 });
 
@@ -135,6 +230,7 @@ describe('ch1_whispering_fen: reachability', () => {
     ]);
     const f = c.state.flags;
     expect(getProgress(c.state)?.ending).toBe('fen_cured');
+    expect(c.state.companions.map((x) => x.id)).toEqual(['nettle']);
     expect(f).toMatchObject({
       'world.nettle_status': 'in_party',
       'world.nettle_loyalty': 75,
@@ -231,8 +327,10 @@ describe('ch1_whispering_fen: starter-arc flags change the chapter', () => {
     startAdventure(shrine);
     expect(ids(shrine)).toContain('recruit_nettle_shrine');
     expect(ids(shrine)).not.toContain('recruit_nettle');
-    perform(shrine, 'recruit_nettle_shrine');
+    const r = perform(shrine, 'recruit_nettle_shrine');
+    expect(r.recruits).toEqual(['nettle']);
     expect(shrine.state.flags).toMatchObject({ 'world.nettle_status': 'in_party', 'world.nettle_loyalty': 55 });
+    expect(shrine.state.companions.map((c) => c.id)).toEqual(['nettle']);
     expect(npcsHere(shrine)).not.toContain('nettle');
     expect(ids(shrine)).toContain('exit.nettle_path');
     expect(ids(shrine)).not.toContain('exit.briars');

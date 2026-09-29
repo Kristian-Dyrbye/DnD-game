@@ -719,16 +719,7 @@
                 "dc": 12,
                 "success": {
                   "text": "'Nettle,' she says, wiping the lance on her shawl. 'If you're going where the Choir goes, I'm coming. Someone has to keep you breathing.'",
-                  "flags": [
-                    {
-                      "set": "world.nettle_status",
-                      "value": "in_party"
-                    },
-                    {
-                      "set": "world.nettle_loyalty",
-                      "value": 50
-                    }
-                  ]
+                  "recruit": "nettle"
                 },
                 "failure": {
                   "text": "'Nettle,' she says, not looking up. 'Prove you're worth the walk and ask me again.'",
@@ -780,14 +771,11 @@
               ],
               "outcome": {
                 "text": "'You relit the Green Father's shrine,' Nettle says, grinning. 'Roots and rot, that's good enough for me.' She shoulders her satchel and falls in beside you.",
-                "flags": [
+                "recruit": "nettle",
+                "approval": [
                   {
-                    "set": "world.nettle_status",
-                    "value": "in_party"
-                  },
-                  {
-                    "set": "world.nettle_loyalty",
-                    "value": 55
+                    "companion": "nettle",
+                    "delta": 5
                   }
                 ]
               }
@@ -819,16 +807,7 @@
               ],
               "outcome": {
                 "text": "'All right,' Nettle says. 'You bled for a fen-brat. That buys you a witch.'",
-                "flags": [
-                  {
-                    "set": "world.nettle_status",
-                    "value": "in_party"
-                  },
-                  {
-                    "set": "world.nettle_loyalty",
-                    "value": 50
-                  }
-                ]
+                "recruit": "nettle"
               }
             },
             {
@@ -970,10 +949,12 @@
                   {
                     "set": "~ch1_child_lost",
                     "value": true
-                  },
+                  }
+                ],
+                "approval": [
                   {
-                    "inc": "world.nettle_loyalty",
-                    "by": -5
+                    "companion": "nettle",
+                    "delta": -5
                   }
                 ]
               }
@@ -1058,10 +1039,12 @@
                   {
                     "set": "arc.main.hollowmere_fate",
                     "value": "abandoned"
-                  },
+                  }
+                ],
+                "approval": [
                   {
-                    "inc": "world.nettle_loyalty",
-                    "by": -30
+                    "companion": "nettle",
+                    "delta": -30
                   }
                 ]
               }
@@ -3745,6 +3728,12 @@
         "refugee fires",
         "gibbet posts (half cover)"
       ],
+      "scaling": {
+        "target": "moderate",
+        "pool": [
+          "zombie"
+        ]
+      },
       "win": {
         "text": "The hanged men fall still. The refugees press close to thank you, and Brask, watching from the wall, nods once.",
         "flags": [
@@ -3793,10 +3782,12 @@
           {
             "set": "~ch1_child_saved",
             "value": true
-          },
+          }
+        ],
+        "approval": [
           {
-            "inc": "world.nettle_loyalty",
-            "by": 5
+            "companion": "nettle",
+            "delta": 5
           }
         ],
         "reputation": [
@@ -3860,10 +3851,12 @@
           {
             "set": "~ch1_child_saved",
             "value": true
-          },
+          }
+        ],
+        "approval": [
           {
-            "inc": "world.nettle_loyalty",
-            "by": 5
+            "companion": "nettle",
+            "delta": 5
           }
         ],
         "reputation": [
@@ -3900,7 +3893,7 @@
       "monsters": [
         {
           "id": "cultist",
-          "count": 2
+          "count": 3
         },
         {
           "id": "giant_toad",
@@ -3923,10 +3916,12 @@
           {
             "set": "~ch1_child_saved",
             "value": true
-          },
+          }
+        ],
+        "approval": [
           {
-            "inc": "world.nettle_loyalty",
-            "by": 5
+            "companion": "nettle",
+            "delta": 5
           }
         ],
         "reputation": [
@@ -3984,7 +3979,7 @@
       "monsters": [
         {
           "id": "zombie",
-          "count": 2
+          "count": 4
         },
         {
           "id": "ghoul",
@@ -4020,7 +4015,7 @@
       "monsters": [
         {
           "id": "zombie",
-          "count": 1
+          "count": 4
         },
         {
           "id": "ghoul",
@@ -4060,7 +4055,7 @@
       "monsters": [
         {
           "id": "zombie",
-          "count": 3
+          "count": 4
         }
       ],
       "terrain": [
@@ -4099,6 +4094,12 @@
         "flooded reliquary",
         "the divers’ boat"
       ],
+      "scaling": {
+        "target": "moderate",
+        "pool": [
+          "cultist"
+        ]
+      },
       "win": {
         "text": "The last diver drops the reliquary box. Inside, wrapped in rotted silk, is a long black tooth: the Drowned Tooth.",
         "flags": [
@@ -4133,7 +4134,7 @@
       "monsters": [
         {
           "id": "scout",
-          "count": 1
+          "count": 2
         },
         {
           "id": "giant_spider",
@@ -4191,7 +4192,7 @@
         },
         {
           "id": "ghoul",
-          "count": 1
+          "count": 2
         },
         {
           "id": "swarm_of_insects",
@@ -4261,6 +4262,14 @@
         {
           "id": "cultist",
           "count": 2
+        },
+        {
+          "id": "ghoul",
+          "count": 2
+        },
+        {
+          "id": "swarm_of_insects",
+          "count": 1
         }
       ],
       "terrain": [
@@ -4271,7 +4280,8 @@
       "scaling": {
         "target": "high",
         "pool": [
-          "cultist"
+          "cultist",
+          "ghoul"
         ]
       },
       "win": {
@@ -4597,10 +4607,10 @@
         ]
       },
       "outcome": {
-        "flags": [
+        "approval": [
           {
-            "inc": "world.nettle_loyalty",
-            "by": -10
+            "companion": "nettle",
+            "delta": -10
           }
         ]
       }
@@ -4624,12 +4634,10 @@
         ]
       },
       "outcome": {
-        "flags": [
-          {
-            "set": "world.nettle_status",
-            "value": "left"
-          }
-        ]
+        "companionLeaves": {
+          "id": "nettle",
+          "status": "left"
+        }
       }
     },
     {
@@ -4647,16 +4655,16 @@
         ]
       },
       "outcome": {
-        "flags": [
+        "approval": [
           {
-            "set": "world.nettle_status",
-            "value": "left"
-          },
-          {
-            "inc": "world.nettle_loyalty",
-            "by": -20
+            "companion": "nettle",
+            "delta": -20
           }
-        ]
+        ],
+        "companionLeaves": {
+          "id": "nettle",
+          "status": "left"
+        }
       }
     },
     {
@@ -4674,10 +4682,10 @@
         ]
       },
       "outcome": {
-        "flags": [
+        "approval": [
           {
-            "inc": "world.nettle_loyalty",
-            "by": 20
+            "companion": "nettle",
+            "delta": 20
           }
         ]
       }
@@ -4697,10 +4705,10 @@
         ]
       },
       "outcome": {
-        "flags": [
+        "approval": [
           {
-            "inc": "world.nettle_loyalty",
-            "by": -20
+            "companion": "nettle",
+            "delta": -20
           }
         ]
       }
@@ -4720,10 +4728,10 @@
         ]
       },
       "outcome": {
-        "flags": [
+        "approval": [
           {
-            "inc": "world.nettle_loyalty",
-            "by": -5
+            "companion": "nettle",
+            "delta": -5
           }
         ]
       }
@@ -4743,10 +4751,10 @@
         ]
       },
       "outcome": {
-        "flags": [
+        "approval": [
           {
-            "inc": "world.corwin_loyalty",
-            "by": 10
+            "companion": "corwin",
+            "delta": 10
           }
         ]
       }
@@ -4766,10 +4774,10 @@
         ]
       },
       "outcome": {
-        "flags": [
+        "approval": [
           {
-            "inc": "world.corwin_loyalty",
-            "by": -10
+            "companion": "corwin",
+            "delta": -10
           }
         ]
       }
@@ -4789,10 +4797,10 @@
         ]
       },
       "outcome": {
-        "flags": [
+        "approval": [
           {
-            "inc": "world.corwin_loyalty",
-            "by": -5
+            "companion": "corwin",
+            "delta": -5
           }
         ]
       }
@@ -4812,10 +4820,10 @@
         ]
       },
       "outcome": {
-        "flags": [
+        "approval": [
           {
-            "inc": "world.corwin_loyalty",
-            "by": -20
+            "companion": "corwin",
+            "delta": -20
           }
         ]
       }
