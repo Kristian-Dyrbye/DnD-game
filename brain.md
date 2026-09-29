@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 1 (Foundation)
-- **Last completed assignment:** A008
-- **Notes for next session:** Start with A009. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. A010 needs Ollama: if `ollama` is still missing, mark it blocked and skip it.
+- **Last completed assignment:** A009
+- **Notes for next session:** Start with A010 (needs Ollama; if `ollama` is still missing, mark it blocked and continue with A011). Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -26,7 +26,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A006 — TTS provider + Piper adapter + mock | Spec: §2, §13 | Done: TtsProvider interface, Piper spawn adapter (path from settings), MockTts, status check; tests with mock | Dep: A001
 - [done] A007 — Status endpoint + indicator | Spec: §14, §17 | Done: GET /api/status (ollama up, model loaded, tts ready, RSS memory); small UI indicator; tests | Dep: A003, A004, A006
 - [done] A008 — Save system + migrations | Spec: §2, §9, §17 | Done: save/load/list/delete slots + autosave slot, meta (time, location, level, thumbnail, mode), migration chain with a sample v0→v1 fixture; REST routes; tests | Dep: A002
-- [todo] A009 — Setup.bat + Start Game.bat | Spec: §1 | Done: CRLF .bat files + scripts/check-deps.mjs (Node, npm install, build, Ollama present/running, model pulled) with friendly messages; Start opens browser; runs clean with Ollama missing (warns, mock mode) | Dep: A002, A003
+- [done] A009 — Setup.bat + Start Game.bat | Spec: §1 | Done: CRLF .bat files + scripts/check-deps.mjs (Node, npm install, build, Ollama present/running, model pulled) with friendly messages; Start opens browser; runs clean with Ollama missing (warns, mock mode) | Dep: A002, A003
 - [todo] A010 — Pick & benchmark LLM (needs Ollama) | Spec: §2, §3 | Done: scripts/bench-llm.mjs tests JSON validity + speed for qwen3:4b vs llama3.2:3b (+ any newer 3–4B); result in Decisions Log; README note on swapping models | Dep: A005, owner installs Ollama
 
 ### Phase 2 — Rules Engine
@@ -170,6 +170,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A006 — TTS layer: TtsProvider, PiperTts (spawn per request, --output_raw → WAV), MockTts (silent WAV), pcm16ToWav, createTtsProvider — `src/tts/*`
 - A007 — GET /api/status (llm, tts, memory), Services holder (rebuilds providers on settings change), indicator lights logic + StatusIndicator UI — `src/server/services.ts`, `src/shared/status.ts`, `src/client/ui/StatusIndicator.tsx`
 - A008 — Save system: envelope schema, migration chain (v0 prototype → v1 fixture), SaveStore (atomic, rotating 3 autosaves, corrupt-file listing, slot-id guard), REST /api/saves — `src/shared/save.ts`, `src/engine/session/migrations.ts`, `src/server/saveStore.ts`
+- A009 — Launchers: Setup.bat (Node via winget if missing → check-deps --setup: npm install, build, Ollama via winget prompt, start ollama serve, pull model), Start Game.bat (check-deps --start, starts Ollama if installed, builds if needed, OPEN_BROWSER=1 npm start; exit 3 = already running → just open browser) — `Setup.bat`, `Start Game.bat`, `scripts/check-deps.mjs`, `scripts/check-deps-lib.mjs`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -198,6 +199,9 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A007: Providers live in `app.services` (Services): `.llm`/`.tts` getters rebuild when their settings section changes; tests pass `buildApp({services:{llm: new MockLlm(), tts: new MockTts()}})`. Indicator: mock = amber, model not loaded = amber, missing = red; RAM warn < 1 GB free, error < 400 MB.
 - A008: Save file = {schemaVersion, meta, state}; state validated later by the engine GameState schema (A050). Autosaves rotate auto-1 (newest) → auto-3. Slot ids /^[a-z0-9][a-z0-9_-]{0,39}$/ (blocks path traversal). SaveError kinds → HTTP 400/404/422 via app error handler.
 - A008: Engine may import plain constants/types from `src/shared` (ARCHITECTURE.md updated).
+- A009: check-deps is plain JS (runs before npm install); pure logic in check-deps-lib.mjs + .d.mts types, tested from tests/check-deps.test.ts. DEFAULT_MODEL and GAME_PORT are duplicated there; a test keeps them in sync with settings.ts and server/port.ts.
+- A009: package.json `allowScripts: {esbuild: false}` silences npm 11's install-script warning (esbuild works via its optional platform package).
+- A009: Server opens the browser itself (OPEN_BROWSER=1) after listen, so the page never loads before the server is up.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -220,6 +224,9 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/shared/save.ts` — SaveMetaSchema, SaveFileSchema, SaveListEntry, SLOT_ID_PATTERN
 - `src/engine/session/migrations.ts` — MIGRATIONS chain + migrateSave(raw) (add a step + fixture test per schema bump)
 - `src/server/saveStore.ts` — SaveStore(dir): list/load/save/autosave/delete; `app.saves`; routes GET/PUT/DELETE /api/saves[/:slot]
+- `Setup.bat` / `Start Game.bat` — CRLF launchers → scripts/check-deps.mjs --setup / --start
+- `scripts/check-deps.mjs` — dependency checks/installs; `scripts/check-deps-lib.mjs` — pure helpers (tested)
+- `src/server/port.ts` — DEFAULT_PORT 3210
 - `src/server/services.ts` — Services(settings, rootDir, overrides): llm, tts, status(); exposed as `app.services`
 - `src/shared/status.ts` — SystemStatus type + llmIndicator/ttsIndicator/memoryIndicator
 - `src/client/ui/StatusIndicator.tsx` — polls /api/status every 10 s; corner lights
@@ -240,6 +247,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ## Gotchas & Lessons
 - git core.autocrlf=true on this machine. The .bat launchers must stay CRLF; `.gitattributes` forces `*.bat` to CRLF (done). LF→CRLF warnings on `git add` are harmless.
 - TS strict + zod: a fallback lambda's return type widens enums to string; annotate it (`(e): T => ...`).
+- In .bat files escape `&` as `^&` (even in `title`). Edit .bat files with python (read bytes, normalize to CRLF); Git Bash `sed -i` mangles CRLF.
+- Testing .bat from the PowerShell tool: native commands don't follow Push-Location; call `cmd /c "`"<absolute path>`""`. To dry-run Start Game.bat, copy it with `call npm start` replaced by an echo.
 - npm 11 blocks install scripts by default (`allow-scripts` warning for esbuild). Ignore it: tsx/vite work via esbuild's optional platform package. Don't run approve-scripts unless something breaks.
 - To smoke-test the server: `PORT=3299 npx tsx src/server/main.ts &`, curl, then kill the PID from `netstat -ano | grep :3299` with `taskkill //PID <pid> //F` (Git Bash needs `//`).
 - Ollama client unverified against a real server (not installed yet); A010 should confirm `think:false` is accepted and structured `format` schemas work.
