@@ -20,8 +20,10 @@ export type LogEntry = z.infer<typeof LogEntrySchema>;
 export const RollRecordSchema = z.object({
   id: z.number().int(),
   label: z.string(),
-  /** Kept dice plus any dropped die for advantage/disadvantage. */
+  /** The d20s rolled: one, or two for advantage/disadvantage (see `mode`). */
   dice: z.array(z.number().int()),
+  /** Advantage keeps the higher die, disadvantage the lower. */
+  mode: z.enum(['normal', 'advantage', 'disadvantage']).optional(),
   modifier: z.number().int(),
   total: z.number().int(),
   /** Full math line, e.g. `d20: 14 + 5 (Persuasion) = 19 vs DC 15 — Success`. */

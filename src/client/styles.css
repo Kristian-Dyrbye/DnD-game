@@ -275,3 +275,17 @@ input[type='color'] { width: 2.2rem; height: 1.8rem; border: 1px solid #4a3f30; 
   .member-card { min-width: 220px; margin-bottom: 0; }
   .game-side { border-left: none; border-top: 1px solid #3a3226; }
 }
+
+/* ---------- dice tray (A053) ---------- */
+.roll-head { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem; }
+.tag-advantage { background: #2f4a2a; color: #bfe6b0; }
+.tag-disadvantage { background: #4a2a2a; color: #f0c0b0; }
+.die.d20 { width: 3rem; height: 3.3rem; border-radius: 0; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: linear-gradient(160deg, #f5ecd8, #cdbf9f); font-size: 1.15rem; }
+.die.d20.dropped { opacity: 0.35; text-decoration: line-through; }
+.die.d20.crit { background: linear-gradient(160deg, #fff3b0, #e0b040); color: #3a2400; }
+.die.d20.fumble { background: linear-gradient(160deg, #f0b0a8, #a8382c); color: #fff; }
+.die.d20.tumbling { animation: die-tumble 0.18s infinite alternate ease-in-out; }
+@keyframes die-tumble { from { transform: rotate(-25deg) translate(-3px, -4px) scale(0.92); } to { transform: rotate(25deg) translate(3px, 2px) scale(1.05); } }
+.last-roll:not(.rolling) .die.d20.kept { animation: die-land 0.25s ease-out; }
+@keyframes die-land { from { transform: scale(1.25); } to { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .die.d20.tumbling, .last-roll .die.d20.kept { animation: none; } }

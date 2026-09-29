@@ -22,6 +22,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       session.addRoll({
         label: roll.label,
         dice: roll.d20.rolls,
+        mode: roll.mode,
         modifier: roll.total - roll.d20.natural,
         total: roll.total,
         math: roll.text,
