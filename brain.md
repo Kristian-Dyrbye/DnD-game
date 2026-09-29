@@ -15,69 +15,17 @@ Status values: todo | in-progress | done | failed | blocked
 Every assignment's Done also implicitly includes: `npm run typecheck` + `npm test` pass (and `npm run build` if it touches the client). -->
 
 ### Phase 0 — Bootstrap
-- [done] A000 — Plan the whole build
+- [done] A000
 
 ### Phase 1 — Foundation
-- [done] A001 — Project scaffold
-- [done] A002 — Fastify server
-- [done] A003 — Settings/config system
-- [done] A004 — LLM provider + Ollama client + mock
-- [done] A005 — Structured JSON helper
-- [done] A006 — TTS provider + Piper adapter + mock
-- [done] A007 — Status endpoint + indicator
-- [done] A008 — Save system + migrations
-- [done] A009 — Setup.bat + Start Game.bat
+- [done] A001, A002, A003, A004, A005, A006, A007, A008, A009
 - [blocked] A010 — Pick & benchmark LLM (needs Ollama) | Spec: §2, §3 | Done: scripts/bench-llm.mjs tests JSON validity + speed for qwen3:4b vs llama3.2:3b (+ any newer 3–4B); result in Decisions Log; README note on swapping models | Dep: A005, owner installs Ollama
 
 ### Phase 2 — Rules Engine
-- [done] A011 — RNG + dice
-- [done] A012 — Core rule types
-- [done] A013 — SRD 5.2 data pipeline + schemas
-- [done] A014 — SRD data: conditions, exhaustion, core tables
-- [done] A015 — SRD data: equipment
-- [done] A016 — SRD data: species + backgrounds
-- [done] A017 — SRD data: feats + epic boons
-- [done] A018 — SRD data: classes part 1 (Barbarian, Bard, Cleric, Druid)
-- [done] A019 — SRD data: classes part 2 (Fighter, Monk, Paladin, Ranger)
-- [done] A020 — SRD data: classes part 3 (Rogue, Sorcerer, Warlock, Wizard)
-- [done] A021 — SRD data: spells cantrip–2
-- [done] A022 — SRD data: spells 3–5
-- [done] A023 — SRD data: spells 6–9
-- [done] A024 — SRD data: monsters A–F
-- [done] A025 — SRD data: monsters G–M
-- [done] A026 — SRD data: monsters N–S
-- [done] A027 — SRD data: monsters T–Z
-- [done] A028 — SRD data: magic items
-- [done] A029 — Ability checks & saves
-- [done] A030 — Attacks & damage
-- [done] A031 — Conditions engine + exhaustion 2024
-- [done] A032 — Death saves, 0 HP, resting
-- [done] A033 — Effect system
-- [done] A034 — Spellcasting engine
-- [done] A034a — Spell effects pass
-- [done] A035 — Character builder + derived stats
-- [done] A036 — Leveling + feats
-- [done] A037 — Multiclassing
-- [done] A038 — Weapon mastery
-- [done] A039 — Class feature framework + Barbarian + Bard
-- [done] A039b — Class features: Cleric (+Life) and Druid (+Land)
-- [done] A039c — Wild Shape
-- [done] A040 — Class features batch 2 (Fighter, Monk, Paladin, Ranger)
-- [done] A041 — Class features batch 3 (Rogue, Sorcerer, Warlock, Wizard)
-- [done] A042 — Monster runtime + encounter builder
+- [done] A011, A012, A013, A014, A015, A016, A017, A018, A019, A020, A021, A022, A023, A024, A025, A026, A027, A028, A029, A030, A031, A032, A033, A034, A034a, A035, A036, A037, A038, A039, A039b, A039c, A040, A041, A042
 
 ### Phase 3 — Character Creation
-- [done] A042a — Active effects + spell hooks batch 1 (buffs)
-- [done] A042b — Spell hooks batch 2 (projectiles & utility)
-- [done] A034c — Fix remaining partial auto spell effects
-- [done] A042c — Spell hooks batch 3 (from A034c)
-- [done] A043 — Creator state machine + class step UI
-- [done] A044 — Background + species steps
-- [done] A045 — Ability score methods
-- [done] A046 — Skills, equipment, spells steps
-- [done] A047 — Identity, backstory, difficulty, Quick Build
-- [done] A048 — 3D asset research + import
-- [done] A049 — 3D preview + appearance customization
+- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A047, A048, A049
 
 ### Phase 4 — Narration Loop
 - [todo] A046b — Origin feat choices in the creator | Spec: §5 | Done: Magic Initiate (background feat option list: 2 cantrips + 1 level-1 spell, ability choice) and Human Versatile feats (Skilled: 3 skills/tools; Magic Initiate list choice) picked in the creator and applied via applyFeat-style logic in buildCharacter; tests | Dep: A047
@@ -107,7 +55,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [todo] A070 — 3D battle map | Spec: §10, §12 | Done: three.js grid with models, orbit/zoom camera, 2D/3D toggle | Dep: A065, A049
 
 ### Phase 6 — Exploration
-- [done] A071 — World lore
+- [done] A071
 - [todo] A072 — Clock + day/night | Spec: §11.3 | Done: clock advanced by travel/explore/rest/downtime; System Registry with onTimeAdvance; tests | Dep: A050
 - [todo] A073 — Weather | Spec: §11.4 | Done: region/season tables, mechanical effects (travel, obscurement, wind ranged penalty, fire/cold); tests | Dep: A072, A071
 - [todo] A074 — Travel + world map engine | Spec: §11.1 | Done: locations, routes, discovery, pace/travel time, random travel events by region/weather; tests | Dep: A073
@@ -138,9 +86,9 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [todo] A093 — Character screen + save thumbnails | Spec: §9, §12 | Done: rotatable 3D character screen; save browser with thumbnail showing gear/scars | Dep: A091, A008
 
 ### Phase 10 — Audio
-- [done] A094 — Audio assets
+- [done] A094
 - [todo] A095 — Music + SFX manager | Spec: §13 | Done: mood crossfade, SFX hooks (dice, hits, spells, UI, doors, steps), volumes | Dep: A094, A052
-- [done] A096 — Piper install + voices
+- [done] A096
 - [todo] A097 — TTS narration pipeline | Spec: §13 | Done: background generation queue, skip, volume, toggle, never blocks; tests with MockTts | Dep: A096, A057
 
 ### Phase 11 — Content
