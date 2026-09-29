@@ -70,3 +70,39 @@ export function buildEncounter(o: EncounterOptions, tables: RulesTables): Encoun
   }
   return { monsters: chosen, xp: spent, budget };
 }
+
+/**
+ * Scales an authored monster list to the actual party (spec §6, DESIGN §0): minions (the cheapest
+ * non-boss monsters) are removed while the fight is above the High budget, and added from `pool`
+ * while it is below the Low budget. Bosses (`bossIds`) are never removed.
+ */
+export function scaleMonsters(
+  monsters: { id: string; count: number }[],
+  partyLevels: number[],
+  db: { monsters: ReadonlyMap<string, Pick<Monster, 'xp'>> },
+  tables: RulesTables,
+  opts: { pool?: string[]; bossIds?: string[] } = {},
+): { id: string; count: number }[] {
+  const out = monsters.map((m) => ({ ...m }));
+  const xpOf = (id: string) => db.monsters.get(id)?.xp ?? 0;
+  const total = () => out.reduce((s, m) => s + xpOf(m.id) * m.count, 0);
+  const high = xpBudget(partyLevels, 'high', tables);
+  const low = xpBudget(partyLevels, 'low', tables);
+  const bosses = new Set(opts.bossIds ?? []);
+  for (let guard = 0; guard < 40 && total() > high; guard++) {
+    const living = out.filter((m) => m.count > 0);
+    if (living.reduce((s, m) => s + m.count, 0) <= 1) break;
+    const minion = living.filter((m) => !bosses.has(m.id)).sort((a, b) => xpOf(a.id) - xpOf(b.id))[0];
+    if (!minion) break;
+    minion.count--;
+  }
+  const pool = (opts.pool ?? []).filter((id) => xpOf(id) > 0).sort((a, b) => xpOf(a) - xpOf(b));
+  for (let guard = 0; guard < 20 && pool.length && total() < low; guard++) {
+    const add = pool[0]!;
+    if (total() + xpOf(add) > high) break;
+    const ex = out.find((m) => m.id === add);
+    if (ex) ex.count++;
+    else out.push({ id: add, count: 1 });
+  }
+  return out.filter((m) => m.count > 0);
+}

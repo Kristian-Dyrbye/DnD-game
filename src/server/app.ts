@@ -31,6 +31,8 @@ import { SideQuestTablesSchema } from '../engine/adventure/sidequestTables';
 import sideQuestsJson from '../../data/tables/sidequests.json';
 import { DefeatTableSchema } from '../engine/adventure/defeat';
 import defeatsJson from '../../data/tables/defeat-outcomes.json';
+import { CompanionRosterSchema } from '../engine/party/companions';
+import companionsJson from '../../data/companions.json';
 import { createDefaultRegistry } from '../engine/systems';
 import { regionOfState } from '../engine/adventure/runner';
 import { suggestIdeas } from '../llm/prompts/suggest';
@@ -167,6 +169,7 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
         shops: ShopTableSchema.parse(shopsJson),
         sideQuests: SideQuestTablesSchema.parse(sideQuestsJson),
         defeats: DefeatTableSchema.parse(defeatsJson),
+        companions: CompanionRosterSchema.parse(companionsJson),
         suggester: (ctx, offered) => suggestIdeas(services.llm, gatherNarrationContext(ctx.state, lore, ctx.adventure, srd), offered),
       }) }),
     saves: {

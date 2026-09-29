@@ -78,6 +78,10 @@ export const OutcomeSchema = z
     minutes: z.number().int().min(0).default(0),
     /** Lore location ids revealed on the world map (a map, a rumour, a signpost). */
     discover: z.array(z.string()).default([]),
+    /** A companion from data/companions.json joins the party (or waits if the party is full). */
+    recruit: z.string().optional(),
+    /** A companion leaves the party: to wait, or for good (left / betrayed / dead). */
+    companionLeaves: z.object({ id: z.string(), status: z.enum(['waiting', 'left', 'betrayed', 'dead']) }).optional(),
     /** Ends the adventure with this ending id. */
     ending: Id.optional(),
   })

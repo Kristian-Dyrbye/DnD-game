@@ -51,10 +51,22 @@ export function randomName(speciesId: string | undefined, rng: Rng): string {
   return rng.pick(NAMES[speciesId ?? 'human'] ?? NAMES.human!);
 }
 
-export function quickBuild(classId: string, db: SrdDatabase, rng: Rng): CreatorState {
+/** Optional origin overrides (companions are built like Quick Builds with their own species/background). */
+export interface QuickBuildOverrides {
+  species?: string;
+  background?: string;
+  lineage?: string;
+}
+
+export function quickBuild(classId: string, db: SrdDatabase, rng: Rng, overrides: QuickBuildOverrides = {}): CreatorState {
   const cls = db.classes.get(classId);
   if (!cls) throw new Error(`Unknown class ${classId}`);
-  const plan = PLANS[classId] ?? { background: 'soldier', species: 'human' };
+  const base = PLANS[classId] ?? { background: 'soldier', species: 'human' };
+  const plan: Plan = {
+    ...base,
+    ...(overrides.species && { species: overrides.species, lineage: overrides.lineage ?? (overrides.species === base.species ? base.lineage : undefined) }),
+    ...(overrides.background && { background: overrides.background }),
+  } as Plan;
   const bg = db.backgrounds.get(plan.background)!;
   const species = db.species.get(plan.species)!;
   const baseScores = suggestAssignment([...STANDARD_ARRAY], cls.primaryAbilities);

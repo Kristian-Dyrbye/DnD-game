@@ -20,6 +20,7 @@ import { resolveIntent } from './resolve';
 import { activeFight, fightAct, finishFight, startFight, type FightEnd } from './fights';
 import type { DefeatTable } from './defeat';
 import { canLevelUp, levelUp } from '../character/leveling';
+import { levelCompanionsWithHero, partWithCompanion, recruitCompanion, type CompanionRoster } from '../party/companions';
 import { totalLevel } from '../core/creature';
 import type { Ability, Skill } from '../rules/basics';
 import { acceptOffer, activeSideQuest, finishActive, offerSources, offersAt, refreshOffers, roadOffer, sideQuestState, type SideQuestDeps } from './sideQuests';
@@ -51,6 +52,8 @@ export interface AdventurePortOptions {
   sideQuests?: SideQuestTables;
   /** Heroic defeat outcomes (data/tables/defeat-outcomes.json). */
   defeats?: DefeatTable;
+  /** Recruitable companions (data/companions.json). */
+  companions?: CompanionRoster;
 }
 
 /** The ActionPort plus a hook for tests to wait for background suggestion/summary work. */
@@ -99,6 +102,17 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     }
     if (r.items.length || r.coins) session.addLog('system', `Received: ${[...r.items.map((i) => `${i.quantity}× ${i.itemId.replace(/_/g, ' ')}`), ...(r.coins ? [formatCoins(r.coins)] : [])].join(', ')}`);
     if (r.xp) session.addLog('system', `+${r.xp} XP`);
+    for (const id of r.recruits ?? []) {
+      const def = opts.companions?.companions.find((c) => c.id === id);
+      if (!def || !db) continue;
+      session.addLog('system', recruitCompanion(session.current, def, db).message);
+    }
+    for (const p of r.partings ?? []) {
+      const def = opts.companions?.companions.find((c) => c.id === p.id);
+      if (!def) continue;
+      partWithCompanion(session.current, def, p.status);
+      session.addLog('system', p.status === 'waiting' ? `${def.name} will wait for you.` : p.status === 'left' ? `${def.name} leaves the party.` : p.status === 'betrayed' ? `${def.name} has betrayed you!` : `${def.name} is dead.`);
+    }
     for (const c of r.reputation ?? []) if (!c.ripple || c.newTier) session.addLog('system', describeChange(c, opts.lore));
     if (r.ending) {
       const end = ctx.adventure.endings.find((e) => e.id === r.ending);
@@ -287,6 +301,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
         });
         session.current.hero = res.character;
         session.addLog('system', `Level ${before + 1}! +${res.hpGained} HP${res.features.length ? `. New: ${res.features.join(', ')}` : ''}.`);
+        if (opts.companions) for (const line of levelCompanionsWithHero(session.current, opts.companions, db)) session.addLog('system', line);
         return;
       }
       if (cmd.type === 'combat_act' || cmd.type === 'combat_flee') {

@@ -5,7 +5,7 @@ import { db } from '../../data';
 import { formatCoins } from '../text';
 import { canLevelUp } from '../../../engine/character/leveling';
 
-function MemberCard({ c, lead, onLevelUp }: { c: Character; lead?: boolean; onLevelUp?: () => void }) {
+function MemberCard({ c, lead, onLevelUp, loyalty }: { c: Character; lead?: boolean; onLevelUp?: () => void; loyalty?: number }) {
   const pct = Math.max(0, Math.min(100, (c.hp / c.maxHp) * 100));
   const classes = c.classes.map((cl) => `${db.classes.get(cl.classId)?.name ?? cl.classId} ${cl.level}`).join(' / ');
   const hpClass = pct <= 25 ? 'low' : pct <= 50 ? 'mid' : 'ok';
@@ -39,6 +39,12 @@ function MemberCard({ c, lead, onLevelUp }: { c: Character; lead?: boolean; onLe
         </p>
       )}
       {lead && <p class="member-coins">{formatCoins(c.coins)}</p>}
+      {loyalty !== undefined && (
+        <p class="member-coins" title="Companion approval (0–100)">
+          Loyalty {loyalty}
+          {loyalty <= 20 ? ' · unhappy' : loyalty >= 70 ? ' · devoted' : ''}
+        </p>
+      )}
       {lead && onLevelUp && canLevelUp(c, db) && (
         <button type="button" class="primary level-up" onClick={onLevelUp}>
           Level up!
@@ -48,13 +54,13 @@ function MemberCard({ c, lead, onLevelUp }: { c: Character; lead?: boolean; onLe
   );
 }
 
-export function PartyPanel({ hero, companions, onLevelUp }: { hero: Character; companions: Character[]; onLevelUp?: () => void }) {
+export function PartyPanel({ hero, companions, onLevelUp, loyalty }: { hero: Character; companions: Character[]; onLevelUp?: () => void; loyalty?: Record<string, number> }) {
   return (
     <aside class="party-panel" aria-label="Party">
       <h2>Party</h2>
       <MemberCard c={hero} lead {...(onLevelUp && { onLevelUp })} />
       {companions.map((c) => (
-        <MemberCard key={c.id} c={c} />
+        <MemberCard key={c.id} c={c} {...(loyalty?.[c.id] !== undefined && { loyalty: loyalty[c.id] })} />
       ))}
       {companions.length === 0 && <p class="hint small">No companions yet.</p>}
     </aside>

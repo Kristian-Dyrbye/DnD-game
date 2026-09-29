@@ -15,6 +15,7 @@ import type { FlagRegistry } from '../world/flags';
 import type { Rng } from '../core/rng';
 import { applyDefeat, pickDefeatOutcome, recordFallen, type DefeatResult, type DefeatTable } from './defeat';
 import { getProgress, resolveEncounter, type RunContext, type StepResult } from './runner';
+import { scaleMonsters } from './encounters';
 
 export interface ActiveFight {
   adventureId: string;
@@ -31,7 +32,10 @@ export function startFight(ctx: RunContext, encounterId: string, rng: Rng, db: S
   const def = ctx.adventure.encounters.find((e) => e.id === encounterId);
   if (!def) throw new Error(`Unknown encounter ${encounterId}`);
   const cctx: CombatContext = { rng, db };
-  const enc = setupEncounter({ hero: ctx.state.hero, companions: ctx.state.companions, monsters: def.monsters, db }, cctx);
+  // Scale to the real party with SRD budgets (authored lists assume a party of four).
+  const party = [ctx.state.hero, ...ctx.state.companions].filter((c) => !c.dead);
+  const monsters = db.tables ? scaleMonsters(def.monsters, party.map((c) => c.classes.reduce((s, x) => s + x.level, 0)), db, db.tables, { pool: def.scaling?.pool ?? [] }) : def.monsters;
+  const enc = setupEncounter({ hero: ctx.state.hero, companions: ctx.state.companions, monsters, db }, cctx);
   const fight: ActiveFight = { adventureId: ctx.adventure.id, encounterId, enc };
   ctx.state.extensions.combat = fight;
   return fight;

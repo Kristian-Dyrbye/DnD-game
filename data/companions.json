@@ -1,0 +1,70 @@
+{
+  "$comment": "Recruitable companions (spec §6; campaign bible DESIGN.md §11). Built from SRD rules like the hero (Quick Build plan + species/background), levelled to the party's level on joining. status/loyalty flags follow DESIGN §11 (loyalty 0–100, starts 50).",
+  "companions": [
+    {
+      "id": "corwin",
+      "name": "Ser Corwin Ashvale",
+      "classId": "paladin",
+      "subclassId": "oath_of_devotion",
+      "species": "human",
+      "background": "soldier",
+      "role": "defender",
+      "personality": "Earnest, stubborn and dry-humoured; ashamed of his dismissal but never mopes.",
+      "goal": "Prove that the Dawn Lance's creed matters more than its orders, and be reinstated.",
+      "voice": "Clipped and formal, softening as trust grows.",
+      "factions": ["order_of_the_dawn_lance", "crown_of_aurelmark"],
+      "appearance": { "outfit": "knight", "head": "knight", "build": "broad", "skinTone": "#c68a62", "primaryColor": "#c8a15a", "showHeadgear": false, "showCape": true },
+      "statusFlag": "world.corwin_status",
+      "loyaltyFlag": "world.corwin_loyalty"
+    },
+    {
+      "id": "nettle",
+      "name": "Nettle",
+      "classId": "druid",
+      "subclassId": "circle_of_the_land",
+      "species": "halfling",
+      "background": "acolyte",
+      "role": "healer",
+      "personality": "Blunt, funny and fearless around the sick; sharp around authority. Hums while healing.",
+      "goal": "Find a true cure for the Whispering Sickness.",
+      "voice": "Quick fen-dialect; swears by roots and rot.",
+      "factions": ["briarkin"],
+      "appearance": { "outfit": "mage", "head": "rogue_hooded", "build": "slim", "skinTone": "#e0ac8a", "primaryColor": "#4f7a3a", "showHeadgear": false, "showCape": true },
+      "statusFlag": "world.nettle_status",
+      "loyaltyFlag": "world.nettle_loyalty"
+    },
+    {
+      "id": "rook",
+      "name": "Rook Marrowby",
+      "classId": "rogue",
+      "subclassId": "thief",
+      "species": "tiefling",
+      "lineage": "infernal",
+      "background": "criminal",
+      "role": "striker",
+      "personality": "Charming, evasive, loyal only once it costs him something.",
+      "goal": "Stay free and stay rich — or so he says.",
+      "voice": "Easy drawl, jokes when nervous.",
+      "factions": ["red_gull_brotherhood"],
+      "appearance": { "outfit": "rogue_hooded", "head": "rogue_hooded", "build": "average", "skinTone": "#9a4a3a", "primaryColor": "#6a2a2a", "showHeadgear": false, "showCape": true },
+      "statusFlag": "world.rook_status",
+      "loyaltyFlag": "world.rook_loyalty"
+    },
+    {
+      "id": "aurek",
+      "name": "Aurek Vell",
+      "classId": "wizard",
+      "subclassId": "evoker",
+      "species": "human",
+      "background": "sage",
+      "role": "ranged",
+      "personality": "Precise, courteous, haunted by what his family has done.",
+      "goal": "Understand his aunt — and stop her.",
+      "voice": "Measured Highcrown diction; long pauses.",
+      "factions": ["crown_of_aurelmark"],
+      "appearance": { "outfit": "mage", "head": "mage", "build": "slim", "skinTone": "#f1c9a5", "primaryColor": "#3a4f8a", "showHeadgear": true, "showCape": true },
+      "statusFlag": "world.aurek_status",
+      "loyaltyFlag": "world.aurek_loyalty"
+    }
+  ]
+}

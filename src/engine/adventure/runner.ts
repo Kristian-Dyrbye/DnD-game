@@ -73,6 +73,9 @@ export interface StepResult {
   xp: number;
   /** Reputation changes (including ripples to allies/enemies). */
   reputation?: ReputationChange[];
+  /** Companions to recruit / part with (applied by the session port, which knows the roster). */
+  recruits?: string[];
+  partings?: { id: string; status: 'waiting' | 'left' | 'betrayed' | 'dead' }[];
 }
 
 export interface AvailableAction {
@@ -305,6 +308,8 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
   state.time += o.minutes;
   const map = getMap(state);
   if (o.discover.length && map) discover(map, o.discover);
+  if (o.recruit) (result.recruits ??= []).push(o.recruit);
+  if (o.companionLeaves) (result.partings ??= []).push(o.companionLeaves);
   if (o.encounter) result.encounter = o.encounter;
   if (o.ending) {
     getProgress(state)!.ending = o.ending;
