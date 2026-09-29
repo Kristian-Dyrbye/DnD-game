@@ -6,7 +6,7 @@
 - **State:** IN PROGRESS
 - **Current phase:** 4 (Phase 3 Character Creation done)
 - **Last completed assignment:** A065b
-- **Notes for next session:** Context was cleared mid-run (owner request). FIRST: a helper was running A101 (arc chapter 1, worktree branch `worktree-agent-aba06517a05ad0a6b` under .claude/worktrees/). If that branch has a commit "A101: arc chapter 1", merge it (`git merge --no-ff`), run full tests, record A101 in brain.md, remove the worktree (`git worktree remove --force` + `git branch -D`). If it has no commit, remove the worktree and set A101 back to todo. Then continue the queue: A064a (zone spells), A063b, A098/A099 (starter arc; companions/recruit/approval now exist), A088–A093 (3D equipment/wounds/scars), A070 (3D battle map), A076 (dungeon maps + fog), A075b, then A114–A116. A010 still blocked until Ollama is installed (Ollama/Piper not installed on this PC yet). Playable test URLs: `#play-<class>`, `#play-<class>+map`, `#combat-<class>`.
+- **Notes for next session:** Context was cleared mid-run (owner request). Continue the queue: A064a (zone spells), A063b, A098/A099 (starter arc; companions/recruit/approval now exist), A088–A093 (3D equipment/wounds/scars), A070 (3D battle map), A076 (dungeon maps + fog), A075b, then A114–A116. A010 still blocked until Ollama is installed (Ollama/Piper not installed on this PC yet). Playable test URLs: `#play-<class>`, `#play-<class>+map`, `#combat-<class>`.
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -25,7 +25,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A011, A012, A013, A014, A015, A016, A017, A018, A019, A020, A021, A022, A023, A024, A025, A026, A027, A028, A029, A030, A031, A032, A033, A034, A034a, A035, A036, A037, A038, A039, A039b, A039c, A040, A041, A042
 
 ### Phase 3 — Character Creation
-- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A046b, A047, A048, A049, A050, A051, A052, A053, A054, A055, A056, A057, A058, A059, A060, A061, A062, A063, A064, A065, A036b, A066, A067, A068, A072, A084, A085, A065b, A086, A087, A073, A074, A075, A077, A078, A079, A080, A081, A082, A083, A100, A107, A108, A109, A110
+- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A046b, A047, A048, A049, A050, A051, A052, A053, A054, A055, A056, A057, A058, A059, A060, A061, A062, A063, A064, A065, A036b, A066, A067, A068, A072, A084, A085, A065b, A086, A087, A073, A074, A075, A077, A078, A079, A080, A081, A082, A083, A100, A101, A107, A108, A109, A110
 
 ### Phase 4 — Narration Loop
 
@@ -58,7 +58,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ### Phase 11 — Content
 - [todo] A098 — Starter arc part 1 | Spec: §7.2 | Done: exploration, dialogue, skill-check tutorial scenes (valid schema) | Dep: A078, A084
 - [todo] A099 — Starter arc part 2 | Spec: §7.2, §9 | Done: combat, rest, shop, companion, world map, hook, defeat outcomes | Dep: A098
-- [in-progress (helper)] A101 — Arc chapter 1 | Spec: §7.2 | Done: valid schema, reads starter flags | Dep: A100
+- [todo] A101b — Ch1 polish | Spec: §6, §7.2 | Done: Nettle via `recruit` outcome, loyalty via `approval`, rely on scaleMonsters; tests still green | Dep: A101, A084
 - [todo] A102 — Arc chapter 2 | Spec: §7.2 | Done: as A101, second region | Dep: A101
 - [todo] A103 — Arc chapter 3 | Spec: §7.2 | Done: as A101 | Dep: A102
 - [todo] A104 — Arc chapter 4 | Spec: §7.2 | Done: as A101 | Dep: A103
@@ -103,6 +103,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A101 (helper): data/adventures/arc1/ch1_whispering_fen.json (arcId main, 6 scenes, 7 NPCs, 12 encounters, 20 beats, 2 deadlines, endings fen_cured/fen_purged/fen_abandoned) + tests/arc1Ch1.test.ts. Starter flags (first_destination, reeve_attitude, ashby_fate, shrine_rekindled, world.corwin_status) change gates, scenes, fights. Follow-ups (A101b): swap Nettle's direct `world.nettle_status` write for the A084 `recruit: "nettle"` outcome + `approval` instead of flag incs; encounters were hand-trimmed (scaleMonsters now exists); wished-for engine features: exhaustion/scar outcomes, group checks, DC modifiers, long-rest trigger, flag-driven NPC attitude, string local flags.
 - A065b: Hero casting on the map reuses A067's castInCombat (lowest slot by default; no upcast picker yet). Area spells: click a square → encounter.areaTargets builds the template (self shapes from the caster, others centred on the square), checks the aim is within spell range, casts on the creatures inside (per-target reach skipped via areaTargets flag). Healing spells target party, others enemies; Lay on Hands needs a touch target, other features self. Known gap: close-combat disadvantage/cover not applied to spell attack rolls; Bonus Action spell rule not enforced for the player.
 - A086: Banter: after each story action (not in combat), at least 4 actions and 30 game minutes since the last line, then a 35% seeded chance (seed = campaign + time + action count + log id; log id alone repeats when actions add no log lines — gotcha); speaker ≠ last speaker. Line from the LLM (one ≤25-word line in the companion's voice and mood) in the background, else written lines from companions.json (`grumbles` when loyalty ≤ 20). Logged as `dialogue` with the companion as speaker (TTS voices it too).
 - A087: Control per companion (default AI) in extensions.party.control; toggled only outside combat (party card button). Encounters get `controlled` = hero + player-controlled companions; the controller stops on their turns and playerAct acts for whoever is up; the CombatScreen shows who is acting. Companion levelling with the hero was done in A084.
