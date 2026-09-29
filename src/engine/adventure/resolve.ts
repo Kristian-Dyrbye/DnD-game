@@ -8,6 +8,7 @@ import { skillCheck } from '../rules/checks';
 import type { ValidatedIntent } from './intent';
 import { availableActions, currentScene, getProgress, perform, type RunContext, type StepResult } from './runner';
 import type { Check, DifficultyTier } from './schema';
+import { TIME_COSTS } from '../world/clock';
 
 /** Used when the SRD rules tables aren't loaded (tests without a db). */
 const DC_FALLBACK: Record<DifficultyTier, number> = { very_easy: 5, easy: 10, medium: 15, hard: 20, very_hard: 25, nearly_impossible: 30 };
@@ -48,11 +49,13 @@ export function resolveIntent(ctx: RunContext, v: ValidatedIntent, text: string)
       return improvise(ctx, skill, v.targetId, text);
     }
     case 'look':
+      ctx.state.time += TIME_COSTS.quick_action;
       return facts('look', 'You take a careful look around.');
     case 'talk': {
       const who = npcName(v.targetId) ?? (scene.npcs.length === 1 ? npcName(scene.npcs[0]) : undefined);
       if (!who) return facts('nothing', scene.npcs.length ? 'You need to say who you are talking to.' : 'There is nobody here to talk to.');
       const npc = ctx.adventure.npcs.find((n) => n.name === who)!;
+      ctx.state.time += TIME_COSTS.explore_action;
       return facts('talk', `You speak with ${who}, who seems ${npc.attitude}. They answer in character but reveal nothing new.`);
     }
     case 'move': {
@@ -83,6 +86,7 @@ function improvise(ctx: RunContext, skill: Skill, targetId: string | undefined, 
     return { result: { ...empty(), facts: [`You already tried that (${SKILL_NAMES[skill]}); a second attempt won't go differently right now.`] }, via: 'already_tried', playerAction: text };
   }
   p.done.push(key);
+  ctx.state.time += TIME_COSTS.quick_action;
   const dc = improvisedDc(ctx);
   const roll = skillCheck(ctx.state.hero, skill, { rng: ctx.rng, dc });
   const what = SKILL_NAMES[skill];

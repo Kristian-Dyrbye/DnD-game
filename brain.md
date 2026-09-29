@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 4 (Phase 3 Character Creation done)
-- **Last completed assignment:** A059
-- **Notes for next session:** Phase 4 (narration loop) is done. Next: A072 (clock + day/night + System Registry). The demo adventure (data/adventures/demo/millbrook_demo.json) is playable end to end on the main game screen; `#play-<class>` opens it directly. Phase 2 engine is complete except zone spells (A064a). A061 (movement + opportunity attacks) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A072
+- **Notes for next session:** Phase 4 (narration loop) is done. Next: A078 (flag system: namespaces, cross-arc reads) or A077 (schedules/deadlines); A073 weather needs A072 (done) + A071 (done). The demo adventure (data/adventures/demo/millbrook_demo.json) is playable end to end on the main game screen; `#play-<class>` opens it directly. Phase 2 engine is complete except zone spells (A064a). A061 (movement + opportunity attacks) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -25,7 +25,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A011, A012, A013, A014, A015, A016, A017, A018, A019, A020, A021, A022, A023, A024, A025, A026, A027, A028, A029, A030, A031, A032, A033, A034, A034a, A035, A036, A037, A038, A039, A039b, A039c, A040, A041, A042
 
 ### Phase 3 — Character Creation
-- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A046b, A047, A048, A049, A050, A051, A052, A053, A054, A055, A056, A057, A058, A059, A060, A100
+- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A046b, A047, A048, A049, A050, A051, A052, A053, A054, A055, A056, A057, A058, A059, A060, A072, A100
 
 ### Phase 4 — Narration Loop
 
@@ -44,7 +44,6 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ### Phase 6 — Exploration
 - [done] A071
-- [todo] A072 — Clock + day/night | Spec: §11.3 | Done: clock advanced by travel/explore/rest/downtime; System Registry with onTimeAdvance; tests | Dep: A050
 - [todo] A073 — Weather | Spec: §11.4 | Done: region/season tables, mechanical effects (travel, obscurement, wind ranged penalty, fire/cold); tests | Dep: A072, A071
 - [todo] A074 — Travel + world map engine | Spec: §11.1 | Done: locations, routes, discovery, pace/travel time, random travel events by region/weather; tests | Dep: A073
 - [todo] A075 — World map UI | Spec: §11.1 | Done: illustrated clickable map, reveal on discovery, travel, time/weather tint | Dep: A074, A052
@@ -110,6 +109,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - Phase 2 part 2 + helpers (A029–A038, A034a, A071): d20Test core + checks/saves/passive/contest; attacks (crit/nat 1), damage rolls, defenses, temp HP; conditions engine from data modifiers (+ exhaustion); death saves, 0 HP, short/long rests; effect executor (shared damage, half on save, spell attacks, heal/upcast, conditions, hooks); spellcasting (slot tables incl. multiclass + pact, casting, rituals, cantrip scaling, concentration); character builder + derived stats (AC, speed, weapon attacks, HP) + inventory; leveling + feats; multiclassing; active effects + weapon masteries. Helpers: world lore (Orrimar: Aurelmark/Gloamfen/Brinescatter, Hollow Choir cult, start town Millbrook); 54 hand-written spell effects/hooks. See File Map for modules.
 - Phase 2 part 3 + helpers (A039–A042a, A048, A094): class feature framework (FeatureImpl hooks + registry/queries) with key features for all 12 classes + SRD subclasses, Wild Shape; monster runtime (stat block → creature, recharge, multiattack, action effects) + encounter builder (2024 XP budgets); spell buff/debuff hooks as active effects + queries. Helpers: CC0 3D models (assets/manifest.json, 52 MB) and CC0 audio (assets/audio-manifest.json, 47 MB) with fetch scripts run by Setup. Details: File Map + Decisions.
 - Phase 4 (A050–A051): GameSession + WebSocket protocol + client socket signals (src/engine/session/{gameState,GameSession}.ts, src/shared/protocol.ts, src/client/net/gameSocket.ts, /ws in src/server/app.ts); adventure format v1 (schema, conditions, validator, scene runner, session ActionPort, server loader) + demo adventure + ADVENTURE_FORMAT.md; main game screen (A052: top bar with location/clock/menu, party panel, story log with streaming, suggestion buttons + free text, 3D hero view, dice tray); animated d20 dice tray with adv/dis (A053); narration prompt builder + retrieval cards + context gathering (A054, src/llm/context/); intent parsing (A055: IntentSchema + keyword fallback + validateIntent in engine/adventure/intent.ts, LLM prompt in llm/prompts/intent.ts, wired into sessionActions.say); action resolution (A056: resolveIntent → authored action/exit check or improvised SRD-DC check → facts); streaming narration + template fallback (A057: engine/adventure/narration.ts narrateInto + server/narrator.ts llmNarrator); suggested actions (A058: data buttons at once + async LLM ideas merged; free-text idea buttons send `say`); rolling story summary after each scene (A059: engine/adventure/summary.ts + llm/prompts/summary.ts).
+- Phase 5 world systems: clock + calendar + System Registry (A072: engine/world/clock.ts, engine/systems/{registry,clockSystem,index}.ts).
 - Phase 2 tail + Phase 3 (A042a–c, A034c, A043–A049, A096 helpers): spell hooks (buffs/debuffs, projectiles/control, batch 3 riders + ~35 query helpers combat must call), spell audit (171 overrides), Eldritch Blast beams; character creator end to end (state machine, class/background/species/abilities (3 methods)/skills+class options/equipment/spells/appearance/identity+AI backstory/difficulty/review, Quick Build for all classes, `#creator` / `#quickbuild-<class>` test URLs); 3D preview (KayKit parts, head swap, skin recolour, tint, auto-frame); Piper voices (public-domain LibriVox, narrator en_GB-cori-medium); origin feat picks (A046b: Magic Initiate list/cantrips/spell/ability, Skilled) in creator + builder. See File Map + Decisions.
 
 
@@ -131,6 +131,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A072: Day 1 00:00 = Dawnday 1 Seedwake 1247 AR (spring); campaigns start 08:00. Time costs: scene action 10 min, improvised check/look 5, talk 10, short rest 60, long rest 480, downtime day 480; exits use their authored minutes. The runner still bumps state.time directly (pure); the session port captures time before each action and calls session.timePassed(before) → registry.timeAdvanced → system events logged as 'system' lines. Clock system reports only the final phase/new day on long jumps. Registry lives in SessionPorts.systems (server: createDefaultRegistry(lore.calendar)).
 - A059: Summary runs after every scene change in the background (chained promise, captured state object), folding log lines with id > state.summaryUpTo (new GameState field, default 0 → old saves fine). LLM result accepted if 20–3000 chars, else template (first sentence per new line, clamped to the last 1500 chars at a sentence boundary). Prompts still include the last 6 exchanges plus the summary.
 - A060 (helper): Grid is plain JSON (GridSchema): cells stored sparsely by "x,y" (terrain normal/difficult, blocking, coverObstacle half/three_quarters, hazards), edges stored once as N/W of a square ("x,y,N"/"x,y,W"; wall or door{open}), tokens {id,x,y(top-left),size}. Every square 5 ft incl. diagonals (Chebyshev). Cover: best attacker corner → 4 corners of each target square; 1–2 blocked half, 3 three-quarters, 4/no LOS total; creatures give half cover max; sources don't stack. Corner-grazing doesn't block; diagonal pillar pairs/wall joints do. Arrow slits = thick blocking squares with a gap. For A061: canStep only checks walls/blocking; large creatures use canPlace per step; diagonal past one pillar corner allowed. For A064: traceLine works corner-to-corner; use it for "effect reaches square".
 - A058: Suggestions = data buttons immediately; the LLM suggester runs in the background (not awaited) and its merged list replaces the buttons only if the log hasn't moved on (stamp = state.nextId). Ideas that aren't offered actions become `say` buttons (dashed style) that go through intent parsing. Offered actions/exits are always kept (max 7 buttons total; up to 5 ideas). adventureActionPort now returns AdventureActionPort with idle() for tests.
@@ -285,6 +286,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/llm/prompts/intent.ts` — intentMessages + parseIntent(provider, text, ictx) (callStructured; mock provider → keywords directly)
 - `src/engine/combat/grid.ts` — Grid model (cells/edges/tokens, footprints, distanceFt/isAdjacent/withinReach, canStep/canPlace)
 - `src/engine/combat/los.ts` — traceLine, hasLineOfSight, computeCover (+COVER_BONUS)
+- `src/engine/world/clock.ts` — MINUTES_PER_DAY, TIME_COSTS, timeOfDay, clockParts, calendarDate (lore calendar)
+- `src/engine/systems/{registry,clockSystem,index}.ts` — SystemRegistry (init/migrate via extensions._systemVersions, advanceTime, timeAdvanced, rest), clock system (phase/new-day events), createDefaultRegistry(calendar)
 - `src/shared/protocol.ts` — ClientCommandSchema (ping/new_game/get_state/say/choose/save/load), ServerEvent union, parseCommand
 - `src/engine/session/gameState.ts` — GameStateSchema (hero, companions, location, time, flags, log, summary, rolls, extensions), LOG_LIMIT/ROLL_LIMIT
 - `src/engine/session/GameSession.ts` — GameSession (handle/on/emit, addLog/addRoll/suggest, autosave, snapshot) + SavePort/ActionPort + newGameState

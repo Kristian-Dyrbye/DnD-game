@@ -21,6 +21,7 @@ import { parseIntent } from '../llm/prompts/intent';
 import { LoreSchema } from '../engine/world/lore';
 import loreJson from '../../data/world/lore.json';
 import { llmNarrator } from './narrator';
+import { createDefaultRegistry } from '../engine/systems';
 import { suggestIdeas } from '../llm/prompts/suggest';
 import { llmSummarizer } from '../llm/prompts/summary';
 import { gatherNarrationContext } from '../llm/context/gather';
@@ -112,6 +113,7 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   for (const p of problems) app.log.warn({ file: p.file, errors: p.errors }, 'Skipping invalid adventure');
   const defaultAdventure = adventures.has(STARTING_ADVENTURE) ? STARTING_ADVENTURE : [...adventures.keys()][0];
   const session = new GameSession({
+    systems: createDefaultRegistry(lore.calendar),
     ...(defaultAdventure && { actions: adventureActionPort(adventures, defaultAdventure, srd, {
         parseIntent: async (text, ictx) => (await parseIntent(services.llm, text, ictx)).intent,
         narrator: llmNarrator(() => services.llm, lore, srd),

@@ -119,15 +119,20 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     async choose(session, actionId) {
       const ctx = ctxFor(session);
       const label = availableActions(ctx).find((a) => a.id === actionId)?.label;
-      await finish(session, ctx, perform(ctx, actionId), label);
+      const before = ctx.state.time;
+      const r = perform(ctx, actionId);
+      await finish(session, ctx, r, label);
+      session.timePassed(before);
     },
     async say(session, text) {
       session.addLog('player', text);
       const ctx = ctxFor(session);
       const ictx = intentContext(ctx);
       const v = validateIntent(await parse(text, ictx), ictx);
+      const before = ctx.state.time;
       const r = resolveIntent(ctx, v, text);
       await finish(session, ctx, r.result, r.playerAction);
+      session.timePassed(before);
     },
   };
 }

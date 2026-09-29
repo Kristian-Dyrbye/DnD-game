@@ -9,6 +9,7 @@ import type { ClientCommand, ServerEvent, SuggestedAction } from '../../shared/p
 import type { SaveMeta } from '../../shared/save';
 import { totalLevel, type Character } from '../core/creature';
 import { Rng } from '../core/rng';
+import type { SystemRegistry } from '../systems/registry';
 import { GameStateSchema, LOG_LIMIT, ROLL_LIMIT, type GameState, type LogEntry, type RollRecord } from './gameState';
 
 /** Metadata the session provides for a save; the store adds slot id, kind and timestamp. */
@@ -41,6 +42,8 @@ export interface SessionPorts {
   actions?: ActionPort;
   /** Seed source for new games (tests pass a fixed one). */
   newSeed?: () => string;
+  /** Engine systems (clock, weather, ...): initialised on new game/load, told when time passes. */
+  systems?: SystemRegistry;
 }
 
 export const START_LOCATION = 'Millbrook';
@@ -98,6 +101,15 @@ export class GameSession {
     return this.state;
   }
 
+  get systems(): SystemRegistry | undefined {
+    return this.ports.systems;
+  }
+
+  /** Tells systems the clock moved (from → current time) and logs what they report. */
+  timePassed(from: number): void {
+    for (const e of this.ports.systems?.timeAdvanced(this.current, from, this.current.time) ?? []) this.addLog('system', e.text);
+  }
+
   get rng(): Rng {
     if (!this.rngInstance) throw new Error('No game is running');
     return this.rngInstance;
@@ -106,6 +118,7 @@ export class GameSession {
   /** Replaces the running game (new game or load). Validates the state. */
   start(state: unknown): GameState {
     const parsed = GameStateSchema.parse(state);
+    this.ports.systems?.init(parsed);
     this.state = parsed;
     this.rngInstance = new Rng(parsed.rng);
     return parsed;

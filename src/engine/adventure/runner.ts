@@ -17,6 +17,7 @@ import { applyFlagWrites, evalCondition, timeOfDay, type ConditionContext } from
 import type { Action, Adventure, Check, Outcome, Scene } from './schema';
 import { allScenes } from './validate';
 import { SKILL_ABILITY } from '../rules/basics';
+import { TIME_COSTS } from '../world/clock';
 
 export interface AdventureProgress {
   adventureId: string;
@@ -159,6 +160,7 @@ export function perform(ctx: RunContext, actionId: string): StepResult {
   const action = poiId ? s.pois.find((x) => x.id === poiId)?.actions.find((a) => a.id === sub) : s.actions.find((a) => a.id === actionId);
   if (!action) throw new AdventureError(`Unknown action "${actionId}"`);
   if (action.once) p.done.push(`${s.id}/${actionId}`);
+  ctx.state.time += TIME_COSTS.explore_action;
   if (action.check) {
     const r = resolveCheck(ctx, action.check);
     result.rolls.push(r);

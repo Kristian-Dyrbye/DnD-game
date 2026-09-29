@@ -120,6 +120,14 @@ interface GameSystem {
 
 Built-in systems (clock, weather, factions, shops, companions, scars/wear) use the same registry, so new systems don't need special wiring.
 
+Implemented so far:
+
+- `src/engine/systems/registry.ts`: `SystemRegistry` with `init` (initState plus migrate, with versions kept in `extensions._systemVersions`), `advanceTime`, `timeAdvanced` and `rest`.
+- `clockSystem.ts`: reports day and night changes and new days.
+- `index.ts`: `createDefaultRegistry(calendar)`.
+
+`GameSession` receives the registry as `ports.systems`. It initialises the registry on new game and on load. It calls `session.timePassed(from)` after every action and logs what the systems report.
+
 | Future expansion | How it plugs in |
 |---|---|
 | **Crafting** | A new `crafting` system registers downtime activities and item recipes in `data/crafting/`. Materials are ordinary items with a `tags: ["material"]` field (already supported in the item schema). |

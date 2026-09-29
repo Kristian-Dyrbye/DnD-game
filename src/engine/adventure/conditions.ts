@@ -3,9 +3,11 @@
  * day, weather, faction reputation, hero level and visited scenes. Unknown flags are simply unset,
  * so later arcs can safely read flags that earlier arcs never wrote.
  */
+import type { TimeOfDay } from '../world/clock';
 import type { Condition, FlagWrite } from './schema';
 
-export type TimeOfDay = 'dawn' | 'day' | 'dusk' | 'night';
+export { timeOfDay, type TimeOfDay } from '../world/clock';
+
 export type Flags = Record<string, boolean | number | string>;
 
 export interface ConditionContext {
@@ -15,15 +17,6 @@ export interface ConditionContext {
   reputation: Record<string, number>;
   level: number;
   visited: ReadonlySet<string>;
-}
-
-/** Time of day from minutes since campaign start (day 1, 00:00). */
-export function timeOfDay(minutes: number): TimeOfDay {
-  const hour = Math.floor(minutes / 60) % 24;
-  if (hour >= 5 && hour < 7) return 'dawn';
-  if (hour >= 7 && hour < 18) return 'day';
-  if (hour >= 18 && hour < 20) return 'dusk';
-  return 'night';
 }
 
 export function evalCondition(c: Condition | undefined, ctx: ConditionContext): boolean {
