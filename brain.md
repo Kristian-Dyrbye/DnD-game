@@ -6,7 +6,7 @@
 - **State:** IN PROGRESS
 - **Current phase:** 4 (Phase 3 Character Creation done)
 - **Last completed assignment:** A073
-- **Notes for next session:** Phase 4 (narration loop) is done. Next: A078 (flag system: namespaces, cross-arc reads), then A077 (schedules/deadlines), A074 (travel). The demo adventure (data/adventures/demo/millbrook_demo.json) is playable end to end on the main game screen; `#play-<class>` opens it directly. Phase 2 engine is complete except zone spells (A064a). A061 (movement + opportunity attacks) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Notes for next session:** Phase 4 (narration loop) is done. Next: A078 (flag system: namespaces, cross-arc reads), then A077 (schedules/deadlines), A074 (travel). The demo adventure (data/adventures/demo/millbrook_demo.json) is playable end to end on the main game screen; `#play-<class>` opens it directly. Phase 2 engine is complete except zone spells (A064a). A062 (initiative/turns/action economy) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -25,13 +25,12 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A011, A012, A013, A014, A015, A016, A017, A018, A019, A020, A021, A022, A023, A024, A025, A026, A027, A028, A029, A030, A031, A032, A033, A034, A034a, A035, A036, A037, A038, A039, A039b, A039c, A040, A041, A042
 
 ### Phase 3 — Character Creation
-- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A046b, A047, A048, A049, A050, A051, A052, A053, A054, A055, A056, A057, A058, A059, A060, A072, A073, A100
+- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A046b, A047, A048, A049, A050, A051, A052, A053, A054, A055, A056, A057, A058, A059, A060, A061, A072, A073, A100
 
 ### Phase 4 — Narration Loop
 
 ### Phase 5 — Grid Combat
-- [in-progress (helper)] A061 — Movement + opportunity attacks | Spec: §10 | Done: reachable squares with difficult terrain, OA triggers, disengage; tests | Dep: A060
-- [todo] A062 — Initiative, turns, action economy | Spec: §10 | Done: initiative order, turn manager, action/bonus/reaction/move/object tracking; tests | Dep: A061, A029
+- [in-progress (helper)] A062 — Initiative, turns, action economy | Spec: §10 | Done: initiative order, turn manager, action/bonus/reaction/move/object tracking; tests | Dep: A061, A029
 - [todo] A063 — Combat actions | Spec: §10 | Done: attack (ranges, long range/adjacent disadvantage), dash, disengage, dodge, help, hide, ready, grapple, shove, 2024 versions; mastery wired; tests | Dep: A062, A038
 - [todo] A064 — AoE templates | Spec: §10 | Done: cone, cube, sphere, line, cylinder → affected squares/creatures; tests | Dep: A060
 - [todo] A064a — Zone spell hooks | Spec: §4, §10 | Done: persistent zones on the grid: spirit_guardians, moonbeam, web, entangle, black_tentacles, wall_of_fire, call_lightning, flaming_sphere, spiritual_weapon, ice_storm terrain; triggers (enter/start turn), once-per-turn; tests | Dep: A064, A042a
@@ -130,6 +129,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A061 (helper): movement.ts follows SRD 5.2.1 text: ally/Tiny spaces are NOT difficult terrain (other creatures' spaces are); crawling costs +1 ft per ft (10 ft/square, 15 in difficult), not doubling; pass through ally/Incapacitated/Tiny/±2 sizes, never end in another's space; OA when leaving a hostile's reach (needs sight/reaction; none with Disengage, forced, teleport), resolved in moveAlong's beforeStep hook (return false to halt). Unhandled (A062/A063): prone-if-ending-in-another's-space, dragging grappled creatures, climb/swim costs, OA-avoiding pathing.
 - A073: Weather rolled per 8-hour block with Rng.fromSeed(`${campaignId}:weather:${region}:${block}`) — deterministic, no saved RNG needed, re-rolled when the region changes. Storm ⇒ strong wind; otherwise 10% strong, 30% breezy. Effects: travel × clear 1 / rain 0.75 / fog 0.75 / heat 0.75 / storm 0.5 / snow 0.5; fog heavily obscured (strong wind → light), rain/storm/snow lightly; strong wind = ranged weapon disadvantage + flames out; snow → extreme_cold, heat → extreme_heat hazards (resolved by travel, A074). createDefaultRegistry now takes {lore, regionOf}.
 - A072: Day 1 00:00 = Dawnday 1 Seedwake 1247 AR (spring); campaigns start 08:00. Time costs: scene action 10 min, improvised check/look 5, talk 10, short rest 60, long rest 480, downtime day 480; exits use their authored minutes. The runner still bumps state.time directly (pure); the session port captures time before each action and calls session.timePassed(before) → registry.timeAdvanced → system events logged as 'system' lines. Clock system reports only the final phase/new day on long jumps. Registry lives in SessionPorts.systems (server: createDefaultRegistry(lore.calendar)).
 - A059: Summary runs after every scene change in the background (chained promise, captured state object), folding log lines with id > state.summaryUpTo (new GameState field, default 0 → old saves fine). LLM result accepted if 20–3000 chars, else template (first sentence per new line, clamped to the last 1500 chars at a sentence boundary). Prompts still include the last 6 exchanges plus the summary.
@@ -290,6 +290,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/systems/{registry,clockSystem,index}.ts` — SystemRegistry (init/migrate via extensions._systemVersions, advanceTime, timeAdvanced, rest), clock system (phase/new-day events), createDefaultRegistry(calendar)
 - `src/engine/world/weather.ts` — weatherAt(lore, region, minutes, campaignId) (deterministic per 8h block), weatherEffects (travel×, obscured, perception/ranged disadvantage, flames, heat/cold hazard, description), weatherChangeText
 - `src/engine/systems/weatherSystem.ts` — weather system (extensions.weather), currentWeather; region via injected resolver (server: runner.regionOfState)
+- `src/engine/combat/movement.ts` — movementBudget, standUpCost, reachableSquares (Dijkstra with paths), planMove (preview + OA triggers), moveAlong (beforeStep hook), teleport
 - `src/shared/protocol.ts` — ClientCommandSchema (ping/new_game/get_state/say/choose/save/load), ServerEvent union, parseCommand
 - `src/engine/session/gameState.ts` — GameStateSchema (hero, companions, location, time, flags, log, summary, rolls, extensions), LOG_LIMIT/ROLL_LIMIT
 - `src/engine/session/GameSession.ts` — GameSession (handle/on/emit, addLog/addRoll/suggest, autosave, snapshot) + SavePort/ActionPort + newGameState
