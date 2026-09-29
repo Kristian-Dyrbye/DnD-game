@@ -507,7 +507,8 @@
         "barrow_shrine_rest"
       ],
       "readBy": [
-        "almoners_masque"
+        "almoners_masque",
+        "millbrook_remembers"
       ],
       "description": "Hero remembers the Cantor's voice from the Tooth-dream; lowers the masque Insight DC from 17 to 12."
     },
@@ -561,7 +562,8 @@
         "defeat_outcomes",
         "pells_reckoning",
         "highcrown_audience",
-        "palace_undercroft"
+        "palace_undercroft",
+        "pyrraxis_hoard"
       ],
       "readBy": [
         "highcrown_audience",
@@ -570,7 +572,8 @@
         "choir_of_teeth",
         "maw_final_seal",
         "pells_reckoning",
-        "palace_undercroft"
+        "palace_undercroft",
+        "pyrraxis_hoard"
       ],
       "description": "Holder of Tooth 1, the Tooth of Want, from the loc:millbrook barrow. Giving it to the Brightwater magistrate sends it silently to the Almonry (choir)."
     },
@@ -595,7 +598,8 @@
         "choir_of_teeth",
         "defeat_outcomes",
         "pells_reckoning",
-        "highcrown_audience"
+        "highcrown_audience",
+        "pyrraxis_hoard"
       ],
       "readBy": [
         "abbey_bells_toll",
@@ -603,7 +607,8 @@
         "maw_final_seal",
         "pells_reckoning",
         "highcrown_audience",
-        "palace_undercroft"
+        "palace_undercroft",
+        "pyrraxis_hoard"
       ],
       "description": "Holder of Tooth 2, the Drowned Tooth, from loc:drowned_abbey."
     },
@@ -629,7 +634,8 @@
         "choir_of_teeth",
         "defeat_outcomes",
         "pells_reckoning",
-        "highcrown_audience"
+        "highcrown_audience",
+        "pyrraxis_hoard"
       ],
       "readBy": [
         "night_of_bells",
@@ -637,7 +643,8 @@
         "maw_final_seal",
         "pells_reckoning",
         "highcrown_audience",
-        "palace_undercroft"
+        "palace_undercroft",
+        "pyrraxis_hoard"
       ],
       "description": "Holder of Tooth 3, the Briar Tooth, kept by Grandmother Wick of fac:briarkin at loc:thornwife_hollow."
     },
@@ -665,7 +672,8 @@
         "side_quests",
         "defeat_outcomes",
         "ch2_salt_and_treason",
-        "highcrown_audience"
+        "highcrown_audience",
+        "pyrraxis_hoard"
       ],
       "readBy": [
         "pells_reckoning",
@@ -674,7 +682,8 @@
         "port_sorrel_docks",
         "brass_parrot_vault",
         "highcrown_audience",
-        "palace_undercroft"
+        "palace_undercroft",
+        "pyrraxis_hoard"
       ],
       "description": "Holder of Tooth 4, the Brass Tooth, from the vault on loc:isle_of_brass_parrots; fac:red_gull_brotherhood may secure it."
     },
@@ -701,7 +710,8 @@
         "defeat_outcomes",
         "pells_reckoning",
         "ch2_salt_and_treason",
-        "highcrown_audience"
+        "highcrown_audience",
+        "pyrraxis_hoard"
       ],
       "readBy": [
         "choir_of_teeth",
@@ -709,7 +719,8 @@
         "singing_reef_lagoon",
         "pells_reckoning",
         "highcrown_audience",
-        "palace_undercroft"
+        "palace_undercroft",
+        "pyrraxis_hoard"
       ],
       "description": "Holder of Tooth 5, the Singing Tooth, taken from the sea hag of loc:singing_reef."
     },
@@ -733,14 +744,16 @@
         "maw_descent",
         "choir_of_teeth",
         "side_quests",
-        "defeat_outcomes"
+        "defeat_outcomes",
+        "pyrraxis_hoard"
       ],
       "readBy": [
         "choir_of_teeth",
         "maw_final_seal",
         "vaelthorn_sky_towers",
         "highcrown_audience",
-        "palace_undercroft"
+        "palace_undercroft",
+        "pyrraxis_hoard"
       ],
       "description": "Holder of Tooth 6, the Sky Tooth, sealed under Dawnbreaker in loc:ruins_of_old_vaelthorn."
     },
@@ -800,7 +813,8 @@
       "readBy": [
         "choir_of_teeth",
         "maw_final_seal",
-        "ending"
+        "ending",
+        "pyrraxis_hoard"
       ],
       "description": "Derived: number of Teeth held by the player or an ally (holder not unclaimed/choir). Recomputed by the flag engine."
     },
@@ -912,7 +926,8 @@
       ],
       "readBy": [
         "lantern_hold_tribunal",
-        "palace_undercroft"
+        "palace_undercroft",
+        "highcrown_burning"
       ],
       "description": "Hero holds the fac:briarkin cure for the Whispering Sickness (bell-ash delivered)."
     },
@@ -957,7 +972,8 @@
         "port_sorrel_docks",
         "palace_undercroft",
         "lantern_hold_siege",
-        "ending"
+        "ending",
+        "highcrown_burning"
       ],
       "description": "How the Whispering Sickness is being fought across Orrimar; readable by future arcs."
     },
@@ -1013,7 +1029,8 @@
         "deepanvil_ledgers",
         "dawnspire_muster",
         "ending",
-        "side_quests"
+        "side_quests",
+        "highcrown_burning"
       ],
       "description": "Side taken in the Isles: fac:red_gull_brotherhood (with fac:tidewright_guild) or fac:saltwind_trading_company."
     },
@@ -1208,7 +1225,9 @@
         "palace_undercroft",
         "choir_of_teeth",
         "ending",
-        "almoners_masque"
+        "almoners_masque",
+        "dawnspire_muster",
+        "highcrown_burning"
       ],
       "description": "Hero knows the Cantor is Lady Seraphine Vell, Royal Almoner of fac:crown_of_aurelmark."
     },
@@ -1223,7 +1242,8 @@
         "dawnspire_muster",
         "highcrown_burning",
         "ending",
-        "palace_undercroft"
+        "palace_undercroft",
+        "ashfall_road"
       ],
       "description": "The Cantor was exposed before the court of loc:highcrown."
     },
@@ -1261,7 +1281,8 @@
         "highcrown_burning",
         "side_quests",
         "almoners_masque",
-        "palace_undercroft"
+        "palace_undercroft",
+        "emberpeak_ascent"
       ],
       "description": "Hero is wanted by fac:crown_of_aurelmark or fac:saltwind_trading_company law."
     },
@@ -1277,7 +1298,8 @@
         "dawnspire_muster",
         "highcrown_burning",
         "choir_of_teeth",
-        "ending"
+        "ending",
+        "ashfall_road"
       ],
       "description": "Queen Isolde Varannis of fac:crown_of_aurelmark survives the Cantor's poison."
     },
@@ -1291,7 +1313,8 @@
       "readBy": [
         "dawnspire_muster",
         "highcrown_burning",
-        "ending"
+        "ending",
+        "millbrook_remembers"
       ],
       "description": "loc:millbrook fights for the hero (war council ally, halves Highcrown fire)."
     },
@@ -1329,7 +1352,8 @@
       "readBy": [
         "highcrown_burning",
         "ending",
-        "side_quests"
+        "side_quests",
+        "pyrraxis_hoard"
       ],
       "description": "Fate of the red dragon Pyrraxis of loc:emberpeak."
     },
@@ -1436,7 +1460,8 @@
       "setBy": [
         "barrow_of_the_first_sheaf",
         "marrows_goods_and_oath",
-        "dawnspire_vigil"
+        "dawnspire_vigil",
+        "dawnspire_muster"
       ],
       "readBy": [
         "vaelthorn_sky_towers",
@@ -1445,7 +1470,9 @@
         "ending",
         "port_sorrel_docks",
         "fort_kestrel_gallows",
-        "dawnspire_vigil"
+        "dawnspire_vigil",
+        "dawnspire_muster",
+        "highcrown_burning"
       ],
       "description": "Ser Corwin Ashvale, dismissed knight of fac:order_of_the_dawn_lance."
     },
@@ -1467,12 +1494,19 @@
         "port_sorrel_docks",
         "fort_kestrel_gallows",
         "brass_parrot_vault",
-        "pells_reckoning"
+        "pells_reckoning",
+        "ashfall_road",
+        "millbrook_remembers",
+        "dawnspire_muster",
+        "emberpeak_ascent",
+        "pyrraxis_hoard",
+        "highcrown_burning"
       ],
       "readBy": [
         "dawnspire_vigil",
         "highcrown_audience",
-        "ending"
+        "ending",
+        "dawnspire_muster"
       ],
       "description": "Corwin approval 0-100; <=20 at loc:dawnspire_keep makes him leave."
     },
@@ -1516,7 +1550,9 @@
         "defeat_outcomes",
         "ending",
         "port_sorrel_docks",
-        "palace_undercroft"
+        "palace_undercroft",
+        "pyrraxis_hoard",
+        "highcrown_burning"
       ],
       "description": "Nettle, fac:briarkin hedge-witch apprentice."
     },
@@ -1534,7 +1570,10 @@
         "blightwood_crossing",
         "side_quests",
         "port_sorrel_docks",
-        "pells_reckoning"
+        "pells_reckoning",
+        "ashfall_road",
+        "millbrook_remembers",
+        "pyrraxis_hoard"
       ],
       "readBy": [
         "thornwife_moot",
@@ -1604,7 +1643,9 @@
         "side_quests",
         "wreckers_cove_caves",
         "singing_reef_lagoon",
-        "pells_reckoning"
+        "pells_reckoning",
+        "dawnspire_muster",
+        "highcrown_burning"
       ],
       "readBy": [
         "pells_reckoning",
@@ -1648,7 +1689,8 @@
         "highcrown_audience",
         "almoners_masque",
         "vaelthorn_sky_towers",
-        "palace_undercroft"
+        "palace_undercroft",
+        "pyrraxis_hoard"
       ],
       "description": "Aurek Vell, Veyran scholar and nephew of the Cantor."
     },
@@ -1663,7 +1705,10 @@
         "vaelthorn_sky_towers",
         "almoners_masque",
         "palace_undercroft",
-        "side_quests"
+        "side_quests",
+        "emberpeak_ascent",
+        "pyrraxis_hoard",
+        "highcrown_burning"
       ],
       "readBy": [
         "highcrown_audience",

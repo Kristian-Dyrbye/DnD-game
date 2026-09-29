@@ -902,6 +902,26 @@ This chapter pays off the most earlier flags.
 
 **Faction tension.** The war council forces priorities. Each ally's condition depends on an earlier choice, so helping one faction in Ch1–3 visibly adds or removes an army here.
 
+**Implementation choices (adventure JSON, `data/adventures/arc1/ch4_wyrmfire.json`):**
+- The chapter endings are `crown_endures` (palace retaken, the Queen lives), `regency_council` (palace retaken, the Queen dead), `crown_in_ashes` (palace retaken while Pyrraxis rages) and `highcrown_fallen` (the coup fight is lost).
+- The Millbrook race uses the `since` condition: the hero sees Pyrraxis on arriving at `ashfall_road`, and Millbrook burns if the hero arrives more than 24 hours later (via Dawnspire it is always too late). A burned Millbrook gives no militia.
+- Millbrook has three branches: faithful (as designed), converted (as designed; Persuasion DC 15 per group of three, one try each, counted by the number flags `~ch4_hold_tries` and `~ch4_groups_freed`), and a new "wavering" middle branch (neither condition holds) where Persuasion DC 15 can still raise the militia. Freeing both converted groups and beating the fanatic also raises the militia. Without the wards, the lone defence costs 2d6 fire (Dex DC 13 half).
+- War council: each ally sets a local `~ch4_ally_*` flag and adds 1 to `arc.main.war_council_allies`. Near misses (Persuasion DC 16, advantage when Pip carries messages): the Dawn Lance at rep 0–19 or when the hero holds Dawnbreaker; the Crown when the hero knows the Cantor privately; Ironvault at rep −20 to −1; Oswin Tull's Tidewright fire-barges when the isles stayed neutral and Gullhaven is free. The Deepanvil mercenaries can also be hired for 1,500 gp. The quartermaster sells one `potion_of_resistance` (300 gp) that negates the Emberpeak heat save.
+- Artillery (the Ironvault or isles ally) cannot yet deal per-round damage to Pyrraxis (no `statOverrides`). Instead it drives off the brood-guardian, and the Ironvault ballistae remove one `cultist_fanatic` from the singers' camp. Pyrraxis's "wounded" modifiers are terrain notes for now.
+- The Free path is a skill challenge with the number flags `~ch4_free_successes` and `~ch4_free_failures`. Every attempt draws a claw (2d6+4 slashing, Dex DC 15 half). Silencing the song-stone gives advantage on every attempt. Three failures end the Free option (slay, bargain or retreat remain).
+- The Bargain lets the player choose which carried Tooth to pay. Retreating from the lair, or losing to the brood-guardian or Pyrraxis, sets "raging" and gives the Ember Tooth to the Choir.
+- At Highcrown, Vey (court) and Vosk (grand stair) each hold a room of the palace map before the throne hall, instead of joining the main fight. The throne-hall fight takes one war-council contingent as allies (the Dawn Lance's `knight` ×3, the royal guard's `guard` ×4 or the Deepanvil `warrior_veteran` ×4). A raging Pyrraxis strafes the party once on arrival (4d10 fire, halved by Millbrook's firebreak).
+- A Queen who is still sick (`world.queen_alive` false after Ch3) gets the DC 20 Medicine retry (automatic with the fen cure). A deadline of 2 days runs from the lair; missing it, losing the palace, or failing the check kills her (`~ch4_queen_dead`).
+- Isolde's letter of forgiveness is the chapter-local flag `~ch4_isolde_letter`, available when the Queen lives and knows who the Cantor is. Ch5 (`choir_of_teeth`) reads it.
+- A disloyal Corwin (loyalty ≤ 20) stays with the Dawn Lance at `dawnspire_muster` and appears as a friendly NPC at Highcrown.
+- Level milestones are XP beats: +11,000 when the Emberpeak camp is resolved (level 8) and +14,000 when Highcrown is resolved (level 9).
+- Maps: `emberpeak_lair` (scorched slope, lava tubes, singers' crater, brood ledge, hoard) and `highcrown_palace` (Queen's Gate, palace court, grand stair, throne hall). Fights happen in their own rooms.
+
+**Flags that visibly change later chapters:**
+- `arc.main.pyrraxis_fate` and `arc.main.tooth_ember_holder` decide whether the dragon and the Ember Tooth await the hero at the Maw.
+- `world.queen_alive` and `~ch4_isolde_letter` open the redemption parley and decide the ending.
+- `arc.main.war_council_allies` changes the Ch5 siege of Lantern Hold.
+
 ---
 
 ## 10. Chapter 5: The Hungering Dark (`ch5_the_hungering_dark`, Level 9–10, Gloamfen)
