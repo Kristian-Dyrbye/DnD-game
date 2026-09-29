@@ -28,7 +28,8 @@ export type Condition =
   | { weather: string[] }
   | { reputation: { faction: string; gte?: number; lte?: number } }
   | { level: { gte?: number; lte?: number } }
-  | { visited: string };
+  | { visited: string }
+  | { hours: { from: number; to: number } };
 
 export const ConditionSchema: z.ZodType<Condition> = z.lazy(() =>
   z.union([
@@ -41,6 +42,8 @@ export const ConditionSchema: z.ZodType<Condition> = z.lazy(() =>
     z.object({ reputation: z.object({ faction: z.string(), gte: z.number().optional(), lte: z.number().optional() }) }).strict(),
     z.object({ level: z.object({ gte: z.number().optional(), lte: z.number().optional() }) }).strict(),
     z.object({ visited: z.string() }).strict(),
+    // Hour window [from, to) on the 24-hour clock; wraps past midnight when from > to (22 → 6).
+    z.object({ hours: z.object({ from: z.number().int().min(0).max(23), to: z.number().int().min(0).max(24) }) }).strict(),
   ]),
 );
 
@@ -184,6 +187,11 @@ export const NpcSchema = z
     ttsVoice: z.string().optional(),
     factions: z.array(z.string()).default([]),
     attitude: z.enum(['friendly', 'indifferent', 'hostile']).default('indifferent'),
+    /**
+     * Where the NPC is by hour. When set, the NPC appears only where and when an entry matches
+     * (scene `npcs` lists are ignored for them). Hours as in the `hours` condition.
+     */
+    schedule: z.array(z.object({ scene: Id, from: z.number().int().min(0).max(23), to: z.number().int().min(0).max(24), if: ConditionSchema.optional() })).default([]),
   })
   .strict();
 export type Npc = z.infer<typeof NpcSchema>;
@@ -219,6 +227,25 @@ export const BeatSchema = z
     required: z.boolean().default(false),
   })
   .strict();
+
+/** A time limit: starts when `start` holds (default: adventure start), met when `met` holds. */
+export const DeadlineSchema = z
+  .object({
+    id: Id,
+    /** For the narrator/journal ("Reach Ravensgate before the pyre is lit"). */
+    text: z.string(),
+    start: ConditionSchema.optional(),
+    met: ConditionSchema,
+    /** Minutes allowed after it starts. */
+    within: z.number().int().min(1),
+    /** Warn once when this many minutes (or fewer) remain. */
+    warnAt: z.number().int().min(0).optional(),
+    warning: z.string().optional(),
+    /** Consequence when time runs out first. */
+    missed: OutcomeSchema.prefault({}),
+  })
+  .strict();
+export type Deadline = z.infer<typeof DeadlineSchema>;
 
 export const LootTableSchema = z
   .object({
@@ -257,6 +284,7 @@ export const AdventureSchema = z
     npcs: z.array(NpcSchema).default([]),
     encounters: z.array(EncounterSchema).default([]),
     beats: z.array(BeatSchema).default([]),
+    deadlines: z.array(DeadlineSchema).default([]),
     lootTables: z.array(LootTableSchema).default([]),
     /** Documented flags this adventure reads/writes (for editors and validation). */
     flags: z.array(z.object({ id: z.string(), description: z.string() })).default([]),

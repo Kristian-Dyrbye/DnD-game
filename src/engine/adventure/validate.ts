@@ -41,6 +41,7 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
   const lootIds = dupes('loot table', adv.lootTables.map((l) => l.id));
   const endingIds = dupes('ending', adv.endings.map((e) => e.id));
   dupes('beat', adv.beats.map((b) => b.id));
+  dupes('deadline', adv.deadlines.map((d) => d.id));
 
   const startChapter = adv.chapters.find((c) => c.id === adv.start.chapter);
   if (!startChapter) errors.push(`start.chapter "${adv.start.chapter}" does not exist`);
@@ -89,6 +90,8 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
     for (const s of b.scenes) if (!sceneIds.has(s)) errors.push(`beat ${b.id}: unknown scene "${s}"`);
   }
   for (const n of adv.npcs) if (db && !db.monsters.has(n.statBlock)) errors.push(`npc ${n.id}: unknown stat block "${n.statBlock}"`);
+  for (const n of adv.npcs) for (const e of n.schedule) if (!sceneIds.has(e.scene)) errors.push(`npc ${n.id}: schedule names unknown scene "${e.scene}"`);
+  for (const d of adv.deadlines) outcome(d.missed, `deadline ${d.id}.missed`);
   for (const l of adv.lootTables) for (const e of l.entries) if (e.itemId) item(e.itemId, `loot ${l.id}`);
 
   // Flags: namespaced, documented (registry or this adventure's docs), and writes of the right type.
@@ -161,5 +164,7 @@ export function flagRefs(adv: Adventure): { reads: Set<string>; writes: { id: st
   walk(adv.chapters);
   walk(adv.encounters);
   walk(adv.beats);
+  walk(adv.deadlines);
+  walk(adv.npcs);
   return { reads, writes };
 }

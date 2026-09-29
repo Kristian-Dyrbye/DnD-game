@@ -118,6 +118,7 @@ Conditions can be nested freely:
 { "reputation": { "faction": "harbor_guild", "gte": 10 } }
 { "level": { "gte": 3 } }
 { "visited": "scene_id" }
+{ "hours": { "from": 6, "to": 14 } }                   // hour window [from, to); 18 → 2 wraps midnight
 ```
 
 A flag that has never been set is simply unset, so later arcs can safely read flags from arcs the player never finished.
@@ -154,6 +155,7 @@ The loader resolves `~name` to the full id, so saves and later arcs only ever se
 ```
 
 - `statBlock` is an SRD monster id.
+- `schedule` is optional: `[{ "scene": "market", "from": 6, "to": 14, "if"?: condition }]`. An NPC with a schedule appears only where and when an entry matches, and scene `npcs` lists are ignored for them. Use it for shopkeepers and night-only visitors.
 - Secrets are passed to the LLM only as guidance, never as mechanics.
 
 ## Encounters
@@ -177,6 +179,23 @@ In Heroic mode, `lose` is the **defeat outcome** (captured, robbed, rescued...).
 - A beat fires **once**, the first time its trigger holds while the hero is in one of its `scenes`.
 - An empty `scenes` list means anywhere.
 - Beats are checked after every action and every scene entry.
+
+## Deadlines
+
+```json
+{ "id": "letter", "text": "Deliver the letter before nightfall",
+  "start": { "flag": "~job_taken" }, "met": { "flag": "~delivered" },
+  "within": 480, "warnAt": 60, "warning": "optional custom warning",
+  "missed": { "text": "The letter is too late...", "flags": [...], "reputation": [...] } }
+```
+
+- **Starting:** a deadline starts the first time `start` holds. With no `start`, it starts at the beginning of the adventure.
+- **Meeting:** it is met as soon as `met` holds.
+- **Missing:** if `within` minutes pass first, the `missed` outcome is applied, which is the consequence.
+- **Warning:** a single warning fact is added when `warnAt` minutes or fewer remain.
+- **When it is checked:** after every action, exit and beat.
+
+For day-only or night-only content, put a `timeOfDay` or `hours` condition on actions, exits, POIs or beats.
 
 ## Loot tables
 

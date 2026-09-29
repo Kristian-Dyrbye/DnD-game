@@ -13,7 +13,7 @@ import type { Rng } from '../core/rng';
 import type { SrdDatabase } from '../data/srd';
 import { abilityCheck, savingThrow, type D20TestResult } from '../rules/checks';
 import type { GameState } from '../session/gameState';
-import { applyFlagWrites, evalCondition, timeOfDay, type ConditionContext } from './conditions';
+import { applyFlagWrites, evalCondition, inHours, timeOfDay, type ConditionContext } from './conditions';
 import type { Action, Adventure, Check, Outcome, Scene } from './schema';
 import { allScenes } from './validate';
 import { SKILL_ABILITY } from '../rules/basics';
@@ -30,6 +30,14 @@ export interface AdventureProgress {
   ending?: string;
   /** Scene entries so far (improvised attempts reset on each new entry). */
   entries?: number;
+  /** Deadline tracking by deadline id. */
+  deadlines?: Record<string, DeadlineProgress>;
+}
+
+export interface DeadlineProgress {
+  startedAt: number;
+  status: 'running' | 'met' | 'missed';
+  warned?: boolean;
 }
 
 export interface RunContext {
@@ -89,6 +97,7 @@ export function conditionContext(state: GameState, progress?: AdventureProgress,
     flags: state.flags,
     ...(registry && { defaults: registry.defaults() }),
     timeOfDay: timeOfDay(state.time),
+    hour: Math.floor(state.time / 60) % 24,
     ...(weather && { weather }),
     reputation: (state.extensions.reputation as Record<string, number> | undefined) ?? {},
     level: totalLevel(state.hero),
@@ -112,8 +121,28 @@ export function describeScene(ctx: Pick<RunContext, 'state' | 'adventure' | 'fla
     name: s.name,
     seed: [s.seed, ...s.variants.filter((v) => evalCondition(v.if, cc)).map((v) => v.seed)].join(' '),
     pois: s.pois.filter((p) => evalCondition(p.if, cc)).map((p) => ({ name: p.name, seed: p.seed })),
-    npcs: s.npcs.map((id) => ctx.adventure.npcs.find((n) => n.id === id)?.name ?? id),
+    npcs: npcsHere(ctx).map((id) => ctx.adventure.npcs.find((n) => n.id === id)?.name ?? id),
   };
+}
+
+/**
+ * NPC ids present in the current scene now: unscheduled NPCs listed by the scene, plus scheduled
+ * NPCs whose schedule puts them here at this hour (and whose entry condition holds).
+ */
+export function npcsHere(ctx: Pick<RunContext, 'state' | 'adventure' | 'flags'>): string[] {
+  const s = currentScene(ctx);
+  const cc = conditionContext(ctx.state, getProgress(ctx.state), ctx.flags);
+  const hour = cc.hour ?? 12;
+  const out: string[] = [];
+  for (const id of s.npcs) {
+    const npc = ctx.adventure.npcs.find((n) => n.id === id);
+    if (!npc || npc.schedule.length === 0) out.push(id);
+  }
+  for (const npc of ctx.adventure.npcs) {
+    if (out.includes(npc.id)) continue;
+    if (npc.schedule.some((e) => e.scene === s.id && inHours(hour, e.from, e.to) && evalCondition(e.if, cc))) out.push(npc.id);
+  }
+  return out;
 }
 
 export function availableActions(ctx: RunContext): AvailableAction[] {
@@ -247,6 +276,47 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
   if (o.goto) enterScene(ctx, o.goto, result, depth + 1);
 }
 
+/**
+ * Starts, completes or fails deadlines. A missed deadline applies its `missed` outcome; a warning
+ * fact is added once when `warnAt` minutes or fewer remain.
+ */
+export function checkDeadlines(ctx: RunContext, result: StepResult, depth = 0): void {
+  const p = getProgress(ctx.state);
+  if (!p) return;
+  const cc = conditionContext(ctx.state, p, ctx.flags);
+  p.deadlines ??= {};
+  for (const d of ctx.adventure.deadlines) {
+    let rec = p.deadlines[d.id];
+    if (!rec) {
+      if (!evalCondition(d.start, cc)) continue;
+      rec = p.deadlines[d.id] = { startedAt: ctx.state.time, status: 'running' };
+    }
+    if (rec.status !== 'running') continue;
+    if (evalCondition(d.met, cc)) {
+      rec.status = 'met';
+      continue;
+    }
+    // Once the adventure has ended, nothing more can be missed.
+    if (p.ending) continue;
+    const left = rec.startedAt + d.within - ctx.state.time;
+    if (left <= 0) {
+      rec.status = 'missed';
+      applyOutcome(ctx, d.missed, result, depth + 1);
+    } else if (d.warnAt !== undefined && left <= d.warnAt && !rec.warned) {
+      rec.warned = true;
+      result.facts.push(d.warning ?? `Time is running short: ${d.text}`);
+    }
+  }
+}
+
+/** Running deadlines with minutes left (journal/UI). */
+export function activeDeadlines(ctx: Pick<RunContext, 'state' | 'adventure'>): { id: string; text: string; minutesLeft: number }[] {
+  const recs = getProgress(ctx.state)?.deadlines ?? {};
+  return ctx.adventure.deadlines
+    .filter((d) => recs[d.id]?.status === 'running')
+    .map((d) => ({ id: d.id, text: d.text, minutesLeft: recs[d.id]!.startedAt + d.within - ctx.state.time }));
+}
+
 function fireBeats(ctx: RunContext, result: StepResult, depth = 0): void {
   const p = getProgress(ctx.state)!;
   for (const b of ctx.adventure.beats) {
@@ -257,6 +327,7 @@ function fireBeats(ctx: RunContext, result: StepResult, depth = 0): void {
     result.facts.push(b.text);
     applyOutcome(ctx, b.outcome, result, depth + 1);
   }
+  checkDeadlines(ctx, result, depth);
 }
 
 function giveItem(hero: Character, itemId: string, quantity: number, db: SrdDatabase | undefined, result: StepResult): void {

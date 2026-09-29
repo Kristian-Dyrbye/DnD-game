@@ -4,7 +4,7 @@
  * the scene's lore location, factions tied to either).
  */
 import { timeOfDay } from '../../engine/adventure/conditions';
-import { describeScene, findScene, getProgress } from '../../engine/adventure/runner';
+import { describeScene, findScene, getProgress, npcsHere } from '../../engine/adventure/runner';
 import type { Adventure } from '../../engine/adventure/schema';
 import type { Character } from '../../engine/core/creature';
 import type { SrdDatabase } from '../../engine/data/srd';
@@ -47,7 +47,7 @@ export function gatherNarrationContext(state: GameState, lore: Lore, adventure?:
   const cards: PromptCard[] = [];
   const factionIds = new Set<string>(location?.factionIds ?? []);
   if (scene && adventure) {
-    for (const id of scene.npcs) {
+    for (const id of npcsHere({ state, adventure })) {
       const npc = adventure.npcs.find((n) => n.id === id);
       if (!npc) continue;
       cards.push(npcCard(npc, true));

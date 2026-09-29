@@ -6,7 +6,7 @@
 import { SKILL_NAMES, type Skill } from '../rules/basics';
 import { skillCheck } from '../rules/checks';
 import type { ValidatedIntent } from './intent';
-import { availableActions, currentScene, getProgress, perform, type RunContext, type StepResult } from './runner';
+import { availableActions, currentScene, getProgress, npcsHere, perform, type RunContext, type StepResult } from './runner';
 import type { Check, DifficultyTier } from './schema';
 import { TIME_COSTS } from '../world/clock';
 
@@ -52,8 +52,9 @@ export function resolveIntent(ctx: RunContext, v: ValidatedIntent, text: string)
       ctx.state.time += TIME_COSTS.quick_action;
       return facts('look', 'You take a careful look around.');
     case 'talk': {
-      const who = npcName(v.targetId) ?? (scene.npcs.length === 1 ? npcName(scene.npcs[0]) : undefined);
-      if (!who) return facts('nothing', scene.npcs.length ? 'You need to say who you are talking to.' : 'There is nobody here to talk to.');
+      const here = npcsHere(ctx);
+      const who = (v.targetId && here.includes(v.targetId) ? npcName(v.targetId) : undefined) ?? (here.length === 1 ? npcName(here[0]) : undefined);
+      if (!who) return facts('nothing', here.length ? 'You need to say who you are talking to.' : 'There is nobody here to talk to.');
       const npc = ctx.adventure.npcs.find((n) => n.name === who)!;
       ctx.state.time += TIME_COSTS.explore_action;
       return facts('talk', `You speak with ${who}, who seems ${npc.attitude}. They answer in character but reveal nothing new.`);

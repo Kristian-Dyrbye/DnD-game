@@ -16,6 +16,8 @@ export interface ConditionContext {
   /** Registry defaults, read when a flag is unset. */
   defaults?: Flags;
   timeOfDay: TimeOfDay;
+  /** Hour of day 0–23 (for `hours` conditions). */
+  hour?: number;
   weather?: string;
   reputation: Record<string, number>;
   level: number;
@@ -30,6 +32,7 @@ export function evalCondition(c: Condition | undefined, ctx: ConditionContext): 
   if ('timeOfDay' in c) return c.timeOfDay.includes(ctx.timeOfDay);
   if ('weather' in c) return ctx.weather !== undefined && c.weather.includes(ctx.weather);
   if ('visited' in c) return ctx.visited.has(c.visited);
+  if ('hours' in c) return inHours(ctx.hour ?? 12, c.hours.from, c.hours.to);
   if ('level' in c) return inRange(ctx.level, c.level.gte, c.level.lte);
   if ('reputation' in c) return inRange(ctx.reputation[c.reputation.faction] ?? 0, c.reputation.gte, c.reputation.lte);
   const v = ctx.flags[c.flag] ?? ctx.defaults?.[c.flag];
@@ -39,6 +42,11 @@ export function evalCondition(c: Condition | undefined, ctx: ConditionContext): 
   // A bare { flag } means "is truthy".
   if (c.exists === undefined && c.eq === undefined) return Boolean(v);
   return true;
+}
+
+/** Hour window [from, to); wraps past midnight when from > to. */
+export function inHours(hour: number, from: number, to: number): boolean {
+  return from <= to ? hour >= from && hour < to : hour >= from || hour < to;
 }
 
 function inRange(v: number, gte?: number, lte?: number): boolean {

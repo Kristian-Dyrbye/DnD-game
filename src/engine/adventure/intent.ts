@@ -6,7 +6,7 @@
  */
 import { z } from 'zod';
 import { SKILLS, type Skill } from '../rules/basics';
-import { availableActions, currentScene, type RunContext } from './runner';
+import { availableActions, currentScene, npcsHere, type RunContext } from './runner';
 
 export const INTENT_ACTIONS = ['choose_action', 'skill_check', 'talk', 'move', 'look', 'attack', 'use_item', 'cast_spell', 'rest', 'other'] as const;
 
@@ -47,7 +47,7 @@ export function intentContext(ctx: RunContext): IntentContext {
   };
   return {
     actions: availableActions(ctx).map((a) => ({ id: a.id, label: a.label, keywords: keywordsOf(a.id) })),
-    npcs: scene.npcs.map((id) => ({ id, name: ctx.adventure.npcs.find((n) => n.id === id)?.name ?? id })),
+    npcs: npcsHere(ctx).map((id) => ({ id, name: ctx.adventure.npcs.find((n) => n.id === id)?.name ?? id })),
     pois: scene.pois.map((p) => ({ id: p.id, name: p.name })),
   };
 }
