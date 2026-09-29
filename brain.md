@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 1 (Foundation)
-- **Last completed assignment:** A005
-- **Notes for next session:** Start with A006. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. A010 needs Ollama: if `ollama` is still missing, mark it blocked and skip it.
+- **Last completed assignment:** A006
+- **Notes for next session:** Start with A007. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. A010 needs Ollama: if `ollama` is still missing, mark it blocked and skip it.
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -23,7 +23,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A003 — Settings/config system | Spec: §14, §2 | Done: zod settings schema (model name, LLM params, volumes, perf preset, accessibility, objectiveHint=false), defaults + userdata/settings.json load/save, GET/PUT /api/settings; tests | Dep: A002
 - [done] A004 — LLM provider + Ollama client + mock | Spec: §2, §3, §17 | Done: LlmProvider interface (chat, stream, json, listModels, status); Ollama client over fetch; deterministic MockLlm (scripted responses); tests with mocked fetch | Dep: A001
 - [done] A005 — Structured JSON helper | Spec: §3 | Done: llm/structured.ts: schema→Ollama format, zod validate, 1 retry, typed fallback, never throws; tests for bad JSON/timeouts | Dep: A004
-- [todo] A006 — TTS provider + Piper adapter + mock | Spec: §2, §13 | Done: TtsProvider interface, Piper spawn adapter (path from settings), MockTts, status check; tests with mock | Dep: A001
+- [done] A006 — TTS provider + Piper adapter + mock | Spec: §2, §13 | Done: TtsProvider interface, Piper spawn adapter (path from settings), MockTts, status check; tests with mock | Dep: A001
 - [todo] A007 — Status endpoint + indicator | Spec: §14, §17 | Done: GET /api/status (ollama up, model loaded, tts ready, RSS memory); small UI indicator; tests | Dep: A003, A004, A006
 - [todo] A008 — Save system + migrations | Spec: §2, §9, §17 | Done: save/load/list/delete slots + autosave slot, meta (time, location, level, thumbnail, mode), migration chain with a sample v0→v1 fixture; REST routes; tests | Dep: A002
 - [todo] A009 — Setup.bat + Start Game.bat | Spec: §1 | Done: CRLF .bat files + scripts/check-deps.mjs (Node, npm install, build, Ollama present/running, model pulled) with friendly messages; Start opens browser; runs clean with Ollama missing (warns, mock mode) | Dep: A002, A003
@@ -167,6 +167,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A003 — Settings: zod schema with defaults, SettingsStore (atomic write, salvages bad fields), GET/PUT /api/settings — `src/shared/settings.ts`, `src/server/settingsStore.ts`
 - A004 — LLM layer: LlmProvider interface, OllamaClient (chat, NDJSON stream, tags/ps status, typed LlmError), deterministic MockLlm (script queue, per-task handlers), createLlmProvider — `src/llm/*`
 - A005 — callStructured: zod schema → Ollama format, JSON extraction, 1 retry with error feedback, typed fallback, never throws — `src/llm/structured.ts`
+- A006 — TTS layer: TtsProvider, PiperTts (spawn per request, --output_raw → WAV), MockTts (silent WAV), pcm16ToWav, createTtsProvider — `src/tts/*`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -191,6 +192,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A004: Ollama client uses global fetch (injectable) — no SDK dependency. `think:false` sent only to reasoning models (qwen3, deepseek-r1, magistral, gpt-oss). keep_alive = idleMinutes if unloadWhenIdle, else '60m' (not -1, so a closed game frees RAM).
 - A004: Every LLM call carries `task` (narrate/intent/suggest/summarize/dialogue/banter/backstory) for logging and mock routing. MockLlm default: rotating template narration; `{}` for JSON calls.
 - A005: Structured retry is skipped for `unreachable`/`aborted` errors (retrying can't help); retry message includes the zod error. zod 4 `z.toJSONSchema` builds the Ollama format ($schema stripped). extractJson strips ```fences, <think> blocks, chatter.
+- A006: Piper is spawned once per utterance (`--model <voice>.onnx --output_raw`, text on stdin), PCM wrapped as WAV using sample_rate from <voice>.onnx.json. No resident process → near-zero idle RAM, so tts.unloadWhenIdle is effectively always true. Voice ids = .onnx file names.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -214,6 +216,11 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/llm/ollama.ts` — OllamaClient(config incl. fetch); supportsThinkFlag
 - `src/llm/mock.ts` — MockLlm({script, handlers, streamDelayMs}); `.calls` records every call
 - `src/llm/structured.ts` — callStructured({provider, messages, schema, fallback, task}) → {value, ok, attempts, error}; extractJson, parseReply, toOllamaSchema
+- `src/tts/types.ts` — TtsProvider (synthesize→WAV bytes, listVoices, status), TtsError(kind)
+- `src/tts/piper.ts` — PiperTts({piperPath, voiceDir, defaultVoice, spawn?, fs?})
+- `src/tts/mock.ts` — MockTts(voices?, failWith?)
+- `src/tts/wav.ts` — pcm16ToWav, wavDurationSeconds
+- `src/tts/provider.ts` — createTtsProvider(settings.tts, rootDir, useMock)
 - `src/llm/provider.ts` — createLlmProvider(settings.llm)
 - `src/shared/version.ts` — GAME_TITLE, GAME_VERSION, SAVE_SCHEMA_VERSION
 - `.gitattributes` — *.bat forced to CRLF
