@@ -64,7 +64,7 @@ export function getProgress(state: GameState): AdventureProgress | undefined {
   return state.extensions.adventure as AdventureProgress | undefined;
 }
 
-export function currentScene(ctx: RunContext): Scene {
+export function currentScene(ctx: Pick<RunContext, 'state' | 'adventure'>): Scene {
   const p = getProgress(ctx.state);
   const s = p && findScene(ctx.adventure, p.sceneId);
   if (!s) throw new AdventureError('No adventure scene is active');
@@ -96,7 +96,7 @@ export function startAdventure(ctx: RunContext): StepResult {
 }
 
 /** Scene text for the narrator: the seed plus any variants whose conditions hold, and visible POIs. */
-export function describeScene(ctx: RunContext): { name: string; seed: string; pois: { name: string; seed: string }[]; npcs: string[] } {
+export function describeScene(ctx: Pick<RunContext, 'state' | 'adventure'>): { name: string; seed: string; pois: { name: string; seed: string }[]; npcs: string[] } {
   const s = currentScene(ctx);
   const cc = conditionContext(ctx.state, getProgress(ctx.state));
   return {
