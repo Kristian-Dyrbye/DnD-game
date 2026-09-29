@@ -42,6 +42,8 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
   const endingIds = dupes('ending', adv.endings.map((e) => e.id));
   dupes('beat', adv.beats.map((b) => b.id));
   dupes('deadline', adv.deadlines.map((d) => d.id));
+  dupes('quest', adv.quests.map((q) => q.id));
+  for (const q of adv.quests) dupes(`objective in quest ${q.id}`, q.objectives.map((o) => o.id));
 
   const startChapter = adv.chapters.find((c) => c.id === adv.start.chapter);
   if (!startChapter) errors.push(`start.chapter "${adv.start.chapter}" does not exist`);
@@ -165,6 +167,7 @@ export function flagRefs(adv: Adventure): { reads: Set<string>; writes: { id: st
   walk(adv.encounters);
   walk(adv.beats);
   walk(adv.deadlines);
+  walk(adv.quests);
   walk(adv.npcs);
   return { reads, writes };
 }

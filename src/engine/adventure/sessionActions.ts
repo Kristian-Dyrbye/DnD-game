@@ -10,6 +10,7 @@ import { availableActions, getProgress, type AvailableAction, perform, resolveEn
 import type { Adventure } from './schema';
 import { intentContext, keywordIntent, validateIntent, type Intent, type IntentContext } from './intent';
 import { narrateInto, type Narrator } from './narration';
+import { currentObjective } from './quests';
 import { resolveIntent } from './resolve';
 import { dataSuggestions, mergeSuggestions, type SuggestionIdea } from './suggestions';
 import { updateSummary, type Summarizer } from './summary';
@@ -85,6 +86,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
   // Data-driven buttons at once; LLM ideas replace them when they arrive, unless the player has
   // acted in the meantime (the log moved on). Never awaited, so it never slows a turn down.
   const offer = (session: GameSession, ctx: RunContext) => {
+    session.emit({ type: 'objective', text: currentObjective(ctx) ?? null });
     const offered = availableActions(ctx);
     session.suggest(dataSuggestions(offered));
     if (!opts.suggester || offered.length === 0) return;

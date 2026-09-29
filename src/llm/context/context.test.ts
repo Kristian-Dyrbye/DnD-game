@@ -45,7 +45,7 @@ describe('gatherNarrationContext', () => {
     perform(ctx, 'talk_mayor');
     ctx.state.log.push({ id: 90, kind: 'player', text: 'I thank the mayor.' }, { id: 91, kind: 'system', text: '+50 XP' });
     const c = gatherNarrationContext(ctx.state, lore, adventure, db);
-    expect(c.flags).toEqual(['Got the mill key from the mayor.']);
+    expect(c.flags).toEqual(['Got the mill key from the mayor.', 'The hero is pursuing: The rats in the old mill.']);
     expect(c.recent).toEqual(['Player: I thank the mayor.']);
   });
 

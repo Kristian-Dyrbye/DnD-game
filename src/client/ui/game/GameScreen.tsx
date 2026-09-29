@@ -6,7 +6,9 @@
 import { timeOfDay } from '../../../engine/world/clock';
 import { weatherEffects, type WeatherState } from '../../../engine/world/weather';
 import { CharacterPreview } from '../../three/CharacterPreview';
-import { connection, gameState, lastError, send } from '../../net/gameSocket';
+import { useEffect } from 'preact/hooks';
+import { connection, gameState, lastError, objective, send } from '../../net/gameSocket';
+import { loadSettings, settings, updateSettings } from '../settingsState';
 import { hero, screen } from '../state';
 import { formatClock } from '../text';
 import { ActionInput } from './ActionInput';
@@ -18,6 +20,10 @@ export function GameScreen() {
   const state = gameState.value;
   const h = state?.hero ?? hero.value;
   const weather = state?.extensions.weather as WeatherState | undefined;
+  useEffect(() => {
+    void loadSettings();
+  }, []);
+  const hintOn = settings.value?.gameplay.objectiveHint ?? false;
   return (
     <div class="game-screen">
       <header class="game-bar">
@@ -33,6 +39,14 @@ export function GameScreen() {
           <button type="button" disabled title="Journal (coming soon)">
             Journal
           </button>
+          <button
+            type="button"
+            aria-pressed={hintOn}
+            title="Show a small hint about your current objective"
+            onClick={() => void updateSettings({ gameplay: { objectiveHint: !hintOn } })}
+          >
+            Hint: {hintOn ? 'on' : 'off'}
+          </button>
           <button type="button" disabled={!state || connection.value !== 'open'} onClick={() => send({ type: 'save', slot: 'quicksave', name: 'Quick save' })}>
             Quick save
           </button>
@@ -41,6 +55,11 @@ export function GameScreen() {
           </button>
         </nav>
       </header>
+      {hintOn && objective.value && (
+        <p class="objective-hint" role="note">
+          <span class="muted">Objective:</span> {objective.value}
+        </p>
+      )}
       {h && <PartyPanel hero={h} companions={state?.companions ?? []} />}
       <main class="game-main">
         {connection.value !== 'open' && <p class="connection-note">{connection.value === 'connecting' ? 'Connecting to the game server…' : 'Disconnected — retrying…'}</p>}

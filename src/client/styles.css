@@ -213,8 +213,8 @@ input[type='color'] { width: 2.2rem; height: 1.8rem; border: 1px solid #4a3f30; 
 .game-screen {
   display: grid;
   grid-template-columns: 250px minmax(0, 1fr) 300px;
-  grid-template-rows: auto minmax(0, 1fr);
-  grid-template-areas: 'bar bar bar' 'party main side';
+  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-areas: 'bar bar bar' 'hint hint hint' 'party main side';
   height: 100vh;
 }
 .game-bar { grid-area: bar; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.5rem 1rem; border-bottom: 1px solid #3a3226; }
@@ -269,7 +269,7 @@ input[type='color'] { width: 2.2rem; height: 1.8rem; border: 1px solid #4a3f30; 
 .roll-history li { margin-bottom: 0.3rem; }
 
 @media (max-width: 1000px) {
-  .game-screen { grid-template-columns: 1fr; grid-template-rows: auto auto minmax(50vh, 1fr) auto; grid-template-areas: 'bar' 'party' 'main' 'side'; height: auto; min-height: 100vh; }
+  .game-screen { grid-template-columns: 1fr; grid-template-rows: auto auto auto minmax(50vh, 1fr) auto; grid-template-areas: 'bar' 'hint' 'party' 'main' 'side'; height: auto; min-height: 100vh; }
   .party-panel { border-right: none; border-bottom: 1px solid #3a3226; display: flex; gap: 0.5rem; overflow-x: auto; }
   .party-panel h2 { display: none; }
   .member-card { min-width: 220px; margin-bottom: 0; }
@@ -290,3 +290,4 @@ input[type='color'] { width: 2.2rem; height: 1.8rem; border: 1px solid #4a3f30; 
 @keyframes die-land { from { transform: scale(1.25); } to { transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) { .die.d20.tumbling, .last-roll .die.d20.kept { animation: none; } }
 .suggestions button.idea { border-style: dashed; font-style: italic; }
+.objective-hint { grid-area: hint; margin: 0; padding: 0.3rem 1rem; font: 0.85rem system-ui, sans-serif; color: #d8c08a; background: #211c16; border-bottom: 1px solid #3a3226; }

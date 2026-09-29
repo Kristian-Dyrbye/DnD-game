@@ -197,6 +197,21 @@ In Heroic mode, `lose` is the **defeat outcome** (captured, robbed, rescued...).
 
 For day-only or night-only content, put a `timeOfDay` or `hours` condition on actions, exits, POIs or beats.
 
+## Quests (internal)
+
+```json
+{ "id": "rat_problem", "name": "The rats in the old mill", "start"?: condition,
+  "objectives": [ { "id": "enter", "text": "Get into the old mill's cellar", "done": { "visited": "mill_cellar" }, "if"?: condition } ],
+  "complete"?: condition, "fail"?: condition }
+```
+
+The player never sees quests as a log, because the journal is the player's own notebook. The engine tracks quests from flags so it can:
+
+- give the LLM context ("The hero is pursuing: ...");
+- show the optional **current objective** hint, which is off by default and toggled from the game menu. The hint shows the first open objective whose `if` holds, from the earliest active quest.
+
+A quest completes when `complete` holds. If `complete` is not set, it completes when every objective is done. It fails when `fail` holds.
+
 ## Loot tables
 
 ```json

@@ -120,7 +120,7 @@ describe('flags in adventures', () => {
   it('the demo adventure has only namespaced, documented flags', () => {
     const r = validateAdventure(structuredClone(demo), db, registry());
     expect(r.warnings).toEqual([]);
-    expect(r.adventure!.flags.map((f) => f.id)).toEqual(['adv.millbrook_demo.knows_key', 'adv.millbrook_demo.has_key', 'adv.millbrook_demo.rats_cleared']);
+    expect(r.adventure!.flags.map((f) => f.id)).toEqual(['adv.millbrook_demo.knows_key', 'adv.millbrook_demo.has_key', 'adv.millbrook_demo.rats_cleared', 'adv.millbrook_demo.reward_claimed']);
   });
 
   it('a later arc reads flags written by an earlier arc (cross-arc), including defaults', () => {

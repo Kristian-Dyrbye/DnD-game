@@ -249,6 +249,34 @@ export const DeadlineSchema = z
   .strict();
 export type Deadline = z.infer<typeof DeadlineSchema>;
 
+/** Internal quest (never shown as a log; drives the optional objective hint and LLM context). */
+export const QuestSchema = z
+  .object({
+    id: Id,
+    name: z.string(),
+    /** Starts when this holds (default: at the start of the adventure). */
+    start: ConditionSchema.optional(),
+    objectives: z
+      .array(
+        z
+          .object({
+            id: Id,
+            /** Hint text, e.g. "Find a way into the old mill". */
+            text: z.string(),
+            done: ConditionSchema,
+            /** Only hinted while this holds (e.g. after an earlier step). */
+            if: ConditionSchema.optional(),
+          })
+          .strict(),
+      )
+      .min(1),
+    /** Completed when this holds (default: every objective done). */
+    complete: ConditionSchema.optional(),
+    fail: ConditionSchema.optional(),
+  })
+  .strict();
+export type Quest = z.infer<typeof QuestSchema>;
+
 export const LootTableSchema = z
   .object({
     id: Id,
@@ -287,6 +315,7 @@ export const AdventureSchema = z
     encounters: z.array(EncounterSchema).default([]),
     beats: z.array(BeatSchema).default([]),
     deadlines: z.array(DeadlineSchema).default([]),
+    quests: z.array(QuestSchema).default([]),
     lootTables: z.array(LootTableSchema).default([]),
     /** Documented flags this adventure reads/writes (for editors and validation). */
     flags: z.array(z.object({ id: z.string(), description: z.string() })).default([]),

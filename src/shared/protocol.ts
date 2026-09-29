@@ -44,7 +44,9 @@ export type ServerEvent =
   | { type: 'narration'; phase: 'start' | 'chunk' | 'end'; entryId: number; text: string }
   | { type: 'roll'; roll: RollRecord }
   | { type: 'suggestions'; actions: SuggestedAction[] }
-  | { type: 'saved'; meta: SaveMeta };
+  | { type: 'saved'; meta: SaveMeta }
+  /** Current objective for the optional hint (the client shows it only if the setting is on). */
+  | { type: 'objective'; text: string | null };
 
 /** Parses a raw WebSocket message into a command, or returns a player-safe error message. */
 export function parseCommand(raw: string): { ok: true; command: ClientCommand } | { ok: false; error: string; reqId?: string } {

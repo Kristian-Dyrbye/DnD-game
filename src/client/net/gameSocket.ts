@@ -17,6 +17,8 @@ export const suggestions = signal<SuggestedAction[]>([]);
 /** Text of the narration currently streaming in, keyed by log entry id. */
 export const streaming = signal<{ entryId: number; text: string } | null>(null);
 export const lastError = signal<string | null>(null);
+/** Current objective text (shown only when the objective hint setting is on). */
+export const objective = signal<string | null>(null);
 
 let ws: WebSocket | null = null;
 let retry = 0;
@@ -46,6 +48,9 @@ export function applyEvent(e: ServerEvent): void {
       return;
     case 'error':
       lastError.value = e.message;
+      return;
+    case 'objective':
+      objective.value = e.text;
       return;
     default:
       return;

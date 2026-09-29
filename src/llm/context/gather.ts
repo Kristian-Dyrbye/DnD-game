@@ -5,6 +5,7 @@
  */
 import { timeOfDay } from '../../engine/adventure/conditions';
 import { describeScene, findScene, getProgress, npcsHere } from '../../engine/adventure/runner';
+import { questContextLines } from '../../engine/adventure/quests';
 import type { Adventure } from '../../engine/adventure/schema';
 import type { Character } from '../../engine/core/creature';
 import type { SrdDatabase } from '../../engine/data/srd';
@@ -64,6 +65,8 @@ export function gatherNarrationContext(state: GameState, lore: Lore, adventure?:
     .filter((f) => state.flags[f.id] !== undefined && state.flags[f.id] !== false)
     .slice(0, MAX_FLAGS)
     .map((f) => (typeof state.flags[f.id] === 'boolean' ? f.description : `${f.description} (${String(state.flags[f.id])})`));
+
+  if (adventure) flags.push(...questContextLines({ state, adventure }));
 
   let sceneText = state.location.name;
   if (scene && adventure) {

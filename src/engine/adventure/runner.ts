@@ -20,6 +20,7 @@ import { SKILL_ABILITY } from '../rules/basics';
 import type { FlagRegistry } from '../world/flags';
 import { TIME_COSTS } from '../world/clock';
 import { discover, getMap } from '../world/travel';
+import { trackQuests } from './quests';
 
 export interface AdventureProgress {
   adventureId: string;
@@ -331,6 +332,7 @@ function fireBeats(ctx: RunContext, result: StepResult, depth = 0): void {
     applyOutcome(ctx, b.outcome, result, depth + 1);
   }
   checkDeadlines(ctx, result, depth);
+  trackQuests(ctx);
 }
 
 function giveItem(hero: Character, itemId: string, quantity: number, db: SrdDatabase | undefined, result: StepResult): void {
