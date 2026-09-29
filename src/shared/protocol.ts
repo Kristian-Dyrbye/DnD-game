@@ -9,14 +9,36 @@ import type { GameState, LogEntry, RollRecord } from '../engine/session/gameStat
 import type { Journal } from '../engine/session/journal';
 import type { ShopView } from '../engine/world/shops';
 import type { Ambience, Mood } from '../engine/world/mood';
+import type { Encounter } from '../engine/combat/encounter';
 import { SLOT_ID_PATTERN, type SaveMeta } from './save';
 
 const base = { reqId: z.string().max(40).optional() };
 
+const PointSchema = z.object({ x: z.number().int().min(0).max(200), y: z.number().int().min(0).max(200) });
+export const PlayerActionSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('move'), path: z.array(PointSchema).min(1).max(80) }),
+  z.object({ kind: z.literal('attack'), targetId: z.string().max(60), profileId: z.string().max(120).optional() }),
+  z.object({ kind: z.literal('dash') }),
+  z.object({ kind: z.literal('disengage') }),
+  z.object({ kind: z.literal('dodge') }),
+  z.object({ kind: z.literal('end_turn') }),
+]);
+
 export const ClientCommandSchema = z.discriminatedUnion('type', [
   z.object({ ...base, type: z.literal('ping') }),
   /** Start a campaign with a freshly created hero. */
-  z.object({ ...base, type: z.literal('new_game'), hero: CharacterSchema, mode: z.enum(['heroic', 'hardcore']), seed: z.union([z.string(), z.number()]).optional() }),
+  z.object({
+    ...base,
+    type: z.literal('new_game'),
+    hero: CharacterSchema,
+    mode: z.enum(['heroic', 'hardcore']),
+    seed: z.union([z.string(), z.number()]).optional(),
+    /** Hardcore: a new hero continues in the same world (flags, map, reputation, time kept). */
+    continueWorld: z.boolean().optional(),
+  }),
+  /** Combat: one hero action on the battle map, or fleeing the fight. */
+  z.object({ ...base, type: z.literal('combat_act'), action: PlayerActionSchema }),
+  z.object({ ...base, type: z.literal('combat_flee') }),
   /** Ask for a full snapshot (e.g. after a reconnect). */
   z.object({ ...base, type: z.literal('get_state') }),
   /** Free text from the input box (goes through intent parsing in A054). */
@@ -68,6 +90,10 @@ export type ServerEvent =
   | { type: 'journal'; journal: Journal; savedId?: string }
   /** Spoken audio for a log entry is ready at /api/tts/<entryId>.wav (only when TTS is on). */
   | { type: 'tts'; entryId: number }
+  /** The running fight (null when it ends). */
+  | { type: 'combat'; encounter: Encounter | null; canFlee?: boolean }
+  /** Hardcore: the hero died; a new hero can continue in this world. */
+  | { type: 'hero_fallen'; name: string }
   /** Music mood + ambience bed for the current place (the client crossfades). */
   | { type: 'mood'; mood: Mood; ambience: Ambience }
   /** A shop's current offer (after shop_open and every trade). */

@@ -33,7 +33,7 @@ function DemoCombat() {
   if (!demoCombat.value && combatDemoClass) startDemoCombat(combatDemoClass);
   const cur = demoCombat.value;
   if (!cur) return null;
-  return <CombatScreen enc={cur.enc} ctx={cur.ctx} act={demoAct} onLeave={() => (screen.value = 'title')} />;
+  return <CombatScreen enc={cur.enc} ctx={cur.ctx} act={demoAct} onLeave={() => (screen.value = 'title')} leaveLabel="Leave sandbox" />;
 }
 
 export function App() {

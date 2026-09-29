@@ -7,6 +7,7 @@ import { signal } from '@preact/signals';
 import type { GameState, LogEntry, RollRecord } from '../../engine/session/gameState';
 import type { ClientCommand, ServerEvent, SuggestedAction } from '../../shared/protocol';
 import type { ShopView } from '../../engine/world/shops';
+import type { Encounter } from '../../engine/combat/encounter';
 import { audio } from '../audio/AudioManager';
 import { sfxForEvent } from '../audio/audioLogic';
 import { ttsPlayer } from '../audio/ttsPlayer';
@@ -23,6 +24,10 @@ export const streaming = signal<{ entryId: number; text: string } | null>(null);
 export const lastError = signal<string | null>(null);
 /** Current objective text (shown only when the objective hint setting is on). */
 export const objective = signal<string | null>(null);
+/** The running fight (server state) and whether fleeing is allowed. */
+export const fight = signal<{ encounter: Encounter; canFlee: boolean } | null>(null);
+/** Hardcore: name of the hero who just died (shows the "continue this world" screen). */
+export const heroFallen = signal<string | null>(null);
 /** The open shop's offer (server-computed prices). */
 export const shopView = signal<ShopView | null>(null);
 /** The journal page the server just saved (so the editor can select a new page). */
@@ -40,11 +45,18 @@ export function applyEvent(e: ServerEvent): void {
     case 'mood':
       audio.setMood(e.mood, e.ambience);
       return;
+    case 'combat':
+      fight.value = e.encounter ? { encounter: e.encounter, canFlee: e.canFlee ?? true } : null;
+      return;
+    case 'hero_fallen':
+      heroFallen.value = e.name;
+      return;
     case 'tts':
       ttsPlayer.ready(e.entryId);
       return;
     case 'snapshot':
       gameState.value = e.state;
+      if (!e.state.extensions.combat) fight.value = null;
       storyLog.value = e.state.log;
       rollHistory.value = e.state.rolls;
       return;

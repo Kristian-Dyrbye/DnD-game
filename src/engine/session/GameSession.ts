@@ -54,7 +54,13 @@ export interface SessionPorts {
 export const START_LOCATION = 'Millbrook';
 
 /** Commands handled by ActionPort.command (the extension point for game systems). */
-export type ExtensionCommand = Extract<ClientCommand, { type: 'equip' | 'unequip' | 'shop_open' | 'shop_buy' | 'shop_sell' | 'shop_haggle' }>;
+export type ExtensionCommand = Extract<ClientCommand, { type: 'equip' | 'unequip' | 'shop_open' | 'shop_buy' | 'shop_sell' | 'shop_haggle' | 'combat_act' | 'combat_flee' }>;
+
+/** Parts of the old state a new Hardcore hero inherits: the world, not the character. */
+export function continueWorld(old: GameState, fresh: GameState): GameState {
+  const { combat: _combat, ...extensions } = old.extensions;
+  return { ...fresh, campaignId: old.campaignId, time: old.time, flags: old.flags, extensions, location: old.location, journal: old.journal, summary: old.summary, summaryUpTo: old.summaryUpTo, log: old.log, nextId: old.nextId, rolls: old.rolls };
+}
 
 /** A fresh campaign state for a newly created hero. */
 export function newGameState(hero: Character, mode: GameState['mode'], seed: string | number): GameState {
@@ -193,7 +199,8 @@ export class GameSession {
           return;
         case 'new_game': {
           const seed = cmd.seed ?? this.ports.newSeed?.() ?? `${Date.now()}-${Math.random()}`;
-          this.start(newGameState(cmd.hero, cmd.mode, seed));
+          const fresh = newGameState(cmd.hero, cmd.mode, seed);
+          this.start(cmd.continueWorld && this.state ? continueWorld(this.current, fresh) : fresh);
           this.emit(this.snapshot());
           await this.ports.actions?.begin?.(this);
           this.emit(this.snapshot());
@@ -224,6 +231,8 @@ export class GameSession {
         case 'shop_buy':
         case 'shop_sell':
         case 'shop_haggle':
+        case 'combat_act':
+        case 'combat_flee':
           if (!this.running) return this.fail('No game is running', reqId);
           if (!this.ports.actions?.command) return this.fail('Not available', reqId);
           await this.ports.actions.command(this, cmd);

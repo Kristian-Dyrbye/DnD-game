@@ -25,11 +25,15 @@ export const heroMode = signal<'heroic' | 'hardcore'>('heroic');
 /** The settings panel can be opened from the title screen and the game menu. */
 export const settingsOpen = signal(false);
 
+/** Hardcore: the next hero continues the current world instead of starting a new one. */
+export const continueWorldNext = signal(false);
+
 export function beginAdventure(): void {
   const s = creator.value;
   hero.value = buildCharacter(toBuildInput(s), db);
   heroMode.value = s.difficulty ?? 'heroic';
-  send({ type: 'new_game', hero: hero.value, mode: heroMode.value });
+  send({ type: 'new_game', hero: hero.value, mode: heroMode.value, ...(continueWorldNext.value && { continueWorld: true }) });
+  continueWorldNext.value = false;
   screen.value = 'game';
 }
 

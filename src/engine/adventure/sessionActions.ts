@@ -17,6 +17,9 @@ import { intentContext, keywordIntent, validateIntent, type Intent, type IntentC
 import { narrateInto, type Narrator } from './narration';
 import { currentObjective } from './quests';
 import { resolveIntent } from './resolve';
+import { activeFight, fightAct, finishFight, startFight, type FightEnd } from './fights';
+import type { DefeatTable } from './defeat';
+import { canLevelUp } from '../character/leveling';
 import { acceptOffer, activeSideQuest, finishActive, offerSources, offersAt, refreshOffers, roadOffer, sideQuestState, type SideQuestDeps } from './sideQuests';
 import type { SideQuestTables } from './sidequestTables';
 import type { SuggestedAction } from '../../shared/protocol';
@@ -44,6 +47,8 @@ export interface AdventurePortOptions {
   shops?: ShopTable;
   /** Side-quest generator tables (data/tables/sidequests.json); enables quest boards etc. */
   sideQuests?: SideQuestTables;
+  /** Heroic defeat outcomes (data/tables/defeat-outcomes.json). */
+  defeats?: DefeatTable;
 }
 
 /** The ActionPort plus a hook for tests to wait for background suggestion/summary work. */
@@ -98,10 +103,38 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       session.addLog('narration', end?.text ?? 'The adventure ends.');
     }
     if (r.encounter) {
-      const name = ctx.adventure.encounters.find((e) => e.id === r.encounter)?.name ?? r.encounter;
-      session.addLog('system', `Encounter: ${name}. (Tactical combat arrives in a later build; the fight is resolved as a victory.)`);
-      await publish(session, ctx, resolveEncounter(ctx, r.encounter, 'win'));
+      const def = ctx.adventure.encounters.find((e) => e.id === r.encounter);
+      if (!db) {
+        // No rules data (tests without SRD): resolve as a victory.
+        await publish(session, ctx, resolveEncounter(ctx, r.encounter, 'win'));
+        return;
+      }
+      session.autosave(); // before combat (spec §9)
+      const fight = startFight(ctx, r.encounter, session.rng, db);
+      session.addLog('system', `Combat! ${def?.name ?? 'Enemies'} attack.`);
+      session.emit({ type: 'mood', mood: 'battle', ambience: null });
+      emitFight(session);
+      if (fight.enc.status !== 'ongoing') await endFight(session, ctx, fight.enc.status === 'won' ? 'win' : 'lose');
     }
+  };
+
+  const emitFight = (session: GameSession) => {
+    const f = activeFight(session.current);
+    const def = f && adventures.get(f.adventureId)?.encounters.find((e) => e.id === f.encounterId);
+    session.emit({ type: 'combat', encounter: f ? structuredClone(f.enc) : null, ...(def && { canFlee: def.canFlee }) });
+  };
+
+  const endFight = async (session: GameSession, ctx: RunContext, how: FightEnd) => {
+    const res = finishFight(ctx, how, { db: db!, rng: session.rng, ...(opts.lore && { lore: opts.lore }), ...(opts.flags && { flags: opts.flags }), ...(opts.defeats && { defeats: opts.defeats }) });
+    emitFight(session);
+    if (res.heroDied) {
+      session.addLog('narration', `${session.current.hero.name} has fallen. The world goes on without them…`);
+      session.emit({ type: 'hero_fallen', name: session.current.hero.name });
+      return;
+    }
+    session.addLog('system', how === 'win' ? `Victory! +${res.xp} XP` : how === 'flee' ? 'You escape the fight.' : 'Defeat…');
+    if (how === 'win' && db && canLevelUp(session.current.hero, db)) session.addLog('system', 'You have enough experience to level up!');
+    await publish(session, ctx, res.step);
   };
 
   // Data-driven buttons at once; LLM ideas replace them when they arrive, unless the player has
@@ -185,6 +218,11 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     },
     async begin(session) {
       const ctx = ctxFor(session);
+      if (activeFight(session.current)) {
+        session.addLog('system', 'The fight is still on!');
+        emitFight(session);
+        return;
+      }
       const p = getProgress(session.current);
       const awayAt = p?.away ? opts.lore?.locations.find((l) => l.id === p.away) : undefined;
       if (!p) await publish(session, ctx, startAdventure(ctx));
@@ -193,6 +231,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       offer(session, ctx);
     },
     async travel(session, to, pace) {
+      if (activeFight(session.current)) throw new Error('You cannot travel in the middle of a fight!');
       const lore = opts.lore;
       if (!lore) throw new Error('Travel needs the world map');
       const ctx = ctxFor(session);
@@ -229,6 +268,25 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       session.autosave();
     },
     async command(session, cmd) {
+      if (cmd.type === 'combat_act' || cmd.type === 'combat_flee') {
+        if (!db) throw new Error('Combat needs the SRD data');
+        const f = activeFight(session.current);
+        if (!f) throw new Error('There is no fight going on.');
+        const ctx = ctxFor(session);
+        if (cmd.type === 'combat_flee') {
+          const def = ctx.adventure.encounters.find((e) => e.id === f.encounterId);
+          if (def && !def.canFlee) throw new Error('There is no escape from this fight!');
+          await endFight(session, ctx, 'flee');
+        } else {
+          const err = fightAct(session.current, cmd.action, session.rng, db);
+          if (err) throw new Error(err);
+          const status = activeFight(session.current)!.enc.status;
+          if (status === 'ongoing') emitFight(session);
+          else await endFight(session, ctx, status === 'won' ? 'win' : 'lose');
+        }
+        offer(session, ctxFor(session));
+        return;
+      }
       const hero = session.current.hero;
       if (cmd.type === 'equip' || cmd.type === 'unequip') {
         if (!db) throw new Error('Equipment needs the SRD data');
@@ -260,6 +318,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       if (view) session.emit({ type: 'shop', shop: view });
     },
     async choose(session, actionId) {
+      if (activeFight(session.current)) throw new Error('You are in the middle of a fight!');
       if (actionId.startsWith('sq:')) return sideQuestChoice(session, actionId);
       const ctx = ctxFor(session);
       const label = availableActions(ctx).find((a) => a.id === actionId)?.label;
@@ -269,6 +328,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       session.timePassed(before);
     },
     async say(session, text) {
+      if (activeFight(session.current)) throw new Error('You are in the middle of a fight!');
       session.addLog('player', text);
       const ctx = ctxFor(session);
       const ictx = intentContext(ctx);

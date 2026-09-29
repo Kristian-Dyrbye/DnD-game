@@ -1,0 +1,20 @@
+{
+  "$comment": "Heroic-mode defeat outcomes (spec §9; campaign bible DESIGN.md §13). The first outcome whose `when` matches is used. Every outcome heals the hero to 1 HP, clears death saves, advances the clock and increments world.times_defeated. `relocate` moves the party to a lore location (or `temple`: the nearest temple-tagged location in the region). Money losses are fractions of the hero's coins.",
+  "outcomes": [
+    { "id": "maws_spit", "when": { "locations": ["the_maw"] }, "text": "The Maw heaves and vomits you up onto its rim, gasping. Something precious was torn from you in the dark.", "minutes": 60, "flags": [{ "inc": "arc.main.teeth_choir", "by": 1 }] },
+    { "id": "dragons_disdain", "when": { "enemyTypes": ["dragon"] }, "text": "The dragon tosses you from its lair like refuse. You wake at the foot of the peak, burned and bruised.", "minutes": 480 },
+    { "id": "captured_by_choir", "when": { "enemyTags": ["cultist"] }, "text": "You wake in a Choir holding cell. Hours later, a loose stone and a desperate squeeze get you out — but your captors have moved on.", "minutes": 360 },
+    { "id": "rescued_by_wardens", "when": { "regions": ["gloamfen"], "if": { "reputation": { "faction": "lantern_wardens", "gte": -20 } } }, "text": "Lantern Wardens find you in the reeds and carry you to Lantern Hold. After a day of quarantine they let you go — for a fee.", "minutes": 1440, "relocate": "lantern_hold", "coinsLost": 1000 },
+    { "id": "rescued_by_briarkin", "when": { "regions": ["gloamfen"], "if": { "any": [{ "reputation": { "faction": "briarkin", "gte": 20 } }, { "flag": "world.nettle_status", "eq": "in_party" }] } }, "text": "Briarkin hands bind your wounds with moss and thorn. You wake at Thornwife Hollow, owing them a favor.", "minutes": 720, "relocate": "thornwife_hollow", "flags": [{ "set": "world.briarkin_favor_owed", "value": true }] },
+    { "id": "temple_revival", "when": { "any": [{ "enemyTypes": ["undead"] }, { "locations": ["drowned_abbey"] }] }, "text": "Priests find you among the dead and carry you to their temple. You wake to candlelight and a request for a tithe.", "minutes": 720, "relocate": "temple", "coinsLostFraction": 0.1 },
+    { "id": "fished_out_by_red_gulls", "when": { "regions": ["brinescatter_isles"], "if": { "reputation": { "faction": "red_gull_brotherhood", "gte": -59 } } }, "text": "You wake on the deck of a Red Gull sloop, soaked and alive. The captain names a salvage fee, and takes it.", "minutes": 480, "coinsLostFraction": 0.25 },
+    { "id": "thrown_in_cells", "when": { "enemyTags": ["lawful"] }, "text": "You wake in a cell. Three days later a bored jailer lets you go with a warning.", "minutes": 4320 },
+    { "id": "robbed_and_left", "when": { "enemyTypes": ["humanoid"] }, "text": "You wake at the roadside, head pounding. Your purse is lighter, and something else is missing too.", "minutes": 240, "coinsLostFraction": 0.5, "loseItem": true },
+    { "id": "left_for_dead", "when": { "enemyTypes": ["beast", "monstrosity", "elemental", "plant", "ooze"] }, "text": "You wake where you fell, hours later. Whatever attacked you has lost interest.", "minutes": 480, "exhaustion": 1 },
+    { "id": "dragged_to_safety", "when": {}, "text": "Somehow you are dragged to safety. You wake hours later, aching but alive.", "minutes": 240 }
+  ],
+  "enemyTagRules": [
+    { "tag": "cultist", "monsters": ["cultist", "cultist_fanatic"] },
+    { "tag": "lawful", "monsters": ["guard", "guard_captain", "knight", "veteran_warrior", "noble"] }
+  ]
+}

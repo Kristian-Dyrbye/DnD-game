@@ -18,7 +18,7 @@ import { BattleMap } from './BattleMap';
 
 type Mode = { kind: 'move' } | { kind: 'attack'; profile: AttackProfile } | { kind: 'area'; spellId: string };
 
-export function CombatScreen({ enc, ctx, act, onLeave }: { enc: Encounter; ctx: CombatContext; act: (a: PlayerAction) => string | undefined; onLeave: () => void }) {
+export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Encounter; ctx: CombatContext; act: (a: PlayerAction) => string | undefined; onLeave?: () => void; leaveLabel?: string }) {
   const [mode, setMode] = useState<Mode>({ kind: 'move' });
   const [hover, setHover] = useState<Point | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -83,9 +83,11 @@ export function CombatScreen({ enc, ctx, act, onLeave }: { enc: Encounter; ctx: 
           {enc.status !== 'ongoing' && <span class={`tag ${enc.status === 'won' ? 'tag-advantage' : 'tag-disadvantage'}`}>{enc.status === 'won' ? 'Victory' : 'Defeat'}</span>}
         </div>
         <nav class="game-menu">
-          <button type="button" onClick={onLeave}>
-            {enc.status === 'ongoing' ? 'Leave (debug)' : 'Continue'}
-          </button>
+          {onLeave && (
+            <button type="button" onClick={onLeave}>
+              {leaveLabel ?? (enc.status === 'ongoing' ? 'Leave' : 'Continue')}
+            </button>
+          )}
         </nav>
       </header>
       <main class="combat-main">

@@ -7,9 +7,15 @@ import { timeOfDay } from '../../../engine/world/clock';
 import { weatherEffects, type WeatherState } from '../../../engine/world/weather';
 import { CharacterPreview } from '../../three/LazyCharacterPreview';
 import { useEffect, useState } from 'preact/hooks';
-import { connection, gameState, lastError, objective, send } from '../../net/gameSocket';
+import { connection, fight, gameState, heroFallen, lastError, objective, send } from '../../net/gameSocket';
+
+/** Previews (reachable squares, attack checks) need a context; they never roll. */
+const previewCtx = { rng: Rng.fromSeed('preview'), db };
 import { loadSettings, settings, updateSettings } from '../settingsState';
-import { hero, screen, settingsOpen } from '../state';
+import { continueWorldNext, hero, screen, settingsOpen, startNewCharacter } from '../state';
+import { CombatScreen } from '../combat/CombatScreen';
+import { Rng } from '../../../engine/core/rng';
+import { db } from '../../data';
 import { formatClock } from '../text';
 import { ActionInput } from './ActionInput';
 import { DiceTray } from './DiceTray';
@@ -39,6 +45,44 @@ export function GameScreen() {
   const here = state ? getMap(state)?.current : undefined;
   const localShops = here ? shopsAt(shops, here) : [];
   const [mapOpen, setMapOpen] = useState(() => typeof location !== 'undefined' && location.hash.endsWith('+map'));
+  if (fight.value) {
+    const f = fight.value;
+    return (
+      <CombatScreen
+        enc={f.encounter}
+        ctx={previewCtx}
+        act={(a) => {
+          send({ type: 'combat_act', action: a });
+          return undefined;
+        }}
+        {...(f.canFlee && f.encounter.status === 'ongoing' && { onLeave: () => send({ type: 'combat_flee' }), leaveLabel: 'Flee' })}
+      />
+    );
+  }
+  if (heroFallen.value) {
+    return (
+      <main class="title-screen fallen">
+        <h1>{heroFallen.value} has fallen</h1>
+        <p>In Hardcore mode, death is final. But the world remembers what you did — its choices, its scars, its debts.</p>
+        <div class="title-actions">
+          <button
+            type="button"
+            class="primary"
+            onClick={() => {
+              heroFallen.value = null;
+              continueWorldNext.value = true;
+              startNewCharacter();
+            }}
+          >
+            Create a new hero in this world
+          </button>
+          <button type="button" onClick={() => ((heroFallen.value = null), (screen.value = 'title'))}>
+            Back to title
+          </button>
+        </div>
+      </main>
+    );
+  }
   return (
     <div class="game-screen">
       <header class="game-bar">
