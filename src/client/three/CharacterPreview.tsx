@@ -3,6 +3,7 @@
  * the appearance changes; renders only while mounted; shows a friendly message if the models
  * haven't been downloaded yet (Setup.bat runs scripts/assets-fetch.mjs).
  */
+import type { WoundLevel } from '../../engine/appearance/wounds';
 import { lookKey, type EquipmentLook } from '../../engine/appearance/equipmentVisuals';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import * as THREE from 'three';
@@ -24,7 +25,7 @@ function frame(camera: THREE.PerspectiveCamera, controls: OrbitControls, obj: TH
   controls.update();
 }
 
-export function CharacterPreview({ appearance, size = 'medium', height = 260, look }: { appearance: Appearance; size?: string; height?: number; look?: EquipmentLook }) {
+export function CharacterPreview({ appearance, size = 'medium', height = 260, look, wounds = 0, seed = 'hero' }: { appearance: Appearance; size?: string; height?: number; look?: EquipmentLook; wounds?: WoundLevel; seed?: string }) {
   const host = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<{ scene: THREE.Scene; camera: THREE.PerspectiveCamera; controls: OrbitControls; model?: CharacterModel } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -76,7 +77,7 @@ export function CharacterPreview({ appearance, size = 'medium', height = 260, lo
       raf = requestAnimationFrame(tick);
       if (now - last < frameMs) return;
       last = now;
-      sceneRef.current?.model?.mixer.update(clock.getDelta());
+      sceneRef.current?.model?.update(clock.getDelta());
       renderer.render(scene, camera);
     };
     raf = requestAnimationFrame(tick);
@@ -98,6 +99,13 @@ export function CharacterPreview({ appearance, size = 'medium', height = 260, lo
     };
   }, [height]);
 
+  // Wounds follow HP (overlays fade in/out inside the model).
+  const woundsRef = useRef(wounds);
+  woundsRef.current = wounds;
+  useEffect(() => {
+    sceneRef.current?.model?.setWounds?.(wounds, seed);
+  }, [wounds, seed]);
+
   // (Re)build the model when the look changes.
   const key = JSON.stringify(appearance) + size + lookKey(look);
   useEffect(() => {
@@ -111,6 +119,7 @@ export function CharacterPreview({ appearance, size = 'medium', height = 260, lo
           holder.model.dispose();
         }
         holder.model = model;
+        model.setWounds?.(woundsRef.current, seed);
         holder.scene.add(model.root);
         frame(holder.camera, holder.controls, model.root);
         setError(null);

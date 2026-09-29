@@ -3,6 +3,7 @@
  * left, story log + actions in the centre, 3D hero view and dice tray on the right. Collapses to a
  * single column on narrow windows.
  */
+import { woundLevel } from '../../../engine/appearance/wounds';
 import { equipmentLook } from '../../../engine/appearance/equipmentVisuals';
 import { timeOfDay } from '../../../engine/world/clock';
 import { weatherEffects, type WeatherState } from '../../../engine/world/weather';
@@ -164,7 +165,7 @@ export function GameScreen() {
       {shopId && <ShopPanel shopId={shopId} onClose={() => setShopId(null)} />}
       <aside class="game-side">
         {dungeon.value && h && <DungeonPanel view={dungeon.value} hero={h} />}
-        <div class="hero-view">{h && <CharacterPreview appearance={h.appearance} size={h.size} height={240} look={equipmentLook(h, db)} />}</div>
+        <div class="hero-view">{h && <CharacterPreview appearance={h.appearance} size={h.size} height={240} look={equipmentLook(h, db)} wounds={woundLevel(h.hp, h.maxHp)} seed={h.id} />}</div>
         <DiceTray />
       </aside>
     </div>

@@ -5,6 +5,8 @@
  * texture atlas, build width and size scale. The built-in weapon meshes stay hidden; the equipped
  * gear is attached to the hand slots instead (equipmentModels.ts).
  */
+import type { WoundLevel } from '../../engine/appearance/wounds';
+import { addWoundOverlays, setWounds, tickWounds } from './wounds';
 import type { EquipmentLook } from '../../engine/appearance/equipmentVisuals';
 import { attachEquipment } from './equipmentModels';
 import * as THREE from 'three';
@@ -16,6 +18,10 @@ export interface CharacterModel {
   root: THREE.Object3D;
   mixer: THREE.AnimationMixer;
   play(clip: string): void;
+  /** Advance animation (and wound fading); returns true if anything changed. */
+  update(dt: number): boolean;
+  /** Temporary wound overlays (characters only). */
+  setWounds?(level: WoundLevel, seed: string): void;
   dispose(): void;
 }
 
@@ -141,8 +147,9 @@ export async function buildCharacterModel(a: Appearance, size = 'medium', look?:
     else if (/_(Head|Head_Hooded|ArmLeft|ArmRight)$/.test(mesh.name)) applySkin(mesh, a.skinTone);
   });
 
-  // Weapons and shields in the hands (A088).
+  // Weapons and shields in the hands (A088); wound decal overlays (A090).
   await attachEquipment(root, look);
+  addWoundOverlays(root);
 
   const scale = sizeScale(size);
   const width = buildWidth(a.build);
@@ -163,6 +170,12 @@ export async function buildCharacterModel(a: Appearance, size = 'medium', look?:
     root,
     mixer,
     play,
+    update: (dt: number) => {
+      mixer.update(dt);
+      tickWounds(root, dt);
+      return true;
+    },
+    setWounds: (level: WoundLevel, seed: string) => setWounds(root, level, seed),
     dispose: () => {
       mixer.stopAllAction();
       root.traverse((o) => {

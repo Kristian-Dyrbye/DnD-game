@@ -49,6 +49,10 @@ export async function buildMonsterModel(v: MonsterVisual, size: string): Promise
     root,
     mixer,
     play,
+    update: (dt: number) => {
+      mixer.update(dt);
+      return true;
+    },
     dispose: () => {
       mixer.stopAllAction();
       for (const m of owned) m.dispose();
