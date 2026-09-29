@@ -6,9 +6,10 @@
 import type { SrdDatabase } from '../data/srd';
 import type { FlagRegistry } from '../world/flags';
 import { describeChange } from '../world/factions';
+import { travel, type TravelEventTable } from '../world/travel';
 import type { Lore } from '../world/lore';
 import type { ActionPort, GameSession } from '../session/GameSession';
-import { availableActions, getProgress, type AvailableAction, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
+import { arriveInScene, availableActions, getProgress, leaveScenes, sceneForLocation, type AvailableAction, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
 import type { Adventure } from './schema';
 import { intentContext, keywordIntent, validateIntent, type Intent, type IntentContext } from './intent';
 import { narrateInto, type Narrator } from './narration';
@@ -28,8 +29,10 @@ export interface AdventurePortOptions {
   summarizer?: Summarizer;
   /** Flag types/defaults/bounds. */
   flags?: FlagRegistry;
-  /** World lore (faction relationships, names). */
+  /** World lore (faction relationships, names, map). */
   lore?: Lore;
+  /** Random travel events table (data/tables/travel-events.json). */
+  travelEvents?: TravelEventTable;
 }
 
 /** The ActionPort plus a hook for tests to wait for background suggestion/summary work. */
@@ -122,9 +125,42 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     },
     async begin(session) {
       const ctx = ctxFor(session);
-      if (!getProgress(session.current)) await publish(session, ctx, startAdventure(ctx));
+      const p = getProgress(session.current);
+      const awayAt = p?.away ? opts.lore?.locations.find((l) => l.id === p.away) : undefined;
+      if (!p) await publish(session, ctx, startAdventure(ctx));
+      else if (awayAt) await narrateInto(session, { kind: 'outcome', facts: [`You are in ${awayAt.name}. ${awayAt.summary}`], ctx }, opts.narrator);
       else await narrateInto(session, { kind: 'scene', facts: [], ctx }, opts.narrator);
       offer(session, ctx);
+    },
+    async travel(session, to, pace) {
+      const lore = opts.lore;
+      if (!lore) throw new Error('Travel needs the world map');
+      const ctx = ctxFor(session);
+      const before = ctx.state.time;
+      const dest = lore.locations.find((l) => l.id === to);
+      if (!dest) throw new Error('Unknown place');
+      let res = travel({ state: ctx.state, lore, rng: session.rng, ...(opts.travelEvents && { events: opts.travelEvents }) }, to, pace);
+      if (!res.ok) throw new Error(res.error ?? 'You cannot travel there.');
+      for (let guard = 0; ; guard++) {
+        for (const roll of res.rolls) session.addRoll({ label: roll.label, dice: roll.d20.rolls, mode: roll.mode, modifier: roll.total - roll.d20.natural, total: roll.total, math: roll.text, ...(roll.success !== undefined && { success: roll.success }) });
+        for (const l of res.log) session.addLog('narration', l.text);
+        if (!res.encounter || guard >= 3) break;
+        session.addLog('system', 'Travel encounter! (Tactical combat arrives in a later build; you fight them off.)');
+        res = travel({ state: ctx.state, lore, rng: session.rng, ...(opts.travelEvents && { events: opts.travelEvents }) }, to, pace);
+        if (!res.ok) break;
+      }
+      const days = Math.round((ctx.state.time - before) / 1440);
+      session.addLog('system', `You travel to ${dest.name}${days >= 1 ? ` (${days} day${days > 1 ? 's' : ''})` : ''}.`);
+      const sceneId = sceneForLocation(ctx.adventure, to, getProgress(ctx.state)?.visited ?? []);
+      if (sceneId) {
+        await publish(session, ctx, arriveInScene(ctx, sceneId));
+      } else {
+        leaveScenes(ctx, to, dest.name);
+        await narrateInto(session, { kind: 'outcome', facts: [`You arrive at ${dest.name}. ${dest.summary}`], ctx }, opts.narrator);
+      }
+      offer(session, ctx);
+      session.timePassed(before);
+      session.autosave();
     },
     async choose(session, actionId) {
       const ctx = ctxFor(session);

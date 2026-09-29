@@ -310,3 +310,18 @@ input[type='color'] { width: 2.2rem; height: 1.8rem; border: 1px solid #4a3f30; 
 .journal-editor textarea { flex: 1; resize: none; line-height: 1.5; background-image: repeating-linear-gradient(transparent, transparent 1.45em, #e2d5b8 1.5em); }
 .journal-actions { display: flex; align-items: center; gap: 0.75rem; }
 @media (max-width: 700px) { .journal-body { grid-template-columns: 1fr; grid-template-rows: 160px 1fr; } .journal-pages { border-right: none; border-bottom: 1px solid #3a3226; } }
+
+/* ---------- world map (A075) ---------- */
+.world-map { width: min(1200px, 100%); height: min(760px, 100%); display: flex; flex-direction: column; background: #1d1813; border: 1px solid #5a4a30; border-radius: 10px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); }
+.world-map-body { flex: 1; display: grid; grid-template-columns: 1fr 280px; min-height: 0; }
+.map-svg { width: 100%; height: 100%; display: block; background: #23384a; }
+.map-region-label { fill: rgba(255, 245, 220, 0.75); font: italic 22px Georgia, serif; pointer-events: none; }
+.map-place { cursor: pointer; }
+.map-place-label { fill: #fff6df; font: 15px Georgia, serif; paint-order: stroke; stroke: rgba(0, 0, 0, 0.7); stroke-width: 3px; }
+.map-place.selected circle:first-child { stroke: #ffd76a; }
+.map-place:hover circle:first-child { stroke-width: 4; }
+.map-side { border-left: 1px solid #3a3226; padding: 0.75rem 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; }
+.map-side h3 { margin: 0.25rem 0 0; color: var(--accent); }
+.map-side p { margin: 0; }
+.map-legend { list-style: none; padding: 0; margin: auto 0 0; color: #8d8270; }
+@media (max-width: 800px) { .world-map-body { grid-template-columns: 1fr; grid-template-rows: 1fr auto; } .map-side { border-left: none; border-top: 1px solid #3a3226; } }

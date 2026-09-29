@@ -36,6 +36,8 @@ export interface ActionPort {
   choose(session: GameSession, actionId: string): Promise<void>;
   /** Called after new_game and load so the scene can present itself. */
   begin?(session: GameSession): Promise<void>;
+  /** World-map travel to a known lore location. */
+  travel?(session: GameSession, to: string, pace: 'slow' | 'normal' | 'fast'): Promise<void>;
 }
 
 export interface SessionPorts {
@@ -204,6 +206,13 @@ export class GameSession {
           await this.ports.actions?.begin?.(this);
           return;
         }
+        case 'travel':
+          if (!this.running) return this.fail('No game is running', reqId);
+          if (!this.ports.actions?.travel) return this.fail('Travel is not available', reqId);
+          await this.ports.actions.travel(this, cmd.to, cmd.pace);
+          this.emit(this.snapshot());
+          this.emit({ type: 'ack', command: cmd.type, ...(reqId && { reqId }) });
+          return;
         case 'journal_save':
         case 'journal_delete':
         case 'journal_reorder': {

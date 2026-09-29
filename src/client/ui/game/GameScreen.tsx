@@ -1,5 +1,5 @@
 /**
- * Main game screen (spec §8): top bar (location, clock, map/journal/save/menu), party panel on the
+ * Main game screen (spec §8): top bar (location, clock, weather, map/journal/hint/save/menu), party panel on the
  * left, story log + actions in the centre, 3D hero view and dice tray on the right. Collapses to a
  * single column on narrow windows.
  */
@@ -14,6 +14,7 @@ import { formatClock } from '../text';
 import { ActionInput } from './ActionInput';
 import { DiceTray } from './DiceTray';
 import { JournalPanel } from './JournalPanel';
+import { WorldMap } from './WorldMap';
 import { PartyPanel } from './PartyPanel';
 import { StoryLog } from './StoryLog';
 
@@ -26,6 +27,7 @@ export function GameScreen() {
   }, []);
   const hintOn = settings.value?.gameplay.objectiveHint ?? false;
   const [journalOpen, setJournalOpen] = useState(false);
+  const [mapOpen, setMapOpen] = useState(() => typeof location !== 'undefined' && location.hash.endsWith('+map'));
   return (
     <div class="game-screen">
       <header class="game-bar">
@@ -35,7 +37,7 @@ export function GameScreen() {
           {weather && <span class="muted weather">{weatherEffects(weather).description}</span>}
         </div>
         <nav class="game-menu" aria-label="Game menu">
-          <button type="button" disabled title="World map (coming soon)">
+          <button type="button" disabled={!state} onClick={() => setMapOpen(true)}>
             Map
           </button>
           <button type="button" disabled={!state} onClick={() => setJournalOpen(true)}>
@@ -77,6 +79,7 @@ export function GameScreen() {
         <ActionInput />
       </main>
       {journalOpen && <JournalPanel onClose={() => setJournalOpen(false)} />}
+      {mapOpen && <WorldMap onClose={() => setMapOpen(false)} />}
       <aside class="game-side">
         <div class="hero-view">{h && <CharacterPreview appearance={h.appearance} size={h.size} height={240} />}</div>
         <DiceTray />

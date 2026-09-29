@@ -37,6 +37,8 @@ export interface AdventureProgress {
   entries?: number;
   /** Deadline tracking by deadline id. */
   deadlines?: Record<string, DeadlineProgress>;
+  /** Lore location id when the party travelled somewhere this adventure has no scene for. */
+  away?: string;
 }
 
 export interface DeadlineProgress {
@@ -156,7 +158,7 @@ export function npcsHere(ctx: Pick<RunContext, 'state' | 'adventure' | 'flags'>)
 
 export function availableActions(ctx: RunContext): AvailableAction[] {
   const p = getProgress(ctx.state);
-  if (!p || p.ending) return [];
+  if (!p || p.ending || p.away) return [];
   const s = currentScene(ctx);
   const cc = conditionContext(ctx.state, p, ctx.flags);
   const open = (a: Action, id: string) => evalCondition(a.if, cc) && !(a.once && p.done.includes(`${s.id}/${id}`));
@@ -211,6 +213,34 @@ export function perform(ctx: RunContext, actionId: string): StepResult {
   if (action.outcome) applyOutcome(ctx, action.outcome, result);
   fireBeats(ctx, result);
   return result;
+}
+
+/**
+ * The scene to enter when the party arrives at a lore location: a chapter's start scene there,
+ * else a visited scene there, else the first scene there. Undefined when the adventure has none.
+ */
+export function sceneForLocation(adv: Adventure, locationId: string, visited: readonly string[] = []): string | undefined {
+  const here = allScenes(adv).filter((s) => s.locationId === locationId);
+  const starts = new Set(adv.chapters.map((c) => c.start));
+  return (here.find((s) => starts.has(s.id)) ?? here.find((s) => visited.includes(s.id)) ?? here[0])?.id;
+}
+
+/** Arrives in a scene from outside the scene graph (travel): clears `away`, runs onEnter/beats. */
+export function arriveInScene(ctx: RunContext, sceneId: string): StepResult {
+  const p = getProgress(ctx.state);
+  if (!p) throw new AdventureError('No adventure is running');
+  delete p.away;
+  const result = emptyResult();
+  enterScene(ctx, sceneId, result);
+  return result;
+}
+
+/** Marks the party as away from the adventure's scenes (at a lore location it has no scene for). */
+export function leaveScenes(ctx: RunContext, locationId: string, locationName: string): void {
+  const p = getProgress(ctx.state);
+  if (!p) return;
+  p.away = locationId;
+  ctx.state.location = { adventureId: ctx.adventure.id, name: locationName };
 }
 
 /** Applies an encounter's win/lose/flee outcome (called by combat, A068). */

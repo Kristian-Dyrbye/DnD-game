@@ -23,6 +23,8 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
   z.object({ ...base, type: z.literal('choose'), actionId: z.string().min(1).max(80) }),
   z.object({ ...base, type: z.literal('save'), slot: z.string().regex(SLOT_ID_PATTERN), name: z.string().max(80).optional() }),
   z.object({ ...base, type: z.literal('load'), slot: z.string().regex(SLOT_ID_PATTERN) }),
+  /** Travel on the world map to a known location. */
+  z.object({ ...base, type: z.literal('travel'), to: z.string().max(60), pace: z.enum(['slow', 'normal', 'fast']).default('normal') }),
   /** Journal: create (no id) or update a page. */
   z.object({ ...base, type: z.literal('journal_save'), page: z.object({ id: z.string().max(12).optional(), title: z.string().max(200), body: z.string().max(25_000) }) }),
   z.object({ ...base, type: z.literal('journal_delete'), id: z.string().max(12) }),

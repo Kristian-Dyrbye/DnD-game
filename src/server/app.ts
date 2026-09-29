@@ -21,6 +21,8 @@ import { parseIntent } from '../llm/prompts/intent';
 import { LoreSchema } from '../engine/world/lore';
 import loreJson from '../../data/world/lore.json';
 import { llmNarrator } from './narrator';
+import { TravelEventTableSchema } from '../engine/world/travel';
+import travelEventsJson from '../../data/tables/travel-events.json';
 import { createDefaultRegistry } from '../engine/systems';
 import { regionOfState } from '../engine/adventure/runner';
 import { suggestIdeas } from '../llm/prompts/suggest';
@@ -123,6 +125,7 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
         summarizer: llmSummarizer(() => services.llm),
         flags: flagRegistry,
         lore,
+        travelEvents: TravelEventTableSchema.parse(travelEventsJson),
         suggester: (ctx, offered) => suggestIdeas(services.llm, gatherNarrationContext(ctx.state, lore, ctx.adventure, srd), offered),
       }) }),
     saves: {
