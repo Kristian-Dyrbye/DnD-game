@@ -442,7 +442,8 @@
       "readBy": [
         "marrows_goods_and_oath",
         "millbrook_remembers",
-        "ending"
+        "ending",
+        "maw_final_seal"
       ],
       "description": "Number of the four Millbrook captives freed alive from the Tithe Altar."
     },
@@ -458,7 +459,8 @@
         "millbrook_remembers",
         "dawnspire_muster",
         "ending",
-        "side_quests"
+        "side_quests",
+        "maw_final_seal"
       ],
       "description": "Pip Hallard, the miller's son, survived; he becomes a page of fac:order_of_the_dawn_lance."
     },
@@ -480,7 +482,8 @@
         "hollowmere_stilts",
         "night_of_bells",
         "ending",
-        "side_quests"
+        "side_quests",
+        "maw_final_seal"
       ],
       "description": "Fate of Brother Ashby, the fac:hollow_choir cell leader of loc:millbrook."
     },
@@ -508,7 +511,8 @@
       ],
       "readBy": [
         "almoners_masque",
-        "millbrook_remembers"
+        "millbrook_remembers",
+        "choir_of_teeth"
       ],
       "description": "Hero remembers the Cantor's voice from the Tooth-dream; lowers the masque Insight DC from 17 to 12."
     },
@@ -563,7 +567,10 @@
         "pells_reckoning",
         "highcrown_audience",
         "palace_undercroft",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "blightwood_crossing",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "readBy": [
         "highcrown_audience",
@@ -573,7 +580,9 @@
         "maw_final_seal",
         "pells_reckoning",
         "palace_undercroft",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "blightwood_crossing",
+        "ch5_the_hungering_dark"
       ],
       "description": "Holder of Tooth 1, the Tooth of Want, from the loc:millbrook barrow. Giving it to the Brightwater magistrate sends it silently to the Almonry (choir)."
     },
@@ -599,7 +608,9 @@
         "defeat_outcomes",
         "pells_reckoning",
         "highcrown_audience",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "readBy": [
         "abbey_bells_toll",
@@ -608,7 +619,10 @@
         "pells_reckoning",
         "highcrown_audience",
         "palace_undercroft",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "blightwood_crossing",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "description": "Holder of Tooth 2, the Drowned Tooth, from loc:drowned_abbey."
     },
@@ -635,7 +649,9 @@
         "defeat_outcomes",
         "pells_reckoning",
         "highcrown_audience",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "readBy": [
         "night_of_bells",
@@ -644,7 +660,10 @@
         "pells_reckoning",
         "highcrown_audience",
         "palace_undercroft",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "blightwood_crossing",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "description": "Holder of Tooth 3, the Briar Tooth, kept by Grandmother Wick of fac:briarkin at loc:thornwife_hollow."
     },
@@ -673,7 +692,9 @@
         "defeat_outcomes",
         "ch2_salt_and_treason",
         "highcrown_audience",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "readBy": [
         "pells_reckoning",
@@ -683,7 +704,10 @@
         "brass_parrot_vault",
         "highcrown_audience",
         "palace_undercroft",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "blightwood_crossing",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "description": "Holder of Tooth 4, the Brass Tooth, from the vault on loc:isle_of_brass_parrots; fac:red_gull_brotherhood may secure it."
     },
@@ -711,7 +735,9 @@
         "pells_reckoning",
         "ch2_salt_and_treason",
         "highcrown_audience",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "readBy": [
         "choir_of_teeth",
@@ -720,7 +746,10 @@
         "pells_reckoning",
         "highcrown_audience",
         "palace_undercroft",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "blightwood_crossing",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "description": "Holder of Tooth 5, the Singing Tooth, taken from the sea hag of loc:singing_reef."
     },
@@ -745,7 +774,9 @@
         "choir_of_teeth",
         "side_quests",
         "defeat_outcomes",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "readBy": [
         "choir_of_teeth",
@@ -753,7 +784,10 @@
         "vaelthorn_sky_towers",
         "highcrown_audience",
         "palace_undercroft",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "blightwood_crossing",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "description": "Holder of Tooth 6, the Sky Tooth, sealed under Dawnbreaker in loc:ruins_of_old_vaelthorn."
     },
@@ -775,12 +809,17 @@
         "blightwood_crossing",
         "maw_descent",
         "choir_of_teeth",
-        "defeat_outcomes"
+        "defeat_outcomes",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "readBy": [
         "highcrown_burning",
         "choir_of_teeth",
-        "maw_final_seal"
+        "maw_final_seal",
+        "blightwood_crossing",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "description": "Holder of Tooth 7, the Ember Tooth, lodged in Pyrraxis at loc:emberpeak."
     },
@@ -808,7 +847,9 @@
         "maw_descent",
         "choir_of_teeth",
         "side_quests",
-        "defeat_outcomes"
+        "defeat_outcomes",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "readBy": [
         "choir_of_teeth",
@@ -842,7 +883,9 @@
         "maw_descent",
         "choir_of_teeth",
         "side_quests",
-        "defeat_outcomes"
+        "defeat_outcomes",
+        "lantern_hold_siege",
+        "ch5_the_hungering_dark"
       ],
       "readBy": [
         "pyrraxis_hoard",
@@ -867,7 +910,8 @@
       "default": "unknown",
       "setBy": [
         "night_of_bells",
-        "side_quests"
+        "side_quests",
+        "lantern_hold_siege"
       ],
       "readBy": [
         "lantern_hold_tribunal",
@@ -875,7 +919,8 @@
         "almoners_masque",
         "lantern_hold_siege",
         "ending",
-        "side_quests"
+        "side_quests",
+        "maw_final_seal"
       ],
       "description": "Fate of Mother Sallow, fac:hollow_choir plague-preacher of loc:hollowmere; captured gives a Cantor clue."
     },
@@ -950,7 +995,8 @@
         "ending",
         "side_quests",
         "port_sorrel_docks",
-        "highcrown_audience"
+        "highcrown_audience",
+        "maw_final_seal"
       ],
       "description": "Fate of loc:hollowmere: cured (fac:briarkin), purged (fac:lantern_wardens) or abandoned to fac:hollow_choir."
     },
@@ -973,7 +1019,8 @@
         "palace_undercroft",
         "lantern_hold_siege",
         "ending",
-        "highcrown_burning"
+        "highcrown_burning",
+        "maw_final_seal"
       ],
       "description": "How the Whispering Sickness is being fought across Orrimar; readable by future arcs."
     },
@@ -1030,7 +1077,8 @@
         "dawnspire_muster",
         "ending",
         "side_quests",
-        "highcrown_burning"
+        "highcrown_burning",
+        "maw_final_seal"
       ],
       "description": "Side taken in the Isles: fac:red_gull_brotherhood (with fac:tidewright_guild) or fac:saltwind_trading_company."
     },
@@ -1053,7 +1101,8 @@
         "ending",
         "side_quests",
         "gullhaven_truce",
-        "pells_reckoning"
+        "pells_reckoning",
+        "maw_final_seal"
       ],
       "description": "Status of the free port loc:gullhaven run by fac:tidewright_guild."
     },
@@ -1077,7 +1126,8 @@
         "dawnspire_muster",
         "ending",
         "side_quests",
-        "pells_reckoning"
+        "pells_reckoning",
+        "maw_final_seal"
       ],
       "description": "Fate of Governor Cassius Pell of fac:saltwind_trading_company."
     },
@@ -1105,7 +1155,8 @@
         "side_quests",
         "brass_parrot_vault",
         "highcrown_audience",
-        "almoners_masque"
+        "almoners_masque",
+        "maw_final_seal"
       ],
       "description": "Fate of Captain Harrow Vey, fac:hollow_choir smuggler-captain."
     },
@@ -1115,7 +1166,8 @@
       "default": false,
       "setBy": [
         "singing_reef_lagoon",
-        "side_quests"
+        "side_quests",
+        "blightwood_crossing"
       ],
       "readBy": [
         "blightwood_crossing",
@@ -1142,7 +1194,8 @@
       "readBy": [
         "dawnspire_muster",
         "ending",
-        "side_quests"
+        "side_quests",
+        "maw_final_seal"
       ],
       "description": "Who got the Brass Parrot treasure of loc:isle_of_brass_parrots."
     },
@@ -1157,7 +1210,8 @@
         "almoners_masque",
         "dawnspire_muster",
         "ending",
-        "palace_undercroft"
+        "palace_undercroft",
+        "maw_final_seal"
       ],
       "description": "Clue 4: fac:ironvault_consortium ledgers tie the Almonry to Choir funds."
     },
@@ -1210,7 +1264,8 @@
         "maw_descent",
         "ending",
         "side_quests",
-        "vaelthorn_sky_towers"
+        "vaelthorn_sky_towers",
+        "maw_final_seal"
       ],
       "description": "Fate of Vosk the Hollow, fac:hollow_choir archivist-mage."
     },
@@ -1299,7 +1354,8 @@
         "highcrown_burning",
         "choir_of_teeth",
         "ending",
-        "ashfall_road"
+        "ashfall_road",
+        "maw_final_seal"
       ],
       "description": "Queen Isolde Varannis of fac:crown_of_aurelmark survives the Cantor's poison."
     },
@@ -1314,7 +1370,8 @@
         "dawnspire_muster",
         "highcrown_burning",
         "ending",
-        "millbrook_remembers"
+        "millbrook_remembers",
+        "maw_final_seal"
       ],
       "description": "loc:millbrook fights for the hero (war council ally, halves Highcrown fire)."
     },
@@ -1353,7 +1410,8 @@
         "highcrown_burning",
         "ending",
         "side_quests",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "maw_descent"
       ],
       "description": "Fate of the red dragon Pyrraxis of loc:emberpeak."
     },
@@ -1367,7 +1425,8 @@
       "readBy": [
         "maw_descent",
         "maw_final_seal",
-        "ending"
+        "ending",
+        "lantern_hold_siege"
       ],
       "description": "loc:lantern_hold survived the siege; fac:lantern_wardens hold the Maw rim (+1 seal)."
     },
@@ -1381,7 +1440,8 @@
       ],
       "readBy": [
         "choir_of_teeth",
-        "maw_final_seal"
+        "maw_final_seal",
+        "abbey_bells_toll"
       ],
       "description": "All nine drowned bells of loc:drowned_abbey were rung (+1 seal, advantage vs Hunger Pull)."
     },
@@ -1399,7 +1459,8 @@
       ],
       "readBy": [
         "maw_final_seal",
-        "ending"
+        "ending",
+        "choir_of_teeth"
       ],
       "description": "Outcome of the redemption parley with the Cantor in loc:the_maw."
     },
@@ -1416,12 +1477,14 @@
       "default": "unknown",
       "setBy": [
         "choir_of_teeth",
-        "maw_final_seal"
+        "maw_final_seal",
+        "ch5_the_hungering_dark"
       ],
       "readBy": [
         "maw_final_seal",
         "ending",
-        "side_quests"
+        "side_quests",
+        "choir_of_teeth"
       ],
       "description": "Fate of the Cantor, leader of fac:hollow_choir."
     },
@@ -1440,7 +1503,8 @@
         "defeat_outcomes"
       ],
       "readBy": [
-        "ending"
+        "ending",
+        "maw_final_seal"
       ],
       "description": "State of loc:the_maw after the finale; readable by future arcs."
     },
@@ -1500,7 +1564,11 @@
         "dawnspire_muster",
         "emberpeak_ascent",
         "pyrraxis_hoard",
-        "highcrown_burning"
+        "highcrown_burning",
+        "lantern_hold_siege",
+        "blightwood_crossing",
+        "abbey_bells_toll",
+        "choir_of_teeth"
       ],
       "readBy": [
         "dawnspire_vigil",
@@ -1519,7 +1587,9 @@
         "companion_quests"
       ],
       "readBy": [
-        "ending"
+        "ending",
+        "choir_of_teeth",
+        "maw_final_seal"
       ],
       "description": "Corwin resolved \"The Broken Oath\" (knighted or Thane exposed)."
     },
@@ -1573,13 +1643,18 @@
         "pells_reckoning",
         "ashfall_road",
         "millbrook_remembers",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "lantern_hold_siege",
+        "abbey_bells_toll",
+        "choir_of_teeth"
       ],
       "readBy": [
         "thornwife_moot",
         "lantern_hold_tribunal",
         "maw_descent",
-        "ending"
+        "ending",
+        "blightwood_crossing",
+        "maw_final_seal"
       ],
       "description": "Nettle approval 0-100; <=20 at loc:the_maw makes her betray the party."
     },
@@ -1593,7 +1668,8 @@
       ],
       "readBy": [
         "maw_final_seal",
-        "ending"
+        "ending",
+        "blightwood_crossing"
       ],
       "description": "Nettle learned her true name (\"The Name in the Jar\")."
     },
@@ -1625,7 +1701,8 @@
         "side_quests",
         "fort_kestrel_gallows",
         "gullhaven_truce",
-        "brass_parrot_vault"
+        "brass_parrot_vault",
+        "maw_final_seal"
       ],
       "description": "Rook Marrowby, fac:red_gull_brotherhood smuggler."
     },
@@ -1690,7 +1767,8 @@
         "almoners_masque",
         "vaelthorn_sky_towers",
         "palace_undercroft",
-        "pyrraxis_hoard"
+        "pyrraxis_hoard",
+        "maw_final_seal"
       ],
       "description": "Aurek Vell, Veyran scholar and nephew of the Cantor."
     },
@@ -1708,7 +1786,9 @@
         "side_quests",
         "emberpeak_ascent",
         "pyrraxis_hoard",
-        "highcrown_burning"
+        "highcrown_burning",
+        "maw_descent",
+        "choir_of_teeth"
       ],
       "readBy": [
         "highcrown_audience",
@@ -1728,7 +1808,8 @@
       ],
       "readBy": [
         "maw_final_seal",
-        "ending"
+        "ending",
+        "choir_of_teeth"
       ],
       "description": "Aurek recovered his father's reverse-song research (\"Veyra's Lantern\"; +1 seal)."
     },
@@ -1741,7 +1822,8 @@
       ],
       "readBy": [
         "ending",
-        "side_quests"
+        "side_quests",
+        "maw_final_seal"
       ],
       "description": "Heroic-mode defeats suffered this campaign."
     },
@@ -1751,7 +1833,8 @@
       "default": false,
       "setBy": [
         "thornwife_moot",
-        "defeat_outcomes"
+        "defeat_outcomes",
+        "blightwood_crossing"
       ],
       "readBy": [
         "blightwood_crossing",

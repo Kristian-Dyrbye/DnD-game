@@ -1023,6 +1023,22 @@ This chapter pays off the most earlier flags.
 - **Writes:** `world.maw_state`, `arc.main.cantor_fate` (as above), `world.sickness_cure` (a "sealed" result sets it to "maw_sealed" if it was "none": the spores die with the Maw).
 - **Defeat:** n/a.
 
+**Implementation choices (adventure JSON, `data/adventures/arc1/ch5_the_hungering_dark.json`):**
+- The endings are the five §12 endings with the same ids, chosen in `maw_final_seal`. None has a `next`: chapter 5 ends the campaign.
+- The engine does not recompute `arc.main.teeth_secured` or `arc.main.teeth_choir` yet, so the chapter reads the seven holder flags directly. "Opened" means all seven holders are "choir"; the wraith joins at five or more; the seal counts one point per secured holder in the local number flag `~ch5_seal`, filled by beats on entering `maw_final_seal`. Unclaimed Teeth count for neither side.
+- Every Tooth theft (a failed Hunger Pull, Nettle's betrayal, Rook's theft, each Maw's-spit defeat) takes the lowest-numbered carried Tooth in §3 table order, through event flags `~ch5_take_<event>`. Each event takes at most one Tooth.
+- Siege: one "Hold the walls" action; beats pick one of twelve encounter variants from Hollowmere's fate (abandoned adds the converts), Sallow's fate (she joins as a second boss) and the war council (4+ allies: two Dawn Lance knights fight as allies). A cured Hollowmere adds two Briarkin archers as allies. Carrying the oil and rallying the Wardens each prevent a breach (story damage). After the siege, Warden-held Teeth become "player". Winning gives the Maw map and sets `arc.main.lantern_hold_held`.
+- Blightwood: the heart-tree fight blocks the way. `world.briarkin_favor_owed` makes the hero spare the mound (wolves only; Nettle +10; the favor is paid). A burned Wick adds the curse-hunters. The hag's sister appears at night: with `arc.main.hag_bargain` she trades the memory back for a carried Tooth of the player's choice (it goes to the Choir); otherwise, or on refusal, she fights. Nettle's personal quest is a Nature DC 15 check at the heart-tree (loyalty 60+).
+- Abbey (optional): a 12-hour vigil to midnight, the rite (automatic with Cendric), three Athletics dives, then the drowned-dead fight. Mireth's death-save blessing is narrated only; mechanically the rung bells give advantage on the Hunger Pull saves and +1 seal strength.
+- Maw descent: the Maw's breath is Con-save story damage (the poisoned condition is not modelled). A failed navigation leads into the bile-pools fight; slipping past the sentries skips their fight, but an escaped Vosk still makes his final stand at the sanctum gate. Level 10 is an XP beat (+16,000) at the sanctum gate.
+- Choir of Teeth: two Hunger Pulls, one before the fight and one when the Cantor is at bay, each a Str or Wis save DC 17 (advantage when the bells were rung; the Wis save also with `arc.starter.dream_heard` or Nettle's confession; disadvantage when the song is late or the Blightwood's whispers got in). The fight has four variants (the wraith, Aurek at her side). Winning leaves the Cantor at bay: up to two Pry attempts (Athletics DC 18), then parley, kill or capture. Parley routes: Aurek (automatic), Liesel's locket `~ch3_locket` (Persuasion DC 20, advantage from either Aurek's or Corwin's quest), Isolde's letter `~ch4_isolde_letter` (automatic while the Queen lives).
+- A betrayed Rook is settled with Persuasion DC 15: success means he pries a Choir-held Tooth back for the party, failure means he steals a carried one. He cannot rejoin (betrayed companions cannot be recruited).
+- Defeat in the finale is the Maw's spit with one retry; a second loss makes the Cantor "escaped", and the seal is made without her.
+- Design gap resolved: a "sealed" result needs the Cantor not "escaped". An escaped Cantor sings inside the seal, so the result is "stirring" (ending 5) whatever the strength.
+- Deadline: 4 days from the chapter start to reach the Jaw-Stone; missing it gives disadvantage on the Hunger Pull saves.
+- The §12 epilogue lines (factions, companions, Millbrook) are beats that fire after the seal, before the ending action.
+- Map: `the_maw` (rim, spiral stair, bile-pools, sentry gallery, sanctum gate, Jaw-Stone). Fights happen in their own rooms.
+
 ---
 
 ## 11. Companions

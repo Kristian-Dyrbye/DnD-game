@@ -7703,22 +7703,26 @@
     {
       "id": "crown_endures",
       "name": "The Crown Endures",
-      "text": "Pyrraxis no longer threatens Aurelmark, the coup is broken, and Queen Isolde lives. The realm will march on the Gloamfen behind its Queen."
+      "text": "Pyrraxis no longer threatens Aurelmark, the coup is broken, and Queen Isolde lives. The realm will march on the Gloamfen behind its Queen.",
+      "next": "ch5_the_hungering_dark"
     },
     {
       "id": "regency_council",
       "name": "The Regency Council",
-      "text": "The coup is broken and the dragon is gone, but the Queen is dead. A regency council rules in Highcrown while the Choir sings at the Maw."
+      "text": "The coup is broken and the dragon is gone, but the Queen is dead. A regency council rules in Highcrown while the Choir sings at the Maw.",
+      "next": "ch5_the_hungering_dark"
     },
     {
       "id": "crown_in_ashes",
       "name": "Crown in Ashes",
-      "text": "The palace is retaken, but Pyrraxis burned the upper tiers of Highcrown before she flew south to the Maw. The Choir has the Ember Tooth."
+      "text": "The palace is retaken, but Pyrraxis burned the upper tiers of Highcrown before she flew south to the Maw. The Choir has the Ember Tooth.",
+      "next": "ch5_the_hungering_dark"
     },
     {
       "id": "highcrown_fallen",
       "name": "Highcrown Fallen",
-      "text": "The Choir held the palace until it chose to leave. Highcrown is broken, and the Choir withdrew to the Maw untouched."
+      "text": "The Choir held the palace until it chose to leave. Highcrown is broken, and the Choir withdrew to the Maw untouched.",
+      "next": "ch5_the_hungering_dark"
     }
   ]
 }
