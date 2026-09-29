@@ -43,7 +43,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ### Phase 7 — World Systems
 
 ### Phase 8 — Companions
-- [todo] A084 — Companion model + recruitment | Spec: §6 | Done: full sheets, recruit via adventure data, party ≤ 4, party UI; tests | Dep: A068, A051
+- [in-progress] A084 — Companion model + recruitment | Spec: §6 | Done: full sheets, recruit via adventure data, party ≤ 4, party UI; tests | Dep: A068, A051
 - [todo] A085 — Loyalty/approval | Spec: §6 | Done: approval shifts from choices, leave/betray at authored points; tests | Dep: A084, A078
 - [todo] A086 — Banter | Spec: §6 | Done: occasional LLM lines with cooldown + fallback lines; tests | Dep: A085, A054
 - [todo] A087 — Control toggle + companion leveling | Spec: §6 | Done: AI/player toggle outside combat, companions level with hero; tests | Dep: A084, A036
@@ -63,7 +63,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ### Phase 11 — Content
 - [todo] A098 — Starter arc part 1 | Spec: §7.2 | Done: exploration, dialogue, skill-check tutorial scenes (valid schema) | Dep: A078, A084
 - [todo] A099 — Starter arc part 2 | Spec: §7.2, §9 | Done: combat, rest, shop, companion, world map, hook, defeat outcomes | Dep: A098
-- [todo] A101 — Arc chapter 1 | Spec: §7.2 | Done: valid schema, reads starter flags | Dep: A100
+- [in-progress (helper)] A101 — Arc chapter 1 | Spec: §7.2 | Done: valid schema, reads starter flags | Dep: A100
 - [todo] A102 — Arc chapter 2 | Spec: §7.2 | Done: as A101, second region | Dep: A101
 - [todo] A103 — Arc chapter 3 | Spec: §7.2 | Done: as A101 | Dep: A102
 - [todo] A104 — Arc chapter 4 | Spec: §7.2 | Done: as A101 | Dep: A103
