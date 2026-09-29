@@ -1,7 +1,7 @@
 /**
  * Combat screen (spec §10): 2D battle map, turn tracker, action bar and combat log. Moving: click a
  * highlighted square. Attacking: pick an attack, then a highlighted enemy. Area spells can be
- * previewed on the map (casting arrives with spell casting in combat). Previews use the same
+ * cast: area spells show their template under the cursor; click to cast. Previews use the same
  * engine code as the rules (reachableSquares, checkAttack, previewArea).
  */
 import { useMemo, useState } from 'preact/hooks';
@@ -11,12 +11,14 @@ import type { CombatContext } from '../../../engine/combat/combatState';
 import { isControlled, type Encounter, type PlayerAction } from '../../../engine/combat/encounter';
 import { cellKey, type Point } from '../../../engine/combat/grid';
 import { reachableSquares } from '../../../engine/combat/movement';
+import { lowestSlotFor, reachProblem, spellEconomy, spellRangeFt } from '../../../engine/combat/castAction';
+import { featureActions } from '../../../engine/character/features';
 import { budgetOf, currentId, movementLeft } from '../../../engine/combat/turns';
 import type { Character } from '../../../engine/core/creature';
 import { db } from '../../data';
 import { BattleMap } from './BattleMap';
 
-type Mode = { kind: 'move' } | { kind: 'attack'; profile: AttackProfile } | { kind: 'area'; spellId: string };
+type Mode = { kind: 'move' } | { kind: 'attack'; profile: AttackProfile } | { kind: 'area'; spellId: string } | { kind: 'spell'; spellId: string } | { kind: 'feature'; actionId: string };
 
 export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Encounter; ctx: CombatContext; act: (a: PlayerAction) => string | undefined; onLeave?: () => void; leaveLabel?: string }) {
   const [mode, setMode] = useState<Mode>({ kind: 'move' });
@@ -40,11 +42,20 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Enco
 
   const profiles = hero ? attackProfiles(hero, db) : [];
   const targets = useMemo(() => {
-    if (!myTurn || mode.kind !== 'attack') return new Set<string>();
-    return new Set(Object.keys(state.creatures).filter((id) => sides[id] === 'enemy' && state.creatures[id]!.hp > 0 && checkAttack(state, ctx, heroId, id, mode.profile).ok));
+    if (!myTurn) return new Set<string>();
+    if (mode.kind === 'attack') return new Set(Object.keys(state.creatures).filter((id) => sides[id] === 'enemy' && state.creatures[id]!.hp > 0 && checkAttack(state, ctx, heroId, id, mode.profile).ok));
+    if (mode.kind === 'spell') {
+      const spell = db.spells.get(mode.spellId);
+      if (!spell) return new Set<string>();
+      const healing = (spell.effects ?? []).some((e) => e.kind === 'heal' || e.kind === 'temp_hp');
+      return new Set(Object.keys(state.creatures).filter((id) => (healing ? sides[id] === 'party' : sides[id] === 'enemy' && state.creatures[id]!.hp > 0) && !reachProblem(state, heroId, id, spellRangeFt(spell))));
+    }
+    if (mode.kind === 'feature') return new Set(Object.keys(state.creatures).filter((id) => sides[id] === 'party' && !reachProblem(state, heroId, id, 5)));
+    return new Set<string>();
   }, [state, mode, myTurn]);
 
-  const areaSpells = hero ? [...(hero.spellcasting?.cantrips ?? []), ...(hero.spellcasting?.prepared ?? []).map((p) => p.spellId)].map((id) => db.spells.get(id)).filter((s) => s?.area) : [];
+  const knownSpells = hero ? [...new Set([...(hero.spellcasting?.cantrips ?? []), ...(hero.spellcasting?.prepared ?? []).map((p) => p.spellId)])].map((id) => db.spells.get(id)).filter((s): s is NonNullable<typeof s> => !!s && !!spellEconomy(s) && (s.effects?.length ?? 0) > 0) : [];
+  const features = hero ? featureActions(hero, db).filter((f) => f.action.cost !== 'reaction') : [];
   const aoe = useMemo(() => {
     if (mode.kind !== 'area' || !hover) return undefined;
     const spell = db.spells.get(mode.spellId);
@@ -66,6 +77,19 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Enco
     if (mode.kind === 'move') {
       const r = reach.get(cellKey(p));
       if (r) run({ kind: 'move', path: r.path });
+      return;
+    }
+    if (mode.kind === 'area') {
+      run({ kind: 'cast', spellId: mode.spellId, targetIds: [], area: p });
+      return;
+    }
+    const clicked = Object.values(state.grid.tokens).find((t) => { const n = t.size === 'large' ? 2 : t.size === 'huge' ? 3 : t.size === 'gargantuan' ? 4 : 1; return t.x <= p.x && p.x < t.x + n && t.y <= p.y && p.y < t.y + n; })?.id;
+    if (mode.kind === 'spell' && clicked && targets.has(clicked)) {
+      run({ kind: 'cast', spellId: mode.spellId, targetIds: [clicked] });
+      return;
+    }
+    if (mode.kind === 'feature' && clicked && targets.has(clicked)) {
+      run({ kind: 'feature', actionId: mode.actionId, targetId: clicked });
       return;
     }
     if (mode.kind === 'attack') {
@@ -126,9 +150,28 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Enco
                   {pr.name}
                 </button>
               ))}
-              {areaSpells.map((s) => (
-                <button key={s!.id} type="button" class={mode.kind === 'area' && mode.spellId === s!.id ? 'selected' : ''} onClick={() => setMode({ kind: 'area', spellId: s!.id })} title="Preview the area (casting in combat comes later)">
-                  ◎ {s!.name}
+              {knownSpells.map((sp) => {
+                const econ = spellEconomy(sp)!;
+                const usable = econ === 'action' ? budget.action : budget.bonusAction;
+                const noSlot = sp.level > 0 && hero && !lowestSlotFor(hero, sp);
+                const selfOnly = !sp.area && sp.range.kind === 'self';
+                const selected = (mode.kind === 'spell' || mode.kind === 'area') && mode.spellId === sp.id;
+                return (
+                  <button
+                    key={sp.id}
+                    type="button"
+                    class={`spell${selected ? ' selected' : ''}`}
+                    disabled={!usable || !!noSlot}
+                    title={`${sp.level === 0 ? 'Cantrip' : `Level ${sp.level}`} · ${econ === 'bonusAction' ? 'bonus action' : 'action'}${sp.area ? ' · area: click a square' : ''}`}
+                    onClick={() => (selfOnly ? run({ kind: 'cast', spellId: sp.id, targetIds: [heroId] }) : setMode(sp.area ? { kind: 'area', spellId: sp.id } : { kind: 'spell', spellId: sp.id }))}
+                  >
+                    ✦ {sp.name}
+                  </button>
+                );
+              })}
+              {features.map((f) => (
+                <button key={f.action.id} type="button" class="feature" disabled={!!f.problem} title={f.problem ?? f.action.name} onClick={() => (f.action.id === 'lay_on_hands' ? setMode({ kind: 'feature', actionId: f.action.id }) : run({ kind: 'feature', actionId: f.action.id }))}>
+                  ◆ {f.action.name}
                 </button>
               ))}
               <button type="button" disabled={!budget.action} onClick={() => run({ kind: 'dash' })}>

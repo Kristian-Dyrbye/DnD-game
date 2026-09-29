@@ -22,6 +22,8 @@ export const PlayerActionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('disengage') }),
   z.object({ kind: z.literal('dodge') }),
   z.object({ kind: z.literal('end_turn') }),
+  z.object({ kind: z.literal('cast'), spellId: z.string().max(60), targetIds: z.array(z.string().max(60)).max(20), slotLevel: z.number().int().min(1).max(9).optional(), area: PointSchema.optional() }),
+  z.object({ kind: z.literal('feature'), actionId: z.string().max(60), targetId: z.string().max(60).optional() }),
 ]);
 
 export const ClientCommandSchema = z.discriminatedUnion('type', [

@@ -111,6 +111,8 @@ export interface CastInCombatOptions {
   targetIds: string[];
   /** Default: the lowest slot that can cast it. */
   slot?: SlotChoice;
+  /** Targets come from an area template (line of effect from the origin, not the caster). */
+  areaTargets?: boolean;
 }
 
 /** Cast a known spell on the map: pays the Action/Bonus Action, checks range and line, runs its effects. */
@@ -131,7 +133,7 @@ export function castInCombat(state: CombatState, ctx: CombatContext, o: CastInCo
   for (const id of o.targetIds) {
     const t = state.creatures[id];
     if (!t) return fail(state, `Unknown creature ${id}`);
-    const problem = reachProblem(state, o.casterId, id, range);
+    const problem = o.areaTargets ? undefined : reachProblem(state, o.casterId, id, range);
     if (problem) return fail(state, `${spell.name} → ${t.name}: ${problem}`);
     targets.push(t);
     const a = state.grid.tokens[o.casterId];

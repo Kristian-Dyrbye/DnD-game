@@ -12,8 +12,11 @@ import { takeAiTurn, type AiOptions } from './ai';
 import { takeCompanionTurn } from './companionAi';
 import { resolveAttack } from './attack';
 import { dash, disengage, dodge, moveCreature } from './actions';
+import { castInCombat, featureInCombat, spellRangeFt } from './castAction';
+import { previewArea, templateFromArea, templateFromCaster } from './aoe';
+import { dbOf } from './combatState';
 import type { CombatContext, CombatEvent, CombatState } from './combatState';
-import { canPlace, createGrid, placeToken, setCell, type Grid, type Point } from './grid';
+import { canPlace, createGrid, distanceFt, placeToken, setCell, type Grid, type Point } from './grid';
 import { rollInitiativeOrder, toEntries } from './initiative';
 import { currentId, livingSides, nextTurn, startCombat } from './turns';
 
@@ -40,7 +43,10 @@ export type PlayerAction =
   | { kind: 'dash' }
   | { kind: 'disengage' }
   | { kind: 'dodge' }
-  | { kind: 'end_turn' };
+  | { kind: 'end_turn' }
+  /** Cast a prepared spell; `area` = the aimed square for area spells (targets are then the creatures inside). */
+  | { kind: 'cast'; spellId: string; targetIds: string[]; slotLevel?: number; area?: Point }
+  | { kind: 'feature'; actionId: string; targetId?: string };
 
 /** A simple arena: open ground with a few pillars and patches of difficult terrain (seeded). */
 export function defaultArena(rng: Rng, width = 12, height = 10): Grid {
@@ -145,6 +151,16 @@ function advance(enc: Encounter, ctx: CombatContext, aiOpts: AiOptions = {}): vo
   }
 }
 
+/** Creatures inside an area spell aimed at `aim` (self-centred shapes start at the caster). */
+export function areaTargets(enc: Encounter, ctx: CombatContext, casterId: string, spellId: string, aim: Point): string[] {
+  const spell = dbOf(ctx).spells.get(spellId);
+  if (!spell?.area) return [];
+  const fromSelf = ['cone', 'line', 'emanation'].includes(spell.area.shape) || spell.range.kind === 'self';
+  const centre = { x: aim.x + 0.5, y: aim.y + 0.5 };
+  const tpl = fromSelf ? templateFromCaster(enc.state.grid, casterId, spell.area, centre) : templateFromArea(spell.area, { origin: centre });
+  return previewArea(enc.state.grid, tpl, { excludeIds: fromSelf ? [casterId] : [] }).creatureIds.filter((id) => (enc.state.creatures[id]?.hp ?? 0) > 0);
+}
+
 /** Does the player control this creature (the hero, or a companion toggled to player control)? */
 export function isControlled(enc: Encounter, id: string): boolean {
   return id === enc.heroId || (enc.controlled ?? []).includes(id);
@@ -157,6 +173,24 @@ export function playerAct(enc: Encounter, ctx: CombatContext, a: PlayerAction): 
   if (!id || !isControlled(enc, id)) return 'It is not your turn.';
   if (a.kind === 'end_turn') {
     advance(enc, ctx);
+    return undefined;
+  }
+  if (a.kind === 'cast' && a.area) {
+    const spell = dbOf(ctx).spells.get(a.spellId);
+    const range = spell ? spellRangeFt(spell) : undefined;
+    const me = enc.state.grid.tokens[id];
+    if (spell && range !== undefined && range > 0 && me && distanceFt(me, { x: a.area.x, y: a.area.y, size: 'medium' }) > range) return `${spell.name}: that point is out of range (${range} ft).`;
+  }
+  if (a.kind === 'cast' || a.kind === 'feature') {
+    const r =
+      a.kind === 'feature'
+        ? featureInCombat(enc.state, ctx, { actorId: id, actionId: a.actionId, ...(a.targetId && { targetId: a.targetId }) })
+        : castInCombat(enc.state, ctx, { casterId: id, spellId: a.spellId, targetIds: a.area ? areaTargets(enc, ctx, id, a.spellId, a.area) : a.targetIds, ...(a.area && { areaTargets: true }), ...(a.slotLevel && { slot: { kind: 'slot' as const, level: a.slotLevel } }) });
+    push(enc, r.events.map((e) => e.text));
+    if (!r.ok) return r.error;
+    enc.state = r.state;
+    if (a.kind === 'cast' && a.targetIds[0]) enc.focusId = a.targetIds[0];
+    checkEnd(enc);
     return undefined;
   }
   const res =
