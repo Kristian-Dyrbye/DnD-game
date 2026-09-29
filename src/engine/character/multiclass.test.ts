@@ -51,7 +51,7 @@ describe('multiclass gains', () => {
 
 describe('addClass', () => {
   it('adds rogue level 1: average HP (not max), d8 hit die, skill + thieves tools, PB from total level', () => {
-    const r = addClass(fighter(), db, 'rogue', { hp: { mode: 'average' }, ignoreXp: true, skill: 'stealth' });
+    const r = addClass(fighter(), db, 'rogue', { hp: { mode: 'average' }, ignoreXp: true, skill: 'stealth', expertise: ['perception', 'athletics'] });
     const c = r.character;
     expect(c.classes).toEqual([
       { classId: 'fighter', level: 1 },
@@ -61,12 +61,14 @@ describe('addClass', () => {
     expect(c.hitDice).toEqual({ d10: 1, d8: 1 });
     expect(c.skills.stealth).toBe('proficient');
     expect(c.proficiencies.tools).toContain('thieves_tools');
+    expect(c.skills.perception).toBe('expertise');
     expect(r.features).toEqual(expect.arrayContaining(['Sneak Attack', 'Expertise']));
   });
 
   it('rejects invalid choices', () => {
     expect(() => addClass(fighter(), db, 'rogue', { hp: { mode: 'average' }, ignoreXp: true })).toThrow(/Choose a skill/);
     expect(() => addClass(fighter(), db, 'rogue', { hp: { mode: 'average' }, ignoreXp: true, skill: 'arcana' })).toThrow(/not a Rogue skill/);
+    expect(() => addClass(fighter(), db, 'rogue', { hp: { mode: 'average' }, ignoreXp: true, skill: 'stealth' })).toThrow(/Expertise/);
     expect(() => addClass(fighter(), db, 'wizard', { hp: { mode: 'average' }, ignoreXp: true })).toThrow(/Intelligence/);
   });
 

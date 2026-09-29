@@ -21,6 +21,7 @@ import {
 import { hitDicePool } from '../rules/rest';
 import { pactSlots, spellSlots } from '../rules/spellcasting';
 import { armorClass, baseSpeed, maxHitPoints } from './derived';
+import { applyOnGain, syncResources } from './features';
 
 export interface CharacterBuildInput {
   id: string;
@@ -239,7 +240,9 @@ export function buildCharacter(input: CharacterBuildInput, db: SrdDatabase): Cha
   });
 
   const hp = maxHitPoints(classLevels, abilities.con, species.id === 'dwarf' ? 1 : 0);
-  const withHp: Character = { ...draft, maxHp: hp, hp };
+  let withHp: Character = { ...draft, maxHp: hp, hp };
+  for (let l = 1; l <= level; l++) withHp = applyOnGain(withHp, db, cls.id, l);
+  withHp = syncResources(withHp, db);
   return {
     ...withHp,
     ac: armorClass(withHp, db).ac,

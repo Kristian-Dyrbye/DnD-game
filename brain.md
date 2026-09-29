@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A038
-- **Notes for next session:** Start with A039. A048 (3D assets) is with a helper — merge its branch when it reports and merge assets/CREDITS-assets.md into CREDITS.md. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A039
+- **Notes for next session:** Start with A039b. A048 (3D assets) is with a helper — merge its branch when it reports and merge assets/CREDITS-assets.md into CREDITS.md. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -59,7 +59,9 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A036 — Leveling + feats
 - [done] A037 — Multiclassing
 - [done] A038 — Weapon mastery
-- [todo] A039 — Class features batch 1 (Barbarian, Bard, Cleric, Druid) | Spec: §4 | Done: mechanical features 1–20 as hooks/effects; tests for key ones | Dep: A036, A034
+- [done] A039 — Class feature framework + Barbarian + Bard
+- [todo] A039b — Class features: Cleric (+Life) and Druid (+Land) | Spec: §4 | Done: Divine Order, Channel Divinity (Divine Spark, Turn Undead), Blessed Strikes, Divine Intervention, Life features; Druid Primal Order, Wild Resurgence, Elemental Fury, Land features; tests | Dep: A039
+- [todo] A039c — Wild Shape | Spec: §4 | Done: transform into Beast stat blocks (CR/fly limits by level), temp HP, revert, Archdruid; tests | Dep: A039b, A042
 - [todo] A040 — Class features batch 2 (Fighter, Monk, Paladin, Ranger) | Spec: §4 | Done: as A039 | Dep: A039
 - [todo] A041 — Class features batch 3 (Rogue, Sorcerer, Warlock, Wizard) | Spec: §4 | Done: as A039 | Dep: A039
 - [todo] A042 — Monster runtime + encounter builder | Spec: §4, §6 | Done: combatant from stat block (multiattack, recharge, legendary); XP-budget encounter scaling by party size/level; tests | Dep: A024, A030
@@ -170,6 +172,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - Phase 2 part 1 (A011–A028): seeded Rng + dice/d20 math (engine/core); core vocabulary + Creature/Character schemas (engine/rules/basics, engine/core/creature); SRD data pipeline (engine/data schemas + SrdDatabase + loadSrd; scripts/srd importers; `npm run srd:fetch`, `npm run srd:import`). Data: 15 conditions (+modifiers), rules tables, 38 weapons, 13 armor, 150 gear, 9 species, 4 backgrounds, 17 feats, 12 classes + 12 subclasses, 339 spells (93 with auto effects), 330 monsters/animals, 271 magic items. Tests per file in src/engine/data/*Data.test.ts.
 - Phase 2 part 2 + helpers (A029–A038, A034a, A071): d20Test core + checks/saves/passive/contest; attacks (crit/nat 1), damage rolls, defenses, temp HP; conditions engine from data modifiers (+ exhaustion); death saves, 0 HP, short/long rests; effect executor (shared damage, half on save, spell attacks, heal/upcast, conditions, hooks); spellcasting (slot tables incl. multiclass + pact, casting, rituals, cantrip scaling, concentration); character builder + derived stats (AC, speed, weapon attacks, HP) + inventory; leveling + feats; multiclassing; active effects + weapon masteries. Helpers: world lore (Orrimar: Aurelmark/Gloamfen/Brinescatter, Hollow Choir cult, start town Millbrook); 54 hand-written spell effects/hooks. See File Map for modules.
 
+- A039 — Class feature framework (FeatureImpl hooks: resources, save/check/initiative/attack/attacked modes, resistances, condition immunities, onWeaponHit riders, actions, onGain, blocksSpellcasting; registry + merged queries; syncResources; applyOnGain wired into builder + levelUp; pending choices expertise/skills) + Barbarian (Rage, Danger Sense, Reckless, Feral Instinct, Primal Champion, Relentless Rage, Indomitable Might, Brutal Strike dice; Berserker Frenzy, Mindless Rage) + Bard (Bardic Inspiration incl. Font, useInspiration, Jack of All Trades, Words of Creation; Lore Cutting Words, Bonus Proficiencies) — `src/engine/character/features/*`, `src/engine/character/featureLevels.ts`
+
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
 - Owner decisions (fixed, from the planning session): Windows, 8 GB RAM, browser app, Ollama with a 3–4B model, full SRD 5.2 with feats and multiclassing, all 3 ability score methods, a starter arc plus one full linked arc, woven-in procedural side quests, a mixed-tone world, auto dice with visible math, Heroic/Hardcore modes, a 3D grid combat map, autosave plus manual slots in all modes, buttons plus free text, flexible AI/player companions, music + SFX + Piper TTS, a world map plus fog-of-war dungeons, a notes-only journal, factions, day/night, weather, dynamic shops, low-poly CC0 3D models for everyone with wounds, scars, and armor wear. Crafting and home base are future expansions only.
@@ -228,6 +232,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A035: Weapons/armor are stored one inventory entry per item (so each can be equipped); other items stack. Generic choice tags resolve via input.choiceItems or DEFAULT_CHOICE_ITEM (holy_symbol→amulet, gaming_set→dice_set, instrument→lute). Fighting style feats go into featIds. Level > 1 builds use fixed average HP (no ASIs/features; leveling = A036).
 - A034a: Spell hook convention: `{kind:'hook', hook:'<spell_id>', params:{…}}`, params carry only what sibling core effects don't. Edit data/srd/overrides/spells.json directly, then `npx tsx scripts/srd/import-spells.ts`.
 - A038: Temporary rules effects (mastery riders, and later spell buffs A042a) live in `creature.effects` (ActiveEffect). Combat must call onTurnEvent(start/end of each turn), consumeAttackEffects after each attack roll, and add attackEffectModes to attack modes. Effect ids are per-creature (`sap-1`), save-safe.
+- A039: Class features = FeatureImpl objects (features/<class>.ts) keyed by (owner class/subclass id, feature id matching classes.json). A test asserts every impl id exists in the data. Resources come from features (syncResources keeps current values). Rage = active effect 'rage' (100 rounds; combat must end it early if not extended, unless Persistent Rage). Reckless = effect until start of own next turn. Resource 'shortRestRegain' for partial short-rest recovery (Rage +1). Retaliation/Intimidating Presence/Countercharm/Magical Secrets/Peerless Skill/Superior Inspiration not automated yet (combat/UI).
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -265,6 +270,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/character/multiclass.ts` — multiclassProblems, multiclassGains, addClass, attacksPerAction
 - `src/engine/rules/activeEffects.ts` — addEffect, hasEffect, removeEffects, onTurnEvent, tickEffects, attackEffectModes, consumeAttackEffects, effectSpeedPenalty
 - `src/engine/rules/mastery.ts` — applyMasteryOnHit, grazeDamage, cleaveDamageModifier
+- `src/engine/character/features/` — types.ts (FeatureImpl), index.ts (ALL_FEATURES, activeFeatures, feature*Modes, featureResistances, weaponHitRiders, syncResources, applyOnGain, featureActions, useFeatureAction), barbarian.ts, bard.ts
 - `src/engine/data/common.ts` — IdSchema, DiceSchema, CostSchema(CP), DamageSchema, AreaSchema, DurationSchema, EffectSchema/Effect, toId
 - `src/engine/data/schemas.ts` — schemas for every data/srd file + RulesTablesSchema; SRD_FILES registry; record types
 - `src/engine/data/srd.ts` — validateSrdFile, SrdDatabase (maps by id, item(), spellsForClass)

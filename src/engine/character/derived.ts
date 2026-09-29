@@ -220,5 +220,7 @@ export function maxHitPoints(levels: { hitDie: string; level: number }[], conSco
 export function initiativeModifiers(c: Character): Modifier[] {
   const mods: Modifier[] = [{ value: abilityModifier(c.abilities.dex), label: 'Dexterity' }];
   if (c.featIds.includes('alert')) mods.push({ value: c.proficiencyBonus, label: 'Alert' });
+  // Jack of All Trades (Bard 2): half proficiency on ability checks without proficiency, incl. Initiative.
+  else if (classLevel(c, 'bard') >= 2) mods.push({ value: Math.floor(c.proficiencyBonus / 2), label: 'Jack of All Trades' });
   return mods;
 }

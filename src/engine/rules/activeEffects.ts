@@ -13,7 +13,7 @@ function nextEffectId(c: Creature, key: string): string {
   return `${key}-${Math.max(0, ...used) + 1}`;
 }
 
-export function addEffect(c: Creature, e: Omit<ActiveEffect, 'id' | 'data'> & Partial<Pick<ActiveEffect, 'id' | 'data'>>): Creature {
+export function addEffect<T extends Creature>(c: T, e: Omit<ActiveEffect, 'id' | 'data'> & Partial<Pick<ActiveEffect, 'id' | 'data'>>): T {
   const effect: ActiveEffect = { data: {}, ...e, id: e.id ?? nextEffectId(c, e.key) };
   return { ...c, effects: [...c.effects, effect] };
 }
@@ -22,7 +22,7 @@ export function hasEffect(c: Creature, key: string, targetId?: string): boolean 
   return c.effects.some((e) => e.key === key && (targetId === undefined || e.targetId === targetId));
 }
 
-export function removeEffects(c: Creature, pred: (e: ActiveEffect) => boolean): Creature {
+export function removeEffects<T extends Creature>(c: T, pred: (e: ActiveEffect) => boolean): T {
   return c.effects.some(pred) ? { ...c, effects: c.effects.filter((e) => !pred(e)) } : c;
 }
 
@@ -77,7 +77,7 @@ export function attackEffectModes(attacker: Creature, targetId: string): { advan
 }
 
 /** Removes the effects used up by an attack roll against `targetId`. */
-export function consumeAttackEffects(attacker: Creature, targetId: string): Creature {
+export function consumeAttackEffects<T extends Creature>(attacker: T, targetId: string): T {
   return removeEffects(attacker, (e) => e.consumeOn === 'own_attack' || (e.consumeOn === 'own_attack_vs_target' && e.targetId === targetId));
 }
 

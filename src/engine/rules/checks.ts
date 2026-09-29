@@ -42,6 +42,7 @@ export interface D20TestResult {
   total: number;
   /** Undefined when there was no target to compare against. */
   success?: boolean;
+  target?: { kind: 'DC' | 'AC'; value: number };
   autoFail?: string;
   advantage: string[];
   disadvantage: string[];
@@ -68,6 +69,7 @@ export function d20Test(input: D20TestInput): D20TestResult {
     modifiers,
     total,
     ...(success !== undefined && { success }),
+    ...(input.target && { target: input.target }),
     ...(input.autoFail && { autoFail: input.autoFail }),
     advantage,
     disadvantage,

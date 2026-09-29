@@ -25,7 +25,14 @@ export interface HitDieRoll {
 
 /** Recharges resources whose recharge type is in `kinds`. */
 export function rechargeResources(resources: Record<string, Resource>, kinds: Resource['recharge'][]): Record<string, Resource> {
-  return Object.fromEntries(Object.entries(resources).map(([k, r]) => [k, kinds.includes(r.recharge) ? { ...r, current: r.max } : r]));
+  const shortRest = kinds.includes('short') && !kinds.includes('long');
+  return Object.fromEntries(
+    Object.entries(resources).map(([k, r]) => {
+      if (kinds.includes(r.recharge)) return [k, { ...r, current: r.max }];
+      if (shortRest && r.shortRestRegain) return [k, { ...r, current: Math.min(r.max, r.current + r.shortRestRegain) }];
+      return [k, r];
+    }),
+  );
 }
 
 /**

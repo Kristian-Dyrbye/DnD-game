@@ -50,6 +50,8 @@ export const ResourceSchema = z.object({
   current: z.number().int().min(0),
   max: z.number().int().min(0),
   recharge: z.enum(['short', 'long', 'turn', 'dawn', 'never']),
+  /** Long-rest resources that regain some uses on a Short Rest (Rage: 1). */
+  shortRestRegain: z.number().int().min(0).optional(),
 });
 export type Resource = z.infer<typeof ResourceSchema>;
 

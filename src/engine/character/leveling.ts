@@ -12,6 +12,8 @@ import type { SrdDatabase } from '../data/srd';
 import { abilityModifier, proficiencyBonus, type Ability, type Skill } from '../rules/basics';
 import { pactSlots, spellSlots } from '../rules/spellcasting';
 import { armorClass, baseSpeed, classLevel } from './derived';
+import { featureLevels } from './featureLevels';
+import { applyOnGain, syncResources } from './features';
 
 export class LevelError extends Error {
   constructor(message: string) {
@@ -34,12 +36,7 @@ export function canLevelUp(c: Character, db: SrdDatabase): boolean {
   return lvl < 20 && c.xp >= db.rules.xpByLevel[lvl]!;
 }
 
-/** All class levels at which a feature is gained ("You gain this feature again at X levels 8, 12, and 16"). */
-export function featureLevels(f: ClassData['features'][number]): number[] {
-  const again = /again at [\w ]*?levels? ([\d, and]+)/.exec(f.text)?.[1];
-  const extra = again ? [...again.matchAll(/\d+/g)].map((m) => Number(m[0])) : [];
-  return [f.level, ...extra];
-}
+export { featureLevels };
 
 /** Class (and subclass) features gained at exactly this class level. */
 export function featuresAtLevel(db: SrdDatabase, classId: string, level: number, subclassId?: string): ClassData['features'] {
@@ -53,7 +50,9 @@ export type PendingChoice =
   | { kind: 'feat'; reason: 'asi' | 'epic_boon' }
   | { kind: 'cantrips'; classId: string; count: number }
   | { kind: 'spells'; classId: string; count: number }
-  | { kind: 'weapon_mastery'; count: number };
+  | { kind: 'weapon_mastery'; count: number }
+  | { kind: 'expertise'; count: number }
+  | { kind: 'skills'; count: number };
 
 /** Choices the player must make when their class reaches `newLevel` in `classId`. */
 export function pendingChoices(c: Character, db: SrdDatabase, classId: string, newLevel: number): PendingChoice[] {
@@ -67,6 +66,11 @@ export function pendingChoices(c: Character, db: SrdDatabase, classId: string, n
   const names = featuresAtLevel(db, classId, newLevel).map((f) => f.name);
   if (names.includes('Ability Score Improvement')) out.push({ kind: 'feat', reason: 'asi' });
   if (names.includes('Epic Boon')) out.push({ kind: 'feat', reason: 'epic_boon' });
+  if (names.includes('Expertise')) out.push({ kind: 'expertise', count: 2 });
+  const sub = current?.subclassId;
+  if (sub && featuresAtLevel(db, classId, newLevel, sub).some((f) => f.name === 'Bonus Proficiencies' && sub === 'college_of_lore')) {
+    out.push({ kind: 'skills', count: 3 });
+  }
   const diff = (arr?: number[]) => (arr ? (arr[newLevel - 1] ?? 0) - (newLevel > 1 ? (arr[newLevel - 2] ?? 0) : 0) : 0);
   const cantrips = diff(cls.spellcasting.cantripsKnown);
   if (cantrips > 0) out.push({ kind: 'cantrips', classId, count: cantrips });
@@ -178,6 +182,10 @@ export interface LevelUpOptions {
   cantrips?: string[];
   spells?: string[];
   weaponMasteries?: string[];
+  /** Expertise picks (must already be proficient). */
+  expertise?: Skill[];
+  /** Extra skill proficiencies (College of Lore Bonus Proficiencies). */
+  skills?: Skill[];
   /** Skip the XP check (quick builds, companions leveling with the hero). */
   ignoreXp?: boolean;
 }
@@ -202,6 +210,7 @@ export function levelUp(c: Character, db: SrdDatabase, o: LevelUpOptions): Level
     if (ch.kind === 'subclass' && !o.subclassId) throw new LevelError('Choose a subclass');
     if (ch.kind === 'subclass' && !ch.options.includes(o.subclassId!)) throw new LevelError(`${o.subclassId} is not a ${cls.name} subclass`);
     if (ch.kind === 'feat' && !o.feat) throw new LevelError(ch.reason === 'asi' ? 'Choose an Ability Score Improvement or feat' : 'Choose an Epic Boon');
+    if (ch.kind === 'expertise' && (o.expertise?.length ?? 0) !== ch.count) throw new LevelError(`Choose ${ch.count} skills for Expertise`);
     if (ch.kind === 'feat' && ch.reason === 'epic_boon' && o.feat && db.feats.get(o.feat.featId)?.category !== 'epic_boon' && o.feat.featId !== 'ability_score_improvement') {
       throw new LevelError('Epic Boon: choose an epic boon feat');
     }
@@ -233,8 +242,19 @@ export function levelUp(c: Character, db: SrdDatabase, o: LevelUpOptions): Level
       },
     };
   }
+  if (o.skills?.length || o.expertise?.length) {
+    const skills = { ...next.skills };
+    for (const s of o.skills ?? []) if (skills[s] !== 'expertise') skills[s] = 'proficient';
+    for (const s of o.expertise ?? []) {
+      if (skills[s] !== 'proficient' && skills[s] !== 'expertise') throw new LevelError(`Expertise needs proficiency in ${s}`);
+      skills[s] = 'expertise';
+    }
+    next = { ...next, skills };
+  }
+  next = applyOnGain(next, db, o.classId, newClassLevel);
   next = recompute(next, db);
   if (o.feat) next = applyFeat(next, db, o.feat);
+  next = syncResources(next, db);
   const subclass = next.classes.find((x) => x.classId === o.classId)?.subclassId;
   return {
     character: next,
