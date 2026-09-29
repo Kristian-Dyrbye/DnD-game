@@ -1,0 +1,666 @@
+{
+  "continent": {
+    "name": "Orrimar",
+    "summary": "Orrimar is a wedge-shaped continent scarred by an ancient war between dragons and the first kingdoms. Its golden northern kingdom still remembers glory, its western fens rot under a sleeping hunger, and its southern coast and islands belong to whoever can hold a deck in a storm."
+  },
+  "regions": [
+    {
+      "id": "aurelmark",
+      "name": "The Kingdom of Aurelmark",
+      "tone": "high_fantasy",
+      "summary": "A realm of white-walled cities, banner-lined roads and knightly orders sworn to the Dawn Warden. Dragons still nest in the Emberpeaks, and the ruins of an older empire hide both treasure and warnings.",
+      "toneProfile": {
+        "style": "Write with warm, stirring grandeur: sunlight on armor, heraldry, oaths and wonder. Heroism is possible and rewarded, and even danger feels like the beginning of a legend.",
+        "vocabulary": ["banner", "oath", "gleaming", "ancient", "valor", "crown", "wyrm", "hallowed", "trumpet", "radiant"],
+        "themes": ["duty and honor", "the weight of old legends", "courage against overwhelming odds", "a kingdom worth protecting"],
+        "avoid": ["gratuitous gore", "cynical mockery of heroism", "modern slang"]
+      },
+      "climate": {
+        "spring": ["clear", "rain", "clear", "fog"],
+        "summer": ["clear", "clear", "heat", "storm"],
+        "autumn": ["clear", "rain", "fog", "storm"],
+        "winter": ["snow", "clear", "snow", "fog"]
+      },
+      "dangerLevel": 2,
+      "travelNotes": "Crown roads are patrolled and well kept, with waystones every ten miles. Beyond the roads, hill trolls and wandering drakes make the high passes risky without an escort.",
+      "mapBounds": { "x": 380, "y": 40, "width": 440, "height": 360 }
+    },
+    {
+      "id": "gloamfen",
+      "name": "The Gloamfen",
+      "tone": "dark_fantasy",
+      "summary": "A drowned lowland of peat bogs, dead forests and walled towns that bar their gates at dusk. Plague, famine and things that walk out of the mire have made its people hard, suspicious and willing to do terrible things to survive.",
+      "toneProfile": {
+        "style": "Write with restrained dread: cold mist, rationed bread, whispered bargains and the sense that something is always watching. Victories cost something, and kindness is rare enough to matter.",
+        "vocabulary": ["mire", "rot", "lantern", "hollow", "ashen", "gaunt", "whisper", "tallow", "carrion"],
+        "themes": ["survival at a price", "morally gray choices", "faith tested by horror", "the hunger beneath the land"],
+        "avoid": ["lighthearted jokes during horror scenes", "clear-cut good and evil", "abundant food or easy comfort"]
+      },
+      "climate": {
+        "spring": ["rain", "fog", "fog", "rain"],
+        "summer": ["fog", "rain", "heat", "storm"],
+        "autumn": ["fog", "rain", "storm", "fog"],
+        "winter": ["snow", "fog", "storm", "snow"]
+      },
+      "dangerLevel": 4,
+      "travelNotes": "Causeways sink and shift, and bog paths are safe only by daylight. Travellers carry lanterns, salt and spare boots; towns refuse entry after dark.",
+      "mapBounds": { "x": 40, "y": 240, "width": 330, "height": 440 }
+    },
+    {
+      "id": "brinescatter_isles",
+      "name": "The Brinescatter Isles",
+      "tone": "swashbuckling",
+      "summary": "A sun-bleached southern coast and a scatter of islands where merchant fleets, pirate crews and smugglers trade cannon fire and insults in equal measure. Treasure maps outnumber honest ledgers, and everyone is owed a favor by someone.",
+      "toneProfile": {
+        "style": "Write with brisk, playful energy: salt spray, witty banter, daring stunts and colorful scoundrels. Danger is real but thrilling, and a clever quip is as good as a sword.",
+        "vocabulary": ["salt", "doubloon", "rigging", "swagger", "parrot", "grog", "spyglass", "squall", "booty"],
+        "themes": ["freedom versus order", "treasure and greed", "loyalty among rogues", "adventure on the open sea"],
+        "avoid": ["prolonged grimness", "graphic cruelty", "solemn speeches that drag on"]
+      },
+      "climate": {
+        "spring": ["clear", "rain", "clear", "storm"],
+        "summer": ["clear", "heat", "heat", "storm"],
+        "autumn": ["storm", "rain", "clear", "fog"],
+        "winter": ["rain", "clear", "storm", "fog"]
+      },
+      "dangerLevel": 3,
+      "travelNotes": "Island hopping requires passage on a ship; captains charge by the day and more for sailing through pirate waters. Storm season (late summer to autumn) can strand travellers for days.",
+      "mapBounds": { "x": 440, "y": 420, "width": 540, "height": 270 }
+    }
+  ],
+  "history": [
+    {
+      "id": "age_of_wyrms",
+      "name": "The Age of Wyrms",
+      "yearsAgo": 4000,
+      "summary": "Great dragons ruled Orrimar and raised the Emberpeaks with their fire. Mortal peoples lived as their tributaries and servants."
+    },
+    {
+      "id": "the_first_oath",
+      "name": "The First Oath",
+      "yearsAgo": 2600,
+      "summary": "Human, dwarf and elf chieftains swore an oath before Solenne and rose against the dragons. The victorious alliance founded the Vaelthorn Empire."
+    },
+    {
+      "id": "vaelthorn_empire",
+      "name": "The Vaelthorn Empire",
+      "yearsAgo": 2000,
+      "summary": "The empire spanned the continent, draining the western lowlands and building roads, lighthouses and sky-towers. Its mages grew arrogant and began to dig for power beneath the earth."
+    },
+    {
+      "id": "the_opened_maw",
+      "name": "The Opened Maw",
+      "yearsAgo": 1400,
+      "summary": "Imperial delvers breached a sealed vault beneath the western lowlands and woke Vashkul, the Hungering Dark. The land sank, the sea flooded in, and the Gloamfen was born."
+    },
+    {
+      "id": "the_long_dusk",
+      "name": "The Long Dusk",
+      "yearsAgo": 1300,
+      "summary": "A century of plague, famine and civil war shattered the empire. The Lantern Wardens were founded to hold back what crawled out of the fens."
+    },
+    {
+      "id": "founding_of_aurelmark",
+      "name": "The Founding of Aurelmark",
+      "yearsAgo": 1247,
+      "summary": "Queen Aurelia the Mender united the northern provinces under one crown at Highcrown. Aurelmark's calendar counts its years from this day."
+    },
+    {
+      "id": "charter_of_the_isles",
+      "name": "The Charter of the Isles",
+      "yearsAgo": 180,
+      "summary": "The crown granted the Saltwind Trading Company a monopoly on southern sea trade. Islanders who refused its tariffs took to piracy, and the Red Gull Brotherhood was born."
+    },
+    {
+      "id": "the_ashfall_winter",
+      "name": "The Ashfall Winter",
+      "yearsAgo": 23,
+      "summary": "The red dragon Pyrraxis woke in the Emberpeaks and burned three valleys before the Dawn Lance drove it back to its lair. Many knights died, and the dragon was wounded but never slain."
+    },
+    {
+      "id": "the_whispering_sickness",
+      "name": "The Whispering Sickness",
+      "yearsAgo": 2,
+      "summary": "A new plague spreads from the Gloamfen, and its victims hear voices promising that hunger will end. Cult sermons have been heard in Highcrown and Port Sorrel for the first time in centuries."
+    }
+  ],
+  "gods": [
+    {
+      "id": "solenne",
+      "name": "Solenne",
+      "title": "the Dawn Warden",
+      "domains": ["light", "protection", "law"],
+      "alignment": "lawful good",
+      "symbol": "A rising sun behind a kite shield",
+      "summary": "Patron of oaths, knights and the first sunrise after darkness. Her temples ring bells at dawn, and oathbreakers are said to lose their shadows.",
+      "favoredRegionIds": ["aurelmark"]
+    },
+    {
+      "id": "korrath",
+      "name": "Korrath",
+      "title": "the Forgefather",
+      "domains": ["forge", "craft", "earth"],
+      "alignment": "lawful neutral",
+      "symbol": "A hammer laid across an anvil",
+      "summary": "Stern god of smiths, miners and fair contracts, revered by dwarves above all. He values honest work and punishes shoddy craft and broken bargains alike.",
+      "favoredRegionIds": ["aurelmark"]
+    },
+    {
+      "id": "thaloren",
+      "name": "Thaloren",
+      "title": "the Greenheart",
+      "domains": ["nature", "harvest", "beasts"],
+      "alignment": "neutral good",
+      "symbol": "An oak leaf crowned with antlers",
+      "summary": "The wandering god of growth, seasons and wild creatures. Farmers leave the first sheaf of every harvest for him, and fen-folk pray he will return to the dead woods.",
+      "favoredRegionIds": ["aurelmark", "gloamfen"]
+    },
+    {
+      "id": "mireth",
+      "name": "Mireth",
+      "title": "the Pale Mother",
+      "domains": ["death", "winter", "mercy"],
+      "alignment": "neutral",
+      "symbol": "A white hand cupping a candle flame",
+      "summary": "Goddess of peaceful death and the rest that follows. In the Gloamfen her priests burn the dead so Vashkul cannot claim them.",
+      "favoredRegionIds": ["gloamfen"]
+    },
+    {
+      "id": "vashkul",
+      "name": "Vashkul",
+      "title": "the Hungering Dark",
+      "domains": ["hunger", "decay", "secrets"],
+      "alignment": "neutral evil",
+      "symbol": "A black mouth ringed with seven teeth",
+      "summary": "A primordial hunger sealed beneath Orrimar before the gods had names. It promises the starving that they will never want again, and it keeps that promise in the worst way.",
+      "favoredRegionIds": ["gloamfen"]
+    },
+    {
+      "id": "oshaya",
+      "name": "Oshaya",
+      "title": "the Tidemother",
+      "domains": ["sea", "storms", "voyages"],
+      "alignment": "chaotic neutral",
+      "symbol": "A spiral shell wrapped in seaweed",
+      "summary": "Fickle goddess of the tides who drowns kings and spares cabin boys on a whim. Every sailor spills the first sip of grog for her.",
+      "favoredRegionIds": ["brinescatter_isles"]
+    },
+    {
+      "id": "fennick",
+      "name": "Fennick",
+      "title": "the Grinning Coin",
+      "domains": ["trickery", "luck", "travel"],
+      "alignment": "chaotic good",
+      "symbol": "A gold coin with a winking face",
+      "summary": "Patron of gamblers, rogues and anyone who wins against the odds. His shrines are hidden in taverns, and he favors those who share their luck.",
+      "favoredRegionIds": ["brinescatter_isles"]
+    },
+    {
+      "id": "veyra",
+      "name": "Veyra",
+      "title": "the Veiled Moon",
+      "domains": ["knowledge", "dreams", "night"],
+      "alignment": "neutral",
+      "symbol": "A crescent moon with an open eye",
+      "summary": "Keeper of secrets and guide of navigators and scholars. She sends dreams as warnings, and her priests are the only ones who study Vashkul without falling to it.",
+      "favoredRegionIds": ["aurelmark", "brinescatter_isles"]
+    }
+  ],
+  "factions": [
+    {
+      "id": "crown_of_aurelmark",
+      "name": "The Crown of Aurelmark",
+      "kind": "kingdom",
+      "homeRegionId": "aurelmark",
+      "summary": "The royal house and its court, stewards of the northern kingdom since Queen Aurelia. Proud and generous to allies, but stretched thin by dragon raids and the spreading sickness.",
+      "goals": ["Keep the Whispering Sickness out of the kingdom", "Restore royal authority over the southern sea lanes", "Slay the dragon Pyrraxis for good"],
+      "leader": {
+        "name": "Queen Isolde Varannis",
+        "summary": "A young, sharp-witted monarch who inherited a treasury drained by the Ashfall Winter. She trusts too few advisers, and one of them is lying to her."
+      },
+      "symbol": "A golden crown above a white tower",
+      "defaultReputation": 0,
+      "relationships": {
+        "order_of_the_dawn_lance": "allied",
+        "ironvault_consortium": "allied",
+        "saltwind_trading_company": "allied",
+        "red_gull_brotherhood": "hostile",
+        "hollow_choir": "hostile",
+        "briarkin": "hostile"
+      },
+      "godId": "solenne"
+    },
+    {
+      "id": "order_of_the_dawn_lance",
+      "name": "The Order of the Dawn Lance",
+      "kind": "order",
+      "homeRegionId": "aurelmark",
+      "summary": "Knights sworn to Solenne who guard the realm against dragons and darkness. Their numbers never recovered from the Ashfall Winter.",
+      "goals": ["Rebuild the order with worthy new knights", "Recover the lost lance Dawnbreaker from the ruins of Old Vaelthorn", "Root out the Hollow Choir"],
+      "leader": {
+        "name": "Lord-Commander Aldric Thane",
+        "summary": "A scarred veteran of the Ashfall Winter who lost his dragon-slaying lance and half his knights. He is honorable to a fault and slow to forgive."
+      },
+      "symbol": "A silver lance before a rising sun",
+      "defaultReputation": 0,
+      "relationships": {
+        "crown_of_aurelmark": "allied",
+        "lantern_wardens": "allied",
+        "hollow_choir": "hostile"
+      },
+      "godId": "solenne"
+    },
+    {
+      "id": "ironvault_consortium",
+      "name": "The Ironvault Consortium",
+      "kind": "guild",
+      "homeRegionId": "aurelmark",
+      "summary": "A dwarven guild of smiths, bankers and mine-owners based in Deepanvil Hold. It holds the crown's debts and much of its steel.",
+      "goals": ["Collect on the crown's war debts", "Secure safe shipping for its ore and coin", "Reopen the sealed deep mines"],
+      "leader": {
+        "name": "Guildmistress Brunhild Ashgrove",
+        "summary": "A shrewd dwarf who measures every favor in coin and never forgets a debt. She is honest, but she is never generous."
+      },
+      "symbol": "An iron key crossed with a hammer",
+      "defaultReputation": 0,
+      "relationships": {
+        "crown_of_aurelmark": "allied",
+        "saltwind_trading_company": "allied",
+        "red_gull_brotherhood": "hostile"
+      },
+      "godId": "korrath"
+    },
+    {
+      "id": "lantern_wardens",
+      "name": "The Lantern Wardens",
+      "kind": "order",
+      "homeRegionId": "gloamfen",
+      "summary": "Grim monster-hunters who have held the fen towns since the Long Dusk. They burn the infected, the dead and sometimes the merely suspected.",
+      "goals": ["Contain the Whispering Sickness by any means", "Destroy the Hollow Choir's hidden sanctum", "Purge the Briarkin witches from the fens"],
+      "leader": {
+        "name": "Warden-Captain Maud Grell",
+        "summary": "A tireless, iron-willed woman who has signed more burning orders than she can count. She believes mercy is a luxury the fens cannot afford."
+      },
+      "symbol": "A lit lantern hung from a crossed pair of pikes",
+      "defaultReputation": -10,
+      "relationships": {
+        "order_of_the_dawn_lance": "allied",
+        "hollow_choir": "hostile",
+        "briarkin": "hostile"
+      },
+      "godId": "mireth"
+    },
+    {
+      "id": "briarkin",
+      "name": "The Briarkin",
+      "kind": "tribe",
+      "homeRegionId": "gloamfen",
+      "summary": "Clans of fen-folk led by hedge-witches who bargain with the mire's spirits. They heal the sick when the Wardens would burn them, but their cures always carry a price.",
+      "goals": ["Survive the Wardens' purges", "Find a true cure for the Whispering Sickness", "Keep outsiders from draining the last wild marshes"],
+      "leader": {
+        "name": "Grandmother Wick",
+        "summary": "An ancient, soft-spoken witch who keeps her true name in a jar. She is kind to children and terrifying to everyone else."
+      },
+      "symbol": "A thorned bramble wrapped around a bone",
+      "defaultReputation": 0,
+      "relationships": {
+        "crown_of_aurelmark": "hostile",
+        "lantern_wardens": "hostile",
+        "hollow_choir": "hostile"
+      },
+      "godId": "thaloren"
+    },
+    {
+      "id": "hollow_choir",
+      "name": "The Hollow Choir",
+      "kind": "cult",
+      "homeRegionId": "gloamfen",
+      "summary": "A secret cult that worships Vashkul and spreads the Whispering Sickness to open the sealed Maw. Its cells hide among nobles in Highcrown, dockworkers in Port Sorrel and the starving of the fens.",
+      "goals": ["Spread the Whispering Sickness across Orrimar", "Gather the seven Tooth relics to unseal the Maw", "Place an agent at the queen's side"],
+      "leader": {
+        "name": "The Cantor",
+        "summary": "A masked figure whose voice is heard in the dreams of the sick. The Cantor's true identity is a noble of Highcrown, and a campaign-level secret."
+      },
+      "symbol": "A black mouth ringed with seven teeth",
+      "defaultReputation": -60,
+      "relationships": {
+        "crown_of_aurelmark": "hostile",
+        "order_of_the_dawn_lance": "hostile",
+        "lantern_wardens": "hostile",
+        "briarkin": "hostile"
+      },
+      "godId": "vashkul"
+    },
+    {
+      "id": "saltwind_trading_company",
+      "name": "The Saltwind Trading Company",
+      "kind": "company",
+      "homeRegionId": "brinescatter_isles",
+      "summary": "A royal-chartered trading company that controls southern sea trade from Port Sorrel. Its tariffs make it rich and its gunboats make it feared.",
+      "goals": ["Crush piracy in the Brinescatter Isles", "Break the free port of Gullhaven", "Keep its monopoly charter renewed"],
+      "leader": {
+        "name": "Governor Cassius Pell",
+        "summary": "A smiling, perfumed administrator with a ledger for a heart. He hangs pirates on Tuesdays and dines with smugglers on Fridays."
+      },
+      "symbol": "A white sail over a set of golden scales",
+      "defaultReputation": 0,
+      "relationships": {
+        "crown_of_aurelmark": "allied",
+        "ironvault_consortium": "allied",
+        "red_gull_brotherhood": "hostile",
+        "tidewright_guild": "hostile"
+      },
+      "godId": "oshaya"
+    },
+    {
+      "id": "red_gull_brotherhood",
+      "name": "The Red Gull Brotherhood",
+      "kind": "pirate_crew",
+      "homeRegionId": "brinescatter_isles",
+      "summary": "A loud, flamboyant pirate fleet that raids Saltwind ships and shares the loot with the islands. They have a code, and they mostly follow it.",
+      "goals": ["Bleed the Saltwind Company dry", "Find the lost treasure of the Brass Parrot", "Keep Gullhaven a free port"],
+      "leader": {
+        "name": "Captain Marisol \"Two-Hats\" Quint",
+        "summary": "A dashing half-elf captain who wears two hats at once, one for each fortune she has won and lost. She never breaks a promise, though she often bends one."
+      },
+      "symbol": "A red gull clutching a cutlass",
+      "defaultReputation": 0,
+      "relationships": {
+        "tidewright_guild": "allied",
+        "crown_of_aurelmark": "hostile",
+        "ironvault_consortium": "hostile",
+        "saltwind_trading_company": "hostile"
+      },
+      "godId": "fennick"
+    },
+    {
+      "id": "tidewright_guild",
+      "name": "The Tidewright Guild",
+      "kind": "guild",
+      "homeRegionId": "brinescatter_isles",
+      "summary": "Shipwrights, harbor pilots and chandlers who run the free port of Gullhaven. They build ships for anyone who pays and ask no questions.",
+      "goals": ["Keep Gullhaven independent of the Saltwind Company", "Win back the right to build warships", "Chart safe passage through the Singing Reef"],
+      "leader": {
+        "name": "Harbormaster Oswin Tull",
+        "summary": "A round, cheerful gnome who knows every tide and every rumor. He plays both sides until he has to choose one."
+      },
+      "symbol": "A ship's wheel crossed by an adze",
+      "defaultReputation": 0,
+      "relationships": {
+        "red_gull_brotherhood": "allied",
+        "saltwind_trading_company": "hostile"
+      },
+      "godId": "oshaya"
+    }
+  ],
+  "locations": [
+    {
+      "id": "highcrown",
+      "name": "Highcrown",
+      "regionId": "aurelmark",
+      "kind": "city",
+      "summary": "Aurelmark's white-walled capital, built in tiers up a hill crowned by the royal palace. Its markets are rich, its temples grand, and its salons full of intrigue.",
+      "mapPos": { "x": 560, "y": 160 },
+      "tags": ["shop", "tavern", "quest_board", "temple", "blacksmith"],
+      "factionIds": ["crown_of_aurelmark", "order_of_the_dawn_lance", "ironvault_consortium", "hollow_choir"]
+    },
+    {
+      "id": "brightwater",
+      "name": "Brightwater",
+      "regionId": "aurelmark",
+      "kind": "town",
+      "summary": "A busy river town of mills and barges where the Silverrun River begins its long journey south. Merchants from every region pass through its toll bridge.",
+      "mapPos": { "x": 490, "y": 290 },
+      "tags": ["shop", "tavern", "quest_board", "stable"],
+      "factionIds": ["crown_of_aurelmark", "ironvault_consortium"]
+    },
+    {
+      "id": "millbrook",
+      "name": "Millbrook",
+      "regionId": "aurelmark",
+      "kind": "village",
+      "summary": "A sleepy farming village on the kingdom's southwestern edge, close enough to the fens to feel their chill. Recent disappearances have its folk barring their doors.",
+      "mapPos": { "x": 420, "y": 370 },
+      "tags": ["tavern", "quest_board", "shop", "starting_location"],
+      "factionIds": ["crown_of_aurelmark"]
+    },
+    {
+      "id": "dawnspire_keep",
+      "name": "Dawnspire Keep",
+      "regionId": "aurelmark",
+      "kind": "fortress",
+      "summary": "The mountain fortress of the Dawn Lance, whose tall spire catches the first light each morning. Its halls are half-empty since the Ashfall Winter.",
+      "mapPos": { "x": 690, "y": 110 },
+      "tags": ["temple", "training", "safe_house"],
+      "factionIds": ["order_of_the_dawn_lance"]
+    },
+    {
+      "id": "emberpeak",
+      "name": "Emberpeak",
+      "regionId": "aurelmark",
+      "kind": "dungeon",
+      "summary": "A smoking volcanic peak honeycombed with tunnels, the lair of the red dragon Pyrraxis. Its slopes are littered with the melted armor of failed heroes.",
+      "mapPos": { "x": 780, "y": 70 },
+      "tags": ["dragon_lair", "treasure", "extreme_danger"],
+      "factionIds": []
+    },
+    {
+      "id": "deepanvil_hold",
+      "name": "Deepanvil Hold",
+      "regionId": "aurelmark",
+      "kind": "city",
+      "summary": "A dwarven city carved into the eastern mountains, loud with forges and counting-houses. Its vaults hold half the kingdom's gold.",
+      "mapPos": { "x": 760, "y": 240 },
+      "tags": ["shop", "tavern", "blacksmith", "bank", "quest_board"],
+      "factionIds": ["ironvault_consortium"]
+    },
+    {
+      "id": "ruins_of_old_vaelthorn",
+      "name": "Ruins of Old Vaelthorn",
+      "regionId": "aurelmark",
+      "kind": "ruin",
+      "summary": "The broken sky-towers of the old imperial capital, overgrown and haunted by arcane constructs still guarding their masters' secrets. The lost lance Dawnbreaker is said to lie within.",
+      "mapPos": { "x": 640, "y": 310 },
+      "tags": ["treasure", "arcane", "night_danger"],
+      "factionIds": []
+    },
+    {
+      "id": "ravensgate",
+      "name": "Ravensgate",
+      "regionId": "gloamfen",
+      "kind": "town",
+      "summary": "A walled border town on the last dry ridge before the fens, crowded with refugees and ringed by gibbets. Its gates close at sunset and open for no one.",
+      "mapPos": { "x": 330, "y": 300 },
+      "tags": ["shop", "tavern", "quest_board", "night_danger", "curfew"],
+      "factionIds": ["lantern_wardens", "crown_of_aurelmark", "hollow_choir"]
+    },
+    {
+      "id": "hollowmere",
+      "name": "Hollowmere",
+      "regionId": "gloamfen",
+      "kind": "village",
+      "summary": "A stilt village over black water, where fishermen sell eels and lies in equal measure. Half its houses stand empty, and nobody says why.",
+      "mapPos": { "x": 210, "y": 380 },
+      "tags": ["tavern", "shop", "night_danger"],
+      "factionIds": ["briarkin", "hollow_choir"]
+    },
+    {
+      "id": "thornwife_hollow",
+      "name": "Thornwife Hollow",
+      "regionId": "gloamfen",
+      "kind": "wilderness",
+      "summary": "A tangled briar thicket hiding the Briarkin's moot-circle and Grandmother Wick's cottage. Strangers who enter without leave rarely find the way out.",
+      "mapPos": { "x": 110, "y": 300 },
+      "tags": ["safe_house", "herbalist", "night_danger"],
+      "factionIds": ["briarkin"]
+    },
+    {
+      "id": "drowned_abbey",
+      "name": "The Drowned Abbey",
+      "regionId": "gloamfen",
+      "kind": "temple",
+      "summary": "A half-sunken abbey of Mireth whose bells still toll beneath the water at midnight. A few stubborn priests keep its upper floors, burning the dead brought to them.",
+      "mapPos": { "x": 120, "y": 470 },
+      "tags": ["temple", "healer", "night_danger"],
+      "factionIds": ["lantern_wardens"]
+    },
+    {
+      "id": "lantern_hold",
+      "name": "Lantern Hold",
+      "regionId": "gloamfen",
+      "kind": "fortress",
+      "summary": "The Wardens' grim stone headquarters, its walls lit by a hundred lanterns that must never go out. Pyres smoke in its yard day and night.",
+      "mapPos": { "x": 270, "y": 470 },
+      "tags": ["shop", "quest_board", "blacksmith", "safe_house"],
+      "factionIds": ["lantern_wardens", "order_of_the_dawn_lance"]
+    },
+    {
+      "id": "blightwood",
+      "name": "The Blightwood",
+      "regionId": "gloamfen",
+      "kind": "wilderness",
+      "summary": "A forest of grey, leafless trees that weep black sap. Wolves here have too many eyes, and the paths change after dark.",
+      "mapPos": { "x": 240, "y": 580 },
+      "tags": ["night_danger", "foraging", "extreme_danger"],
+      "factionIds": []
+    },
+    {
+      "id": "the_maw",
+      "name": "The Maw",
+      "regionId": "gloamfen",
+      "kind": "dungeon",
+      "summary": "A vast sinkhole where the imperial delvers woke Vashkul, now ringed by the Hollow Choir's hidden sanctum. The ground breathes, slowly.",
+      "mapPos": { "x": 90, "y": 620 },
+      "tags": ["cult_sanctum", "extreme_danger", "night_danger"],
+      "factionIds": ["hollow_choir"]
+    },
+    {
+      "id": "port_sorrel",
+      "name": "Port Sorrel",
+      "regionId": "brinescatter_isles",
+      "kind": "port",
+      "summary": "The Saltwind Company's orderly harbor city at the mouth of the Silverrun, all whitewashed warehouses and hanging cages. Everything is for sale if you pay the tariff.",
+      "mapPos": { "x": 520, "y": 480 },
+      "tags": ["shop", "tavern", "quest_board", "shipwright", "bank"],
+      "factionIds": ["saltwind_trading_company", "crown_of_aurelmark", "tidewright_guild", "hollow_choir"]
+    },
+    {
+      "id": "fort_kestrel",
+      "name": "Fort Kestrel",
+      "regionId": "brinescatter_isles",
+      "kind": "fortress",
+      "summary": "A star-shaped Saltwind fort on a coastal bluff, bristling with cannon and a long row of pirate gallows. Its commander is famously bribable.",
+      "mapPos": { "x": 610, "y": 540 },
+      "tags": ["shop", "quest_board", "prison"],
+      "factionIds": ["saltwind_trading_company"]
+    },
+    {
+      "id": "fennicks_rest",
+      "name": "Fennick's Rest",
+      "regionId": "brinescatter_isles",
+      "kind": "village",
+      "summary": "A cheerful fishing village of painted shacks and one enormous gambling hall. Smugglers land here because nobody asks questions and everybody bets on everything.",
+      "mapPos": { "x": 630, "y": 640 },
+      "tags": ["tavern", "shop", "gambling", "safe_house"],
+      "factionIds": ["red_gull_brotherhood"]
+    },
+    {
+      "id": "gullhaven",
+      "name": "Gullhaven",
+      "regionId": "brinescatter_isles",
+      "kind": "port",
+      "summary": "A ramshackle free port built on the wrecks of a hundred ships, lashed together over a lagoon. Pirates, traders and shipwrights share its grog-houses under a fragile truce.",
+      "mapPos": { "x": 740, "y": 590 },
+      "tags": ["shop", "tavern", "quest_board", "shipwright", "safe_house"],
+      "factionIds": ["tidewright_guild", "red_gull_brotherhood"]
+    },
+    {
+      "id": "wreckers_cove",
+      "name": "Wreckers' Cove",
+      "regionId": "brinescatter_isles",
+      "kind": "dungeon",
+      "summary": "Sea caves where wreckers once lured ships onto the rocks with false lights. Now the Red Gulls stash loot there, alongside something that eats the careless.",
+      "mapPos": { "x": 840, "y": 500 },
+      "tags": ["treasure", "smugglers", "night_danger"],
+      "factionIds": ["red_gull_brotherhood"]
+    },
+    {
+      "id": "singing_reef",
+      "name": "The Singing Reef",
+      "regionId": "brinescatter_isles",
+      "kind": "landmark",
+      "summary": "A ring of coral spires that hum eerily when the wind rises, luring ships onto the rocks. Sirens and sea hags are rumored to nest in the lagoon at its heart.",
+      "mapPos": { "x": 900, "y": 590 },
+      "tags": ["hazard", "treasure", "sea_monsters"],
+      "factionIds": []
+    },
+    {
+      "id": "isle_of_brass_parrots",
+      "name": "Isle of Brass Parrots",
+      "regionId": "brinescatter_isles",
+      "kind": "wilderness",
+      "summary": "A jungle island where clockwork parrots from a vanished tinkerer still squawk riddles from the trees. The treasure of the Brass Parrot is buried somewhere under its volcano.",
+      "mapPos": { "x": 940, "y": 660 },
+      "tags": ["treasure", "puzzle", "jungle"],
+      "factionIds": []
+    }
+  ],
+  "routes": [
+    { "from": "highcrown", "to": "brightwater", "kind": "road", "miles": 45 },
+    { "from": "highcrown", "to": "dawnspire_keep", "kind": "road", "miles": 35 },
+    { "from": "highcrown", "to": "deepanvil_hold", "kind": "road", "miles": 55 },
+    { "from": "brightwater", "to": "millbrook", "kind": "road", "miles": 25 },
+    { "from": "brightwater", "to": "ruins_of_old_vaelthorn", "kind": "trail", "miles": 40 },
+    { "from": "dawnspire_keep", "to": "emberpeak", "kind": "trail", "miles": 30 },
+    { "from": "deepanvil_hold", "to": "emberpeak", "kind": "trail", "miles": 45 },
+    { "from": "deepanvil_hold", "to": "ruins_of_old_vaelthorn", "kind": "trail", "miles": 35 },
+    { "from": "millbrook", "to": "ravensgate", "kind": "road", "miles": 30 },
+    { "from": "brightwater", "to": "port_sorrel", "kind": "river", "miles": 60 },
+    { "from": "ravensgate", "to": "hollowmere", "kind": "road", "miles": 35 },
+    { "from": "ravensgate", "to": "lantern_hold", "kind": "road", "miles": 45 },
+    { "from": "hollowmere", "to": "thornwife_hollow", "kind": "trail", "miles": 25 },
+    { "from": "hollowmere", "to": "drowned_abbey", "kind": "trail", "miles": 30 },
+    { "from": "hollowmere", "to": "lantern_hold", "kind": "trail", "miles": 30 },
+    { "from": "lantern_hold", "to": "blightwood", "kind": "trail", "miles": 25 },
+    { "from": "blightwood", "to": "the_maw", "kind": "trail", "miles": 40 },
+    { "from": "drowned_abbey", "to": "the_maw", "kind": "trail", "miles": 40 },
+    { "from": "lantern_hold", "to": "port_sorrel", "kind": "road", "miles": 70 },
+    { "from": "port_sorrel", "to": "fort_kestrel", "kind": "road", "miles": 25 },
+    { "from": "fort_kestrel", "to": "fennicks_rest", "kind": "road", "miles": 25 },
+    { "from": "port_sorrel", "to": "gullhaven", "kind": "sea", "miles": 70 },
+    { "from": "fennicks_rest", "to": "gullhaven", "kind": "sea", "miles": 30 },
+    { "from": "gullhaven", "to": "wreckers_cove", "kind": "sea", "miles": 35 },
+    { "from": "wreckers_cove", "to": "singing_reef", "kind": "sea", "miles": 25 },
+    { "from": "gullhaven", "to": "singing_reef", "kind": "sea", "miles": 45 },
+    { "from": "singing_reef", "to": "isle_of_brass_parrots", "kind": "sea", "miles": 20 }
+  ],
+  "calendar": {
+    "daysPerYear": 360,
+    "daysPerMonth": 30,
+    "startYear": 1247,
+    "yearSuffix": "AR",
+    "months": [
+      { "id": "seedwake", "name": "Seedwake", "season": "spring" },
+      { "id": "bloomrise", "name": "Bloomrise", "season": "spring" },
+      { "id": "greentide", "name": "Greentide", "season": "spring" },
+      { "id": "highsun", "name": "Highsun", "season": "summer" },
+      { "id": "blazeheart", "name": "Blazeheart", "season": "summer" },
+      { "id": "longlight", "name": "Longlight", "season": "summer" },
+      { "id": "reapmoon", "name": "Reapmoon", "season": "autumn" },
+      { "id": "leaffall", "name": "Leaffall", "season": "autumn" },
+      { "id": "mistwane", "name": "Mistwane", "season": "autumn" },
+      { "id": "frostwatch", "name": "Frostwatch", "season": "winter" },
+      { "id": "deepdark", "name": "Deepdark", "season": "winter" },
+      { "id": "thawmoon", "name": "Thawmoon", "season": "winter" }
+    ],
+    "weekdays": [
+      { "id": "dawnday", "name": "Dawnday" },
+      { "id": "forgeday", "name": "Forgeday" },
+      { "id": "greenday", "name": "Greenday" },
+      { "id": "tideday", "name": "Tideday" },
+      { "id": "moonday", "name": "Moonday" },
+      { "id": "coinday", "name": "Coinday" },
+      { "id": "candleday", "name": "Candleday" }
+    ]
+  }
+}
