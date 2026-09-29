@@ -12,7 +12,7 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "srd:fetch": "node scripts/srd-fetch.mjs",
-    "srd:import": "tsx scripts/srd/import-core.ts && tsx scripts/srd/import-equipment.ts && tsx scripts/srd/import-origins.ts"
+    "srd:import": "tsx scripts/srd/import-core.ts && tsx scripts/srd/import-equipment.ts && tsx scripts/srd/import-origins.ts && tsx scripts/srd/import-feats.ts"
   },
   "author": "",
   "license": "UNLICENSED",

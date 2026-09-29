@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A016
-- **Notes for next session:** Start with A017. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A017
+- **Notes for next session:** Start with A018. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -36,7 +36,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A014 — SRD data: conditions, exhaustion, core tables | Spec: §4 | Done: conditions.json, rules tables (XP/level, proficiency, spell slots full/half/third/pact, multiclass slots, encounter XP budgets, DC guide); validated + spot tests | Dep: A013
 - [done] A015 — SRD data: equipment | Spec: §4, §11.5 | Done: weapons (with mastery), armor, gear, tools, packs, prices; validated | Dep: A013
 - [done] A016 — SRD data: species + backgrounds | Spec: §4, §5 | Done: all SRD species and backgrounds (ASI options, origin feat, skills, tools, equipment); validated | Dep: A013
-- [todo] A017 — SRD data: feats + epic boons | Spec: §4 | Done: origin, general, fighting style, epic boon feats with prereqs and effect refs; validated | Dep: A013
+- [done] A017 — SRD data: feats + epic boons | Spec: §4 | Done: origin, general, fighting style, epic boon feats with prereqs and effect refs; validated | Dep: A013
 - [todo] A018 — SRD data: classes part 1 (Barbarian, Bard, Cleric, Druid) | Spec: §4 | Done: class tables 1–20, features, SRD subclass each; validated | Dep: A013
 - [todo] A019 — SRD data: classes part 2 (Fighter, Monk, Paladin, Ranger) | Spec: §4 | Done: as A018 | Dep: A018
 - [todo] A020 — SRD data: classes part 3 (Rogue, Sorcerer, Warlock, Wizard) | Spec: §4 | Done: as A018 | Dep: A018
@@ -177,6 +177,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A014 — conditions.json (15, text + hand-written structured modifiers) and rules-tables.json (XP/level, XP/CR, full/half/pact/multiclass slots, encounter budgets, DCs); importer lib + import-core — `scripts/srd/lib.ts`, `scripts/srd/import-core.ts`, `data/srd/overrides/conditions.json`
 - A015 — Equipment: 38 weapons (mastery, ranges, ammo ids, versatile), 13 armor, 149 gear (adventuring gear w/ text, ammo bundles, focuses, tools w/ ability/utilize/craft + gaming/instrument variants, packs with resolved contents, mounts, tack, drawn vehicles) — `scripts/srd/import-equipment.ts`, `data/srd/{weapons,armor,gear}.json`
 - A016 — Origins: 9 species (sizes, speed, darkvision, traits, lineages incl. dragon damage types + lineage spell ids by level) and 4 backgrounds (ability options, feat + option, skills, tool or choice, equipment A/B resolved to item ids) — `scripts/srd/import-origins.ts`
+- A017 — 17 feats (4 origin, 2 general, 4 fighting style, 7 epic boons) with prerequisites (level, abilities, feature id), repeatable, abilityIncrease — `scripts/srd/import-feats.ts`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -250,6 +251,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `scripts/srd/import-core.ts` — conditions + rules tables (`npm run srd:import`)
 - `scripts/srd/import-equipment.ts` — weapons/armor/gear (in `npm run srd:import`)
 - `scripts/srd/import-origins.ts` — species + backgrounds (needs equipment JSON first)
+- `scripts/srd/import-feats.ts` — feats
 - `data/srd/overrides/` — hand fixes/mechanics merged by id into importer output
 - `data/srd/rules-tables.json` — core numeric tables
 - `data/srd/*.json` — SRD data (arrays; empty until A014–A028 fill them)
@@ -285,6 +287,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - The SRD Markdown source looked corrupted once, but that was two files' output concatenated in one shell command. Known real glitch: Typical DC table misses the Medium row. Still validate importer output and fix via overrides.
 - SRD Markdown format: spells are `#### Name` + `_Level 3 Evocation (Sorcerer, Wizard)_` + `**Casting Time:**` lines; monsters are `### Name` + `_Size Type (Tag), Alignment_` + `**AC** 15 **Initiative** +2 (12)` + an HTML <table> of STR..CHA (score, MOD, SAVE) + `#### Actions` with `**_Name._** _Melee Attack Roll:_ +4, reach 5 ft. _Hit:_ 5 (1d6 + 2) Slashing damage`. Tables are HTML (<tr><td>).
 - Class feature tables in classes.md have captions `**<Class> Features**`; spellcasters have a 2-row header (slot levels in row 2) → skip 2 rows.
+- Editing regexes with sed/python heredocs mangles backslashes; use the Edit tool for code containing regex escapes.
 - TS strict + zod: a fallback lambda's return type widens enums to string; annotate it (`(e): T => ...`).
 - In .bat files escape `&` as `^&` (even in `title`). Edit .bat files with python (read bytes, normalize to CRLF); Git Bash `sed -i` mangles CRLF.
 - Testing .bat from the PowerShell tool: native commands don't follow Push-Location; call `cmd /c "`"<absolute path>`""`. To dry-run Start Game.bat, copy it with `call npm start` replaced by an echo.
