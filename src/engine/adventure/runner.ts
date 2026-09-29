@@ -7,6 +7,7 @@
  * Progress lives in `state.extensions.adventure`. Action ids: scene actions use their own id,
  * POI actions are `<poi>.<action>`, exits are `exit.<id>`.
  */
+import { applyDamage, rollDamage } from '../rules/damage';
 import { changeApproval, partingLine, partWithCompanion, recruitCompanion, recruitFlagsOnly, type CompanionRoster } from '../party/companions';
 import { roll } from '../core/dice';
 import { totalLevel, type Character } from '../core/creature';
@@ -125,6 +126,9 @@ export function conditionContext(state: GameState, progress?: AdventureProgress,
     reputation: (state.extensions.reputation as Record<string, number> | undefined) ?? {},
     level: totalLevel(state.hero),
     visited: new Set(progress?.visited ?? []),
+    coins: state.hero.coins,
+    now: state.time,
+    flagTimes: (state.extensions.flagTimes as Record<string, number> | undefined) ?? {},
   };
 }
 
@@ -304,8 +308,26 @@ function enterScene(ctx: RunContext, sceneId: string, result: StepResult, depth 
 export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, depth = 0): void {
   if (depth > 8) throw new AdventureError('Outcome chain too deep (goto/beat loop?)');
   const { state } = ctx;
+  if (o.cost > 0) {
+    if (state.hero.coins < o.cost) {
+      result.facts.push(`You can't afford that (${formatCoins(o.cost)} needed).`);
+      return;
+    }
+    state.hero.coins -= o.cost;
+    result.coins -= o.cost;
+  }
   if (o.text) result.facts.push(o.text);
   applyFlagWrites(state.flags, o.flags, ctx.flags);
+  if (o.flags.length) {
+    const times = { ...((state.extensions.flagTimes as Record<string, number> | undefined) ?? {}) };
+    for (const w of o.flags) times['set' in w ? w.set : 'inc' in w ? w.inc : w.clear] = state.time;
+    state.extensions.flagTimes = times;
+  }
+  if (o.damage) storyDamage(ctx, o.damage, result);
+  if (o.exhaustion) {
+    for (const c of [state.hero, ...state.companions]) c.exhaustion = Math.max(0, Math.min(6, c.exhaustion + o.exhaustion));
+    result.facts.push(o.exhaustion > 0 ? `Exhaustion +${o.exhaustion}.` : `Exhaustion ${o.exhaustion}.`);
+  }
   for (const it of o.items) giveItem(state.hero, it.itemId, it.quantity, ctx.db, result);
   if (o.coins) giveCoins(state.hero, o.coins, result);
   if (o.loot) rollLoot(ctx, o.loot, result);
@@ -329,6 +351,33 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
     result.ending = o.ending;
   }
   if (o.goto) enterScene(ctx, o.goto, result, depth + 1);
+}
+
+/**
+ * Story damage (traps, falls, a sea hag's bargain): one roll shared by every target; a save halves
+ * it (or negates it when `half` is false). Heroic mode never drops a character below 1 HP; in
+ * Hardcore a character at 0 HP falls unconscious but is stable.
+ */
+function storyDamage(ctx: RunContext, d: NonNullable<Outcome['damage']>, result: StepResult): void {
+  const { state } = ctx;
+  const rolled = rollDamage(ctx.rng, [{ dice: d.dice, type: d.type }]);
+  const targets = d.target === 'party' ? [state.hero, ...state.companions] : [state.hero];
+  for (const c of targets) {
+    let amount = rolled.total;
+    if (d.save) {
+      const s = savingThrow(c, d.save.ability, { rng: ctx.rng, dc: d.save.dc });
+      result.rolls.push(s);
+      if (s.success) amount = d.save.half ? Math.floor(amount / 2) : 0;
+    }
+    if (amount <= 0) continue;
+    const hit = applyDamage(c, [{ amount, type: d.type }]).creature as Character;
+    const floor = state.mode === 'hardcore' ? 0 : 1;
+    const hp = Math.max(floor, hit.hp);
+    const next: Character = { ...hit, hp, dead: false, deathSaves: hp === 0 ? { successes: 0, failures: 0, stable: true } : hit.deathSaves };
+    if (c === state.hero) state.hero = next;
+    else state.companions = state.companions.map((x) => (x.id === c.id ? next : x));
+    result.facts.push(`${c.name} takes ${c.hp - hp} ${d.type} damage${hp === 0 ? ' and falls unconscious' : ''}.`);
+  }
 }
 
 /** Recruit / approval / parting outcomes applied straight away (lines go to `result.partyLog`). */
@@ -419,6 +468,14 @@ function giveItem(hero: Character, itemId: string, quantity: number, db: SrdData
 function giveCoins(hero: Character, cp: number, result: StepResult): void {
   hero.coins += cp;
   result.coins += cp;
+}
+
+/** 1234 cp → "12 gp 3 sp 4 cp". */
+export function formatCoins(cp: number): string {
+  const gp = Math.floor(cp / 100);
+  const sp = Math.floor((cp % 100) / 10);
+  const c = cp % 10;
+  return [gp && `${gp} gp`, sp && `${sp} sp`, c && `${c} cp`].filter(Boolean).join(' ') || '0 cp';
 }
 
 const COIN_CP = { cp: 1, sp: 10, gp: 100 } as const;

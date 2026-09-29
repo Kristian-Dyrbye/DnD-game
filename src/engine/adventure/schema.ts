@@ -4,7 +4,7 @@
  * DCs and the consequences. The LLM only narrates it.
  */
 import { z } from 'zod';
-import { ABILITIES, SKILLS } from '../rules/basics';
+import { ABILITIES, DamageTypeSchema, SKILLS } from '../rules/basics';
 import { TIERS } from '../world/factions';
 
 export const ADVENTURE_FORMAT_VERSION = 1;
@@ -30,7 +30,9 @@ export type Condition =
   | { reputation: { faction: string; gte?: number; lte?: number; tier?: (typeof TIERS)[number] } }
   | { level: { gte?: number; lte?: number } }
   | { visited: string }
-  | { hours: { from: number; to: number } };
+  | { hours: { from: number; to: number } }
+  | { coins: { gte: number } }
+  | { since: { flag: string; gteHours?: number; lteHours?: number } };
 
 export const ConditionSchema: z.ZodType<Condition> = z.lazy(() =>
   z.union([
@@ -46,6 +48,10 @@ export const ConditionSchema: z.ZodType<Condition> = z.lazy(() =>
     z.object({ visited: z.string() }).strict(),
     // Hour window [from, to) on the 24-hour clock; wraps past midnight when from > to (22 → 6).
     z.object({ hours: z.object({ from: z.number().int().min(0).max(23), to: z.number().int().min(0).max(24) }) }).strict(),
+    // The hero carries at least this many copper pieces (gate a bribe or a purchase).
+    z.object({ coins: z.object({ gte: z.number().int().min(0) }).strict() }).strict(),
+    // Hours of game time since `flag` was last set by an outcome (false if never set).
+    z.object({ since: z.object({ flag: z.string(), gteHours: z.number().min(0).optional(), lteHours: z.number().min(0).optional() }).strict() }).strict(),
   ]),
 );
 
@@ -70,6 +76,20 @@ export const OutcomeSchema = z
     loot: Id.optional(),
     items: z.array(z.object({ itemId: z.string(), quantity: z.number().int().min(1).default(1) })).default([]),
     coins: z.number().int().min(0).default(0),
+    /** Coins (copper) paid. If the hero can't pay, nothing else in this outcome happens. */
+    cost: z.number().int().min(0).default(0),
+    /** Damage to the hero (or the whole party), optionally halved by a save. Heroic mode never drops below 1 HP. */
+    damage: z
+      .object({
+        dice: z.string(),
+        type: DamageTypeSchema,
+        target: z.enum(['hero', 'party']).default('hero'),
+        save: z.object({ ability: z.enum(ABILITIES), dc: z.number().int().min(1).max(30), half: z.boolean().default(true) }).strict().optional(),
+      })
+      .strict()
+      .optional(),
+    /** Exhaustion levels gained (negative: removed). */
+    exhaustion: z.number().int().min(-6).max(6).default(0),
     xp: z.number().int().min(0).default(0),
     reputation: z.array(z.object({ faction: z.string(), delta: z.number().int() })).default([]),
     /** Start an encounter (combat runner, A068). */
@@ -218,6 +238,8 @@ export const EncounterSchema = z
     scaling: z.object({ target: z.enum(['low', 'moderate', 'high']), pool: z.array(z.string()).default([]) }).optional(),
     /** Monster ids never trimmed when scaling to a small party (default: the most expensive monster). */
     bosses: z.array(z.string()).default([]),
+    /** Friendly stat blocks that fight on the party's side (AI-controlled), e.g. town guards. */
+    allies: z.array(z.object({ id: z.string(), count: z.number().int().min(1).default(1) })).default([]),
     canFlee: z.boolean().default(true),
     win: OutcomeSchema.prefault({}),
     lose: OutcomeSchema.prefault({}),

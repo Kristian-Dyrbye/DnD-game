@@ -11,7 +11,7 @@ import { buy, haggle, sell, shopView, type ShopTable } from '../world/shops';
 import { equipItem, itemName, unequipItem } from '../character/inventory';
 import type { Lore } from '../world/lore';
 import type { ActionPort, GameSession } from '../session/GameSession';
-import { arriveInScene, availableActions, findScene, getProgress, leaveScenes, sceneForLocation, type AvailableAction, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
+import { arriveInScene, availableActions, findScene, formatCoins, getProgress, leaveScenes, sceneForLocation, type AvailableAction, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
 import type { Adventure } from './schema';
 import { intentContext, keywordIntent, validateIntent, type Intent, type IntentContext } from './intent';
 import { narrateInto, type Narrator } from './narration';
@@ -103,7 +103,8 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
         opts.narrator,
       );
     }
-    if (r.items.length || r.coins) session.addLog('system', `Received: ${[...r.items.map((i) => `${i.quantity}× ${i.itemId.replace(/_/g, ' ')}`), ...(r.coins ? [formatCoins(r.coins)] : [])].join(', ')}`);
+    if (r.items.length || r.coins > 0) session.addLog('system', `Received: ${[...r.items.map((i) => `${i.quantity}× ${i.itemId.replace(/_/g, ' ')}`), ...(r.coins > 0 ? [formatCoins(r.coins)] : [])].join(', ')}`);
+    if (r.coins < 0) session.addLog('system', `Paid ${formatCoins(-r.coins)}.`);
     if (r.xp) session.addLog('system', `+${r.xp} XP`);
     for (const line of r.partyLog ?? []) session.addLog('system', line);
     for (const id of r.recruits ?? []) {
@@ -411,9 +412,3 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
   };
 }
 
-function formatCoins(cp: number): string {
-  const gp = Math.floor(cp / 100);
-  const sp = Math.floor((cp % 100) / 10);
-  const c = cp % 10;
-  return [gp && `${gp} gp`, sp && `${sp} sp`, c && `${c} cp`].filter(Boolean).join(' ');
-}

@@ -23,6 +23,11 @@ export interface ConditionContext {
   reputation: Record<string, number>;
   level: number;
   visited: ReadonlySet<string>;
+  /** Hero's coins (copper). */
+  coins?: number;
+  /** Campaign minutes now, and when each flag was last set (for `since`). */
+  now?: number;
+  flagTimes?: Readonly<Record<string, number>>;
 }
 
 export function evalCondition(c: Condition | undefined, ctx: ConditionContext): boolean {
@@ -34,6 +39,12 @@ export function evalCondition(c: Condition | undefined, ctx: ConditionContext): 
   if ('weather' in c) return ctx.weather !== undefined && c.weather.includes(ctx.weather);
   if ('visited' in c) return ctx.visited.has(c.visited);
   if ('hours' in c) return inHours(ctx.hour ?? 12, c.hours.from, c.hours.to);
+  if ('coins' in c) return (ctx.coins ?? 0) >= c.coins.gte;
+  if ('since' in c) {
+    const at = ctx.flagTimes?.[c.since.flag];
+    if (at === undefined || ctx.now === undefined) return false;
+    return inRange((ctx.now - at) / 60, c.since.gteHours, c.since.lteHours);
+  }
   if ('level' in c) return inRange(ctx.level, c.level.gte, c.level.lte);
   if ('reputation' in c) {
     const score = ctx.reputation[c.reputation.faction] ?? 0;

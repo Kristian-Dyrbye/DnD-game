@@ -99,6 +99,8 @@ export interface EncounterSetup {
   /** Companion ids the player controls in this fight (default: all AI). */
   playerControlled?: string[];
   monsters: { id: string; count: number }[];
+  /** Friendly stat blocks on the party's side (AI-controlled with the companion AI). */
+  allies?: { id: string; count: number }[];
   db: SrdDatabase;
   grid?: Grid;
 }
@@ -106,12 +108,15 @@ export interface EncounterSetup {
 /** Places everyone, rolls initiative and runs AI turns until the hero is up (or it's over). */
 export function setupEncounter(setup: EncounterSetup, ctx: CombatContext): Encounter {
   const grid = setup.grid ?? defaultArena(ctx.rng);
-  const party: Creature[] = [setup.hero, ...(setup.companions ?? [])];
-  const foes: Creature[] = setup.monsters.flatMap((m) => {
-    const data = setup.db.monsters.get(m.id);
-    if (!data) throw new Error(`Unknown monster ${m.id}`);
-    return Array.from({ length: m.count }, (_, i) => monsterToCreature(data, `${m.id}_${i + 1}`, m.count > 1 ? `${data.name} ${i + 1}` : data.name));
-  });
+  const spawn = (list: { id: string; count: number }[], prefix = '', label = '') =>
+    list.flatMap((m) => {
+      const data = setup.db.monsters.get(m.id);
+      if (!data) throw new Error(`Unknown monster ${m.id}`);
+      return Array.from({ length: m.count }, (_, i) => monsterToCreature(data, `${prefix}${m.id}_${i + 1}`, `${label}${data.name}${m.count > 1 ? ` ${i + 1}` : ''}`));
+    });
+  const allies = spawn(setup.allies ?? [], 'ally_', 'Allied ');
+  const party: Creature[] = [setup.hero, ...(setup.companions ?? []), ...allies];
+  const foes: Creature[] = spawn(setup.monsters);
   for (const c of party) place(grid, c, [0, 1], ctx.rng);
   for (const c of foes) place(grid, c, [grid.width - 2, grid.width - 1], ctx.rng);
   const rolls = rollInitiativeOrder(

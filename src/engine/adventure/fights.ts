@@ -46,7 +46,7 @@ export function startFight(ctx: RunContext, encounterId: string, rng: Rng, db: S
   // Scale to the real party with SRD budgets (authored lists assume a party of four).
   const party = [ctx.state.hero, ...ctx.state.companions].filter((c) => !c.dead);
   const monsters = db.tables ? scaleMonsters(def.monsters, party.map((c) => c.classes.reduce((s, x) => s + x.level, 0)), db, db.tables, { pool: def.scaling?.pool ?? [], bossIds: bossesOf(def, db) }) : def.monsters;
-  const enc = setupEncounter({ hero: ctx.state.hero, companions: ctx.state.companions, playerControlled: playerControlled(ctx.state), monsters, db }, cctx);
+  const enc = setupEncounter({ hero: ctx.state.hero, companions: ctx.state.companions, playerControlled: playerControlled(ctx.state), monsters, allies: def.allies, db }, cctx);
   const fight: ActiveFight = { adventureId: ctx.adventure.id, encounterId, enc };
   ctx.state.extensions.combat = fight;
   return fight;

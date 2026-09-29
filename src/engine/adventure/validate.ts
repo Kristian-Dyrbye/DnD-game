@@ -90,6 +90,7 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
   for (const e of adv.encounters) {
     for (const m of e.monsters) if (db && !db.monsters.has(m.id)) errors.push(`encounter ${e.id}: unknown monster "${m.id}"`);
     for (const m of e.scaling?.pool ?? []) if (db && !db.monsters.has(m)) errors.push(`encounter ${e.id}: unknown scaling monster "${m}"`);
+    for (const m of e.allies) if (db && !db.monsters.has(m.id)) errors.push(`encounter ${e.id}: unknown ally "${m.id}"`);
     for (const b of e.bosses) if (!e.monsters.some((m) => m.id === b)) errors.push(`encounter ${e.id}: boss "${b}" is not one of its monsters`);
     outcome(e.win, `encounter ${e.id}.win`);
     outcome(e.lose, `encounter ${e.id}.lose`);
