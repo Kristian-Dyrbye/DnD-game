@@ -100,6 +100,28 @@ export const DeathSavesSchema = z.object({
   stable: z.boolean(),
 });
 
+/** Spell slots, pact slots, prepared spells and the current concentration effect. */
+export const SpellcastingStateSchema = z.object({
+  /** Remaining slots for levels 1–9 (index 0 = level 1). */
+  slots: z.array(z.number().int().min(0)).length(9),
+  maxSlots: z.array(z.number().int().min(0)).length(9),
+  /** Warlock Pact Magic slots (all of the same level; recharge on a Short Rest). */
+  pact: z.object({ current: z.number().int().min(0), max: z.number().int().min(0), level: z.number().int().min(1).max(5) }).optional(),
+  cantrips: z.array(z.string()).default([]),
+  /** Prepared (or always-prepared) spell ids, each tagged with the class it's cast through. */
+  prepared: z.array(z.object({ spellId: z.string(), classId: z.string() })).default([]),
+  concentration: z
+    .object({
+      spellId: z.string(),
+      /** Stamped on every condition the spell created (see effects.ts). */
+      sourceId: z.string(),
+      targetIds: z.array(z.string()),
+      roundsLeft: z.number().int().min(0).optional(),
+    })
+    .optional(),
+});
+export type SpellcastingState = z.infer<typeof SpellcastingStateSchema>;
+
 /** Player characters and companions: a creature plus class, species, background and progression. */
 export const CharacterSchema = CreatureSchema.extend({
   kind: z.literal('character'),
@@ -112,6 +134,7 @@ export const CharacterSchema = CreatureSchema.extend({
   featIds: z.array(z.string()).default([]),
   deathSaves: DeathSavesSchema.default({ successes: 0, failures: 0, stable: false }),
   heroicInspiration: z.boolean().default(false),
+  spellcasting: SpellcastingStateSchema.optional(),
 });
 export type Character = z.infer<typeof CharacterSchema>;
 
