@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A032
-- **Notes for next session:** Start with A033. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A033
+- **Notes for next session:** Start with A034. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -52,7 +52,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A030 — Attacks & damage
 - [done] A031 — Conditions engine + exhaustion 2024
 - [done] A032 — Death saves, 0 HP, resting
-- [todo] A033 — Effect system | Spec: §4 | Done: data-driven executor for damage/heal/condition/save/area/duration effects; tests | Dep: A031
+- [done] A033 — Effect system
 - [todo] A034 — Spellcasting engine | Spec: §4 | Done: slots, save DC/attack, upcast, concentration (DC max(10, dmg/2)), rituals, abstract components, pact magic; tests | Dep: A033, A021
 - [todo] A034a — Spell effects pass | Spec: §4 | Done: hand-written effects/hooks in data/srd/overrides/spells.json for the ~40 most-used combat spells that have no auto effects (magic_missile, bless, shield, ice_storm, counterspell, guiding_bolt, spiritual_weapon, etc.); cantrip damage scaling by character level (5/11/17) in the engine; tests | Dep: A034
 - [todo] A035 — Character builder + derived stats | Spec: §4, §5 | Done: build from class/species/background/scores; AC (armor, shield, unarmored), HP, speed, proficiencies, attacks; tests | Dep: A015, A016, A018
@@ -168,6 +168,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A030 — attackRoll (nat 20 crit / nat 1 miss, critOn, autoCrit), rollDamage (crit doubles dice only, modifiers on first entry, min 0, math text), applyDamage (immune/resist/vuln once, temp HP first, overflow, massive-damage flag), heal, grantTempHp, isBloodied — `src/engine/rules/damage.ts`
 - A031 — Conditions engine: effectiveConditions (implied + exhaustion), apply/remove (immunities incl. Petrified→Poisoned, same-source dedupe keeps longer duration, Unconscious ends → Prone), tick durations, end-of-turn saves, attack/check/save/initiative modes from data modifiers (source rules for grappled/frightened/charmed/invisible), canAct, effectiveSpeed (speedZero, −5/exhaustion), crawl, resistAll, mayHarm, exhaustion levels + death at 6 — `src/engine/rules/conditions.ts`
 - A032 — Death & rest: resolveDamageAtZero (monster death, unconscious, massive damage, failures at 0 HP incl. crit = 2), rollDeathSave (10+, nat 1/20, stable, dead, exhaustion applies), stabilize, healFromZero; shortRest (hit dice die+Con min 1), longRest (all HP + all hit dice, temp HP gone, −1 exhaustion), rechargeResources, hitDicePool; `dead` flag on Creature — `src/engine/rules/death.ts`, `src/engine/rules/rest.ts`
+- A033 — Effect executor: createEffectContext + executeEffects for damage (shared roll per effect, half on save), save (per target, condition-aware modes), attack (spell attack, crit doubles), heal (+spell mod, upcast), temp HP, condition (duration → rounds, source id), area, hooks (unknown = logged); upcastDice, durationRounds; onDamaged callback for concentration — `src/engine/rules/effects.ts`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -221,6 +222,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - Owner decision (2026-09-29): max 2 agents at once (main + 1 helper subagent in its own worktree, separate assignment, main merges + updates brain.md). CLAUDE.md §2, .claude/settings.json deny list and run-loop.bat prompt updated.
 - A031: Condition functions take an optional ConditionTable (defaults to loadSrd().conditions). Mode helpers return {advantage[], disadvantage[], autoFail?} that spread straight into check/save options. Frightened 'source visible' defaults to true unless the caller says otherwise (LOS comes in A060).
 - A032: Creature has `dead: boolean`. Death saves apply exhaustion (they are D20 Tests). Heroic-mode defeat is decided by the session (A068), the rules module always reports real death. Long rest also resets death saves.
+- A033: EffectContext keeps a Map of creatures updated in place + a text log; targets are pre-selected (AoE geometry lives in combat/aoe). Condition sourceId convention for spells: `<casterId>:<spellId>` so ending concentration removes them. Durations: 1 minute = 10 rounds.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -249,6 +251,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/rules/conditions.ts` — effectiveConditions, hasCondition, applyCondition, removeCondition(+FromSource), addExhaustion, tickConditions, endOfTurnSaves, attackModes, checkModes, saveModes, initiativeModes, canAct, effectiveSpeed, isCrawlOnly, resistsAllDamage, mayHarm
 - `src/engine/rules/death.ts` — resolveDamageAtZero, rollDeathSave, stabilize, healFromZero, needsDeathSave
 - `src/engine/rules/rest.ts` — shortRest, longRest, rechargeResources, hitDicePool, restoreCreature
+- `src/engine/rules/effects.ts` — createEffectContext, executeEffects, upcastDice, durationRounds (HookFn registry)
 - `src/engine/data/common.ts` — IdSchema, DiceSchema, CostSchema(CP), DamageSchema, AreaSchema, DurationSchema, EffectSchema/Effect, toId
 - `src/engine/data/schemas.ts` — schemas for every data/srd file + RulesTablesSchema; SRD_FILES registry; record types
 - `src/engine/data/srd.ts` — validateSrdFile, SrdDatabase (maps by id, item(), spellsForClass)
