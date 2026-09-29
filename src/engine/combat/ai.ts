@@ -42,6 +42,7 @@ import { planMove, reachableSquares, standUpCost, type PathOptions } from './mov
 import { addDash, canReact, movementLeft, spend, standUp } from './turns';
 import type { SlotChoice } from '../rules/spellcasting';
 import { castInCombat, featureInCombat } from './castAction';
+import { monsterActionOf, monsterSaveAction, multiattackSaveActions, saveActionProblem, saveActions } from './monsterActions';
 
 // ---------------------------------------------------------------- plan shapes
 
@@ -53,6 +54,8 @@ export type AiStep =
   | { kind: 'dodge' }
   | { kind: 'attack'; profileId: string; targetId: string }
   | { kind: 'area'; actionName: string; aim: Point }
+  /** A single-target save action from the stat block (Constrict, Dreadful Glare...). */
+  | { kind: 'monster_action'; actionName: string; targetId: string }
   /** Cast a known spell (companions): Action or Bonus Action from its casting time. */
   | { kind: 'cast'; spellId: string; targetIds: string[]; slot?: SlotChoice }
   /** Use a class-feature action (Second Wind, Lay On Hands...). */
@@ -481,6 +484,10 @@ export function planTurn(state: CombatState, ctx: CombatContext, actorId: string
         ...(attack.bonusDisengage ? [{ kind: 'disengage', bonus: true } as AiStep] : []),
         ...(attack.dest.path.length ? [{ kind: 'move', path: attack.dest.path } as AiStep] : []),
         ...attack.attacks.map((a): AiStep => ({ kind: 'attack', profileId: a.profileId, targetId: attack.targetId })),
+        // Multiattack parts that are save actions ("makes one Bite attack and uses Constrict").
+        ...multiattackSaveActions(actor, ctx)
+          .filter((n) => saveActions(actor, ctx).some((a) => a.name === n))
+          .map((n): AiStep => ({ kind: 'monster_action', actionName: n, targetId: attack.targetId })),
       ],
       reason: `attacks ${target.name}`,
       expected: attack.expected,
@@ -623,6 +630,24 @@ export function executePlan(state: CombatState, ctx: CombatContext, plan: AiPlan
         if (!r.ok) note(r.error);
         events.push(...r.events);
         cur = r.state;
+        break;
+      }
+      case 'monster_action': {
+        const action = monsterActionOf(actor, ctx, step.actionName);
+        if (!action) break;
+        // The planned target, else any hostile it can reach now (Constrict needs someone within 10 ft).
+        const ok = (t: string) => !isDown(cur.creatures[t]!) && areHostile(cur, ctx, id, t) && !saveActionProblem(cur, ctx, id, action, t);
+        const targetId = cur.creatures[step.targetId] && ok(step.targetId) ? step.targetId : Object.keys(cur.creatures).find((t) => t !== id && ok(t));
+        if (!targetId) {
+          note(`${name} has no one in reach of ${step.actionName}.`);
+          break;
+        }
+        const r = monsterSaveAction(cur, ctx, id, step.actionName, targetId);
+        if (!r.ok) note(r.error);
+        else {
+          events.push(...r.events);
+          cur = r.state;
+        }
         break;
       }
       case 'area': {

@@ -36,7 +36,8 @@ import { applyDamage, attackRoll, rollDamage, type AttackRollResult, type Damage
 import { resolveDamageAtZero } from '../rules/death';
 import { createEffectContext } from '../rules/effects';
 import { applyMasteryOnHit, cleaveDamageModifier, grazeDamage, type Mastery } from '../rules/mastery';
-import { multiattackSequence } from '../rules/monsters';
+import { actionRiders, multiattackSequence } from '../rules/monsters';
+import { applyActionRiders } from './saves';
 import { concentrationCheck } from '../rules/spellcasting';
 import { attackedEffectModes, breakInvisibility, consumeAttackedEffects, effectDamageRiders, effectiveAc, rollEffectBonuses } from '../rules/spellHooks';
 import { curseDamageRider } from '../rules/spellHooks2';
@@ -713,6 +714,18 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
   );
   next = dealt.state;
   events.push(...dealt.events);
+
+  // ---- stat-block riders on a hit (Grappled with escape DC, Prone, Paralyzed after a save...)
+  if (profile.id.startsWith('monster:') && next.creatures[target.id] && !next.creatures[target.id]!.dead) {
+    const m = attacker.statBlockId ? db.monsters.get(attacker.statBlockId) : undefined;
+    const action = m?.actions.find((x) => x.name === profile.name) ?? m?.bonusActions.find((x) => x.name === profile.name);
+    const riders = action ? actionRiders(action) : [];
+    if (riders.length > 0) {
+      const r = applyActionRiders(next, ctx, attacker.id, target.id, riders, profile.name);
+      next = r.state;
+      events.push(...r.events);
+    }
+  }
 
   // ---- mastery riders on a hit
   let cleaveAvailable = false;

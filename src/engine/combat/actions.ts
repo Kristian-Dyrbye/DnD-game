@@ -28,11 +28,10 @@
 import type { Character, Creature } from '../core/creature';
 import { SIZES, SKILL_ABILITY, type Ability, type Skill } from '../rules/basics';
 import { addEffect, removeEffects } from '../rules/activeEffects';
-import { abilityCheck, saveModifiers, savingThrow, type D20TestResult } from '../rules/checks';
+import { abilityCheck, saveModifiers, type D20TestResult } from '../rules/checks';
 import { applyCondition, canAct, checkModes, hasCondition, isCrawlOnly, removeCondition, saveModes } from '../rules/conditions';
-import { effectSaveAdjustments } from '../rules/spellHooks';
-import { canMakeOpportunityAttacks, effectCheckBonuses, effectCheckModes, effectSaveAdjustments3 } from '../rules/spellHooks3';
-import { featureCheckBonuses, featureCheckModes, featureSaveModes } from '../character/features';
+import { canMakeOpportunityAttacks, effectCheckBonuses, effectCheckModes } from '../rules/spellHooks3';
+import { featureCheckBonuses, featureCheckModes } from '../character/features';
 import { abilityModifier } from '../rules/basics';
 import { HIDE_SOURCE, consumeHelpCheck, dodgeSaveModes, helpCheckModes, hideDc } from './actionEffects';
 import { attackProfiles, canSee, findProfile, meleeReach, pushAway, resolveAttack, spendAttack, withinOneSizeLarger, type AttackKind, type AttackOutcome } from './attack';
@@ -42,6 +41,7 @@ import { computeCover } from './los';
 import { moveAlong, type MoveMode, type OpportunityTrigger } from './movement';
 import { addDash, canReact, currentId, movementLeft, setDisengaged, spend, spendMovement, type EconomyKind } from './turns';
 import { effectiveSpeed } from '../rules/conditions';
+import { combatSave, grappleTarget } from './saves';
 import { endConcentration, expendSlot, slotProblem, type SlotChoice } from '../rules/spellcasting';
 import type { SpellcastingState } from '../core/creature';
 import { castInCombat, knowsSpell, lowestSlotFor, spellEconomy } from './castAction';
@@ -155,23 +155,7 @@ export function combatCheck(
   return { state: used === c ? state : withCreature(state, used), result };
 }
 
-/** A saving throw with condition, effect, feature and Dodge modes (Grapple/Shove saves). */
-export function combatSave(state: CombatState, ctx: CombatContext, id: string, ability: Ability, dc: number): D20TestResult {
-  const c = state.creatures[id] as Creature;
-  const cond = saveModes(c, ability, ctx.table);
-  const e1 = effectSaveAdjustments(c, ability);
-  const e3 = effectSaveAdjustments3(c, ability);
-  const dodge = dodgeSaveModes(c, ability, ctx.table);
-  const feat = isCharacter(c) ? featureSaveModes(c, dbOf(ctx), ability) : { advantage: [], disadvantage: [] };
-  return savingThrow(c, ability, {
-    rng: ctx.rng,
-    dc,
-    advantage: [...cond.advantage, ...e1.advantage, ...e3.advantage, ...dodge.advantage, ...feat.advantage],
-    disadvantage: [...cond.disadvantage, ...e3.disadvantage, ...feat.disadvantage],
-    bonuses: [...e1.modifiers, ...e3.modifiers],
-    ...(cond.autoFail && { autoFail: cond.autoFail }),
-  });
-}
+export { combatSave } from './saves';
 
 // ---------------------------------------------------------------- Hide and Search
 
@@ -442,9 +426,9 @@ export function grapple(state: CombatState, ctx: CombatContext, attackerId: stri
   const r = unarmedOption(state, ctx, attackerId, targetId, 'Grapple', opts);
   if (!r.ok) return r;
   if (r.save.success) return { ok: true, state: r.state, events: r.events, success: false };
-  const applied = applyCondition(r.target, { condition: 'grappled', sourceId: attackerId }, ctx.table);
+  const applied = grappleTarget(r.target, attackerId, r.dc, ctx.table);
   if (!applied.applied) return { ok: true, state: r.state, events: [...r.events, { kind: 'condition', targetId, text: `${r.target.name} can't be Grappled.` }], success: false };
-  const marked = addEffect(applied.creature, { key: 'grappled_by', sourceId: attackerId, data: { dc: r.dc, grapplerId: attackerId } });
+  const marked = applied.creature;
   return {
     ok: true,
     state: withCreature(r.state, marked),
@@ -493,8 +477,10 @@ export function escapeGrapple(state: CombatState, ctx: CombatContext, id: string
   return { ok: true, state: next, events, success };
 }
 
+/** Ends a grapple and every condition tied to it (conditions sourced to the grappler itself). */
 function releaseFrom<T extends Creature>(c: T, grapplerId: string): T {
-  return removeCondition(removeEffects(c, (e) => e.key === 'grappled_by' && e.sourceId === grapplerId), 'grappled', grapplerId);
+  const freed = removeCondition(removeEffects(c, (e) => e.key === 'grappled_by' && e.sourceId === grapplerId), 'grappled', grapplerId);
+  return { ...freed, conditions: freed.conditions.filter((x) => x.sourceId !== grapplerId) };
 }
 
 /** The grappler lets go (no action required). */
