@@ -16,7 +16,7 @@ import { GameSession, type SessionPorts } from '../engine/session/GameSession';
 import { parseCommand } from '../shared/protocol';
 import { adventureActionPort } from '../engine/adventure/sessionActions';
 import { loadSrd } from '../engine/data/srdBundle';
-import { loadAdventures } from './adventures';
+import { loadAdventures, loadFlagRegistry } from './adventures';
 import { parseIntent } from '../llm/prompts/intent';
 import { LoreSchema } from '../engine/world/lore';
 import loreJson from '../../data/world/lore.json';
@@ -110,7 +110,9 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   // Adventures: the default one starts on new_game (the demo until the starter arc exists, A099).
   const srd = loadSrd();
   const lore = LoreSchema.parse(loreJson);
-  const { adventures, problems } = loadAdventures(opts.adventuresDir ?? path.join(opts.rootDir ?? process.cwd(), 'data', 'adventures'), srd);
+  const adventuresDir = opts.adventuresDir ?? path.join(opts.rootDir ?? process.cwd(), 'data', 'adventures');
+  const flagRegistry = loadFlagRegistry(adventuresDir);
+  const { adventures, problems } = loadAdventures(adventuresDir, srd, flagRegistry);
   for (const p of problems) app.log.warn({ file: p.file, errors: p.errors }, 'Skipping invalid adventure');
   const defaultAdventure = adventures.has(STARTING_ADVENTURE) ? STARTING_ADVENTURE : [...adventures.keys()][0];
   const session = new GameSession({
@@ -119,6 +121,7 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
         parseIntent: async (text, ictx) => (await parseIntent(services.llm, text, ictx)).intent,
         narrator: llmNarrator(() => services.llm, lore, srd),
         summarizer: llmSummarizer(() => services.llm),
+        flags: flagRegistry,
         suggester: (ctx, offered) => suggestIdeas(services.llm, gatherNarrationContext(ctx.state, lore, ctx.adventure, srd), offered),
       }) }),
     saves: {

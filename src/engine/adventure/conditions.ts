@@ -4,14 +4,17 @@
  * so later arcs can safely read flags that earlier arcs never wrote.
  */
 import type { TimeOfDay } from '../world/clock';
+import type { FlagRegistry, Flags } from '../world/flags';
 import type { Condition, FlagWrite } from './schema';
 
 export { timeOfDay, type TimeOfDay } from '../world/clock';
 
-export type Flags = Record<string, boolean | number | string>;
+export type { Flags } from '../world/flags';
 
 export interface ConditionContext {
   flags: Flags;
+  /** Registry defaults, read when a flag is unset. */
+  defaults?: Flags;
   timeOfDay: TimeOfDay;
   weather?: string;
   reputation: Record<string, number>;
@@ -29,7 +32,7 @@ export function evalCondition(c: Condition | undefined, ctx: ConditionContext): 
   if ('visited' in c) return ctx.visited.has(c.visited);
   if ('level' in c) return inRange(ctx.level, c.level.gte, c.level.lte);
   if ('reputation' in c) return inRange(ctx.reputation[c.reputation.faction] ?? 0, c.reputation.gte, c.reputation.lte);
-  const v = ctx.flags[c.flag];
+  const v = ctx.flags[c.flag] ?? ctx.defaults?.[c.flag];
   if (c.exists !== undefined && (v !== undefined) !== c.exists) return false;
   if (c.eq !== undefined && v !== c.eq) return false;
   if (c.gte !== undefined || c.lte !== undefined) return typeof v === 'number' && inRange(v, c.gte, c.lte);
@@ -42,11 +45,20 @@ function inRange(v: number, gte?: number, lte?: number): boolean {
   return (gte === undefined || v >= gte) && (lte === undefined || v <= lte);
 }
 
-export function applyFlagWrites(flags: Flags, writes: readonly FlagWrite[]): void {
+/**
+ * Applies flag writes. With a registry, numbers are clamped to their bounds, `inc` starts from the
+ * declared default, and writes of the wrong type/value are skipped (the validator reports them).
+ */
+export function applyFlagWrites(flags: Flags, writes: readonly FlagWrite[], registry?: FlagRegistry): void {
   for (const w of writes) {
-    if ('set' in w) flags[w.set] = w.value;
-    else if ('inc' in w) flags[w.inc] = (typeof flags[w.inc] === 'number' ? (flags[w.inc] as number) : 0) + w.by;
-    else delete flags[w.clear];
+    if ('set' in w) {
+      if (registry?.checkValue(w.set, w.value)) continue;
+      flags[w.set] = registry ? registry.clamp(w.set, w.value) : w.value;
+    } else if ('inc' in w) {
+      const cur = flags[w.inc] ?? registry?.get(w.inc)?.default;
+      const next = (typeof cur === 'number' ? cur : 0) + w.by;
+      flags[w.inc] = registry ? registry.clamp(w.inc, next) : next;
+    } else delete flags[w.clear];
   }
 }
 

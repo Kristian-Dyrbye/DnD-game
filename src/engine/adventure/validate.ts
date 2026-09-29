@@ -4,6 +4,7 @@
  * generator (reject and regenerate) and by a future editor/importer.
  */
 import type { SrdDatabase } from '../data/srd';
+import { FlagRegistry, isNamespaced, resolveAdventureFlags, type FlagValue } from '../world/flags';
 import { AdventureSchema, type Action, type Adventure, type Outcome, type Scene } from './schema';
 
 export interface ValidationResult {
@@ -14,12 +15,13 @@ export interface ValidationResult {
   warnings: string[];
 }
 
-export function validateAdventure(raw: unknown, db?: SrdDatabase): ValidationResult {
+export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: FlagRegistry): ValidationResult {
   const parsed = AdventureSchema.safeParse(raw);
   if (!parsed.success) {
     return { ok: false, errors: parsed.error.issues.map((i) => `${i.path.join('.') || '(root)'}: ${i.message}`), warnings: [] };
   }
-  const adv = parsed.data;
+  // `~name` flags → this adventure's namespace, so everything downstream sees absolute ids.
+  const adv = resolveAdventureFlags(parsed.data);
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -89,6 +91,18 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase): ValidationRes
   for (const n of adv.npcs) if (db && !db.monsters.has(n.statBlock)) errors.push(`npc ${n.id}: unknown stat block "${n.statBlock}"`);
   for (const l of adv.lootTables) for (const e of l.entries) if (e.itemId) item(e.itemId, `loot ${l.id}`);
 
+  // Flags: namespaced, documented (registry or this adventure's docs), and writes of the right type.
+  const documented = new Set(adv.flags.map((f) => f.id));
+  const { reads, writes } = flagRefs(adv);
+  for (const id of new Set([...reads, ...writes.map((w) => w.id)])) {
+    if (!isNamespaced(id)) warnings.push(`flag "${id}" is not namespaced (use arc.<arc>., world., side.<quest>. or ~name)`);
+    else if (!documented.has(id) && !registry?.has(id)) warnings.push(`flag "${id}" is not documented`);
+  }
+  for (const w of writes) {
+    const problem = w.value !== undefined ? registry?.checkValue(w.id, w.value) : undefined;
+    if (problem) errors.push(problem);
+  }
+
   // Reachability from the start scene through exits and gotos (ignoring conditions).
   const reach = new Set<string>();
   const queue = [adv.start.scene];
@@ -128,4 +142,24 @@ function sceneTargets(s: Scene, adv: Adventure): string[] {
   }
   for (const b of adv.beats) if (b.outcome.goto && (b.scenes.length === 0 || b.scenes.includes(s.id))) out.push(b.outcome.goto);
   return out;
+}
+
+/** Every flag an adventure reads (conditions) and writes (outcome `flags`). */
+export function flagRefs(adv: Adventure): { reads: Set<string>; writes: { id: string; value?: FlagValue }[] } {
+  const reads = new Set<string>();
+  const writes: { id: string; value?: FlagValue }[] = [];
+  const walk = (v: unknown): void => {
+    if (Array.isArray(v)) return v.forEach(walk);
+    if (!v || typeof v !== 'object') return;
+    const o = v as Record<string, unknown>;
+    if (typeof o.flag === 'string') reads.add(o.flag);
+    if (typeof o.set === 'string') writes.push({ id: o.set, value: o.value as FlagValue });
+    if (typeof o.inc === 'string') writes.push({ id: o.inc, value: 0 });
+    if (typeof o.clear === 'string') writes.push({ id: o.clear });
+    for (const [k, x] of Object.entries(o)) if (k !== 'flags' || Array.isArray(x)) walk(x);
+  };
+  walk(adv.chapters);
+  walk(adv.encounters);
+  walk(adv.beats);
+  return { reads, writes };
 }

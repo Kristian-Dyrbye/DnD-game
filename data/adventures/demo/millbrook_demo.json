@@ -19,7 +19,7 @@
           "name": "Millbrook Square",
           "locationId": "millbrook",
           "seed": "A cobbled square around a mossy well. Market stalls are closing; the smell of bread drifts from the bakery. A notice board leans by the well.",
-          "variants": [{ "if": { "flag": "demo.rats_cleared" }, "seed": "Townsfolk nod at you as you pass. Word of the cleared cellar has spread." }],
+          "variants": [{ "if": { "flag": "~rats_cleared" }, "seed": "Townsfolk nod at you as you pass. Word of the cleared cellar has spread." }],
           "npcs": ["mayor_hobb"],
           "mood": "town",
           "pois": [
@@ -36,7 +36,7 @@
                   "check": {
                     "skill": "investigation",
                     "dc": 10,
-                    "success": { "text": "Under the rat notice is an older one, half torn: the miller's cellar key was 'lost' the night he vanished.", "flags": [{ "set": "demo.knows_key" }] },
+                    "success": { "text": "Under the rat notice is an older one, half torn: the miller's cellar key was 'lost' the night he vanished.", "flags": [{ "set": "~knows_key" }] },
                     "failure": { "text": "Only the fresh notice about rats in the old mill is legible." }
                   }
                 }
@@ -49,13 +49,13 @@
               "label": "Speak with Mayor Hobb",
               "once": true,
               "keywords": ["mayor", "hobb", "talk", "reward"],
-              "outcome": { "text": "Mayor Hobb promises 10 gold pieces if the mill cellar is cleared, and hands over a spare key to the mill door.", "flags": [{ "set": "demo.has_key" }], "items": [{ "itemId": "torch", "quantity": 2 }] }
+              "outcome": { "text": "Mayor Hobb promises 10 gold pieces if the mill cellar is cleared, and hands over a spare key to the mill door.", "flags": [{ "set": "~has_key" }], "items": [{ "itemId": "torch", "quantity": 2 }] }
             },
             {
               "id": "claim_reward",
               "label": "Claim the mayor's reward",
               "once": true,
-              "if": { "flag": "demo.rats_cleared" },
+              "if": { "flag": "~rats_cleared" },
               "keywords": ["reward", "claim", "gold"],
               "outcome": { "text": "Mayor Hobb counts out ten gold pieces with evident relief.", "coins": 1000, "xp": 50, "reputation": [{ "faction": "millbrook_folk", "delta": 1 }], "ending": "rats_cleared" }
             }
@@ -68,12 +68,12 @@
           "locationId": "millbrook",
           "seed": "A creaking water wheel turns over a sluggish stream. The mill door is barred with a rusted padlock. Scratching sounds come from below.",
           "exits": [
-            { "id": "unlock", "label": "Unlock the door with the mayor's key", "to": "mill_cellar", "if": { "flag": "demo.has_key" } },
+            { "id": "unlock", "label": "Unlock the door with the mayor's key", "to": "mill_cellar", "if": { "flag": "~has_key" } },
             {
               "id": "force",
               "label": "Force the door",
               "to": "mill_cellar",
-              "if": { "not": { "flag": "demo.has_key" } },
+              "if": { "not": { "flag": "~has_key" } },
               "check": { "skill": "athletics", "dc": 12, "success": { "text": "The rotten hasp splinters and the door swings in." }, "failure": { "text": "The door shudders but holds. Your shoulder aches.", "minutes": 5 } }
             },
             { "id": "back", "label": "Return to the square", "to": "millbrook_square", "minutes": 15 }
@@ -91,7 +91,7 @@
               "id": "chest",
               "name": "Miller's strongbox",
               "seed": "A small iron-bound box wedged behind a barrel.",
-              "if": { "flag": "demo.rats_cleared" },
+              "if": { "flag": "~rats_cleared" },
               "actions": [{ "id": "open", "label": "Open the strongbox", "once": true, "keywords": ["chest", "box", "open"], "outcome": { "text": "Inside the box you find what the miller left behind.", "loot": "miller_box" } }]
             }
           ],
@@ -99,7 +99,7 @@
             {
               "id": "fight_rats",
               "label": "Fight the rats",
-              "if": { "not": { "flag": "demo.rats_cleared" } },
+              "if": { "not": { "flag": "~rats_cleared" } },
               "keywords": ["fight", "attack", "rats"],
               "outcome": { "encounter": "cellar_rats" }
             }
@@ -127,21 +127,21 @@
       "name": "Cellar rats",
       "monsters": [{ "id": "giant_rat", "count": 2 }],
       "terrain": ["barrels (half cover)", "flour sacks (difficult terrain)"],
-      "win": { "text": "The last rat squeals and lies still.", "flags": [{ "set": "demo.rats_cleared" }], "xp": 50 },
+      "win": { "text": "The last rat squeals and lies still.", "flags": [{ "set": "~rats_cleared" }], "xp": 50 },
       "lose": { "text": "You wake up in the square, bitten and bruised; a farmer dragged you out.", "goto": "millbrook_square" },
       "flee": { "text": "You scramble up the ladder and slam the hatch.", "goto": "old_mill" }
     }
   ],
   "beats": [
-    { "id": "rat_return", "text": "Walking back into the square, you hear children cheering about the rats.", "trigger": { "flag": "demo.rats_cleared" }, "scenes": ["millbrook_square"] }
+    { "id": "rat_return", "text": "Walking back into the square, you hear children cheering about the rats.", "trigger": { "flag": "~rats_cleared" }, "scenes": ["millbrook_square"] }
   ],
   "lootTables": [
     { "id": "miller_box", "rolls": 1, "entries": [{ "weight": 1, "itemId": "potion_of_healing", "coins": "2d6", "coinUnit": "sp" }] }
   ],
   "flags": [
-    { "id": "demo.knows_key", "description": "Read the torn notice about the miller's key." },
-    { "id": "demo.has_key", "description": "Got the mill key from the mayor." },
-    { "id": "demo.rats_cleared", "description": "Cleared the mill cellar." }
+    { "id": "~knows_key", "description": "Read the torn notice about the miller's key." },
+    { "id": "~has_key", "description": "Got the mill key from the mayor." },
+    { "id": "~rats_cleared", "description": "Cleared the mill cellar." }
   ],
   "endings": [{ "id": "rats_cleared", "name": "Rats cleared", "text": "Millbrook's mill is safe again, for now." }]
 }

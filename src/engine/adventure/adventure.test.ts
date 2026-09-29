@@ -108,7 +108,7 @@ describe('scene runner', () => {
     const torchesBefore = c.state.hero.inventory.find((i) => i.itemId === 'torch')?.quantity ?? 0;
     const r = perform(c, 'talk_mayor');
     expect(r.facts[0]).toMatch(/Mayor Hobb promises/);
-    expect(c.state.flags['demo.has_key']).toBe(true);
+    expect(c.state.flags['adv.millbrook_demo.has_key']).toBe(true);
     expect(c.state.hero.inventory.find((i) => i.itemId === 'torch')?.quantity).toBe(torchesBefore + 2);
     expect(availableActions(c).map((a) => a.id)).not.toContain('talk_mayor');
     expect(() => perform(c, 'talk_mayor')).toThrow(AdventureError);
@@ -126,7 +126,7 @@ describe('scene runner', () => {
       const c = ctx(seed);
       startAdventure(c);
       const r = perform(c, 'notice_board.read');
-      return { success: r.rolls[0]!.success, flag: c.state.flags['demo.knows_key'], text: r.rolls[0]!.text };
+      return { success: r.rolls[0]!.success, flag: c.state.flags['adv.millbrook_demo.knows_key'], text: r.rolls[0]!.text };
     };
     expect(run(7)).toEqual(run(7));
     const outcomes = new Set(Array.from({ length: 30 }, (_, i) => run(i).success));
@@ -163,7 +163,7 @@ describe('scene runner', () => {
     expect(into.facts).toContain('Two giant rats burst from the sacks!');
     const win = resolveEncounter(c, 'cellar_rats', 'win');
     expect(win.xp).toBe(50);
-    expect(c.state.flags['demo.rats_cleared']).toBe(true);
+    expect(c.state.flags['adv.millbrook_demo.rats_cleared']).toBe(true);
     const loot = perform(c, 'chest.open');
     expect(loot.items).toEqual([{ itemId: 'potion_of_healing', quantity: 1 }]);
     expect(loot.coins).toBeGreaterThanOrEqual(20);
@@ -194,7 +194,7 @@ describe('adventure action port', () => {
     expect(events.some((e) => e.type === 'roll' && e.roll.label === 'Investigation')).toBe(true);
 
     await session.handle({ type: 'say', text: 'I ask the mayor about the reward' });
-    expect(session.current.flags['demo.has_key']).toBe(true);
+    expect(session.current.flags['adv.millbrook_demo.has_key']).toBe(true);
 
     await session.handle({ type: 'choose', actionId: 'no_such_thing', reqId: 'z' });
     expect(events.at(-1)).toEqual({ type: 'error', message: '"no_such_thing" is not possible here', reqId: 'z' });

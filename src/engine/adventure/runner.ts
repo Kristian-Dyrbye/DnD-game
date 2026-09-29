@@ -17,6 +17,7 @@ import { applyFlagWrites, evalCondition, timeOfDay, type ConditionContext } from
 import type { Action, Adventure, Check, Outcome, Scene } from './schema';
 import { allScenes } from './validate';
 import { SKILL_ABILITY } from '../rules/basics';
+import type { FlagRegistry } from '../world/flags';
 import { TIME_COSTS } from '../world/clock';
 
 export interface AdventureProgress {
@@ -36,6 +37,8 @@ export interface RunContext {
   adventure: Adventure;
   rng: Rng;
   db?: SrdDatabase;
+  /** Flag types/defaults/bounds (data/adventures/flags.json + adventure docs). */
+  flags?: FlagRegistry;
 }
 
 export interface StepResult {
@@ -80,10 +83,11 @@ export function findScene(adv: Adventure, id: string): Scene | undefined {
   return allScenes(adv).find((s) => s.id === id);
 }
 
-export function conditionContext(state: GameState, progress?: AdventureProgress): ConditionContext {
+export function conditionContext(state: GameState, progress?: AdventureProgress, registry?: FlagRegistry): ConditionContext {
   const weather = (state.extensions.weather as { kind?: string } | undefined)?.kind;
   return {
     flags: state.flags,
+    ...(registry && { defaults: registry.defaults() }),
     timeOfDay: timeOfDay(state.time),
     ...(weather && { weather }),
     reputation: (state.extensions.reputation as Record<string, number> | undefined) ?? {},
@@ -101,9 +105,9 @@ export function startAdventure(ctx: RunContext): StepResult {
 }
 
 /** Scene text for the narrator: the seed plus any variants whose conditions hold, and visible POIs. */
-export function describeScene(ctx: Pick<RunContext, 'state' | 'adventure'>): { name: string; seed: string; pois: { name: string; seed: string }[]; npcs: string[] } {
+export function describeScene(ctx: Pick<RunContext, 'state' | 'adventure' | 'flags'>): { name: string; seed: string; pois: { name: string; seed: string }[]; npcs: string[] } {
   const s = currentScene(ctx);
-  const cc = conditionContext(ctx.state, getProgress(ctx.state));
+  const cc = conditionContext(ctx.state, getProgress(ctx.state), ctx.flags);
   return {
     name: s.name,
     seed: [s.seed, ...s.variants.filter((v) => evalCondition(v.if, cc)).map((v) => v.seed)].join(' '),
@@ -116,7 +120,7 @@ export function availableActions(ctx: RunContext): AvailableAction[] {
   const p = getProgress(ctx.state);
   if (!p || p.ending) return [];
   const s = currentScene(ctx);
-  const cc = conditionContext(ctx.state, p);
+  const cc = conditionContext(ctx.state, p, ctx.flags);
   const open = (a: Action, id: string) => evalCondition(a.if, cc) && !(a.once && p.done.includes(`${s.id}/${id}`));
   const out: AvailableAction[] = [];
   for (const a of s.actions) if (open(a, a.id)) out.push({ id: a.id, label: a.label, kind: 'action', ...(a.check && { check: checkLabel(a.check) }) });
@@ -191,7 +195,7 @@ function cap(s: string): string {
 }
 
 function resolveCheck(ctx: RunContext, c: Check): D20TestResult {
-  const cc = conditionContext(ctx.state, getProgress(ctx.state));
+  const cc = conditionContext(ctx.state, getProgress(ctx.state), ctx.flags);
   const advantage = c.advantageIf.filter((x) => evalCondition(x.if, cc)).map((x) => x.source);
   const disadvantage = c.disadvantageIf.filter((x) => evalCondition(x.if, cc)).map((x) => x.source);
   const opts = { rng: ctx.rng, dc: c.dc, advantage, disadvantage };
@@ -221,7 +225,7 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
   if (depth > 8) throw new AdventureError('Outcome chain too deep (goto/beat loop?)');
   const { state } = ctx;
   if (o.text) result.facts.push(o.text);
-  applyFlagWrites(state.flags, o.flags);
+  applyFlagWrites(state.flags, o.flags, ctx.flags);
   for (const it of o.items) giveItem(state.hero, it.itemId, it.quantity, ctx.db, result);
   if (o.coins) giveCoins(state.hero, o.coins, result);
   if (o.loot) rollLoot(ctx, o.loot, result);
@@ -248,7 +252,7 @@ function fireBeats(ctx: RunContext, result: StepResult, depth = 0): void {
   for (const b of ctx.adventure.beats) {
     if (p.beats.includes(b.id)) continue;
     if (b.scenes.length && !b.scenes.includes(p.sceneId)) continue;
-    if (!evalCondition(b.trigger, conditionContext(ctx.state, p))) continue;
+    if (!evalCondition(b.trigger, conditionContext(ctx.state, p, ctx.flags))) continue;
     p.beats.push(b.id);
     result.facts.push(b.text);
     applyOutcome(ctx, b.outcome, result, depth + 1);

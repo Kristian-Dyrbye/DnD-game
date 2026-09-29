@@ -122,13 +122,28 @@ Conditions can be nested freely:
 
 A flag that has never been set is simply unset, so later arcs can safely read flags from arcs the player never finished.
 
-**Flag naming:**
+**Flag naming.** Every flag belongs to a namespace:
 
-- `arc.<arcId>.<name>` for arc state.
-- `world.<name>` for facts every arc may read.
-- `side.<questId>.<name>` for side quests.
+- `arc.<arcId>.<name>`: arc state, for example `arc.starter.reeve_attitude`.
+- `world.<name>`: facts every later arc may read, for example `world.queen_alive`.
+- `side.<questId>.<name>`: side quests.
+- `adv.<adventureId>.<name>`: tests and demos.
 
-The flag system is finalised in A078.
+Inside an adventure, you can write `~name` for the adventure's own namespace:
+
+- `arc.<arcId>.` when the adventure has an `arcId`.
+- `side.<id>.` for a side quest.
+- `adv.<id>.` otherwise.
+
+The loader resolves `~name` to the full id, so saves and later arcs only ever see absolute ids. Any adventure can read any flag, and that is how later arcs react to earlier ones.
+
+**Flag registry.** `data/adventures/flags.json` declares campaign flags with a `type` (`boolean`, `string` or `number`), a `default`, allowed `values` for strings, and `min`/`max` for numbers.
+
+- An unset flag reads as its default in conditions.
+- `inc` starts counting from the default.
+- Numbers are clamped to their bounds.
+- The validator rejects writes of the wrong type or value.
+- The validator warns about flags that aren't namespaced or aren't documented. A flag counts as documented if it is in the registry or in the adventure's own `flags` list.
 
 ## NPCs
 

@@ -4,6 +4,7 @@
  * narrated (streamed LLM or template). Until combat (A068) exists, encounters auto-resolve as wins.
  */
 import type { SrdDatabase } from '../data/srd';
+import type { FlagRegistry } from '../world/flags';
 import type { ActionPort, GameSession } from '../session/GameSession';
 import { availableActions, getProgress, type AvailableAction, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
 import type { Adventure } from './schema';
@@ -22,6 +23,8 @@ export interface AdventurePortOptions {
   suggester?: (ctx: RunContext, offered: AvailableAction[]) => Promise<SuggestionIdea[]>;
   /** Condenses the story after each scene (the LLM). Without it, the template summary is used. */
   summarizer?: Summarizer;
+  /** Flag types/defaults/bounds. */
+  flags?: FlagRegistry;
 }
 
 /** The ActionPort plus a hook for tests to wait for background suggestion/summary work. */
@@ -37,7 +40,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     const id = getProgress(session.current)?.adventureId ?? defaultId;
     const adventure = adventures.get(id);
     if (!adventure) throw new Error(`Adventure "${id}" is not installed`);
-    return { state: session.current, adventure, rng: session.rng, ...(db && { db }) };
+    return { state: session.current, adventure, rng: session.rng, ...(db && { db }), ...(opts.flags && { flags: opts.flags }) };
   };
 
   const publish = async (session: GameSession, ctx: RunContext, r: StepResult, playerAction?: string): Promise<void> => {

@@ -38,7 +38,7 @@ describe('resolveIntent', () => {
     const r = resolveText(ctx, 'talk to the mayor');
     expect(r.via).toBe('action');
     expect(r.actionId).toBe('talk_mayor');
-    expect(ctx.state.flags['demo.has_key']).toBe(true);
+    expect(ctx.state.flags['adv.millbrook_demo.has_key']).toBe(true);
     expect(r.playerAction).toBe('talk to the mayor');
   });
 
