@@ -23,6 +23,8 @@ import loreJson from '../../data/world/lore.json';
 import { llmNarrator } from './narrator';
 import { TravelEventTableSchema } from '../engine/world/travel';
 import travelEventsJson from '../../data/tables/travel-events.json';
+import { ShopTableSchema } from '../engine/world/shops';
+import shopsJson from '../../data/world/shops.json';
 import { createDefaultRegistry } from '../engine/systems';
 import { regionOfState } from '../engine/adventure/runner';
 import { suggestIdeas } from '../llm/prompts/suggest';
@@ -126,6 +128,7 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
         flags: flagRegistry,
         lore,
         travelEvents: TravelEventTableSchema.parse(travelEventsJson),
+        shops: ShopTableSchema.parse(shopsJson),
         suggester: (ctx, offered) => suggestIdeas(services.llm, gatherNarrationContext(ctx.state, lore, ctx.adventure, srd), offered),
       }) }),
     saves: {

@@ -15,6 +15,11 @@ import { ActionInput } from './ActionInput';
 import { DiceTray } from './DiceTray';
 import { JournalPanel } from './JournalPanel';
 import { WorldMap } from './WorldMap';
+import { InventoryPanel } from './InventoryPanel';
+import { ShopPanel } from './ShopPanel';
+import { getMap } from '../../../engine/world/travel';
+import { shopsAt } from '../../../engine/world/shops';
+import { shops } from '../../data';
 import { PartyPanel } from './PartyPanel';
 import { StoryLog } from './StoryLog';
 
@@ -27,6 +32,10 @@ export function GameScreen() {
   }, []);
   const hintOn = settings.value?.gameplay.objectiveHint ?? false;
   const [journalOpen, setJournalOpen] = useState(false);
+  const [inventoryOpen, setInventoryOpen] = useState(false);
+  const [shopId, setShopId] = useState<string | null>(null);
+  const here = state ? getMap(state)?.current : undefined;
+  const localShops = here ? shopsAt(shops, here) : [];
   const [mapOpen, setMapOpen] = useState(() => typeof location !== 'undefined' && location.hash.endsWith('+map'));
   return (
     <div class="game-screen">
@@ -43,6 +52,14 @@ export function GameScreen() {
           <button type="button" disabled={!state} onClick={() => setJournalOpen(true)}>
             Journal
           </button>
+          <button type="button" disabled={!state} onClick={() => setInventoryOpen(true)}>
+            Inventory
+          </button>
+          {localShops.map((s) => (
+            <button key={s.id} type="button" class="shop-button" onClick={() => setShopId(s.id)}>
+              {s.name}
+            </button>
+          ))}
           <button
             type="button"
             aria-pressed={hintOn}
@@ -80,6 +97,8 @@ export function GameScreen() {
       </main>
       {journalOpen && <JournalPanel onClose={() => setJournalOpen(false)} />}
       {mapOpen && <WorldMap onClose={() => setMapOpen(false)} />}
+      {inventoryOpen && <InventoryPanel onClose={() => setInventoryOpen(false)} />}
+      {shopId && <ShopPanel shopId={shopId} onClose={() => setShopId(null)} />}
       <aside class="game-side">
         <div class="hero-view">{h && <CharacterPreview appearance={h.appearance} size={h.size} height={240} />}</div>
         <DiceTray />

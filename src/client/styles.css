@@ -325,3 +325,15 @@ input[type='color'] { width: 2.2rem; height: 1.8rem; border: 1px solid #4a3f30; 
 .map-side p { margin: 0; }
 .map-legend { list-style: none; padding: 0; margin: auto 0 0; color: #8d8270; }
 @media (max-width: 800px) { .world-map-body { grid-template-columns: 1fr; grid-template-rows: 1fr auto; } .map-side { border-left: none; border-top: 1px solid #3a3226; } }
+
+/* ---------- inventory + shop (A081) ---------- */
+.inventory-body, .shop-body { flex: 1; overflow-y: auto; padding: 0.75rem 1rem; }
+.inventory-body h3 { margin: 0.75rem 0 0.3rem; color: var(--accent); font-size: 1rem; }
+.inventory-list { list-style: none; margin: 0; padding: 0; }
+.inventory-list li { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; padding: 0.35rem 0.5rem; border-bottom: 1px solid #2e271e; }
+.inventory-list li.equipped { background: #2a2419; }
+.item-actions { display: flex; align-items: center; gap: 0.4rem; }
+.item-actions button { padding: 0.2rem 0.6rem; font-size: 0.85rem; }
+.tag-equipped { background: #4a3b1f; color: #f0d7a0; margin-left: 0.4rem; }
+.price { color: #d8c08a; font: 0.9rem system-ui, sans-serif; min-width: 5rem; text-align: right; }
+.shop-button { border-color: #6a5530; }

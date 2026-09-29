@@ -236,3 +236,43 @@ export function haggle(ctx: ShopContext & { rng: Rng }, shopId: string): { ok: f
   s.haggle = { day, success: roll.success === true };
   return { ok: true, roll, success: roll.success === true };
 }
+
+// ---------------------------------------------------------------- views (UI)
+
+export interface ShopView {
+  id: string;
+  name: string;
+  kind: ShopDef['kind'];
+  open: boolean;
+  refuses: boolean;
+  /** Haggled today: undefined = not yet, true/false = the result. */
+  haggled?: boolean;
+  stock: { itemId: string; name: string; qty: number; price: number }[];
+  /** What the shop would pay for each unequipped item the hero carries. */
+  offers: { uid: string; itemId: string; name: string; qty: number; price: number }[];
+}
+
+export function shopsAt(table: ShopTable, locationId: string): ShopDef[] {
+  return table.shops.filter((s) => s.locationId === locationId);
+}
+
+export function shopView(ctx: ShopContext, shopId: string): ShopView | undefined {
+  const def = findShop(ctx, shopId);
+  if (!def) return undefined;
+  const s = shopState(def, ctx);
+  const day = Math.floor(ctx.state.time / MINUTES_PER_DAY);
+  const name = (id: string) => ctx.db.item(id)?.name ?? ctx.db.magicItems.get(id)?.name ?? id;
+  return {
+    id: def.id,
+    name: def.name,
+    kind: def.kind,
+    open: isOpen(def, ctx.state.time),
+    refuses: repMultiplier(def, ctx) === undefined,
+    ...(s.haggle?.day === day && { haggled: s.haggle.success }),
+    stock: s.stock.filter((l) => l.qty > 0).map((l) => ({ itemId: l.itemId, name: name(l.itemId), qty: l.qty, price: buyPrice(def, ctx, l.itemId) ?? 0 })),
+    offers: ctx.state.hero.inventory
+      .filter((i) => !i.equipped)
+      .map((i) => ({ uid: i.uid, itemId: i.itemId, name: name(i.itemId), qty: i.quantity, price: sellPrice(def, ctx, i.itemId) ?? 0 }))
+      .filter((o) => o.price > 0),
+  };
+}

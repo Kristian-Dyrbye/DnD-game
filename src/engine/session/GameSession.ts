@@ -38,6 +38,8 @@ export interface ActionPort {
   begin?(session: GameSession): Promise<void>;
   /** World-map travel to a known lore location. */
   travel?(session: GameSession, to: string, pace: 'slow' | 'normal' | 'fast'): Promise<void>;
+  /** Other game commands (inventory, shops, future systems). Throw to report an error. */
+  command?(session: GameSession, cmd: ExtensionCommand): Promise<void>;
 }
 
 export interface SessionPorts {
@@ -50,6 +52,9 @@ export interface SessionPorts {
 }
 
 export const START_LOCATION = 'Millbrook';
+
+/** Commands handled by ActionPort.command (the extension point for game systems). */
+export type ExtensionCommand = Extract<ClientCommand, { type: 'equip' | 'unequip' | 'shop_open' | 'shop_buy' | 'shop_sell' | 'shop_haggle' }>;
 
 /** A fresh campaign state for a newly created hero. */
 export function newGameState(hero: Character, mode: GameState['mode'], seed: string | number): GameState {
@@ -212,6 +217,17 @@ export class GameSession {
           await this.ports.actions.travel(this, cmd.to, cmd.pace);
           this.emit(this.snapshot());
           this.emit({ type: 'ack', command: cmd.type, ...(reqId && { reqId }) });
+          return;
+        case 'equip':
+        case 'unequip':
+        case 'shop_open':
+        case 'shop_buy':
+        case 'shop_sell':
+        case 'shop_haggle':
+          if (!this.running) return this.fail('No game is running', reqId);
+          if (!this.ports.actions?.command) return this.fail('Not available', reqId);
+          await this.ports.actions.command(this, cmd);
+          this.emit(this.snapshot());
           return;
         case 'journal_save':
         case 'journal_delete':

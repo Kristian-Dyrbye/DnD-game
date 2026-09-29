@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { CharacterSchema } from '../engine/core/creature';
 import type { GameState, LogEntry, RollRecord } from '../engine/session/gameState';
 import type { Journal } from '../engine/session/journal';
+import type { ShopView } from '../engine/world/shops';
 import { SLOT_ID_PATTERN, type SaveMeta } from './save';
 
 const base = { reqId: z.string().max(40).optional() };
@@ -25,6 +26,14 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
   z.object({ ...base, type: z.literal('load'), slot: z.string().regex(SLOT_ID_PATTERN) }),
   /** Travel on the world map to a known location. */
   z.object({ ...base, type: z.literal('travel'), to: z.string().max(60), pace: z.enum(['slow', 'normal', 'fast']).default('normal') }),
+  /** Inventory. */
+  z.object({ ...base, type: z.literal('equip'), uid: z.string().max(20), slot: z.enum(['armor', 'shield', 'main_hand', 'off_hand', 'worn']).optional() }),
+  z.object({ ...base, type: z.literal('unequip'), uid: z.string().max(20) }),
+  /** Shops at the current location. */
+  z.object({ ...base, type: z.literal('shop_open'), shopId: z.string().max(60) }),
+  z.object({ ...base, type: z.literal('shop_buy'), shopId: z.string().max(60), itemId: z.string().max(80), qty: z.number().int().min(1).max(99).default(1) }),
+  z.object({ ...base, type: z.literal('shop_sell'), shopId: z.string().max(60), uid: z.string().max(20), qty: z.number().int().min(1).max(99).default(1) }),
+  z.object({ ...base, type: z.literal('shop_haggle'), shopId: z.string().max(60) }),
   /** Journal: create (no id) or update a page. */
   z.object({ ...base, type: z.literal('journal_save'), page: z.object({ id: z.string().max(12).optional(), title: z.string().max(200), body: z.string().max(25_000) }) }),
   z.object({ ...base, type: z.literal('journal_delete'), id: z.string().max(12) }),
@@ -55,7 +64,9 @@ export type ServerEvent =
   /** Current objective for the optional hint (the client shows it only if the setting is on). */
   | { type: 'objective'; text: string | null }
   /** The journal after a change (also part of every snapshot). `savedId` is the page just saved. */
-  | { type: 'journal'; journal: Journal; savedId?: string };
+  | { type: 'journal'; journal: Journal; savedId?: string }
+  /** A shop's current offer (after shop_open and every trade). */
+  | { type: 'shop'; shop: ShopView };
 
 /** Parses a raw WebSocket message into a command, or returns a player-safe error message. */
 export function parseCommand(raw: string): { ok: true; command: ClientCommand } | { ok: false; error: string; reqId?: string } {

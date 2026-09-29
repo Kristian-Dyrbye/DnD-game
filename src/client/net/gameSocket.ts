@@ -6,6 +6,7 @@
 import { signal } from '@preact/signals';
 import type { GameState, LogEntry, RollRecord } from '../../engine/session/gameState';
 import type { ClientCommand, ServerEvent, SuggestedAction } from '../../shared/protocol';
+import type { ShopView } from '../../engine/world/shops';
 
 export type Connection = 'connecting' | 'open' | 'closed';
 
@@ -19,6 +20,8 @@ export const streaming = signal<{ entryId: number; text: string } | null>(null);
 export const lastError = signal<string | null>(null);
 /** Current objective text (shown only when the objective hint setting is on). */
 export const objective = signal<string | null>(null);
+/** The open shop's offer (server-computed prices). */
+export const shopView = signal<ShopView | null>(null);
 /** The journal page the server just saved (so the editor can select a new page). */
 export const lastSavedPage = signal<{ id: string; at: number } | null>(null);
 
@@ -53,6 +56,9 @@ export function applyEvent(e: ServerEvent): void {
       return;
     case 'objective':
       objective.value = e.text;
+      return;
+    case 'shop':
+      shopView.value = e.shop;
       return;
     case 'journal':
       if (gameState.value) gameState.value = { ...gameState.value, journal: e.journal };

@@ -6,7 +6,9 @@
 import type { SrdDatabase } from '../data/srd';
 import type { FlagRegistry } from '../world/flags';
 import { describeChange } from '../world/factions';
-import { travel, type TravelEventTable } from '../world/travel';
+import { getMap, travel, type TravelEventTable } from '../world/travel';
+import { buy, haggle, sell, shopView, type ShopTable } from '../world/shops';
+import { equipItem, itemName, unequipItem } from '../character/inventory';
 import type { Lore } from '../world/lore';
 import type { ActionPort, GameSession } from '../session/GameSession';
 import { arriveInScene, availableActions, getProgress, leaveScenes, sceneForLocation, type AvailableAction, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
@@ -33,6 +35,8 @@ export interface AdventurePortOptions {
   lore?: Lore;
   /** Random travel events table (data/tables/travel-events.json). */
   travelEvents?: TravelEventTable;
+  /** Shops (data/world/shops.json). */
+  shops?: ShopTable;
 }
 
 /** The ActionPort plus a hook for tests to wait for background suggestion/summary work. */
@@ -161,6 +165,37 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       offer(session, ctx);
       session.timePassed(before);
       session.autosave();
+    },
+    async command(session, cmd) {
+      const hero = session.current.hero;
+      if (cmd.type === 'equip' || cmd.type === 'unequip') {
+        if (!db) throw new Error('Equipment needs the SRD data');
+        const r = cmd.type === 'equip' ? equipItem(hero, cmd.uid, db, cmd.slot) : unequipItem(hero, cmd.uid, db);
+        if (!r.ok) throw new Error(r.error);
+        return;
+      }
+      if (!db || !opts.lore || !opts.shops) throw new Error('Shops are not available');
+      const here = getMap(session.current)?.current;
+      const shop = opts.shops.shops.find((s) => s.id === cmd.shopId);
+      if (!shop || shop.locationId !== here) throw new Error('That shop is not here.');
+      const sctx = { state: session.current, db, lore: opts.lore, table: opts.shops };
+      if (cmd.type === 'shop_buy') {
+        const r = buy(sctx, cmd.shopId, cmd.itemId, cmd.qty);
+        if (!r.ok) throw new Error(r.error);
+        session.addLog('system', `Bought ${cmd.qty}× ${itemName(cmd.itemId, db)} for ${formatCoins(-r.coins)}.`);
+      } else if (cmd.type === 'shop_sell') {
+        const entry = hero.inventory.find((i) => i.uid === cmd.uid);
+        const r = sell(sctx, cmd.shopId, cmd.uid, cmd.qty);
+        if (!r.ok) throw new Error(r.error);
+        session.addLog('system', `Sold ${cmd.qty}× ${entry ? itemName(entry.itemId, db) : 'item'} for ${formatCoins(r.coins)}.`);
+      } else if (cmd.type === 'shop_haggle') {
+        const r = haggle({ ...sctx, rng: session.rng }, cmd.shopId);
+        if (!r.ok) throw new Error(r.error);
+        session.addRoll({ label: r.roll.label, dice: r.roll.d20.rolls, mode: r.roll.mode, modifier: r.roll.total - r.roll.d20.natural, total: r.roll.total, math: r.roll.text, ...(r.roll.success !== undefined && { success: r.roll.success }) });
+        session.addLog('system', r.success ? `${shop.name}: the shopkeeper grudgingly offers better prices today.` : `${shop.name}: the shopkeeper will not budge.`);
+      }
+      const view = shopView(sctx, cmd.shopId);
+      if (view) session.emit({ type: 'shop', shop: view });
     },
     async choose(session, actionId) {
       const ctx = ctxFor(session);
