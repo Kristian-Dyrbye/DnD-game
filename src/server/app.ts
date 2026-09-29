@@ -21,6 +21,7 @@ import { parseIntent } from '../llm/prompts/intent';
 import { LoreSchema } from '../engine/world/lore';
 import loreJson from '../../data/world/lore.json';
 import { llmNarrator } from './narrator';
+import { TtsQueue } from '../tts/queue';
 import { TravelEventTableSchema } from '../engine/world/travel';
 import travelEventsJson from '../../data/tables/travel-events.json';
 import { ShopTableSchema } from '../engine/world/shops';
@@ -142,6 +143,25 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
     ...opts.sessionPorts,
   });
   app.decorate('session', session);
+
+  // Spoken narration: narration/dialogue lines are voiced in the background (never blocking play).
+  const tts = new TtsQueue({ getProvider: () => services.tts, onReady: (entryId) => session.emit({ type: 'tts', entryId }) });
+  app.decorate('tts', tts);
+  session.on((e) => {
+    if (e.type !== 'log' || (e.entry.kind !== 'narration' && e.entry.kind !== 'dialogue')) return;
+    const cfg = settings.get().tts;
+    tts.setEnabled(cfg.enabled && services.tts.name !== 'mock');
+    tts.enqueue({ id: e.entry.id, text: e.entry.text, voice: cfg.narratorVoice });
+  });
+  app.get<{ Params: { id: string } }>('/api/tts/:id', async (req, reply) => {
+    const wav = tts.get(Number.parseInt(req.params.id, 10));
+    if (!wav) return reply.code(404).send({ error: 'No audio for that line' });
+    return reply.type('audio/wav').send(Buffer.from(wav));
+  });
+  app.post('/api/tts/skip', async () => {
+    tts.clear();
+    return { ok: true };
+  });
   let queue: Promise<void> = Promise.resolve();
   app.register(async (scope) => {
     scope.get('/ws', { websocket: true }, (socket) => {
@@ -188,5 +208,6 @@ declare module 'fastify' {
     services: Services;
     saves: SaveStore;
     session: GameSession;
+    tts: TtsQueue;
   }
 }

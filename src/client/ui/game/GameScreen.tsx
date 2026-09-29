@@ -15,6 +15,7 @@ import { ActionInput } from './ActionInput';
 import { DiceTray } from './DiceTray';
 import { JournalPanel } from './JournalPanel';
 import { WorldMap } from './WorldMap';
+import { speaking, ttsPlayer } from '../../audio/ttsPlayer';
 import { InventoryPanel } from './InventoryPanel';
 import { ShopPanel } from './ShopPanel';
 import { getMap } from '../../../engine/world/travel';
@@ -31,6 +32,7 @@ export function GameScreen() {
     void loadSettings();
   }, []);
   const hintOn = settings.value?.gameplay.objectiveHint ?? false;
+  const voiceOn = settings.value?.tts.enabled ?? false;
   const [journalOpen, setJournalOpen] = useState(false);
   const [inventoryOpen, setInventoryOpen] = useState(false);
   const [shopId, setShopId] = useState<string | null>(null);
@@ -68,6 +70,14 @@ export function GameScreen() {
           >
             Hint: {hintOn ? 'on' : 'off'}
           </button>
+          <button type="button" aria-pressed={voiceOn} title="Read the story aloud (Piper voice)" onClick={() => void updateSettings({ tts: { enabled: !voiceOn } })}>
+            Voice: {voiceOn ? 'on' : 'off'}
+          </button>
+          {speaking.value && (
+            <button type="button" onClick={() => ttsPlayer.skip()} title="Stop the narration voice">
+              Skip voice
+            </button>
+          )}
           <button type="button" disabled={!state || connection.value !== 'open'} onClick={() => send({ type: 'save', slot: 'quicksave', name: 'Quick save' })}>
             Quick save
           </button>

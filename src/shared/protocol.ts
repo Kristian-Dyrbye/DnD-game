@@ -66,6 +66,8 @@ export type ServerEvent =
   | { type: 'objective'; text: string | null }
   /** The journal after a change (also part of every snapshot). `savedId` is the page just saved. */
   | { type: 'journal'; journal: Journal; savedId?: string }
+  /** Spoken audio for a log entry is ready at /api/tts/<entryId>.wav (only when TTS is on). */
+  | { type: 'tts'; entryId: number }
   /** Music mood + ambience bed for the current place (the client crossfades). */
   | { type: 'mood'; mood: Mood; ambience: Ambience }
   /** A shop's current offer (after shop_open and every trade). */

@@ -9,6 +9,7 @@ import type { ClientCommand, ServerEvent, SuggestedAction } from '../../shared/p
 import type { ShopView } from '../../engine/world/shops';
 import { audio } from '../audio/AudioManager';
 import { sfxForEvent } from '../audio/audioLogic';
+import { ttsPlayer } from '../audio/ttsPlayer';
 
 export type Connection = 'connecting' | 'open' | 'closed';
 
@@ -38,6 +39,9 @@ export function applyEvent(e: ServerEvent): void {
   switch (e.type) {
     case 'mood':
       audio.setMood(e.mood, e.ambience);
+      return;
+    case 'tts':
+      ttsPlayer.ready(e.entryId);
       return;
     case 'snapshot':
       gameState.value = e.state;

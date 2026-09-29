@@ -2,8 +2,15 @@
 import { signal } from '@preact/signals';
 import type { Settings } from '../../shared/settings';
 import { audio } from '../audio/AudioManager';
+import { ttsPlayer } from '../audio/ttsPlayer';
 
 export const settings = signal<Settings | null>(null);
+
+function applyAudioSettings(s: Settings): void {
+  audio.setVolumes(s.audio);
+  ttsPlayer.setVolume(s.audio.master * s.audio.narration);
+  ttsPlayer.setEnabled(s.tts.enabled);
+}
 
 let loading: Promise<void> | null = null;
 
@@ -12,7 +19,7 @@ export function loadSettings(): Promise<void> {
     .then((r) => r.json() as Promise<Settings>)
     .then((s) => {
       settings.value = s;
-      audio.setVolumes(s.audio);
+      applyAudioSettings(s);
     })
     .catch(() => {
       loading = null; // retry next time
@@ -25,6 +32,6 @@ export async function updateSettings(patch: Record<string, unknown>): Promise<vo
   const res = await fetch('/api/settings', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(patch) });
   if (res.ok) {
     settings.value = (await res.json()) as Settings;
-    audio.setVolumes(settings.value.audio);
+    applyAudioSettings(settings.value);
   }
 }
