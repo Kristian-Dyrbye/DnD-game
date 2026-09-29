@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A011
-- **Notes for next session:** Start with A012. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A012
+- **Notes for next session:** Start with A013. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -31,7 +31,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ### Phase 2 — Rules Engine
 - [done] A011 — RNG + dice | Spec: §4, §8 | Done: seeded serializable RNG, dice notation parser (NdX+M, kh/kl), adv/dis, roll result with math string; tests | Dep: A001
-- [todo] A012 — Core rule types | Spec: §4 | Done: abilities/mods, proficiency by level, skills, damage types, sizes, Creature/Character/Combatant types; tests | Dep: A011
+- [done] A012 — Core rule types | Spec: §4 | Done: abilities/mods, proficiency by level, skills, damage types, sizes, Creature/Character/Combatant types; tests | Dep: A011
 - [todo] A013 — SRD 5.2 data pipeline + schemas | Spec: §4 | Done: decide source (official SRD 5.2 CC-BY-4.0 PDF → scripts/srd-extract, or CC-BY JSON source) and log it; zod schemas for every data/srd file; loader + validator test; CREDITS.md with SRD attribution | Dep: A012
 - [todo] A014 — SRD data: conditions, exhaustion, core tables | Spec: §4 | Done: conditions.json, rules tables (XP/level, proficiency, spell slots full/half/third/pact, multiclass slots, encounter XP budgets, DC guide); validated + spot tests | Dep: A013
 - [todo] A015 — SRD data: equipment | Spec: §4, §11.5 | Done: weapons (with mastery), armor, gear, tools, packs, prices; validated | Dep: A013
@@ -172,6 +172,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A008 — Save system: envelope schema, migration chain (v0 prototype → v1 fixture), SaveStore (atomic, rotating 3 autosaves, corrupt-file listing, slot-id guard), REST /api/saves — `src/shared/save.ts`, `src/engine/session/migrations.ts`, `src/server/saveStore.ts`
 - A009 — Launchers: Setup.bat (Node via winget if missing → check-deps --setup: npm install, build, Ollama via winget prompt, start ollama serve, pull model), Start Game.bat (check-deps --start, starts Ollama if installed, builds if needed, OPEN_BROWSER=1 npm start; exit 3 = already running → just open browser) — `Setup.bat`, `Start Game.bat`, `scripts/check-deps.mjs`, `scripts/check-deps-lib.mjs`
 - A011 — Seeded sfc32 Rng (saveable state), dice notation parser (NdX, kh/kl, +/- terms), roll, diceStats, d20 adv/dis + visible math formatting — `src/engine/core/rng.ts`, `src/engine/core/dice.ts`
+- A012 — Core rule vocabulary + formulas (abilities, 18 skills, damage types, sizes, creature types, 15 conditions, ability mod, PB by level/CR, CR parse) and zod Creature/Character/Combatant schemas — `src/engine/rules/basics.ts`, `src/engine/core/creature.ts`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -204,6 +205,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A009: package.json `allowScripts: {esbuild: false}` silences npm 11's install-script warning (esbuild works via its optional platform package).
 - A009: Server opens the browser itself (OPEN_BROWSER=1) after listen, so the page never loads before the server is up.
 - A011: RNG = sfc32 seeded by cyrb128 string hash; RngState = 4 uint32 stored in saves. Math-line format: `d20: 14 + 5 (Persuasion) = 19 vs DC 15 — Success`; adv/dis: `d20 (adv: 7, 14 → 14) ...`; damage: `2d6+3: [4, 2] + 3 = 9`, dropped dice as ~x~. Uses the real minus sign (−) in display text.
+- A012: Ids are snake_case strings (skills `sleight_of_hand`, classes `fighter`). Creature holds CURRENT state; static rules data is referenced by id (classId, statBlockId). Exhaustion stored as a number 0–6 on the creature, not as an ActiveCondition. hitDice stored per die size ({d10: 3}) for multiclass.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -225,6 +227,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/server/settingsStore.ts` — SettingsStore(userDataDir): get/update, persisted to settings.json; exposed as `app.settings`
 - `src/engine/core/rng.ts` — Rng.fromSeed, next/int/pick/shuffle, getState/setState
 - `src/engine/core/dice.ts` — parseDice, roll, formatRoll, diceStats, resolveRollMode, rollD20, formatD20Test
+- `src/engine/rules/basics.ts` — ABILITIES, SKILL_ABILITY, DAMAGE_TYPES, SIZES, CREATURE_TYPES, CONDITIONS (+ zod enums); abilityModifier, proficiencyBonus(ForCR), proficiencyContribution, parseCR/formatCR, formatModifier, sizeSquares
+- `src/engine/core/creature.ts` — CreatureSchema, CharacterSchema, CombatantSchema, ActiveCondition, Resource, totalLevel
 - `src/shared/save.ts` — SaveMetaSchema, SaveFileSchema, SaveListEntry, SLOT_ID_PATTERN
 - `src/engine/session/migrations.ts` — MIGRATIONS chain + migrateSave(raw) (add a step + fixture test per schema bump)
 - `src/server/saveStore.ts` — SaveStore(dir): list/load/save/autosave/delete; `app.saves`; routes GET/PUT/DELETE /api/saves[/:slot]
