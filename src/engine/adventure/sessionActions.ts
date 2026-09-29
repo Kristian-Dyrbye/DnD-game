@@ -1,15 +1,21 @@
 /**
  * Connects the scene runner to a GameSession (its ActionPort). Until narration (A057), intent
- * parsing (A055) and combat (A068) exist, scene text and fixed facts are logged as-is, free text is
- * matched against action labels/keywords, and encounters are auto-resolved as victories.
+ * resolution (A056) and combat (A068) exist, scene text and fixed facts are logged as-is, free text
+ * only triggers offered actions (via the intent parser), and encounters are auto-resolved as wins.
  */
 import type { SrdDatabase } from '../data/srd';
 import type { ActionPort, GameSession } from '../session/GameSession';
 import { availableActions, describeScene, getProgress, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
 import type { Adventure } from './schema';
-import { allScenes } from './validate';
+import { intentContext, keywordIntent, validateIntent, type Intent, type IntentContext } from './intent';
 
-export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, defaultId: string, db?: SrdDatabase): ActionPort {
+export interface AdventurePortOptions {
+  /** Free text → Intent (the LLM parser on the server). Defaults to the keyword parser. */
+  parseIntent?: (text: string, ictx: IntentContext) => Promise<Intent>;
+}
+
+export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, defaultId: string, db?: SrdDatabase, opts: AdventurePortOptions = {}): ActionPort {
+  const parse = opts.parseIntent ?? (async (text: string, ictx: IntentContext) => keywordIntent(text, ictx));
   const ctxFor = (session: GameSession): RunContext => {
     const id = getProgress(session.current)?.adventureId ?? defaultId;
     const adventure = adventures.get(id);
@@ -75,30 +81,15 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     async say(session, text) {
       session.addLog('player', text);
       const ctx = ctxFor(session);
-      const match = matchFreeText(ctx, text);
-      if (match) run(session, match);
+      const ictx = intentContext(ctx);
+      const v = validateIntent(await parse(text, ictx), ictx);
+      if (v.actionId) run(session, v.actionId);
       else {
         session.addLog('system', 'Nothing obvious comes of that. Try one of the suggested actions.');
         offer(session, ctx);
       }
     },
   };
-}
-
-/** Best available action for free text: most keyword/label word hits (ties → first). */
-export function matchFreeText(ctx: RunContext, text: string): string | undefined {
-  const words = new Set(text.toLowerCase().match(/[a-z']+/g) ?? []);
-  const scenes = allScenes(ctx.adventure);
-  let best: { id: string; score: number } | undefined;
-  for (const a of availableActions(ctx)) {
-    const scene = scenes.find((s) => s.id === ctx.state.location.sceneId);
-    const [poi, sub] = a.id.split('.', 2);
-    const def = a.kind === 'poi' ? scene?.pois.find((p) => p.id === poi)?.actions.find((x) => x.id === sub) : a.kind === 'action' ? scene?.actions.find((x) => x.id === a.id) : undefined;
-    const vocab = [...(def?.keywords ?? []), ...a.label.toLowerCase().split(/\W+/).filter((w) => w.length > 3)];
-    const score = vocab.filter((k) => words.has(k.toLowerCase())).length;
-    if (score > 0 && (!best || score > best.score)) best = { id: a.id, score };
-  }
-  return best?.id;
 }
 
 function formatCoins(cp: number): string {

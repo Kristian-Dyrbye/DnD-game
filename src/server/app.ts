@@ -17,6 +17,7 @@ import { parseCommand } from '../shared/protocol';
 import { adventureActionPort } from '../engine/adventure/sessionActions';
 import { loadSrd } from '../engine/data/srdBundle';
 import { loadAdventures } from './adventures';
+import { parseIntent } from '../llm/prompts/intent';
 
 /** Adventure a new campaign starts with. */
 export const STARTING_ADVENTURE = 'millbrook_demo';
@@ -104,7 +105,7 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   for (const p of problems) app.log.warn({ file: p.file, errors: p.errors }, 'Skipping invalid adventure');
   const defaultAdventure = adventures.has(STARTING_ADVENTURE) ? STARTING_ADVENTURE : [...adventures.keys()][0];
   const session = new GameSession({
-    ...(defaultAdventure && { actions: adventureActionPort(adventures, defaultAdventure, srd) }),
+    ...(defaultAdventure && { actions: adventureActionPort(adventures, defaultAdventure, srd, { parseIntent: async (text, ictx) => (await parseIntent(services.llm, text, ictx)).intent }) }),
     saves: {
       save: (slot, meta, state) => saves.save(slot, meta, state).meta,
       autosave: (meta, state) => saves.autosave(meta, state).meta,

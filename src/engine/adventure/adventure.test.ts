@@ -10,7 +10,7 @@ import { GameSession, newGameState } from '../session/GameSession';
 import { applyFlagWrites, evalCondition, timeOfDay, type ConditionContext } from './conditions';
 import { AdventureError, availableActions, describeScene, getProgress, perform, resolveEncounter, startAdventure, type RunContext } from './runner';
 import type { Adventure } from './schema';
-import { adventureActionPort, matchFreeText } from './sessionActions';
+import { adventureActionPort } from './sessionActions';
 import { validateAdventure } from './validate';
 
 const db = loadSrd();
@@ -176,14 +176,6 @@ describe('scene runner', () => {
     expect(c.state.hero.xp).toBe(100);
     expect(getProgress(c.state)?.ending).toBe('rats_cleared');
     expect(availableActions(c)).toEqual([]);
-  });
-
-  it('matches free text to actions by keywords', () => {
-    const c = ctx();
-    startAdventure(c);
-    expect(matchFreeText(c, 'I go and talk to the mayor')).toBe('talk_mayor');
-    expect(matchFreeText(c, 'read the notice board')).toBe('notice_board.read');
-    expect(matchFreeText(c, 'dance wildly')).toBeUndefined();
   });
 });
 
