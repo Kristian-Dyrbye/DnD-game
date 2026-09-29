@@ -59,15 +59,17 @@ export function edgeSegments(grid: Grid): { x0: number; z0: number; x1: number; 
 }
 
 /**
- * Tokens that get a full character model: characters with an appearance, party first, up to
- * `max` (settings.performance.maxNpcModels); everyone else uses a stand-in.
+ * Tokens that get a full model, up to `max` (settings.performance.maxNpcModels): characters with an
+ * appearance first (party first), then monsters with a stat block; everyone else uses a stand-in.
  */
 export function modelTokens(grid: Grid, creatures: Creatures, sides: Record<string, string>, max: number): Set<string> {
-  const ids = Object.keys(grid.tokens).filter((id) => {
+  const isPc = (id: string) => {
     const c = creatures[id];
     return !!c && c.kind === 'character' && 'appearance' in c && !!(c as { appearance?: unknown }).appearance;
-  });
-  ids.sort((a, b) => (sides[a] === 'party' ? 0 : 1) - (sides[b] === 'party' ? 0 : 1));
+  };
+  const ids = Object.keys(grid.tokens).filter((id) => isPc(id) || !!creatures[id]?.statBlockId);
+  const rank = (id: string) => (isPc(id) ? 0 : 2) + (sides[id] === 'party' ? 0 : 1);
+  ids.sort((a, b) => rank(a) - rank(b));
   return new Set(ids.slice(0, Math.max(0, max)));
 }
 

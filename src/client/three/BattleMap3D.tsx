@@ -2,10 +2,13 @@
  * 3D battle map (spec §10, §12): the same props as the 2D BattleMap, drawn with three.js — ground
  * squares, raised blocking squares, darker difficult ground, walls/doors, overlays (reachable,
  * zones, area preview), a planned path, and tokens. Heroes and companions get their KayKit model
- * (up to settings.performance.maxNpcModels); monsters get side-coloured stand-ins until A089.
+ * and monsters get models from their stat block (monsterVisuals), up to
+ * settings.performance.maxNpcModels; the rest get side-coloured stand-ins.
  * Each token has an HP ring; the active creature and valid targets get rings too. Orbit (drag),
  * zoom (wheel) and pan (right drag) the camera; click a square to act. Rendering follows the fps cap.
  */
+import { monsterVisual } from '../../engine/appearance/monsterVisuals';
+import { buildMonsterModel } from './monsterModel';
 import { equipmentLook, lookKey } from '../../engine/appearance/equipmentVisuals';
 import type { Character } from '../../engine/core/creature';
 import { db } from '../data';
@@ -306,13 +309,17 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
       if (withModels.has(t.id) && !entry) {
         const slot = { loading: true, failed: false, look: lookKey(look) } as { model?: CharacterModel; loading: boolean; failed: boolean; look: string };
         h.models.set(t.id, slot);
-        const appearance = (c as { appearance?: Parameters<typeof buildCharacterModel>[0] }).appearance!;
-        buildCharacterModel(appearance, c.size, look)
+        const building =
+          c.kind === 'character'
+            ? buildCharacterModel((c as Character).appearance, c.size, look)
+            : buildMonsterModel(monsterVisual(c.statBlockId ?? c.id, c.creatureType), c.size);
+        building
           .then((model) => {
             const live = holder.current;
             if (!live || live.models.get(t.id) !== slot) return model.dispose();
             // Fit the figure to its squares (models differ in scale).
-            const box = new THREE.Box3().setFromObject(model.root);
+            model.root.updateMatrixWorld(true); // bones must be posed before measuring (Quaternius rigs are scaled ×100)
+            const box = new THREE.Box3().setFromObject(model.root, true);
             const tall = box.getSize(new THREE.Vector3()).y || 1;
             model.root.scale.multiplyScalar((n * 1.1) / tall);
             model.root.traverse((o) => ((o as THREE.Mesh).castShadow = shadows));
@@ -323,10 +330,10 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
           .catch(() => {
             slot.loading = false;
             slot.failed = true;
-            setMessage('Character models not found (run Setup.bat); showing stand-ins.');
+            setMessage('3D models not found (run Setup.bat); showing stand-ins.');
           });
       }
-      // Stand-in: a coloured pawn scaled to the footprint (monsters until A089, or while a model loads).
+      // Stand-in: a coloured pawn scaled to the footprint (over the model budget, or while a model loads).
       const pawn = new THREE.Mesh(new THREE.CapsuleGeometry(0.22 * n, 0.45 * n, 4, 12), new THREE.MeshStandardMaterial({ color: side, roughness: 0.6, transparent: down, opacity: down ? 0.45 : 1 }));
       pawn.position.set(at.x, down ? 0.25 * n : 0.45 * n, at.z);
       if (down) pawn.rotation.z = Math.PI / 2;
