@@ -53,8 +53,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A031 — Conditions engine + exhaustion 2024
 - [done] A032 — Death saves, 0 HP, resting
 - [done] A033 — Effect system
-- [todo] A034 — Spellcasting engine | Spec: §4 | Done: slots, save DC/attack, upcast, concentration (DC max(10, dmg/2)), rituals, abstract components, pact magic; tests | Dep: A033, A021
-- [todo] A034a — Spell effects pass | Spec: §4 | Done: hand-written effects/hooks in data/srd/overrides/spells.json for the ~40 most-used combat spells that have no auto effects (magic_missile, bless, shield, ice_storm, counterspell, guiding_bolt, spiritual_weapon, etc.); cantrip damage scaling by character level (5/11/17) in the engine; tests | Dep: A034
+- [in-progress] A034 — Spellcasting engine | Spec: §4 | Done: slots, save DC/attack, upcast, concentration (DC max(10, dmg/2)), rituals, abstract components, pact magic; tests | Dep: A033, A021
+- [in-progress (helper)] A034a — Spell effects pass | Spec: §4 | Done: hand-written effects/hooks in data/srd/overrides/spells.json for the ~40 most-used combat spells that have no auto effects (magic_missile, bless, shield, ice_storm, counterspell, guiding_bolt, spiritual_weapon, etc.); tests (cantrip scaling moved into A034) | Dep: A033
 - [todo] A035 — Character builder + derived stats | Spec: §4, §5 | Done: build from class/species/background/scores; AC (armor, shield, unarmored), HP, speed, proficiencies, attacks; tests | Dep: A015, A016, A018
 - [todo] A036 — Leveling + feats | Spec: §4 | Done: XP thresholds, level-up (HP, features, subclass, ASI/feat, epic boon), feat effects via hooks; tests | Dep: A035, A017, A020
 - [todo] A037 — Multiclassing | Spec: §4 | Done: prereqs, proficiencies gained, multiclass slot table, pact magic separate; tests | Dep: A036
@@ -99,7 +99,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [todo] A070 — 3D battle map | Spec: §10, §12 | Done: three.js grid with models, orbit/zoom camera, 2D/3D toggle | Dep: A065, A049
 
 ### Phase 6 — Exploration
-- [in-progress (helper)] A071 — World lore | Spec: §7.1 | Done: data/world/lore.json (continent, 3 regions with tone profiles, history, factions, gods, key locations); schema + test | Dep: A013
+- [done] A071 — World lore
 - [todo] A072 — Clock + day/night | Spec: §11.3 | Done: clock advanced by travel/explore/rest/downtime; System Registry with onTimeAdvance; tests | Dep: A050
 - [todo] A073 — Weather | Spec: §11.4 | Done: region/season tables, mechanical effects (travel, obscurement, wind ranged penalty, fire/cold); tests | Dep: A072, A071
 - [todo] A074 — Travel + world map engine | Spec: §11.1 | Done: locations, routes, discovery, pace/travel time, random travel events by region/weather; tests | Dep: A073
@@ -169,6 +169,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A031 — Conditions engine: effectiveConditions (implied + exhaustion), apply/remove (immunities incl. Petrified→Poisoned, same-source dedupe keeps longer duration, Unconscious ends → Prone), tick durations, end-of-turn saves, attack/check/save/initiative modes from data modifiers (source rules for grappled/frightened/charmed/invisible), canAct, effectiveSpeed (speedZero, −5/exhaustion), crawl, resistAll, mayHarm, exhaustion levels + death at 6 — `src/engine/rules/conditions.ts`
 - A032 — Death & rest: resolveDamageAtZero (monster death, unconscious, massive damage, failures at 0 HP incl. crit = 2), rollDeathSave (10+, nat 1/20, stable, dead, exhaustion applies), stabilize, healFromZero; shortRest (hit dice die+Con min 1), longRest (all HP + all hit dice, temp HP gone, −1 exhaustion), rechargeResources, hitDicePool; `dead` flag on Creature — `src/engine/rules/death.ts`, `src/engine/rules/rest.ts`
 - A033 — Effect executor: createEffectContext + executeEffects for damage (shared roll per effect, half on save), save (per target, condition-aware modes), attack (spell attack, crit doubles), heal (+spell mod, upcast), temp HP, condition (duration → rounds, source id), area, hooks (unknown = logged); upcastDice, durationRounds; onDamaged callback for concentration — `src/engine/rules/effects.ts`
+- A071 (helper) — World lore: continent Orrimar; regions Aurelmark (high fantasy), the Gloamfen (dark), Brinescatter Isles (swashbuckling) with narrator tone profiles + climate; 9 history events, 8 gods, 9 factions (symmetric relationships; villain cult = Hollow Choir, leader 'The Cantor', seeks 7 Tooth relics to unseal the Maw), 21 locations with mapPos (1000×700), 27 routes, calendar (12 months, 7 weekdays, 30-day months, year 1247 AR); helpers regionById/locationById/factionById/regionOfLocation/routesFrom/factionRelation — `src/engine/world/lore.ts`, `data/world/lore.json`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -223,6 +224,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A031: Condition functions take an optional ConditionTable (defaults to loadSrd().conditions). Mode helpers return {advantage[], disadvantage[], autoFail?} that spread straight into check/save options. Frightened 'source visible' defaults to true unless the caller says otherwise (LOS comes in A060).
 - A032: Creature has `dead: boolean`. Death saves apply exhaustion (they are D20 Tests). Heroic-mode defeat is decided by the session (A068), the rules module always reports real death. Long rest also resets death saves.
 - A033: EffectContext keeps a Map of creatures updated in place + a text log; targets are pre-selected (AoE geometry lives in combat/aoe). Condition sourceId convention for spells: `<casterId>:<spellId>` so ending concentration removes them. Durations: 1 minute = 10 rounds.
+- A071: Starting location = Millbrook (tag `starting_location`, Aurelmark). Routes stored once (undirected). Faction defaultReputation 0 except Hollow Choir −60, Lantern Wardens −10. region.mapBounds boxes contain their locations.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -252,6 +254,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/rules/death.ts` — resolveDamageAtZero, rollDeathSave, stabilize, healFromZero, needsDeathSave
 - `src/engine/rules/rest.ts` — shortRest, longRest, rechargeResources, hitDicePool, restoreCreature
 - `src/engine/rules/effects.ts` — createEffectContext, executeEffects, upcastDice, durationRounds (HookFn registry)
+- `src/engine/world/lore.ts` + `data/world/lore.json` — world lore schema/data + lookup helpers (MAP_WIDTH/HEIGHT, WEATHER_KINDS, SEASONS...)
 - `src/engine/data/common.ts` — IdSchema, DiceSchema, CostSchema(CP), DamageSchema, AreaSchema, DurationSchema, EffectSchema/Effect, toId
 - `src/engine/data/schemas.ts` — schemas for every data/srd file + RulesTablesSchema; SRD_FILES registry; record types
 - `src/engine/data/srd.ts` — validateSrdFile, SrdDatabase (maps by id, item(), spellsForClass)
