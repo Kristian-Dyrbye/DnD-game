@@ -9,6 +9,7 @@ import { ABILITIES, type Ability, type AbilityScores, type Skill } from '../rule
 import { validateBuild, type CharacterBuildInput } from './builder';
 import { scoreProblems } from './abilityScores';
 import { weaponMasteryCount } from './featureLevels';
+import { defaultAppearanceFor, type Appearance } from '../appearance/appearance';
 
 export const CREATOR_STEPS = ['class', 'background', 'species', 'abilities', 'skills', 'equipment', 'spells', 'appearance', 'identity', 'difficulty', 'review'] as const;
 export type CreatorStep = (typeof CREATOR_STEPS)[number];
@@ -29,14 +30,7 @@ export const STEP_LABELS: Record<CreatorStep, string> = {
 
 export type AbilityMethod = 'standard_array' | 'point_buy' | 'roll';
 
-export interface Appearance {
-  body: string;
-  face: string;
-  hair: string;
-  skinTone: string;
-  primaryColor: string;
-  secondaryColor: string;
-}
+export type { Appearance };
 
 export interface CreatorState {
   step: CreatorStep;
@@ -69,15 +63,8 @@ export interface CreatorState {
   difficulty?: 'heroic' | 'hardcore';
 }
 
-/** Starting look; the appearance step (A049) edits it. */
-export const DEFAULT_APPEARANCE: Appearance = {
-  body: 'average',
-  face: 'face_1',
-  hair: 'short',
-  skinTone: '#c68c59',
-  primaryColor: '#7a2e2e',
-  secondaryColor: '#c8a15a',
-};
+/** Starting look; the appearance step edits it (chooseClass resets it to the class default). */
+export const DEFAULT_APPEARANCE: Appearance = defaultAppearanceFor(undefined);
 
 export function newCreatorState(): CreatorState {
   return {
@@ -108,7 +95,7 @@ export function stepsFor(s: CreatorState, db: SrdDatabase): CreatorStep[] {
 /** Changing an earlier choice clears the later choices that depended on it. */
 export function chooseClass(s: CreatorState, classId: string): CreatorState {
   if (s.classId === classId) return s;
-  return { ...s, classId, classSkills: [], expertise: [], classEquipment: undefined, weaponMasteries: [], choices: {}, cantrips: [], preparedSpells: [] } as CreatorState;
+  return { ...s, classId, classSkills: [], expertise: [], classEquipment: undefined, weaponMasteries: [], choices: {}, cantrips: [], preparedSpells: [], appearance: { ...defaultAppearanceFor(classId), skinTone: s.appearance?.skinTone ?? DEFAULT_APPEARANCE.skinTone } } as CreatorState;
 }
 
 export function chooseBackground(s: CreatorState, backgroundId: string): CreatorState {
@@ -302,5 +289,6 @@ export function toBuildInput(s: CreatorState, id = 'hero'): CharacterBuildInput 
     cantrips: s.cantrips,
     preparedSpells: s.preparedSpells,
     personality: s.personality,
+    ...(s.appearance && { appearance: s.appearance }),
   };
 }

@@ -202,3 +202,9 @@ fieldset + fieldset { margin-top: 1rem; }
 .vitals span, .abilities span { font-size: 0.75rem; color: #8d8270; }
 .vitals strong, .abilities strong { font-size: 1.4rem; color: var(--accent); }
 .backstory { margin: 1rem 0 0; padding: 0.75rem 1rem; border-left: 3px solid var(--accent); background: #211c16; font-style: italic; max-width: 760px; }
+.character-preview { position: relative; border: 1px solid #3a3226; border-radius: 8px; background: radial-gradient(circle at 50% 40%, #2c251c, #16130f); overflow: hidden; cursor: grab; }
+.character-preview canvas { display: block; }
+.preview-error { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 1rem; text-align: center; color: #8d8270; font-size: 0.85rem; }
+.swatch { width: 1.8rem; height: 1.8rem; border-radius: 50%; padding: 0; border: 2px solid #4a3f30; }
+.swatch.selected { border-color: var(--accent); box-shadow: 0 0 0 2px #16130f inset; }
+input[type='color'] { width: 2.2rem; height: 1.8rem; border: 1px solid #4a3f30; background: none; padding: 0; cursor: pointer; }

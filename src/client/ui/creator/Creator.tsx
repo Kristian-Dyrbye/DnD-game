@@ -16,6 +16,9 @@ import { SpellsStep } from './SpellsStep';
 import { IdentityStep } from './IdentityStep';
 import { DifficultyStep } from './DifficultyStep';
 import { ReviewStep } from './ReviewStep';
+import { AppearanceStep } from './AppearanceStep';
+import { CharacterPreview } from '../../three/CharacterPreview';
+import { defaultAppearanceFor } from '../../../engine/appearance/appearance';
 
 const STEP_COMPONENTS: Partial<Record<CreatorStep, ComponentType>> = {
   class: ClassStep,
@@ -25,6 +28,7 @@ const STEP_COMPONENTS: Partial<Record<CreatorStep, ComponentType>> = {
   skills: SkillsStep,
   equipment: EquipmentStep,
   spells: SpellsStep,
+  appearance: AppearanceStep,
   identity: IdentityStep,
   difficulty: DifficultyStep,
   review: ReviewStep,
@@ -46,9 +50,7 @@ function Summary() {
   const sp = s.speciesId ? db.species.get(s.speciesId) : undefined;
   return (
     <aside class="creator-summary" aria-label="Character summary">
-      <div class="preview-slot" aria-hidden="true">
-        <span>3D preview</span>
-      </div>
+      <CharacterPreview appearance={s.appearance ?? defaultAppearanceFor(s.classId)} size={s.size ?? sp?.sizes[0] ?? 'medium'} />
       <h3>{s.name.trim() || 'Unnamed hero'}</h3>
       <dl>
         <dt>Class</dt>

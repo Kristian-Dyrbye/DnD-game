@@ -7,7 +7,8 @@ import type { Rng } from '../core/rng';
 import type { SrdDatabase } from '../data/srd';
 import type { Skill } from '../rules/basics';
 import { STANDARD_ARRAY, suggestAssignment, suggestBackgroundBonus } from './abilityScores';
-import { DEFAULT_APPEARANCE, creationChoices, newCreatorState, setChoiceValues, spellCounts, type CreatorState } from './creator';
+import { defaultAppearanceFor } from '../appearance/appearance';
+import { creationChoices, newCreatorState, setChoiceValues, spellCounts, type CreatorState } from './creator';
 
 interface Plan {
   background: string;
@@ -70,7 +71,7 @@ export function quickBuild(classId: string, db: SrdDatabase, rng: Rng): CreatorS
     backgroundBonus: suggestBackgroundBonus(bg.abilityScores, cls.primaryAbilities, baseScores),
     classEquipment: 0,
     backgroundEquipment: 'a',
-    appearance: { ...DEFAULT_APPEARANCE },
+    appearance: defaultAppearanceFor(classId),
     difficulty: 'heroic',
   };
   // Class skills: the first ones not already granted by the background.

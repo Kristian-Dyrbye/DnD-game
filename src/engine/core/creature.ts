@@ -14,6 +14,7 @@ import {
   SizeSchema,
   SkillSchema,
 } from '../rules/basics';
+import { AppearanceSchema } from '../appearance/appearance';
 
 export const SpeedSchema = z.object({
   walk: z.number().int().min(0),
@@ -200,6 +201,7 @@ export const CharacterSchema = CreatureSchema.extend({
   /** Chosen class options (fighting style feat id, metamagic, invocations...). */
   choices: z.record(z.string(), z.array(z.string())).default({}),
   personality: z.object({ traits: z.string(), ideals: z.string(), bonds: z.string(), flaws: z.string(), backstory: z.string() }).partial().default({}),
+  appearance: AppearanceSchema.prefault({}),
 });
 export type Character = z.infer<typeof CharacterSchema>;
 

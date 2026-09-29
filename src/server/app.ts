@@ -19,6 +19,8 @@ export interface AppOptions {
   clientDir?: string;
   /** Folder for settings.json (and later other per-user data). Defaults to <cwd>/userdata. */
   userDataDir?: string;
+  /** Folder with downloaded models/audio (served at /assets/). Defaults to <cwd>/assets. */
+  assetsDir?: string;
   /** Folder for save files. Defaults to <cwd>/saves. */
   savesDir?: string;
   /** Project root, used to resolve relative tool paths (Piper, voices). Defaults to cwd. */
@@ -97,6 +99,15 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
       });
     });
   });
+
+  // Downloaded 3D models, music and SFX (only these sub-folders; voices stay server-side for Piper).
+  const assetsDir = opts.assetsDir ?? path.join(process.cwd(), 'assets');
+  for (const sub of ['models', 'audio']) {
+    const dir = path.join(assetsDir, sub);
+    if (fs.existsSync(dir)) {
+      await app.register(fastifyStatic, { root: dir, prefix: `/assets/${sub}/`, decorateReply: false });
+    }
+  }
 
   const clientDir = opts.clientDir;
   if (clientDir && fs.existsSync(path.join(clientDir, 'index.html'))) {

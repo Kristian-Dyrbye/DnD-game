@@ -10,6 +10,7 @@ export default defineConfig({
     // During `npm run dev`, forward API and game-channel traffic to the Fastify server (npm run dev:server).
     proxy: {
       '/api': 'http://127.0.0.1:3210',
+      '/assets': 'http://127.0.0.1:3210',
       '/ws': { target: 'ws://127.0.0.1:3210', ws: true },
     },
   },

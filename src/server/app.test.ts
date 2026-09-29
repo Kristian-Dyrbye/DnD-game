@@ -60,3 +60,23 @@ describe('server app', () => {
     }
   });
 });
+
+describe('asset serving', () => {
+  it('serves files under /assets/models and /assets/audio only', async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'dnd-assets-'));
+    fs.mkdirSync(path.join(dir, 'models', 'characters'), { recursive: true });
+    fs.writeFileSync(path.join(dir, 'models', 'characters', 'x.glb'), 'glb');
+    fs.mkdirSync(path.join(dir, 'voices'), { recursive: true });
+    fs.writeFileSync(path.join(dir, 'voices', 'v.onnx'), 'secret');
+    const a = await buildApp({ assetsDir: dir, userDataDir: dir });
+    try {
+      const ok = await a.inject({ method: 'GET', url: '/assets/models/characters/x.glb' });
+      expect(ok.statusCode).toBe(200);
+      expect(ok.body).toBe('glb');
+      expect((await a.inject({ method: 'GET', url: '/assets/voices/v.onnx' })).statusCode).toBe(404);
+    } finally {
+      await a.close();
+      fs.rmSync(dir, { recursive: true, force: true });
+    }
+  });
+});

@@ -4,9 +4,9 @@
 
 ## Status
 - **State:** IN PROGRESS
-- **Current phase:** 3 (Character Creation)
-- **Last completed assignment:** A047
-- **Notes for next session:** Start with A049 (3D preview + appearance; A048 assets done — run `node scripts/assets-fetch.mjs` first). A042c (spell hooks 3) is with a helper. Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Current phase:** 3 → 4 (Character Creation nearly done; A046b left)
+- **Last completed assignment:** A049
+- **Notes for next session:** Start with A046b (origin feat choices), then A050 (Phase 4: GameSession + protocol). Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -77,9 +77,10 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A046 — Skills, equipment, spells steps
 - [done] A047 — Identity, backstory, difficulty, Quick Build
 - [done] A048 — 3D asset research + import
-- [todo] A049 — 3D preview + appearance customization | Spec: §5, §12 | Done: three.js viewer in creator (rotate), body/face/hair/skin/colors saved to character; build passes | Dep: A048, A043
+- [done] A049 — 3D preview + appearance customization
 
 ### Phase 4 — Narration Loop
+- [todo] A046b — Origin feat choices in the creator | Spec: §5 | Done: Magic Initiate (background feat option list: 2 cantrips + 1 level-1 spell, ability choice) and Human Versatile feats (Skilled: 3 skills/tools; Magic Initiate list choice) picked in the creator and applied via applyFeat-style logic in buildCharacter; tests | Dep: A047
 - [todo] A050 — GameSession + WebSocket protocol | Spec: §3, §8 | Done: shared command/event types, GameSession.handle, state snapshots, ws wiring; tests | Dep: A002, A035
 - [todo] A051 — Adventure schema v1 + scene runner | Spec: §7.3 | Done: zod schema (chapters, scenes, POIs, exits, conditions, checks, NPCs, encounters, beats, loot, flags); runner moves between scenes; tiny test adventure; ADVENTURE_FORMAT.md v1; tests | Dep: A050
 - [todo] A052 — Main screen layout | Spec: §8 | Done: story log, party panel, 3D view slot, map button, dice tray slot, input area; build passes | Dep: A050
@@ -198,6 +199,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 - A047 — Quick Build (curated background/species/lineage/picks/spells per class, Standard Array to primaries, suggested bg bonus, random species name; every class builds valid) + DEFAULT_APPEARANCE; backstory prompt + template fallback + POST /api/llm/backstory (mock → template); UI: IdentityStep (name + random, traits/ideals/bonds/flaws, backstory + Suggest), DifficultyStep (Heroic/Hardcore), ReviewStep (engine-built sheet: vitals, abilities, skills, attacks, grouped gear, spells, feats, backstory), Begin adventure → hero signal + game placeholder; `#quickbuild-<class>` test URL; item name helpers — `src/engine/character/quickBuild.ts`, `src/llm/prompts/backstory.ts`, `src/client/ui/creator/{Identity,Difficulty,Review}Step.tsx`
 
+- A049 — 3D preview + appearance: AppearanceSchema on Character (outfit, head, build, skinTone, primaryColor, showHeadgear/Cape) + defaultAppearanceFor(class), sizeScale, buildWidth; server serves assets/models + assets/audio at /assets/*; client three.js 0.186: cached GLTF loader, buildCharacterModel (KayKit parts, head swap re-bound to skeleton, skin recolour of atlas pixels, cape/headgear tint, build/size scale, Idle animation), CharacterPreview (orbit, auto-frame, error when models missing), AppearanceStep — `src/engine/appearance/appearance.ts`, `src/client/three/*`, `src/client/ui/creator/AppearanceStep.tsx`
+
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
 - Infra decisions (A001–A012, condensed): TS 7 native tsc, Vite 8, Vitest 5, Preact 10; strict tsconfig w/ noUncheckedIndexedAccess + verbatimModuleSyntax, bundler resolution (no .js suffixes); server = tsx, 127.0.0.1:3210 (PORT env), opens browser itself (OPEN_BROWSER=1); zod 4 (.prefault({}) for nested defaults); settings in userdata/settings.json (salvage bad fields); LLM via injectable fetch, think:false only for reasoning models, keep_alive idle/60m, every call tagged with `task`; structured calls retry once (not when unreachable) then typed fallback; Piper spawned per utterance (--output_raw → WAV); providers in app.services (rebuilt on settings change); saves = {schemaVersion, meta, state} + migration chain, 3 rotating autosaves, slot-id regex; check-deps.mjs plain JS (DEFAULT_MODEL/GAME_PORT synced by test), allowScripts esbuild:false; RNG sfc32+cyrb128 (state in saves); math line format `d20: 14 + 5 (Persuasion) = 19 vs DC 15 — Success` with real minus sign; snake_case ids; Creature = current state, static data by id; exhaustion numeric; hit dice per die size.
@@ -254,6 +257,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A046: Creator stores weapon masteries in state.weaponMasteries, rogue expertise in state.expertise, all other class picks in state.choices[key] (fighting_style, divine_order, primal_order, eldritch_invocation, tool_proficiencies).
 - A096: Lessac (old default narrator) and voices fine-tuned from it are research-only → not shipped. ryan/hfc voices are CC BY-NC-SA → rejected. Only public-domain voices are used.
 - A047: Heroic is the default difficulty. The hero is stored client-side in `hero` until the GameSession exists (A050 moves it to the server). Backstory homeland hint = Millbrook (starting town).
+- A049: Weapons/shields in the KayKit files are hidden for now (A088 equipment attach will show the right ones). Skin recolour is a heuristic (warm mid-saturation pixels) on a copy of the texture atlas — revisit if it tints leather. Client bundle is now 2.3 MB (521 KB gz) with three.js + SRD data (code-split in A112).
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -268,6 +272,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `package.json` — scripts: dev, build, preview, test, test:watch, typecheck
 - `tsconfig.json` — strict TS config for all of src/tests/scripts
 - `vite.config.ts` — Vite (client) + Vitest config (tests: src/**/*.test.ts(x), tests/**/*.test.ts)
+- `src/client/three/` — loader.ts (GLTF cache, outfit files/mesh names), characterModel.ts (buildCharacterModel), CharacterPreview.tsx
 - `src/client/` — index.html, main.tsx, styles.css, data.ts (db), ui/App.tsx (screens), ui/state.ts (signals), ui/creator/ (Creator shell + step components)
 - `src/server/app.ts` — buildApp(opts): Fastify app factory (REST, /ws, static). Tests use inject()/injectWS()
 - `src/server/main.ts` — entry; serves dist/client on 127.0.0.1:3210
@@ -355,6 +360,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - TS strict + zod: a fallback lambda's return type widens enums to string; annotate it (`(e): T => ...`).
 - In .bat files escape `&` as `^&` (even in `title`). Edit .bat files with python (read bytes, normalize to CRLF); Git Bash `sed -i` mangles CRLF.
 - Never add `2>/dev/null` to `git add` with a path list: one missing/deleted path makes the whole add fail silently. Check `git status` after committing.
+- Headless WebGL screenshots work with `--use-angle=swiftshader --enable-unsafe-swiftshader` and `--virtual-time-budget=8000`.
 - UI screenshots: build, run the server on a spare port, then `msedge.exe --headless=new --disable-gpu --window-size=1400,900 --virtual-time-budget=4000 --screenshot=<png> "http://127.0.0.1:<port>/#creator"` and Read the PNG.
 - Testing .bat from the PowerShell tool: native commands don't follow Push-Location; call `cmd /c "`"<absolute path>`""`. To dry-run Start Game.bat, copy it with `call npm start` replaced by an echo.
 - npm 11 blocks install scripts by default (`allow-scripts` warning for esbuild). Ignore it: tsx/vite work via esbuild's optional platform package. Don't run approve-scripts unless something breaks.

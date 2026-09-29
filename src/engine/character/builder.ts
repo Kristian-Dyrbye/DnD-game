@@ -58,6 +58,7 @@ export interface CharacterBuildInput {
   preparedSpells?: string[];
   languages?: string[];
   personality?: Character['personality'];
+  appearance?: Character['appearance'];
 }
 
 export class BuildError extends Error {
@@ -248,6 +249,7 @@ export function buildCharacter(input: CharacterBuildInput, db: SrdDatabase): Cha
     },
     choices: input.choices ?? {},
     ...(input.personality && { personality: input.personality }),
+    ...(input.appearance && { appearance: input.appearance }),
     ...(spellcasting && { spellcasting }),
   });
 

@@ -79,7 +79,11 @@ export function ReviewStep() {
             {attacks.map((a) => (
               <li key={a!.uid}>
                 {a!.name}: {formatModifier(a!.toHit)} to hit, {a!.damage[0]!.dice}
-                {formatModifier(a!.damageModifiers.reduce((x, m) => x + m.value, 0))} {a!.damage[0]!.type}
+                {(() => {
+                  const mod = a!.damageModifiers.reduce((x, m) => x + m.value, 0);
+                  return mod ? formatModifier(mod) : '';
+                })()}{' '}
+                {a!.damage[0]!.type}
                 {a!.mastery ? ` · ${a!.mastery[0]!.toUpperCase()}${a!.mastery.slice(1)}` : ''}
               </li>
             ))}
