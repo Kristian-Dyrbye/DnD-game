@@ -9,10 +9,13 @@ import Fastify, { type FastifyInstance } from 'fastify';
 import fastifyStatic from '@fastify/static';
 import fastifyWebsocket from '@fastify/websocket';
 import { GAME_VERSION } from '../shared/version';
+import { SettingsStore } from './settingsStore';
 
 export interface AppOptions {
   /** Absolute path to the built client (dist/client). Static serving is skipped if it doesn't exist. */
   clientDir?: string;
+  /** Folder for settings.json (and later other per-user data). Defaults to <cwd>/userdata. */
+  userDataDir?: string;
   logger?: boolean;
 }
 
@@ -22,6 +25,15 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   await app.register(fastifyWebsocket);
 
   app.get('/api/health', async () => ({ ok: true, version: GAME_VERSION }));
+
+  const settings = new SettingsStore(opts.userDataDir ?? path.join(process.cwd(), 'userdata'));
+  app.decorate('settings', settings);
+  app.get('/api/settings', async () => settings.get());
+  app.put('/api/settings', async (req, reply) => {
+    const res = settings.update(req.body);
+    if (!res.ok) return reply.code(400).send({ error: res.error });
+    return res.settings;
+  });
 
   // Game channel. For now it echoes JSON messages back; GameSession wiring comes in A050.
   app.register(async (scope) => {
@@ -52,4 +64,10 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   }
 
   return app;
+}
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    settings: SettingsStore;
+  }
 }
