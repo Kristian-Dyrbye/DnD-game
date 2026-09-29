@@ -216,6 +216,8 @@ export const EncounterSchema = z
     terrain: z.array(z.string()).default([]),
     /** Scale by party: add/remove monsters to hit this difficulty (A068). */
     scaling: z.object({ target: z.enum(['low', 'moderate', 'high']), pool: z.array(z.string()).default([]) }).optional(),
+    /** Monster ids never trimmed when scaling to a small party (default: the most expensive monster). */
+    bosses: z.array(z.string()).default([]),
     canFlee: z.boolean().default(true),
     win: OutcomeSchema.prefault({}),
     lose: OutcomeSchema.prefault({}),

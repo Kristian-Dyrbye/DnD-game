@@ -155,7 +155,7 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   const lore = LoreSchema.parse(loreJson);
   const adventuresDir = opts.adventuresDir ?? path.join(opts.rootDir ?? process.cwd(), 'data', 'adventures');
   const flagRegistry = loadFlagRegistry(adventuresDir);
-  const { adventures, problems } = loadAdventures(adventuresDir, srd, flagRegistry);
+  const { adventures, problems } = loadAdventures(adventuresDir, srd, flagRegistry, CompanionRosterSchema.parse(companionsJson));
   for (const p of problems) app.log.warn({ file: p.file, errors: p.errors }, 'Skipping invalid adventure');
   const defaultAdventure = adventures.has(STARTING_ADVENTURE) ? STARTING_ADVENTURE : [...adventures.keys()][0];
   const session = new GameSession({

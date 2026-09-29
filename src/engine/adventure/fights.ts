@@ -13,10 +13,20 @@ import { getMap } from '../world/travel';
 import type { Lore } from '../world/lore';
 import type { FlagRegistry } from '../world/flags';
 import type { Rng } from '../core/rng';
+import type { AdventureEncounter } from './schema';
 import { applyDefeat, pickDefeatOutcome, recordFallen, type DefeatResult, type DefeatTable } from './defeat';
 import { getProgress, resolveEncounter, type RunContext, type StepResult } from './runner';
 import { scaleMonsters } from './encounters';
 import { playerControlled } from '../party/companions';
+
+/** Bosses of an encounter: authored `bosses`, else its single most expensive monster type (if it outranks the rest). */
+export function bossesOf(def: AdventureEncounter, db: SrdDatabase): string[] {
+  if (def.bosses.length) return def.bosses;
+  const xp = (id: string) => db.monsters.get(id)?.xp ?? 0;
+  const sorted = [...def.monsters].sort((a, b) => xp(b.id) - xp(a.id));
+  const top = sorted[0];
+  return top && sorted.length > 1 && xp(top.id) > xp(sorted[1]!.id) ? [top.id] : [];
+}
 
 export interface ActiveFight {
   adventureId: string;
@@ -35,7 +45,7 @@ export function startFight(ctx: RunContext, encounterId: string, rng: Rng, db: S
   const cctx: CombatContext = { rng, db };
   // Scale to the real party with SRD budgets (authored lists assume a party of four).
   const party = [ctx.state.hero, ...ctx.state.companions].filter((c) => !c.dead);
-  const monsters = db.tables ? scaleMonsters(def.monsters, party.map((c) => c.classes.reduce((s, x) => s + x.level, 0)), db, db.tables, { pool: def.scaling?.pool ?? [] }) : def.monsters;
+  const monsters = db.tables ? scaleMonsters(def.monsters, party.map((c) => c.classes.reduce((s, x) => s + x.level, 0)), db, db.tables, { pool: def.scaling?.pool ?? [], bossIds: bossesOf(def, db) }) : def.monsters;
   const enc = setupEncounter({ hero: ctx.state.hero, companions: ctx.state.companions, playerControlled: playerControlled(ctx.state), monsters, db }, cctx);
   const fight: ActiveFight = { adventureId: ctx.adventure.id, encounterId, enc };
   ctx.state.extensions.combat = fight;

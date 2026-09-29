@@ -115,6 +115,29 @@ export function recruitCompanion(state: GameState, def: CompanionDef, db: SrdDat
   return { joined: true, waiting: false, message: `${def.name} joins your party.` };
 }
 
+/**
+ * Recruit without building a sheet (no rules data, e.g. the solver): only the status/loyalty flags
+ * change, with the same party-size rule as recruitCompanion.
+ */
+export function recruitFlagsOnly(state: GameState, def: CompanionDef, roster: CompanionRoster): RecruitResult {
+  const status = companionStatus(state, def);
+  if (status === 'in_party') return { joined: false, waiting: false, message: `${def.name} is already with you.` };
+  if (status === 'dead' || status === 'betrayed') return { joined: false, waiting: false, message: `${def.name} cannot join you.` };
+  const inParty = roster.companions.filter((d) => companionStatus(state, d) === 'in_party').length;
+  if (inParty >= MAX_COMPANIONS) {
+    state.flags[def.statusFlag] = 'waiting';
+    return { joined: false, waiting: true, message: `${def.name} will wait for you at the nearest safe house (your party is full).` };
+  }
+  state.flags[def.statusFlag] = 'in_party';
+  if (state.flags[def.loyaltyFlag] === undefined) state.flags[def.loyaltyFlag] = 50;
+  return { joined: true, waiting: false, message: `${def.name} joins your party.` };
+}
+
+/** Log line for a companion parting with the given status. */
+export function partingLine(def: CompanionDef, status: Exclude<CompanionStatus, 'in_party' | 'unmet' | 'met'>): string {
+  return status === 'waiting' ? `${def.name} will wait for you.` : status === 'left' ? `${def.name} leaves the party.` : status === 'betrayed' ? `${def.name} has betrayed you!` : `${def.name} is dead.`;
+}
+
 /** A companion leaves the party (to wait, or for good with status left/betrayed/dead). Their sheet is kept. */
 export function partWithCompanion(state: GameState, def: CompanionDef, status: Exclude<CompanionStatus, 'in_party' | 'unmet' | 'met'>): void {
   const c = state.companions.find((x) => x.id === def.id);

@@ -74,7 +74,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     const id = getProgress(session.current)?.adventureId ?? pending ?? defaultId;
     const adventure = adventures.get(id) ?? activeSideQuest(session.current, id);
     if (!adventure) throw new Error(`Adventure "${id}" is not installed`);
-    return { state: session.current, adventure, rng: session.rng, ...(db && { db }), ...(opts.flags && { flags: opts.flags }), ...(opts.lore && { lore: opts.lore }) };
+    return { state: session.current, adventure, rng: session.rng, ...(db && { db }), ...(opts.flags && { flags: opts.flags }), ...(opts.lore && { lore: opts.lore }), ...(opts.companions && { companions: opts.companions }) };
   };
 
   const publish = async (session: GameSession, ctx: RunContext, r: StepResult, playerAction?: string): Promise<void> => {
@@ -105,6 +105,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     }
     if (r.items.length || r.coins) session.addLog('system', `Received: ${[...r.items.map((i) => `${i.quantity}× ${i.itemId.replace(/_/g, ' ')}`), ...(r.coins ? [formatCoins(r.coins)] : [])].join(', ')}`);
     if (r.xp) session.addLog('system', `+${r.xp} XP`);
+    for (const line of r.partyLog ?? []) session.addLog('system', line);
     for (const id of r.recruits ?? []) {
       const def = opts.companions?.companions.find((c) => c.id === id);
       if (!def || !db) continue;

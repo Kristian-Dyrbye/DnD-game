@@ -102,6 +102,8 @@ Every field is optional:
 | `encounter` | Starts an encounter by id. |
 | `recruit` | A companion id from `data/companions.json` joins the party. If the party already has 3 companions, they wait instead. |
 | `companionLeaves` | `{ "id": "corwin", "status": "waiting" \| "left" \| "betrayed" \| "dead" }` |
+
+Recruit, approval and companionLeaves take effect in the same step, so a beat triggered by the new status or loyalty fires straight away.
 | `approval` | `[{ "companion": "nettle", "delta": 10 }]`: ±5 for minor choices, ±10 significant, ±20 defining. Only companions in the party react. Loyalty is kept in `world.<id>_loyalty` (0–100). Author leave or betray points as actions or beats with `{ "flag": "world.<id>_loyalty", "lte": 20 }`. |
 | `goto` | Moves to a scene. This is applied last. |
 | `ending` | Finishes the adventure. |
@@ -167,11 +169,13 @@ The loader resolves `~name` to the full id, so saves and later arcs only ever se
 ```json
 { "id": "cellar_rats", "name": "Cellar rats", "monsters": [{ "id": "giant_rat", "count": 2 }],
   "map": "optional-map-id", "terrain": ["barrels (half cover)"],
-  "scaling": { "target": "moderate", "pool": ["rat"] }, "canFlee": true,
+  "scaling": { "target": "moderate", "pool": ["rat"] }, "bosses": [], "canFlee": true,
   "win": { ... }, "lose": { ... }, "flee": { ... } }
 ```
 
-In Heroic mode, `lose` is the **defeat outcome** (captured, robbed, rescued...). Until tactical combat is built (A068), encounters are resolved automatically as wins.
+- Author the group for a party of four. The game scales it to the real party: the cheapest non-boss monsters are removed while the fight is above the High XP budget, and `scaling.pool` monsters are added while it is below Low.
+- `bosses` lists monster ids that are never removed. When it is empty, the single most expensive monster type counts as the boss.
+- In Heroic mode, `lose` is the **defeat outcome** (captured, robbed, rescued...).
 
 ## Beats
 

@@ -2,6 +2,7 @@
  * Loads every adventure JSON under data/adventures/ (recursively), validating each one. Invalid
  * files are reported and skipped so one broken adventure never stops the game from starting.
  */
+import type { CompanionRoster } from '../engine/party/companions';
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Adventure } from '../engine/adventure/schema';
@@ -20,7 +21,7 @@ export function loadFlagRegistry(dir: string): FlagRegistry {
   return fs.existsSync(file) ? FlagRegistry.fromJson(JSON.parse(fs.readFileSync(file, 'utf8'))) : new FlagRegistry();
 }
 
-export function loadAdventures(dir: string, db?: SrdDatabase, registry?: FlagRegistry): LoadedAdventures {
+export function loadAdventures(dir: string, db?: SrdDatabase, registry?: FlagRegistry, companions?: CompanionRoster): LoadedAdventures {
   const adventures = new Map<string, Adventure>();
   const problems: LoadedAdventures['problems'] = [];
   const walk = (d: string) => {
@@ -38,7 +39,7 @@ export function loadAdventures(dir: string, db?: SrdDatabase, registry?: FlagReg
         }
         // Only files that look like adventures (other JSON such as flag registries is skipped).
         if (!raw || typeof raw !== 'object' || !('formatVersion' in raw)) continue;
-        const res = validateAdventure(raw, db, registry);
+        const res = validateAdventure(raw, db, registry, companions);
         if (res.ok && res.adventure) {
           adventures.set(res.adventure.id, res.adventure);
           registry?.addDocs(res.adventure.flags);

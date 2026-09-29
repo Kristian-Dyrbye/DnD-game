@@ -7,6 +7,7 @@
  * Progress lives in `state.extensions.adventure`. Action ids: scene actions use their own id,
  * POI actions are `<poi>.<action>`, exits are `exit.<id>`.
  */
+import { changeApproval, partingLine, partWithCompanion, recruitCompanion, recruitFlagsOnly, type CompanionRoster } from '../party/companions';
 import { roll } from '../core/dice';
 import { totalLevel, type Character } from '../core/creature';
 import type { Rng } from '../core/rng';
@@ -56,6 +57,11 @@ export interface RunContext {
   flags?: FlagRegistry;
   /** World lore (faction relationships for reputation ripples). */
   lore?: Lore;
+  /**
+   * Companion roster: recruit / approval / companionLeaves outcomes are applied at once (so beats in
+   * the same step see the new status/loyalty). Without it they are only collected in the result.
+   */
+  companions?: CompanionRoster;
 }
 
 export interface StepResult {
@@ -73,7 +79,9 @@ export interface StepResult {
   xp: number;
   /** Reputation changes (including ripples to allies/enemies). */
   reputation?: ReputationChange[];
-  /** Companions to recruit / part with (applied by the session port, which knows the roster). */
+  /** Party changes already applied (RunContext.companions given): log lines in order. */
+  partyLog?: string[];
+  /** Companions to recruit / part with, when the runner had no roster (the caller applies them). */
   recruits?: string[];
   partings?: { id: string; status: 'waiting' | 'left' | 'betrayed' | 'dead' }[];
   approvals?: { companion: string; delta: number }[];
@@ -309,15 +317,41 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
   state.time += o.minutes;
   const map = getMap(state);
   if (o.discover.length && map) discover(map, o.discover);
-  if (o.recruit) (result.recruits ??= []).push(o.recruit);
-  if (o.approval.length) (result.approvals ??= []).push(...o.approval);
-  if (o.companionLeaves) (result.partings ??= []).push(o.companionLeaves);
+  if (ctx.companions) applyParty(ctx, ctx.companions, o, result);
+  else {
+    if (o.recruit) (result.recruits ??= []).push(o.recruit);
+    if (o.approval.length) (result.approvals ??= []).push(...o.approval);
+    if (o.companionLeaves) (result.partings ??= []).push(o.companionLeaves);
+  }
   if (o.encounter) result.encounter = o.encounter;
   if (o.ending) {
     getProgress(state)!.ending = o.ending;
     result.ending = o.ending;
   }
   if (o.goto) enterScene(ctx, o.goto, result, depth + 1);
+}
+
+/** Recruit / approval / parting outcomes applied straight away (lines go to `result.partyLog`). */
+function applyParty(ctx: RunContext, roster: CompanionRoster, o: Outcome, result: StepResult): void {
+  const def = (id: string) => roster.companions.find((c) => c.id === id);
+  const log = (line: string | undefined) => {
+    if (line) (result.partyLog ??= []).push(line);
+  };
+  if (o.recruit) {
+    const d = def(o.recruit);
+    if (d) log((ctx.db ? recruitCompanion(ctx.state, d, ctx.db) : recruitFlagsOnly(ctx.state, d, roster)).message);
+  }
+  for (const a of o.approval) {
+    const d = def(a.companion);
+    if (d) log(changeApproval(ctx.state, d, a.delta));
+  }
+  if (o.companionLeaves) {
+    const d = def(o.companionLeaves.id);
+    if (d) {
+      partWithCompanion(ctx.state, d, o.companionLeaves.status);
+      log(partingLine(d, o.companionLeaves.status));
+    }
+  }
 }
 
 /**

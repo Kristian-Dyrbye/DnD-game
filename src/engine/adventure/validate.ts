@@ -3,6 +3,7 @@
  * monster and item ids) + reachability. Used by tests for authored content, by the side-quest
  * generator (reject and regenerate) and by a future editor/importer.
  */
+import type { CompanionRoster } from '../party/companions';
 import type { SrdDatabase } from '../data/srd';
 import { FlagRegistry, isNamespaced, resolveAdventureFlags, type FlagValue } from '../world/flags';
 import { AdventureSchema, type Action, type Adventure, type Outcome, type Scene } from './schema';
@@ -15,7 +16,7 @@ export interface ValidationResult {
   warnings: string[];
 }
 
-export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: FlagRegistry): ValidationResult {
+export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: FlagRegistry, companions?: CompanionRoster): ValidationResult {
   const parsed = AdventureSchema.safeParse(raw);
   if (!parsed.success) {
     return { ok: false, errors: parsed.error.issues.map((i) => `${i.path.join('.') || '(root)'}: ${i.message}`), warnings: [] };
@@ -60,6 +61,12 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
     if (o.encounter && !encounterIds.has(o.encounter)) errors.push(`${where}: unknown encounter "${o.encounter}"`);
     if (o.ending && !endingIds.has(o.ending)) errors.push(`${where}: unknown ending "${o.ending}"`);
     for (const it of o.items) item(it.itemId, where);
+    if (companions) {
+      const known = (id: string) => companions.companions.some((c) => c.id === id);
+      if (o.recruit && !known(o.recruit)) errors.push(`${where}: recruit names unknown companion "${o.recruit}"`);
+      for (const a of o.approval) if (!known(a.companion)) errors.push(`${where}: approval names unknown companion "${a.companion}"`);
+      if (o.companionLeaves && !known(o.companionLeaves.id)) errors.push(`${where}: companionLeaves names unknown companion "${o.companionLeaves.id}"`);
+    }
   };
   const action = (a: Action, where: string) => {
     if (!a.check && !a.outcome) warnings.push(`${where}: action "${a.id}" has no check or outcome`);
@@ -83,6 +90,7 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
   for (const e of adv.encounters) {
     for (const m of e.monsters) if (db && !db.monsters.has(m.id)) errors.push(`encounter ${e.id}: unknown monster "${m.id}"`);
     for (const m of e.scaling?.pool ?? []) if (db && !db.monsters.has(m)) errors.push(`encounter ${e.id}: unknown scaling monster "${m}"`);
+    for (const b of e.bosses) if (!e.monsters.some((m) => m.id === b)) errors.push(`encounter ${e.id}: boss "${b}" is not one of its monsters`);
     outcome(e.win, `encounter ${e.id}.win`);
     outcome(e.lose, `encounter ${e.id}.lose`);
     outcome(e.flee, `encounter ${e.id}.flee`);
