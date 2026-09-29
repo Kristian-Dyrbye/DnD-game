@@ -130,3 +130,23 @@ export function writeData(file: SrdFileName, records: unknown[]): void {
   fs.writeFileSync(path.join(DATA_DIR, file), `${JSON.stringify(records, null, 1)}\n`, 'utf8');
   console.log(`${file}: wrote ${records.length} records`);
 }
+
+/** "1,500 GP" / "5 SP" / "2 CP" → copper pieces. Throws on anything else. */
+export function costToCp(cell: string): number {
+  const m = /^([\d,]+)\s*(CP|SP|EP|GP|PP)$/i.exec(cell.trim());
+  if (!m) throw new Error(`Bad cost: "${cell}"`);
+  const mult = { CP: 1, SP: 10, EP: 50, GP: 100, PP: 1000 }[m[2]!.toUpperCase() as 'CP'];
+  return Number(m[1]!.replace(/,/g, '')) * mult;
+}
+
+/** "1/4 lb." / "1½ lb." / "5 lb. (full)" / "—" → pounds (0 for "—"; undefined for "Varies"). */
+export function weightLb(cell: string): number | undefined {
+  const c = cell.trim().replace(/(\d),(\d)/g, '$1$2');
+  if (c === '' || c === '—' || c === '-') return 0;
+  if (/varies/i.test(c)) return undefined;
+  const m = /^(\d+)?\s*(½|1\/2|1\/4)?\s*lb/.exec(c);
+  if (!m || (!m[1] && !m[2])) throw new Error(`Bad weight: "${cell}"`);
+  const whole = m[1] ? Number(m[1]) : 0;
+  const frac = m[2] === '1/4' ? 0.25 : m[2] ? 0.5 : 0;
+  return whole + frac;
+}

@@ -1,1 +1,1792 @@
-[]
+[
+ {
+  "tags": [],
+  "id": "acid",
+  "name": "Acid",
+  "category": "adventuring_gear",
+  "cost": 2500,
+  "weightLb": 1,
+  "text": "When you take the Attack action, you can replace one of your attacks with throwing a vial of Acid. Target one creature or object you can see within 20 feet of yourself. The target must succeed on a Dexterity saving throw (DC 8 plus your Dexterity modifier and Proficiency Bonus) or take 2d6 Acid damage."
+ },
+ {
+  "tags": [],
+  "id": "alchemists_fire",
+  "name": "Alchemist's Fire",
+  "category": "adventuring_gear",
+  "cost": 5000,
+  "weightLb": 1,
+  "text": "When you take the Attack action, you can replace one of your attacks with throwing a flask of Alchemist's Fire. Target one creature or object you can see within 20 feet of yourself. The target must succeed on a Dexterity saving throw (DC 8 plus your Dexterity modifier and Proficiency Bonus) or take 1d4 Fire damage and start burning (see \"Rules Glossary\")."
+ },
+ {
+  "tags": [],
+  "id": "antitoxin",
+  "name": "Antitoxin",
+  "category": "adventuring_gear",
+  "cost": 5000,
+  "weightLb": 0,
+  "text": "As a Bonus Action, you can drink a vial of Antitoxin to gain Advantage on saving throws to avoid or end the Poisoned condition for 1 hour."
+ },
+ {
+  "tags": [],
+  "id": "backpack",
+  "name": "Backpack",
+  "category": "adventuring_gear",
+  "cost": 200,
+  "weightLb": 5,
+  "text": "A Backpack holds up to 30 pounds within 1 cubic foot. It can also serve as a saddlebag."
+ },
+ {
+  "tags": [],
+  "id": "ball_bearings",
+  "name": "Ball Bearings",
+  "category": "adventuring_gear",
+  "cost": 100,
+  "weightLb": 2,
+  "text": "As a Utilize action, you can spill Ball Bearings from their pouch. They spread to cover a level, 10-foot-square area within 10 feet of yourself. A creature that enters this area for the first time on a turn must succeed on a DC 10 Dexterity saving throw or have the Prone condition. It takes 10 minutes to recover the Ball Bearings."
+ },
+ {
+  "tags": [],
+  "id": "barrel",
+  "name": "Barrel",
+  "category": "adventuring_gear",
+  "cost": 200,
+  "weightLb": 70,
+  "text": "A Barrel holds up to 40 gallons of liquid or up to 4 cubic feet of dry goods."
+ },
+ {
+  "tags": [],
+  "id": "basket",
+  "name": "Basket",
+  "category": "adventuring_gear",
+  "cost": 40,
+  "weightLb": 2,
+  "text": "A Basket holds up to 40 pounds within 2 cubic feet."
+ },
+ {
+  "tags": [],
+  "id": "bedroll",
+  "name": "Bedroll",
+  "category": "adventuring_gear",
+  "cost": 100,
+  "weightLb": 7,
+  "text": "A Bedroll sleeps one Small or Medium creature. While in a Bedroll, you automatically succeed on saving throws against extreme cold (see \"Gameplay Toolbox\")."
+ },
+ {
+  "tags": [],
+  "id": "bell",
+  "name": "Bell",
+  "category": "adventuring_gear",
+  "cost": 100,
+  "weightLb": 0,
+  "text": "When rung as a Utilize action, a Bell produces a sound that can be heard up to 60 feet away."
+ },
+ {
+  "tags": [],
+  "id": "blanket",
+  "name": "Blanket",
+  "category": "adventuring_gear",
+  "cost": 50,
+  "weightLb": 3,
+  "text": "While wrapped in a blanket, you have Advantage on saving throws against extreme cold (see \"Gameplay Toolbox\")."
+ },
+ {
+  "tags": [],
+  "id": "block_and_tackle",
+  "name": "Block and Tackle",
+  "category": "adventuring_gear",
+  "cost": 100,
+  "weightLb": 5,
+  "text": "A Block and Tackle allows you to hoist up to four times the weight you can normally lift."
+ },
+ {
+  "tags": [],
+  "id": "book",
+  "name": "Book",
+  "category": "adventuring_gear",
+  "cost": 2500,
+  "weightLb": 5,
+  "text": "A Book contains fiction or nonfiction. If you consult an accurate nonfiction Book about its topic, you gain a +5 bonus to Intelligence (Arcana, History, Nature, or Religion) checks you make about that topic."
+ },
+ {
+  "tags": [],
+  "id": "bottle_glass",
+  "name": "Bottle, Glass",
+  "category": "adventuring_gear",
+  "cost": 200,
+  "weightLb": 2,
+  "text": "A Glass Bottle holds up to 1½ pints."
+ },
+ {
+  "tags": [],
+  "id": "bucket",
+  "name": "Bucket",
+  "category": "adventuring_gear",
+  "cost": 5,
+  "weightLb": 2,
+  "text": "A Bucket holds up to half a cubic foot of contents."
+ },
+ {
+  "tags": [],
+  "id": "burglars_pack",
+  "name": "Burglar's Pack",
+  "category": "pack",
+  "cost": 1600,
+  "weightLb": 42,
+  "text": "A Burglar's Pack contains the following items: Backpack, Ball Bearings, Bell, 10 Candles, Crowbar, Hooded Lantern, 7 flasks of Oil, 5 days of Rations, Rope, Tinderbox, and Waterskin.",
+  "contents": [
+   [
+    "backpack",
+    1
+   ],
+   [
+    "ball_bearings",
+    1
+   ],
+   [
+    "bell",
+    1
+   ],
+   [
+    "candle",
+    10
+   ],
+   [
+    "crowbar",
+    1
+   ],
+   [
+    "lantern_hooded",
+    1
+   ],
+   [
+    "oil",
+    7
+   ],
+   [
+    "rations",
+    5
+   ],
+   [
+    "rope",
+    1
+   ],
+   [
+    "tinderbox",
+    1
+   ],
+   [
+    "waterskin",
+    1
+   ]
+  ]
+ },
+ {
+  "tags": [],
+  "id": "caltrops",
+  "name": "Caltrops",
+  "category": "adventuring_gear",
+  "cost": 100,
+  "weightLb": 2,
+  "text": "As a Utilize action, you can spread Caltrops from their bag to cover a 5-foot-square area within 5 feet of yourself. A creature that enters this area for the first time on a turn must succeed on a DC 15 Dexterity saving throw or take 1 Piercing damage and have its Speed reduced to 0 until the start of its next turn. It takes 10 minutes to recover the Caltrops."
+ },
+ {
+  "tags": [],
+  "id": "candle",
+  "name": "Candle",
+  "category": "adventuring_gear",
+  "cost": 1,
+  "weightLb": 0,
+  "text": "For 1 hour, a lit Candle sheds Bright Light in a 5-foot radius and Dim Light for an additional 5 feet."
+ },
+ {
+  "tags": [],
+  "id": "case_crossbow_bolt",
+  "name": "Case, Crossbow Bolt",
+  "category": "adventuring_gear",
+  "cost": 100,
+  "weightLb": 1,
+  "text": "A Crossbow Bolt Case holds up to 20 Bolts."
+ },
+ {
+  "tags": [],
+  "id": "case_map_or_scroll",
+  "name": "Case, Map or Scroll",
+  "category": "adventuring_gear",
+  "cost": 100,
+  "weightLb": 1,
+  "text": "A Map or Scroll Case holds up to 10 sheets of paper or 5 sheets of parchment."
+ },
+ {
+  "tags": [],
+  "id": "chain",
+  "name": "Chain",
+  "category": "adventuring_gear",
+  "cost": 500,
+  "weightLb": 10,
+  "text": "As a Utilize action, you can wrap a Chain around an unwilling creature within 5 feet of yourself that has the Grappled, Incapacitated, or Restrained condition if you succeed on a DC 13 Strength (Athletics) check. If the creature's legs are bound, the creature has the Restrained condition until it escapes. Escaping the Chain requires the creature to make a successful DC 18 Dexterity (Acrobatics) check as an action. Bursting the Chain requires a successful DC 20 Strength (Athletics) check as an action."
+ },
+ {
+  "tags": [],
+  "id": "chest",
+  "name": "Chest",
+  "category": "adventuring_gear",
+  "cost": 500,
+  "weightLb": 25,
+  "text": "A Chest holds up to 12 cubic feet of contents."
+ },
+ {
+  "tags": [],
+  "id": "climbers_kit",
+  "name": "Climber's Kit",
+  "category": "adventuring_gear",
+  "cost": 2500,
+  "weightLb": 12,
+  "text": "A Climber's Kit includes boot tips, gloves, pitons, and a harness. As a Utilize action, you can use the Climber's Kit to anchor yourself; when you do, you can't fall more than 25 feet from the anchor point, and you can't move more than 25 feet from there without undoing the anchor as a Bonus Action."
+ },
+ {
+  "tags": [],
+  "id": "clothes_fine",
+  "name": "Clothes, Fine",
+  "category": "adventuring_gear",
+  "cost": 1500,
+  "weightLb": 6,
+  "text": "Fine Clothes are made of expensive fabrics and adorned with expertly crafted details. Some events and locations admit only people wearing these clothes."
+ },
+ {
+  "tags": [],
+  "id": "clothes_travelers",
+  "name": "Clothes, Traveler's",
+  "category": "adventuring_gear",
+  "cost": 200,
+  "weightLb": 4,
+  "text": "Traveler's Clothes are resilient garments designed for travel in various environments."
+ },
+ {
+  "tags": [],
+  "id": "component_pouch",
+  "name": "Component Pouch",
+  "category": "adventuring_gear",
+  "cost": 2500,
+  "weightLb": 2,
+  "text": "A Component Pouch is watertight and filled with compartments that hold all the free Material components of your spells."
+ },
+ {
+  "tags": [],
+  "id": "costume",
+  "name": "Costume",
+  "category": "adventuring_gear",
+  "cost": 500,
+  "weightLb": 4,
+  "text": "While wearing a Costume, you have Advantage on any ability check you make to impersonate the person or type of person it represents."
+ },
+ {
+  "tags": [],
+  "id": "crowbar",
+  "name": "Crowbar",
+  "category": "adventuring_gear",
+  "cost": 200,
+  "weightLb": 5,
+  "text": "Using a Crowbar gives you Advantage on Strength checks where the Crowbar's leverage can be applied."
+ },
+ {
+  "tags": [],
+  "id": "diplomats_pack",
+  "name": "Diplomat's Pack",
+  "category": "pack",
+  "cost": 3900,
+  "weightLb": 39,
+  "text": "A Diplomat's Pack contains the following items: Chest, Fine Clothes, Ink, 5 Ink Pens, Lamp, 2 Map or Scroll Cases, 4 flasks of Oil, 5 sheets of Paper, 5 sheets of Parchment, Perfume, and Tinderbox.",
+  "contents": [
+   [
+    "chest",
+    1
+   ],
+   [
+    "clothes_fine",
+    1
+   ],
+   [
+    "ink",
+    1
+   ],
+   [
+    "ink_pen",
+    5
+   ],
+   [
+    "lamp",
+    1
+   ],
+   [
+    "case_map_or_scroll",
+    2
+   ],
+   [
+    "oil",
+    4
+   ],
+   [
+    "paper",
+    5
+   ],
+   [
+    "parchment",
+    5
+   ],
+   [
+    "perfume",
+    1
+   ],
+   [
+    "tinderbox",
+    1
+   ]
+  ]
+ },
+ {
+  "tags": [],
+  "id": "dungeoneers_pack",
+  "name": "Dungeoneer's Pack",
+  "category": "pack",
+  "cost": 1200,
+  "weightLb": 55,
+  "text": "A Dungeoneer's Pack contains the following items: Backpack, Caltrops, Crowbar, 2 flasks of Oil, 10 days of Rations, Rope, Tinderbox, 10 Torches, and Waterskin.",
+  "contents": [
+   [
+    "backpack",
+    1
+   ],
+   [
+    "caltrops",
+    1
+   ],
+   [
+    "crowbar",
+    1
+   ],
+   [
+    "oil",
+    2
+   ],
+   [
+    "rations",
+    10
+   ],
+   [
+    "rope",
+    1
+   ],
+   [
+    "tinderbox",
+    1
+   ],
+   [
+    "torch",
+    10
+   ],
+   [
+    "waterskin",
+    1
+   ]
+  ]
+ },
+ {
+  "tags": [],
+  "id": "entertainers_pack",
+  "name": "Entertainer's Pack",
+  "category": "pack",
+  "cost": 4000,
+  "weightLb": 58.5,
+  "text": "An Entertainer's Pack contains the following items: Backpack, Bedroll, Bell, Bullseye Lantern, 3 Costumes, Mirror, 8 flasks of Oil, 9 days of Rations, Tinderbox, and Waterskin.",
+  "contents": [
+   [
+    "backpack",
+    1
+   ],
+   [
+    "bedroll",
+    1
+   ],
+   [
+    "bell",
+    1
+   ],
+   [
+    "lantern_bullseye",
+    1
+   ],
+   [
+    "costume",
+    3
+   ],
+   [
+    "mirror",
+    1
+   ],
+   [
+    "oil",
+    8
+   ],
+   [
+    "rations",
+    9
+   ],
+   [
+    "tinderbox",
+    1
+   ],
+   [
+    "waterskin",
+    1
+   ]
+  ]
+ },
+ {
+  "tags": [],
+  "id": "explorers_pack",
+  "name": "Explorer's Pack",
+  "category": "pack",
+  "cost": 1000,
+  "weightLb": 55,
+  "text": "An Explorer's Pack contains the following items: Backpack, Bedroll, 2 flasks of Oil, 10 days of Rations, Rope, Tinderbox, 10 Torches, and Waterskin.",
+  "contents": [
+   [
+    "backpack",
+    1
+   ],
+   [
+    "bedroll",
+    1
+   ],
+   [
+    "oil",
+    2
+   ],
+   [
+    "rations",
+    10
+   ],
+   [
+    "rope",
+    1
+   ],
+   [
+    "tinderbox",
+    1
+   ],
+   [
+    "torch",
+    10
+   ],
+   [
+    "waterskin",
+    1
+   ]
+  ]
+ },
+ {
+  "tags": [],
+  "id": "flask",
+  "name": "Flask",
+  "category": "adventuring_gear",
+  "cost": 2,
+  "weightLb": 1,
+  "text": "A Flask holds up to 1 pint."
+ },
+ {
+  "tags": [],
+  "id": "grappling_hook",
+  "name": "Grappling Hook",
+  "category": "adventuring_gear",
+  "cost": 200,
+  "weightLb": 4,
+  "text": "As a Utilize action, you can throw the Grappling Hook at a railing, a ledge, or another catch within 50 feet of yourself, and the hook catches on if you succeed on a DC 13 Dexterity (Acrobatics) check. If you tied a Rope to the hook, you can then climb it."
+ },
+ {
+  "tags": [],
+  "id": "healers_kit",
+  "name": "Healer's Kit",
+  "category": "adventuring_gear",
+  "cost": 500,
+  "weightLb": 3,
+  "text": "A Healer's Kit has ten uses. As a Utilize action, you can expend one of its uses to stabilize an Unconscious creature that has 0 Hit Points without needing to make a Wisdom (Medicine) check."
+ },
+ {
+  "tags": [],
+  "id": "holy_water",
+  "name": "Holy Water",
+  "category": "adventuring_gear",
+  "cost": 2500,
+  "weightLb": 1,
+  "text": "When you take the Attack action, you can replace one of your attacks with throwing a flask of Holy Water. Target one creature you can see within 20 feet of yourself. The target must succeed on a Dexterity saving throw (DC 8 plus your Dexterity modifier and Proficiency Bonus) or take 2d8 Radiant damage if it is a Fiend or an Undead."
+ },
+ {
+  "tags": [],
+  "id": "hunting_trap",
+  "name": "Hunting Trap",
+  "category": "adventuring_gear",
+  "cost": 500,
+  "weightLb": 25,
+  "text": "As a Utilize action, you can set a Hunting Trap, which is a sawtooth steel ring that snaps shut when a creature steps on a pressure plate in the center.\n\nThe trap is affixed by a heavy chain to an immobile object, such as a tree or a spike driven into the ground. A creature that steps on the plate must succeed on a DC 13 Dexterity saving throw or take 1d4 Piercing damage and have its Speed reduced to 0 until the start of its next turn. Thereafter, until the creature breaks free of the trap, its movement is limited by the length of the chain (typically 3 feet). A creature can use its action to make a DC 13 Strength (Athletics) check, freeing itself or another creature within its reach on a success. Each failed check deals 1 Piercing damage to the trapped creature."
+ },
+ {
+  "tags": [],
+  "id": "ink",
+  "name": "Ink",
+  "category": "adventuring_gear",
+  "cost": 1000,
+  "weightLb": 0,
+  "text": "Ink comes in a 1-ounce bottle, which provides enough ink to write about 500 pages."
+ },
+ {
+  "tags": [],
+  "id": "ink_pen",
+  "name": "Ink Pen",
+  "category": "adventuring_gear",
+  "cost": 2,
+  "weightLb": 0,
+  "text": "Using Ink, an Ink Pen is used to write or draw."
+ },
+ {
+  "tags": [],
+  "id": "jug",
+  "name": "Jug",
+  "category": "adventuring_gear",
+  "cost": 2,
+  "weightLb": 4,
+  "text": "A Jug holds up to 1 gallon."
+ },
+ {
+  "tags": [],
+  "id": "ladder",
+  "name": "Ladder",
+  "category": "adventuring_gear",
+  "cost": 10,
+  "weightLb": 25,
+  "text": "A Ladder is 10 feet tall. You must climb to move up or down it."
+ },
+ {
+  "tags": [],
+  "id": "lamp",
+  "name": "Lamp",
+  "category": "adventuring_gear",
+  "cost": 50,
+  "weightLb": 1,
+  "text": "A Lamp burns Oil as fuel to cast Bright Light in a 15-foot radius and Dim Light for an additional 30 feet."
+ },
+ {
+  "tags": [],
+  "id": "lantern_bullseye",
+  "name": "Lantern, Bullseye",
+  "category": "adventuring_gear",
+  "cost": 1000,
+  "weightLb": 2,
+  "text": "A Bullseye Lantern burns Oil as fuel to cast Bright Light in a 60-foot Cone and Dim Light for an additional 60 feet."
+ },
+ {
+  "tags": [],
+  "id": "lantern_hooded",
+  "name": "Lantern, Hooded",
+  "category": "adventuring_gear",
+  "cost": 500,
+  "weightLb": 2,
+  "text": "A Hooded Lantern burns Oil as fuel to cast Bright Light in a 30-foot radius and Dim Light for an additional 30 feet. As a Bonus Action, you can lower the hood, reducing the light to Dim Light in a 5-foot radius, or raise it again."
+ },
+ {
+  "tags": [],
+  "id": "lock",
+  "name": "Lock",
+  "category": "adventuring_gear",
+  "cost": 1000,
+  "weightLb": 1,
+  "text": "A Lock comes with a key. Without the key, a creature can use Thieves' Tools to pick this Lock with a successful DC 15 Dexterity (Sleight of Hand) check."
+ },
+ {
+  "tags": [],
+  "id": "magnifying_glass",
+  "name": "Magnifying Glass",
+  "category": "adventuring_gear",
+  "cost": 10000,
+  "weightLb": 0,
+  "text": "A Magnifying Glass grants Advantage on any ability check made to appraise or inspect a highly detailed item. Lighting a fire with a Magnifying Glass requires light as bright as sunlight to focus, tinder to ignite, and about 5 minutes for the fire to ignite."
+ },
+ {
+  "tags": [],
+  "id": "manacles",
+  "name": "Manacles",
+  "category": "adventuring_gear",
+  "cost": 200,
+  "weightLb": 6,
+  "text": "As a Utilize action, you can use Manacles to bind an unwilling Small or Medium creature within 5 feet of yourself that has the Grappled, Incapacitated, or Restrained condition if you succeed on a DC 13 Dexterity (Sleight of Hand) check. While bound, a creature has Disadvantage on attack rolls, and the creature is Restrained if the Manacles are attached to a chain or hook that is fixed in place. Escaping the Manacles requires a successful DC 20 Dexterity (Sleight of Hand) check as an action. Bursting them requires a successful DC 25 Strength (Athletics) check as an action.\n\nEach set of Manacles comes with a key. Without the key, a creature can use Thieves' Tools to pick the Manacles' lock with a successful DC 15 Dexterity (Sleight of Hand) check."
+ },
+ {
+  "tags": [],
+  "id": "map",
+  "name": "Map",
+  "category": "adventuring_gear",
+  "cost": 100,
+  "weightLb": 0,
+  "text": "If you consult an accurate Map, you gain a +5 bonus to Wisdom (Survival) checks you make to find your way in the place represented on it."
+ },
+ {
+  "tags": [],
+  "id": "mirror",
+  "name": "Mirror",
+  "category": "adventuring_gear",
+  "cost": 500,
+  "weightLb": 0.5,
+  "text": "A handheld steel Mirror is useful for personal cosmetics but also for peeking around corners and reflecting light as a signal."
+ },
+ {
+  "tags": [],
+  "id": "net",
+  "name": "Net",
+  "category": "adventuring_gear",
+  "cost": 100,
+  "weightLb": 3,
+  "text": "When you take the Attack action, you can replace one of your attacks with throwing a Net. Target a creature you can see within 15 feet of yourself. The target must succeed on a Dexterity saving throw (DC 8 plus your Dexterity modifier and Proficiency Bonus) or have the Restrained condition until it escapes. The target succeeds automatically if it is Huge or larger.\n\nTo escape, the target or a creature within 5 feet of it must take an action to make a DC 10 Strength (Athletics) check, freeing the Restrained creature on a success. Destroying the Net (AC 10; 5 HP; Immunity to Bludgeoning, Poison, and Psychic damage) also frees the target, ending the effect."
+ },
+ {
+  "tags": [],
+  "id": "oil",
+  "name": "Oil",
+  "category": "adventuring_gear",
+  "cost": 10,
+  "weightLb": 1,
+  "text": "You can douse a creature, object, or space with Oil or use it as fuel, as detailed below.\n\n_Dousing a Creature or an Object._ When you take the Attack action, you can replace one of your attacks with throwing an Oil flask. Target one creature or object within 20 feet of yourself. The target must succeed on a Dexterity saving throw (DC 8 plus your Dexterity modifier and Proficiency Bonus) or be covered in oil. If the target takes Fire damage before the oil dries (after 1 minute), the target takes an extra 5 Fire damage from burning oil.\n\n_Dousing a Space._ You can take the Utilize action to pour an Oil flask on level ground to cover a 5-foot-square area within 5 feet of yourself. If lit, the oil burns until the end of the turn 2 rounds from when the oil was lit (or 12 seconds) and deals 5 Fire damage to any creature that enters the area or ends its turn there. A creature can take this damage only once per turn.\n\n_Fuel._ Oil serves as fuel for Lamps and Lanterns. Once lit, a flask of Oil burns for 6 hours in a Lamp or Lantern. That duration doesn't need to be consecutive; you can extinguish the burning Oil (as a Utilize action) and rekindle it again until it has burned for a total of 6 hours."
+ },
+ {
+  "tags": [],
+  "id": "paper",
+  "name": "Paper",
+  "category": "adventuring_gear",
+  "cost": 20,
+  "weightLb": 0,
+  "text": "One sheet of Paper can hold about 250 handwritten words."
+ },
+ {
+  "tags": [],
+  "id": "parchment",
+  "name": "Parchment",
+  "category": "adventuring_gear",
+  "cost": 10,
+  "weightLb": 0,
+  "text": "One sheet of Parchment can hold about 250 handwritten words."
+ },
+ {
+  "tags": [],
+  "id": "perfume",
+  "name": "Perfume",
+  "category": "adventuring_gear",
+  "cost": 500,
+  "weightLb": 0,
+  "text": "Perfume comes in a 4-ounce vial. For 1 hour after applying Perfume to yourself, you have Advantage on Charisma (Persuasion) checks made to influence an Indifferent Humanoid within 5 feet of yourself."
+ },
+ {
+  "tags": [],
+  "id": "poison_basic",
+  "name": "Poison, Basic",
+  "category": "adventuring_gear",
+  "cost": 10000,
+  "weightLb": 0,
+  "text": "As a Bonus Action, you can use a vial of Basic Poison to coat one weapon or up to three pieces of ammunition. A creature that takes Piercing or Slashing damage from the poisoned weapon or ammunition takes an extra 1d4 Poison damage. Once applied, the poison retains potency for 1 minute or until its damage is dealt, whichever comes first."
+ },
+ {
+  "tags": [],
+  "id": "pole",
+  "name": "Pole",
+  "category": "adventuring_gear",
+  "cost": 5,
+  "weightLb": 7,
+  "text": "A Pole is 10 feet long. You can use it to touch something up to 10 feet away. If you must make a Strength (Athletics) check as part of a High or Long Jump, you can use the Pole to vault, giving yourself Advantage on the check."
+ },
+ {
+  "tags": [],
+  "id": "pot_iron",
+  "name": "Pot, Iron",
+  "category": "adventuring_gear",
+  "cost": 200,
+  "weightLb": 10,
+  "text": "An Iron Pot holds up to 1 gallon."
+ },
+ {
+  "tags": [],
+  "id": "potion_of_healing",
+  "name": "Potion of Healing",
+  "category": "adventuring_gear",
+  "cost": 5000,
+  "weightLb": 0.5,
+  "text": "This potion is a magic item. As a Bonus Action, you can drink it or administer it to another creature within 5 feet of yourself. The creature that drinks the magical red fluid in this vial regains 2d4 + 2 Hit Points."
+ },
+ {
+  "tags": [],
+  "id": "pouch",
+  "name": "Pouch",
+  "category": "adventuring_gear",
+  "cost": 50,
+  "weightLb": 1,
+  "text": "A Pouch holds up to 6 pounds within one-fifth of a cubic foot."
+ },
+ {
+  "tags": [],
+  "id": "priests_pack",
+  "name": "Priest's Pack",
+  "category": "pack",
+  "cost": 3300,
+  "weightLb": 29,
+  "text": "A Priest's Pack contains the following items: Backpack, Blanket, Holy Water, Lamp, 7 days of Rations, Robe, and Tinderbox.",
+  "contents": [
+   [
+    "backpack",
+    1
+   ],
+   [
+    "blanket",
+    1
+   ],
+   [
+    "holy_water",
+    1
+   ],
+   [
+    "lamp",
+    1
+   ],
+   [
+    "rations",
+    7
+   ],
+   [
+    "robe",
+    1
+   ],
+   [
+    "tinderbox",
+    1
+   ]
+  ]
+ },
+ {
+  "tags": [],
+  "id": "quiver",
+  "name": "Quiver",
+  "category": "adventuring_gear",
+  "cost": 100,
+  "weightLb": 1,
+  "text": "A Quiver holds up to 20 Arrows."
+ },
+ {
+  "tags": [],
+  "id": "ram_portable",
+  "name": "Ram, Portable",
+  "category": "adventuring_gear",
+  "cost": 400,
+  "weightLb": 35,
+  "text": "You can use a Portable Ram to break down doors. When doing so, you gain a +4 bonus to the Strength check. One other character can help you use the ram, giving you Advantage on this check."
+ },
+ {
+  "tags": [],
+  "id": "rations",
+  "name": "Rations",
+  "category": "adventuring_gear",
+  "cost": 50,
+  "weightLb": 2,
+  "text": "Rations consist of travel-ready food, including jerky, dried fruit, hardtack, and nuts. See \"Malnutrition\" in \"Rules Glossary\" for the risks of not eating."
+ },
+ {
+  "tags": [],
+  "id": "robe",
+  "name": "Robe",
+  "category": "adventuring_gear",
+  "cost": 100,
+  "weightLb": 4,
+  "text": "A Robe has vocational or ceremonial significance. Some events and locations admit only people wearing a Robe bearing certain colors or symbols."
+ },
+ {
+  "tags": [],
+  "id": "rope",
+  "name": "Rope",
+  "category": "adventuring_gear",
+  "cost": 100,
+  "weightLb": 5,
+  "text": "As a Utilize action, you can tie a knot with Rope if you succeed on a DC 10 Dexterity (Sleight of Hand) check. The Rope can be burst with a successful DC 20 Strength (Athletics) check.\n\nYou can bind an unwilling creature with the Rope only if the creature has the Grappled, Incapacitated, or Restrained condition. If the creature's legs are bound, the creature has the Restrained condition until it escapes. Escaping the Rope requires the creature to make a successful DC 15 Dexterity (Acrobatics) check as an action."
+ },
+ {
+  "tags": [],
+  "id": "sack",
+  "name": "Sack",
+  "category": "adventuring_gear",
+  "cost": 1,
+  "weightLb": 0.5,
+  "text": "A Sack holds up to 30 pounds within 1 cubic foot."
+ },
+ {
+  "tags": [],
+  "id": "scholars_pack",
+  "name": "Scholar's Pack",
+  "category": "pack",
+  "cost": 4000,
+  "weightLb": 22,
+  "text": "A Scholar's Pack contains the following items: Backpack, Book, Ink, Ink Pen, Lamp, 10 flasks of Oil, 10 sheets of Parchment, and Tinderbox.",
+  "contents": [
+   [
+    "backpack",
+    1
+   ],
+   [
+    "book",
+    1
+   ],
+   [
+    "ink",
+    1
+   ],
+   [
+    "ink_pen",
+    1
+   ],
+   [
+    "lamp",
+    1
+   ],
+   [
+    "oil",
+    10
+   ],
+   [
+    "parchment",
+    10
+   ],
+   [
+    "tinderbox",
+    1
+   ]
+  ]
+ },
+ {
+  "tags": [],
+  "id": "shovel",
+  "name": "Shovel",
+  "category": "adventuring_gear",
+  "cost": 200,
+  "weightLb": 5,
+  "text": "Working for 1 hour, you can use a Shovel to dig a hole that is 5 feet on each side in soil or similar material."
+ },
+ {
+  "tags": [],
+  "id": "signal_whistle",
+  "name": "Signal Whistle",
+  "category": "adventuring_gear",
+  "cost": 5,
+  "weightLb": 0,
+  "text": "When blown as a Utilize action, a Signal Whistle produces a sound that can be heard up to 600 feet away."
+ },
+ {
+  "tags": [],
+  "id": "spell_scroll_cantrip",
+  "name": "Spell Scroll (Cantrip)",
+  "category": "adventuring_gear",
+  "cost": 3000,
+  "weightLb": 0
+ },
+ {
+  "tags": [],
+  "id": "spell_scroll_level_1",
+  "name": "Spell Scroll (Level 1)",
+  "category": "adventuring_gear",
+  "cost": 5000,
+  "weightLb": 0
+ },
+ {
+  "tags": [],
+  "id": "spikes_iron",
+  "name": "Spikes, Iron",
+  "category": "adventuring_gear",
+  "cost": 100,
+  "weightLb": 5,
+  "text": "Iron Spikes come in bundles of ten. As a Utilize action, you can use a blunt object, such as a Light Hammer, to hammer a spike into wood, earth, or a similar material. You can do so to jam a door shut or to then tie a Rope or Chain to the Spike."
+ },
+ {
+  "tags": [],
+  "id": "spyglass",
+  "name": "Spyglass",
+  "category": "adventuring_gear",
+  "cost": 100000,
+  "weightLb": 1,
+  "text": "Objects viewed through a Spyglass are magnified to twice their size."
+ },
+ {
+  "tags": [],
+  "id": "string",
+  "name": "String",
+  "category": "adventuring_gear",
+  "cost": 10,
+  "weightLb": 0,
+  "text": "String is 10 feet long. You can tie a knot in it as a Utilize action."
+ },
+ {
+  "tags": [],
+  "id": "tent",
+  "name": "Tent",
+  "category": "adventuring_gear",
+  "cost": 200,
+  "weightLb": 20,
+  "text": "A Tent sleeps up to two Small or Medium creatures."
+ },
+ {
+  "tags": [],
+  "id": "tinderbox",
+  "name": "Tinderbox",
+  "category": "adventuring_gear",
+  "cost": 50,
+  "weightLb": 1,
+  "text": "A Tinderbox is a small container holding flint, fire steel, and tinder (usually dry cloth soaked in light oil) used to kindle a fire. Using it to light a Candle, Lamp, Lantern, or Torch—or anything else with exposed fuel—takes a Bonus Action. Lighting any other fire takes 1 minute."
+ },
+ {
+  "tags": [],
+  "id": "torch",
+  "name": "Torch",
+  "category": "adventuring_gear",
+  "cost": 1,
+  "weightLb": 1,
+  "text": "A Torch burns for 1 hour, casting Bright Light in a 20-foot radius and Dim Light for an additional 20 feet. When you take the Attack action, you can attack with the Torch, using it as a Simple Melee weapon. On a hit, the target takes 1 Fire damage."
+ },
+ {
+  "tags": [],
+  "id": "vial",
+  "name": "Vial",
+  "category": "adventuring_gear",
+  "cost": 100,
+  "weightLb": 0,
+  "text": "A Vial holds up to 4 ounces."
+ },
+ {
+  "tags": [],
+  "id": "waterskin",
+  "name": "Waterskin",
+  "category": "adventuring_gear",
+  "cost": 20,
+  "weightLb": 5,
+  "text": "A Waterskin holds up to 4 pints. If you don't drink sufficient water, you risk dehydration (see \"Rules Glossary\")."
+ },
+ {
+  "tags": [],
+  "id": "arrows",
+  "name": "Arrows",
+  "category": "ammunition",
+  "cost": 100,
+  "weightLb": 1,
+  "bundle": 20
+ },
+ {
+  "tags": [],
+  "id": "bolts",
+  "name": "Bolts",
+  "category": "ammunition",
+  "cost": 100,
+  "weightLb": 1.5,
+  "bundle": 20
+ },
+ {
+  "tags": [],
+  "id": "bullets_firearm",
+  "name": "Bullets, Firearm",
+  "category": "ammunition",
+  "cost": 300,
+  "weightLb": 2,
+  "bundle": 10
+ },
+ {
+  "tags": [],
+  "id": "bullets_sling",
+  "name": "Bullets, Sling",
+  "category": "ammunition",
+  "cost": 4,
+  "weightLb": 1.5,
+  "bundle": 20
+ },
+ {
+  "tags": [],
+  "id": "needles",
+  "name": "Needles",
+  "category": "ammunition",
+  "cost": 100,
+  "weightLb": 1,
+  "bundle": 50
+ },
+ {
+  "tags": [],
+  "id": "arcane_focus_crystal",
+  "name": "Crystal (Arcane Focus)",
+  "category": "arcane_focus",
+  "cost": 1000,
+  "weightLb": 1
+ },
+ {
+  "tags": [],
+  "id": "arcane_focus_orb",
+  "name": "Orb (Arcane Focus)",
+  "category": "arcane_focus",
+  "cost": 2000,
+  "weightLb": 3
+ },
+ {
+  "tags": [],
+  "id": "arcane_focus_rod",
+  "name": "Rod (Arcane Focus)",
+  "category": "arcane_focus",
+  "cost": 1000,
+  "weightLb": 2
+ },
+ {
+  "tags": [],
+  "id": "arcane_focus_staff",
+  "name": "Staff (Arcane Focus)",
+  "category": "arcane_focus",
+  "cost": 500,
+  "weightLb": 4,
+  "text": "Also counts as a Quarterstaff."
+ },
+ {
+  "tags": [],
+  "id": "arcane_focus_wand",
+  "name": "Wand (Arcane Focus)",
+  "category": "arcane_focus",
+  "cost": 1000,
+  "weightLb": 1
+ },
+ {
+  "tags": [],
+  "id": "druidic_focus_sprig_of_mistletoe",
+  "name": "Sprig of mistletoe (Druidic Focus)",
+  "category": "druidic_focus",
+  "cost": 100,
+  "weightLb": 0
+ },
+ {
+  "tags": [],
+  "id": "druidic_focus_wooden_staff",
+  "name": "Wooden staff (Druidic Focus)",
+  "category": "druidic_focus",
+  "cost": 500,
+  "weightLb": 4,
+  "text": "Also counts as a Quarterstaff."
+ },
+ {
+  "tags": [],
+  "id": "druidic_focus_yew_wand",
+  "name": "Yew wand (Druidic Focus)",
+  "category": "druidic_focus",
+  "cost": 1000,
+  "weightLb": 1
+ },
+ {
+  "tags": [],
+  "id": "holy_symbol_amulet",
+  "name": "Amulet (Holy Symbol)",
+  "category": "holy_symbol",
+  "cost": 500,
+  "weightLb": 1
+ },
+ {
+  "tags": [],
+  "id": "holy_symbol_emblem",
+  "name": "Emblem (Holy Symbol)",
+  "category": "holy_symbol",
+  "cost": 500,
+  "weightLb": 0
+ },
+ {
+  "tags": [],
+  "id": "holy_symbol_reliquary",
+  "name": "Reliquary (Holy Symbol)",
+  "category": "holy_symbol",
+  "cost": 500,
+  "weightLb": 2
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "int",
+  "utilize": "Identify a substance (DC 15), or start a fire (DC 15)",
+  "craft": [
+   "Acid",
+   "Alchemist's Fire",
+   "Component Pouch",
+   "Oil",
+   "Paper",
+   "Perfume"
+  ],
+  "id": "alchemists_supplies",
+  "name": "Alchemist's Supplies",
+  "cost": 5000,
+  "weightLb": 8
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "int",
+  "utilize": "Detect poisoned drink (DC 15), or identify alcohol (DC 10)",
+  "craft": [
+   "Antitoxin"
+  ],
+  "id": "brewers_supplies",
+  "name": "Brewer's Supplies",
+  "cost": 2000,
+  "weightLb": 9
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "dex",
+  "utilize": "Write text with impressive flourishes that guard against forgery (DC 15)",
+  "craft": [
+   "Ink",
+   "Spell Scroll"
+  ],
+  "id": "calligraphers_supplies",
+  "name": "Calligrapher's Supplies",
+  "cost": 1000,
+  "weightLb": 5
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "str",
+  "utilize": "Seal or pry open a door or container (DC 20)",
+  "craft": [
+   "Club",
+   "Greatclub",
+   "Quarterstaff",
+   "Barrel",
+   "Chest",
+   "Ladder",
+   "Pole",
+   "Portable Ram",
+   "Torch"
+  ],
+  "id": "carpenters_tools",
+  "name": "Carpenter's Tools",
+  "cost": 800,
+  "weightLb": 6
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "wis",
+  "utilize": "Draft a map of a small area (DC 15)",
+  "craft": [
+   "Map"
+  ],
+  "id": "cartographers_tools",
+  "name": "Cartographer's Tools",
+  "cost": 1500,
+  "weightLb": 6
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "dex",
+  "utilize": "Modify footwear to give Advantage on the wearer's next Dexterity (Acrobatics) check (DC 10)",
+  "craft": [
+   "Climber's Kit"
+  ],
+  "id": "cobblers_tools",
+  "name": "Cobbler's Tools",
+  "cost": 500,
+  "weightLb": 5
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "wis",
+  "utilize": "Improve food's flavor (DC 10), or detect spoiled or poisoned food (DC 15)",
+  "craft": [
+   "Rations"
+  ],
+  "id": "cooks_utensils",
+  "name": "Cook's Utensils",
+  "cost": 100,
+  "weightLb": 8
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "int",
+  "utilize": "Discern what a glass object held in the past 24 hours (DC 15)",
+  "craft": [
+   "Glass Bottle",
+   "Magnifying Glass",
+   "Spyglass",
+   "Vial"
+  ],
+  "id": "glassblowers_tools",
+  "name": "Glassblower's Tools",
+  "cost": 3000,
+  "weightLb": 5
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "int",
+  "utilize": "Discern a gem's value (DC 15)",
+  "craft": [
+   "Arcane Focus",
+   "Holy Symbol"
+  ],
+  "id": "jewelers_tools",
+  "name": "Jeweler's Tools",
+  "cost": 2500,
+  "weightLb": 2
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "dex",
+  "utilize": "Add a design to a leather item (DC 10)",
+  "craft": [
+   "Sling",
+   "Whip",
+   "Hide Armor",
+   "Leather Armor",
+   "Studded Leather Armor",
+   "Backpack",
+   "Crossbow Bolt Case",
+   "Map or Scroll Case",
+   "Parchment",
+   "Pouch",
+   "Quiver",
+   "Waterskin"
+  ],
+  "id": "leatherworkers_tools",
+  "name": "Leatherworker's Tools",
+  "cost": 500,
+  "weightLb": 5
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "str",
+  "utilize": "Chisel a symbol or hole in stone (DC 10)",
+  "craft": [
+   "Block and Tackle"
+  ],
+  "id": "masons_tools",
+  "name": "Mason's Tools",
+  "cost": 1000,
+  "weightLb": 8
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "wis",
+  "utilize": "Paint a recognizable image of something you've seen (DC 10)",
+  "craft": [
+   "Druidic Focus",
+   "Holy Symbol"
+  ],
+  "id": "painters_supplies",
+  "name": "Painter's Supplies",
+  "cost": 1000,
+  "weightLb": 5
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "int",
+  "utilize": "Discern what a ceramic object held in the past 24 hours (DC 15)",
+  "craft": [
+   "Jug",
+   "Lamp"
+  ],
+  "id": "potters_tools",
+  "name": "Potter's Tools",
+  "cost": 1000,
+  "weightLb": 3
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "str",
+  "utilize": "Pry open a door or container (DC 20)",
+  "craft": [
+   "Any Melee weapon (except Club",
+   "Greatclub",
+   "Quarterstaff",
+   "and Whip)",
+   "Medium armor (except Hide)",
+   "Heavy armor",
+   "Ball Bearings",
+   "Bucket",
+   "Caltrops",
+   "Chain",
+   "Crowbar",
+   "Firearm Bullets",
+   "Grappling Hook",
+   "Iron Pot",
+   "Iron Spikes",
+   "Sling Bullets"
+  ],
+  "id": "smiths_tools",
+  "name": "Smith's Tools",
+  "cost": 2000,
+  "weightLb": 8
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "dex",
+  "utilize": "Assemble a Tiny item composed of scrap, which falls apart in 1 minute (DC 20)",
+  "craft": [
+   "Musket",
+   "Pistol",
+   "Bell",
+   "Bullseye Lantern",
+   "Flask",
+   "Hooded Lantern",
+   "Hunting Trap",
+   "Lock",
+   "Manacles",
+   "Mirror",
+   "Shovel",
+   "Signal Whistle",
+   "Tinderbox"
+  ],
+  "id": "tinkers_tools",
+  "name": "Tinker's Tools",
+  "cost": 5000,
+  "weightLb": 10
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "dex",
+  "utilize": "Mend a tear in clothing (DC 10), or sew a Tiny design (DC 10)",
+  "craft": [
+   "Padded Armor",
+   "Basket",
+   "Bedroll",
+   "Blanket",
+   "Fine Clothes",
+   "Net",
+   "Robe",
+   "Rope",
+   "Sack",
+   "String",
+   "Tent",
+   "Traveler's Clothes"
+  ],
+  "id": "weavers_tools",
+  "name": "Weaver's Tools",
+  "cost": 100,
+  "weightLb": 5
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "dex",
+  "utilize": "Carve a pattern in wood (DC 10)",
+  "craft": [
+   "Club",
+   "Greatclub",
+   "Quarterstaff",
+   "Ranged weapons (except Pistol",
+   "Musket",
+   "and Sling)",
+   "Arcane Focus",
+   "Arrows",
+   "Bolts",
+   "Druidic Focus",
+   "Ink Pen",
+   "Needles"
+  ],
+  "id": "woodcarvers_tools",
+  "name": "Woodcarver's Tools",
+  "cost": 100,
+  "weightLb": 5
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "cha",
+  "utilize": "Apply makeup (DC 10)",
+  "craft": [
+   "Costume"
+  ],
+  "id": "disguise_kit",
+  "name": "Disguise Kit",
+  "cost": 2500,
+  "weightLb": 3
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "dex",
+  "utilize": "Mimic 10 or fewer words of someone else's handwriting (DC 15), or duplicate a wax seal (DC 20)",
+  "id": "forgery_kit",
+  "name": "Forgery Kit",
+  "cost": 1500,
+  "weightLb": 5
+ },
+ {
+  "tags": [
+   "gaming_set"
+  ],
+  "category": "tool",
+  "toolAbility": "wis",
+  "utilize": "Discern whether someone is cheating (DC 10), or win the game (DC 20)",
+  "id": "dice_set",
+  "name": "Dice Set",
+  "cost": 10,
+  "weightLb": 0
+ },
+ {
+  "tags": [
+   "gaming_set"
+  ],
+  "category": "tool",
+  "toolAbility": "wis",
+  "utilize": "Discern whether someone is cheating (DC 10), or win the game (DC 20)",
+  "id": "dragonchess_set",
+  "name": "Dragonchess Set",
+  "cost": 100,
+  "weightLb": 0
+ },
+ {
+  "tags": [
+   "gaming_set"
+  ],
+  "category": "tool",
+  "toolAbility": "wis",
+  "utilize": "Discern whether someone is cheating (DC 10), or win the game (DC 20)",
+  "id": "playing_cards_set",
+  "name": "Playing cards Set",
+  "cost": 50,
+  "weightLb": 0
+ },
+ {
+  "tags": [
+   "gaming_set"
+  ],
+  "category": "tool",
+  "toolAbility": "wis",
+  "utilize": "Discern whether someone is cheating (DC 10), or win the game (DC 20)",
+  "id": "three_dragon_ante_set",
+  "name": "Three-dragon ante Set",
+  "cost": 100,
+  "weightLb": 0
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "int",
+  "utilize": "Identify a plant (DC 10)",
+  "craft": [
+   "Antitoxin",
+   "Candle",
+   "Healer's Kit",
+   "Potion of Healing"
+  ],
+  "id": "herbalism_kit",
+  "name": "Herbalism Kit",
+  "cost": 500,
+  "weightLb": 3
+ },
+ {
+  "tags": [
+   "musical_instrument"
+  ],
+  "category": "tool",
+  "toolAbility": "cha",
+  "utilize": "Play a known tune (DC 10), or improvise a song (DC 15)",
+  "id": "bagpipes",
+  "name": "Bagpipes",
+  "cost": 3000,
+  "weightLb": 6
+ },
+ {
+  "tags": [
+   "musical_instrument"
+  ],
+  "category": "tool",
+  "toolAbility": "cha",
+  "utilize": "Play a known tune (DC 10), or improvise a song (DC 15)",
+  "id": "drum",
+  "name": "Drum",
+  "cost": 600,
+  "weightLb": 3
+ },
+ {
+  "tags": [
+   "musical_instrument"
+  ],
+  "category": "tool",
+  "toolAbility": "cha",
+  "utilize": "Play a known tune (DC 10), or improvise a song (DC 15)",
+  "id": "dulcimer",
+  "name": "Dulcimer",
+  "cost": 2500,
+  "weightLb": 10
+ },
+ {
+  "tags": [
+   "musical_instrument"
+  ],
+  "category": "tool",
+  "toolAbility": "cha",
+  "utilize": "Play a known tune (DC 10), or improvise a song (DC 15)",
+  "id": "flute",
+  "name": "Flute",
+  "cost": 200,
+  "weightLb": 1
+ },
+ {
+  "tags": [
+   "musical_instrument"
+  ],
+  "category": "tool",
+  "toolAbility": "cha",
+  "utilize": "Play a known tune (DC 10), or improvise a song (DC 15)",
+  "id": "horn",
+  "name": "Horn",
+  "cost": 300,
+  "weightLb": 2
+ },
+ {
+  "tags": [
+   "musical_instrument"
+  ],
+  "category": "tool",
+  "toolAbility": "cha",
+  "utilize": "Play a known tune (DC 10), or improvise a song (DC 15)",
+  "id": "lute",
+  "name": "Lute",
+  "cost": 3500,
+  "weightLb": 2
+ },
+ {
+  "tags": [
+   "musical_instrument"
+  ],
+  "category": "tool",
+  "toolAbility": "cha",
+  "utilize": "Play a known tune (DC 10), or improvise a song (DC 15)",
+  "id": "lyre",
+  "name": "Lyre",
+  "cost": 3000,
+  "weightLb": 2
+ },
+ {
+  "tags": [
+   "musical_instrument"
+  ],
+  "category": "tool",
+  "toolAbility": "cha",
+  "utilize": "Play a known tune (DC 10), or improvise a song (DC 15)",
+  "id": "pan_flute",
+  "name": "Pan flute",
+  "cost": 1200,
+  "weightLb": 2
+ },
+ {
+  "tags": [
+   "musical_instrument"
+  ],
+  "category": "tool",
+  "toolAbility": "cha",
+  "utilize": "Play a known tune (DC 10), or improvise a song (DC 15)",
+  "id": "shawm",
+  "name": "Shawm",
+  "cost": 200,
+  "weightLb": 1
+ },
+ {
+  "tags": [
+   "musical_instrument"
+  ],
+  "category": "tool",
+  "toolAbility": "cha",
+  "utilize": "Play a known tune (DC 10), or improvise a song (DC 15)",
+  "id": "viol",
+  "name": "Viol",
+  "cost": 3000,
+  "weightLb": 1
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "wis",
+  "utilize": "Plot a course (DC 10), or determine position by stargazing (DC 15)",
+  "id": "navigators_tools",
+  "name": "Navigator's Tools",
+  "cost": 2500,
+  "weightLb": 2
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "int",
+  "utilize": "Detect a poisoned object (DC 10)",
+  "craft": [
+   "Basic Poison"
+  ],
+  "id": "poisoners_kit",
+  "name": "Poisoner's Kit",
+  "cost": 5000,
+  "weightLb": 2
+ },
+ {
+  "tags": [],
+  "category": "tool",
+  "toolAbility": "dex",
+  "utilize": "Pick a lock (DC 15), or disarm a trap (DC 15)",
+  "id": "thieves_tools",
+  "name": "Thieves' Tools",
+  "cost": 2500,
+  "weightLb": 1
+ },
+ {
+  "tags": [],
+  "id": "camel",
+  "name": "Camel",
+  "category": "mount",
+  "cost": 5000,
+  "carryingCapacityLb": 450
+ },
+ {
+  "tags": [],
+  "id": "elephant",
+  "name": "Elephant",
+  "category": "mount",
+  "cost": 20000,
+  "carryingCapacityLb": 1320
+ },
+ {
+  "tags": [],
+  "id": "horse_draft",
+  "name": "Horse, Draft",
+  "category": "mount",
+  "cost": 5000,
+  "carryingCapacityLb": 540
+ },
+ {
+  "tags": [],
+  "id": "horse_riding",
+  "name": "Horse, Riding",
+  "category": "mount",
+  "cost": 7500,
+  "carryingCapacityLb": 480
+ },
+ {
+  "tags": [],
+  "id": "mastiff",
+  "name": "Mastiff",
+  "category": "mount",
+  "cost": 2500,
+  "carryingCapacityLb": 195
+ },
+ {
+  "tags": [],
+  "id": "mule",
+  "name": "Mule",
+  "category": "mount",
+  "cost": 800,
+  "carryingCapacityLb": 420
+ },
+ {
+  "tags": [],
+  "id": "pony",
+  "name": "Pony",
+  "category": "mount",
+  "cost": 3000,
+  "carryingCapacityLb": 225
+ },
+ {
+  "tags": [],
+  "id": "warhorse",
+  "name": "Warhorse",
+  "category": "mount",
+  "cost": 40000,
+  "carryingCapacityLb": 540
+ },
+ {
+  "tags": [],
+  "id": "carriage",
+  "name": "Carriage",
+  "category": "vehicle",
+  "cost": 10000,
+  "weightLb": 600
+ },
+ {
+  "tags": [],
+  "id": "cart",
+  "name": "Cart",
+  "category": "vehicle",
+  "cost": 1500,
+  "weightLb": 200
+ },
+ {
+  "tags": [],
+  "id": "chariot",
+  "name": "Chariot",
+  "category": "vehicle",
+  "cost": 25000,
+  "weightLb": 100
+ },
+ {
+  "tags": [],
+  "id": "feed_per_day",
+  "name": "Feed per day",
+  "category": "tack",
+  "cost": 5,
+  "weightLb": 10
+ },
+ {
+  "tags": [],
+  "id": "saddle_exotic",
+  "name": "Saddle, Exotic",
+  "category": "tack",
+  "cost": 6000,
+  "weightLb": 40
+ },
+ {
+  "tags": [],
+  "id": "saddle_military",
+  "name": "Saddle, Military",
+  "category": "tack",
+  "cost": 2000,
+  "weightLb": 30
+ },
+ {
+  "tags": [],
+  "id": "saddle_riding",
+  "name": "Saddle, Riding",
+  "category": "tack",
+  "cost": 1000,
+  "weightLb": 25
+ },
+ {
+  "tags": [],
+  "id": "sled",
+  "name": "Sled",
+  "category": "vehicle",
+  "cost": 2000,
+  "weightLb": 300
+ },
+ {
+  "tags": [],
+  "id": "stabling_per_day",
+  "name": "Stabling per day",
+  "category": "tack",
+  "cost": 50,
+  "weightLb": 0
+ },
+ {
+  "tags": [],
+  "id": "wagon",
+  "name": "Wagon",
+  "category": "vehicle",
+  "cost": 3500,
+  "weightLb": 400
+ }
+]

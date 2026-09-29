@@ -122,8 +122,14 @@ export const GearSchema = z.object({
   cost: CostSchema,
   weightLb: z.number().min(0).optional(),
   text: TextSchema.optional(),
-  /** For tools: the ability used. */
+  /** Units bought together (e.g. 20 arrows). */
+  bundle: z.number().int().positive().optional(),
+  /** For tools: the ability used, the Utilize uses and the items it can craft (future crafting, §16). */
   toolAbility: AbilitySchema.optional(),
+  utilize: z.string().optional(),
+  craft: z.array(z.string()).optional(),
+  /** Mounts: carrying capacity. */
+  carryingCapacityLb: z.number().min(0).optional(),
   /** Packs: contents as [itemId, quantity]. */
   contents: z.array(z.tuple([IdSchema, z.number().int().positive()])).optional(),
   /** Free-form tags (future crafting: "material"). */
