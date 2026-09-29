@@ -65,7 +65,7 @@ Design source of truth for the hand-authored content (Build Prompt §7.2). Later
 
 ### 2.2 How the player learns the secret
 
-Seven clues exist. **Private knowledge** (`arc.main.cantor_identity_known`) needs any 2 clues, plus the masquerade Insight check. **Public unmasking** (`arc.main.cantor_unmasked_publicly`) needs 3 clues, of which at least one is physical evidence (marked P).
+Seven clues exist. **Private knowledge** (`arc.main.cantor_identity_known`) needs any 2 clues, plus the masquerade Insight check. **Public unmasking** (`arc.main.cantor_unmasked_publicly`) needs 3 clues, of which at least one is physical evidence (marked P). Chapter 3 checks these thresholds directly from the clue flags, with the chapter-local flags `~ch3_clues_2` and `~ch3_clues_3`.
 
 1. Dream voice. Scene `barrow_shrine_rest` sets `arc.starter.dream_heard`. At the masque, the voice sounds familiar (Insight DC 12 instead of DC 17).
 2. (P) Almonry seal on the plague grain. Scene `port_sorrel_docks` sets `arc.main.almoner_seal_seen`.
@@ -769,6 +769,13 @@ Whatever happens, the Cantor escapes to begin her endgame. What matters is what 
 - Pressing the Consortium with a royal warrant costs Ironvault rep.
 - Keeping Dawnbreaker offends the Dawn Lance (rep −15), but gives a stronger player.
 - A failed public accusation outlaws the hero from Crown lands until Ch4, when Seraphine's flight clears them if the Queen lives.
+
+**Implementation choices (adventure JSON, `data/adventures/arc1/ch3_the_gilded_lie.json`):**
+- The chapter endings are `court_unmasked` (public unmasking), `court_secret` (identity known privately), `court_hunted` (still outlawed) and `court_vanished` (identity never learned).
+- The race for the Vault: 4 days after the audience, Vosk empties the Vault if the hero has not started the climb. Then the Sky Tooth and Dawnbreaker both become "choir". A failed climb also loses the race: Vosk reaches the Vault first and must be beaten there to recover both.
+- Handing a Tooth to Seraphine "for safekeeping" in `highcrown_audience` sends it to the Choir. The chase in `palace_undercroft` retakes the Sky Tooth first, then an entrusted Tooth, then older Choir-held Teeth, newest chapter first. The chase needs 2 of 3 checks.
+- Dawnbreaker (`dragon_slayer`) enters the inventory only when the hero keeps it at Dawnspire, because outcomes cannot remove items.
+- Liesel's locket is the chapter-local flag `~ch3_locket`, set by a won chase. Ch5 (`choir_of_teeth`) reads it.
 
 **Flags that visibly change later chapters:**
 - `arc.main.dawnbreaker_holder` changes the Pyrraxis options and the finale seal strength.
