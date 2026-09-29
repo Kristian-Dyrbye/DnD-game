@@ -150,3 +150,38 @@ export function weightLb(cell: string): number | undefined {
   const frac = m[2] === '1/4' ? 0.25 : m[2] ? 0.5 : 0;
   return whole + frac;
 }
+
+/** Item wording in the SRD that doesn't match item names. */
+const ITEM_ALIASES: Record<string, string> = {
+  'Map or Scroll Cases': 'case_map_or_scroll',
+  'Map or Scroll Case': 'case_map_or_scroll',
+};
+
+/**
+ * Resolves SRD item phrases to [itemId, quantity]:
+ * "Hooded Lantern" → lantern_hooded, "10 Candles" → candle ×10, "7 flasks of Oil" → oil ×7,
+ * "Parchment (10 sheets)" → parchment ×10, "Book (prayers)" → book. Returns undefined if unknown.
+ */
+export function makeItemResolver(ids: Set<string>) {
+  return (phrase: string): [string, number] | undefined => {
+    let text = phrase.trim().replace(/^and\s+/, '').replace(/\.$/, '');
+    let qty = 1;
+    const q = /^(\d+)\s+(.*)$/.exec(text);
+    if (q) {
+      qty = Number(q[1]);
+      text = q[2]!;
+    }
+    const inner = /\((\d+)\s+\w+\)$/.exec(text);
+    if (inner) qty = Number(inner[1]);
+    text = text.replace(/^(flasks?|days?|sheets?|feet|bottles?|pieces?|sticks?|vials?|blocks?) of\s+/i, '').replace(/\s*\(.*\)$/, '');
+    const candidates = [text, text.replace(/s$/, ''), text.replace(/es$/, '')];
+    const words = text.split(' ');
+    if (words.length === 2) candidates.push(`${words[1]}, ${words[0]}`, `${words[1]!.replace(/s$/, '')}, ${words[0]}`);
+    for (const c of candidates) {
+      const id = c.normalize('NFKD').toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+      if (ids.has(id)) return [id, qty];
+    }
+    const alias = ITEM_ALIASES[text];
+    return alias ? [alias, qty] : undefined;
+  };
+}

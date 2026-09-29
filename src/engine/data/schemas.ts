@@ -148,8 +148,19 @@ export const SpeciesSchema = z.object({
   traits: z.array(z.object({ name: z.string(), text: TextSchema, effects: z.array(EffectSchema).optional() })),
   /** Sub-choices such as Draconic Ancestry or Elven Lineage. */
   lineages: z
-    .array(z.object({ id: IdSchema, name: z.string(), damageType: DamageTypeSchema.optional(), text: TextSchema.optional() }))
+    .array(
+      z.object({
+        id: IdSchema,
+        name: z.string(),
+        damageType: DamageTypeSchema.optional(),
+        text: TextSchema.optional(),
+        /** Spells learned at character level ("1", "3", "5") as spell ids. */
+        spells: z.record(z.string(), z.array(IdSchema)).optional(),
+      }),
+    )
     .optional(),
+  /** Name of the lineage choice ("Draconic Ancestry", "Elven Lineage"...). */
+  lineageLabel: z.string().optional(),
 });
 
 export const EquipmentChoiceSchema = z.object({
@@ -170,6 +181,7 @@ export const BackgroundSchema = z.object({
   /** e.g. Magic Initiate (Cleric) → "cleric". */
   featOption: z.string().optional(),
   skills: z.array(SkillSchema).length(2),
+  /** Tool proficiency: an item id, or "choice:<tag>" (e.g. "choice:gaming_set"). */
   tool: z.string(),
   equipment: z.object({ a: EquipmentChoiceSchema, b: EquipmentChoiceSchema }),
 });

@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A015
-- **Notes for next session:** Start with A016. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A016
+- **Notes for next session:** Start with A017. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -35,7 +35,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A013 — SRD 5.2 data pipeline + schemas | Spec: §4 | Done: decide source (official SRD 5.2 CC-BY-4.0 PDF → scripts/srd-extract, or CC-BY JSON source) and log it; zod schemas for every data/srd file; loader + validator test; CREDITS.md with SRD attribution | Dep: A012
 - [done] A014 — SRD data: conditions, exhaustion, core tables | Spec: §4 | Done: conditions.json, rules tables (XP/level, proficiency, spell slots full/half/third/pact, multiclass slots, encounter XP budgets, DC guide); validated + spot tests | Dep: A013
 - [done] A015 — SRD data: equipment | Spec: §4, §11.5 | Done: weapons (with mastery), armor, gear, tools, packs, prices; validated | Dep: A013
-- [todo] A016 — SRD data: species + backgrounds | Spec: §4, §5 | Done: all SRD species and backgrounds (ASI options, origin feat, skills, tools, equipment); validated | Dep: A013
+- [done] A016 — SRD data: species + backgrounds | Spec: §4, §5 | Done: all SRD species and backgrounds (ASI options, origin feat, skills, tools, equipment); validated | Dep: A013
 - [todo] A017 — SRD data: feats + epic boons | Spec: §4 | Done: origin, general, fighting style, epic boon feats with prereqs and effect refs; validated | Dep: A013
 - [todo] A018 — SRD data: classes part 1 (Barbarian, Bard, Cleric, Druid) | Spec: §4 | Done: class tables 1–20, features, SRD subclass each; validated | Dep: A013
 - [todo] A019 — SRD data: classes part 2 (Fighter, Monk, Paladin, Ranger) | Spec: §4 | Done: as A018 | Dep: A018
@@ -176,6 +176,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A013 — SRD pipeline: source = SRD 5.2.1 Markdown (downfallx repo, pinned commit) fetched to data/srd/_source by `npm run srd:fetch`; zod schemas for all 12 data files + rules tables; Effect union; SrdDatabase + validateSrdFile; bundled loader; empty data files; CREDITS.md — `src/engine/data/*`, `scripts/srd-fetch.mjs`, `CREDITS.md`
 - A014 — conditions.json (15, text + hand-written structured modifiers) and rules-tables.json (XP/level, XP/CR, full/half/pact/multiclass slots, encounter budgets, DCs); importer lib + import-core — `scripts/srd/lib.ts`, `scripts/srd/import-core.ts`, `data/srd/overrides/conditions.json`
 - A015 — Equipment: 38 weapons (mastery, ranges, ammo ids, versatile), 13 armor, 149 gear (adventuring gear w/ text, ammo bundles, focuses, tools w/ ability/utilize/craft + gaming/instrument variants, packs with resolved contents, mounts, tack, drawn vehicles) — `scripts/srd/import-equipment.ts`, `data/srd/{weapons,armor,gear}.json`
+- A016 — Origins: 9 species (sizes, speed, darkvision, traits, lineages incl. dragon damage types + lineage spell ids by level) and 4 backgrounds (ability options, feat + option, skills, tool or choice, equipment A/B resolved to item ids) — `scripts/srd/import-origins.ts`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -217,6 +218,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A014: CR 0 XP stored as 10 ("0 or 10" in SRD). Typical DC table: source drops the Medium row; hard-coded 5/10/15/20/25/30 and cross-checked.
 - A014: rules-tables.json is an object (not in SRD_FILES); SrdDatabase(files, rulesTables) → `db.rules` (throws if missing), `db.tables` optional.
 - A015: Gear ids: focuses prefixed (`arcane_focus_orb`, `holy_symbol_amulet`), gaming sets `<variant>_set` tagged gaming_set, instruments by name tagged musical_instrument, comma names flattened (`lantern_hooded`, `clothes_fine`, `case_map_or_scroll`). Ammo ids: arrows, bolts, needles, bullets_sling, bullets_firearm (weapon.ammunition). Large ships skipped (not needed yet). Tools keep `craft` lists for future crafting.
+- A016: Background equipment: generic items (Holy Symbol, Gaming Set, focuses, instruments) become `choices` tags; quantities are units ("20 Arrows" → [arrows, 20]). Tool field is an item id or `choice:<tag>`. Species traits keep text; mechanics come later via hooks/effects (A035/A039+). Lineage spells referenced by spell id (validated once spells exist, A021–A023).
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -244,9 +246,10 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/data/schemas.ts` — schemas for every data/srd file + RulesTablesSchema; SRD_FILES registry; record types
 - `src/engine/data/srd.ts` — validateSrdFile, SrdDatabase (maps by id, item(), spellsForClass)
 - `src/engine/data/srdBundle.ts` — static imports of data/srd/*.json; loadSrd()
-- `scripts/srd/lib.ts` — importer helpers: readSource, sections(md, level), sectionByTitle, htmlTables, tableAfterCaption('**Caption**'), cleanText, num, applyOverrides, writeData (validates)
+- `scripts/srd/lib.ts` — importer helpers: makeItemResolver(ids) (item phrases → [id, qty]), costToCp, weightLb, readSource, sections(md, level), sectionByTitle, htmlTables, tableAfterCaption('**Caption**'), cleanText, num, applyOverrides, writeData (validates)
 - `scripts/srd/import-core.ts` — conditions + rules tables (`npm run srd:import`)
 - `scripts/srd/import-equipment.ts` — weapons/armor/gear (in `npm run srd:import`)
+- `scripts/srd/import-origins.ts` — species + backgrounds (needs equipment JSON first)
 - `data/srd/overrides/` — hand fixes/mechanics merged by id into importer output
 - `data/srd/rules-tables.json` — core numeric tables
 - `data/srd/*.json` — SRD data (arrays; empty until A014–A028 fill them)
@@ -279,7 +282,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ## Gotchas & Lessons
 - git core.autocrlf=true on this machine. The .bat launchers must stay CRLF; `.gitattributes` forces `*.bat` to CRLF (done). LF→CRLF warnings on `git add` are harmless.
 - Tests needing exact dice: use a fixed-face Rng stub (see `fixed()` in dice.test.ts).
-- SRD Markdown source has conversion errors (e.g. Dragonborn ancestry table in character-origins.md runs into the weapons table: 'Silver | 20 GP', 'Lance' rows). Always validate importer output and cross-check odd rows against the rules; fix via overrides.
+- The SRD Markdown source looked corrupted once, but that was two files' output concatenated in one shell command. Known real glitch: Typical DC table misses the Medium row. Still validate importer output and fix via overrides.
 - SRD Markdown format: spells are `#### Name` + `_Level 3 Evocation (Sorcerer, Wizard)_` + `**Casting Time:**` lines; monsters are `### Name` + `_Size Type (Tag), Alignment_` + `**AC** 15 **Initiative** +2 (12)` + an HTML <table> of STR..CHA (score, MOD, SAVE) + `#### Actions` with `**_Name._** _Melee Attack Roll:_ +4, reach 5 ft. _Hit:_ 5 (1d6 + 2) Slashing damage`. Tables are HTML (<tr><td>).
 - Class feature tables in classes.md have captions `**<Class> Features**`; spellcasters have a 2-row header (slot levels in row 2) → skip 2 rows.
 - TS strict + zod: a fallback lambda's return type widens enums to string; annotate it (`(e): T => ...`).

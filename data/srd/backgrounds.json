@@ -1,1 +1,200 @@
-[]
+[
+ {
+  "id": "acolyte",
+  "name": "Acolyte",
+  "abilityScores": [
+   "int",
+   "wis",
+   "cha"
+  ],
+  "featId": "magic_initiate",
+  "featOption": "cleric",
+  "skills": [
+   "insight",
+   "religion"
+  ],
+  "tool": "calligraphers_supplies",
+  "equipment": {
+   "a": {
+    "items": [
+     [
+      "calligraphers_supplies",
+      1
+     ],
+     [
+      "book",
+      1
+     ],
+     [
+      "parchment",
+      10
+     ],
+     [
+      "robe",
+      1
+     ]
+    ],
+    "cost": 800,
+    "choices": [
+     "holy_symbol"
+    ]
+   },
+   "b": {
+    "items": [],
+    "cost": 5000,
+    "choices": []
+   }
+  }
+ },
+ {
+  "id": "criminal",
+  "name": "Criminal",
+  "abilityScores": [
+   "dex",
+   "con",
+   "int"
+  ],
+  "featId": "alert",
+  "skills": [
+   "sleight_of_hand",
+   "stealth"
+  ],
+  "tool": "thieves_tools",
+  "equipment": {
+   "a": {
+    "items": [
+     [
+      "dagger",
+      2
+     ],
+     [
+      "thieves_tools",
+      1
+     ],
+     [
+      "crowbar",
+      1
+     ],
+     [
+      "pouch",
+      2
+     ],
+     [
+      "clothes_travelers",
+      1
+     ]
+    ],
+    "cost": 1600,
+    "choices": []
+   },
+   "b": {
+    "items": [],
+    "cost": 5000,
+    "choices": []
+   }
+  }
+ },
+ {
+  "id": "sage",
+  "name": "Sage",
+  "abilityScores": [
+   "con",
+   "int",
+   "wis"
+  ],
+  "featId": "magic_initiate",
+  "featOption": "wizard",
+  "skills": [
+   "arcana",
+   "history"
+  ],
+  "tool": "calligraphers_supplies",
+  "equipment": {
+   "a": {
+    "items": [
+     [
+      "quarterstaff",
+      1
+     ],
+     [
+      "calligraphers_supplies",
+      1
+     ],
+     [
+      "book",
+      1
+     ],
+     [
+      "parchment",
+      8
+     ],
+     [
+      "robe",
+      1
+     ]
+    ],
+    "cost": 800,
+    "choices": []
+   },
+   "b": {
+    "items": [],
+    "cost": 5000,
+    "choices": []
+   }
+  }
+ },
+ {
+  "id": "soldier",
+  "name": "Soldier",
+  "abilityScores": [
+   "str",
+   "dex",
+   "con"
+  ],
+  "featId": "savage_attacker",
+  "skills": [
+   "athletics",
+   "intimidation"
+  ],
+  "tool": "choice:gaming_set",
+  "equipment": {
+   "a": {
+    "items": [
+     [
+      "spear",
+      1
+     ],
+     [
+      "shortbow",
+      1
+     ],
+     [
+      "arrows",
+      20
+     ],
+     [
+      "healers_kit",
+      1
+     ],
+     [
+      "quiver",
+      1
+     ],
+     [
+      "clothes_travelers",
+      1
+     ]
+    ],
+    "cost": 1400,
+    "choices": [
+     "gaming_set"
+    ]
+   },
+   "b": {
+    "items": [],
+    "cost": 5000,
+    "choices": []
+   }
+  }
+ }
+]

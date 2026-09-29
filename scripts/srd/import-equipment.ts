@@ -5,7 +5,7 @@
 import { toId } from '../../src/engine/data/common';
 import type { Armor, Gear, Weapon } from '../../src/engine/data/schemas';
 import { ABILITIES, ABILITY_NAMES, DAMAGE_TYPES, type Ability, type DamageType } from '../../src/engine/rules/basics';
-import { applyOverrides, cleanText, costToCp, readSource, sectionByTitle, sections, tableAfterCaption, weightLb, writeData } from './lib';
+import { applyOverrides, cleanText, makeItemResolver, costToCp, readSource, sectionByTitle, sections, tableAfterCaption, weightLb, writeData } from './lib';
 
 const md = readSource('equipment.md');
 
@@ -215,34 +215,12 @@ for (const [label, weight, cost] of tableAfterCaption(md, 'Tack, Harness, and Dr
 // ---------------------------------------------------------------- pack contents
 
 const ids = new Set([...gear.map((g) => g.id), ...weapons.map((w) => w.id), ...armor.map((a) => a.id)]);
-/** "Hooded Lantern" → lantern_hooded, "10 Candles" → candle ×10, "7 flasks of Oil" → oil ×7. */
-function resolveItem(phrase: string): [string, number] {
-  let text = phrase.trim().replace(/^and\s+/, '').replace(/\.$/, '');
-  let qty = 1;
-  const q = /^(\d+)\s+(.*)$/.exec(text);
-  if (q) {
-    qty = Number(q[1]);
-    text = q[2]!;
-  }
-  text = text.replace(/^(flasks?|days?|sheets?|feet|bottles?|pieces?|sticks?|vials?|blocks?) of\s+/i, '').replace(/\s*\(.*\)$/, '');
-  const candidates = [text, text.replace(/s$/, ''), text.replace(/es$/, '')];
-  const words = text.split(' ');
-  if (words.length === 2) candidates.push(`${words[1]}, ${words[0]}`, `${words[1]!.replace(/s$/, '')}, ${words[0]}`);
-  for (const c of candidates) {
-    const id = toId(c);
-    if (ids.has(id)) return [id, qty];
-  }
-  const alias = PACK_ALIASES[text];
-  if (alias) return [alias, qty];
-  unresolved.push(phrase);
-  return ['?', qty];
-}
-
-/** Pack wording that doesn't match item names. */
-const PACK_ALIASES: Record<string, string> = {
-  'Map or Scroll Cases': 'case_map_or_scroll',
-};
 const unresolved: string[] = [];
+const resolveItem = (phrase: string): [string, number] => {
+  const r = makeItemResolver(ids)(phrase);
+  if (!r) unresolved.push(phrase);
+  return r ?? ['?', 1];
+};
 
 for (const g of gear) {
   if (g.category !== 'pack' || !g.text) continue;
