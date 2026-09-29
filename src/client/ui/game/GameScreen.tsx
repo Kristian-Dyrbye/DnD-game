@@ -140,7 +140,7 @@ export function GameScreen() {
           <span class="muted">Objective:</span> {objective.value}
         </p>
       )}
-      {h && <PartyPanel hero={h} companions={state?.companions ?? []} onLevelUp={() => setLevelUpOpen(true)} loyalty={Object.fromEntries((state?.companions ?? []).map((c) => [c.id, Number(state?.flags[`world.${c.id}_loyalty`] ?? 50)]))} />}
+      {h && <PartyPanel hero={h} companions={state?.companions ?? []} onLevelUp={() => setLevelUpOpen(true)} loyalty={Object.fromEntries((state?.companions ?? []).map((c) => [c.id, Number(state?.flags[`world.${c.id}_loyalty`] ?? 50)]))} controls={(state?.extensions.party as { control?: Record<string, 'ai' | 'player'> } | undefined)?.control ?? {}} />}
       {levelUpOpen && h && <LevelUpPanel hero={h} onClose={() => setLevelUpOpen(false)} />}
       <main class="game-main">
         {connection.value !== 'open' && <p class="connection-note">{connection.value === 'connecting' ? 'Connecting to the game server…' : 'Disconnected — retrying…'}</p>}

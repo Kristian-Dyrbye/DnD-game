@@ -162,3 +162,19 @@ export function changeApproval(state: GameState, def: CompanionDef, delta: numbe
   const warn = after <= LOYALTY_LOW && before > LOYALTY_LOW ? ' Their patience is wearing thin.' : '';
   return `${shortName(def.name)} ${mood}. (${delta > 0 ? '+' : ''}${delta})${warn}`;
 }
+
+// ---------------------------------------------------------------- control toggle (A087)
+
+export type Control = 'ai' | 'player';
+
+/** Companions the player controls in combat (default: AI). Stored in extensions.party.control. */
+export function playerControlled(state: GameState): string[] {
+  const control = (state.extensions.party as { control?: Record<string, Control> } | undefined)?.control ?? {};
+  return state.companions.filter((c) => control[c.id] === 'player').map((c) => c.id);
+}
+
+export function setControl(state: GameState, companionId: string, control: Control): void {
+  if (!state.companions.some((c) => c.id === companionId)) throw new Error('That companion is not in your party.');
+  const party = (state.extensions.party as { control?: Record<string, Control> } | undefined) ?? {};
+  state.extensions.party = { ...party, control: { ...(party.control ?? {}), [companionId]: control } };
+}

@@ -378,3 +378,4 @@ body.cb-helpers .hp-bar.hp-mid div { background-image: repeating-linear-gradient
 .combat-log li { margin-bottom: 0.25rem; }
 @media (max-width: 1000px) { .combat-screen { grid-template-columns: 1fr; grid-template-rows: auto auto auto; grid-template-areas: 'bar' 'main' 'side'; height: auto; } .combat-side { border-left: none; border-top: 1px solid #3a3226; } }
 .level-up { margin-top: 0.4rem; width: 100%; }
+.econ.acting { background: #3a2f1c; color: var(--accent); text-decoration: none; }

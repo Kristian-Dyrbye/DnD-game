@@ -8,7 +8,7 @@ import { useMemo, useState } from 'preact/hooks';
 import { templateFromArea, templateFromCaster, previewArea } from '../../../engine/combat/aoe';
 import { attackProfiles, checkAttack, type AttackProfile } from '../../../engine/combat/attack';
 import type { CombatContext } from '../../../engine/combat/combatState';
-import type { Encounter, PlayerAction } from '../../../engine/combat/encounter';
+import { isControlled, type Encounter, type PlayerAction } from '../../../engine/combat/encounter';
 import { cellKey, type Point } from '../../../engine/combat/grid';
 import { reachableSquares } from '../../../engine/combat/movement';
 import { budgetOf, currentId, movementLeft } from '../../../engine/combat/turns';
@@ -22,9 +22,12 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Enco
   const [mode, setMode] = useState<Mode>({ kind: 'move' });
   const [hover, setHover] = useState<Point | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const { state, heroId } = enc;
+  const { state } = enc;
+  // The player acts for the hero and any companion toggled to player control.
+  const upNow = currentId(state.turns);
+  const heroId = upNow && isControlled(enc, upNow) ? upNow : enc.heroId;
   const hero = state.creatures[heroId] as Character | undefined;
-  const myTurn = enc.status === 'ongoing' && currentId(state.turns) === heroId;
+  const myTurn = enc.status === 'ongoing' && upNow === heroId && isControlled(enc, heroId);
   const budget = budgetOf(state.turns, heroId);
   const sides = enc.roster;
 
@@ -113,6 +116,7 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Enco
               <span class={`econ ${budget.action ? 'on' : ''}`}>Action</span>
               <span class={`econ ${budget.bonusAction ? 'on' : ''}`}>Bonus</span>
               <span class={`econ ${budget.reaction ? 'on' : ''}`}>Reaction</span>
+              <span class="econ acting">{hero?.name}</span>
               <span class="econ on">Move {hero ? movementLeft(state.turns, heroId, hero) : 0} ft</span>
               <button type="button" class={mode.kind === 'move' ? 'selected' : ''} onClick={() => setMode({ kind: 'move' })}>
                 Move

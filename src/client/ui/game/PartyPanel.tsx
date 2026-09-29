@@ -4,8 +4,9 @@ import { totalLevel } from '../../../engine/core/creature';
 import { db } from '../../data';
 import { formatCoins } from '../text';
 import { canLevelUp } from '../../../engine/character/leveling';
+import { send } from '../../net/gameSocket';
 
-function MemberCard({ c, lead, onLevelUp, loyalty }: { c: Character; lead?: boolean; onLevelUp?: () => void; loyalty?: number }) {
+function MemberCard({ c, lead, onLevelUp, loyalty, control, onToggle }: { c: Character; lead?: boolean; onLevelUp?: () => void; loyalty?: number; control?: 'ai' | 'player'; onToggle?: () => void }) {
   const pct = Math.max(0, Math.min(100, (c.hp / c.maxHp) * 100));
   const classes = c.classes.map((cl) => `${db.classes.get(cl.classId)?.name ?? cl.classId} ${cl.level}`).join(' / ');
   const hpClass = pct <= 25 ? 'low' : pct <= 50 ? 'mid' : 'ok';
@@ -39,6 +40,11 @@ function MemberCard({ c, lead, onLevelUp, loyalty }: { c: Character; lead?: bool
         </p>
       )}
       {lead && <p class="member-coins">{formatCoins(c.coins)}</p>}
+      {onToggle && (
+        <button type="button" class="link-button small" onClick={onToggle} title="Who decides this companion's actions in combat">
+          Combat: {control === 'player' ? 'you control' : 'AI'} ⇄
+        </button>
+      )}
       {loyalty !== undefined && (
         <p class="member-coins" title="Companion approval (0–100)">
           Loyalty {loyalty}
@@ -54,13 +60,19 @@ function MemberCard({ c, lead, onLevelUp, loyalty }: { c: Character; lead?: bool
   );
 }
 
-export function PartyPanel({ hero, companions, onLevelUp, loyalty }: { hero: Character; companions: Character[]; onLevelUp?: () => void; loyalty?: Record<string, number> }) {
+export function PartyPanel({ hero, companions, onLevelUp, loyalty, controls }: { hero: Character; companions: Character[]; onLevelUp?: () => void; loyalty?: Record<string, number>; controls?: Record<string, 'ai' | 'player'> }) {
   return (
     <aside class="party-panel" aria-label="Party">
       <h2>Party</h2>
       <MemberCard c={hero} lead {...(onLevelUp && { onLevelUp })} />
       {companions.map((c) => (
-        <MemberCard key={c.id} c={c} {...(loyalty?.[c.id] !== undefined && { loyalty: loyalty[c.id] })} />
+        <MemberCard
+          key={c.id}
+          c={c}
+          {...(loyalty?.[c.id] !== undefined && { loyalty: loyalty[c.id] })}
+          control={controls?.[c.id] ?? 'ai'}
+          onToggle={() => send({ type: 'companion_control', companionId: c.id, control: controls?.[c.id] === 'player' ? 'ai' : 'player' })}
+        />
       ))}
       {companions.length === 0 && <p class="hint small">No companions yet.</p>}
     </aside>

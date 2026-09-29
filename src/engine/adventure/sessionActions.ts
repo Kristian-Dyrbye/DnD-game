@@ -20,7 +20,7 @@ import { resolveIntent } from './resolve';
 import { activeFight, fightAct, finishFight, startFight, type FightEnd } from './fights';
 import type { DefeatTable } from './defeat';
 import { canLevelUp, levelUp } from '../character/leveling';
-import { changeApproval, levelCompanionsWithHero, partWithCompanion, recruitCompanion, type CompanionRoster } from '../party/companions';
+import { changeApproval, levelCompanionsWithHero, partWithCompanion, recruitCompanion, setControl, type CompanionRoster } from '../party/companions';
 import { totalLevel } from '../core/creature';
 import type { Ability, Skill } from '../rules/basics';
 import { acceptOffer, activeSideQuest, finishActive, offerSources, offersAt, refreshOffers, roadOffer, sideQuestState, type SideQuestDeps } from './sideQuests';
@@ -289,6 +289,13 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       session.autosave();
     },
     async command(session, cmd) {
+      if (cmd.type === 'companion_control') {
+        if (activeFight(session.current)) throw new Error('Change control outside of combat.');
+        setControl(session.current, cmd.companionId, cmd.control);
+        const c = session.current.companions.find((x) => x.id === cmd.companionId)!;
+        session.addLog('system', `${c.name} is now ${cmd.control === 'player' ? 'controlled by you' : 'controlled by the AI'} in combat.`);
+        return;
+      }
       if (cmd.type === 'level_up') {
         if (!db) throw new Error('Leveling needs the SRD data');
         if (activeFight(session.current)) throw new Error('Finish the fight first.');

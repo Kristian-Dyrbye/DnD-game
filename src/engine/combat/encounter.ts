@@ -22,6 +22,8 @@ export type EncounterStatus = 'ongoing' | 'won' | 'lost';
 export interface Encounter {
   state: CombatState;
   heroId: string;
+  /** Creatures the player controls (the hero + companions toggled to player control). */
+  controlled?: string[];
   /** Initial sides (for the AI's morale rule). */
   roster: Record<string, string>;
   log: string[];
@@ -67,6 +69,8 @@ const push = (enc: Encounter, lines: string[]) => {
 export interface EncounterSetup {
   hero: Character;
   companions?: Character[];
+  /** Companion ids the player controls in this fight (default: all AI). */
+  playerControlled?: string[];
   monsters: { id: string; count: number }[];
   db: SrdDatabase;
   grid?: Grid;
@@ -92,6 +96,7 @@ export function setupEncounter(setup: EncounterSetup, ctx: CombatContext): Encou
   const enc: Encounter = {
     state: { grid, turns, creatures },
     heroId: setup.hero.id,
+    controlled: [setup.hero.id, ...(setup.playerControlled ?? []).filter((id) => (setup.companions ?? []).some((c) => c.id === id))],
     roster: Object.fromEntries(turns.order.map((e) => [e.id, e.side])),
     log: ['Roll for initiative!', ...rolls.map((r) => `${creatures[r.id]?.name ?? r.id}: ${r.text}`)],
     status: 'ongoing',
@@ -122,10 +127,10 @@ function advance(enc: Encounter, ctx: CombatContext, aiOpts: AiOptions = {}): vo
     push(enc, r.events.map((e) => e.text));
     const id = currentId(enc.state.turns);
     if (!id) return;
-    if (id === enc.heroId) {
-      const hero = enc.state.creatures[id];
-      // A downed hero rolls death saves in startTurn; nothing else to do this turn.
-      if (hero && hero.hp > 0) return;
+    if (isControlled(enc, id)) {
+      const pc = enc.state.creatures[id];
+      // A downed character rolls death saves in startTurn; nothing else to do this turn.
+      if (pc && pc.hp > 0) return;
       continue;
     }
     const c = enc.state.creatures[id];
@@ -140,11 +145,16 @@ function advance(enc: Encounter, ctx: CombatContext, aiOpts: AiOptions = {}): vo
   }
 }
 
-/** Applies one hero action. Returns an error message if the action was refused. */
+/** Does the player control this creature (the hero, or a companion toggled to player control)? */
+export function isControlled(enc: Encounter, id: string): boolean {
+  return id === enc.heroId || (enc.controlled ?? []).includes(id);
+}
+
+/** Applies one action for the player-controlled creature whose turn it is. Returns an error message if refused. */
 export function playerAct(enc: Encounter, ctx: CombatContext, a: PlayerAction): string | undefined {
   if (enc.status !== 'ongoing') return 'The fight is over.';
-  if (currentId(enc.state.turns) !== enc.heroId) return 'It is not your turn.';
-  const id = enc.heroId;
+  const id = currentId(enc.state.turns);
+  if (!id || !isControlled(enc, id)) return 'It is not your turn.';
   if (a.kind === 'end_turn') {
     advance(enc, ctx);
     return undefined;

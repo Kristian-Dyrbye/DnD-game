@@ -50,6 +50,8 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
     expertise: z.array(z.string().max(40)).max(4).optional(),
     skills: z.array(z.string().max(40)).max(4).optional(),
   }),
+  /** Toggle a companion between AI and player control (outside combat). */
+  z.object({ ...base, type: z.literal('companion_control'), companionId: z.string().max(40), control: z.enum(['ai', 'player']) }),
   /** Combat: one hero action on the battle map, or fleeing the fight. */
   z.object({ ...base, type: z.literal('combat_act'), action: PlayerActionSchema }),
   z.object({ ...base, type: z.literal('combat_flee') }),
