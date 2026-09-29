@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A029
-- **Notes for next session:** Start with A030. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A030
+- **Notes for next session:** Start with A031. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -49,7 +49,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A027 — SRD data: monsters T–Z
 - [done] A028 — SRD data: magic items
 - [done] A029 — Ability checks & saves
-- [todo] A030 — Attacks & damage | Spec: §4 | Done: to-hit, nat 20/1, crit dice, resist/vuln/immune, temp HP, damage application; tests | Dep: A029
+- [done] A030 — Attacks & damage
 - [todo] A031 — Conditions engine + exhaustion 2024 | Spec: §4 | Done: apply/remove/duration, data-driven roll modifiers, exhaustion −2/level d20 & −5 ft speed, death at 6; tests | Dep: A014, A030
 - [todo] A032 — Death saves, 0 HP, resting | Spec: §4, §9 | Done: death saves, stabilize, massive damage, healing from 0, short rest (hit dice) and long rest, generic resource recovery; tests | Dep: A031
 - [todo] A033 — Effect system | Spec: §4 | Done: data-driven executor for damage/heal/condition/save/area/duration effects; tests | Dep: A031
@@ -165,6 +165,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - Phase 0–1 (A000–A009, A010 blocked): repo + ARCHITECTURE.md; Vite+Preact client, strict TS, Vitest; Fastify server (/api/health, /ws echo, static + SPA fallback, dev proxy); settings schema + store + /api/settings; LLM layer (LlmProvider, OllamaClient w/ NDJSON streaming + status, deterministic MockLlm, callStructured w/ zod + retry + fallback); TTS layer (PiperTts spawn-per-utterance → WAV, MockTts); /api/status + StatusIndicator; saves (envelope, migration chain, rotating autosaves, /api/saves); Setup.bat / Start Game.bat + scripts/check-deps.mjs. Key dirs: src/server, src/shared, src/llm, src/tts, src/client, scripts/.
 - Phase 2 part 1 (A011–A028): seeded Rng + dice/d20 math (engine/core); core vocabulary + Creature/Character schemas (engine/rules/basics, engine/core/creature); SRD data pipeline (engine/data schemas + SrdDatabase + loadSrd; scripts/srd importers; `npm run srd:fetch`, `npm run srd:import`). Data: 15 conditions (+modifiers), rules tables, 38 weapons, 13 armor, 150 gear, 9 species, 4 backgrounds, 17 feats, 12 classes + 12 subclasses, 339 spells (93 with auto effects), 330 monsters/animals, 271 magic items. Tests per file in src/engine/data/*Data.test.ts.
 - A029 — d20Test core (adv/dis cancel, exhaustion −2/level, autoFail, math line) + abilityCheck/skillCheck/savingThrow/passiveScore/contest — `src/engine/rules/checks.ts`
+- A030 — attackRoll (nat 20 crit / nat 1 miss, critOn, autoCrit), rollDamage (crit doubles dice only, modifiers on first entry, min 0, math text), applyDamage (immune/resist/vuln once, temp HP first, overflow, massive-damage flag), heal, grantTempHp, isBloodied — `src/engine/rules/damage.ts`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -214,6 +215,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A028: Magic item ids for +N items end in _N (weapon_1). `potion_of_healing` exists both as gear (buyable, 50 GP) and as a magic item (with heal effect) — separate maps, same id on purpose. 'Rarity Varies' items (spell_scroll, ioun_stone, figurine...) keep rarity 'varies'.
 - A028: `npm run srd:import` rebuilds all SRD JSON deterministically (verified no diff on rerun).
 - A029: All D20 Tests go through d20Test(); it takes adv/dis as lists of source names (cancel per SRD) and optional autoFail reason. Nat 20/1 only matter for attack rolls (A030). Proficiency modifier labels: 'Proficiency: Persuasion', 'Expertise: Stealth'.
+- A030: Creature updates are pure (return new creature + report). Resist and vulnerable on the same type: halve then double. Massive damage flag = overflow ≥ max HP after hitting 0; death/unconscious handling is A032.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -238,6 +240,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/rules/basics.ts` — ABILITIES, SKILL_ABILITY, DAMAGE_TYPES, SIZES, CREATURE_TYPES, CONDITIONS (+ zod enums); abilityModifier, proficiencyBonus(ForCR), proficiencyContribution, parseCR/formatCR, formatModifier, sizeSquares
 - `src/engine/core/creature.ts` — CreatureSchema, CharacterSchema, CombatantSchema, ActiveCondition, Resource, totalLevel
 - `src/engine/rules/checks.ts` — d20Test (shared core), abilityCheck, skillCheck, savingThrow, checkModifiers, saveModifiers, passiveScore, contest
+- `src/engine/rules/damage.ts` — attackRoll, rollDamage, doubleDice, adjustForDefenses, applyDamage, heal, grantTempHp, isBloodied
 - `src/engine/data/common.ts` — IdSchema, DiceSchema, CostSchema(CP), DamageSchema, AreaSchema, DurationSchema, EffectSchema/Effect, toId
 - `src/engine/data/schemas.ts` — schemas for every data/srd file + RulesTablesSchema; SRD_FILES registry; record types
 - `src/engine/data/srd.ts` — validateSrdFile, SrdDatabase (maps by id, item(), spellsForClass)
