@@ -39,7 +39,7 @@ Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master. Runs fully of
 │  │  ├─ data/                    zod schemas for data/srd, SrdDatabase, bundled loader (loadSrd)
 │  │  ├─ rules/                   abilities, checks, attacks, damage, conditions, effects, spells, rest, leveling, feats, multiclass
 │  │  ├─ character/               character builder, derived stats, creator validation, quick build
-│  │  ├─ combat/                  grid, LOS/cover, movement, initiative, actions, AoE, mastery, AI (enemy + companion)
+│  │  ├─ combat/                  grid (grid.ts: squares, edge walls/doors, tokens, distance), LOS/cover (los.ts), movement, initiative, actions, AoE, mastery, AI
 │  │  ├─ world/                   clock, weather, travel, map discovery, fog, factions, shops, flags, schedules
 │  │  ├─ adventure/               adventure schema, scene runner, encounter scaling, side-quest generator + validator
 │  │  ├─ party/                   companions, loyalty, control mode
