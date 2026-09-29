@@ -559,7 +559,9 @@
         "maw_descent",
         "choir_of_teeth",
         "defeat_outcomes",
-        "pells_reckoning"
+        "pells_reckoning",
+        "highcrown_audience",
+        "palace_undercroft"
       ],
       "readBy": [
         "highcrown_audience",
@@ -567,7 +569,8 @@
         "lantern_hold_siege",
         "choir_of_teeth",
         "maw_final_seal",
-        "pells_reckoning"
+        "pells_reckoning",
+        "palace_undercroft"
       ],
       "description": "Holder of Tooth 1, the Tooth of Want, from the loc:millbrook barrow. Giving it to the Brightwater magistrate sends it silently to the Almonry (choir)."
     },
@@ -591,13 +594,16 @@
         "maw_descent",
         "choir_of_teeth",
         "defeat_outcomes",
-        "pells_reckoning"
+        "pells_reckoning",
+        "highcrown_audience"
       ],
       "readBy": [
         "abbey_bells_toll",
         "choir_of_teeth",
         "maw_final_seal",
-        "pells_reckoning"
+        "pells_reckoning",
+        "highcrown_audience",
+        "palace_undercroft"
       ],
       "description": "Holder of Tooth 2, the Drowned Tooth, from loc:drowned_abbey."
     },
@@ -622,13 +628,16 @@
         "maw_descent",
         "choir_of_teeth",
         "defeat_outcomes",
-        "pells_reckoning"
+        "pells_reckoning",
+        "highcrown_audience"
       ],
       "readBy": [
         "night_of_bells",
         "choir_of_teeth",
         "maw_final_seal",
-        "pells_reckoning"
+        "pells_reckoning",
+        "highcrown_audience",
+        "palace_undercroft"
       ],
       "description": "Holder of Tooth 3, the Briar Tooth, kept by Grandmother Wick of fac:briarkin at loc:thornwife_hollow."
     },
@@ -655,14 +664,17 @@
         "choir_of_teeth",
         "side_quests",
         "defeat_outcomes",
-        "ch2_salt_and_treason"
+        "ch2_salt_and_treason",
+        "highcrown_audience"
       ],
       "readBy": [
         "pells_reckoning",
         "choir_of_teeth",
         "maw_final_seal",
         "port_sorrel_docks",
-        "brass_parrot_vault"
+        "brass_parrot_vault",
+        "highcrown_audience",
+        "palace_undercroft"
       ],
       "description": "Holder of Tooth 4, the Brass Tooth, from the vault on loc:isle_of_brass_parrots; fac:red_gull_brotherhood may secure it."
     },
@@ -688,13 +700,16 @@
         "choir_of_teeth",
         "defeat_outcomes",
         "pells_reckoning",
-        "ch2_salt_and_treason"
+        "ch2_salt_and_treason",
+        "highcrown_audience"
       ],
       "readBy": [
         "choir_of_teeth",
         "maw_final_seal",
         "singing_reef_lagoon",
-        "pells_reckoning"
+        "pells_reckoning",
+        "highcrown_audience",
+        "palace_undercroft"
       ],
       "description": "Holder of Tooth 5, the Singing Tooth, taken from the sea hag of loc:singing_reef."
     },
@@ -722,7 +737,10 @@
       ],
       "readBy": [
         "choir_of_teeth",
-        "maw_final_seal"
+        "maw_final_seal",
+        "vaelthorn_sky_towers",
+        "highcrown_audience",
+        "palace_undercroft"
       ],
       "description": "Holder of Tooth 6, the Sky Tooth, sealed under Dawnbreaker in loc:ruins_of_old_vaelthorn."
     },
@@ -818,7 +836,8 @@
         "maw_final_seal",
         "ending",
         "port_sorrel_docks",
-        "brass_parrot_vault"
+        "brass_parrot_vault",
+        "highcrown_audience"
       ],
       "description": "Derived: number of Teeth held by fac:hollow_choir. Reaching 7 during the finale opens loc:the_maw."
     },
@@ -915,7 +934,8 @@
         "lantern_hold_siege",
         "ending",
         "side_quests",
-        "port_sorrel_docks"
+        "port_sorrel_docks",
+        "highcrown_audience"
       ],
       "description": "Fate of loc:hollowmere: cured (fac:briarkin), purged (fac:lantern_wardens) or abandoned to fac:hollow_choir."
     },
@@ -951,7 +971,8 @@
       ],
       "readBy": [
         "pells_reckoning",
-        "almoners_masque"
+        "almoners_masque",
+        "palace_undercroft"
       ],
       "description": "Clue 2: the Almonry seal on plague grain in loc:port_sorrel."
     },
@@ -966,7 +987,8 @@
       "readBy": [
         "pells_reckoning",
         "deepanvil_ledgers",
-        "almoners_masque"
+        "almoners_masque",
+        "palace_undercroft"
       ],
       "description": "Clue 3: the fac:hollow_choir ledger from loc:wreckers_cove."
     },
@@ -1064,7 +1086,9 @@
         "highcrown_burning",
         "ending",
         "side_quests",
-        "brass_parrot_vault"
+        "brass_parrot_vault",
+        "highcrown_audience",
+        "almoners_masque"
       ],
       "description": "Fate of Captain Harrow Vey, fac:hollow_choir smuggler-captain."
     },
@@ -1115,7 +1139,8 @@
       "readBy": [
         "almoners_masque",
         "dawnspire_muster",
-        "ending"
+        "ending",
+        "palace_undercroft"
       ],
       "description": "Clue 4: fac:ironvault_consortium ledgers tie the Almonry to Choir funds."
     },
@@ -1139,7 +1164,8 @@
         "pyrraxis_hoard",
         "choir_of_teeth",
         "maw_final_seal",
-        "ending"
+        "ending",
+        "vaelthorn_sky_towers"
       ],
       "description": "Holder of the holy lance Dawnbreaker (dragon_slayer) of fac:order_of_the_dawn_lance."
     },
@@ -1166,7 +1192,8 @@
         "highcrown_burning",
         "maw_descent",
         "ending",
-        "side_quests"
+        "side_quests",
+        "vaelthorn_sky_towers"
       ],
       "description": "Fate of Vosk the Hollow, fac:hollow_choir archivist-mage."
     },
@@ -1180,7 +1207,8 @@
       "readBy": [
         "palace_undercroft",
         "choir_of_teeth",
-        "ending"
+        "ending",
+        "almoners_masque"
       ],
       "description": "Hero knows the Cantor is Lady Seraphine Vell, Royal Almoner of fac:crown_of_aurelmark."
     },
@@ -1194,7 +1222,8 @@
       "readBy": [
         "dawnspire_muster",
         "highcrown_burning",
-        "ending"
+        "ending",
+        "palace_undercroft"
       ],
       "description": "The Cantor was exposed before the court of loc:highcrown."
     },
@@ -1230,7 +1259,9 @@
         "ashfall_road",
         "dawnspire_muster",
         "highcrown_burning",
-        "side_quests"
+        "side_quests",
+        "almoners_masque",
+        "palace_undercroft"
       ],
       "description": "Hero is wanted by fac:crown_of_aurelmark or fac:saltwind_trading_company law."
     },
@@ -1413,7 +1444,8 @@
         "highcrown_audience",
         "ending",
         "port_sorrel_docks",
-        "fort_kestrel_gallows"
+        "fort_kestrel_gallows",
+        "dawnspire_vigil"
       ],
       "description": "Ser Corwin Ashvale, dismissed knight of fac:order_of_the_dawn_lance."
     },
@@ -1483,7 +1515,8 @@
         "maw_final_seal",
         "defeat_outcomes",
         "ending",
-        "port_sorrel_docks"
+        "port_sorrel_docks",
+        "palace_undercroft"
       ],
       "description": "Nettle, fac:briarkin hedge-witch apprentice."
     },
@@ -1611,7 +1644,11 @@
       "readBy": [
         "choir_of_teeth",
         "ending",
-        "wreckers_cove_caves"
+        "wreckers_cove_caves",
+        "highcrown_audience",
+        "almoners_masque",
+        "vaelthorn_sky_towers",
+        "palace_undercroft"
       ],
       "description": "Aurek Vell, Veyran scholar and nephew of the Cantor."
     },
@@ -1632,7 +1669,8 @@
         "highcrown_audience",
         "almoners_masque",
         "choir_of_teeth",
-        "ending"
+        "ending",
+        "palace_undercroft"
       ],
       "description": "Aurek approval 0-100; <=20 at the masque makes him warn his aunt; >=70 enables redemption."
     },
