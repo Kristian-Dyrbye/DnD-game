@@ -390,6 +390,12 @@ body.cb-helpers .hp-bar.hp-mid div { background-image: repeating-linear-gradient
 .save-browser, .character-screen { text-align: left; }
 .save-actions { display: flex; gap: 0.35rem; }
 @media (max-width: 700px) { .character-body { grid-template-columns: 1fr; } .save-card { grid-template-columns: 64px 1fr; } .save-thumb { width: 64px; height: 64px; } .save-actions { grid-column: 1 / -1; } }
+.glyph { fill: none; stroke-width: 1.6; stroke-linecap: round; opacity: 0.55; }
+.glyph-tree { stroke: #2f4a1e; fill: #3f5f28; }
+.glyph-reed { stroke: #9aa88a; }
+.glyph-wave { stroke: #cfe6f2; }
+.glyph-hill { stroke: #e2d6b0; }
+.map-place.heard { opacity: 0.65; }
 .combat-narration { margin: 0; padding: 0.4rem 1rem; font-style: italic; color: var(--muted, #c9bfa8); border-top: 1px solid #3a3226; }
 .action-row-more { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; width: 100%; padding-top: 0.4rem; border-top: 1px dashed #3a3226; }
 .action-row-more .skill-pick, .action-row-more .item-use { display: inline-flex; gap: 0.2rem; }

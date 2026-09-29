@@ -5,7 +5,7 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 4 (Phase 3 Character Creation done)
-- **Last completed assignment:** A093
+- **Last completed assignment:** A075b
 - **Notes for next session:** Continue the queue: A098/A099 (starter arc; companions/recruit/approval now exist), A088–A093 (3D equipment/wounds/scars), A070 (3D battle map), A076 (dungeon maps + fog), A075b, then A114–A116. A010 still blocked until Ollama is installed (Ollama/Piper not installed on this PC yet). Playable test URLs: `#play-<class>`, `#play-<class>+map`, `#combat-<class>`.
 
 ## Assignment Queue
@@ -74,7 +74,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ### Phase 12 — Procedural Side Quests
 
 ### Phase 13 — Polish
-- [todo] A075b — Map art polish | Spec: §11.1 | Done: organic region outlines (SVG paths) + terrain/location icons + labels that don't overlap; fog on unknown areas | Dep: A075
+- [done] A075b — Map art polish
 - [done] A111, A112, A113
 - [todo] A114 — Docs + About screen | Spec: §4, §17 | Done: README, ARCHITECTURE, ADVENTURE_FORMAT, CREDITS final; SRD CC-BY-4.0 attribution in About + README | Dep: A113
 - [todo] A115 — Full playtest pass | Spec: §17 | Done: play through with mock (and real LLM if available); issues become new queue items | Dep: A114
@@ -82,6 +82,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ## Completed Log
 <!-- One line per assignment: A<id> — what was built — key files. Compress into per-phase summaries when long. -->
+- A075b — world map art: seeded organic region coastlines (superellipse + low-frequency waves, Catmull-Rom Béziers), terrain glyphs by region tone (trees/hills, reeds, waves) kept clear of places, SVG icons per location kind (city, town, fortress, port, temple, dungeon/ruin, wilderness), greedy non-overlapping label placement, blurred fog mask lifting around known/visited places, region names only once a place there is known — client/ui/game/{WorldMap.tsx,mapArt.ts}
 - A093 — character screen (game menu → Character: big rotatable model with gear/wounds/wear/scars, click a scar mark or hover the list to read its origin, abilities/AC/HP/equipment), save browser (title Load Game, in-game Save / Load: thumbnails, save as new, overwrite/delete manual saves), hero preview snapshots a 128px JPEG after each model rebuild → `thumbnail` command → every save's meta.thumbnail — client/ui/{SaveBrowser.tsx,game/CharacterScreen.tsx}, client/three/{CharacterPreview,scarMarks}.ts(x), engine/session/GameSession.ts, shared/protocol.ts; test URL #load
 - A092 — armor wear: InventoryItem.wear 0–100, combat tallies hits on characters (armorHits), fight end adds wear (armor +3/hit, shield +2, crits double), labels pristine→battered, `repair` ws command (smith here: 25% of value × wear, 1 h; mend yourself: −50 wear, 8 h), inventory wear tags + Repair/Mend buttons, grey scratch/dent overlays on armored body parts — engine/character/armorWear.ts, combat/{attack,combatState}.ts, adventure/{fights,sessionActions}.ts, shared/protocol.ts, client InventoryPanel + three/{wounds,characterModel,CharacterPreview,BattleMap3D}
 - A091 — permanent scars: Character.scars (location, cause crit/down/story, description, origin, at), combat records scarMarks (crits taken, drops to 0) → rollScars at fight end (35%/60%, one per character per fight, placement by damage type, 'Weapon of the Source' + scene/adventure origin), story `scar` outcome, narrator hero line lists the newest scars, party-card chips with hover text, 3D marks attached to bones — engine/character/scars.ts, core/creature.ts, combat/attack.ts, adventure/{fights,runner,schema}.ts, llm/context/gather.ts, client/three/scarMarks.ts, ui/game/PartyPanel.tsx; test URL #play-<class>+scars
@@ -128,6 +129,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A075b: Map art is procedural and deterministic (seeded by region id) instead of a painted image — no asset licensing, scales to any lore. Fog: 0.9-opacity dark rect with a blurred mask (radius 150 around visited, 100 around heard-of places).
 - A093: Thumbnails are captured client-side (drawImage from the WebGL canvas right after render, so no preserveDrawingBuffer) and kept in the session (not in GameState) until the next new_game; saves made before the first capture have none. Scar marks carry invisible bigger hit boxes for clicking. Manual saves use slot ids save-<base36 time>; autosaves can't be overwritten or deleted from the browser.
 - A092: Wear is cosmetic (never changes AC) so it can't punish players; it shows on the model, in the inventory and via the item wear value. Smith repairs need a smith shop at the current map location (shops.json kind 'smith'). Wear overlays reuse the wound overlay copies (UV-space decals) on Body/Arm/Leg parts, 4 steps by 25 wear.
 - A091: Scar marks are thin boxes placed in bind-pose model space (Knight.glb measurements: front +Z, character's left +X) then bone.attach()ed; other outfits share the rig so positions are close. Hover inspect lives on the party card (title tooltip) for now; A093's character screen should add click/hover on the 3D marks (mark.userData.scar).
@@ -273,7 +275,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - tts: `types.ts`, `piper.ts`, `mock.ts`, `wav.ts`, `provider.ts`, `queue.ts` (TtsQueue: background, drop-oldest, cache, speakable)
 - server: `app.ts` (buildApp: REST, /ws → GameSession, adventures + flag registry + systems + LLM ports), `main.ts`, `port.ts`, `services.ts` (llm/tts/status), `settingsStore.ts`, `saveStore.ts` (atomic saves, rotating autosaves), `adventures.ts` (loadAdventures, loadFlagRegistry), `narrator.ts` (llmNarrator + onError), `notices.ts` (Notices: throttled friendly LLM/TTS problem lines)
 - shared: `protocol.ts` (ClientCommandSchema incl. journal_*, ServerEvent incl. narration/roll/suggestions/objective/journal, parseCommand), `settings.ts`, `save.ts`, `status.ts`, `version.ts`
-- client: `ui/SaveBrowser.tsx` (load/save with thumbnails), `ui/game/CharacterScreen.tsx` (3D model + scars + sheet), `three/BattleMap3D.tsx` (3D battle map) + `three/LazyBattleMap3D.tsx` + `three/battle3d.ts` (pure helpers), `main.tsx`, `index.html`, `styles.css`, `data.ts` (db); `net/gameSocket.ts` (ws + signals + applyEvent); `ui/App.tsx`, `ui/state.ts` (screens; `#creator`, `#quickbuild-<class>`, `#play-<class>`, `#play-<class>+map`), `ui/settingsState.ts` (+applyAccessibility), `ui/SettingsPanel.tsx`, `ui/text.ts`, `ui/StatusIndicator.tsx`, `ui/creator/*` (creator steps), `ui/game/LevelUpPanel.tsx`, `ui/game/{GameScreen,PartyPanel,StoryLog,ActionInput,DiceTray,JournalPanel,WorldMap,InventoryPanel,ShopPanel}.tsx`; `ui/combat/{BattleMap,CombatScreen}.tsx` + `combatDemo.ts` + `dice.ts`; `three/{loader,characterModel,CharacterPreview}`; `audio/AudioManager.ts` (music crossfade, ambience, SFX pools, unlock on first gesture) + `audio/audioLogic.ts` (pickVariant, channelVolume, sfxForEvent)
+- client: `ui/game/mapArt.ts` (region outlines, glyphs, label placement), `ui/SaveBrowser.tsx` (load/save with thumbnails), `ui/game/CharacterScreen.tsx` (3D model + scars + sheet), `three/BattleMap3D.tsx` (3D battle map) + `three/LazyBattleMap3D.tsx` + `three/battle3d.ts` (pure helpers), `main.tsx`, `index.html`, `styles.css`, `data.ts` (db); `net/gameSocket.ts` (ws + signals + applyEvent); `ui/App.tsx`, `ui/state.ts` (screens; `#creator`, `#quickbuild-<class>`, `#play-<class>`, `#play-<class>+map`), `ui/settingsState.ts` (+applyAccessibility), `ui/SettingsPanel.tsx`, `ui/text.ts`, `ui/StatusIndicator.tsx`, `ui/creator/*` (creator steps), `ui/game/LevelUpPanel.tsx`, `ui/game/{GameScreen,PartyPanel,StoryLog,ActionInput,DiceTray,JournalPanel,WorldMap,InventoryPanel,ShopPanel}.tsx`; `ui/combat/{BattleMap,CombatScreen}.tsx` + `combatDemo.ts` + `dice.ts`; `three/{loader,characterModel,CharacterPreview}`; `audio/AudioManager.ts` (music crossfade, ambience, SFX pools, unlock on first gesture) + `audio/audioLogic.ts` (pickVariant, channelVolume, sfxForEvent)
 
 ## Gotchas & Lessons
 - Beats fire in array order in one pass: a threshold beat placed before the beat that sets its input only fires next step (A068d fixes). Deadline outcomes run after beats in the same step: set what must hold after a miss inside `missed` itself.
