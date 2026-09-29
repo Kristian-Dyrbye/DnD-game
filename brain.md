@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 4 (Phase 3 Character Creation done)
-- **Last completed assignment:** A050
-- **Notes for next session:** Start with A051 (adventure schema + scene runner; plug in via GameSession ActionPort), then A052 (main screen layout). Phase 2 engine is complete except zone spells (A064a). A100 (campaign design bible) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A051
+- **Notes for next session:** Start with A052 (main screen layout). The demo adventure (data/adventures/demo/millbrook_demo.json) is playable end to end via suggestion buttons on the placeholder game screen. Phase 2 engine is complete except zone spells (A064a). A100 (campaign design bible) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -25,10 +25,9 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A011, A012, A013, A014, A015, A016, A017, A018, A019, A020, A021, A022, A023, A024, A025, A026, A027, A028, A029, A030, A031, A032, A033, A034, A034a, A035, A036, A037, A038, A039, A039b, A039c, A040, A041, A042
 
 ### Phase 3 — Character Creation
-- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A046b, A047, A048, A049, A050
+- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A046b, A047, A048, A049, A050, A051
 
 ### Phase 4 — Narration Loop
-- [todo] A051 — Adventure schema v1 + scene runner | Spec: §7.3 | Done: zod schema (chapters, scenes, POIs, exits, conditions, checks, NPCs, encounters, beats, loot, flags); runner moves between scenes; tiny test adventure; ADVENTURE_FORMAT.md v1; tests | Dep: A050
 - [todo] A052 — Main screen layout | Spec: §8 | Done: story log, party panel, 3D view slot, map button, dice tray slot, input area; build passes | Dep: A050
 - [todo] A053 — Dice tray | Spec: §8 | Done: animated dice, math line, two dice for adv/dis, scrollable roll history | Dep: A052, A011
 - [todo] A054 — Prompt builder + retrieval cards | Spec: §3 | Done: system persona + region tone, compact state summary, last N exchanges, NPC/location/faction cards, fixed-facts block, token budget; tests | Dep: A051, A004
@@ -120,7 +119,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - Phase 2 part 1 (A011–A028): seeded Rng + dice/d20 math (engine/core); core vocabulary + Creature/Character schemas (engine/rules/basics, engine/core/creature); SRD data pipeline (engine/data schemas + SrdDatabase + loadSrd; scripts/srd importers; `npm run srd:fetch`, `npm run srd:import`). Data: 15 conditions (+modifiers), rules tables, 38 weapons, 13 armor, 150 gear, 9 species, 4 backgrounds, 17 feats, 12 classes + 12 subclasses, 339 spells (93 with auto effects), 330 monsters/animals, 271 magic items. Tests per file in src/engine/data/*Data.test.ts.
 - Phase 2 part 2 + helpers (A029–A038, A034a, A071): d20Test core + checks/saves/passive/contest; attacks (crit/nat 1), damage rolls, defenses, temp HP; conditions engine from data modifiers (+ exhaustion); death saves, 0 HP, short/long rests; effect executor (shared damage, half on save, spell attacks, heal/upcast, conditions, hooks); spellcasting (slot tables incl. multiclass + pact, casting, rituals, cantrip scaling, concentration); character builder + derived stats (AC, speed, weapon attacks, HP) + inventory; leveling + feats; multiclassing; active effects + weapon masteries. Helpers: world lore (Orrimar: Aurelmark/Gloamfen/Brinescatter, Hollow Choir cult, start town Millbrook); 54 hand-written spell effects/hooks. See File Map for modules.
 - Phase 2 part 3 + helpers (A039–A042a, A048, A094): class feature framework (FeatureImpl hooks + registry/queries) with key features for all 12 classes + SRD subclasses, Wild Shape; monster runtime (stat block → creature, recharge, multiattack, action effects) + encounter builder (2024 XP budgets); spell buff/debuff hooks as active effects + queries. Helpers: CC0 3D models (assets/manifest.json, 52 MB) and CC0 audio (assets/audio-manifest.json, 47 MB) with fetch scripts run by Setup. Details: File Map + Decisions.
-- Phase 4 (A050): GameSession + WebSocket protocol + client socket signals — src/engine/session/{gameState,GameSession}.ts, src/shared/protocol.ts, src/client/net/gameSocket.ts, /ws in src/server/app.ts.
+- Phase 4 (A050–A051): GameSession + WebSocket protocol + client socket signals (src/engine/session/{gameState,GameSession}.ts, src/shared/protocol.ts, src/client/net/gameSocket.ts, /ws in src/server/app.ts); adventure format v1 (schema, conditions, validator, scene runner, session ActionPort, server loader) + demo adventure + ADVENTURE_FORMAT.md.
 - Phase 2 tail + Phase 3 (A042a–c, A034c, A043–A049, A096 helpers): spell hooks (buffs/debuffs, projectiles/control, batch 3 riders + ~35 query helpers combat must call), spell audit (171 overrides), Eldritch Blast beams; character creator end to end (state machine, class/background/species/abilities (3 methods)/skills+class options/equipment/spells/appearance/identity+AI backstory/difficulty/review, Quick Build for all classes, `#creator` / `#quickbuild-<class>` test URLs); 3D preview (KayKit parts, head swap, skin recolour, tint, auto-frame); Piper voices (public-domain LibriVox, narrator en_GB-cori-medium); origin feat picks (A046b: Magic Initiate list/cantrips/spell/ability, Skilled) in creator + builder. See File Map + Decisions.
 
 
@@ -142,6 +141,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A051: Adventure format = JSON validated by zod (src/engine/adventure/schema.ts); action ids `<action>`, `<poi>.<action>`, `exit.<id>`. Progress in state.extensions.adventure; reputation temporarily in state.extensions.reputation (A077 may move it — migrate then). Campaign clock starts 08:00 day 1 (state.time=480). onEnter fires on first visit only; beats fire once. Until A068, encounters auto-resolve as wins in sessionActions.ts; until A055, free text = keyword match. Default adventure = STARTING_ADVENTURE ('millbrook_demo') in server/app.ts → switch to the starter arc id when A099 lands. Known wart: onEnter facts are logged before the scene description (A057 narration should order arrival text first).
 - A050: One GameSession per server (single player); all sockets get its events; commands run serially via a promise queue. Hero is built client-side and sent in `new_game` (validated by CharacterSchema) — fine for a local single-player game. GameState keeps per-system data in `extensions[systemId]`. Session never throws: errors become `error` events. new_game autosaves immediately. Placeholder ActionPort logs "story engine not connected" until A051/A053. Rng.getState now returns unsigned values (states compare equal after save/load).
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
 - Infra decisions (A001–A012, condensed): TS 7 native tsc, Vite 8, Vitest 5, Preact 10; strict tsconfig w/ noUncheckedIndexedAccess + verbatimModuleSyntax, bundler resolution (no .js suffixes); server = tsx, 127.0.0.1:3210 (PORT env), opens browser itself (OPEN_BROWSER=1); zod 4 (.prefault({}) for nested defaults); settings in userdata/settings.json (salvage bad fields); LLM via injectable fetch, think:false only for reasoning models, keep_alive idle/60m, every call tagged with `task`; structured calls retry once (not when unreachable) then typed fallback; Piper spawned per utterance (--output_raw → WAV); providers in app.services (rebuilt on settings change); saves = {schemaVersion, meta, state} + migration chain, 3 rotating autosaves, slot-id regex; check-deps.mjs plain JS (DEFAULT_MODEL/GAME_PORT synced by test), allowScripts esbuild:false; RNG sfc32+cyrb128 (state in saves); math line format `d20: 14 + 5 (Persuasion) = 19 vs DC 15 — Success` with real minus sign; snake_case ids; Creature = current state, static data by id; exhaustion numeric; hit dice per die size.
@@ -266,6 +266,11 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `data/srd/_source/` — fetched SRD Markdown (gitignored; `npm run srd:fetch`)
 - `scripts/srd-fetch.mjs` — downloads SRD Markdown at a pinned commit
 - `CREDITS.md` — SRD CC-BY-4.0 attribution + asset credits
+- `src/engine/adventure/schema.ts` — Adventure format v1 zod schema (chapters/scenes/POIs/actions/exits/checks/outcomes/NPCs/encounters/beats/loot/endings)
+- `src/engine/adventure/{conditions,validate,runner,sessionActions}.ts` — condition eval + flag writes; validateAdventure (refs, SRD ids, reachability); scene runner (start/perform/availableActions/describeScene/resolveEncounter); ActionPort adapter + free-text keyword match
+- `src/server/adventures.ts` — loadAdventures(dir, db): loads + validates data/adventures/**/*.json (files with formatVersion)
+- `data/adventures/demo/millbrook_demo.json` — tiny demo/test adventure (3 scenes, check, gated exit, encounter, loot, beat, ending)
+- `ADVENTURE_FORMAT.md` — authoring guide for the adventure format
 - `src/shared/protocol.ts` — ClientCommandSchema (ping/new_game/get_state/say/choose/save/load), ServerEvent union, parseCommand
 - `src/engine/session/gameState.ts` — GameStateSchema (hero, companions, location, time, flags, log, summary, rolls, extensions), LOG_LIMIT/ROLL_LIMIT
 - `src/engine/session/GameSession.ts` — GameSession (handle/on/emit, addLog/addRoll/suggest, autosave, snapshot) + SavePort/ActionPort + newGameState

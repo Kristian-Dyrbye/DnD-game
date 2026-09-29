@@ -3,7 +3,7 @@ import { GAME_TITLE } from '../../shared/version';
 import { StatusIndicator } from './StatusIndicator';
 import { Creator } from './creator/Creator';
 import { hero, screen, startNewCharacter } from './state';
-import { connection, gameState, lastError, storyLog } from '../net/gameSocket';
+import { connection, gameState, lastError, send, storyLog, suggestions } from '../net/gameSocket';
 
 function TitleScreen() {
   return (
@@ -26,12 +26,19 @@ function GameScreen() {
   return (
     <main class="title-screen">
       <h1>{state?.hero.name ?? h?.name ?? 'Your hero'}</h1>
-      <p>{state ? `Your adventure begins in ${state.location.name}…` : connection.value === 'open' ? 'Starting your adventure…' : 'Connecting to the game server…'}</p>
+      {!state && <p>{connection.value === 'open' ? 'Starting your adventure…' : 'Connecting to the game server…'}</p>}
       <ul class="story-log">
         {storyLog.value.map((e) => (
           <li key={e.id} class={`log-${e.kind}`}>{e.text}</li>
         ))}
       </ul>
+      <div class="option-row">
+        {suggestions.value.map((a) => (
+          <button key={a.id} type="button" onClick={() => send({ type: 'choose', actionId: a.id })}>
+            {a.label}
+          </button>
+        ))}
+      </div>
       {lastError.value && <p class="hint">{lastError.value}</p>}
       <button type="button" onClick={() => (screen.value = 'title')}>Back to title</button>
     </main>

@@ -54,6 +54,8 @@ export function newGameState(hero: Character, mode: GameState['mode'], seed: str
     rng: rng.getState(),
     hero,
     location: { name: START_LOCATION },
+    // Campaigns begin at 08:00 on day 1.
+    time: 8 * 60,
   });
 }
 

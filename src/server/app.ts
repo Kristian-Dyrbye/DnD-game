@@ -14,6 +14,12 @@ import { Services, type ServiceOverrides } from './services';
 import { SaveError, SaveStore, type SaveMetaInput } from './saveStore';
 import { GameSession, type SessionPorts } from '../engine/session/GameSession';
 import { parseCommand } from '../shared/protocol';
+import { adventureActionPort } from '../engine/adventure/sessionActions';
+import { loadSrd } from '../engine/data/srdBundle';
+import { loadAdventures } from './adventures';
+
+/** Adventure a new campaign starts with. */
+export const STARTING_ADVENTURE = 'millbrook_demo';
 import { backstoryMessages, templateBackstory, type BackstorySummary } from '../llm/prompts/backstory';
 
 export interface AppOptions {
@@ -23,6 +29,8 @@ export interface AppOptions {
   userDataDir?: string;
   /** Folder with downloaded models/audio (served at /assets/). Defaults to <cwd>/assets. */
   assetsDir?: string;
+  /** Folder with adventure JSON. Defaults to <rootDir>/data/adventures. */
+  adventuresDir?: string;
   /** Folder for save files. Defaults to <cwd>/saves. */
   savesDir?: string;
   /** Project root, used to resolve relative tool paths (Piper, voices). Defaults to cwd. */
@@ -90,7 +98,13 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
 
   // Game channel: one GameSession per server (single player). Every socket sees its events, so a
   // reloaded page can reconnect and ask for a snapshot. Commands run one at a time, in order.
+  // Adventures: the default one starts on new_game (the demo until the starter arc exists, A099).
+  const srd = loadSrd();
+  const { adventures, problems } = loadAdventures(opts.adventuresDir ?? path.join(opts.rootDir ?? process.cwd(), 'data', 'adventures'), srd);
+  for (const p of problems) app.log.warn({ file: p.file, errors: p.errors }, 'Skipping invalid adventure');
+  const defaultAdventure = adventures.has(STARTING_ADVENTURE) ? STARTING_ADVENTURE : [...adventures.keys()][0];
   const session = new GameSession({
+    ...(defaultAdventure && { actions: adventureActionPort(adventures, defaultAdventure, srd) }),
     saves: {
       save: (slot, meta, state) => saves.save(slot, meta, state).meta,
       autosave: (meta, state) => saves.autosave(meta, state).meta,
