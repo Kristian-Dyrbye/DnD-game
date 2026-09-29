@@ -172,6 +172,10 @@ async function setup() {
   if (run('node', [path.join('scripts', 'assets-fetch.mjs')], { shell: false })) console.log(line('ok', '3D models ready.'));
   else console.log(line('warn', 'Some 3D models could not be downloaded. The game will use simple shapes; run Setup.bat again later.'));
 
+  console.log(line('info', 'Downloading music and sound effects (about 47 MB, one time only)...'));
+  if (run('node', [path.join('scripts', 'audio-fetch.mjs')], { shell: false })) console.log(line('ok', 'Music and sound effects ready.'));
+  else console.log(line('warn', 'Some audio could not be downloaded. The game works without it; run Setup.bat again later.'));
+
   // Narration voices (Piper) are added by a later build step.
   console.log('\nSetup finished. Start the game with "Start Game.bat".\n');
   return 0;

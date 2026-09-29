@@ -10,7 +10,7 @@ import { z } from 'zod';
 
 const root = path.resolve(__dirname, '..');
 const manifestRaw: unknown = JSON.parse(readFileSync(path.join(root, 'assets', 'audio-manifest.json'), 'utf8'));
-const credits = readFileSync(path.join(root, 'assets', 'CREDITS-audio.md'), 'utf8');
+const credits = readFileSync(path.join(root, 'CREDITS.md'), 'utf8');
 
 const REQUIRED_MOODS = [
   'menu', 'town', 'tavern', 'wilderness_aurelmark', 'wilderness_gloamfen', 'wilderness_brinescatter',
@@ -82,7 +82,7 @@ describe('audio manifest', () => {
       } else {
         expect(p.license).toBe('CC0-1.0');
       }
-      if (p.attribution) expect(credits, `${p.id} attribution in CREDITS-audio.md`).toContain(p.attribution);
+      if (p.attribution) expect(credits, `${p.id} attribution in CREDITS.md`).toContain(p.attribution);
     }
   });
 
@@ -126,7 +126,7 @@ describe('audio manifest', () => {
     }
   });
 
-  it('every pack author is credited in CREDITS-audio.md', () => {
+  it('every pack author is credited in CREDITS.md', () => {
     expect(credits).toMatch(/^## Music and sound effects/m);
     for (const p of manifest.packs) {
       expect(credits, p.id).toContain(p.author);

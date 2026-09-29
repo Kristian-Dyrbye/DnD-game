@@ -112,6 +112,9 @@ export const CreatureSchema = z.object({
   exhaustion: z.number().int().min(0).max(6).default(0),
   languages: z.array(z.string()).default([]),
   resources: z.record(z.string(), ResourceSchema).default({}),
+  /** Exact save / skill bonuses printed in a stat block (used instead of ability + proficiency). */
+  saveBonuses: z.partialRecord(AbilitySchema, z.number().int()).optional(),
+  skillBonuses: z.partialRecord(SkillSchema, z.number().int()).optional(),
   /** Monster stat block id (data/srd/monsters) for monsters and statted NPCs. */
   statBlockId: z.string().optional(),
 });

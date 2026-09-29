@@ -140,9 +140,10 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
         if (!target || target.dead) continue;
         const source = ctx.creatures.get(ctx.source.id) ?? ctx.source;
         const modes = attackModes({ attacker: source, target, distanceFt: ctx.distances?.get(id) ?? 5 });
-        const mods: Modifier[] = [{ value: ctx.attackBonus ?? 0, label: 'Spell attack' }];
+        const label = effect.attack.endsWith('spell') ? 'Spell attack' : 'Attack';
+        const mods: Modifier[] = [{ value: ctx.attackBonus ?? 0, label }];
         const advantage = [...modes.advantage, ...(ctx.attackAdvantage ? [ctx.attackAdvantage] : [])];
-        const res = attackRoll({ rng: ctx.rng, label: 'Spell attack', modifiers: mods, targetAc: target.ac, advantage, disadvantage: modes.disadvantage, exhaustion: source.exhaustion, ...(modes.autoCrit && { autoCrit: modes.autoCrit }) });
+        const res = attackRoll({ rng: ctx.rng, label, modifiers: mods, targetAc: target.ac, advantage, disadvantage: modes.disadvantage, exhaustion: source.exhaustion, ...(modes.autoCrit && { autoCrit: modes.autoCrit }) });
         ctx.log.push({ targetId: id, kind: 'attack', text: `${source.name} → ${target.name}: ${res.text}` });
         if (res.hit) for (const e of effect.onHit) runEffect(e, [id], ctx, { ...state, crit: res.crit, sharedDamage: new Map() });
         else if (ctx.potentCantrip) for (const e of effect.onHit) if (e.kind === 'damage') runEffect(e, [id], ctx, { ...state, half: true, sharedDamage: new Map() });

@@ -91,6 +91,8 @@ export interface CheckOptions {
 
 /** Modifier list for an ability check, optionally with a skill (uses the skill's default ability unless overridden). */
 export function checkModifiers(c: Creature, ability: Ability, skill?: Skill, profOverride?: ProficiencyLevel): Modifier[] {
+  const printed = skill && ability === SKILL_ABILITY[skill] ? c.skillBonuses?.[skill] : undefined;
+  if (printed !== undefined) return [{ value: printed, label: SKILL_NAMES[skill!] }];
   const mods: Modifier[] = [{ value: abilityModifier(c.abilities[ability]), label: ABILITY_NAMES[ability] }];
   const level = profOverride ?? (skill ? (c.skills[skill] ?? 'none') : 'none');
   const prof = proficiencyContribution(level, c.proficiencyBonus);
@@ -121,6 +123,8 @@ export function skillCheck(c: Creature, skill: Skill, opts: CheckOptions): D20Te
 }
 
 export function saveModifiers(c: Creature, ability: Ability): Modifier[] {
+  const printed = c.saveBonuses?.[ability];
+  if (printed !== undefined) return [{ value: printed, label: `${ABILITY_NAMES[ability]} save` }];
   const mods: Modifier[] = [{ value: abilityModifier(c.abilities[ability]), label: ABILITY_NAMES[ability] }];
   if (c.saveProficiencies.includes(ability)) mods.push({ value: c.proficiencyBonus, label: 'Proficiency' });
   return mods;

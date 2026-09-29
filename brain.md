@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A041
-- **Notes for next session:** Start with A042 (then A039c Wild Shape, A042a/b spell hooks). A094 (audio assets) is with a helper — merge its branch when it reports and merge its credits into CREDITS.md. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A042
+- **Notes for next session:** Start with A039c (Wild Shape), then A042a/A042b (spell hooks). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -64,12 +64,12 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [todo] A039c — Wild Shape | Spec: §4 | Done: transform into Beast stat blocks (CR/fly limits by level), temp HP, revert, Archdruid; tests | Dep: A039b, A042
 - [done] A040 — Class features batch 2 (Fighter, Monk, Paladin, Ranger)
 - [done] A041 — Class features batch 3 (Rogue, Sorcerer, Warlock, Wizard)
-- [todo] A042 — Monster runtime + encounter builder | Spec: §4, §6 | Done: combatant from stat block (multiattack, recharge, legendary); XP-budget encounter scaling by party size/level; tests | Dep: A024, A030
+- [done] A042 — Monster runtime + encounter builder
 
 ### Phase 3 — Character Creation
 - [todo] A042a — Active effects + spell hooks batch 1 (buffs) | Spec: §4 | Done: generic active-effect/buff store on creatures (bonus dice to attacks/saves, AC bonus, speed mult, advantage grants, durations, concentration-linked); implement hooks bless, bane, shield, shield_of_faith, mage_armor, haste, slow, heroism, hex, hunters_mark, guiding_bolt, faerie_fire, divine_favor, blur, aid, false_life, heal, invisibility, greater_invisibility using params in data/srd/overrides/spells.json; tests | Dep: A034a, A042
 - [todo] A042b — Spell hooks batch 2 (projectiles & utility) | Spec: §4 | Done: magic_missile, scorching_ray, chromatic_orb, chain_lightning, meteor_swarm, misty_step, dispel_magic, counterspell, revivify, power_word_kill/heal, lesser_restoration, command, sleep, hypnotic_pattern, bestow_curse, blindness_deafness, disintegrate, ice_knife, acid_arrow, vampiric_touch, divine_smite, prayer_of_healing; tests | Dep: A042a
-- [todo] A034c — Fix remaining partial auto spell effects | Spec: §4 | Done: overrides for banishment, conjure_*, contagion, divine_word, geas, dream, heat_metal etc. (audit all auto effects vs text); tests | Dep: A034a
+- [in-progress (helper)] A034c — Fix remaining partial auto spell effects | Spec: §4 | Done: overrides for banishment, conjure_*, contagion, divine_word, geas, dream, heat_metal etc. (audit all auto effects vs text); tests | Dep: A034a
 - [todo] A043 — Creator state machine + class step UI | Spec: §5 | Done: engine-side wizard state + validation; class step with summaries + beginner tags; tests | Dep: A035, A002
 - [todo] A044 — Background + species steps | Spec: §5 | Done: UI shows ASI options + origin feat; validation tests | Dep: A043
 - [todo] A045 — Ability score methods | Spec: §5 | Done: standard array, point buy (27, cost table), 4d6-drop-lowest animated with player assignment; engine tests | Dep: A043, A011
@@ -136,7 +136,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [todo] A093 — Character screen + save thumbnails | Spec: §9, §12 | Done: rotatable 3D character screen; save browser with thumbnail showing gear/scars | Dep: A091, A008
 
 ### Phase 10 — Audio
-- [in-progress (helper)] A094 — Audio assets | Spec: §13 | Done: CC0 music by mood + SFX downloaded, verified, CREDITS.md | Dep: A001
+- [done] A094 — Audio assets
 - [todo] A095 — Music + SFX manager | Spec: §13 | Done: mood crossfade, SFX hooks (dice, hits, spells, UI, doors, steps), volumes | Dep: A094, A052
 - [todo] A096 — Piper install + voices | Spec: §13, §1 | Done: Setup downloads Piper for Windows + narrator/male/female voices; license in CREDITS | Dep: A006, A009
 - [todo] A097 — TTS narration pipeline | Spec: §13 | Done: background generation queue, skip, volume, toggle, never blocks; tests with MockTts | Dep: A096, A057
@@ -181,6 +181,9 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A040 — Fighter (Second Wind, Action Surge effect, Indomitable, Tactical Mind, Studied Attacks; Champion crit 19/18, Remarkable Athlete, Heroic Warrior, Survivor), Monk (Martial Arts modifyAttack: Dex/die/force, Focus + Flurry/Patient Defense/Step effects, Uncanny Metabolism, Deflect, Stunning Strike, Evasion effect, Disciplined Survivor, Body and Mind; Open Hand technique, Wholeness of Body), Paladin (Lay On Hands pool/cure, free Divine Smite/Find Steed + always prepared, Channel Divinity 2→3, Radiant Strikes, auras via distance helpers; Devotion Sacred Weapon), Ranger (Favored Enemy free Hunter's Mark, Deft Explorer expertise, Roving speed, Tireless, Nature's Veil, Feral Senses, Foe Slayer die, Precise Hunter; Hunter Colossus Slayer); new hooks critOn, modifyAttack (featureWeaponAttack), saveBonus; Evasion in effect executor; weaponMasteryCount from table or text — `src/engine/character/features/{fighter,monk,paladin,ranger}.ts`
 
 - A041 — Rogue (Sneak Attack rider w/ ally/advantage rules + dice spent, Cunning Strike poison/trip/withdraw/daze/knock out/obscure, Steady Aim effect, Evasion, Slippery Mind, Uncanny Dodge/Reliable Talent/Stroke of Luck helpers; Thief climb speed), Sorcerer (Innate Sorcery +1 DC/adv, Font of Magic slot⇄points, Metamagic costs, Sorcerous Restoration; Draconic AC/HP/affinity/wings), Warlock (Agonizing Blast, Magical Cunning; Fiend blessing/resilience/luck), Wizard (Arcane Recovery, Scholar expertise; Evoker Potent Cantrip, Empowered Evocation, Sculpt Spells in executor); spellOptions now takes SpellInfo (spellInfo helper) and can add saveDcBonus/attackAdvantage/damageBonus/potentCantrip; onLevelUp hook — `features/rogue.ts`, `features/casters.ts`
+
+- A042 — Monster runtime: monsterToCreature (printed saveBonuses/skillBonuses, legendary actions/resistance, recharge + per-day resources), actionAvailable/spendAction, rollRecharges (d6 ≥ recharge, refresh legendary), multiattackSequence, actionEffects (attack/save/area → Effects), actionRange; encounters: xpBudget (per character, low/moderate/high), rateEncounter (trivial…deadly), buildEncounter (leader + fill, CR ≤ party level, max 2/char + 2) — `src/engine/rules/monsters.ts`, `src/engine/adventure/encounters.ts`
+- A094 (helper) — CC0 audio: 32 packs (Kenney + OpenGameArt), 151 files, ~47 MB; assets/audio-manifest.json (moods: menu, town, tavern, 3 regional wilderness, dungeon, battle, boss, victory(one-shot); ambience; 48 sfx events), scripts/audio-fetch.mjs (Windows tar.exe for zips), Setup runs it, credits merged into CREDITS.md, tests/audio-manifest.test.ts. Nobody has listened to the tracks yet (owner review).
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -245,6 +248,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A048: KayKit characters share one rig (76 animations) with swappable head/body/arm/leg meshes, toggleable helmet/hat/cape/shield meshes and hand-slot bones → equipment attach (A088). Quaternius models differ in scale: size by bounding box. Quaternius's newer packs use a non-CC0 license (QAL, 2026-08-28) — don't add new Quaternius packs without checking. Upgrade option: Quaternius Universal Base Characters (itch.io manual download) for deeper appearance customization.
 - A040: Permanent class traits can be stored as effects without expiry (Evasion = effect 'evasion', read by effects.ts). Aura features are helpers taking a distance (combat supplies positions). Combat must use featureWeaponAttack(c, db, weaponAttack(...)) and critOn(c, db). Not automated yet: Horde Breaker extra attack, Defensive Tactics, Abjure Foes, Divine Sense, Relentless Hunter concentration immunity (helper exists), Acrobatic Movement, Self-Restoration, Perfect Focus, Quivering Palm, Holy Nimbus/Smite of Protection — add to A042a follow-up if needed.
 - A041: Call spellOptions(c, db, spellInfo(spell, classId), slotLevel) and spread into castSpell; Sculpt Spells ids go in castSpell.sculptTargetIds. Not automated yet: Cunning Action (combat), Elusive, Supreme Sneak/Use Magic Device/Thief's Reflexes, most Metamagic effects (costs only), invocations other than Agonizing Blast, Mystic Arcanum, Contact Patron, Memorize Spell/Spell Mastery/Signature Spells, Overchannel, Hurl Through Hell, Dragon Wings/Companion.
+- A042: Monsters keep printed save/skill totals in creature.saveBonuses/skillBonuses (checks.ts uses them first). Encounter XP uses no group multiplier (2024). Monster attack effects need ctx.attackBonus = action.attack.bonus.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -284,6 +288,9 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/rules/mastery.ts` — applyMasteryOnHit, grazeDamage, cleaveDamageModifier
 - `src/engine/character/features/` — types.ts (FeatureImpl, SpellInfo), index.ts (ALL_FEATURES, activeFeatures, feature*Modes/Bonuses, featureResistances, weaponHitRiders, critOn, featureWeaponAttack, spellOptions/spellInfo, syncResources, applyOnGain/OnLevelUp, featureActions, useFeatureAction), one file per class group (barbarian, bard, cleric, druid, fighter, monk, paladin, ranger, rogue, casters)
 - `assets/manifest.json` + `scripts/assets-fetch.mjs` — 3D model packs, roles, monster stand-ins; models land in assets/models/ (gitignored)
+- `src/engine/rules/monsters.ts` — monsterToCreature, actionAvailable, spendAction, rollRecharges, multiattackSequence, actionEffects, actionRange
+- `src/engine/adventure/encounters.ts` — xpBudget, encounterXp, rateEncounter, buildEncounter
+- `assets/audio-manifest.json` + `scripts/audio-fetch.mjs` — music moods, ambience, sfx; files land in assets/audio/ (gitignored)
 - `src/engine/data/common.ts` — IdSchema, DiceSchema, CostSchema(CP), DamageSchema, AreaSchema, DurationSchema, EffectSchema/Effect, toId
 - `src/engine/data/schemas.ts` — schemas for every data/srd file + RulesTablesSchema; SRD_FILES registry; record types
 - `src/engine/data/srd.ts` — validateSrdFile, SrdDatabase (maps by id, item(), spellsForClass)
@@ -350,4 +357,5 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ## Blockers / Owner Review
 <!-- Blockers: what's wrong + the exact fix the owner should apply. Owner Review: non-urgent decisions the owner may want to revisit. -->
 - BLOCKER (A010): Ollama not installed (checked 2026-09-29). Fix: install from https://ollama.com/download (or run Setup.bat, which offers winget), then set A010 back to todo. Everything else proceeds with the mock.
+- Owner Review: listen to the downloaded music/SFX (assets/audio after `node scripts/audio-fetch.mjs`) and flag tracks to swap — they were chosen by metadata only.
 - Owner Review: default model qwen3:4b is provisional until A010 benchmarks it.
