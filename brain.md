@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 1 (Foundation)
-- **Last completed assignment:** A007
-- **Notes for next session:** Start with A008. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. A010 needs Ollama: if `ollama` is still missing, mark it blocked and skip it.
+- **Last completed assignment:** A008
+- **Notes for next session:** Start with A009. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. A010 needs Ollama: if `ollama` is still missing, mark it blocked and skip it.
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -25,7 +25,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A005 — Structured JSON helper | Spec: §3 | Done: llm/structured.ts: schema→Ollama format, zod validate, 1 retry, typed fallback, never throws; tests for bad JSON/timeouts | Dep: A004
 - [done] A006 — TTS provider + Piper adapter + mock | Spec: §2, §13 | Done: TtsProvider interface, Piper spawn adapter (path from settings), MockTts, status check; tests with mock | Dep: A001
 - [done] A007 — Status endpoint + indicator | Spec: §14, §17 | Done: GET /api/status (ollama up, model loaded, tts ready, RSS memory); small UI indicator; tests | Dep: A003, A004, A006
-- [todo] A008 — Save system + migrations | Spec: §2, §9, §17 | Done: save/load/list/delete slots + autosave slot, meta (time, location, level, thumbnail, mode), migration chain with a sample v0→v1 fixture; REST routes; tests | Dep: A002
+- [done] A008 — Save system + migrations | Spec: §2, §9, §17 | Done: save/load/list/delete slots + autosave slot, meta (time, location, level, thumbnail, mode), migration chain with a sample v0→v1 fixture; REST routes; tests | Dep: A002
 - [todo] A009 — Setup.bat + Start Game.bat | Spec: §1 | Done: CRLF .bat files + scripts/check-deps.mjs (Node, npm install, build, Ollama present/running, model pulled) with friendly messages; Start opens browser; runs clean with Ollama missing (warns, mock mode) | Dep: A002, A003
 - [todo] A010 — Pick & benchmark LLM (needs Ollama) | Spec: §2, §3 | Done: scripts/bench-llm.mjs tests JSON validity + speed for qwen3:4b vs llama3.2:3b (+ any newer 3–4B); result in Decisions Log; README note on swapping models | Dep: A005, owner installs Ollama
 
@@ -169,6 +169,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A005 — callStructured: zod schema → Ollama format, JSON extraction, 1 retry with error feedback, typed fallback, never throws — `src/llm/structured.ts`
 - A006 — TTS layer: TtsProvider, PiperTts (spawn per request, --output_raw → WAV), MockTts (silent WAV), pcm16ToWav, createTtsProvider — `src/tts/*`
 - A007 — GET /api/status (llm, tts, memory), Services holder (rebuilds providers on settings change), indicator lights logic + StatusIndicator UI — `src/server/services.ts`, `src/shared/status.ts`, `src/client/ui/StatusIndicator.tsx`
+- A008 — Save system: envelope schema, migration chain (v0 prototype → v1 fixture), SaveStore (atomic, rotating 3 autosaves, corrupt-file listing, slot-id guard), REST /api/saves — `src/shared/save.ts`, `src/engine/session/migrations.ts`, `src/server/saveStore.ts`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -195,6 +196,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A005: Structured retry is skipped for `unreachable`/`aborted` errors (retrying can't help); retry message includes the zod error. zod 4 `z.toJSONSchema` builds the Ollama format ($schema stripped). extractJson strips ```fences, <think> blocks, chatter.
 - A006: Piper is spawned once per utterance (`--model <voice>.onnx --output_raw`, text on stdin), PCM wrapped as WAV using sample_rate from <voice>.onnx.json. No resident process → near-zero idle RAM, so tts.unloadWhenIdle is effectively always true. Voice ids = .onnx file names.
 - A007: Providers live in `app.services` (Services): `.llm`/`.tts` getters rebuild when their settings section changes; tests pass `buildApp({services:{llm: new MockLlm(), tts: new MockTts()}})`. Indicator: mock = amber, model not loaded = amber, missing = red; RAM warn < 1 GB free, error < 400 MB.
+- A008: Save file = {schemaVersion, meta, state}; state validated later by the engine GameState schema (A050). Autosaves rotate auto-1 (newest) → auto-3. Slot ids /^[a-z0-9][a-z0-9_-]{0,39}$/ (blocks path traversal). SaveError kinds → HTTP 400/404/422 via app error handler.
+- A008: Engine may import plain constants/types from `src/shared` (ARCHITECTURE.md updated).
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -214,6 +217,9 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/server/main.ts` — entry; serves dist/client on 127.0.0.1:3210
 - `src/shared/settings.ts` — SettingsSchema (llm, tts, audio, performance, accessibility, gameplay), defaultSettings, mergeSettings
 - `src/server/settingsStore.ts` — SettingsStore(userDataDir): get/update, persisted to settings.json; exposed as `app.settings`
+- `src/shared/save.ts` — SaveMetaSchema, SaveFileSchema, SaveListEntry, SLOT_ID_PATTERN
+- `src/engine/session/migrations.ts` — MIGRATIONS chain + migrateSave(raw) (add a step + fixture test per schema bump)
+- `src/server/saveStore.ts` — SaveStore(dir): list/load/save/autosave/delete; `app.saves`; routes GET/PUT/DELETE /api/saves[/:slot]
 - `src/server/services.ts` — Services(settings, rootDir, overrides): llm, tts, status(); exposed as `app.services`
 - `src/shared/status.ts` — SystemStatus type + llmIndicator/ttsIndicator/memoryIndicator
 - `src/client/ui/StatusIndicator.tsx` — polls /api/status every 10 s; corner lights

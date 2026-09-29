@@ -60,7 +60,7 @@ Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master. Runs fully of
 
 ## 3. Module Boundaries
 
-- `engine` imports nothing outside itself except `data` types and zod. It is **isomorphic**: the server runs it with authority, and the client imports the same pure functions for instant previews (reachable squares, AoE highlights, point-buy math).
+- `engine` imports nothing outside itself except `data` types, zod and plain constants/types from `shared` (e.g. `SAVE_SCHEMA_VERSION`). It is **isomorphic**: the server runs it with authority, and the client imports the same pure functions for instant previews (reachable squares, AoE highlights, point-buy math).
 - `llm` and `tts` depend on `engine` types only. They never change game state; they return text or validated JSON.
 - `server` wires everything together: it owns one `GameSession` per open game, persists saves, and proxies Ollama and Piper.
 - `client` never decides mechanics. It sends **commands** and renders **events** and state snapshots.

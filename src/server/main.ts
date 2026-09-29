@@ -9,5 +9,7 @@ const clientDir = path.join(process.cwd(), 'dist', 'client');
 
 const userDataDir = path.join(process.cwd(), 'userdata');
 
-const app = await buildApp({ clientDir, userDataDir, logger: true });
+const savesDir = path.join(process.cwd(), 'saves');
+
+const app = await buildApp({ clientDir, userDataDir, savesDir, logger: true });
 await app.listen({ port, host: '127.0.0.1' });
