@@ -5,7 +5,7 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 4 (Phase 3 Character Creation done)
-- **Last completed assignment:** A115
+- **Last completed assignment:** A101c
 - **Notes for next session:** Continue the queue: A098/A099 (starter arc; companions/recruit/approval now exist), A088–A093 (3D equipment/wounds/scars), A070 (3D battle map), A076 (dungeon maps + fog), A075b, then A114–A116. A010 still blocked until Ollama is installed (Ollama/Piper not installed on this PC yet). Playable test URLs: `#play-<class>`, `#play-<class>+map`, `#combat-<class>`.
 
 ## Assignment Queue
@@ -36,7 +36,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A068b — Fight/adventure engine follow-ups (bosses kept when scaling, party outcomes applied in the runner step, validator/solver know companions)
 - [done] A068c — Adventure outcomes cost/damage/exhaustion, conditions coins/since, encounter allies, deadline docs
 - [done] A068d — More authoring features (typed local flags, removeItems, item condition, multi-pass beats)
-- [todo] A101c — Retrofit chapters 1–3 with the new outcomes | Spec: §7.2 | Done: bribes/fines/restitution use `cost` (+ `coins` gates), falls/traps use `damage` (with saves), races use `since` where cleaner, allied guards use encounter `allies`, bosses marked with `bosses`, scars via the A091 outcome once it exists; chapter tests still green | Dep: A068c, A103
+- [done] A101c — Retrofit chapters 1–3 with the new outcomes
 - [done] A068e — Encounter authoring extras (statOverrides, conditional groups, revealRoom)
 - [done] A064a — Zone spell hooks (combat/zones.ts)
 - [done] A069 — Async combat narration
@@ -84,6 +84,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ## Completed Log
 <!-- One line per assignment: A<id> — what was built — key files. Compress into per-phase summaries when long. -->
+- A101c — retrofit: ch2 bribes (50 gp cost on success + coins gates), cove climb 2d4, Brass Parrot doors 2d6 fire Dex DC 13 half, Kestrel breakout neck scar; ch3 turnkey bribe 150 gp + restitution 300 gp (cost + gates), sky-tower falls 3d6 (+ brow scar), vigil poisoned blade 2d6 poison + shoulder scar, chase falls 1d6/2d6 — data/adventures/arc1/ch2*,ch3*.json, tests/retrofit.test.ts
 - A115 — exploratory playtest: every authored adventure (starter + ch1–ch4, ch5 when present) played through the real session by a seeded random player with real grid fights, 3 seeds × 250 steps, asserting no error events/crashes/dead ends (tests/playtest.test.ts, shared tests/helpers/combatPolicy.ts). Finding fixed: Prone heroes were offered moves the engine refused (reachable squares ignored crawling) and had no way to stand up → engine reachableForMove (same rules as moveCreature) used by the battle map + PlayerAction 'stand' + Stand up button
 - A114 — README.md (features, requirements, setup, how to play, settings, model swap, developer commands + test URLs, troubleshooting, SRD 5.2.1 CC-BY-4.0 attribution), ARCHITECTURE.md refreshed (combat/world/adventure/appearance modules, full protocol, campaign flow, combat narration queue), About screen on the title screen (exact SRD attribution wording, asset credits summary) — README.md, ARCHITECTURE.md, src/client/ui/AboutPanel.tsx
 - A106 — starter arc smoke test through buildApp (mock LLM/TTS, seeded dice, real grid fights with a simple attack/approach policy, flag-driven story policy) reaching ch1 with zero error events; it found and fixed: an altar soft-lock after a lost fight (rematch + crypt short rest), suggestion buttons capped at 7 dropping real exits (offered actions are never dropped now, only free-text ideas), stale adventure context after a chained ending — tests/starterSmoke.test.ts, adventure/{suggestions,sessionActions}.ts, starter JSON
@@ -137,6 +138,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A101c: Retrofit kept to mechanics the texts already promised (costs, falls, traps, scars). Bosses rely on the default rule (single most expensive monster type) — ch1–3 leaders are already the priciest stat blocks; allied-guard fights and `since` races were left as authored (they work and the chapter tests pin them).
 - A115: Playtest with the real LLM isn't possible (Ollama not installed): queued as A115b (blocked with A010). Automated playtests use template narration; they check robustness, not prose quality.
 - A106: Suggestion buttons: every offered action/exit is always shown; the model's free-text ideas only fill room under MAX_SUGGESTIONS (7). Authored defeats must leave a way forward: any once-per-visit fight (onEnter/beat) that can be lost needs a rematch action.
 - A068e: Legendary/extra actions in statOverrides were left out (would need monster-runtime support); overrides cover name/HP/AC. If every conditional monster group is off, the fight falls back to the unfiltered groups rather than starting empty.

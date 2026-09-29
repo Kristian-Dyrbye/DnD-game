@@ -369,11 +369,20 @@
               "if": {
                 "all": [
                   {
-                    "flag": "~ch3_jailed_gate"
+                    "all": [
+                      {
+                        "flag": "~ch3_jailed_gate"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_gate_passed"
+                        }
+                      }
+                    ]
                   },
                   {
-                    "not": {
-                      "flag": "~ch3_gate_passed"
+                    "coins": {
+                      "gte": 15000
                     }
                   }
                 ]
@@ -389,7 +398,8 @@
                   {
                     "clear": "~ch3_jailed_gate"
                   }
-                ]
+                ],
+                "cost": 15000
               }
             },
             {
@@ -1200,12 +1210,21 @@
               "if": {
                 "all": [
                   {
-                    "flag": "arc.main.isles_alliance",
-                    "eq": "red_gull"
+                    "all": [
+                      {
+                        "flag": "arc.main.isles_alliance",
+                        "eq": "red_gull"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_restitution_settled"
+                        }
+                      }
+                    ]
                   },
                   {
-                    "not": {
-                      "flag": "~ch3_restitution_settled"
+                    "coins": {
+                      "gte": 30000
                     }
                   }
                 ]
@@ -1218,7 +1237,8 @@
                     "set": "~ch3_restitution_settled",
                     "value": true
                   }
-                ]
+                ],
+                "cost": 30000
               }
             },
             {
@@ -1818,7 +1838,7 @@
                   ]
                 },
                 "failure": {
-                  "text": "A handhold crumbles and you fall two storeys onto the bridge below (3d6 falling damage). The fall splits your brow; it will scar. Vosk's climbers pass you.",
+                  "text": "A handhold crumbles and you fall two storeys onto the bridge below. The fall splits your brow; it will scar. Vosk's climbers pass you.",
                   "flags": [
                     {
                       "set": "~ch3_climb_started",
@@ -1832,7 +1852,15 @@
                       "set": "~ch3_race_lost",
                       "value": true
                     }
-                  ]
+                  ],
+                  "damage": {
+                    "dice": "3d6",
+                    "type": "bludgeoning"
+                  },
+                  "scar": {
+                    "description": "a fall from the Vaelthorn sky-towers",
+                    "location": "brow"
+                  }
                 }
               }
             },
@@ -1880,7 +1908,7 @@
                   ]
                 },
                 "failure": {
-                  "text": "The tower shrugs you off onto a ledge (3d6 falling damage). By the time you reach the Vault, Vosk the Hollow is already inside.",
+                  "text": "The tower shrugs you off onto a ledge. By the time you reach the Vault, Vosk the Hollow is already inside.",
                   "flags": [
                     {
                       "set": "~ch3_climb_started",
@@ -1894,7 +1922,11 @@
                       "set": "~ch3_race_lost",
                       "value": true
                     }
-                  ]
+                  ],
+                  "damage": {
+                    "dice": "3d6",
+                    "type": "bludgeoning"
+                  }
                 }
               }
             },
@@ -2804,7 +2836,16 @@
                 "failure": {
                   "text": "You wake with a poisoned blade already in your shoulder. The wound will leave black veins that never fade.",
                   "minutes": 360,
-                  "encounter": "vigil_assassins_surprise"
+                  "encounter": "vigil_assassins_surprise",
+                  "scar": {
+                    "description": "a poisoned Choir blade",
+                    "location": "left_shoulder",
+                    "damageType": "poison"
+                  },
+                  "damage": {
+                    "dice": "2d6",
+                    "type": "poison"
+                  }
                 }
               }
             }
@@ -4308,7 +4349,11 @@
                       "set": "~ch3_chase_2_done",
                       "value": true
                     }
-                  ]
+                  ],
+                  "damage": {
+                    "dice": "1d6",
+                    "type": "bludgeoning"
+                  }
                 }
               }
             },
@@ -4412,7 +4457,11 @@
                       "set": "~ch3_chase_3_done",
                       "value": true
                     }
-                  ]
+                  ],
+                  "damage": {
+                    "dice": "2d6",
+                    "type": "bludgeoning"
+                  }
                 }
               }
             },

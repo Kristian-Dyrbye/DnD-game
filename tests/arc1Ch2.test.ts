@@ -349,6 +349,8 @@ describe('ch2_salt_and_treason: chapter-1 flags change the chapter', () => {
     const at = startingAt('fort_kestrel_gallows');
     const plain = ctx({}, { adventure: at });
     startAdventure(plain);
+    expect(ids(plain)).not.toContain('bribe_lusk'); // the bribe needs 50 gp in hand
+    plain.state.hero.coins = 6000;
     expect(ids(plain)).toEqual(expect.arrayContaining(['bribe_lusk', 'forged_papers']));
     expect(ids(plain)).not.toContain('rota_tip');
     expect(npcsHere(plain)).toContain('rook');

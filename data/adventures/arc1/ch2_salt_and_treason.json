@@ -681,25 +681,34 @@
               "if": {
                 "all": [
                   {
-                    "not": {
-                      "any": [
-                        {
-                          "flag": "~ch2_rook_freed"
-                        },
-                        {
-                          "flag": "~ch2_rook_hanged"
+                    "all": [
+                      {
+                        "not": {
+                          "any": [
+                            {
+                              "flag": "~ch2_rook_freed"
+                            },
+                            {
+                              "flag": "~ch2_rook_hanged"
+                            }
+                          ]
                         }
-                      ]
-                    }
+                      },
+                      {
+                        "not": {
+                          "flag": "world.player_outlawed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch2_jailed"
+                        }
+                      }
+                    ]
                   },
                   {
-                    "not": {
-                      "flag": "world.player_outlawed"
-                    }
-                  },
-                  {
-                    "not": {
-                      "flag": "~ch2_jailed"
+                    "coins": {
+                      "gte": 5000
                     }
                   }
                 ]
@@ -720,7 +729,8 @@
                       "value": true
                     }
                   ],
-                  "recruit": "rook"
+                  "recruit": "rook",
+                  "cost": 5000
                 },
                 "failure": {
                   "text": "Lusk weighs you, weighs the purse, and decides the Governor pays better. You are shown the gate."
@@ -739,25 +749,34 @@
               "if": {
                 "all": [
                   {
-                    "not": {
-                      "any": [
-                        {
-                          "flag": "~ch2_rook_freed"
-                        },
-                        {
-                          "flag": "~ch2_rook_hanged"
+                    "all": [
+                      {
+                        "not": {
+                          "any": [
+                            {
+                              "flag": "~ch2_rook_freed"
+                            },
+                            {
+                              "flag": "~ch2_rook_hanged"
+                            }
+                          ]
                         }
-                      ]
-                    }
+                      },
+                      {
+                        "not": {
+                          "flag": "world.player_outlawed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch2_jailed"
+                        }
+                      }
+                    ]
                   },
                   {
-                    "not": {
-                      "flag": "world.player_outlawed"
-                    }
-                  },
-                  {
-                    "not": {
-                      "flag": "~ch2_jailed"
+                    "coins": {
+                      "gte": 5000
                     }
                   }
                 ]
@@ -778,7 +797,8 @@
                       "value": true
                     }
                   ],
-                  "recruit": "rook"
+                  "recruit": "rook",
+                  "cost": 5000
                 },
                 "failure": {
                   "text": "Lusk laughs in your face and keeps the door shut."
@@ -3066,7 +3086,11 @@
                       "value": true
                     }
                   ],
-                  "minutes": 60
+                  "minutes": 60,
+                  "damage": {
+                    "dice": "2d4",
+                    "type": "bludgeoning"
+                  }
                 },
                 "advantageIf": [
                   {
@@ -3549,7 +3573,16 @@
                   "text": "The parrot asks what runs but never walks; you answer \"the tide\". The brass door swings open."
                 },
                 "failure": {
-                  "text": "Wrong answer. Fire jets from the parrot’s beak (2d6 fire damage, Dex save DC 13 for half) before the door grinds open anyway."
+                  "text": "Wrong answer. Fire jets from the parrot’s beak before the door grinds open anyway.",
+                  "damage": {
+                    "dice": "2d6",
+                    "type": "fire",
+                    "save": {
+                      "ability": "dex",
+                      "dc": 13,
+                      "half": true
+                    }
+                  }
                 },
                 "advantageIf": [
                   {
@@ -3610,7 +3643,16 @@
                   "text": "The parrot asks which king drowned in his own harbor; you name him. The brass door swings open."
                 },
                 "failure": {
-                  "text": "Wrong answer. Fire jets from the parrot’s beak (2d6 fire damage, Dex save DC 13 for half) before the door grinds open anyway."
+                  "text": "Wrong answer. Fire jets from the parrot’s beak before the door grinds open anyway.",
+                  "damage": {
+                    "dice": "2d6",
+                    "type": "fire",
+                    "save": {
+                      "ability": "dex",
+                      "dc": 13,
+                      "half": true
+                    }
+                  }
                 },
                 "advantageIf": [
                   {
@@ -3671,7 +3713,16 @@
                   "text": "The parrot asks what grows by being taken away; you answer \"a hole\". The brass door swings open."
                 },
                 "failure": {
-                  "text": "Wrong answer. Fire jets from the parrot’s beak (2d6 fire damage, Dex save DC 13 for half) before the door grinds open anyway."
+                  "text": "Wrong answer. Fire jets from the parrot’s beak before the door grinds open anyway.",
+                  "damage": {
+                    "dice": "2d6",
+                    "type": "fire",
+                    "save": {
+                      "ability": "dex",
+                      "dc": 13,
+                      "half": true
+                    }
+                  }
                 },
                 "advantageIf": [
                   {
@@ -5347,7 +5398,11 @@
             "faction": "saltwind_trading_company",
             "delta": -15
           }
-        ]
+        ],
+        "scar": {
+          "description": "rope burn from the Fort Kestrel gallows",
+          "location": "neck"
+        }
       },
       "lose": {
         "text": "You wake in a Fort Kestrel cell, next to Rook’s. Lusk sets your bail at 150 gp or three days, whichever comes first.",

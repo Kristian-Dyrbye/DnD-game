@@ -466,6 +466,7 @@ describe('ch3_the_gilded_lie: earlier chapters change the chapter', () => {
     expect(ids(redGull)).toContain('request_warrant_suspect');
     expect(ids(redGull)).not.toContain('request_warrant');
     perform(redGull, 'exit.to_deepanvil');
+    redGull.state.hero.coins = 30000; // restitution costs 300 gp
     expect(ids(redGull)).toEqual(expect.arrayContaining(['pay_restitution', 'argue_restitution']));
     expect(ids(redGull)).not.toContain('clear_mine');
     perform(redGull, 'pay_restitution');
