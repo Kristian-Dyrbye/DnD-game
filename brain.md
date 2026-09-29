@@ -70,7 +70,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A042a — Active effects + spell hooks batch 1 (buffs)
 - [done] A042b — Spell hooks batch 2 (projectiles & utility)
 - [done] A034c — Fix remaining partial auto spell effects
-- [in-progress (helper)] A042c — Spell hooks batch 3 (from A034c) | Spec: §4 | Done: implement cantrip riders (ray_of_frost, chill_touch, shocking_grasp, vicious_mockery, starry_wisp, sacred_flame cover, produce_flame/shillelagh/true_strike/sorcerous_burst own scaling), hold/dominate repeat saves (hook sibling with appliesIfCondition), charm/control riders (charm_person/monster, fear, suggestion, banishment, compulsion), common buffs (barkskin, enhance_ability, enlarge_reduce, fly, longstrider, mirror_image, protection_from_energy, protection_from_evil_and_good, resistance, guidance, sanctuary, stoneskin, magic_weapon, warding_bond, death_ward, beacon_of_hope, spider_climb, see_invisibility, darkvision); tests | Dep: A042b
+- [done] A042c — Spell hooks batch 3 (from A034c)
 - [done] A043 — Creator state machine + class step UI
 - [done] A044 — Background + species steps
 - [done] A045 — Ability score methods
@@ -146,7 +146,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ### Phase 11 — Content
 - [todo] A098 — Starter arc part 1 | Spec: §7.2 | Done: exploration, dialogue, skill-check tutorial scenes (valid schema) | Dep: A078, A084
 - [todo] A099 — Starter arc part 2 | Spec: §7.2, §9 | Done: combat, rest, shop, companion, world map, hook, defeat outcomes | Dep: A098
-- [todo] A100 — Campaign arc design | Spec: §7.2 | Done: villain, factions, flag plan, chapter outlines, 2+ endings (in data/adventures/arc1/README or JSON) | Dep: A099
+- [in-progress (helper)] A100 — Campaign arc design | Spec: §7.2 | Done: villain, factions, flag plan, chapter outlines, 2+ endings (in data/adventures/arc1/README or JSON) | Dep: A099
 - [todo] A101 — Arc chapter 1 | Spec: §7.2 | Done: valid schema, reads starter flags | Dep: A100
 - [todo] A102 — Arc chapter 2 | Spec: §7.2 | Done: as A101, second region | Dep: A101
 - [todo] A103 — Arc chapter 3 | Spec: §7.2 | Done: as A101 | Dep: A102
@@ -200,6 +200,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A047 — Quick Build (curated background/species/lineage/picks/spells per class, Standard Array to primaries, suggested bg bonus, random species name; every class builds valid) + DEFAULT_APPEARANCE; backstory prompt + template fallback + POST /api/llm/backstory (mock → template); UI: IdentityStep (name + random, traits/ideals/bonds/flaws, backstory + Suggest), DifficultyStep (Heroic/Hardcore), ReviewStep (engine-built sheet: vitals, abilities, skills, attacks, grouped gear, spells, feats, backstory), Begin adventure → hero signal + game placeholder; `#quickbuild-<class>` test URL; item name helpers — `src/engine/character/quickBuild.ts`, `src/llm/prompts/backstory.ts`, `src/client/ui/creator/{Identity,Difficulty,Review}Step.tsx`
 
 - A049 — 3D preview + appearance: AppearanceSchema on Character (outfit, head, build, skinTone, primaryColor, showHeadgear/Cape) + defaultAppearanceFor(class), sizeScale, buildWidth; server serves assets/models + assets/audio at /assets/*; client three.js 0.186: cached GLTF loader, buildCharacterModel (KayKit parts, head swap re-bound to skeleton, skin recolour of atlas pixels, cape/headgear tint, build/size scale, Idle animation), CharacterPreview (orbit, auto-frame, error when models missing), AppearanceStep — `src/engine/appearance/appearance.ts`, `src/client/three/*`, `src/client/ui/creator/AppearanceStep.tsx`
+
+- A042c (helper) — SPELL_HOOKS_3 (41 hooks: cantrip riders, hook-driven cantrips, hold/dominate, charm/control, buffs) + query helpers in `src/engine/rules/spellHooks3.ts` (canRegainHp, canMakeOpportunityAttacks, invisibilityNegated, seesInvisible, effectSenses, isBanished, controlEffects, endControlOnHarm, dominationDamageSave, endOfTurnSpellEffects3, minAcFromEffects, extraAcFromEffects, effectResistances, effectResistsAll, wardingBondDamage, resistanceCantripReduction, resetOncePerTurnEffects, applyDeathWard, negatesInstantDeath, mirrorImageRedirect, sanctuaryCheck, breakSanctuary, blocksConditionFrom, attackedEffectModes3, ownAttackEffectModes3, effectCheckModes, effectCheckBonuses, effectSaveAdjustments3, deathSaveAdvantage, maxHealingFromEffects, effectSpeeds, effectiveSize, weaponEffectMods, levelTableDice)
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -258,6 +260,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A096: Lessac (old default narrator) and voices fine-tuned from it are research-only → not shipped. ryan/hfc voices are CC BY-NC-SA → rejected. Only public-domain voices are used.
 - A047: Heroic is the default difficulty. The hero is stored client-side in `hero` until the GameSession exists (A050 moves it to the server). Backstory homeland hint = Millbrook (starting town).
 - A049: Weapons/shields in the KayKit files are hidden for now (A088 equipment attach will show the right ones). Skin recolour is a heuristic (warm mid-saturation pixels) on a copy of the texture atlas — revisit if it tints leather. Client bundle is now 2.3 MB (521 KB gz) with three.js + SRD data (code-split in A112).
+- A042c: Combat (A062/A063) must integrate the spellHooks3 query helpers (AC = max(effectiveAc, minAcFromEffects) + extraAcFromEffects; pass effectResistances/effectResistsAll into applyDamage; check canRegainHp before heals; mirror image/sanctuary on targeting; death ward after 0 HP; resetOncePerTurnEffects each turn). effects.ts dealDamage does not yet read spell resistances.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
