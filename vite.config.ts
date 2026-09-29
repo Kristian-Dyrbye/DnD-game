@@ -18,7 +18,7 @@ export default defineConfig({
     outDir: '../../dist/client',
     emptyOutDir: true,
     // The SRD data (~1.2 MB of JSON) is bundled; splitting it out is part of the performance pass (A112).
-    chunkSizeWarningLimit: 2500,
+    chunkSizeWarningLimit: 3000,
   },
   test: {
     root: '.',

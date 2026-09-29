@@ -2,7 +2,9 @@
 import { GAME_TITLE } from '../../shared/version';
 import { StatusIndicator } from './StatusIndicator';
 import { Creator } from './creator/Creator';
-import { screen, settingsOpen, startNewCharacter } from './state';
+import { combatDemoClass, screen, settingsOpen, startNewCharacter } from './state';
+import { CombatScreen } from './combat/CombatScreen';
+import { demoAct, demoCombat, startDemoCombat } from './combat/combatDemo';
 import { useEffect } from 'preact/hooks';
 import { audio } from '../audio/AudioManager';
 import { loadSettings } from './settingsState';
@@ -26,6 +28,14 @@ function TitleScreen() {
   );
 }
 
+/** The local combat sandbox (`#combat-<class>`). */
+function DemoCombat() {
+  if (!demoCombat.value && combatDemoClass) startDemoCombat(combatDemoClass);
+  const cur = demoCombat.value;
+  if (!cur) return null;
+  return <CombatScreen enc={cur.enc} ctx={cur.ctx} act={demoAct} onLeave={() => (screen.value = 'title')} />;
+}
+
 export function App() {
   // Menu music outside the game; in game the server sends the mood.
   useEffect(() => {
@@ -34,8 +44,8 @@ export function App() {
   }, [screen.value]);
   return (
     <>
-      {screen.value === 'creator' ? <Creator /> : screen.value === 'game' ? <GameScreen /> : <TitleScreen />}
-      <StatusIndicator />
+      {screen.value === 'creator' ? <Creator /> : screen.value === 'game' ? <GameScreen /> : screen.value === 'combat' ? <DemoCombat /> : <TitleScreen />}
+      {screen.value !== 'combat' && <StatusIndicator />}
       {settingsOpen.value && <SettingsPanel onClose={() => (settingsOpen.value = false)} />}
     </>
   );

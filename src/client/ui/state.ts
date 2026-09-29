@@ -8,14 +8,16 @@ import { Rng } from '../../engine/core/rng';
 import { db } from '../data';
 import { send } from '../net/gameSocket';
 
-export type Screen = 'title' | 'creator' | 'game';
+export type Screen = 'title' | 'creator' | 'game' | 'combat';
 
 const hash = typeof location !== 'undefined' ? location.hash : '';
 // Test shortcuts: `#creator` opens the creator; `#quickbuild-<class>` opens a Quick Build at the review step;
 // `#play-<class>` starts a game straight away with that Quick Build (`#play-<class>+map` also opens the map).
 const quick = /^#(?:quickbuild|play)-(\w+)(?:\+\w+)?$/.exec(hash)?.[1];
 
-export const screen = signal<Screen>(hash === '#creator' || (quick && db.classes.has(quick)) ? 'creator' : 'title');
+/** `#combat-<class>`: the local combat sandbox (battle map test). */
+export const combatDemoClass = /^#combat-(\w+)$/.exec(hash)?.[1];
+export const screen = signal<Screen>(combatDemoClass && db.classes.has(combatDemoClass) ? 'combat' : hash === '#creator' || (quick && db.classes.has(quick)) ? 'creator' : 'title');
 export const creator = signal<CreatorState>(quick && db.classes.has(quick) ? quickBuild(quick, db, Rng.fromSeed(quick)) : newCreatorState());
 /** The finished hero (set when the player begins the adventure). */
 export const hero = signal<Character | null>(null);
