@@ -47,7 +47,7 @@ export function SkillsStep() {
           count={1}
           options={[...db.feats.values()].filter((f) => f.category === 'origin' && f.id !== bg.featId).map((f) => ({ id: f.id, label: f.name, detail: f.text }))}
           selected={s.speciesFeatId ? [s.speciesFeatId] : []}
-          onChange={(ids) => (creator.value = { ...s, speciesFeatId: ids[0] })}
+          onChange={(ids) => (creator.value = { ...s, speciesFeatId: ids[0], choices: Object.fromEntries(Object.entries(s.choices).filter(([k]) => !k.startsWith('feat_sp_'))) })}
         />
       )}
       {creationChoices(s, db).map((ch) => (

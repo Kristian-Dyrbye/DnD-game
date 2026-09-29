@@ -4,9 +4,9 @@
 
 ## Status
 - **State:** IN PROGRESS
-- **Current phase:** 3 → 4 (Character Creation nearly done; A046b left)
-- **Last completed assignment:** A049
-- **Notes for next session:** Start with A046b (origin feat choices), then A050 (Phase 4: GameSession + protocol). Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Current phase:** 4 (Phase 3 Character Creation done)
+- **Last completed assignment:** A046b
+- **Notes for next session:** Start with A050 (Phase 4: GameSession + protocol). Phase 2 engine is complete except zone spells (A064a). A100 (campaign design bible) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -25,10 +25,9 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A011, A012, A013, A014, A015, A016, A017, A018, A019, A020, A021, A022, A023, A024, A025, A026, A027, A028, A029, A030, A031, A032, A033, A034, A034a, A035, A036, A037, A038, A039, A039b, A039c, A040, A041, A042
 
 ### Phase 3 — Character Creation
-- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A047, A048, A049
+- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A046b, A047, A048, A049
 
 ### Phase 4 — Narration Loop
-- [todo] A046b — Origin feat choices in the creator | Spec: §5 | Done: Magic Initiate (background feat option list: 2 cantrips + 1 level-1 spell, ability choice) and Human Versatile feats (Skilled: 3 skills/tools; Magic Initiate list choice) picked in the creator and applied via applyFeat-style logic in buildCharacter; tests | Dep: A047
 - [todo] A050 — GameSession + WebSocket protocol | Spec: §3, §8 | Done: shared command/event types, GameSession.handle, state snapshots, ws wiring; tests | Dep: A002, A035
 - [todo] A051 — Adventure schema v1 + scene runner | Spec: §7.3 | Done: zod schema (chapters, scenes, POIs, exits, conditions, checks, NPCs, encounters, beats, loot, flags); runner moves between scenes; tiny test adventure; ADVENTURE_FORMAT.md v1; tests | Dep: A050
 - [todo] A052 — Main screen layout | Spec: §8 | Done: story log, party panel, 3D view slot, map button, dice tray slot, input area; build passes | Dep: A050
@@ -122,7 +121,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - Phase 2 part 1 (A011–A028): seeded Rng + dice/d20 math (engine/core); core vocabulary + Creature/Character schemas (engine/rules/basics, engine/core/creature); SRD data pipeline (engine/data schemas + SrdDatabase + loadSrd; scripts/srd importers; `npm run srd:fetch`, `npm run srd:import`). Data: 15 conditions (+modifiers), rules tables, 38 weapons, 13 armor, 150 gear, 9 species, 4 backgrounds, 17 feats, 12 classes + 12 subclasses, 339 spells (93 with auto effects), 330 monsters/animals, 271 magic items. Tests per file in src/engine/data/*Data.test.ts.
 - Phase 2 part 2 + helpers (A029–A038, A034a, A071): d20Test core + checks/saves/passive/contest; attacks (crit/nat 1), damage rolls, defenses, temp HP; conditions engine from data modifiers (+ exhaustion); death saves, 0 HP, short/long rests; effect executor (shared damage, half on save, spell attacks, heal/upcast, conditions, hooks); spellcasting (slot tables incl. multiclass + pact, casting, rituals, cantrip scaling, concentration); character builder + derived stats (AC, speed, weapon attacks, HP) + inventory; leveling + feats; multiclassing; active effects + weapon masteries. Helpers: world lore (Orrimar: Aurelmark/Gloamfen/Brinescatter, Hollow Choir cult, start town Millbrook); 54 hand-written spell effects/hooks. See File Map for modules.
 - Phase 2 part 3 + helpers (A039–A042a, A048, A094): class feature framework (FeatureImpl hooks + registry/queries) with key features for all 12 classes + SRD subclasses, Wild Shape; monster runtime (stat block → creature, recharge, multiattack, action effects) + encounter builder (2024 XP budgets); spell buff/debuff hooks as active effects + queries. Helpers: CC0 3D models (assets/manifest.json, 52 MB) and CC0 audio (assets/audio-manifest.json, 47 MB) with fetch scripts run by Setup. Details: File Map + Decisions.
-- Phase 2 tail + Phase 3 (A042a–c, A034c, A043–A049, A096 helpers): spell hooks (buffs/debuffs, projectiles/control, batch 3 riders + ~35 query helpers combat must call), spell audit (171 overrides), Eldritch Blast beams; character creator end to end (state machine, class/background/species/abilities (3 methods)/skills+class options/equipment/spells/appearance/identity+AI backstory/difficulty/review, Quick Build for all classes, `#creator` / `#quickbuild-<class>` test URLs); 3D preview (KayKit parts, head swap, skin recolour, tint, auto-frame); Piper voices (public-domain LibriVox, narrator en_GB-cori-medium). See File Map + Decisions.
+- Phase 2 tail + Phase 3 (A042a–c, A034c, A043–A049, A096 helpers): spell hooks (buffs/debuffs, projectiles/control, batch 3 riders + ~35 query helpers combat must call), spell audit (171 overrides), Eldritch Blast beams; character creator end to end (state machine, class/background/species/abilities (3 methods)/skills+class options/equipment/spells/appearance/identity+AI backstory/difficulty/review, Quick Build for all classes, `#creator` / `#quickbuild-<class>` test URLs); 3D preview (KayKit parts, head swap, skin recolour, tint, auto-frame); Piper voices (public-domain LibriVox, narrator en_GB-cori-medium); origin feat picks (A046b: Magic Initiate list/cantrips/spell/ability, Skilled) in creator + builder. See File Map + Decisions.
 
 
 
@@ -200,6 +199,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A047: Heroic is the default difficulty. The hero is stored client-side in `hero` until the GameSession exists (A050 moves it to the server). Backstory homeland hint = Millbrook (starting town).
 - A049: Weapons/shields in the KayKit files are hidden for now (A088 equipment attach will show the right ones). Skin recolour is a heuristic (warm mid-saturation pixels) on a copy of the texture atlas — revisit if it tints leather. Client bundle is now 2.3 MB (521 KB gz) with three.js + SRD data (code-split in A112).
 - A042c: Combat (A062/A063) must integrate the spellHooks3 query helpers (AC = max(effectiveAc, minAcFromEffects) + extraAcFromEffects; pass effectResistances/effectResistsAll into applyDamage; check canRegainHp before heals; mirror image/sanctuary on targeting; death ward after 0 HP; resetOncePerTurnEffects each turn). effects.ts dealDamage does not yet read spell resistances.
+- A046b: Origin-feat picks live in creator choices under feat_bg_* / feat_sp_* keys → toBuildInput → `originFeatChoices` (builder). Background Magic Initiate list comes from bg.featOption (source:'background'). Feat spells are tagged classId `feat:magic_initiate:<list>`; ability stored in character.choices[`magic_initiate_ability:<list>`]; non-casters get a spellcasting block with 0 slots. Feat-granted level 1 spell is once per long rest free — casting code (A062/A066) must honour that (not tracked yet). Versatile list excludes the background's feat (no double Magic Initiate). Skilled offers skills only (no tools) in the UI.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map

@@ -8,7 +8,7 @@ import type { SrdDatabase } from '../data/srd';
 import type { Skill } from '../rules/basics';
 import { STANDARD_ARRAY, suggestAssignment, suggestBackgroundBonus } from './abilityScores';
 import { defaultAppearanceFor } from '../appearance/appearance';
-import { creationChoices, newCreatorState, setChoiceValues, spellCounts, type CreatorState } from './creator';
+import { choiceValues, creationChoices, newCreatorState, setChoiceValues, spellCounts, type CreatorState } from './creator';
 
 interface Plan {
   background: string;
@@ -83,10 +83,17 @@ export function quickBuild(classId: string, db: SrdDatabase, rng: Rng): CreatorS
   }
   if (species.id === 'elf') s.speciesSkills = [(['perception', 'insight', 'survival'] as Skill[]).find((k) => !bgSkills.has(k) && !s.classSkills.includes(k))!];
   // Class options: curated picks when valid, else the first options.
-  for (const ch of creationChoices(s, db)) {
-    const wanted = (plan.picks?.[ch.key] ?? []).filter((id) => ch.options.some((o) => o.id === id));
-    const fill = ch.options.map((o) => o.id).filter((id) => !wanted.includes(id));
-    s = setChoiceValues(s, ch.key, [...wanted, ...fill].slice(0, ch.count));
+  // Repeat until stable: some picks (a Magic Initiate list) unlock further choices.
+  for (let pass = 0; pass < 3; pass++) {
+    const open = creationChoices(s, db).filter((ch) => choiceValues(s, ch.key).length === 0);
+    if (!open.length) break;
+    for (const ch of open) {
+      // Origin-feat spellcasting ability: the class's primary ability if it's a mental one, else Wisdom.
+      const preferred = ch.key.endsWith('_ability') ? [...cls.primaryAbilities, 'wis'] : (plan.picks?.[ch.key] ?? []);
+      const wanted = preferred.filter((id) => ch.options.some((o) => o.id === id)).slice(0, ch.count);
+      const fill = ch.options.map((o) => o.id).filter((id) => !wanted.includes(id));
+      s = setChoiceValues(s, ch.key, [...wanted, ...fill].slice(0, ch.count));
+    }
   }
   const need = spellCounts(s, db);
   const list = db.spellsForClass(classId, 1);

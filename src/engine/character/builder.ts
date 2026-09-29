@@ -7,7 +7,7 @@
  */
 import { CharacterSchema, type Character, type InventoryItem } from '../core/creature';
 import type { SrdDatabase } from '../data/srd';
-import type { EquipmentChoiceSchema } from '../data/schemas';
+import type { Background, EquipmentChoiceSchema } from '../data/schemas';
 import type { z } from 'zod';
 import {
   ABILITIES,
@@ -46,6 +46,8 @@ export interface CharacterBuildInput {
   speciesSkills?: Skill[];
   /** Human Versatile: an extra origin feat. */
   speciesFeatId?: string;
+  /** Picks for origin feats that need them (Magic Initiate spells/ability, Skilled proficiencies). */
+  originFeatChoices?: OriginFeatChoice[];
   /** Starting equipment option indexes: class 0=A, 1=B, 2=C; background 'a' | 'b'. */
   classEquipment: number;
   backgroundEquipment: 'a' | 'b';
@@ -59,6 +61,27 @@ export interface CharacterBuildInput {
   languages?: string[];
   personality?: Character['personality'];
   appearance?: Character['appearance'];
+}
+
+export interface OriginFeatChoice {
+  featId: 'magic_initiate' | 'skilled';
+  /** Which origin feat this is for; a background's fixed Magic Initiate list fills in `spellList`. */
+  source?: 'background' | 'species';
+  /** Magic Initiate list: 'cleric' | 'druid' | 'wizard'. */
+  spellList?: string;
+  cantrips?: string[];
+  spells?: string[];
+  ability?: Ability;
+  /** Skilled: skills (and/or tool item ids in `tools`). */
+  skills?: Skill[];
+  tools?: string[];
+}
+
+/** Fills in the spell list for a background Magic Initiate whose list the background fixes. */
+function resolveFeatChoices(input: CharacterBuildInput, bg: Background | undefined): OriginFeatChoice[] {
+  return (input.originFeatChoices ?? []).map((fc) =>
+    fc.featId === 'magic_initiate' && !fc.spellList && fc.source === 'background' && bg?.featOption ? { ...fc, spellList: bg.featOption } : fc,
+  );
 }
 
 export class BuildError extends Error {
@@ -142,6 +165,22 @@ export function validateBuild(input: CharacterBuildInput, db: SrdDatabase): stri
   if ((input.weaponMasteries?.length ?? 0) > masteryCount) problems.push(`${cls.name} can master ${masteryCount} weapon(s)`);
   for (const w of input.weaponMasteries ?? []) if (!db.weapons.has(w)) problems.push(`Unknown weapon ${w}`);
 
+  // Origin feat picks
+  for (const fc of resolveFeatChoices(input, bg)) {
+    if (fc.featId === 'magic_initiate') {
+      const list = fc.spellList ?? '';
+      if (!['cleric', 'druid', 'wizard'].includes(list)) problems.push('Magic Initiate: choose Cleric, Druid or Wizard');
+      if ((fc.cantrips?.length ?? 0) !== 2) problems.push('Magic Initiate: choose two cantrips');
+      if ((fc.spells?.length ?? 0) !== 1) problems.push('Magic Initiate: choose one level 1 spell');
+      if (!fc.ability || !['int', 'wis', 'cha'].includes(fc.ability)) problems.push('Magic Initiate: choose Int, Wis or Cha');
+      for (const id of [...(fc.cantrips ?? []), ...(fc.spells ?? [])]) {
+        const sp = db.spells.get(id);
+        if (!sp || !sp.classes.includes(list)) problems.push(`${id} is not on the ${list} list`);
+      }
+    }
+    if (fc.featId === 'skilled' && (fc.skills?.length ?? 0) + (fc.tools?.length ?? 0) !== 3) problems.push('Skilled: choose three skills or tools');
+  }
+
   // Expertise must be in proficient skills
   const proficient = new Set([...bg.skills, ...input.classSkills, ...(input.speciesSkills ?? [])]);
   for (const s of input.expertise ?? []) if (!proficient.has(s)) problems.push(`Expertise needs proficiency in ${s}`);
@@ -169,6 +208,7 @@ export function buildCharacter(input: CharacterBuildInput, db: SrdDatabase): Cha
   const skills: Character['skills'] = {};
   for (const s of [...bg.skills, ...input.classSkills, ...(input.speciesSkills ?? [])]) skills[s] = 'proficient';
   for (const s of input.expertise ?? []) if (skills[s]) skills[s] = 'expertise';
+  for (const fc of input.originFeatChoices ?? []) if (fc.featId === 'skilled') for (const s of fc.skills ?? []) skills[s] ??= 'proficient';
 
   const resistances: DamageType[] = [];
   if (species.id === 'dwarf') resistances.push('poison');
@@ -201,16 +241,21 @@ export function buildCharacter(input: CharacterBuildInput, db: SrdDatabase): Cha
   const sc = cls.spellcasting;
   const slots = spellSlots([{ progression: sc.progression, level }], db.rules);
   const pact = sc.progression === 'pact' ? pactSlots(level, db.rules) : undefined;
+  // Magic Initiate spells are tagged with their list so the right ability is used when casting.
+  const mi = resolveFeatChoices(input, bg).filter((f) => f.featId === 'magic_initiate');
+  const featCantrips = mi.flatMap((f) => f.cantrips ?? []);
+  const featPrepared = mi.flatMap((f) => (f.spells ?? []).map((spellId) => ({ spellId, classId: `feat:magic_initiate:${f.spellList}` })));
   const spellcasting =
-    sc.progression === 'none'
+    sc.progression === 'none' && mi.length === 0
       ? undefined
       : {
           slots: [...slots],
           maxSlots: slots,
           ...(pact && { pact: { current: pact.max, max: pact.max, level: pact.level } }),
-          cantrips: input.cantrips ?? [],
-          prepared: (input.preparedSpells ?? []).map((spellId) => ({ spellId, classId: cls.id })),
+          cantrips: [...(input.cantrips ?? []), ...featCantrips],
+          prepared: [...(input.preparedSpells ?? []).map((spellId) => ({ spellId, classId: cls.id })), ...featPrepared],
         };
+  const featChoiceRecord = Object.fromEntries(mi.map((f) => [`magic_initiate_ability:${f.spellList}`, [f.ability ?? 'wis']]));
 
   const draft = CharacterSchema.parse({
     id: input.id,
@@ -244,10 +289,11 @@ export function buildCharacter(input: CharacterBuildInput, db: SrdDatabase): Cha
       tools: [
         bg.tool.startsWith('choice:') ? (input.choiceItems?.[bg.tool.slice(7)] ?? DEFAULT_CHOICE_ITEM[bg.tool.slice(7)] ?? bg.tool) : bg.tool,
         ...(input.choices?.tool_proficiencies ?? []),
+        ...(input.originFeatChoices ?? []).flatMap((f) => f.tools ?? []),
         ...(cls.id === 'druid' ? ['herbalism_kit'] : cls.id === 'rogue' ? ['thieves_tools'] : []),
       ],
     },
-    choices: input.choices ?? {},
+    choices: { ...(input.choices ?? {}), ...featChoiceRecord },
     ...(input.personality && { personality: input.personality }),
     ...(input.appearance && { appearance: input.appearance }),
     ...(spellcasting && { spellcasting }),

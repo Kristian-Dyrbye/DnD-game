@@ -5,8 +5,8 @@
  * CreatorState in a signal and calls these functions.
  */
 import type { SrdDatabase } from '../data/srd';
-import { ABILITIES, type Ability, type AbilityScores, type Skill } from '../rules/basics';
-import { validateBuild, type CharacterBuildInput } from './builder';
+import { ABILITIES, SKILLS, type Ability, type AbilityScores, type Skill } from '../rules/basics';
+import { validateBuild, type CharacterBuildInput, type OriginFeatChoice } from './builder';
 import { scoreProblems } from './abilityScores';
 import { weaponMasteryCount } from './featureLevels';
 import { defaultAppearanceFor, type Appearance } from '../appearance/appearance';
@@ -100,12 +100,16 @@ export function chooseClass(s: CreatorState, classId: string): CreatorState {
 
 export function chooseBackground(s: CreatorState, backgroundId: string): CreatorState {
   if (s.backgroundId === backgroundId) return s;
-  return { ...s, backgroundId, backgroundBonus: {}, classSkills: [], expertise: [], backgroundEquipment: undefined } as CreatorState;
+  return { ...s, backgroundId, backgroundBonus: {}, classSkills: [], expertise: [], backgroundEquipment: undefined, choices: withoutKeys(s.choices, 'feat_bg_') } as CreatorState;
 }
 
 export function chooseSpecies(s: CreatorState, speciesId: string): CreatorState {
   if (s.speciesId === speciesId) return s;
-  return { ...s, speciesId, lineageId: undefined, size: undefined, speciesSkills: [], speciesFeatId: undefined } as CreatorState;
+  return { ...s, speciesId, lineageId: undefined, size: undefined, speciesSkills: [], speciesFeatId: undefined, choices: withoutKeys(s.choices, 'feat_sp_') } as CreatorState;
+}
+
+function withoutKeys(choices: Record<string, string[]>, prefix: string): Record<string, string[]> {
+  return Object.fromEntries(Object.entries(choices).filter(([k]) => !k.startsWith(prefix)));
 }
 
 /** What still blocks leaving a step. Empty = the step is complete. */
@@ -249,6 +253,32 @@ export function creationChoices(s: CreatorState, db: SrdDatabase): CreationChoic
     const invocations = (cls.options.eldritch_invocation ?? []).filter((o) => !o.prerequisite || !/Level \d+\+/.test(o.prerequisite));
     out.push({ key: 'eldritch_invocation', label: 'an Eldritch Invocation', count: 1, options: invocations.map((o) => ({ id: o.id, label: o.name, detail: o.text })) });
   }
+  // Origin feat picks: background feat and Human Versatile feat.
+  const bg = s.backgroundId ? db.backgrounds.get(s.backgroundId) : undefined;
+  const spellOpts = (list: string, level: 0 | 1) => db.spellsForClass(list, 1).filter((sp) => sp.level === level).map((sp) => ({ id: sp.id, label: sp.name }));
+  const abilityOpts = [
+    { id: 'int', label: 'Intelligence' },
+    { id: 'wis', label: 'Wisdom' },
+    { id: 'cha', label: 'Charisma' },
+  ];
+  const addMagicInitiate = (slot: 'bg' | 'sp', fixedList?: string) => {
+    const list = fixedList ?? s.choices[`feat_${slot}_list`]?.[0];
+    const title = slot === 'bg' ? 'Magic Initiate' : 'Versatile: Magic Initiate';
+    if (!fixedList) {
+      out.push({ key: `feat_${slot}_list`, label: `${title} spell list`, count: 1, options: ['cleric', 'druid', 'wizard'].map((l) => ({ id: l, label: cap(l) })) });
+    }
+    if (!list) return;
+    out.push({ key: `feat_${slot}_cantrips`, label: `${title} cantrips (${cap(list)})`, count: 2, options: spellOpts(list, 0) });
+    out.push({ key: `feat_${slot}_spell`, label: `${title} level 1 spell (${cap(list)})`, count: 1, options: spellOpts(list, 1) });
+    out.push({ key: `feat_${slot}_ability`, label: `${title} spellcasting ability`, count: 1, options: abilityOpts });
+  };
+  if (bg?.featId === 'magic_initiate') addMagicInitiate('bg', bg.featOption);
+  if (s.speciesFeatId === 'magic_initiate') addMagicInitiate('sp');
+  if (s.speciesFeatId === 'skilled') {
+    const have = new Set<string>([...(bg?.skills ?? []), ...s.classSkills, ...s.speciesSkills]);
+    out.push({ key: 'feat_sp_skilled', label: 'Skilled proficiencies', count: 3, options: SKILLS.filter((k) => !have.has(k)).map((k) => ({ id: k, label: cap(k) })) });
+  }
+
   const instruments = [...db.gear.values()].filter((g) => g.tags.includes('musical_instrument'));
   if (cls.id === 'bard') out.push({ key: 'tool_proficiencies', label: 'Musical Instruments', count: 3, options: instruments.map((g) => ({ id: g.id, label: g.name })) });
   if (cls.id === 'monk') {
@@ -266,6 +296,26 @@ export function spellCounts(s: CreatorState, db: SrdDatabase): { cantrips: numbe
   return { cantrips: (cls.spellcasting.cantripsKnown?.[0] ?? 0) + extra, spells: cls.spellcasting.preparedSpells?.[0] ?? 0 };
 }
 
+/** Converts the creator's feat_* picks into builder OriginFeatChoice entries. */
+export function originFeatChoices(s: CreatorState): OriginFeatChoice[] {
+  const out: OriginFeatChoice[] = [];
+  for (const slot of ['bg', 'sp'] as const) {
+    const cantrips = s.choices[`feat_${slot}_cantrips`];
+    if (!cantrips) continue;
+    const list = slot === 'sp' ? s.choices.feat_sp_list?.[0] : undefined;
+    out.push({
+      featId: 'magic_initiate',
+      source: slot === 'bg' ? 'background' : 'species',
+      ...(list && { spellList: list }),
+      cantrips,
+      spells: s.choices[`feat_${slot}_spell`] ?? [],
+      ...(s.choices[`feat_${slot}_ability`]?.[0] && { ability: s.choices[`feat_${slot}_ability`]![0] as Ability }),
+    });
+  }
+  if (s.choices.feat_sp_skilled) out.push({ featId: 'skilled', source: 'species', skills: s.choices.feat_sp_skilled as Skill[] });
+  return out;
+}
+
 export function toBuildInput(s: CreatorState, id = 'hero'): CharacterBuildInput {
   return {
     id,
@@ -279,6 +329,7 @@ export function toBuildInput(s: CreatorState, id = 'hero'): CharacterBuildInput 
     backgroundBonus: s.backgroundBonus,
     classSkills: s.classSkills,
     ...(s.expertise.length && { expertise: s.expertise }),
+    ...(originFeatChoices(s).length && { originFeatChoices: originFeatChoices(s) }),
     ...(s.speciesSkills.length && { speciesSkills: s.speciesSkills }),
     ...(s.speciesFeatId && { speciesFeatId: s.speciesFeatId }),
     classEquipment: s.classEquipment ?? 0,
