@@ -230,6 +230,15 @@ describe('start / end of turn hooks', () => {
     expect(r.events.some((e) => e.kind === 'death_save')).toBe(false);
   });
 
+  it('Beacon of Hope gives Advantage on death saves', () => {
+    const { state, creatures } = setup();
+    const down = applyCondition(pc({ hp: 0 }), { condition: 'unconscious' }).creature;
+    const hoped = addEffect(down, { key: 'beacon_of_hope', data: { deathSaveAdvantage: true, maxHealing: true } });
+    const r = nextTurn(state, { ...creatures, hero: hoped }, { rng: fixed(4, 15) });
+    expect(r.events.find((e) => e.kind === 'death_save')?.text).toMatch(/adv: 4, 15 → 15.*Success/);
+    expect((r.creatures.hero as Character).deathSaves.successes).toBe(1);
+  });
+
   it('a character dropped to 0 HP by an end-of-turn effect falls Unconscious', () => {
     const { state, creatures } = setup();
     let r = nextTurn(state, creatures, ctx);

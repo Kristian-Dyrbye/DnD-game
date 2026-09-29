@@ -3,7 +3,7 @@
  * Monsters die at 0 HP; characters fall Unconscious and make death saves. Heroic-mode "defeat
  * instead of death" is decided by the game session (A068), not here.
  */
-import { formatD20Test, rollD20, type Modifier } from '../core/dice';
+import { formatD20Test, rollD20, type Modifier, type RollMode } from '../core/dice';
 import type { Character, Creature } from '../core/creature';
 import type { Rng } from '../core/rng';
 import { applyCondition, removeCondition } from './conditions';
@@ -61,8 +61,8 @@ export interface DeathSaveResult {
 }
 
 /** Start-of-turn death save: d20 ≥ 10 succeeds; 1 = two failures; 20 = regain 1 HP. Exhaustion applies (it's a D20 Test). */
-export function rollDeathSave(c: Character, rng: Rng, bonuses: Modifier[] = []): DeathSaveResult {
-  const d20 = rollD20(rng);
+export function rollDeathSave(c: Character, rng: Rng, bonuses: Modifier[] = [], mode: RollMode = 'normal'): DeathSaveResult {
+  const d20 = rollD20(rng, mode);
   const modifiers = [...bonuses];
   if (c.exhaustion > 0) modifiers.push({ value: -2 * c.exhaustion, label: 'Exhaustion' });
   const total = d20.natural + modifiers.reduce((s, m) => s + m.value, 0);

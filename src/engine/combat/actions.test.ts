@@ -1,16 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { CharacterSchema, type Character, type Creature } from '../core/creature';
-import type { Rng } from '../core/rng';
 import { loadSrd } from '../data/srdBundle';
 import { addEffect, hasEffect } from '../rules/activeEffects';
 import { applyCondition, hasCondition } from '../rules/conditions';
 import { monsterToCreature } from '../rules/monsters';
 import { dodgeSaveModes, hideDc, isHidden } from './actionEffects';
-import { dash, disengage, dodge, escapeGrapple, grapple, help, hide, moveCreature, ready, searchFor, settleGrapples, shove, triggerReadied } from './actions';
+import { dash, disengage, dodge, dragDoublesCost, escapeGrapple, freeHands, grapple, grappledBy, help, hide, holdsReadiedSpell, moveCreature, ready, searchFor, settleGrapples, shove, triggerReadied } from './actions';
 import { attackProfiles, checkAttack, characterAttackProfile, pushAway, resolveAttack } from './attack';
 import type { CombatContext, CombatState } from './combatState';
 import { createGrid, placeToken, setEdge } from './grid';
 import { startCombat } from './turns';
+import { buildCharacter } from '../character/builder';
+import { toBuildInput } from '../character/creator';
+import { quickBuild } from '../character/quickBuild';
+import { autoLevelTo } from '../party/companions';
+import { Rng } from '../core/rng';
 
 const db = loadSrd();
 
@@ -45,6 +49,7 @@ function hero(id = 'hero', over: Partial<Character> = {}): Character {
       { uid: 'axe', itemId: 'greataxe', quantity: 1 },
       { uid: 'hammer', itemId: 'warhammer', quantity: 1 },
       { uid: 'dg', itemId: 'dagger', quantity: 1, equipped: 'off_hand' },
+      { uid: 'hx', itemId: 'handaxe', quantity: 1 },
     ],
     ...over,
   });
@@ -256,12 +261,19 @@ describe('weapon mastery', () => {
     expect(r.state.grid.tokens.g1).toMatchObject({ x: 8, y: 5 });
   });
 
-  it('Nick: the Light extra attack inside the Attack action, once per turn; Light bonus attack adds no ability mod', () => {
+  it('Nick: the Light extra attack inside the Attack action, once per turn; Light bonus attack adds no ability mod; needs a prior Light attack with another weapon', () => {
     const s = base(['dagger']);
     const nickFirst = resolveAttack(s, ctx(15, 2), { attackerId: 'hero', targetId: 'g1', profile: P('dg'), kind: 'nick' });
     expect(nickFirst.ok).toBe(false); // Attack action not taken yet
-    const a = resolveAttack(s, ctx(2), { attackerId: 'hero', targetId: 'g1', profile: P('ls') });
+    const heavy = resolveAttack(s, ctx(2), { attackerId: 'hero', targetId: 'g1', profile: P('ls') });
+    if (!heavy.ok) throw new Error(heavy.error);
+    // Light property: the extra attack needs an Attack with a Light weapon first.
+    expect(resolveAttack(heavy.state, ctx(15, 2), { attackerId: 'hero', targetId: 'g1', profile: P('dg'), kind: 'nick' }).ok).toBe(false);
+    expect(resolveAttack(heavy.state, ctx(15, 2), { attackerId: 'hero', targetId: 'g1', profile: P('dg'), kind: 'light_bonus' }).ok).toBe(false);
+    const a = resolveAttack(s, ctx(2), { attackerId: 'hero', targetId: 'g1', profile: P('hx') });
     if (!a.ok) throw new Error(a.error);
+    // ...and a different Light weapon.
+    expect(resolveAttack(a.state, ctx(15, 2), { attackerId: 'hero', targetId: 'g1', profile: P('hx'), kind: 'light_bonus' }).ok).toBe(false);
     const n = resolveAttack(a.state, ctx(15, 2), { attackerId: 'hero', targetId: 'g1', profile: P('dg'), kind: 'nick' });
     if (!n.ok) throw new Error(n.error);
     expect(n.damage).toBe(2);
@@ -386,11 +398,17 @@ describe('Hide and Search', () => {
   });
 });
 
+/** The test hero with the dagger stowed: one hand free. */
+const oneHand = (): Creature => {
+  const h = hero();
+  return { ...h, inventory: h.inventory.map((i) => (i.uid === 'dg' ? { ...i, equipped: undefined } : i)) } as Creature;
+};
+
 describe('Grapple and Shove', () => {
   it('Grapple: size limit, better save chosen, Grappled on a failure, escape', () => {
     const huge = { ...ogre('huge'), size: 'huge' as const };
     const s = setup([
-      { c: hero(), side: 'party', x: 0, y: 0 },
+      { c: oneHand(), side: 'party', x: 0, y: 0 },
       { c: ogre('o'), side: 'enemy', x: 1, y: 0 },
       { c: huge, side: 'enemy', x: 0, y: 3 },
     ]);
@@ -414,7 +432,7 @@ describe('Grapple and Shove', () => {
 
   it('grapple ends when the grappler is Incapacitated or too far', () => {
     const s = setup([
-      { c: hero(), side: 'party', x: 0, y: 0 },
+      { c: oneHand(), side: 'party', x: 0, y: 0 },
       { c: goblin('g1'), side: 'enemy', x: 1, y: 0 },
     ]);
     const g = grapple(s, ctx(1), 'hero', 'g1');
@@ -422,6 +440,56 @@ describe('Grapple and Shove', () => {
     const moved = { ...g.state, grid: pushAway(g.state.grid, 'hero', 'g1', 10).grid };
     const settled = settleGrapples(moved, ctx());
     expect(hasCondition(settled.state.creatures.g1!, 'grappled')).toBe(false);
+  });
+
+  it('one grapple per free hand (weapons and shields fill hands)', () => {
+    const s = setup([
+      { c: hero(), side: 'party', x: 0, y: 0 },
+      { c: goblin('g1'), side: 'enemy', x: 1, y: 0 },
+      { c: goblin('g2'), side: 'enemy', x: 0, y: 1 },
+    ]);
+    expect(freeHands(s, ctx(), s.creatures.hero!)).toBe(0);
+    expect(grapple(s, ctx(1), 'hero', 'g1').ok).toBe(false);
+    const bare = { ...s, creatures: { ...s.creatures, hero: { ...(s.creatures.hero as Character), inventory: [] } } };
+    expect(freeHands(bare, ctx(), bare.creatures.hero!)).toBe(2);
+    const one = { ...s, creatures: { ...s.creatures, hero: oneHand() } };
+    const g = grapple(one, ctx(1), 'hero', 'g1');
+    if (!g.ok) throw new Error(g.error);
+    expect(g.success).toBe(true);
+    expect(grappledBy(g.state, 'hero')).toEqual(['g1']);
+    expect(freeHands(g.state, ctx(), g.state.creatures.hero!)).toBe(0);
+    const second = grapple(g.state, ctx(1), 'hero', 'g2');
+    expect(second.ok).toBe(false);
+    expect(!second.ok && second.error).toContain('free hand');
+    // Monsters have no hand limit.
+    expect(freeHands(s, ctx(), s.creatures.g1!)).toBe(Infinity);
+  });
+
+  it('dragging a grappled creature costs double movement and pulls it along', () => {
+    const s = setup([
+      { c: oneHand(), side: 'party', x: 5, y: 5 },
+      { c: goblin('g1'), side: 'enemy', x: 6, y: 5 },
+    ]);
+    const g = grapple(s, ctx(1), 'hero', 'g1');
+    if (!g.ok) throw new Error(g.error);
+    const path = [{ x: 4, y: 5 }, { x: 3, y: 5 }, { x: 2, y: 5 }];
+    const m = moveCreature(g.state, ctx(), 'hero', path, { drag: ['g1'] });
+    if (!m.ok) throw new Error(m.error);
+    expect(m.movedFt).toBe(30);
+    expect(m.state.grid.tokens.hero).toMatchObject({ x: 2, y: 5 });
+    expect(m.state.grid.tokens.g1).toMatchObject({ x: 3, y: 5 });
+    expect(m.state.turns.budgets.hero!.movementSpentFt).toBe(30);
+    expect(m.events.at(-1)!.text).toContain('dragging');
+    expect(settleGrapples(m.state, ctx()).state.creatures.g1!.effects.some((e) => e.key === 'grappled_by')).toBe(true);
+    // 30 ft of speed drags only 15 ft: a 4-square path is too long.
+    expect(moveCreature(g.state, ctx(), 'hero', [...path, { x: 1, y: 5 }], { drag: ['g1'] }).ok).toBe(false);
+    // A Tiny creature is dragged for free.
+    const tiny: CombatState = { ...g.state, creatures: { ...g.state.creatures, g1: { ...g.state.creatures.g1!, size: 'tiny' as const } } };
+    expect(dragDoublesCost(tiny.creatures.hero!, tiny.creatures.g1!)).toBe(false);
+    const t = moveCreature(tiny, ctx(), 'hero', path, { drag: ['g1'] });
+    expect(t.ok && t.movedFt).toBe(15);
+    // Only creatures you grapple can be dragged.
+    expect(moveCreature(s, ctx(), 'hero', path, { drag: ['g1'] }).ok).toBe(false);
   });
 
   it('Shove: Prone or pushed 5 ft on a failed save', () => {
@@ -492,6 +560,41 @@ describe('Ready', () => {
     expect(t.state.turns.budgets.hero!.reaction).toBe(false);
     expect(hasEffect(t.state.creatures.hero!, 'readied')).toBe(false);
     expect(triggerReadied(t.state, ctx(), 'hero', { targetId: 'g1' }).ok).toBe(false);
+  });
+
+  it('a readied spell spends its slot on Ready, is held with Concentration and released with the Reaction', () => {
+    let wiz = autoLevelTo(buildCharacter(toBuildInput(quickBuild('wizard', db, Rng.fromSeed('wiz'))), db), 3, db);
+    wiz = { ...wiz, id: 'wiz', spellcasting: { ...wiz.spellcasting!, prepared: [...wiz.spellcasting!.prepared, { spellId: 'magic_missile', classId: 'wizard' }, { spellId: 'healing_word', classId: 'wizard' }] } };
+    const s = setup([
+      { c: wiz, side: 'party', x: 0, y: 0 },
+      { c: goblin('g1'), side: 'enemy', x: 3, y: 0 },
+    ]);
+    const slots = wiz.spellcasting!.slots[0]!;
+    expect(ready(s, ctx(), 'wiz', 'a goblin moves', { kind: 'spell', spellId: 'healing_word' }).ok).toBe(false); // Bonus Action spell
+    const r = ready(s, ctx(), 'wiz', 'the goblin moves', { kind: 'spell', spellId: 'magic_missile' });
+    if (!r.ok) throw new Error(r.error);
+    const held = r.state.creatures.wiz as Character;
+    expect(held.spellcasting!.slots[0]).toBe(slots - 1);
+    expect(holdsReadiedSpell(held, 'magic_missile')).toBe(true);
+    expect(r.events.at(-1)!.text).toContain('Magic Missile (held with Concentration)');
+
+    const goblinTurn = { ...r.state, turns: { ...r.state.turns, currentIndex: 1 } };
+    const t = triggerReadied(goblinTurn, ctx(), 'wiz', { targetIds: ['g1'] });
+    if (!t.ok) throw new Error(t.error);
+    const after = t.state.creatures.wiz as Character;
+    expect(after.spellcasting!.slots[0]).toBe(slots - 1); // not paid twice
+    expect(after.spellcasting!.concentration).toBeUndefined();
+    expect(t.state.creatures.g1!.hp).toBeLessThan(10);
+    expect(t.state.turns.budgets.wiz!.reaction).toBe(false);
+    expect(hasEffect(after, 'readied')).toBe(false);
+
+    // Concentration lost before the trigger: the spell dissipates, the slot stays spent.
+    const broken = { ...goblinTurn, creatures: { ...goblinTurn.creatures, wiz: { ...held, spellcasting: { ...held.spellcasting!, concentration: undefined } } } };
+    const lost = triggerReadied(broken, ctx(), 'wiz', { targetIds: ['g1'] });
+    if (!lost.ok) throw new Error(lost.error);
+    expect(lost.events[0]!.text).toContain('dissipates');
+    expect(lost.state.creatures.g1!.hp).toBe(10);
+    expect((lost.state.creatures.wiz as Character).spellcasting!.slots[0]).toBe(slots - 1);
   });
 
   it('dodge effect helper ignores unrelated abilities', () => {

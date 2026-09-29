@@ -113,6 +113,8 @@ export interface CastInCombatOptions {
   slot?: SlotChoice;
   /** Targets come from an area template (line of effect from the origin, not the caster). */
   areaTargets?: boolean;
+  /** Override the casting cost (a readied spell is released with the Reaction). */
+  economy?: EconomyKind;
 }
 
 /** Cast a known spell on the map: pays the Action/Bonus Action, checks range and line, runs its effects. */
@@ -140,7 +142,7 @@ export function castInCombat(state: CombatState, ctx: CombatContext, o: CastInCo
     const b = state.grid.tokens[id];
     distances.set(id, a && b ? distanceFt(a, b) : 5);
   }
-  const paid = spend(state.turns, o.casterId, economy, caster, ctx.table);
+  const paid = spend(state.turns, o.casterId, o.economy ?? economy, caster, ctx.table);
   if (!paid.ok) return fail(state, paid.error);
   const src = spellcastingSource(caster, spell, db);
   const level = spell.level === 0 ? 0 : slot.kind === 'slot' ? slot.level : slot.kind === 'pact' ? (caster.spellcasting?.pact?.level ?? spell.level) : spell.level;

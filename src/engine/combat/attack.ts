@@ -367,12 +367,16 @@ export function spendAttack(
     }
     case 'light_bonus': {
       if (profile && !profile.properties.includes('light')) return { ok: false, error: `${profile.name} isn't a Light weapon` };
+      const needs = lightExtraAttackError(attacker, profile);
+      if (needs) return { ok: false, error: needs };
       const r = spend(turns, attacker.id, 'bonusAction', attacker, ctx.table);
       return r.ok ? { ok: true, turns: r.state, attacker } : { ok: false, error: r.error };
     }
     case 'nick': {
       if (!onOwnTurn(turns, attacker.id)) return { ok: false, error: `It isn't ${attacker.id}'s turn` };
       if (!profile || profile.mastery !== 'nick' || !profile.properties.includes('light')) return { ok: false, error: 'Nick needs a Light weapon with the Nick mastery' };
+      const needs = lightExtraAttackError(attacker, profile);
+      if (needs) return { ok: false, error: needs };
       if (budgetOf(turns, attacker.id).action) return { ok: false, error: 'Nick attacks are part of the Attack action' };
       if (hasOncePerTurnMarker(attacker, 'nick_used')) return { ok: false, error: 'Nick already used this turn' };
       const marked = addEffect(attacker, { key: 'nick_used', sourceId: attacker.id, expires: { on: 'end_of_turn', creatureId: attacker.id, skip: 0 } });
@@ -388,13 +392,34 @@ export function spendAttack(
       const left = turns.budgets[attacker.id]?.attacksLeft ?? 0;
       if (left > 0 && onOwnTurn(turns, attacker.id)) {
         if (!canAct(attacker, ctx.table)) return { ok: false, error: `${attacker.name} can't act (Incapacitated)` };
-        return { ok: true, turns: setAttacksLeft(turns, attacker.id, left - 1), attacker };
+        return { ok: true, turns: setAttacksLeft(turns, attacker.id, left - 1), attacker: markLightAttack(attacker, profile) };
       }
       const r = spend(turns, attacker.id, 'action', attacker, ctx.table);
       if (!r.ok) return { ok: false, error: r.error };
-      return { ok: true, turns: setAttacksLeft(r.state, attacker.id, attacksPerActionOf(attacker, db) - 1), attacker };
+      return { ok: true, turns: setAttacksLeft(r.state, attacker.id, attacksPerActionOf(attacker, db) - 1), attacker: markLightAttack(attacker, profile) };
     }
   }
+}
+
+const weaponKey = (p: AttackProfile): string => p.uid ?? p.id;
+
+/** Light property: attacking with a Light weapon as part of the Attack action enables the extra attack. */
+function markLightAttack(attacker: Creature, profile: AttackProfile | undefined): Creature {
+  if (!profile?.properties.includes('light') || attacker.effects.some((e) => e.key === 'light_attacked')) return attacker;
+  return addEffect(attacker, {
+    key: 'light_attacked',
+    sourceId: attacker.id,
+    data: { weapon: weaponKey(profile) },
+    expires: { on: 'end_of_turn', creatureId: attacker.id, skip: 0 },
+  });
+}
+
+/** The Light extra attack needs a prior Attack with a Light weapon this turn, made with a different weapon. */
+function lightExtraAttackError(attacker: Creature, profile: AttackProfile | undefined): string | undefined {
+  const mark = attacker.effects.find((e) => e.key === 'light_attacked');
+  if (!mark) return 'The Light extra attack needs an Attack with a Light weapon first this turn';
+  if (profile && mark.data.weapon === weaponKey(profile)) return 'The Light extra attack must use a different Light weapon';
+  return undefined;
 }
 
 // ---------------------------------------------------------------- damage

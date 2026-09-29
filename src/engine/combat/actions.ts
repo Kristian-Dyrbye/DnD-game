@@ -13,15 +13,20 @@
  *   (source 'hide') with the check total recorded as the DC to find you.
  * - Search (for a hidden creature): Wisdom (Perception) vs the recorded Stealth total.
  * - Ready: stores a trigger + readied response; `triggerReadied` spends the Reaction to resolve it.
- *   Readied spells (held with Concentration) are not modelled yet.
+ *   A readied spell (casting time of an action) is cast on Ready (its slot is spent) and held with
+ *   Concentration; if Concentration ends first (damage, a new concentration spell, the next turn)
+ *   the spell is lost. Released with the Reaction; targets are chosen then.
  * - Grapple / Shove: replace one attack of the Attack action (or an Opportunity Attack); target at most
  *   one size larger and within 5 ft; it makes the better of a Str or Dex save vs 8 + Str mod + PB.
- *   Escaping: action, Str (Athletics) or Dex (Acrobatics) vs the same DC.
+ *   Escaping: action, Str (Athletics) or Dex (Acrobatics) vs the same DC. Characters grapple one
+ *   creature per free hand (weapons, shields and current grapples fill hands); stat blocks aren't limited.
+ * - Dragging: `moveCreature` with `drag` moves creatures you grapple along; every foot costs 1 extra
+ *   foot unless the dragged creature is Tiny or two or more sizes smaller than you.
  * - `moveCreature`: walks a path, resolving Opportunity Attacks from hostile creatures whose reach
  *   the mover leaves (Reaction, melee attack; halted if the mover drops or can't move).
  */
 import type { Character, Creature } from '../core/creature';
-import { SKILL_ABILITY, type Ability, type Skill } from '../rules/basics';
+import { SIZES, SKILL_ABILITY, type Ability, type Skill } from '../rules/basics';
 import { addEffect, removeEffects } from '../rules/activeEffects';
 import { abilityCheck, saveModifiers, savingThrow, type D20TestResult } from '../rules/checks';
 import { applyCondition, canAct, checkModes, hasCondition, isCrawlOnly, removeCondition, saveModes } from '../rules/conditions';
@@ -32,11 +37,14 @@ import { abilityModifier } from '../rules/basics';
 import { HIDE_SOURCE, consumeHelpCheck, dodgeSaveModes, helpCheckModes, hideDc } from './actionEffects';
 import { attackProfiles, canSee, findProfile, meleeReach, pushAway, resolveAttack, spendAttack, withinOneSizeLarger, type AttackKind, type AttackOutcome } from './attack';
 import { areHostile, cloneGridTokens, dbOf, fail, withCreature, type ActionResult, type CombatContext, type CombatEvent, type CombatState } from './combatState';
-import { distanceFt, type Point } from './grid';
+import { canPlace, distanceFt, moveToken, type Grid, type Point } from './grid';
 import { computeCover } from './los';
 import { moveAlong, type MoveMode, type OpportunityTrigger } from './movement';
 import { addDash, canReact, currentId, movementLeft, setDisengaged, spend, spendMovement, type EconomyKind } from './turns';
 import { effectiveSpeed } from '../rules/conditions';
+import { endConcentration, expendSlot, slotProblem, type SlotChoice } from '../rules/spellcasting';
+import type { SpellcastingState } from '../core/creature';
+import { castInCombat, knowsSpell, lowestSlotFor, spellEconomy } from './castAction';
 
 const isCharacter = (c: Creature): c is Character => c.kind === 'character' && 'classes' in c;
 
@@ -233,7 +241,55 @@ export function searchFor(state: CombatState, ctx: CombatContext, id: string, hi
 export type ReadiedAction =
   | { kind: 'attack'; targetId?: string; profileId?: string }
   | { kind: 'move' }
+  | { kind: 'spell'; spellId: string; slot?: SlotChoice }
   | { kind: 'other'; description: string };
+
+/** Concentration source id that marks a held (readied) spell. */
+const heldSourceId = (casterId: string, spellId: string): string => `${casterId}:readied:${spellId}`;
+
+/** Is the caster still holding this readied spell with Concentration? */
+export function holdsReadiedSpell(c: Creature, spellId: string): boolean {
+  return c.kind === 'character' && (c as Character).spellcasting?.concentration?.sourceId === heldSourceId(c.id, spellId);
+}
+
+function slotBack(sc: SpellcastingState, slot: SlotChoice): SpellcastingState {
+  if (slot.kind === 'slot') return { ...sc, slots: sc.slots.map((n, i) => (i === slot.level - 1 ? n + 1 : n)) };
+  if (slot.kind === 'pact' && sc.pact) return { ...sc, pact: { ...sc.pact, current: sc.pact.current + 1 } };
+  return sc;
+}
+
+/** Cast a spell into the Ready action: spend its slot now and start holding it with Concentration. */
+function holdSpell(state: CombatState, ctx: CombatContext, id: string, action: Extract<ReadiedAction, { kind: 'spell' }>): ActionResult<{ action: ReadiedAction }> {
+  const c = state.creatures[id];
+  if (!c || c.kind !== 'character' || !(c as Character).spellcasting) return fail(state, `${c?.name ?? id} can't cast spells`);
+  const caster = c as Character;
+  const spell = dbOf(ctx).spells.get(action.spellId);
+  if (!spell) return fail(state, `Unknown spell ${action.spellId}`);
+  if (!knowsSpell(caster, spell.id)) return fail(state, `${caster.name} doesn't have ${spell.name} prepared`);
+  if (spellEconomy(spell) !== 'action') return fail(state, 'Only spells with a casting time of an action can be readied');
+  const slot = action.slot ?? lowestSlotFor(caster, spell);
+  if (!slot) return fail(state, `${caster.name} has no slot left for ${spell.name}`);
+  const problem = slotProblem(spell, slot, caster.spellcasting);
+  if (problem) return fail(state, problem);
+  let next = state;
+  const events: CombatEvent[] = [];
+  if (caster.spellcasting!.concentration) {
+    const map = new Map(Object.entries(state.creatures));
+    const ended = endConcentration({ creatures: map }, id);
+    next = { ...state, creatures: Object.fromEntries(map) };
+    if (ended) events.push({ kind: 'info', actorId: id, text: `${caster.name} stops concentrating on ${ended}.` });
+  }
+  const now = next.creatures[id] as Character;
+  const held: Character = {
+    ...now,
+    spellcasting: {
+      ...expendSlot(now.spellcasting!, slot),
+      // Two ticks: survives the end of this turn and is gone by the end of the next one.
+      concentration: { spellId: spell.id, sourceId: heldSourceId(id, spell.id), targetIds: [], roundsLeft: 2 },
+    },
+  };
+  return { ok: true, state: withCreature(next, held), events, action: { ...action, slot } };
+}
 
 export function readiedOf(c: Creature): { trigger: string; action: ReadiedAction } | undefined {
   const e = c.effects.find((x) => x.key === 'readied');
@@ -244,13 +300,27 @@ export function readiedOf(c: Creature): { trigger: string; action: ReadiedAction
 export function ready(state: CombatState, ctx: CombatContext, id: string, trigger: string, action: ReadiedAction): ActionResult {
   const p = pay(state, ctx, id, 'action');
   if (!p.ok) return p;
-  const actor = addEffect(removeEffects(p.actor, (e) => e.key === 'readied'), {
+  let base = p.state;
+  let actorNow = p.actor;
+  let held: ReadiedAction = action;
+  const events: CombatEvent[] = [];
+  if (action.kind === 'spell') {
+    if (!canAct(p.actor, ctx.table)) return fail(state, `${p.actor.name} can't act (Incapacitated)`);
+    const h = holdSpell(p.state, ctx, id, action);
+    if (!h.ok) return fail(state, h.error);
+    base = h.state;
+    actorNow = h.state.creatures[id] as Creature;
+    events.push(...h.events);
+    held = h.action;
+  }
+  const actor = addEffect(removeEffects(actorNow, (e) => e.key === 'readied'), {
     key: 'readied',
     sourceId: id,
     expires: { on: 'start_of_turn', creatureId: id, skip: 0 },
-    data: { trigger, action },
+    data: { trigger, action: held },
   });
-  return { ok: true, state: withCreature(p.state, actor), events: [{ kind: 'action', actorId: id, text: `${actor.name} readies: "${trigger}".` }] };
+  const what = held.kind === 'spell' ? ` ${dbOf(ctx).spells.get(held.spellId)?.name ?? held.spellId} (held with Concentration)` : '';
+  return { ok: true, state: withCreature(base, actor), events: [...events, { kind: 'action', actorId: id, text: `${actor.name} readies${what}: "${trigger}".` }] };
 }
 
 /**
@@ -262,7 +332,7 @@ export function triggerReadied(
   state: CombatState,
   ctx: CombatContext,
   id: string,
-  opts: { targetId?: string } = {},
+  opts: { targetId?: string; targetIds?: string[] } = {},
 ): ActionResult<{ readied: ReadiedAction; attack?: AttackOutcome }> {
   const c = state.creatures[id];
   const r = c ? readiedOf(c) : undefined;
@@ -276,6 +346,21 @@ export function triggerReadied(
     const { ok: _ok, state: s, events, ...outcome } = a;
     return { ok: true, state: cleared(s), events: [{ kind: 'action', actorId: id, text: `${c.name}'s readied action triggers: "${r.trigger}".` }, ...events], readied: r.action, attack: outcome };
   }
+  if (r.action.kind === 'spell') {
+    const spellName = dbOf(ctx).spells.get(r.action.spellId)?.name ?? r.action.spellId;
+    if (!holdsReadiedSpell(c, r.action.spellId)) {
+      return { ok: true, state: cleared(state), events: [{ kind: 'info', actorId: id, text: `${c.name} lost Concentration: the readied ${spellName} dissipates.` }], readied: r.action };
+    }
+    const targetIds = opts.targetIds ?? (opts.targetId ? [opts.targetId] : []);
+    const slot: SlotChoice = r.action.slot ?? { kind: 'cantrip' };
+    // The slot was spent on Ready: give it back and cast for real with the Reaction.
+    const caster = c as Character;
+    const { concentration: _held, ...rest } = caster.spellcasting!;
+    const refunded: Character = { ...caster, spellcasting: slotBack(rest, slot) };
+    const cast = castInCombat(withCreature(state, refunded), ctx, { casterId: id, spellId: r.action.spellId, targetIds, slot, economy: 'reaction' });
+    if (!cast.ok) return fail(state, cast.error);
+    return { ok: true, state: cleared(cast.state), events: [{ kind: 'action', actorId: id, text: `${c.name}'s readied ${spellName} triggers: "${r.trigger}".` }, ...cast.events], readied: r.action };
+  }
   const p = pay(state, ctx, id, 'reaction');
   if (!p.ok) return p;
   return { ok: true, state: cleared(p.state), events: [{ kind: 'action', actorId: id, text: `${c.name}'s readied action triggers: "${r.trigger}".` }], readied: r.action };
@@ -286,7 +371,7 @@ export function triggerReadied(
 export interface UnarmedOptionOpts {
   /** 'action' (one attack of the Attack action, default), 'opportunity', 'reaction' or 'free'. */
   kind?: Extract<AttackKind, 'action' | 'opportunity' | 'reaction' | 'free'>;
-  /** Grapple needs a free hand. Default true. */
+  /** Grapple needs a free hand. Default: counted from the grappler's gear and grapples (see freeHands). */
   handFree?: boolean;
 }
 
@@ -318,7 +403,7 @@ function unarmedOption(
   if (!attacker || !target || !at || !tt || target.dead || attackerId === targetId) return fail(state, 'Invalid target');
   if (distanceFt(at, tt) > 5) return fail(state, `${target.name} must be within 5 ft`);
   if (!withinOneSizeLarger(attacker, target)) return fail(state, `${target.name} is too large to ${what.toLowerCase()}`);
-  if (what === 'Grapple' && opts.handFree === false) return fail(state, 'Grappling needs a free hand');
+  if (what === 'Grapple' && !(opts.handFree ?? freeHands(state, ctx, attacker) > 0)) return fail(state, 'Grappling needs a free hand');
   const paid = spendAttack(state.turns, ctx, attacker, opts.kind ?? 'action');
   if (!paid.ok) return fail(state, paid.error);
   attacker = paid.attacker;
@@ -328,6 +413,28 @@ function unarmedOption(
   const save = combatSave(next, ctx, targetId, ability, dc);
   const events: CombatEvent[] = [{ kind: 'save', actorId: attackerId, targetId, text: `${attacker.name} tries to ${what} ${target.name} — ${save.text}` }];
   return { ok: true, state: next, events, attacker, target, save, dc };
+}
+
+/** Creatures currently Grappled by `grapplerId`. */
+export function grappledBy(state: CombatState, grapplerId: string): string[] {
+  return Object.values(state.creatures)
+    .filter((c) => c.effects.some((e) => e.key === 'grappled_by' && e.sourceId === grapplerId))
+    .map((c) => c.id);
+}
+
+/**
+ * Free hands of a character: 2 minus hands holding equipped weapons (two-handed ones take both) or
+ * a shield, minus creatures it is grappling. Stat blocks have no hand limit (Infinity).
+ */
+export function freeHands(state: CombatState, ctx: CombatContext, c: Creature): number {
+  if (c.kind !== 'character' || !('inventory' in c)) return Infinity;
+  const db = dbOf(ctx);
+  let used = 0;
+  for (const i of (c as Character).inventory) {
+    if (i.equipped === 'main_hand') used += db.weapons.get(i.itemId)?.properties.includes('two_handed') ? 2 : 1;
+    else if (i.equipped === 'off_hand' || i.equipped === 'shield') used += 1;
+  }
+  return Math.max(0, 2 - used - grappledBy(state, c.id).length);
 }
 
 /** Unarmed Strike (Grapple): on a failed save the target is Grappled (escape DC = the save DC). */
@@ -427,6 +534,32 @@ export interface MoveOptions {
   oaProfile?: (attackerId: string) => string | undefined;
   /** Whether a creature takes its Opportunity Attack (AI/player choice). Default: yes. */
   takeOpportunity?: (attackerId: string, targetId: string) => boolean;
+  /** Creatures the mover grapples and drags along (they end next to the mover). */
+  drag?: readonly string[];
+}
+
+/** Dragging costs 1 extra foot per foot unless the creature is Tiny or 2+ sizes smaller than the mover. */
+export function dragDoublesCost(mover: Creature, dragged: Creature): boolean {
+  return dragged.size !== 'tiny' && SIZES.indexOf(mover.size) - SIZES.indexOf(dragged.size) < 2;
+}
+
+/**
+ * Put a dragged creature next to the mover: the squares the mover left (latest first), then any
+ * free square within 5 ft of the mover closest to where the dragged creature was.
+ */
+function placeDragged(grid: Grid, moverId: string, draggedId: string, trail: readonly Point[]): boolean {
+  const m = grid.tokens[moverId];
+  const d = grid.tokens[draggedId];
+  if (!m || !d) return false;
+  const near = (p: Point) => distanceFt(m, { ...d, x: p.x, y: p.y }) <= 5;
+  const fits = (p: Point) => near(p) && canPlace(grid, d.size, p, [draggedId]);
+  const around: Point[] = [];
+  for (let y = m.y - 3; y <= m.y + 3; y++) for (let x = m.x - 3; x <= m.x + 3; x++) around.push({ x, y });
+  around.sort((a, b) => Math.hypot(a.x - d.x, a.y - d.y) - Math.hypot(b.x - d.x, b.y - d.y));
+  const spot = [...[...trail].reverse(), ...around].find(fits);
+  if (!spot) return false;
+  moveToken(grid, draggedId, spot);
+  return true;
 }
 
 /**
@@ -441,6 +574,13 @@ export function moveCreature(state: CombatState, ctx: CombatContext, id: string,
   const db = dbOf(ctx);
   const budgetFt = opts.reactionMove ? effectiveSpeed(mover, ctx.table) : currentId(state.turns) === id && state.turns.turnActive ? movementLeft(state.turns, id, mover, { ...(opts.mode && { mode: opts.mode }), ...(ctx.table && { table: ctx.table }) }) : 0;
   if (budgetFt <= 0) return fail(state, `${mover.name} has no movement left`);
+  const drag = opts.drag ?? [];
+  for (const d of drag) {
+    const c = state.creatures[d];
+    if (!c || !state.grid.tokens[d] || !c.effects.some((e) => e.key === 'grappled_by' && e.sourceId === id)) return fail(state, `${mover.name} isn't grappling ${c?.name ?? d}`);
+  }
+  const costFactor = drag.some((d) => dragDoublesCost(mover, state.creatures[d] as Creature)) ? 2 : 1;
+  const trail: Point[] = [];
   const disengaged = !opts.reactionMove && (state.turns.budgets[id]?.disengaged ?? false);
 
   const grid = cloneGridTokens(state.grid);
@@ -448,8 +588,9 @@ export function moveCreature(state: CombatState, ctx: CombatContext, id: string,
   const events: CombatEvent[] = [];
   let displaced = false;
   const result = moveAlong(grid, id, path, {
-    budgetFt,
+    budgetFt: Math.floor(budgetFt / costFactor),
     disengaged,
+    ...(drag.length > 0 && { ignore: drag }),
     crawling: isCrawlOnly(mover, ctx.table) && (opts.mode ?? 'walk') === 'walk',
     isHostile: (a, b) => areHostile(cur, ctx, a, b),
     isIncapacitated: (x) => {
@@ -488,21 +629,29 @@ export function moveCreature(state: CombatState, ctx: CombatContext, id: string,
       const m = cur.creatures[id];
       if (displaced || !m || m.dead || m.hp <= 0 || !canAct(m, ctx.table) || effectiveSpeed(m, ctx.table) <= 0) return false;
       const pos = grid.tokens[id];
-      return !!pos && pos.x === step.from.x && pos.y === step.from.y;
+      const onPath = !!pos && pos.x === step.from.x && pos.y === step.from.y;
+      if (onPath) trail.push({ ...step.from });
+      return onPath;
     },
   });
   if (!result.ok) return fail(state, result.error ?? 'Illegal move');
   if (!displaced) cur = { ...cur, grid };
-  if (!opts.reactionMove && result.costFt > 0) {
+  const draggedNames: string[] = [];
+  if (!displaced && result.stepsTaken > 0) {
+    for (const d of drag) if (placeDragged(grid, id, d, trail.slice(0, result.stepsTaken))) draggedNames.push(cur.creatures[d]?.name ?? d);
+  }
+  const spentFt = result.costFt * costFactor;
+  if (!opts.reactionMove && spentFt > 0) {
     const m = cur.creatures[id] as Creature;
-    const s = spendMovement(cur.turns, id, Math.min(result.costFt, movementLeft(cur.turns, id, m, { ...(opts.mode && { mode: opts.mode }), ...(ctx.table && { table: ctx.table }) })), m, {
+    const s = spendMovement(cur.turns, id, Math.min(spentFt, movementLeft(cur.turns, id, m, { ...(opts.mode && { mode: opts.mode }), ...(ctx.table && { table: ctx.table }) })), m, {
       ...(opts.mode && { mode: opts.mode }),
       ...(ctx.table && { table: ctx.table }),
     });
     if (s.ok) cur = { ...cur, turns: s.state };
   }
-  events.push({ kind: 'move', actorId: id, text: `${mover.name} moves ${result.costFt} ft${result.halted ? ' and is stopped' : ''}.` });
-  return { ok: true, state: cur, events, movedFt: result.costFt, halted: result.halted, triggers: result.triggers };
+  const dragText = draggedNames.length > 0 ? ` dragging ${draggedNames.join(' and ')}` : '';
+  events.push({ kind: 'move', actorId: id, text: `${mover.name} moves ${spentFt} ft${dragText}${result.halted ? ' and is stopped' : ''}.` });
+  return { ok: true, state: cur, events, movedFt: spentFt, halted: result.halted, triggers: result.triggers };
 }
 
 /** Convenience: an Opportunity Attack outside of `moveCreature` (e.g. a creature leaving reach via a readied move). */

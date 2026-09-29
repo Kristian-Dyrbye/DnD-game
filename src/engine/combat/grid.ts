@@ -147,11 +147,16 @@ export function isWallEdge(grid: Grid, x: number, y: number, side: Side): boolea
   return !!e && (e.kind === 'wall' || e.open !== true);
 }
 
-/** Edge that nothing can pass: a wall/closed door, or a face of a blocking square. */
+/**
+ * Edge that nothing can pass: a wall/closed door, a face of a blocking square, or an edge on (or
+ * beyond) the map border — the border acts like a wall, so lines can't slip round a wall end
+ * that touches the edge of the map.
+ */
 export function isSolidEdge(grid: Grid, x: number, y: number, side: Side): boolean {
   if (isWallEdge(grid, x, y, side)) return true;
-  if (isBlockingSquare(grid, { x, y })) return true;
   const n = neighbour({ x, y }, side);
+  if (!inBounds(grid, { x, y }) || !inBounds(grid, n)) return true;
+  if (isBlockingSquare(grid, { x, y })) return true;
   return isBlockingSquare(grid, n);
 }
 

@@ -33,7 +33,7 @@ import { rollRecharges } from '../rules/monsters';
 import { endConcentration } from '../rules/spellcasting';
 import { revertExpiredEffects, startOfTurnEffects } from '../rules/spellHooks';
 import { endOfTurnSpellEffects } from '../rules/spellHooks2';
-import { endOfTurnSpellEffects3, resetOncePerTurnEffects } from '../rules/spellHooks3';
+import { deathSaveAdvantage, endOfTurnSpellEffects3, resetOncePerTurnEffects } from '../rules/spellHooks3';
 import { footprintSize, type Grid } from './grid';
 import { movementBudget, standUpCost, type MoveMode } from './movement';
 import { compareInitiative, type InitiativeEntry } from './initiative';
@@ -314,9 +314,9 @@ export function startTurn(state: TurnState, creatures: Creatures, ctx: TurnConte
     }
   }
 
-  // TODO(A068+): Beacon of Hope death-save advantage (spellHooks3.deathSaveAdvantage) needs a mode parameter on rollDeathSave.
   if (isCharacter(c) && needsDeathSave(c)) {
-    const ds = rollDeathSave(c, ctx.rng);
+    // Beacon of Hope gives Advantage on Death Saving Throws.
+    const ds = rollDeathSave(c, ctx.rng, [], deathSaveAdvantage(c) ? 'advantage' : 'normal');
     c = ds.character;
     events.push({ kind: 'death_save', creatureId: id, text: `${c.name} death save: ${ds.text}` });
     if (ds.outcome === 'died') events.push({ kind: 'died', creatureId: id, text: `${c.name} dies.` });

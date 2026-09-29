@@ -216,3 +216,21 @@ describe('cover', () => {
     expect(computeCover(g, { x: 0, y: 0, size: 'medium' }, { x: 5, y: 5, size: 'huge' }).cover).toBe('none');
   });
 });
+
+describe('map border', () => {
+  it('acts like a wall: no line slips round a wall end that touches the edge', () => {
+    const g = field();
+    // Wall along the top of row 5 from the west border to x = 5.
+    for (let x = 0; x < 5; x++) setEdge(g, x, 5, 'N', { kind: 'wall' });
+    expect(hasLineOfSight(g, tok('a', 0, 7), tok('t', 0, 2))).toBe(false);
+    expect(computeCover(g, tok('a', 0, 7), tok('t', 0, 2)).cover).toBe('total');
+    // The open end of the wall still lets lines through.
+    expect(hasLineOfSight(g, tok('a', 6, 7), tok('t', 6, 2))).toBe(true);
+  });
+
+  it('lines along the border itself are not blocked', () => {
+    const g = field();
+    expect(computeCover(g, tok('a', 0, 0), tok('t', 0, 9)).cover).toBe('none');
+    expect(computeCover(g, tok('a', 0, 0), tok('t', 9, 0)).cover).toBe('none');
+  });
+});
