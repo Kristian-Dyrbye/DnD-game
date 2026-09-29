@@ -353,6 +353,7 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
   if (o.text) result.facts.push(o.text);
   if (o.tip) (result.tips ??= []).push(o.tip);
   applyFlagWrites(state.flags, o.flags, flagsFor(ctx));
+  if (o.flags.some((w) => 'set' in w && TOOTH_HOLDER.test(w.set))) recountTeeth(state.flags);
   if (o.flags.length) {
     const times = { ...((state.extensions.flagTimes as Record<string, number> | undefined) ?? {}) };
     for (const w of o.flags) times['set' in w ? w.set : 'inc' in w ? w.inc : w.clear] = state.time;
@@ -466,6 +467,16 @@ function storyRest(ctx: RunContext, kind: 'short' | 'long', result: StepResult):
       ? `The party takes a short rest (1 hour).${state.hero.hp > before ? ` ${state.hero.name} recovers ${state.hero.hp - before} HP.` : ''}`
       : 'The party takes a long rest (8 hours) and wakes restored.',
   );
+}
+
+const TOOTH_HOLDER = /^arc\.main\.tooth_[a-z]+_holder$/;
+const SAFE_HOLDERS = new Set(['player', 'wardens', 'briarkin', 'red_gull', 'dawn_lance']);
+
+/** DESIGN §3: `arc.main.teeth_secured` / `teeth_choir` follow the seven holder flags. */
+export function recountTeeth(flags: GameState['flags']): void {
+  const holders = Object.entries(flags).filter(([k]) => TOOTH_HOLDER.test(k)).map(([, v]) => String(v));
+  flags['arc.main.teeth_secured'] = holders.filter((h) => SAFE_HOLDERS.has(h)).length;
+  flags['arc.main.teeth_choir'] = holders.filter((h) => h === 'choir').length;
 }
 
 /** Recruit / approval / parting outcomes applied straight away (lines go to `result.partyLog`). */

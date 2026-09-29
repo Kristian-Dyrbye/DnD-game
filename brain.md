@@ -3,10 +3,10 @@
 > This is the only memory carried between sessions. Read it fully at the start of every session. Update it at the end of every session. Keep it under about 400 lines.
 
 ## Status
-- **State:** IN PROGRESS
-- **Current phase:** 4 (Phase 3 Character Creation done)
-- **Last completed assignment:** A101c
-- **Notes for next session:** Continue the queue: A098/A099 (starter arc; companions/recruit/approval now exist), A088–A093 (3D equipment/wounds/scars), A070 (3D battle map), A076 (dungeon maps + fog), A075b, then A114–A116. A010 still blocked until Ollama is installed (Ollama/Piper not installed on this PC yet). Playable test URLs: `#play-<class>`, `#play-<class>+map`, `#combat-<class>`.
+- **State:** BLOCKED — all buildable work is done; only A010 (LLM benchmark) and A115b (real-LLM playtest) remain, both waiting for the owner to install Ollama.
+- **Current phase:** 13 (Polish) complete except the Ollama-blocked items
+- **Last completed assignment:** A116
+- **Notes for next session:** Once Ollama is installed: set A010 and A115b to todo, run `node scripts/bench-llm.mjs --pull`, record the result, then playtest starter + ch1 with the real model (A115b). Everything else (full campaign starter→ch5, 3D map, wounds/scars/wear, docs) is built and tested (133 test files, 1177 tests). Test URLs: `#play-<class>`, `#play-<class>+map`, `#play-<class>+scars`, `#combat-<class>`, `#load`.
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -69,7 +69,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A102 — Arc chapter 2 "Salt and Treason" (helper)
 - [done] A103 — Arc chapter 3 "The Gilded Lie" (helper)
 - [done] A104 — Arc chapter 4 "Wyrmfire" (helper)
-- [in-progress (helper)] A105 — Arc chapter 5 + endings | Spec: §7.2 | Done: 2+ endings depending on flags; tests that flags change content | Dep: A104
+- [done] A105 — Arc chapter 5 "The Hungering Dark" + campaign endings (helper)
 - [done] A106 — Starter arc smoke test
 
 ### Phase 12 — Procedural Side Quests
@@ -80,10 +80,12 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A114 — Docs + About screen
 - [done] A115 — Full playtest pass (mock LLM; real-LLM pass queued as A115b)
 - [blocked] A115b — Playtest with the real LLM | Spec: §17 | Done: play starter + ch1 with Ollama (qwen3:4b): narration quality, intent parsing on free text, suggestion ideas, JSON validity, speed on 8 GB; issues become queue items | Dep: A010 (owner installs Ollama)
-- [todo] A116 — Final check | Spec: all | Done: all tests, typecheck, build pass; Status DONE | Dep: A115
+- [done] A116 — Final check: typecheck, 1177 tests, build all pass (Status can't be DONE while A010/A115b wait for Ollama)
 
 ## Completed Log
 <!-- One line per assignment: A<id> — what was built — key files. Compress into per-phase summaries when long. -->
+- A116 — final check green; fixes found by the ch5 playtest: auto-ASI crashed when the 2nd primary ability was Con (asiIncreases now always spends +2 under the cap), fights failed to start when big monsters found no room at the map edge (placement falls back to the nearest free square), Teeth counts now recomputed on holder writes (recountTeeth) — party/companions.ts, combat/encounter.ts, adventure/runner.ts
+- Campaign content: arc chapter 5 "The Hungering Dark" (A105, helper) — data/adventures/arc1/ch5_the_hungering_dark.json (6 scenes, 10 NPCs, 26 encounters, Maw map, 5 campaign endings from DESIGN §12, 4 Cantor fates) + tests/arc1Ch5.test.ts; ch4 endings chain into it. The whole campaign now runs starter → ch1 → ch2 → ch3 → ch4 → ch5.
 - A101c — retrofit: ch2 bribes (50 gp cost on success + coins gates), cove climb 2d4, Brass Parrot doors 2d6 fire Dex DC 13 half, Kestrel breakout neck scar; ch3 turnkey bribe 150 gp + restitution 300 gp (cost + gates), sky-tower falls 3d6 (+ brow scar), vigil poisoned blade 2d6 poison + shoulder scar, chase falls 1d6/2d6 — data/adventures/arc1/ch2*,ch3*.json, tests/retrofit.test.ts
 - A115 — exploratory playtest: every authored adventure (starter + ch1–ch4, ch5 when present) played through the real session by a seeded random player with real grid fights, 3 seeds × 250 steps, asserting no error events/crashes/dead ends (tests/playtest.test.ts, shared tests/helpers/combatPolicy.ts). Finding fixed: Prone heroes were offered moves the engine refused (reachable squares ignored crawling) and had no way to stand up → engine reachableForMove (same rules as moveCreature) used by the battle map + PlayerAction 'stand' + Stand up button
 - A114 — README.md (features, requirements, setup, how to play, settings, model swap, developer commands + test URLs, troubleshooting, SRD 5.2.1 CC-BY-4.0 attribution), ARCHITECTURE.md refreshed (combat/world/adventure/appearance modules, full protocol, campaign flow, combat narration queue), About screen on the title screen (exact SRD attribution wording, asset credits summary) — README.md, ARCHITECTURE.md, src/client/ui/AboutPanel.tsx
@@ -138,6 +140,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A105 (helper): Ch5 reads the seven Tooth holder flags directly (engine now also keeps teeth_secured/teeth_choir). 'Opened' = all seven 'choir'; the wraith joins at ≥ 5 choir; seal strength = local number `~ch5_seal` filled by beats in maw_final_seal; unclaimed Teeth count for neither side. Thefts take the lowest-numbered carried Tooth via `~ch5_take_<event>` flags. Design gap resolved: an escaped Cantor always gives 'stirring' + A Quiet Hunger. Siege = one 'Hold the walls' action + beats picking 1 of 12 variants (guarded by `~ch5_siege_done`). A betrayed Rook can't rejoin; winning the Persuasion makes him pry back a Choir Tooth. Finale: 2 Hunger Pulls, ≤ 2 Pry attempts, one retry; second defeat → escaped. 4-day deadline to the Jaw-Stone (missed → disadvantage on Pull saves). Epilogue lines are beats after the seal. +16,000 XP (L10) at the sanctum gate.
 - A101c: Retrofit kept to mechanics the texts already promised (costs, falls, traps, scars). Bosses rely on the default rule (single most expensive monster type) — ch1–3 leaders are already the priciest stat blocks; allied-guard fights and `since` races were left as authored (they work and the chapter tests pin them).
 - A115: Playtest with the real LLM isn't possible (Ollama not installed): queued as A115b (blocked with A010). Automated playtests use template narration; they check robustness, not prose quality.
 - A106: Suggestion buttons: every offered action/exit is always shown; the model's free-text ideas only fill room under MAX_SUGGESTIONS (7). Authored defeats must leave a way forward: any once-per-visit fight (onEnter/beat) that can be lost needs a rematch action.
@@ -293,6 +296,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - client: `ui/game/mapArt.ts` (region outlines, glyphs, label placement), `ui/SaveBrowser.tsx` (load/save with thumbnails), `ui/game/CharacterScreen.tsx` (3D model + scars + sheet), `three/BattleMap3D.tsx` (3D battle map) + `three/LazyBattleMap3D.tsx` + `three/battle3d.ts` (pure helpers), `main.tsx`, `index.html`, `styles.css`, `data.ts` (db); `net/gameSocket.ts` (ws + signals + applyEvent); `ui/App.tsx`, `ui/state.ts` (screens; `#creator`, `#quickbuild-<class>`, `#play-<class>`, `#play-<class>+map`), `ui/settingsState.ts` (+applyAccessibility), `ui/SettingsPanel.tsx`, `ui/text.ts`, `ui/StatusIndicator.tsx`, `ui/creator/*` (creator steps), `ui/game/LevelUpPanel.tsx`, `ui/game/{GameScreen,PartyPanel,StoryLog,ActionInput,DiceTray,JournalPanel,WorldMap,InventoryPanel,ShopPanel}.tsx`; `ui/combat/{BattleMap,CombatScreen}.tsx` + `combatDemo.ts` + `dice.ts`; `three/{loader,characterModel,CharacterPreview}`; `audio/AudioManager.ts` (music crossfade, ambience, SFX pools, unlock on first gesture) + `audio/audioLogic.ts` (pickVariant, channelVolume, sfxForEvent)
 
 ## Gotchas & Lessons
+- Encounter-starting beats keyed on flags can fire again when a later choice flips the flag: give selection beats a 'done' guard. Don't reuse one local flag across scenes. PowerShell 5 Get/Set-Content garbles UTF-8 curly quotes — edit with node/python. The solver always makes its rolls: endings that need a loss need scripted tests with an always-fail Rng.
 - Fights started by onEnter or beats fire once: if they can be lost (Heroic defeat → goto elsewhere), add a rematch action or the scene soft-locks (smoke test caught this in the barrow).
 - The session log is capped at 200 entries: long tests can't search early lines.
 - fightMap only runs when a real fight starts: perform/resolveEncounter don't reveal an encounter's room (tests call fightMap). Items given with quantity > 1 may land as separate inventory entries — sum quantities.
@@ -334,6 +338,9 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ## Blockers / Owner Review
 <!-- Blockers: what's wrong + the exact fix the owner should apply. Owner Review: non-urgent decisions the owner may want to revisit. -->
+- BLOCKER (A115b): the real-LLM playtest also needs Ollama. Fix: install Ollama, run `ollama pull qwen3:4b` (or Setup.bat), then set A010 and A115b to todo.
+- Owner Review (future engine ideas from the chapter authors, not queued): count-of-flags conditions; an outcome to return a betrayed companion; status conditions (poisoned/frightened) in outcomes; legendary/extra actions in statOverrides; mid-fight triggers (at half HP / each round) so parleys and pulls can happen inside combat; group checks.
+- Owner Review: 77 of 330 SRD monsters use a creature-type stand-in model (beasts → wolf, monstrosities → dino…); more CC0 model packs would help.
 - BLOCKER (A010): Ollama not installed (checked 2026-09-29). Fix: install from https://ollama.com/download (or run Setup.bat, which offers winget), then set A010 back to todo. Everything else proceeds with the mock.
 - Owner Review: listen to the downloaded music/SFX (assets/audio after `node scripts/audio-fetch.mjs`) and flag tracks to swap — they were chosen by metadata only.
 - Owner Review: default model qwen3:4b is provisional until A010 benchmarks it.

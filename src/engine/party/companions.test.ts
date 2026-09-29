@@ -109,3 +109,13 @@ describe('encounter scaling', () => {
     expect(scaleMonsters([{ id: 'giant_rat', count: 2 }], [1], db, tables)).toEqual([{ id: 'giant_rat', count: 2 }]);
   });
 });
+
+describe('automatic Ability Score Improvements', () => {
+  it('always spend the full +2 without passing 20', async () => {
+    const { asiIncreases } = await import('./companions');
+    const base = { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 };
+    expect(asiIncreases({ ...base, str: 16 }, ['str', 'con'])).toEqual({ str: 2 });
+    expect(asiIncreases({ ...base, str: 19 }, ['str', 'con'])).toEqual({ str: 1, con: 1 }); // the old code gave only con +1
+    expect(asiIncreases({ ...base, str: 20, con: 20 }, ['str', 'con'])).toEqual({ dex: 1, wis: 1 });
+  });
+});

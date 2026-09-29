@@ -46,6 +46,21 @@ export type CompanionRoster = z.infer<typeof CompanionRosterSchema>;
 
 export type CompanionStatus = 'unmet' | 'met' | 'in_party' | 'waiting' | 'left' | 'betrayed' | 'dead';
 
+/**
+ * +2 for an Ability Score Improvement without passing 20: +2 to the main ability if it fits, else
+ * +1 each to the first two abilities (primary abilities, then Con, Dex, Wis, Str, Cha, Int) that can
+ * still grow. Always spends the full +2 while any ability is below 20.
+ */
+export function asiIncreases(abilities: Record<Ability, number>, primary: readonly Ability[]): Partial<Record<Ability, number>> {
+  const order = [...new Set<Ability>([...primary, 'con', 'dex', 'wis', 'str', 'cha', 'int'])];
+  const main = order[0]!;
+  if (abilities[main] <= 18) return { [main]: 2 };
+  const room = order.filter((a) => abilities[a] < 20);
+  if (room.length >= 2) return { [room[0]!]: 1, [room[1]!]: 1 };
+  if (room.length === 1) return abilities[room[0]!] <= 18 ? { [room[0]!]: 2 } : { [room[0]!]: 1 };
+  return {};
+}
+
 /** Automatic level-up choices: subclass from the roster, ASI into the main ability, first valid spells/picks. */
 export function autoLevelChoices(c: Character, db: SrdDatabase, classId: string, subclassId?: string): Omit<LevelUpOptions, 'classId' | 'hp'> {
   const newLevel = classLevel(c, classId) + 1;
@@ -56,9 +71,7 @@ export function autoLevelChoices(c: Character, db: SrdDatabase, classId: string,
   for (const ch of pendingChoices(c, db, classId, newLevel)) {
     if (ch.kind === 'subclass') out.subclassId = subclassId && ch.options.includes(subclassId) ? subclassId : ch.options[0]!;
     if (ch.kind === 'feat') {
-      const main = (cls.primaryAbilities[0] ?? 'str') as Ability;
-      const second = (cls.primaryAbilities[1] ?? 'con') as Ability;
-      out.feat = { featId: 'ability_score_improvement', increases: c.abilities[main] <= 18 ? { [main]: 2 } : { [second]: 1, con: 1 } };
+      out.feat = { featId: 'ability_score_improvement', increases: asiIncreases(c.abilities, (cls.primaryAbilities as Ability[]) ?? []) };
     }
     if (ch.kind === 'cantrips') out.cantrips = spells.filter((s) => s.level === 0).slice(0, ch.count).map((s) => s.id);
     if (ch.kind === 'spells') out.spells = spells.filter((s) => s.level > 0).slice(0, ch.count).map((s) => s.id);

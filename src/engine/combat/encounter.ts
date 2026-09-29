@@ -91,7 +91,14 @@ function place(grid: Grid, c: Creature, cols: number[], rng: Rng): void {
       return;
     }
   }
-  throw new Error(`No room to place ${c.name}`);
+  // Crowded edge (big creatures, many foes): the free square nearest the preferred columns anywhere on the map.
+  const centre = cols.reduce((a, b) => a + b, 0) / cols.length;
+  const spots: Point[] = [];
+  for (let y = 0; y < grid.height; y++) for (let x = 0; x < grid.width; x++) spots.push({ x, y });
+  spots.sort((a, b) => Math.abs(a.x - centre) - Math.abs(b.x - centre) || a.y - b.y);
+  const spot = spots.find((p) => canPlace(grid, c.size, p));
+  if (!spot) throw new Error(`No room to place ${c.name}`);
+  placeToken(grid, { id: c.id, x: spot.x, y: spot.y, size: c.size });
 }
 
 const push = (enc: Encounter, lines: string[]) => {

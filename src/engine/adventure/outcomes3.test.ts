@@ -101,3 +101,13 @@ describe('A068d authoring features', () => {
     expect(ids(c)).not.toContain('give');
   });
 });
+
+describe('Teeth counts (DESIGN §3)', () => {
+  it('teeth_secured / teeth_choir follow the holder flags', async () => {
+    const { recountTeeth } = await import('./runner');
+    const flags: Record<string, string | number | boolean> = { 'arc.main.tooth_want_holder': 'player', 'arc.main.tooth_abbey_holder': 'wardens', 'arc.main.tooth_wick_holder': 'choir', 'arc.main.tooth_reef_holder': 'unclaimed' };
+    recountTeeth(flags);
+    expect(flags['arc.main.teeth_secured']).toBe(2);
+    expect(flags['arc.main.teeth_choir']).toBe(1);
+  });
+});
