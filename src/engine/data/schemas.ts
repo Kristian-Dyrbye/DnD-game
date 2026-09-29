@@ -381,6 +381,17 @@ export const MonsterSchema = z.object({
   bonusActions: z.array(MonsterActionSchema).default([]),
   reactions: z.array(MonsterActionSchema).default([]),
   legendary: z.object({ uses: z.number().int().positive(), actions: z.array(MonsterActionSchema) }).optional(),
+  /** Parsed Spellcasting action: spells at will and per day. */
+  spellcasting: z
+    .object({
+      ability: AbilitySchema,
+      dc: z.number().int().optional(),
+      attackBonus: z.number().int().optional(),
+      atWill: z.array(IdSchema),
+      /** "1" → spells usable once per day, "2" → twice per day... */
+      perDay: z.record(z.string(), z.array(IdSchema)),
+    })
+    .optional(),
   /** Which source file it came from (animals.md vs monsters-A-Z.md). */
   source: z.enum(['monsters', 'animals']),
 });

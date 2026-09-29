@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A023
-- **Notes for next session:** Start with A024. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A027
+- **Notes for next session:** Start with A028. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -43,10 +43,10 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A021 — SRD data: spells cantrip–2 | Spec: §4 | Done: all SRD spells of these levels with effect data (damage, save, area, duration, conc, ritual, upcast); validated | Dep: A013
 - [done] A022 — SRD data: spells 3–5 | Spec: §4 | Done: as A021 | Dep: A021
 - [done] A023 — SRD data: spells 6–9 | Spec: §4 | Done: as A021 | Dep: A021
-- [todo] A024 — SRD data: monsters A–F | Spec: §4 | Done: stat blocks (actions, multiattack, recharge, legendary, traits) validated | Dep: A013
-- [todo] A025 — SRD data: monsters G–M | Spec: §4 | Done: as A024 | Dep: A024
-- [todo] A026 — SRD data: monsters N–S | Spec: §4 | Done: as A024 | Dep: A024
-- [todo] A027 — SRD data: monsters T–Z | Spec: §4 | Done: as A024 | Dep: A024
+- [done] A024 — SRD data: monsters A–F | Spec: §4 | Done: stat blocks (actions, multiattack, recharge, legendary, traits) validated | Dep: A013
+- [done] A025 — SRD data: monsters G–M | Spec: §4 | Done: as A024 | Dep: A024
+- [done] A026 — SRD data: monsters N–S | Spec: §4 | Done: as A024 | Dep: A024
+- [done] A027 — SRD data: monsters T–Z | Spec: §4 | Done: as A024 | Dep: A024
 - [todo] A028 — SRD data: magic items | Spec: §4, §11.5 | Done: all SRD magic items with rarity, attunement, effect refs; validated (split if too big) | Dep: A013
 - [todo] A029 — Ability checks & saves | Spec: §4, §8 | Done: checks/saves with proficiency, expertise, adv/dis sources, DC, math string; tests | Dep: A012
 - [todo] A030 — Attacks & damage | Spec: §4 | Done: to-hit, nat 20/1, crit dice, resist/vuln/immune, temp HP, damage application; tests | Dep: A029
@@ -181,6 +181,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A017 — 17 feats (4 origin, 2 general, 4 fighting style, 7 epic boons) with prerequisites (level, abilities, feature id), repeatable, abilityIncrease — `scripts/srd/import-feats.ts`
 - A018–A020 — One generic importer for all 12 classes + 12 SRD subclasses: core traits, features 1–20, table columns (rages, sneak_attack...), cantrips/prepared arrays, starting equipment A/B(/C), multiclass prereqs + gains, Metamagic/Invocation option lists, subclass always-prepared spells (Circle of the Land keyed `arid:3`); added Spellbook gear item — `scripts/srd/import-classes.ts`
 - A021–A023 — All 339 spells (one importer): header fields, higherLevels/cantripUpgrade text, hints (attack, save, damage, area, conditions), auto effects for 93 unambiguous spells (spell attack, save-for-damage with area/half, heal + mod, save-or-condition), upcast dice — `scripts/srd/import-spells.ts`
+- A024–A027 — All 330 stat blocks (235 monsters + 95 animals, one importer): size/type/tags/swarm, AC, init, HP+dice, speeds, abilities+saves, skills, resist/immune/vuln/condition immunities, senses, CR/XP/PB, gear, traits/actions/bonus/reactions/legendary (attack bonus, reach/range, always-on damage, save DC/area/half, recharge, per-day, legendary cost), multiattack pairs, parsed spellcasting — `scripts/srd/import-monsters.ts`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -226,6 +227,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A018: Classes done with ONE generic importer, so A019/A020 were completed in the same session (all 12 classes tested). Beginner-friendly classes = fighter, barbarian, rogue (game decision). Weapon proficiency tokens: simple, martial, martial:light, martial:finesse. Class `columns` keyed by snake_case header; numbers where numeric, strings for dice ('1d6'), 0 for '—'. Multiclass gains kept as text strings (parse in A037).
 - A018: Spellbook added as gear (50 GP, 3 lb., classic SRD values) because the 2024 SRD has no gear row for it.
 - A021: Spells imported with ONE importer, so A022/A023 were completed in the same session. Auto effects only for unambiguous patterns; other spells keep hints + text and get hand effects/hooks in A034a (new queue item). Cantrip scaling is NOT in data (engine rule, A034a).
+- A024: Monsters imported with ONE importer (A025–A027 done in the same session). Attack `damage` = always-on damage only; conditional extras ("plus 1d4 if Advantage", Bloodied alternatives) stay in text for hooks. Multiattack "A or B" / "any combination" → first option. Hydra multiattack = 5 Bites (starting heads). Source typos fixed: Will-o'-Wisp STR (derived from mod), Archmage XP 8,400 (override), 'Long Strider' → longstrider.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -260,6 +262,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `scripts/srd/import-feats.ts` — feats
 - `scripts/srd/import-classes.ts` — classes + subclasses (needs equipment JSON)
 - `scripts/srd/import-spells.ts` — spells
+- `scripts/srd/import-monsters.ts` — monsters + animals
 - `data/srd/overrides/` — hand fixes/mechanics merged by id into importer output
 - `data/srd/rules-tables.json` — core numeric tables
 - `data/srd/*.json` — SRD data (arrays; empty until A014–A028 fill them)
@@ -297,6 +300,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - Class feature tables in classes.md have captions `**<Class> Features**`; spellcasters have a 2-row header (slot levels in row 2) → skip 2 rows.
 - Editing regexes with sed/python heredocs mangles backslashes; use the Edit tool for code containing regex escapes.
 - Spells source: a few spells use `**Component:**` (singular) instead of `**Components:**`.
+- monsters-A-Z.md uses `### Name` + `#### Actions`; animals.md uses `## Name` + `### Actions`. Ability tables sometimes merge cells ("10 +0") → parse rows as token streams.
 - TS strict + zod: a fallback lambda's return type widens enums to string; annotate it (`(e): T => ...`).
 - In .bat files escape `&` as `^&` (even in `title`). Edit .bat files with python (read bytes, normalize to CRLF); Git Bash `sed -i` mangles CRLF.
 - Testing .bat from the PowerShell tool: native commands don't follow Push-Location; call `cmd /c "`"<absolute path>`""`. To dry-run Start Game.bat, copy it with `call npm start` replaced by an echo.
