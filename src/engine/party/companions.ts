@@ -132,3 +132,33 @@ export function levelCompanionsWithHero(state: GameState, roster: CompanionRoste
   });
   return out;
 }
+
+// ---------------------------------------------------------------- loyalty (A085)
+
+export const LOYALTY_LOW = 20;
+export const LOYALTY_HIGH = 70;
+
+/** "Ser Corwin Ashvale" → "Corwin", "Rook Marrowby" → "Rook". */
+export function shortName(name: string): string {
+  const words = name.split(/\s+/).filter((w) => !/^(Ser|Sir|Lady|Lord|Dame|Brother|Sister)$/.test(w));
+  return words[0] ?? name;
+}
+
+export function loyaltyOf(state: GameState, def: CompanionDef): number {
+  const v = state.flags[def.loyaltyFlag];
+  return typeof v === 'number' ? v : 50;
+}
+
+/**
+ * Applies an approval change for a companion who is with the party (others don't see it).
+ * Loyalty is clamped to 0–100. Returns the log line, or undefined if nothing changed.
+ */
+export function changeApproval(state: GameState, def: CompanionDef, delta: number): string | undefined {
+  if (companionStatus(state, def) !== 'in_party' || delta === 0) return undefined;
+  const before = loyaltyOf(state, def);
+  const after = Math.max(0, Math.min(100, before + delta));
+  state.flags[def.loyaltyFlag] = after;
+  const mood = delta >= 20 ? 'strongly approves' : delta > 0 ? 'approves' : delta <= -20 ? 'strongly disapproves' : 'disapproves';
+  const warn = after <= LOYALTY_LOW && before > LOYALTY_LOW ? ' Their patience is wearing thin.' : '';
+  return `${shortName(def.name)} ${mood}. (${delta > 0 ? '+' : ''}${delta})${warn}`;
+}

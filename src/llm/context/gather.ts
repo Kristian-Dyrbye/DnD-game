@@ -76,7 +76,13 @@ export function gatherNarrationContext(state: GameState, lore: Lore, adventure?:
 
   return {
     ...(region && { tone: toneText(region) }),
-    party: [state.hero, ...state.companions].map((c) => describeMember(c, db)),
+    party: [
+      describeMember(state.hero, db),
+      ...state.companions.map((c) => {
+        const loyalty = state.flags[`world.${c.id}_loyalty`];
+        return `${describeMember(c, db)} (companion${typeof loyalty === 'number' ? `, loyalty ${loyalty}/100${loyalty <= 20 ? ', resentful' : loyalty >= 70 ? ', devoted' : ''}` : ''})`;
+      }),
+    ],
     where: [scene?.name ?? state.location.name, location && location.name !== scene?.name ? location.name : undefined, region?.name].filter(Boolean).join(', '),
     when: [timeOfDay(state.time), weather].filter(Boolean).join(', '),
     threats: [],

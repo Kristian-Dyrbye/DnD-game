@@ -80,6 +80,8 @@ export const OutcomeSchema = z
     discover: z.array(z.string()).default([]),
     /** A companion from data/companions.json joins the party (or waits if the party is full). */
     recruit: z.string().optional(),
+    /** Companion approval changes (DESIGN §11: ±5 minor, ±10 significant, ±20 defining). Only companions in the party react. */
+    approval: z.array(z.object({ companion: z.string(), delta: z.number().int().min(-50).max(50) })).default([]),
     /** A companion leaves the party: to wait, or for good (left / betrayed / dead). */
     companionLeaves: z.object({ id: z.string(), status: z.enum(['waiting', 'left', 'betrayed', 'dead']) }).optional(),
     /** Ends the adventure with this ending id. */

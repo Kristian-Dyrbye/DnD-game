@@ -20,7 +20,7 @@ import { resolveIntent } from './resolve';
 import { activeFight, fightAct, finishFight, startFight, type FightEnd } from './fights';
 import type { DefeatTable } from './defeat';
 import { canLevelUp, levelUp } from '../character/leveling';
-import { levelCompanionsWithHero, partWithCompanion, recruitCompanion, type CompanionRoster } from '../party/companions';
+import { changeApproval, levelCompanionsWithHero, partWithCompanion, recruitCompanion, type CompanionRoster } from '../party/companions';
 import { totalLevel } from '../core/creature';
 import type { Ability, Skill } from '../rules/basics';
 import { acceptOffer, activeSideQuest, finishActive, offerSources, offersAt, refreshOffers, roadOffer, sideQuestState, type SideQuestDeps } from './sideQuests';
@@ -106,6 +106,11 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       const def = opts.companions?.companions.find((c) => c.id === id);
       if (!def || !db) continue;
       session.addLog('system', recruitCompanion(session.current, def, db).message);
+    }
+    for (const a of r.approvals ?? []) {
+      const def = opts.companions?.companions.find((c) => c.id === a.companion);
+      const line = def && changeApproval(session.current, def, a.delta);
+      if (line) session.addLog('system', line);
     }
     for (const p of r.partings ?? []) {
       const def = opts.companions?.companions.find((c) => c.id === p.id);

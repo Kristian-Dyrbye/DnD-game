@@ -76,6 +76,7 @@ export interface StepResult {
   /** Companions to recruit / part with (applied by the session port, which knows the roster). */
   recruits?: string[];
   partings?: { id: string; status: 'waiting' | 'left' | 'betrayed' | 'dead' }[];
+  approvals?: { companion: string; delta: number }[];
 }
 
 export interface AvailableAction {
@@ -309,6 +310,7 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
   const map = getMap(state);
   if (o.discover.length && map) discover(map, o.discover);
   if (o.recruit) (result.recruits ??= []).push(o.recruit);
+  if (o.approval.length) (result.approvals ??= []).push(...o.approval);
   if (o.companionLeaves) (result.partings ??= []).push(o.companionLeaves);
   if (o.encounter) result.encounter = o.encounter;
   if (o.ending) {
