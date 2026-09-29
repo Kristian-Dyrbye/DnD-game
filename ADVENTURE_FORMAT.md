@@ -97,7 +97,7 @@ Every field is optional:
 | `coins` | Copper pieces (`1000` = 10 gp). |
 | `loot` | Rolls a loot table by id. |
 | `xp` | Added to the hero. |
-| `reputation` | `[{ "faction": "id", "delta": 1 }]` |
+| `reputation` | `[{ "faction": "id", "delta": 1 }]`. Faction ids come from lore. Half of the change ripples to allied factions, and the opposite half to hostile ones. |
 | `minutes` | Time passes. |
 | `encounter` | Starts an encounter by id. |
 | `goto` | Moves to a scene. This is applied last. |
@@ -116,6 +116,7 @@ Conditions can be nested freely:
 { "timeOfDay": ["dusk", "night"] }                   // dawn 5–7, day 7–18, dusk 18–20, night
 { "weather": ["rain", "storm"] }
 { "reputation": { "faction": "harbor_guild", "gte": 10 } }
+{ "reputation": { "faction": "crown_of_aurelmark", "tier": "friendly" } }   // at least Friendly
 { "level": { "gte": 3 } }
 { "visited": "scene_id" }
 { "hours": { "from": 6, "to": 14 } }                   // hour window [from, to); 18 → 2 wraps midnight

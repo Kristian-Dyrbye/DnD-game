@@ -122,6 +122,7 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
         narrator: llmNarrator(() => services.llm, lore, srd),
         summarizer: llmSummarizer(() => services.llm),
         flags: flagRegistry,
+        lore,
         suggester: (ctx, offered) => suggestIdeas(services.llm, gatherNarrationContext(ctx.state, lore, ctx.adventure, srd), offered),
       }) }),
     saves: {

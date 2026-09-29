@@ -20,6 +20,8 @@ import { SKILL_ABILITY } from '../rules/basics';
 import type { FlagRegistry } from '../world/flags';
 import { TIME_COSTS } from '../world/clock';
 import { discover, getMap } from '../world/travel';
+import { changeReputation, type ReputationChange } from '../world/factions';
+import type { Lore } from '../world/lore';
 import { trackQuests } from './quests';
 
 export interface AdventureProgress {
@@ -49,6 +51,8 @@ export interface RunContext {
   db?: SrdDatabase;
   /** Flag types/defaults/bounds (data/adventures/flags.json + adventure docs). */
   flags?: FlagRegistry;
+  /** World lore (faction relationships for reputation ripples). */
+  lore?: Lore;
 }
 
 export interface StepResult {
@@ -64,6 +68,8 @@ export interface StepResult {
   items: { itemId: string; quantity: number }[];
   coins: number;
   xp: number;
+  /** Reputation changes (including ripples to allies/enemies). */
+  reputation?: ReputationChange[];
 }
 
 export interface AvailableAction {
@@ -264,11 +270,7 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
     state.hero.xp += o.xp;
     result.xp += o.xp;
   }
-  if (o.reputation.length) {
-    const rep = ((state.extensions.reputation as Record<string, number> | undefined) ?? {}) as Record<string, number>;
-    for (const r of o.reputation) rep[r.faction] = (rep[r.faction] ?? 0) + r.delta;
-    state.extensions.reputation = rep;
-  }
+  for (const r of o.reputation) (result.reputation ??= []).push(...changeReputation(state, r.faction, r.delta, ctx.lore));
   state.time += o.minutes;
   const map = getMap(state);
   if (o.discover.length && map) discover(map, o.discover);

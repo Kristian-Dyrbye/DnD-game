@@ -1,6 +1,7 @@
 /** Default system set for a campaign. New built-in systems are registered here. */
 import type { Lore } from '../world/lore';
 import { clockSystem } from './clockSystem';
+import { factionSystem } from './factionSystem';
 import { mapSystem } from './mapSystem';
 import { SystemRegistry } from './registry';
 import { weatherSystem, type RegionResolver } from './weatherSystem';
@@ -16,6 +17,7 @@ export function createDefaultRegistry(opts: DefaultSystemsOptions = {}): SystemR
   if (opts.lore) {
     reg.register(weatherSystem(opts.lore, opts.regionOf ?? (() => undefined)));
     reg.register(mapSystem(opts.lore));
+    reg.register(factionSystem(opts.lore));
   }
   return reg;
 }

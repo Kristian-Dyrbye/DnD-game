@@ -5,6 +5,7 @@
  */
 import type { TimeOfDay } from '../world/clock';
 import type { FlagRegistry, Flags } from '../world/flags';
+import { tierAtLeast } from '../world/factions';
 import type { Condition, FlagWrite } from './schema';
 
 export { timeOfDay, type TimeOfDay } from '../world/clock';
@@ -34,7 +35,10 @@ export function evalCondition(c: Condition | undefined, ctx: ConditionContext): 
   if ('visited' in c) return ctx.visited.has(c.visited);
   if ('hours' in c) return inHours(ctx.hour ?? 12, c.hours.from, c.hours.to);
   if ('level' in c) return inRange(ctx.level, c.level.gte, c.level.lte);
-  if ('reputation' in c) return inRange(ctx.reputation[c.reputation.faction] ?? 0, c.reputation.gte, c.reputation.lte);
+  if ('reputation' in c) {
+    const score = ctx.reputation[c.reputation.faction] ?? 0;
+    return inRange(score, c.reputation.gte, c.reputation.lte) && (!c.reputation.tier || tierAtLeast(score, c.reputation.tier));
+  }
   const v = ctx.flags[c.flag] ?? ctx.defaults?.[c.flag];
   if (c.exists !== undefined && (v !== undefined) !== c.exists) return false;
   if (c.eq !== undefined && v !== c.eq) return false;

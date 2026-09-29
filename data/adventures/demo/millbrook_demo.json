@@ -115,7 +115,7 @@
                 "xp": 50,
                 "reputation": [
                   {
-                    "faction": "millbrook_folk",
+                    "faction": "crown_of_aurelmark",
                     "delta": 1
                   }
                 ],
@@ -257,7 +257,7 @@
       ],
       "voice": "Fussy, breathless, calls everyone 'friend'.",
       "factions": [
-        "millbrook_folk"
+        "crown_of_aurelmark"
       ],
       "attitude": "friendly"
     }

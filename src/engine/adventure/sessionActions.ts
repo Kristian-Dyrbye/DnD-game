@@ -5,6 +5,8 @@
  */
 import type { SrdDatabase } from '../data/srd';
 import type { FlagRegistry } from '../world/flags';
+import { describeChange } from '../world/factions';
+import type { Lore } from '../world/lore';
 import type { ActionPort, GameSession } from '../session/GameSession';
 import { availableActions, getProgress, type AvailableAction, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
 import type { Adventure } from './schema';
@@ -26,6 +28,8 @@ export interface AdventurePortOptions {
   summarizer?: Summarizer;
   /** Flag types/defaults/bounds. */
   flags?: FlagRegistry;
+  /** World lore (faction relationships, names). */
+  lore?: Lore;
 }
 
 /** The ActionPort plus a hook for tests to wait for background suggestion/summary work. */
@@ -41,7 +45,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     const id = getProgress(session.current)?.adventureId ?? defaultId;
     const adventure = adventures.get(id);
     if (!adventure) throw new Error(`Adventure "${id}" is not installed`);
-    return { state: session.current, adventure, rng: session.rng, ...(db && { db }), ...(opts.flags && { flags: opts.flags }) };
+    return { state: session.current, adventure, rng: session.rng, ...(db && { db }), ...(opts.flags && { flags: opts.flags }), ...(opts.lore && { lore: opts.lore }) };
   };
 
   const publish = async (session: GameSession, ctx: RunContext, r: StepResult, playerAction?: string): Promise<void> => {
@@ -72,6 +76,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     }
     if (r.items.length || r.coins) session.addLog('system', `Received: ${[...r.items.map((i) => `${i.quantity}× ${i.itemId.replace(/_/g, ' ')}`), ...(r.coins ? [formatCoins(r.coins)] : [])].join(', ')}`);
     if (r.xp) session.addLog('system', `+${r.xp} XP`);
+    for (const c of r.reputation ?? []) if (!c.ripple || c.newTier) session.addLog('system', describeChange(c, opts.lore));
     if (r.ending) {
       const end = ctx.adventure.endings.find((e) => e.id === r.ending);
       session.addLog('narration', end?.text ?? 'The adventure ends.');

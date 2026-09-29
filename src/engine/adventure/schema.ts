@@ -5,6 +5,7 @@
  */
 import { z } from 'zod';
 import { ABILITIES, SKILLS } from '../rules/basics';
+import { TIERS } from '../world/factions';
 
 export const ADVENTURE_FORMAT_VERSION = 1;
 
@@ -26,7 +27,7 @@ export type Condition =
   | { not: Condition }
   | { timeOfDay: (typeof TIMES_OF_DAY)[number][] }
   | { weather: string[] }
-  | { reputation: { faction: string; gte?: number; lte?: number } }
+  | { reputation: { faction: string; gte?: number; lte?: number; tier?: (typeof TIERS)[number] } }
   | { level: { gte?: number; lte?: number } }
   | { visited: string }
   | { hours: { from: number; to: number } };
@@ -39,7 +40,8 @@ export const ConditionSchema: z.ZodType<Condition> = z.lazy(() =>
     z.object({ not: ConditionSchema }).strict(),
     z.object({ timeOfDay: z.array(z.enum(TIMES_OF_DAY)).min(1) }).strict(),
     z.object({ weather: z.array(z.string()).min(1) }).strict(),
-    z.object({ reputation: z.object({ faction: z.string(), gte: z.number().optional(), lte: z.number().optional() }) }).strict(),
+    // `tier`: at least this reputation tier (hostile … revered).
+    z.object({ reputation: z.object({ faction: z.string(), gte: z.number().optional(), lte: z.number().optional(), tier: z.enum(TIERS).optional() }) }).strict(),
     z.object({ level: z.object({ gte: z.number().optional(), lte: z.number().optional() }) }).strict(),
     z.object({ visited: z.string() }).strict(),
     // Hour window [from, to) on the 24-hour clock; wraps past midnight when from > to (22 → 6).

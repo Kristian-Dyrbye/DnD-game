@@ -172,7 +172,7 @@ describe('scene runner', () => {
     expect(back.facts).toContain('Walking back into the square, you hear children cheering about the rats.');
     const end = perform(c, 'claim_reward');
     expect(end.ending).toBe('rats_cleared');
-    expect(c.state.extensions.reputation).toEqual({ millbrook_folk: 1 });
+    expect(c.state.extensions.reputation).toEqual({ crown_of_aurelmark: 1 });
     expect(c.state.hero.xp).toBe(100);
     expect(getProgress(c.state)?.ending).toBe('rats_cleared');
     expect(availableActions(c)).toEqual([]);
