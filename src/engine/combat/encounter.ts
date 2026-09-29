@@ -1,7 +1,7 @@
 /**
  * Encounter controller: sets up a fight (grid, tokens, initiative) and runs it turn by turn. The
- * player controls the hero; everyone else acts through the AI (enemy AI now, companion AI from
- * A067). It is plain data + pure functions, so the client can preview and the server can run it
+ * player controls the hero; companions act through the companion AI (following the hero, focusing
+ * on the hero's target) and foes through the enemy AI. It is plain data + pure functions, so the client can preview and the server can run it
  * with authority (A068 wires it into the game session). Every step returns log lines with the math.
  */
 import type { Character, Creature } from '../core/creature';
@@ -9,6 +9,7 @@ import type { Rng } from '../core/rng';
 import type { SrdDatabase } from '../data/srd';
 import { monsterToCreature } from '../rules/monsters';
 import { takeAiTurn, type AiOptions } from './ai';
+import { takeCompanionTurn } from './companionAi';
 import { resolveAttack } from './attack';
 import { dash, disengage, dodge, moveCreature } from './actions';
 import type { CombatContext, CombatEvent, CombatState } from './combatState';
@@ -25,6 +26,8 @@ export interface Encounter {
   roster: Record<string, string>;
   log: string[];
   status: EncounterStatus;
+  /** The hero's last attack target (companions focus on it). */
+  focusId?: string;
 }
 
 export const LOG_CAP = 200;
@@ -127,7 +130,11 @@ function advance(enc: Encounter, ctx: CombatContext, aiOpts: AiOptions = {}): vo
     }
     const c = enc.state.creatures[id];
     if (!c || c.hp <= 0) continue;
-    const res = takeAiTurn(enc.state, ctx, id, { roster: enc.roster, ...aiOpts });
+    // Companions follow the hero and focus on the hero's target; everyone else is the enemy AI.
+    const res =
+      enc.roster[id] === 'party'
+        ? takeCompanionTurn(enc.state, ctx, id, { roster: enc.roster, leaderId: enc.heroId, ...(enc.focusId && { focusId: enc.focusId }), ...aiOpts })
+        : takeAiTurn(enc.state, ctx, id, { roster: enc.roster, ...aiOpts });
     enc.state = res.state;
     push(enc, res.events.map((e: CombatEvent) => e.text));
   }
@@ -155,6 +162,7 @@ export function playerAct(enc: Encounter, ctx: CombatContext, a: PlayerAction): 
   push(enc, res.events.map((e) => e.text));
   if (!res.ok) return res.error;
   enc.state = res.state;
+  if (a.kind === 'attack') enc.focusId = a.targetId;
   if (checkEnd(enc)) return undefined;
   // Dropping on your own turn (e.g. an Opportunity Attack) ends it.
   if ((enc.state.creatures[id]?.hp ?? 0) <= 0) advance(enc, ctx);
