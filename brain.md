@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A037
-- **Notes for next session:** Start with A038. A048 (3D assets) is with a helper — merge its branch when it reports and merge assets/CREDITS-assets.md into CREDITS.md. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A038
+- **Notes for next session:** Start with A039. A048 (3D assets) is with a helper — merge its branch when it reports and merge assets/CREDITS-assets.md into CREDITS.md. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -58,7 +58,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A035 — Character builder + derived stats
 - [done] A036 — Leveling + feats
 - [done] A037 — Multiclassing
-- [todo] A038 — Weapon mastery | Spec: §4, §10 | Done: cleave, graze, nick, push, sap, slow, topple, vex; tests | Dep: A030, A015
+- [done] A038 — Weapon mastery
 - [todo] A039 — Class features batch 1 (Barbarian, Bard, Cleric, Druid) | Spec: §4 | Done: mechanical features 1–20 as hooks/effects; tests for key ones | Dep: A036, A034
 - [todo] A040 — Class features batch 2 (Fighter, Monk, Paladin, Ranger) | Spec: §4 | Done: as A039 | Dep: A039
 - [todo] A041 — Class features batch 3 (Rogue, Sorcerer, Warlock, Wizard) | Spec: §4 | Done: as A039 | Dep: A039
@@ -177,6 +177,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A035 — Character builder + derived stats: Character gets inventory (uid, itemId, qty, equipped slot, magicItemId, attuned), coins (CP), lineageId, weaponMasteries, proficiencies {weapons, armor, tools}, choices, personality; validateBuild (lists all problems) + buildCharacter (bg bonus, skills, species skills/feat, lineage resistances/darkvision, equipment A/B + auto-equip, HP, AC, speed, slots); derived: armorClass (armor/dex cap, Unarmored Defense barb/monk, shield, Defense, magic, worn items), baseSpeed, weaponAttack (finesse/ranged ability, proficiency tokens, magic, Archery, mastery), unarmedStrike, maxHitPoints (avg after L1, Dwarven Toughness), initiativeModifiers (Alert) — `src/engine/character/builder.ts`, `src/engine/character/derived.ts`
 - A036 — Leveling + feats: levelForXp/canLevelUp, featureLevels (parses 'again at levels 8, 12…'), featuresAtLevel, pendingChoices (subclass, ASI/epic boon feat, cantrips, spells, weapon masteries), levelUp (avg/rolled HP min 1 + dwarf, hit die, PB, slots, features list), featProblems/applyFeat (prereqs, repeatable, ASI +2/+1+1 caps, retroactive Con HP, Skilled, Magic Initiate spells tagged `feat:magic_initiate:<list>`), recompute (slots keep expended ones, AC, speed) — `src/engine/character/leveling.ts`
 - A037 — Multiclassing: multiclassProblems (13+ in primary of all current + new class; 'or' primaries need one), multiclassGains (parses martial/armor/skill/tools/instrument lines), addClass (levelUp + gained proficiencies; HP average, not max), attacksPerAction (Extra Attack doesn't stack; fighter 11/20) — `src/engine/character/multiclass.ts`
+- A038 — Active effects store on creatures (ActiveEffect: key, source, target, expires on turn event w/ skip, roundsLeft, consumeOn) + helpers (addEffect, onTurnEvent, tickEffects, attackEffectModes, consumeAttackEffects, effectSpeedPenalty → effectiveSpeed); weapon masteries: applyMasteryOnHit (sap, vex, slow, topple save DC 8+mod+PB, push ≤ Large 10 ft, cleave flag), grazeDamage, cleaveDamageModifier; nick = action economy (A063) — `src/engine/rules/activeEffects.ts`, `src/engine/rules/mastery.ts`
 - A071 (helper) — World lore: continent Orrimar; regions Aurelmark (high fantasy), the Gloamfen (dark), Brinescatter Isles (swashbuckling) with narrator tone profiles + climate; 9 history events, 8 gods, 9 factions (symmetric relationships; villain cult = Hollow Choir, leader 'The Cantor', seeks 7 Tooth relics to unseal the Maw), 21 locations with mapPos (1000×700), 27 routes, calendar (12 months, 7 weekdays, 30-day months, year 1247 AR); helpers regionById/locationById/factionById/regionOfLocation/routesFrom/factionRelation — `src/engine/world/lore.ts`, `data/world/lore.json`
 
 ## Decisions Log
@@ -236,6 +237,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A034: Spell condition source id = `<casterId>:<spellId>`. castSpell hooks concentrationCheck into EffectContext.onDamaged. Third-casters supported in math (floor(level/3)) though no SRD class uses it.
 - A035: Weapons/armor are stored one inventory entry per item (so each can be equipped); other items stack. Generic choice tags resolve via input.choiceItems or DEFAULT_CHOICE_ITEM (holy_symbol→amulet, gaming_set→dice_set, instrument→lute). Fighting style feats go into featIds. Level > 1 builds use fixed average HP (no ASIs/features; leveling = A036).
 - A034a: Spell hook convention: `{kind:'hook', hook:'<spell_id>', params:{…}}`, params carry only what sibling core effects don't. Edit data/srd/overrides/spells.json directly, then `npx tsx scripts/srd/import-spells.ts`.
+- A038: Temporary rules effects (mastery riders, and later spell buffs A042a) live in `creature.effects` (ActiveEffect). Combat must call onTurnEvent(start/end of each turn), consumeAttackEffects after each attack roll, and add attackEffectModes to attack modes. Effect ids are per-creature (`sap-1`), save-safe.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -271,6 +273,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/character/derived.ts` — armorClass, baseSpeed, isProficientWith, weaponAttack, unarmedStrike, maxHitPoints, initiativeModifiers, classLevel, equipped
 - `src/engine/character/leveling.ts` — levelForXp, canLevelUp, featureLevels, featuresAtLevel, pendingChoices, featProblems, applyFeat, levelUp, recompute
 - `src/engine/character/multiclass.ts` — multiclassProblems, multiclassGains, addClass, attacksPerAction
+- `src/engine/rules/activeEffects.ts` — addEffect, hasEffect, removeEffects, onTurnEvent, tickEffects, attackEffectModes, consumeAttackEffects, effectSpeedPenalty
+- `src/engine/rules/mastery.ts` — applyMasteryOnHit, grazeDamage, cleaveDamageModifier
 - `src/engine/data/common.ts` — IdSchema, DiceSchema, CostSchema(CP), DamageSchema, AreaSchema, DurationSchema, EffectSchema/Effect, toId
 - `src/engine/data/schemas.ts` — schemas for every data/srd file + RulesTablesSchema; SRD_FILES registry; record types
 - `src/engine/data/srd.ts` — validateSrdFile, SrdDatabase (maps by id, item(), spellsForClass)

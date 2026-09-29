@@ -11,6 +11,7 @@ import type { ConditionData, ConditionModifiers } from '../data/schemas';
 import { loadSrd } from '../data/srdBundle';
 import { ABILITY_NAMES, type Ability, type Condition } from './basics';
 import { savingThrow, type D20TestResult } from './checks';
+import { effectSpeedPenalty } from './activeEffects';
 
 export type ConditionTable = ReadonlyMap<string, ConditionData>;
 
@@ -231,10 +232,10 @@ export function canAct(c: Creature, table: ConditionTable = defaultTable()): boo
   return !activeModifiers(c, table).some((m) => m.mods.incapacitated);
 }
 
-/** Walking speed after conditions and exhaustion (never below 0). */
+/** Walking speed after conditions, exhaustion and speed effects like Slow (never below 0). */
 export function effectiveSpeed(c: Creature, table: ConditionTable = defaultTable(), base = c.speed.walk): number {
   if (activeModifiers(c, table).some((m) => m.mods.speedZero)) return 0;
-  return Math.max(0, base - 5 * c.exhaustion);
+  return Math.max(0, base - 5 * c.exhaustion - effectSpeedPenalty(c));
 }
 
 /** Prone creatures can only crawl (1 extra foot per foot) or spend half their speed to stand. */

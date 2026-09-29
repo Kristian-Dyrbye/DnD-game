@@ -53,6 +53,33 @@ export const ResourceSchema = z.object({
 });
 export type Resource = z.infer<typeof ResourceSchema>;
 
+/**
+ * A temporary rules effect on a creature (weapon mastery riders, spell buffs...).
+ * Expires on a turn event of some creature, after N rounds, or when consumed by an attack.
+ */
+export const ActiveEffectSchema = z.object({
+  id: z.string(),
+  /** What it is: 'sap', 'vex', 'slow', 'bless'... Engine code interprets keys. */
+  key: z.string(),
+  /** Creature that created it. */
+  sourceId: z.string().optional(),
+  /** For effects that concern one other creature (Vex: advantage against this target). */
+  targetId: z.string().optional(),
+  expires: z
+    .object({
+      on: z.enum(['start_of_turn', 'end_of_turn']),
+      creatureId: z.string(),
+      /** Matching events to ignore first ("end of your NEXT turn" set during your turn → 1). */
+      skip: z.number().int().min(0).default(0),
+    })
+    .optional(),
+  roundsLeft: z.number().int().min(0).optional(),
+  /** Removed after the next attack roll it affects. */
+  consumeOn: z.enum(['own_attack', 'own_attack_vs_target']).optional(),
+  data: z.record(z.string(), z.unknown()).default({}),
+});
+export type ActiveEffect = z.infer<typeof ActiveEffectSchema>;
+
 export const CreatureKindSchema = z.enum(['character', 'monster', 'npc']);
 
 export const CreatureSchema = z.object({
@@ -76,6 +103,7 @@ export const CreatureSchema = z.object({
   vulnerabilities: z.array(DamageTypeSchema).default([]),
   conditionImmunities: z.array(ConditionSchema).default([]),
   conditions: z.array(ActiveConditionSchema).default([]),
+  effects: z.array(ActiveEffectSchema).default([]),
   /** Dead (0 HP monster, 3 failed death saves, massive damage, exhaustion 6). */
   dead: z.boolean().default(false),
   /** 0–6 (2024 exhaustion). */
