@@ -86,3 +86,51 @@ describe('creator state machine', () => {
     expect(c).toMatchObject({ name: 'Brenna', abilities: { str: 17 } });
   });
 });
+
+describe('level-1 choices and spells', () => {
+  const base = (classId: string): CreatorState => ({ ...newCreatorState(), classId, backgroundId: 'criminal', speciesId: 'dwarf', classSkills: [] });
+
+  it('lists class picks: masteries, fighting style, expertise, orders, invocations, tools', async () => {
+    const { creationChoices } = await import('./creator');
+    const keys = (id: string) => creationChoices(base(id), db).map((c) => `${c.key}:${c.count}`);
+    expect(keys('fighter')).toEqual(['weapon_mastery:3', 'fighting_style:1']);
+    expect(keys('rogue')).toEqual(['weapon_mastery:2', 'expertise:2']);
+    expect(keys('cleric')).toEqual(['divine_order:1']);
+    expect(keys('warlock')).toEqual(['eldritch_invocation:1']);
+    expect(keys('bard')).toEqual(['tool_proficiencies:3']);
+    expect(keys('wizard')).toEqual([]);
+    const barbWeapons = creationChoices(base('barbarian'), db)[0]!.options.map((o) => o.id);
+    expect(barbWeapons).toContain('greataxe');
+    expect(barbWeapons).not.toContain('longbow');
+    const inv = creationChoices(base('warlock'), db)[0]!.options.map((o) => o.id);
+    expect(inv).toContain('pact_of_the_blade');
+    expect(inv).not.toContain('agonizing_blast');
+  });
+
+  it('skills step requires the class picks; expertise options are proficient skills', async () => {
+    const { creationChoices, setChoiceValues } = await import('./creator');
+    let s: CreatorState = { ...base('rogue'), classSkills: ['acrobatics', 'perception', 'insight', 'deception'] };
+    expect(stepProblems(s, 'skills', db)).toEqual(['Choose weapon masteries (2)', 'Choose Expertise skills (2)']);
+    const expertiseOpts = creationChoices(s, db)[1]!.options.map((o) => o.id);
+    expect(expertiseOpts).toEqual(expect.arrayContaining(['stealth', 'sleight_of_hand', 'perception']));
+    s = setChoiceValues(setChoiceValues(s, 'weapon_mastery', ['dagger', 'shortbow']), 'expertise', ['stealth', 'perception']);
+    expect(stepProblems(s, 'skills', db)).toEqual([]);
+  });
+
+  it('spell counts come from the class table; Thaumaturge adds a cantrip', async () => {
+    const { spellCounts } = await import('./creator');
+    expect(spellCounts(base('wizard'), db)).toEqual({ cantrips: 3, spells: 4 });
+    expect(spellCounts(base('paladin'), db)).toEqual({ cantrips: 0, spells: 2 });
+    expect(spellCounts({ ...base('cleric'), choices: { divine_order: ['thaumaturge'] } }, db)).toEqual({ cantrips: 4, spells: 4 });
+    expect(stepProblems({ ...base('wizard'), cantrips: ['fire_bolt'] }, 'spells', db)).toEqual(['Choose 3 cantrips', 'Choose 4 level 1 spells']);
+  });
+
+  it('builds a rogue with expertise and a bard with instruments', () => {
+    const rogue = buildCharacter(
+      { ...toBuildInput({ ...base('rogue'), baseScores: { str: 8, dex: 15, con: 14, int: 12, wis: 13, cha: 10 }, backgroundBonus: { dex: 2, con: 1 }, classSkills: ['acrobatics', 'perception', 'insight', 'deception'], expertise: ['stealth', 'perception'], weaponMasteries: ['dagger', 'shortbow'], classEquipment: 0, backgroundEquipment: 'a', name: 'Vex' }) },
+      db,
+    );
+    expect(rogue.skills).toMatchObject({ stealth: 'expertise', perception: 'expertise', acrobatics: 'proficient' });
+    expect(rogue.proficiencies.tools).toContain('thieves_tools');
+  });
+});

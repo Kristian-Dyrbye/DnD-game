@@ -40,6 +40,8 @@ export interface CharacterBuildInput {
   /** Background increase: +2/+1 to two, or +1/+1/+1 to three, of the background's abilities. */
   backgroundBonus: Partial<Record<Ability, number>>;
   classSkills: Skill[];
+  /** Expertise picks at level 1 (Rogue): must be proficient skills. */
+  expertise?: Skill[];
   /** Species skill choices: Human Skillful (any 1), Elf Keen Senses (Insight/Perception/Survival). */
   speciesSkills?: Skill[];
   /** Human Versatile: an extra origin feat. */
@@ -139,6 +141,10 @@ export function validateBuild(input: CharacterBuildInput, db: SrdDatabase): stri
   if ((input.weaponMasteries?.length ?? 0) > masteryCount) problems.push(`${cls.name} can master ${masteryCount} weapon(s)`);
   for (const w of input.weaponMasteries ?? []) if (!db.weapons.has(w)) problems.push(`Unknown weapon ${w}`);
 
+  // Expertise must be in proficient skills
+  const proficient = new Set([...bg.skills, ...input.classSkills, ...(input.speciesSkills ?? [])]);
+  for (const s of input.expertise ?? []) if (!proficient.has(s)) problems.push(`Expertise needs proficiency in ${s}`);
+
   // Spells (counts are checked in detail by the creator, A046)
   for (const id of [...(input.cantrips ?? []), ...(input.preparedSpells ?? [])]) {
     const sp = db.spells.get(id);
@@ -161,6 +167,7 @@ export function buildCharacter(input: CharacterBuildInput, db: SrdDatabase): Cha
 
   const skills: Character['skills'] = {};
   for (const s of [...bg.skills, ...input.classSkills, ...(input.speciesSkills ?? [])]) skills[s] = 'proficient';
+  for (const s of input.expertise ?? []) if (skills[s]) skills[s] = 'expertise';
 
   const resistances: DamageType[] = [];
   if (species.id === 'dwarf') resistances.push('poison');
@@ -233,7 +240,11 @@ export function buildCharacter(input: CharacterBuildInput, db: SrdDatabase): Cha
     proficiencies: {
       weapons: cls.weaponProficiencies,
       armor: cls.armorTraining,
-      tools: [bg.tool.startsWith('choice:') ? (input.choiceItems?.[bg.tool.slice(7)] ?? DEFAULT_CHOICE_ITEM[bg.tool.slice(7)] ?? bg.tool) : bg.tool],
+      tools: [
+        bg.tool.startsWith('choice:') ? (input.choiceItems?.[bg.tool.slice(7)] ?? DEFAULT_CHOICE_ITEM[bg.tool.slice(7)] ?? bg.tool) : bg.tool,
+        ...(input.choices?.tool_proficiencies ?? []),
+        ...(cls.id === 'druid' ? ['herbalism_kit'] : cls.id === 'rogue' ? ['thieves_tools'] : []),
+      ],
     },
     choices: input.choices ?? {},
     ...(input.personality && { personality: input.personality }),

@@ -161,3 +161,28 @@ legend { color: var(--accent); padding: 0 0.35rem; }
 .die-total { margin-left: 0.3rem; color: var(--accent); }
 @keyframes die-shake { from { transform: rotate(-12deg) translateY(-2px); } to { transform: rotate(12deg) translateY(2px); } }
 @media (prefers-reduced-motion: reduce) { .dice-set.rolling .die { animation: none; } }
+.pick-list { margin-bottom: 1rem; }
+.pick-count { color: #8d8270; font-size: 0.85rem; margin-left: 0.3rem; }
+.pick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.5rem; }
+.pick-item { display: flex; flex-direction: column; gap: 0.2rem; border: 1px solid #4a3f30; border-radius: 8px; padding: 0.5rem 0.75rem; cursor: pointer; background: #211c16; }
+.pick-item.selected { border-color: var(--accent); background: #2c2519; }
+.pick-item small { color: #b9ad98; }
+.pick-item input { position: absolute; opacity: 0; pointer-events: none; }
+.pick-item:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.option-pill.locked, .pick-item.locked { opacity: 0.6; cursor: default; }
+.package { display: block; padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; margin-bottom: 0.35rem; border: 1px solid transparent; }
+.package.selected { border-color: var(--accent); background: #2c2519; }
+.package input { margin-right: 0.4rem; }
+fieldset + fieldset { margin-top: 1rem; }
+.select-row { display: block; margin: 0.35rem 0; }
+.select-row select, .search { font: inherit; background: #211c16; color: var(--fg); border: 1px solid #4a3f30; border-radius: 4px; padding: 0.25rem 0.5rem; }
+.search { margin-bottom: 0.6rem; width: 240px; }
+.spell-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.5rem; max-height: 420px; overflow-y: auto; }
+.spell-card { display: flex; flex-direction: column; gap: 0.15rem; border: 1px solid #4a3f30; border-radius: 8px; padding: 0.5rem 0.75rem; cursor: pointer; background: #211c16; }
+.spell-card.selected { border-color: var(--accent); background: #2c2519; }
+.spell-card.disabled { opacity: 0.5; cursor: not-allowed; }
+.spell-card input { position: absolute; opacity: 0; pointer-events: none; }
+.spell-card:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.spell-name { font-weight: bold; }
+.spell-meta { font-size: 0.78rem; color: var(--accent); }
+.spell-card small { color: #b9ad98; }

@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 3 (Character Creation)
-- **Last completed assignment:** A045
-- **Notes for next session:** Start with A046 (skills, equipment, spells steps). A096 (Piper voices) is with a helper. Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A046
+- **Notes for next session:** Start with A047 (identity, backstory, difficulty, Quick Build). A096 (Piper voices) is with a helper. Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -74,7 +74,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A043 — Creator state machine + class step UI
 - [done] A044 — Background + species steps
 - [done] A045 — Ability score methods
-- [todo] A046 — Skills, equipment, spells steps | Spec: §5 | Done: skill picks, starting package vs gold, spell selection; tests | Dep: A044, A034
+- [done] A046 — Skills, equipment, spells steps
 - [todo] A047 — Identity, backstory, difficulty, Quick Build | Spec: §5, §9 | Done: name/traits/backstory, LLM backstory suggestion (mock), Heroic/Hardcore pick, Quick Build per class; tests | Dep: A046, A005
 - [done] A048 — 3D asset research + import
 - [todo] A049 — 3D preview + appearance customization | Spec: §5, §12 | Done: three.js viewer in creator (rotate), body/face/hair/skin/colors saved to character; build passes | Dep: A048, A043
@@ -192,6 +192,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 - A045 — Ability scores: engine (STANDARD_ARRAY, point buy costs/budget/canAdjust, 4d6kh3 rolls, scoreProblems per method, suggestAssignment, suggestBackgroundBonus) wired into creator validation; AbilitiesStep UI (method tabs, dropdown assignment from remaining pool, point-buy steppers + budget, animated roll with dropped die shown, background +0/+1/+2 buttons capped at 3 total, final score + modifier, primary tags, suggest buttons); `#creator` URL hash opens the creator; status lights moved bottom-left — `src/engine/character/abilityScores.ts`, `src/client/ui/creator/AbilitiesStep.tsx`
 
+- A046 — Level-1 choices engine: creationChoices (weapon masteries from class proficiencies (barbarian melee only), fighter Fighting Style, rogue Expertise from proficient skills, cleric Divine Order, druid Primal Order, warlock invocations without level prereq, bard 3 instruments, monk artisan tool/instrument), choiceValues/setChoiceValues, spellCounts (+1 cantrip Thaumaturge/Magician); builder input `expertise` + chosen tool proficiencies (+druid herbalism kit, rogue thieves' tools); UI: PickList, SkillsStep, EquipmentStep (class/background packages + item picks), SpellsStep (filterable cantrip/level-1 grids) — `src/engine/character/creator.ts`, `src/client/ui/creator/{PickList,SkillsStep,EquipmentStep,SpellsStep}.tsx`
+
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
 - Infra decisions (A001–A012, condensed): TS 7 native tsc, Vite 8, Vitest 5, Preact 10; strict tsconfig w/ noUncheckedIndexedAccess + verbatimModuleSyntax, bundler resolution (no .js suffixes); server = tsx, 127.0.0.1:3210 (PORT env), opens browser itself (OPEN_BROWSER=1); zod 4 (.prefault({}) for nested defaults); settings in userdata/settings.json (salvage bad fields); LLM via injectable fetch, think:false only for reasoning models, keep_alive idle/60m, every call tagged with `task`; structured calls retry once (not when unreachable) then typed fallback; Piper spawned per utterance (--output_raw → WAV); providers in app.services (rebuilt on settings change); saves = {schemaVersion, meta, state} + migration chain, 3 rotating autosaves, slot-id regex; check-deps.mjs plain JS (DEFAULT_MODEL/GAME_PORT synced by test), allowScripts esbuild:false; RNG sfc32+cyrb128 (state in saves); math line format `d20: 14 + 5 (Persuasion) = 19 vs DC 15 — Success` with real minus sign; snake_case ids; Creature = current state, static data by id; exhaustion numeric; hit dice per die size.
@@ -245,6 +247,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A042b: castSpell options choice/allocations feed hooks. Combat must call endOfTurnSpellEffects(c, rng) before end-of-turn expiry, and treat 'counterspelled' / 'commanded' / 'hypnotized' (ends on damage) effects. Chain Lightning/Meteor Swarm/Ice Knife burst rely on the caller passing all affected targets.
 - A043: Client imports loadSrd() directly (SRD bundled into the JS, 1.5 MB / 337 KB gz); code-split in A112. UI state = Preact signals in src/client/ui/state.ts. Class blurbs are original game text in classInfo.ts. Creator step components register in Creator.tsx STEP_COMPONENTS (placeholders until built).
 - A034c: hold_person/hold_monster hooks are top-level siblings with params.appliesIfCondition (hook must check the condition). Cantrips with hooks marked noDiceScaling are not dice-multiplied; beamsByLevel hooks fire one attack per beam (allocations or round-robin). beacon_of_hope has a stray `save: 'wis'` hint (harmless).
+- A046: Creator stores weapon masteries in state.weaponMasteries, rogue expertise in state.expertise, all other class picks in state.choices[key] (fighting_style, divine_order, primal_order, eldritch_invocation, tool_proficiencies).
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map

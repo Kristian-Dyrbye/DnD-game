@@ -9,13 +9,19 @@ import { creator, screen } from '../state';
 import { AbilitiesStep } from './AbilitiesStep';
 import { BackgroundStep } from './BackgroundStep';
 import { ClassStep } from './ClassStep';
+import { EquipmentStep } from './EquipmentStep';
+import { SkillsStep } from './SkillsStep';
 import { SpeciesStep } from './SpeciesStep';
+import { SpellsStep } from './SpellsStep';
 
 const STEP_COMPONENTS: Partial<Record<CreatorStep, ComponentType>> = {
   class: ClassStep,
   background: BackgroundStep,
   species: SpeciesStep,
   abilities: AbilitiesStep,
+  skills: SkillsStep,
+  equipment: EquipmentStep,
+  spells: SpellsStep,
 };
 
 function Placeholder({ step }: { step: CreatorStep }) {
