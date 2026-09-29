@@ -1,0 +1,36 @@
+# Dependencies & build output
+node_modules/
+dist/
+build/
+.vite/
+coverage/
+*.tsbuildinfo
+
+# Runtime data (player saves, user settings, logs)
+saves/
+userdata/
+logs/
+*.log
+
+# Downloaded / large binaries (fetched by Setup.bat; manifests are committed)
+models/
+tools/piper/
+assets/voices/
+*.onnx
+*.onnx.json
+*.gguf
+*.bin
+
+# SRD source PDFs/text dumps (regenerable; structured JSON in data/srd is committed)
+data/srd/_source/
+
+# Loop control files
+loop_status.txt
+STOP.txt
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
