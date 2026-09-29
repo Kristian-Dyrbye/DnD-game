@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A012
-- **Notes for next session:** Start with A013. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A013
+- **Notes for next session:** Start with A014. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -32,7 +32,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ### Phase 2 — Rules Engine
 - [done] A011 — RNG + dice | Spec: §4, §8 | Done: seeded serializable RNG, dice notation parser (NdX+M, kh/kl), adv/dis, roll result with math string; tests | Dep: A001
 - [done] A012 — Core rule types | Spec: §4 | Done: abilities/mods, proficiency by level, skills, damage types, sizes, Creature/Character/Combatant types; tests | Dep: A011
-- [todo] A013 — SRD 5.2 data pipeline + schemas | Spec: §4 | Done: decide source (official SRD 5.2 CC-BY-4.0 PDF → scripts/srd-extract, or CC-BY JSON source) and log it; zod schemas for every data/srd file; loader + validator test; CREDITS.md with SRD attribution | Dep: A012
+- [done] A013 — SRD 5.2 data pipeline + schemas | Spec: §4 | Done: decide source (official SRD 5.2 CC-BY-4.0 PDF → scripts/srd-extract, or CC-BY JSON source) and log it; zod schemas for every data/srd file; loader + validator test; CREDITS.md with SRD attribution | Dep: A012
 - [todo] A014 — SRD data: conditions, exhaustion, core tables | Spec: §4 | Done: conditions.json, rules tables (XP/level, proficiency, spell slots full/half/third/pact, multiclass slots, encounter XP budgets, DC guide); validated + spot tests | Dep: A013
 - [todo] A015 — SRD data: equipment | Spec: §4, §11.5 | Done: weapons (with mastery), armor, gear, tools, packs, prices; validated | Dep: A013
 - [todo] A016 — SRD data: species + backgrounds | Spec: §4, §5 | Done: all SRD species and backgrounds (ASI options, origin feat, skills, tools, equipment); validated | Dep: A013
@@ -173,6 +173,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A009 — Launchers: Setup.bat (Node via winget if missing → check-deps --setup: npm install, build, Ollama via winget prompt, start ollama serve, pull model), Start Game.bat (check-deps --start, starts Ollama if installed, builds if needed, OPEN_BROWSER=1 npm start; exit 3 = already running → just open browser) — `Setup.bat`, `Start Game.bat`, `scripts/check-deps.mjs`, `scripts/check-deps-lib.mjs`
 - A011 — Seeded sfc32 Rng (saveable state), dice notation parser (NdX, kh/kl, +/- terms), roll, diceStats, d20 adv/dis + visible math formatting — `src/engine/core/rng.ts`, `src/engine/core/dice.ts`
 - A012 — Core rule vocabulary + formulas (abilities, 18 skills, damage types, sizes, creature types, 15 conditions, ability mod, PB by level/CR, CR parse) and zod Creature/Character/Combatant schemas — `src/engine/rules/basics.ts`, `src/engine/core/creature.ts`
+- A013 — SRD pipeline: source = SRD 5.2.1 Markdown (downfallx repo, pinned commit) fetched to data/srd/_source by `npm run srd:fetch`; zod schemas for all 12 data files + rules tables; Effect union; SrdDatabase + validateSrdFile; bundled loader; empty data files; CREDITS.md — `src/engine/data/*`, `scripts/srd-fetch.mjs`, `CREDITS.md`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -206,6 +207,10 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A009: Server opens the browser itself (OPEN_BROWSER=1) after listen, so the page never loads before the server is up.
 - A011: RNG = sfc32 seeded by cyrb128 string hash; RngState = 4 uint32 stored in saves. Math-line format: `d20: 14 + 5 (Persuasion) = 19 vs DC 15 — Success`; adv/dis: `d20 (adv: 7, 14 → 14) ...`; damage: `2d6+3: [4, 2] + 3 = 9`, dropped dice as ~x~. Uses the real minus sign (−) in display text.
 - A012: Ids are snake_case strings (skills `sleight_of_hand`, classes `fighter`). Creature holds CURRENT state; static rules data is referenced by id (classId, statBlockId). Exhaustion stored as a number 0–6 on the creature, not as an ActiveCondition. hitDice stored per die size ({d10: 3}) for multiclass.
+- A013: SRD source = community Markdown of SRD 5.2.1 (github downfallx/dnd-5e-srd-markdown @1b4b99d, CC-BY-4.0) — alt: official PDF (hard to parse), 5e-bits (2014-focused) — cleanest structured text. Source is gitignored; generated JSON is committed. Importers: write `scripts/srd/import-<kind>.ts` (run with `npx tsx`), parse Markdown → validate with the zod schema → write data/srd/<file>.json. Hand fixes go in `data/srd/overrides/<file>.json` merged by id.
+- A013: Money stored in copper (CP) integers everywhere (1 GP = 100). Data ids snake_case via toId(). Monster saves stored as final printed bonuses for all six abilities. Spells keep importer hints (save, damage, area, attack) plus hand-refined `effects`.
+- A013: Effect union (damage, heal, temp_hp, save, attack, condition, area, hook) in engine/data/common.ts; complex features use `{kind:'hook', hook:'name'}` implemented in code.
+- A013: Data reaches the engine via static JSON imports in srdBundle.ts (works in Vite, Vitest, tsx). loadSrd() caches a validated SrdDatabase. A test asserts every committed data file validates.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -229,6 +234,14 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/core/dice.ts` — parseDice, roll, formatRoll, diceStats, resolveRollMode, rollD20, formatD20Test
 - `src/engine/rules/basics.ts` — ABILITIES, SKILL_ABILITY, DAMAGE_TYPES, SIZES, CREATURE_TYPES, CONDITIONS (+ zod enums); abilityModifier, proficiencyBonus(ForCR), proficiencyContribution, parseCR/formatCR, formatModifier, sizeSquares
 - `src/engine/core/creature.ts` — CreatureSchema, CharacterSchema, CombatantSchema, ActiveCondition, Resource, totalLevel
+- `src/engine/data/common.ts` — IdSchema, DiceSchema, CostSchema(CP), DamageSchema, AreaSchema, DurationSchema, EffectSchema/Effect, toId
+- `src/engine/data/schemas.ts` — schemas for every data/srd file + RulesTablesSchema; SRD_FILES registry; record types
+- `src/engine/data/srd.ts` — validateSrdFile, SrdDatabase (maps by id, item(), spellsForClass)
+- `src/engine/data/srdBundle.ts` — static imports of data/srd/*.json; loadSrd()
+- `data/srd/*.json` — SRD data (arrays; empty until A014–A028 fill them)
+- `data/srd/_source/` — fetched SRD Markdown (gitignored; `npm run srd:fetch`)
+- `scripts/srd-fetch.mjs` — downloads SRD Markdown at a pinned commit
+- `CREDITS.md` — SRD CC-BY-4.0 attribution + asset credits
 - `src/shared/save.ts` — SaveMetaSchema, SaveFileSchema, SaveListEntry, SLOT_ID_PATTERN
 - `src/engine/session/migrations.ts` — MIGRATIONS chain + migrateSave(raw) (add a step + fixture test per schema bump)
 - `src/server/saveStore.ts` — SaveStore(dir): list/load/save/autosave/delete; `app.saves`; routes GET/PUT/DELETE /api/saves[/:slot]
@@ -255,6 +268,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ## Gotchas & Lessons
 - git core.autocrlf=true on this machine. The .bat launchers must stay CRLF; `.gitattributes` forces `*.bat` to CRLF (done). LF→CRLF warnings on `git add` are harmless.
 - Tests needing exact dice: use a fixed-face Rng stub (see `fixed()` in dice.test.ts).
+- SRD Markdown source has conversion errors (e.g. Dragonborn ancestry table in character-origins.md runs into the weapons table: 'Silver | 20 GP', 'Lance' rows). Always validate importer output and cross-check odd rows against the rules; fix via overrides.
+- SRD Markdown format: spells are `#### Name` + `_Level 3 Evocation (Sorcerer, Wizard)_` + `**Casting Time:**` lines; monsters are `### Name` + `_Size Type (Tag), Alignment_` + `**AC** 15 **Initiative** +2 (12)` + an HTML <table> of STR..CHA (score, MOD, SAVE) + `#### Actions` with `**_Name._** _Melee Attack Roll:_ +4, reach 5 ft. _Hit:_ 5 (1d6 + 2) Slashing damage`. Tables are HTML (<tr><td>).
 - TS strict + zod: a fallback lambda's return type widens enums to string; annotate it (`(e): T => ...`).
 - In .bat files escape `&` as `^&` (even in `title`). Edit .bat files with python (read bytes, normalize to CRLF); Git Bash `sed -i` mangles CRLF.
 - Testing .bat from the PowerShell tool: native commands don't follow Push-Location; call `cmd /c "`"<absolute path>`""`. To dry-run Start Game.bat, copy it with `call npm start` replaced by an echo.

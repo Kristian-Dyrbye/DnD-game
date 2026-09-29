@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "srd:fetch": "node scripts/srd-fetch.mjs"
   },
   "author": "",
   "license": "UNLICENSED",
