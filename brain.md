@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A020
-- **Notes for next session:** Start with A021. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A023
+- **Notes for next session:** Start with A024. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -40,9 +40,9 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A018 — SRD data: classes part 1 (Barbarian, Bard, Cleric, Druid) | Spec: §4 | Done: class tables 1–20, features, SRD subclass each; validated | Dep: A013
 - [done] A019 — SRD data: classes part 2 (Fighter, Monk, Paladin, Ranger) | Spec: §4 | Done: as A018 | Dep: A018
 - [done] A020 — SRD data: classes part 3 (Rogue, Sorcerer, Warlock, Wizard) | Spec: §4 | Done: as A018 | Dep: A018
-- [todo] A021 — SRD data: spells cantrip–2 | Spec: §4 | Done: all SRD spells of these levels with effect data (damage, save, area, duration, conc, ritual, upcast); validated | Dep: A013
-- [todo] A022 — SRD data: spells 3–5 | Spec: §4 | Done: as A021 | Dep: A021
-- [todo] A023 — SRD data: spells 6–9 | Spec: §4 | Done: as A021 | Dep: A021
+- [done] A021 — SRD data: spells cantrip–2 | Spec: §4 | Done: all SRD spells of these levels with effect data (damage, save, area, duration, conc, ritual, upcast); validated | Dep: A013
+- [done] A022 — SRD data: spells 3–5 | Spec: §4 | Done: as A021 | Dep: A021
+- [done] A023 — SRD data: spells 6–9 | Spec: §4 | Done: as A021 | Dep: A021
 - [todo] A024 — SRD data: monsters A–F | Spec: §4 | Done: stat blocks (actions, multiattack, recharge, legendary, traits) validated | Dep: A013
 - [todo] A025 — SRD data: monsters G–M | Spec: §4 | Done: as A024 | Dep: A024
 - [todo] A026 — SRD data: monsters N–S | Spec: §4 | Done: as A024 | Dep: A024
@@ -54,6 +54,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [todo] A032 — Death saves, 0 HP, resting | Spec: §4, §9 | Done: death saves, stabilize, massive damage, healing from 0, short rest (hit dice) and long rest, generic resource recovery; tests | Dep: A031
 - [todo] A033 — Effect system | Spec: §4 | Done: data-driven executor for damage/heal/condition/save/area/duration effects; tests | Dep: A031
 - [todo] A034 — Spellcasting engine | Spec: §4 | Done: slots, save DC/attack, upcast, concentration (DC max(10, dmg/2)), rituals, abstract components, pact magic; tests | Dep: A033, A021
+- [todo] A034a — Spell effects pass | Spec: §4 | Done: hand-written effects/hooks in data/srd/overrides/spells.json for the ~40 most-used combat spells that have no auto effects (magic_missile, bless, shield, ice_storm, counterspell, guiding_bolt, spiritual_weapon, etc.); cantrip damage scaling by character level (5/11/17) in the engine; tests | Dep: A034
 - [todo] A035 — Character builder + derived stats | Spec: §4, §5 | Done: build from class/species/background/scores; AC (armor, shield, unarmored), HP, speed, proficiencies, attacks; tests | Dep: A015, A016, A018
 - [todo] A036 — Leveling + feats | Spec: §4 | Done: XP thresholds, level-up (HP, features, subclass, ASI/feat, epic boon), feat effects via hooks; tests | Dep: A035, A017, A020
 - [todo] A037 — Multiclassing | Spec: §4 | Done: prereqs, proficiencies gained, multiclass slot table, pact magic separate; tests | Dep: A036
@@ -179,6 +180,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A016 — Origins: 9 species (sizes, speed, darkvision, traits, lineages incl. dragon damage types + lineage spell ids by level) and 4 backgrounds (ability options, feat + option, skills, tool or choice, equipment A/B resolved to item ids) — `scripts/srd/import-origins.ts`
 - A017 — 17 feats (4 origin, 2 general, 4 fighting style, 7 epic boons) with prerequisites (level, abilities, feature id), repeatable, abilityIncrease — `scripts/srd/import-feats.ts`
 - A018–A020 — One generic importer for all 12 classes + 12 SRD subclasses: core traits, features 1–20, table columns (rages, sneak_attack...), cantrips/prepared arrays, starting equipment A/B(/C), multiclass prereqs + gains, Metamagic/Invocation option lists, subclass always-prepared spells (Circle of the Land keyed `arid:3`); added Spellbook gear item — `scripts/srd/import-classes.ts`
+- A021–A023 — All 339 spells (one importer): header fields, higherLevels/cantripUpgrade text, hints (attack, save, damage, area, conditions), auto effects for 93 unambiguous spells (spell attack, save-for-damage with area/half, heal + mod, save-or-condition), upcast dice — `scripts/srd/import-spells.ts`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -223,6 +225,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A016: Background equipment: generic items (Holy Symbol, Gaming Set, focuses, instruments) become `choices` tags; quantities are units ("20 Arrows" → [arrows, 20]). Tool field is an item id or `choice:<tag>`. Species traits keep text; mechanics come later via hooks/effects (A035/A039+). Lineage spells referenced by spell id (validated once spells exist, A021–A023).
 - A018: Classes done with ONE generic importer, so A019/A020 were completed in the same session (all 12 classes tested). Beginner-friendly classes = fighter, barbarian, rogue (game decision). Weapon proficiency tokens: simple, martial, martial:light, martial:finesse. Class `columns` keyed by snake_case header; numbers where numeric, strings for dice ('1d6'), 0 for '—'. Multiclass gains kept as text strings (parse in A037).
 - A018: Spellbook added as gear (50 GP, 3 lb., classic SRD values) because the 2024 SRD has no gear row for it.
+- A021: Spells imported with ONE importer, so A022/A023 were completed in the same session. Auto effects only for unambiguous patterns; other spells keep hints + text and get hand effects/hooks in A034a (new queue item). Cantrip scaling is NOT in data (engine rule, A034a).
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -256,6 +259,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `scripts/srd/import-origins.ts` — species + backgrounds (needs equipment JSON first)
 - `scripts/srd/import-feats.ts` — feats
 - `scripts/srd/import-classes.ts` — classes + subclasses (needs equipment JSON)
+- `scripts/srd/import-spells.ts` — spells
 - `data/srd/overrides/` — hand fixes/mechanics merged by id into importer output
 - `data/srd/rules-tables.json` — core numeric tables
 - `data/srd/*.json` — SRD data (arrays; empty until A014–A028 fill them)
@@ -292,6 +296,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - SRD Markdown format: spells are `#### Name` + `_Level 3 Evocation (Sorcerer, Wizard)_` + `**Casting Time:**` lines; monsters are `### Name` + `_Size Type (Tag), Alignment_` + `**AC** 15 **Initiative** +2 (12)` + an HTML <table> of STR..CHA (score, MOD, SAVE) + `#### Actions` with `**_Name._** _Melee Attack Roll:_ +4, reach 5 ft. _Hit:_ 5 (1d6 + 2) Slashing damage`. Tables are HTML (<tr><td>).
 - Class feature tables in classes.md have captions `**<Class> Features**`; spellcasters have a 2-row header (slot levels in row 2) → skip 2 rows.
 - Editing regexes with sed/python heredocs mangles backslashes; use the Edit tool for code containing regex escapes.
+- Spells source: a few spells use `**Component:**` (singular) instead of `**Components:**`.
 - TS strict + zod: a fallback lambda's return type widens enums to string; annotate it (`(e): T => ...`).
 - In .bat files escape `&` as `^&` (even in `title`). Edit .bat files with python (read bytes, normalize to CRLF); Git Bash `sed -i` mangles CRLF.
 - Testing .bat from the PowerShell tool: native commands don't follow Push-Location; call `cmd /c "`"<absolute path>`""`. To dry-run Start Game.bat, copy it with `call npm start` replaced by an echo.
