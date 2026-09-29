@@ -7,6 +7,7 @@
  * Each token has an HP ring; the active creature and valid targets get rings too. Orbit (drag),
  * zoom (wheel) and pan (right drag) the camera; click a square to act. Rendering follows the fps cap.
  */
+import { armorWear } from '../../engine/character/armorWear';
 import { woundLevel } from '../../engine/appearance/wounds';
 import { monsterVisual } from '../../engine/appearance/monsterVisuals';
 import { buildMonsterModel } from './monsterModel';
@@ -297,6 +298,7 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
       }
       if (withModels.has(t.id) && entry?.model) {
         entry.model.setWounds?.(woundLevel(c.hp, c.maxHp), t.id);
+        if (c.kind === 'character') entry.model.setWear?.(armorWear(c as Character), t.id);
         const root = entry.model.root;
         root.position.set(at.x, 0, at.z);
         root.rotation.set(down ? -Math.PI / 2 : 0, sides[t.id] === 'enemy' ? -Math.PI / 2 : Math.PI / 2, 0);

@@ -480,6 +480,12 @@ export function dealCombatDamage(
   }
   let next = withCreature(state, after);
 
+  // Armor wear: hits from attacks on characters (character/armorWear.ts).
+  if (isCharacter(after) && report.totalAfterDefenses > 0 && opts.weapon && sourceId !== targetId) {
+    const prev = next.armorHits?.[targetId] ?? { hits: 0, crits: 0 };
+    next = { ...next, armorHits: { ...(next.armorHits ?? {}), [targetId]: { hits: prev.hits + 1, crits: prev.crits + (opts.crit ? 1 : 0) } } };
+  }
+
   // Dramatic moments for permanent scars (character/scars.ts): a crit taken or dropping to 0 HP.
   if (isCharacter(after) && report.totalAfterDefenses > 0 && (opts.crit || zero.event === 'unconscious' || zero.event === 'died')) {
     const source = state.creatures[sourceId];

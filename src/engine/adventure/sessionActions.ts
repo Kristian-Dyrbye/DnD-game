@@ -3,6 +3,7 @@
  * validateIntent → resolveIntent) are resolved by the engine, rolls are shown, then the facts are
  * narrated (streamed LLM or template). Until combat (A068) exists, encounters auto-resolve as wins.
  */
+import { mendYourself, repairAtSmith } from '../character/armorWear';
 import { dungeonView } from '../world/dungeon';
 import { CombatNarrationQueue, pickMoments, type CombatNarrationMode } from './combatNarration';
 import { logSince } from '../combat/encounter';
@@ -383,6 +384,24 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
         if (!db) throw new Error('Equipment needs the SRD data');
         const r = cmd.type === 'equip' ? equipItem(hero, cmd.uid, db, cmd.slot) : unequipItem(hero, cmd.uid, db);
         if (!r.ok) throw new Error(r.error);
+        return;
+      }
+      if (cmd.type === 'repair') {
+        if (!db) throw new Error('Repairs need the SRD data');
+        if (activeFight(session.current)) throw new Error('Not in the middle of a fight!');
+        let r;
+        if (cmd.how === 'smith') {
+          const here = getMap(session.current)?.current;
+          const smith = opts.shops?.shops.find((s) => s.id === cmd.shopId && s.kind === 'smith');
+          if (!smith || smith.locationId !== here) throw new Error('There is no smith here.');
+          r = repairAtSmith(hero, cmd.uid, db);
+        } else r = mendYourself(hero, cmd.uid);
+        if (!r.ok) throw new Error(r.error);
+        const before = session.current.time;
+        session.current.hero = r.character;
+        session.current.time += r.minutes;
+        session.addLog('system', `${r.text}${r.coins ? ` (${formatCoins(r.coins)})` : ''}`);
+        session.timePassed(before);
         return;
       }
       if (!db || !opts.lore || !opts.shops) throw new Error('Shops are not available');

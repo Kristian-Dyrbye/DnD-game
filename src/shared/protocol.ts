@@ -87,6 +87,8 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
   z.object({ ...base, type: z.literal('shop_buy'), shopId: z.string().max(60), itemId: z.string().max(80), qty: z.number().int().min(1).max(99).default(1) }),
   z.object({ ...base, type: z.literal('shop_sell'), shopId: z.string().max(60), uid: z.string().max(20), qty: z.number().int().min(1).max(99).default(1) }),
   z.object({ ...base, type: z.literal('shop_haggle'), shopId: z.string().max(60) }),
+  /** Armor repair: at a smith here (gold, 1 hour) or yourself (8 hours downtime). */
+  z.object({ ...base, type: z.literal('repair'), uid: z.string().max(20), how: z.enum(['smith', 'self']), shopId: z.string().max(60).optional() }),
   /** Journal: create (no id) or update a page. */
   z.object({ ...base, type: z.literal('journal_save'), page: z.object({ id: z.string().max(12).optional(), title: z.string().max(200), body: z.string().max(25_000) }) }),
   z.object({ ...base, type: z.literal('journal_delete'), id: z.string().max(12) }),

@@ -368,6 +368,7 @@ body.cb-helpers .hp-bar.hp-mid div { background-image: repeating-linear-gradient
 .dungeon-panel { padding: 0.5rem; border-bottom: 1px solid #3a3226; }
 .dungeon-panel h2 { font-size: 0.95rem; margin: 0 0 0.4rem; }
 .dungeon-panel canvas { max-width: 100%; height: auto; }
+.tag-wear { background: #2e2e33; color: #c9c9d4; }
 .member-scars { display: flex; flex-wrap: wrap; gap: 0.25rem; margin: 0.3rem 0 0; }
 .tag-scar { background: #3a1e1e; color: #e8c8b8; cursor: help; }
 .combat-narration { margin: 0; padding: 0.4rem 1rem; font-style: italic; color: var(--muted, #c9bfa8); border-top: 1px solid #3a3226; }

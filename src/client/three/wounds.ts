@@ -79,16 +79,16 @@ interface WoundRig {
   level: WoundLevel;
 }
 
-/** Create the (initially invisible) overlays on a built character model. */
-export function addWoundOverlays(root: THREE.Object3D): void {
+/** Transparent copies of the matching body parts sharing geometry/skeleton/UVs, with one material. */
+function makeOverlays(root: THREE.Object3D, parts: RegExp, suffix: string): { overlays: THREE.Mesh[]; material: THREE.MeshStandardMaterial } {
   const material = new THREE.MeshStandardMaterial({ transparent: true, opacity: 0, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, roughness: 0.6 });
   const overlays: THREE.Mesh[] = [];
-  const parts: THREE.Mesh[] = [];
+  const found: THREE.Mesh[] = [];
   root.traverse((o) => {
     const m = o as THREE.Mesh;
-    if (m.isMesh && m.visible && PARTS.test(m.name)) parts.push(m);
+    if (m.isMesh && m.visible && parts.test(m.name)) found.push(m);
   });
-  for (const m of parts) {
+  for (const m of found) {
     const sk = m as THREE.SkinnedMesh;
     let copy: THREE.Mesh;
     if (sk.isSkinnedMesh) {
@@ -97,7 +97,7 @@ export function addWoundOverlays(root: THREE.Object3D): void {
       skinned.frustumCulled = false;
       copy = skinned;
     } else copy = new THREE.Mesh(m.geometry, material);
-    copy.name = `${m.name}_wounds`;
+    copy.name = `${m.name}_${suffix}`;
     copy.visible = false;
     copy.position.copy(m.position);
     copy.quaternion.copy(m.quaternion);
@@ -105,7 +105,69 @@ export function addWoundOverlays(root: THREE.Object3D): void {
     m.parent?.add(copy);
     overlays.push(copy);
   }
+  return { overlays, material };
+}
+
+/** Create the (initially invisible) overlays on a built character model. */
+export function addWoundOverlays(root: THREE.Object3D): void {
+  const { overlays, material } = makeOverlays(root, PARTS, 'wounds');
   root.userData.wounds = { overlays, material, target: 0, level: 0 } satisfies WoundRig;
+  const wear = makeOverlays(root, ARMOR_PARTS, 'wear');
+  wear.material.polygonOffsetFactor = -1;
+  root.userData.wear = wear;
+}
+
+// ---------------------------------------------------------------- armor wear (A092)
+
+const ARMOR_PARTS = /_(Body|ArmLeft|ArmRight|LegLeft|LegRight)$/;
+
+/** Grey scratches and dark dents, more of them with more wear (0–100). */
+function wearTexture(seed: string, step: number): THREE.Texture | undefined {
+  if (typeof document === 'undefined' || step === 0) return undefined;
+  const key = `wear:${seed}:${step}`;
+  const hit = textures.get(key);
+  if (hit) return hit;
+  const canvas = document.createElement('canvas');
+  canvas.width = SIZE;
+  canvas.height = SIZE;
+  const g = canvas.getContext('2d');
+  if (!g) return undefined;
+  const r = rand(hash(`wear:${seed}`));
+  for (let i = 0; i < step * 14; i++) {
+    const x = r() * SIZE;
+    const y = r() * SIZE;
+    if (r() < 0.6) {
+      g.strokeStyle = 'rgba(210,210,215,0.7)';
+      g.lineWidth = 0.8;
+      g.beginPath();
+      g.moveTo(x, y);
+      g.lineTo(x + (r() - 0.5) * 18, y + (r() - 0.5) * 18);
+      g.stroke();
+    } else {
+      const grad = g.createRadialGradient(x, y, 0, x, y, 3 + r() * 5);
+      grad.addColorStop(0, 'rgba(20,20,25,0.7)');
+      grad.addColorStop(1, 'rgba(20,20,25,0)');
+      g.fillStyle = grad;
+      g.fillRect(x - 10, y - 10, 20, 20);
+    }
+  }
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.flipY = false;
+  textures.set(key, tex);
+  return tex;
+}
+
+/** Show armor wear (0–100) as scratches and dents on the armored parts. */
+export function setWear(root: THREE.Object3D, wear: number, seed: string): void {
+  const rig = root.userData.wear as { overlays: THREE.Mesh[]; material: THREE.MeshStandardMaterial } | undefined;
+  if (!rig) return;
+  const step = wear <= 0 ? 0 : Math.min(4, Math.ceil(wear / 25));
+  const tex = wearTexture(seed, step);
+  rig.material.map = tex ?? null;
+  rig.material.opacity = step ? 0.85 : 0;
+  rig.material.needsUpdate = true;
+  for (const o of rig.overlays) o.visible = step > 0;
 }
 
 /** Set the wound step (seeded by `seed`, e.g. the creature id). */

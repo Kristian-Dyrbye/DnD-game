@@ -8,7 +8,7 @@
 import type { ScarLocation } from '../../engine/core/creature';
 import { attachScarMarks } from './scarMarks';
 import type { WoundLevel } from '../../engine/appearance/wounds';
-import { addWoundOverlays, setWounds, tickWounds } from './wounds';
+import { addWoundOverlays, setWear, setWounds, tickWounds } from './wounds';
 import type { EquipmentLook } from '../../engine/appearance/equipmentVisuals';
 import { attachEquipment } from './equipmentModels';
 import * as THREE from 'three';
@@ -24,6 +24,8 @@ export interface CharacterModel {
   update(dt: number): boolean;
   /** Temporary wound overlays (characters only). */
   setWounds?(level: WoundLevel, seed: string): void;
+  /** Armor wear 0–100 as scratches/dents (characters only). */
+  setWear?(wear: number, seed: string): void;
   dispose(): void;
 }
 
@@ -180,6 +182,7 @@ export async function buildCharacterModel(a: Appearance, size = 'medium', look?:
       return true;
     },
     setWounds: (level: WoundLevel, seed: string) => setWounds(root, level, seed),
+    setWear: (wear: number, seed: string) => setWear(root, wear, seed),
     dispose: () => {
       mixer.stopAllAction();
       root.traverse((o) => {

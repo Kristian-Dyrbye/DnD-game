@@ -26,7 +26,7 @@ function frame(camera: THREE.PerspectiveCamera, controls: OrbitControls, obj: TH
   controls.update();
 }
 
-export function CharacterPreview({ appearance, size = 'medium', height = 260, look, wounds = 0, seed = 'hero', scars = [] }: { appearance: Appearance; size?: string; height?: number; look?: EquipmentLook; wounds?: WoundLevel; seed?: string; scars?: readonly ScarLocation[] }) {
+export function CharacterPreview({ appearance, size = 'medium', height = 260, look, wounds = 0, seed = 'hero', scars = [], wear = 0 }: { appearance: Appearance; size?: string; height?: number; look?: EquipmentLook; wounds?: WoundLevel; seed?: string; scars?: readonly ScarLocation[]; wear?: number }) {
   const host = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<{ scene: THREE.Scene; camera: THREE.PerspectiveCamera; controls: OrbitControls; model?: CharacterModel } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -103,9 +103,12 @@ export function CharacterPreview({ appearance, size = 'medium', height = 260, lo
   // Wounds follow HP (overlays fade in/out inside the model).
   const woundsRef = useRef(wounds);
   woundsRef.current = wounds;
+  const wearRef = useRef(wear);
+  wearRef.current = wear;
   useEffect(() => {
     sceneRef.current?.model?.setWounds?.(wounds, seed);
-  }, [wounds, seed]);
+    sceneRef.current?.model?.setWear?.(wear, seed);
+  }, [wounds, wear, seed]);
 
   // (Re)build the model when the look changes.
   const key = JSON.stringify(appearance) + size + lookKey(look) + scars.join(',');
@@ -121,6 +124,7 @@ export function CharacterPreview({ appearance, size = 'medium', height = 260, lo
         }
         holder.model = model;
         model.setWounds?.(woundsRef.current, seed);
+        model.setWear?.(wearRef.current, seed);
         holder.scene.add(model.root);
         frame(holder.camera, holder.controls, model.root);
         setError(null);

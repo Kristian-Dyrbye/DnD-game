@@ -22,6 +22,8 @@ export interface CombatState {
   zones?: Zone[];
   /** Crits taken / drops to 0 HP by characters this fight (scars, character/scars.ts). */
   scarMarks?: ScarMark[];
+  /** Hits taken per character this fight (armor wear, character/armorWear.ts). */
+  armorHits?: Record<string, { hits: number; crits: number }>;
 }
 
 export interface CombatContext {

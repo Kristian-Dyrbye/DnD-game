@@ -4,6 +4,7 @@
  * resources, XP for defeated monsters, the encounter's win/lose/flee outcome, and in Heroic mode a
  * defeat outcome instead of death (Hardcore: the hero dies; a new hero can continue the world).
  */
+import { wearFromFight } from '../character/armorWear';
 import type { Character } from '../core/creature';
 import type { SrdDatabase } from '../data/srd';
 import type { CombatContext } from '../combat/combatState';
@@ -115,6 +116,10 @@ export function finishFight(ctx: RunContext, how: FightEnd, deps: { db: SrdDatab
   const { state } = ctx;
   syncParty(state, f.enc);
   delete state.extensions.combat;
+  // Armor wear from the hits taken (A092).
+  const hits = f.enc.state.armorHits ?? {};
+  state.hero = wearFromFight(state.hero, hits[state.hero.id] ?? { hits: 0, crits: 0 });
+  state.companions = state.companions.map((c) => wearFromFight(c, hits[c.id] ?? { hits: 0, crits: 0 }));
   // Permanent scars from the fight's dramatic moments (A091).
   const marks = f.enc.state.scarMarks ?? [];
   let scarLines: string[] = [];

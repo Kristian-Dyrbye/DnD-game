@@ -167,6 +167,8 @@ export const InventoryItemSchema = z.object({
   /** Magic item id layered on a base item (weapon_1 on a longsword). */
   magicItemId: z.string().optional(),
   attuned: z.boolean().optional(),
+  /** Armor/shield wear 0–100 (dents, scratches; cosmetic, cleared by repair). */
+  wear: z.number().int().min(0).max(100).optional(),
 });
 export type InventoryItem = z.infer<typeof InventoryItemSchema>;
 

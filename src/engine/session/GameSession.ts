@@ -54,7 +54,7 @@ export interface SessionPorts {
 export const START_LOCATION = 'Millbrook';
 
 /** Commands handled by ActionPort.command (the extension point for game systems). */
-export type ExtensionCommand = Extract<ClientCommand, { type: 'equip' | 'unequip' | 'shop_open' | 'shop_buy' | 'shop_sell' | 'shop_haggle' | 'combat_act' | 'combat_flee' | 'level_up' | 'companion_control' }>;
+export type ExtensionCommand = Extract<ClientCommand, { type: 'equip' | 'unequip' | 'shop_open' | 'shop_buy' | 'shop_sell' | 'shop_haggle' | 'combat_act' | 'combat_flee' | 'level_up' | 'companion_control' | 'repair' }>;
 
 /** Parts of the old state a new Hardcore hero inherits: the world, not the character. */
 export function continueWorld(old: GameState, fresh: GameState): GameState {
@@ -235,6 +235,7 @@ export class GameSession {
         case 'combat_flee':
         case 'level_up':
         case 'companion_control':
+        case 'repair':
           if (!this.running) return this.fail('No game is running', reqId);
           if (!this.ports.actions?.command) return this.fail('Not available', reqId);
           await this.ports.actions.command(this, cmd);
