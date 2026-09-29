@@ -1,0 +1,5219 @@
+{
+  "formatVersion": 1,
+  "id": "ch1_whispering_fen",
+  "name": "The Whispering Fen",
+  "arcId": "main",
+  "kind": "arc",
+  "levelRange": [
+    2,
+    3
+  ],
+  "regionId": "gloamfen",
+  "summary": "Chapter 1 of The Seven Teeth of Vashkul. The Whispering Sickness burns through Hollowmere; the Lantern Wardens mean to burn the village at the new moon, the Briarkin claim a cure, and the Hollow Choir wants the pyre. Two Teeth are in play: the Drowned Tooth and the Briar Tooth.",
+  "start": {
+    "chapter": "whispering_fen",
+    "scene": "ravensgate_gates"
+  },
+  "chapters": [
+    {
+      "id": "whispering_fen",
+      "name": "The Whispering Fen",
+      "summary": "Reach Hollowmere, bargain with Grandmother Wick, raid the Drowned Abbey, face Grell’s tribunal, and survive the night of bells.",
+      "start": "ravensgate_gates",
+      "scenes": [
+        {
+          "id": "ravensgate_gates",
+          "name": "The Gates of Ravensgate",
+          "locationId": "ravensgate",
+          "mood": "tense",
+          "seed": "Ravensgate's black walls crown the last dry ridge before the fen, ringed by creaking gibbets. Refugees crowd the causeway below the gate; one man holds up hands threaded with black veins. Warden-Sergeant Odo Brask works the gate with a lantern and a ledger.",
+          "variants": [
+            {
+              "if": {
+                "timeOfDay": [
+                  "dusk",
+                  "night"
+                ]
+              },
+              "seed": "The gates are shut for the night. Lanterns burn along the wall, and something shuffles among the gibbets beyond the refugee fires."
+            },
+            {
+              "if": {
+                "flag": "arc.starter.first_destination",
+                "eq": "brightwater"
+              },
+              "seed": "Brask has seen a crown writ from Brightwater before. He touches his helm to yours rather than argue with it."
+            },
+            {
+              "if": {
+                "all": [
+                  {
+                    "flag": "arc.starter.first_destination",
+                    "eq": "ravensgate"
+                  },
+                  {
+                    "flag": "arc.main.tooth_want_holder",
+                    "eq": "player"
+                  }
+                ]
+              },
+              "seed": "Brask's eyes keep drifting to your pack. Word of the relic from the Millbrook barrow has reached the Wardens, and he means to have it."
+            },
+            {
+              "if": {
+                "flag": "arc.starter.reeve_attitude",
+                "eq": "friendly"
+              },
+              "seed": "Reeve Tamsin's letter of passage is still folded in your coat, sealed with Millbrook's wheat-sheaf."
+            },
+            {
+              "if": {
+                "flag": "world.corwin_status",
+                "eq": "in_party"
+              },
+              "seed": "Ser Corwin studies the gibbets and the refugees with his jaw set hard."
+            },
+            {
+              "if": {
+                "flag": "~ch1_refugees_protected"
+              },
+              "seed": "The refugees who lived through the night whisper your name at the gate."
+            }
+          ],
+          "npcs": [
+            "odo_brask"
+          ],
+          "onEnter": {
+            "text": "Word on the road is grim: the Lantern Wardens mean to burn Hollowmere, the living with the dead, at the new moon six days from now.",
+            "discover": [
+              "hollowmere",
+              "lantern_hold"
+            ]
+          },
+          "pois": [
+            {
+              "id": "refugee",
+              "name": "The black-veined refugee",
+              "seed": "A feverish eel-fisher from Hollowmere, murmuring about a choir that sings of full bellies.",
+              "actions": [
+                {
+                  "id": "examine",
+                  "label": "Examine the refugee's sickness",
+                  "once": true,
+                  "keywords": [
+                    "examine",
+                    "sick",
+                    "veins",
+                    "refugee",
+                    "medicine"
+                  ],
+                  "check": {
+                    "skill": "medicine",
+                    "dc": 12,
+                    "success": {
+                      "text": "The black veins follow the lungs, not the heart: the Sickness is breathed in as spores. It is a disease, not a curse.",
+                      "flags": [
+                        {
+                          "set": "~ch1_sickness_known",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The fever is like no plague you know. The refugees call it a curse, and you cannot say they are wrong."
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "id": "talk_brask",
+              "label": "Answer Sergeant Brask’s questions",
+              "once": true,
+              "keywords": [
+                "brask",
+                "sergeant",
+                "talk",
+                "questions"
+              ],
+              "outcome": {
+                "text": "Brask takes your name, business and road. Lower, he admits that Captain Grell's burning order sits badly with him: 'Half of them in Hollowmere aren't even sick yet.'"
+              }
+            },
+            {
+              "id": "inspection",
+              "label": "Submit to the Warden inspection",
+              "if": {
+                "all": [
+                  {
+                    "timeOfDay": [
+                      "dawn",
+                      "day"
+                    ]
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_inside"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "inspection",
+                "enter",
+                "gate",
+                "pass"
+              ],
+              "outcome": {
+                "text": "Brask checks your eyes and palms for black veins, then stamps a Warden quarantine pass and waves you through.",
+                "flags": [
+                  {
+                    "set": "~ch1_inside",
+                    "value": true
+                  },
+                  {
+                    "set": "~ch1_pass",
+                    "value": true
+                  }
+                ],
+                "minutes": 20
+              }
+            },
+            {
+              "id": "talk_way_in",
+              "label": "Talk your way through the shut gate",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "timeOfDay": [
+                      "dusk",
+                      "night"
+                    ]
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_inside"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "persuade",
+                "talk",
+                "gate",
+                "open"
+              ],
+              "check": {
+                "skill": "persuasion",
+                "dc": 13,
+                "success": {
+                  "text": "Brask grumbles, unbars the postern, and stamps a quarantine pass for you. 'If you cough, you burn.'",
+                  "flags": [
+                    {
+                      "set": "~ch1_inside",
+                      "value": true
+                    },
+                    {
+                      "set": "~ch1_pass",
+                      "value": true
+                    }
+                  ],
+                  "minutes": 20
+                },
+                "failure": {
+                  "text": "Brask will not open the gate after dusk for words alone."
+                }
+              }
+            },
+            {
+              "id": "reeve_letter",
+              "label": "Show Reeve Tamsin's letter",
+              "if": {
+                "all": [
+                  {
+                    "timeOfDay": [
+                      "dusk",
+                      "night"
+                    ]
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_inside"
+                    }
+                  },
+                  {
+                    "flag": "arc.starter.reeve_attitude",
+                    "eq": "friendly"
+                  }
+                ]
+              },
+              "keywords": [
+                "letter",
+                "reeve",
+                "tamsin"
+              ],
+              "outcome": {
+                "text": "Brask reads the Reeve's letter by lantern-light, grunts that Tamsin is an honest man, and lets you in with a quarantine pass.",
+                "flags": [
+                  {
+                    "set": "~ch1_inside",
+                    "value": true
+                  },
+                  {
+                    "set": "~ch1_pass",
+                    "value": true
+                  }
+                ],
+                "minutes": 20
+              }
+            },
+            {
+              "id": "crown_writ",
+              "label": "Present the crown writ from Brightwater",
+              "if": {
+                "all": [
+                  {
+                    "timeOfDay": [
+                      "dusk",
+                      "night"
+                    ]
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_inside"
+                    }
+                  },
+                  {
+                    "flag": "arc.starter.first_destination",
+                    "eq": "brightwater"
+                  }
+                ]
+              },
+              "keywords": [
+                "writ",
+                "crown",
+                "brightwater"
+              ],
+              "outcome": {
+                "text": "Brask straightens at the crown seal and opens the gate himself. The quarantine pass he stamps is marked \"by writ\".",
+                "flags": [
+                  {
+                    "set": "~ch1_inside",
+                    "value": true
+                  },
+                  {
+                    "set": "~ch1_pass",
+                    "value": true
+                  }
+                ],
+                "minutes": 20
+              }
+            },
+            {
+              "id": "wait_for_dark",
+              "label": "Wait outside the walls with the refugees until dark",
+              "if": {
+                "all": [
+                  {
+                    "timeOfDay": [
+                      "dawn",
+                      "day"
+                    ]
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_inside"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_refugees_protected"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "wait",
+                "camp",
+                "refugees",
+                "dark"
+              ],
+              "outcome": {
+                "text": "You share a thin fire with the refugees as the sun goes down and the gates boom shut.",
+                "minutes": 780
+              }
+            },
+            {
+              "id": "defend_refugees",
+              "label": "Stand with the refugees against the gibbet dead",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "timeOfDay": [
+                      "night"
+                    ]
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_inside"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "defend",
+                "zombies",
+                "dead",
+                "gibbet",
+                "protect"
+              ],
+              "outcome": {
+                "text": "Two hanged men drop from the gibbets and shamble toward the refugee fires.",
+                "encounter": "gibbet_dead"
+              }
+            },
+            {
+              "id": "hand_over_tooth",
+              "label": "Hand the Tooth of Want to Sergeant Brask",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "arc.starter.first_destination",
+                    "eq": "ravensgate"
+                  },
+                  {
+                    "flag": "arc.main.tooth_want_holder",
+                    "eq": "player"
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_tooth_refused"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "tooth",
+                "hand",
+                "give",
+                "relic"
+              ],
+              "outcome": {
+                "text": "Brask locks the Tooth of Want in an iron box for Lantern Hold and writes you a receipt in Warden script. The Wardens will remember this.",
+                "flags": [
+                  {
+                    "set": "arc.main.tooth_want_holder",
+                    "value": "wardens"
+                  }
+                ],
+                "reputation": [
+                  {
+                    "faction": "lantern_wardens",
+                    "delta": 10
+                  }
+                ]
+              }
+            },
+            {
+              "id": "keep_tooth",
+              "label": "Refuse to give up the Tooth",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "arc.starter.first_destination",
+                    "eq": "ravensgate"
+                  },
+                  {
+                    "flag": "arc.main.tooth_want_holder",
+                    "eq": "player"
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_tooth_refused"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "refuse",
+                "keep",
+                "tooth"
+              ],
+              "outcome": {
+                "text": "You keep the Tooth. Brask writes your name in his ledger and underlines it twice.",
+                "flags": [
+                  {
+                    "set": "~ch1_tooth_refused",
+                    "value": true
+                  }
+                ]
+              }
+            }
+          ],
+          "exits": [
+            {
+              "id": "causeway",
+              "label": "Take the Warden causeway to Hollowmere",
+              "to": "hollowmere_stilts",
+              "if": {
+                "flag": "~ch1_pass"
+              },
+              "minutes": 600
+            },
+            {
+              "id": "slip_cordon",
+              "label": "Slip past the Warden cordon toward Hollowmere",
+              "to": "hollowmere_stilts",
+              "if": {
+                "not": {
+                  "flag": "~ch1_pass"
+                }
+              },
+              "minutes": 600,
+              "check": {
+                "skill": "stealth",
+                "dc": 12,
+                "failure": {
+                  "text": "A Warden lantern swings your way, and you back off before anyone sees your face."
+                }
+              }
+            },
+            {
+              "id": "road_hold",
+              "label": "Take the road to Lantern Hold",
+              "to": "lantern_hold_tribunal",
+              "minutes": 720
+            }
+          ]
+        },
+        {
+          "id": "hollowmere_stilts",
+          "name": "Hollowmere Stilts",
+          "locationId": "hollowmere",
+          "mood": "grim",
+          "seed": "Stilt-houses lean over black water, half of them shuttered and silent. On the landing a kind-faced woman in grey hands warm bread to the coughing sick. Farther along the walkways, a halfling in a moss-green shawl lances a fisherman’s buboes and hums while she works.",
+          "variants": [
+            {
+              "if": {
+                "flag": "arc.starter.ashby_fate",
+                "eq": "escaped"
+              },
+              "seed": "Among Mother Sallow's grey deacons walks Brother Ashby, the Millbrook sexton, a fanatic's shine in his eyes. He sees you and smiles."
+            },
+            {
+              "if": {
+                "flag": "arc.starter.ashby_fate",
+                "eq": "captured"
+              },
+              "seed": "Ashby's confession, passed on by the Reeve, named this landing: the Choir boat ties up at the third stilt-house once the bread is handed out."
+            },
+            {
+              "if": {
+                "flag": "arc.starter.shrine_rekindled"
+              },
+              "seed": "The halfling healer sniffs the air as you pass and frowns: something about you smells of Thaloren’s shrine-smoke."
+            },
+            {
+              "if": {
+                "flag": "~ch1_child_saved"
+              },
+              "seed": "A mother on the walkway presses a string of dried eels on you and will not take them back."
+            },
+            {
+              "if": {
+                "flag": "arc.main.hollowmere_fate",
+                "eq": "purged"
+              },
+              "seed": "Warden pyres smoke on the far bank, and the walkways are chalked with plague marks."
+            },
+            {
+              "if": {
+                "flag": "world.nettle_status",
+                "eq": "left"
+              },
+              "seed": "Nettle's herb-bundles still hang from the eaves, but Nettle is gone."
+            },
+            {
+              "if": {
+                "flag": "~ch1_choir_offer"
+              },
+              "seed": "A grey ribbon is tied to the landing post: the Choir's sign that its offer still stands."
+            }
+          ],
+          "pois": [
+            {
+              "id": "bread",
+              "name": "Sallow's bread basket",
+              "seed": "Warm loaves handed out free, a little grey at the heart.",
+              "if": {
+                "flag": "arc.main.sallow_fate",
+                "eq": "unknown"
+              },
+              "actions": [
+                {
+                  "id": "examine",
+                  "label": "Examine the bread",
+                  "once": true,
+                  "keywords": [
+                    "bread",
+                    "loaf",
+                    "examine",
+                    "spores"
+                  ],
+                  "check": {
+                    "skill": "medicine",
+                    "dc": 14,
+                    "success": {
+                      "text": "Grey threads run through the crumb: spores, the same that vein the sick men's lungs. Sallow's bread is spreading the Sickness.",
+                      "flags": [
+                        {
+                          "set": "~ch1_bread_spores",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Coarse fen bread, a little stale. Nothing you can name."
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "id": "read_sallow",
+              "label": "Watch Mother Sallow at her work",
+              "once": true,
+              "if": {
+                "flag": "arc.main.sallow_fate",
+                "eq": "unknown"
+              },
+              "keywords": [
+                "sallow",
+                "watch",
+                "insight",
+                "preacher"
+              ],
+              "check": {
+                "skill": "insight",
+                "dc": 13,
+                "success": {
+                  "text": "Her kindness is a hook. She notes which of the sick take bread twice, and her deacons chalk their doors.",
+                  "flags": [
+                    {
+                      "set": "~ch1_sallow_suspected",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "She seems a saint in a hard place."
+                }
+              }
+            },
+            {
+              "id": "hide_pass",
+              "label": "Hide your Warden pass before the Briarkin healer sees it",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "world.nettle_status",
+                    "eq": "unmet"
+                  },
+                  {
+                    "all": [
+                      {
+                        "flag": "~ch1_pass"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch1_pass_hidden"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "keywords": [
+                "hide",
+                "pass",
+                "deceive",
+                "healer",
+                "nettle"
+              ],
+              "check": {
+                "skill": "deception",
+                "dc": 13,
+                "success": {
+                  "text": "The Warden pass disappears into your boot before the healer looks up.",
+                  "flags": [
+                    {
+                      "set": "~ch1_pass_hidden",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "The healer sees the Warden stamp and spits. 'Nettle's the name, and I don't walk with pyre-men.' She will not join you.",
+                  "flags": [
+                    {
+                      "set": "~ch1_nettle_refused",
+                      "value": true
+                    },
+                    {
+                      "set": "world.nettle_status",
+                      "value": "met"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "recruit_nettle",
+              "label": "Ask the Briarkin healer to join you",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "world.nettle_status",
+                    "eq": "unmet"
+                  },
+                  {
+                    "not": {
+                      "all": [
+                        {
+                          "flag": "~ch1_pass"
+                        },
+                        {
+                          "not": {
+                            "flag": "~ch1_pass_hidden"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.starter.shrine_rekindled"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "nettle",
+                "healer",
+                "join",
+                "recruit",
+                "persuade"
+              ],
+              "check": {
+                "skill": "persuasion",
+                "dc": 12,
+                "success": {
+                  "text": "'Nettle,' she says, wiping the lance on her shawl. 'If you're going where the Choir goes, I'm coming. Someone has to keep you breathing.'",
+                  "flags": [
+                    {
+                      "set": "world.nettle_status",
+                      "value": "in_party"
+                    },
+                    {
+                      "set": "world.nettle_loyalty",
+                      "value": 50
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "'Nettle,' she says, not looking up. 'Prove you're worth the walk and ask me again.'",
+                  "flags": [
+                    {
+                      "set": "world.nettle_status",
+                      "value": "met"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "recruit_nettle_shrine",
+              "label": "Greet the healer who smells Thaloren’s smoke on you",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "world.nettle_status",
+                    "eq": "unmet"
+                  },
+                  {
+                    "not": {
+                      "all": [
+                        {
+                          "flag": "~ch1_pass"
+                        },
+                        {
+                          "not": {
+                            "flag": "~ch1_pass_hidden"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "flag": "arc.starter.shrine_rekindled"
+                  }
+                ]
+              },
+              "keywords": [
+                "nettle",
+                "healer",
+                "join",
+                "recruit",
+                "shrine",
+                "thaloren"
+              ],
+              "outcome": {
+                "text": "'You relit the Green Father's shrine,' Nettle says, grinning. 'Roots and rot, that's good enough for me.' She shoulders her satchel and falls in beside you.",
+                "flags": [
+                  {
+                    "set": "world.nettle_status",
+                    "value": "in_party"
+                  },
+                  {
+                    "set": "world.nettle_loyalty",
+                    "value": 55
+                  }
+                ]
+              }
+            },
+            {
+              "id": "nettle_after_child",
+              "label": "Ask Nettle again, now that the child is safe",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "world.nettle_status",
+                    "eq": "met"
+                  },
+                  {
+                    "flag": "~ch1_child_saved"
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_nettle_refused"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "nettle",
+                "join",
+                "again"
+              ],
+              "outcome": {
+                "text": "'All right,' Nettle says. 'You bled for a fen-brat. That buys you a witch.'",
+                "flags": [
+                  {
+                    "set": "world.nettle_status",
+                    "value": "in_party"
+                  },
+                  {
+                    "set": "world.nettle_loyalty",
+                    "value": 50
+                  }
+                ]
+              }
+            },
+            {
+              "id": "stop_deacons",
+              "label": "Step in as the deacons drag a sick child to the Choir boat",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch1_child_saved"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_child_lost"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.starter.ashby_fate",
+                      "eq": "escaped"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.starter.ashby_fate",
+                      "eq": "captured"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "child",
+                "deacons",
+                "stop",
+                "boat",
+                "fight"
+              ],
+              "outcome": {
+                "text": "Three grey deacons haul a feverish child toward the boat. When you step in, something huge and warty heaves out of the water: the Choir's pet toad.",
+                "encounter": "stilts_deacons"
+              }
+            },
+            {
+              "id": "stop_deacons_ashby",
+              "label": "Step in as Ashby and the deacons drag a sick child to the boat",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch1_child_saved"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_child_lost"
+                    }
+                  },
+                  {
+                    "flag": "arc.starter.ashby_fate",
+                    "eq": "escaped"
+                  }
+                ]
+              },
+              "keywords": [
+                "child",
+                "deacons",
+                "ashby",
+                "stop",
+                "fight"
+              ],
+              "outcome": {
+                "text": "'The Millbrook hero,' Ashby laughs, 'come to feed the Choir after all.' He and two deacons turn on you as the Choir's toad heaves out of the water.",
+                "encounter": "stilts_deacons_ashby"
+              }
+            },
+            {
+              "id": "ambush_boat",
+              "label": "Wait at the landing Ashby's confession named",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch1_child_saved"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_child_lost"
+                    }
+                  },
+                  {
+                    "flag": "arc.starter.ashby_fate",
+                    "eq": "captured"
+                  }
+                ]
+              },
+              "keywords": [
+                "ambush",
+                "landing",
+                "boat",
+                "wait",
+                "child"
+              ],
+              "outcome": {
+                "text": "Forewarned, you are waiting when the deacons bring the child. One goes into the water before the others know you are there.",
+                "encounter": "stilts_deacons_ambush"
+              }
+            },
+            {
+              "id": "let_child_go",
+              "label": "Stay out of the Choir’s business",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch1_child_saved"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_child_lost"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "ignore",
+                "leave",
+                "stay out"
+              ],
+              "outcome": {
+                "text": "The Choir boat slides off into the mist with the child aboard. The healer on the walkway watches you and says nothing.",
+                "flags": [
+                  {
+                    "set": "~ch1_child_lost",
+                    "value": true
+                  },
+                  {
+                    "inc": "world.nettle_loyalty",
+                    "by": -5
+                  }
+                ]
+              }
+            },
+            {
+              "id": "nettle_brews",
+              "label": "Have Nettle brew the cure from the bell-ash",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "world.nettle_status",
+                    "eq": "in_party"
+                  },
+                  {
+                    "flag": "~ch1_bell_ash"
+                  },
+                  {
+                    "flag": "arc.main.wick_fate",
+                    "eq": "wronged"
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.main.cure_recipe"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "nettle",
+                "brew",
+                "cure",
+                "ash"
+              ],
+              "outcome": {
+                "text": "Nettle grinds the bell-ash with fen-root and her own spit. 'Gran's not the only one who knows it,' she mutters. 'I just never wanted to be.' The cure is real.",
+                "flags": [
+                  {
+                    "set": "arc.main.cure_recipe",
+                    "value": true
+                  }
+                ]
+              }
+            },
+            {
+              "id": "accept_offer",
+              "label": "Accept the Choir’s offer: the Teeth for Hollowmere",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_choir_offer"
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_offer_refused"
+                    }
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "unresolved"
+                  }
+                ]
+              },
+              "keywords": [
+                "accept",
+                "offer",
+                "choir",
+                "teeth"
+              ],
+              "outcome": {
+                "text": "You tie your Teeth to the grey ribbon on the landing post. By morning they are gone, and so are the sick: Sallow's boats took them all, singing, 'to where no one hungers.'",
+                "flags": [
+                  {
+                    "set": "~ch1_offer_accepted",
+                    "value": true
+                  },
+                  {
+                    "set": "~ch1_tribunal_done",
+                    "value": true
+                  },
+                  {
+                    "set": "arc.main.hollowmere_fate",
+                    "value": "abandoned"
+                  },
+                  {
+                    "inc": "world.nettle_loyalty",
+                    "by": -30
+                  }
+                ]
+              }
+            },
+            {
+              "id": "refuse_offer",
+              "label": "Cut down the Choir’s ribbon",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_choir_offer"
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_offer_accepted"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "refuse",
+                "ribbon",
+                "offer"
+              ],
+              "outcome": {
+                "text": "You cut the grey ribbon and drop it in the black water.",
+                "flags": [
+                  {
+                    "set": "~ch1_offer_refused",
+                    "value": true
+                  }
+                ]
+              }
+            }
+          ],
+          "exits": [
+            {
+              "id": "to_ravensgate",
+              "label": "Return to Ravensgate",
+              "to": "ravensgate_gates",
+              "minutes": 600
+            },
+            {
+              "id": "nettle_path",
+              "label": "Follow Nettle’s hidden path into the briars",
+              "to": "thornwife_moot",
+              "if": {
+                "all": [
+                  {
+                    "flag": "world.nettle_status",
+                    "eq": "in_party"
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_raid_done"
+                    }
+                  }
+                ]
+              },
+              "minutes": 540
+            },
+            {
+              "id": "briarkin_leave",
+              "label": "Walk the briar path with the Briarkin’s leave",
+              "to": "thornwife_moot",
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "world.nettle_status",
+                      "eq": "in_party"
+                    }
+                  },
+                  {
+                    "reputation": {
+                      "faction": "briarkin",
+                      "gte": 20
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_raid_done"
+                    }
+                  }
+                ]
+              },
+              "minutes": 540
+            },
+            {
+              "id": "briars",
+              "label": "Find your own way through the briars to Thornwife Hollow",
+              "to": "thornwife_moot",
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "world.nettle_status",
+                      "eq": "in_party"
+                    }
+                  },
+                  {
+                    "reputation": {
+                      "faction": "briarkin",
+                      "lte": 19
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_raid_done"
+                    }
+                  }
+                ]
+              },
+              "minutes": 540,
+              "check": {
+                "skill": "survival",
+                "dc": 13,
+                "failure": {
+                  "text": "The briars shift behind you. A pale light bobs ahead, kindly, and leads you to the lip of a sucking sinkhole.",
+                  "minutes": 120,
+                  "encounter": "briar_wisp"
+                }
+              }
+            },
+            {
+              "id": "to_abbey",
+              "label": "Hire an eel-boat to the Drowned Abbey",
+              "to": "drowned_abbey_undercroft",
+              "minutes": 600
+            },
+            {
+              "id": "to_hold",
+              "label": "Take the fen trail to Lantern Hold",
+              "to": "lantern_hold_tribunal",
+              "minutes": 540
+            },
+            {
+              "id": "new_moon",
+              "label": "Wait in Hollowmere for the new moon",
+              "to": "night_of_bells",
+              "if": {
+                "any": [
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "purged"
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "abandoned"
+                  },
+                  {
+                    "all": [
+                      {
+                        "flag": "~ch1_cure_path"
+                      },
+                      {
+                        "flag": "arc.main.cure_recipe"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "minutes": 60
+            }
+          ]
+        },
+        {
+          "id": "thornwife_moot",
+          "name": "Grandmother Wick's Moot",
+          "locationId": "thornwife_hollow",
+          "mood": "eerie",
+          "seed": "The briars part onto a moot-circle of bone-pale stones and a crooked cottage whose shelves are crowded with sealed jars. Grandmother Wick sits on the step, shelling beans, and has clearly been expecting you.",
+          "variants": [
+            {
+              "if": {
+                "flag": "world.nettle_status",
+                "eq": "in_party"
+              },
+              "seed": "Nettle goes quiet and stands up straighter. 'Gran,' she says. Wick's eyes flick to one jar on the shelf and back."
+            },
+            {
+              "if": {
+                "flag": "arc.starter.shrine_rekindled"
+              },
+              "seed": "Wick sniffs. 'Thaloren's smoke. Somebody relit an old shrine.' Her smile is almost warm."
+            },
+            {
+              "if": {
+                "flag": "arc.main.tooth_wick_holder",
+                "eq": "unclaimed"
+              },
+              "seed": "Among the jars sits a long yellow tooth, wrapped in bramble: the Briar Tooth."
+            },
+            {
+              "if": {
+                "flag": "arc.main.wick_fate",
+                "eq": "wronged"
+              },
+              "seed": "The cottage door is shut to you, and the briars have turned their thorns outward."
+            },
+            {
+              "if": {
+                "flag": "~ch1_raid_done"
+              },
+              "seed": "Warden boots have trampled the moot-circle. The jars lie smashed and the cottage is ash."
+            }
+          ],
+          "npcs": [],
+          "onEnter": {
+            "discover": [
+              "thornwife_hollow"
+            ]
+          },
+          "actions": [
+            {
+              "id": "talk_wick",
+              "label": "Hear Grandmother Wick’s bargain",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "arc.main.wick_fate",
+                      "eq": "wronged"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_raid_done"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "wick",
+                "grandmother",
+                "bargain",
+                "cure",
+                "talk"
+              ],
+              "outcome": {
+                "text": "Wick will cure the Sickness if you bring her 'the ash of the dead-bells': the urns in the Drowned Abbey's bell-loft. As for the Tooth on her shelf, she keeps it 'so no one can use it', and she might part with it for a memory you'd miss, or an oath to protect Hollowmere.",
+                "flags": [
+                  {
+                    "set": "~ch1_wick_bargain",
+                    "value": true
+                  }
+                ],
+                "discover": [
+                  "drowned_abbey"
+                ]
+              }
+            },
+            {
+              "id": "ask_tooth",
+              "label": "Ask Wick for the Briar Tooth",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "all": [
+                      {
+                        "flag": "arc.main.tooth_wick_holder",
+                        "eq": "unclaimed"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.main.wick_fate",
+                          "eq": "wronged"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.main.wick_fate",
+                          "eq": "burned"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "not": {
+                      "all": [
+                        {
+                          "flag": "world.nettle_status",
+                          "eq": "in_party"
+                        },
+                        {
+                          "flag": "world.nettle_loyalty",
+                          "gte": 60
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "tooth",
+                "ask",
+                "persuade",
+                "briar"
+              ],
+              "check": {
+                "skill": "persuasion",
+                "dc": 15,
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "arc.starter.shrine_rekindled"
+                    },
+                    "source": "Thaloren’s shrine rekindled"
+                  }
+                ],
+                "success": {
+                  "text": "Wick laughs until she coughs, then drops the Briar Tooth into your palm. 'Mind it bites back.'",
+                  "flags": [
+                    {
+                      "set": "arc.main.tooth_wick_holder",
+                      "value": "player"
+                    },
+                    {
+                      "set": "arc.main.wick_fate",
+                      "value": "ally"
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "'Not for asking, dearie,' Wick says. 'Everything here costs.'"
+                }
+              }
+            },
+            {
+              "id": "ask_tooth_nettle",
+              "label": "Let Nettle ask her grandmother for the Tooth",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "all": [
+                      {
+                        "flag": "arc.main.tooth_wick_holder",
+                        "eq": "unclaimed"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.main.wick_fate",
+                          "eq": "wronged"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.main.wick_fate",
+                          "eq": "burned"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "flag": "world.nettle_status",
+                    "eq": "in_party"
+                  },
+                  {
+                    "flag": "world.nettle_loyalty",
+                    "gte": 60
+                  }
+                ]
+              },
+              "keywords": [
+                "tooth",
+                "ask",
+                "nettle",
+                "persuade"
+              ],
+              "check": {
+                "skill": "persuasion",
+                "dc": 12,
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "arc.starter.shrine_rekindled"
+                    },
+                    "source": "Thaloren’s shrine rekindled"
+                  }
+                ],
+                "success": {
+                  "text": "Wick looks from Nettle to you for a long time. 'She trusts you. Heaven help her.' The Briar Tooth is yours.",
+                  "flags": [
+                    {
+                      "set": "arc.main.tooth_wick_holder",
+                      "value": "player"
+                    },
+                    {
+                      "set": "arc.main.wick_fate",
+                      "value": "ally"
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "'Not yet, child,' Wick tells Nettle, gently. 'Not for this one.'"
+                }
+              }
+            },
+            {
+              "id": "trade_memory",
+              "label": "Trade Wick a memory you would miss",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "arc.main.tooth_wick_holder",
+                    "eq": "unclaimed"
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.main.wick_fate",
+                      "eq": "wronged"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.main.wick_fate",
+                      "eq": "burned"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "memory",
+                "trade",
+                "bargain"
+              ],
+              "outcome": {
+                "text": "Wick draws a thorn behind your ear and something warm goes out of you: a face, a song, a summer. It leaves a thorn-shaped white mark behind the ear. The Briar Tooth is yours.",
+                "flags": [
+                  {
+                    "set": "arc.main.tooth_wick_holder",
+                    "value": "player"
+                  },
+                  {
+                    "set": "arc.main.wick_fate",
+                    "value": "ally"
+                  },
+                  {
+                    "set": "~ch1_memory_traded",
+                    "value": true
+                  }
+                ]
+              }
+            },
+            {
+              "id": "trade_oath",
+              "label": "Swear an oath to protect Hollowmere for the Tooth",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "arc.main.tooth_wick_holder",
+                    "eq": "unclaimed"
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.main.wick_fate",
+                      "eq": "wronged"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.main.wick_fate",
+                      "eq": "burned"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "oath",
+                "swear",
+                "protect",
+                "bargain"
+              ],
+              "outcome": {
+                "text": "You swear on the moot-stones to protect Hollowmere. Wick ties a bramble around your wrist. 'The Briarkin will call that favour in,' she says, and gives you the Briar Tooth.",
+                "flags": [
+                  {
+                    "set": "arc.main.tooth_wick_holder",
+                    "value": "player"
+                  },
+                  {
+                    "set": "arc.main.wick_fate",
+                    "value": "ally"
+                  },
+                  {
+                    "set": "world.briarkin_favor_owed",
+                    "value": true
+                  }
+                ]
+              }
+            },
+            {
+              "id": "leave_with_wick",
+              "label": "Ask Wick to keep the Briar Tooth safe as your ally",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "arc.main.tooth_wick_holder",
+                    "eq": "unclaimed"
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.main.wick_fate",
+                      "eq": "wronged"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.main.wick_fate",
+                      "eq": "burned"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "keep",
+                "safe",
+                "ally",
+                "leave"
+              ],
+              "outcome": {
+                "text": "'Sensible,' Wick says, and the Tooth stays among her jars. 'When you go for the Maw, I'll bring it.'",
+                "flags": [
+                  {
+                    "set": "arc.main.tooth_wick_holder",
+                    "value": "briarkin"
+                  },
+                  {
+                    "set": "arc.main.wick_fate",
+                    "value": "ally"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "steal_tooth",
+              "label": "Steal the Briar Tooth from the shelf",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "arc.main.tooth_wick_holder",
+                    "eq": "unclaimed"
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.main.wick_fate",
+                      "eq": "wronged"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.main.wick_fate",
+                      "eq": "burned"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "steal",
+                "pocket",
+                "sleight",
+                "tooth"
+              ],
+              "check": {
+                "skill": "sleight_of_hand",
+                "dc": 17,
+                "success": {
+                  "text": "The Briar Tooth slides into your sleeve. You are three steps down the path before the jars start to rattle. Wick will not forgive this.",
+                  "flags": [
+                    {
+                      "set": "arc.main.tooth_wick_holder",
+                      "value": "player"
+                    },
+                    {
+                      "set": "arc.main.wick_fate",
+                      "value": "wronged"
+                    },
+                    {
+                      "set": "~ch1_wick_stolen",
+                      "value": true
+                    }
+                  ],
+                  "reputation": [
+                    {
+                      "faction": "briarkin",
+                      "delta": -20
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "Wick's hand closes on your wrist, dry as a root. The briars throw you out onto the Hollowmere trail.",
+                  "flags": [
+                    {
+                      "set": "arc.main.wick_fate",
+                      "value": "wronged"
+                    },
+                    {
+                      "set": "~ch1_wick_stolen",
+                      "value": true
+                    }
+                  ],
+                  "reputation": [
+                    {
+                      "faction": "briarkin",
+                      "delta": -10
+                    }
+                  ],
+                  "minutes": 540,
+                  "goto": "hollowmere_stilts"
+                }
+              }
+            },
+            {
+              "id": "deliver_ash",
+              "label": "Give Wick the ash of the dead-bells",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_bell_ash"
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.main.wick_fate",
+                      "eq": "wronged"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.main.cure_recipe"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_raid_done"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "ash",
+                "bell",
+                "give",
+                "cure",
+                "recipe"
+              ],
+              "outcome": {
+                "text": "Wick sifts the bell-ash through her fingers, hums, and writes the cure on a strip of birch-bark in a hand like thorns. She adds two stoppered draughts 'for the road'.",
+                "flags": [
+                  {
+                    "set": "arc.main.cure_recipe",
+                    "value": true
+                  }
+                ],
+                "items": [
+                  {
+                    "itemId": "potion_of_healing",
+                    "quantity": 2
+                  }
+                ],
+                "reputation": [
+                  {
+                    "faction": "briarkin",
+                    "delta": 5
+                  }
+                ]
+              }
+            }
+          ],
+          "exits": [
+            {
+              "id": "to_hollowmere",
+              "label": "Return to Hollowmere",
+              "to": "hollowmere_stilts",
+              "minutes": 540
+            }
+          ]
+        },
+        {
+          "id": "drowned_abbey_undercroft",
+          "name": "The Drowned Undercroft",
+          "locationId": "drowned_abbey",
+          "mood": "dungeon",
+          "seed": "The Drowned Abbey lists into the fen. Upstairs, old Abbot Cendric burns the dead the boats bring him; below, the undercroft is flooded to the capitals, and somewhere under the black water the bells wait for midnight. Wet footprints and a rope ladder say Sallow's divers are already down there.",
+          "variants": [
+            {
+              "if": {
+                "flag": "world.nettle_status",
+                "eq": "in_party"
+              },
+              "seed": "Nettle murmurs the Abbey's old burial rite under her breath. She knows every verse."
+            },
+            {
+              "if": {
+                "hours": {
+                  "from": 23,
+                  "to": 1
+                }
+              },
+              "seed": "It is nearly midnight. Under the water, the drowned bells begin to stir."
+            },
+            {
+              "if": {
+                "flag": "~ch1_bell_rung"
+              },
+              "seed": "The upper bell still hums. Below, the drowned dead move as if half asleep."
+            },
+            {
+              "if": {
+                "flag": "arc.main.abbot_cendric_alive",
+                "eq": false
+              },
+              "seed": "The upper floor is dark. The Abbot's pyre has gone out."
+            },
+            {
+              "if": {
+                "flag": "~ch1_child_lost"
+              },
+              "seed": "A Choir boat is moored at the water-gate, empty; small wet footprints lead down toward the reliquary."
+            }
+          ],
+          "npcs": [],
+          "actions": [
+            {
+              "id": "talk_abbot",
+              "label": "Speak with Abbot Cendric",
+              "once": true,
+              "if": {
+                "flag": "arc.main.abbot_cendric_alive"
+              },
+              "keywords": [
+                "abbot",
+                "cendric",
+                "priest",
+                "talk"
+              ],
+              "outcome": {
+                "text": "Cendric begs you to lay the drowned dead to rest. The bell-ash the witches want, he says, sits in the urns of the bell-loft, beyond the flooded nave, and the Choir divers went down an hour ago."
+              }
+            },
+            {
+              "id": "ring_bell",
+              "label": "Ring the upper bell with the old rite",
+              "once": true,
+              "if": {
+                "not": {
+                  "flag": "~ch1_nave_cleared"
+                }
+              },
+              "keywords": [
+                "bell",
+                "ring",
+                "rite",
+                "religion"
+              ],
+              "check": {
+                "skill": "religion",
+                "dc": 13,
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "world.nettle_status",
+                      "eq": "in_party"
+                    },
+                    "source": "Nettle knows the Abbey’s burial rites"
+                  }
+                ],
+                "success": {
+                  "text": "The upper bell rings true, and Mireth's old rite goes down through the water. The drowned dead below falter.",
+                  "flags": [
+                    {
+                      "set": "~ch1_bell_rung",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "The bell clangs flat. Below, something turns toward the sound."
+                }
+              }
+            },
+            {
+              "id": "swim",
+              "label": "Swim the flooded nave",
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch1_nave_crossed"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_nave_failed"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "swim",
+                "nave",
+                "water",
+                "dive",
+                "athletics"
+              ],
+              "check": {
+                "skill": "athletics",
+                "dc": 12,
+                "success": {
+                  "text": "You kick through the black water between drowned pillars and surface in the nave.",
+                  "flags": [
+                    {
+                      "set": "~ch1_nave_crossed",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "The cold water fights you back to the stairs. You are exhausted, and it will take a long rest to shake it.",
+                  "flags": [
+                    {
+                      "set": "~ch1_nave_failed",
+                      "value": true
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "swim_again",
+              "label": "Try the flooded nave again",
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch1_nave_crossed"
+                    }
+                  },
+                  {
+                    "flag": "~ch1_nave_failed"
+                  }
+                ]
+              },
+              "keywords": [
+                "swim",
+                "again",
+                "nave",
+                "athletics"
+              ],
+              "check": {
+                "skill": "athletics",
+                "dc": 12,
+                "success": {
+                  "text": "This time you make it through the black water and surface in the nave.",
+                  "flags": [
+                    {
+                      "set": "~ch1_nave_crossed",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "You swallow bell-cold water and come up choking. It leaves a chill in your throat that never quite goes: the drowned-bell chill. You are more exhausted still."
+                }
+              }
+            },
+            {
+              "id": "fight_nave",
+              "label": "Fight through the drowned dead",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "all": [
+                      {
+                        "flag": "~ch1_nave_crossed"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch1_nave_cleared"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_bell_rung"
+                    }
+                  },
+                  {
+                    "not": {
+                      "hours": {
+                        "from": 23,
+                        "to": 1
+                      }
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "fight",
+                "dead",
+                "zombies",
+                "nave"
+              ],
+              "outcome": {
+                "text": "Bloated dead rise from the pews, and something leaner and hungrier drops from the rafters.",
+                "encounter": "abbey_nave"
+              }
+            },
+            {
+              "id": "fight_nave_midnight",
+              "label": "Fight through the drowned dead as the bells toll midnight",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "all": [
+                      {
+                        "flag": "~ch1_nave_crossed"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch1_nave_cleared"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_bell_rung"
+                    }
+                  },
+                  {
+                    "hours": {
+                      "from": 23,
+                      "to": 1
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "fight",
+                "dead",
+                "midnight",
+                "nave"
+              ],
+              "outcome": {
+                "text": "The drowned bells toll midnight. The dead rise, and a cold shape pours up out of the bell-shaft with them.",
+                "encounter": "abbey_nave_midnight"
+              }
+            },
+            {
+              "id": "fight_nave_rung",
+              "label": "Fight through the faltering dead",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "all": [
+                      {
+                        "flag": "~ch1_nave_crossed"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch1_nave_cleared"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "flag": "~ch1_bell_rung"
+                  }
+                ]
+              },
+              "keywords": [
+                "fight",
+                "dead",
+                "zombies",
+                "nave"
+              ],
+              "outcome": {
+                "text": "The drowned dead rise slow and stupid, still hearing the rite.",
+                "encounter": "abbey_nave_rung"
+              }
+            },
+            {
+              "id": "save_abbot",
+              "label": "Save Abbot Cendric from the drowned dead",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_nave_cleared"
+                  },
+                  {
+                    "flag": "arc.main.tooth_abbey_holder",
+                    "eq": "unclaimed"
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_abbey_choice"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "abbot",
+                "save",
+                "cendric",
+                "help"
+              ],
+              "outcome": {
+                "text": "Cendric has come down after you and the last of the dead have him by the robes. You haul him free. Below, the divers’ lantern moves off toward the reliquary stairs.",
+                "flags": [
+                  {
+                    "set": "~ch1_abbey_choice",
+                    "value": true
+                  },
+                  {
+                    "set": "arc.main.abbot_cendric_alive",
+                    "value": true
+                  }
+                ]
+              }
+            },
+            {
+              "id": "chase_divers",
+              "label": "Leave the Abbot and chase the divers",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_nave_cleared"
+                  },
+                  {
+                    "flag": "arc.main.tooth_abbey_holder",
+                    "eq": "unclaimed"
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_abbey_choice"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "chase",
+                "divers",
+                "reliquary",
+                "tooth"
+              ],
+              "outcome": {
+                "text": "You leave the Abbot to the drowned dead and plunge after the divers. His cries stop behind you.",
+                "flags": [
+                  {
+                    "set": "~ch1_abbey_choice",
+                    "value": true
+                  },
+                  {
+                    "set": "arc.main.abbot_cendric_alive",
+                    "value": false
+                  }
+                ],
+                "encounter": "abbey_divers"
+              }
+            },
+            {
+              "id": "spot_boat",
+              "label": "Look for the divers' boat",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_abbey_choice"
+                  },
+                  {
+                    "flag": "arc.main.abbot_cendric_alive"
+                  },
+                  {
+                    "flag": "arc.main.tooth_abbey_holder",
+                    "eq": "unclaimed"
+                  }
+                ]
+              },
+              "keywords": [
+                "boat",
+                "divers",
+                "look",
+                "perception"
+              ],
+              "check": {
+                "skill": "perception",
+                "dc": 14,
+                "success": {
+                  "text": "A hooded lantern at the water-gate: the divers are loading their boat. You reach it first.",
+                  "encounter": "abbey_divers"
+                },
+                "failure": {
+                  "text": "By the time you find the water-gate, the divers' boat is a lantern-spark in the mist. The Drowned Tooth is gone to the Choir.",
+                  "flags": [
+                    {
+                      "set": "arc.main.tooth_abbey_holder",
+                      "value": "choir"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "collect_ash",
+              "label": "Gather the ash of the dead-bells from the bell-loft urns",
+              "once": true,
+              "if": {
+                "flag": "~ch1_nave_cleared"
+              },
+              "keywords": [
+                "ash",
+                "urn",
+                "bell",
+                "gather"
+              ],
+              "outcome": {
+                "text": "The bell-loft urns hold fine grey ash that rings faintly when you tip it into a pouch.",
+                "flags": [
+                  {
+                    "set": "~ch1_bell_ash",
+                    "value": true
+                  }
+                ]
+              }
+            },
+            {
+              "id": "take_offerings",
+              "label": "Take all the drowned offerings",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_nave_cleared"
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_offerings"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "offerings",
+                "coins",
+                "take",
+                "loot"
+              ],
+              "outcome": {
+                "text": "You scoop sixty gold pieces of drowned offerings from the flooded alms-box. Mireth's priests will not thank you.",
+                "coins": 6000,
+                "flags": [
+                  {
+                    "set": "~ch1_offerings",
+                    "value": true
+                  }
+                ]
+              }
+            },
+            {
+              "id": "tithe_offerings",
+              "label": "Take half the offerings and return half to the Abbey",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_nave_cleared"
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_offerings"
+                    }
+                  },
+                  {
+                    "flag": "arc.main.abbot_cendric_alive"
+                  }
+                ]
+              },
+              "keywords": [
+                "offerings",
+                "half",
+                "return",
+                "tithe"
+              ],
+              "outcome": {
+                "text": "You keep thirty gold and leave thirty on the altar. Abbot Cendric blesses you in the Drowned Lady’s name.",
+                "coins": 3000,
+                "flags": [
+                  {
+                    "set": "~ch1_offerings",
+                    "value": true
+                  }
+                ],
+                "reputation": [
+                  {
+                    "faction": "lantern_wardens",
+                    "delta": 3
+                  }
+                ]
+              }
+            },
+            {
+              "id": "climb_out",
+              "label": "Climb out of the undercroft",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_nave_cleared"
+                  },
+                  {
+                    "flag": "~ch1_bell_ash"
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.main.tooth_abbey_holder",
+                      "eq": "unclaimed"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "leave",
+                "climb",
+                "out",
+                "done"
+              ],
+              "outcome": {
+                "text": "You climb out of the Drowned Abbey soaked, bruised and harder than you went in. (Milestone: level 3.)",
+                "flags": [
+                  {
+                    "set": "~ch1_abbey_done",
+                    "value": true
+                  }
+                ],
+                "items": [
+                  {
+                    "itemId": "potion_of_healing",
+                    "quantity": 1
+                  }
+                ],
+                "xp": 600
+              }
+            }
+          ],
+          "exits": [
+            {
+              "id": "to_hollowmere",
+              "label": "Take a boat back to Hollowmere",
+              "to": "hollowmere_stilts",
+              "minutes": 600
+            }
+          ]
+        },
+        {
+          "id": "lantern_hold_tribunal",
+          "name": "Grell's Tribunal",
+          "locationId": "lantern_hold",
+          "mood": "stern",
+          "seed": "Lantern Hold's hundred lanterns burn even at noon, and the pyre-smoke never leaves the yard. In the great hall Warden-Captain Maud Grell sits in judgment beneath the crossed pikes, the burning order for Hollowmere already signed.",
+          "variants": [
+            {
+              "if": {
+                "flag": "arc.main.tooth_want_holder",
+                "eq": "wardens"
+              },
+              "seed": "The Tooth of Want sits in an iron box at Grell’s elbow. She nods to you as to a comrade."
+            },
+            {
+              "if": {
+                "flag": "arc.main.cure_recipe"
+              },
+              "seed": "Wick's cure is written on birch-bark in your pack. It might be enough to stay the pyre."
+            },
+            {
+              "if": {
+                "flag": "world.nettle_status",
+                "eq": "in_party"
+              },
+              "seed": "The Wardens eye Nettle's Briarkin shawl, and hands drift to sword hilts."
+            },
+            {
+              "if": {
+                "all": [
+                  {
+                    "flag": "world.nettle_status",
+                    "eq": "in_party"
+                  },
+                  {
+                    "flag": "world.nettle_loyalty",
+                    "lte": 39
+                  }
+                ]
+              },
+              "seed": "Nettle glares at every Warden in the hall and does not care who sees it."
+            },
+            {
+              "if": {
+                "flag": "world.corwin_status",
+                "eq": "in_party"
+              },
+              "seed": "Ser Corwin stands very straight. Burning the living is not a thing he will stomach quietly."
+            },
+            {
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_cure_path"
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.main.cure_recipe"
+                    }
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "unresolved"
+                  }
+                ]
+              },
+              "seed": "Grell's three days are running. Without Wick's cure, the pyres will be lit anyway."
+            },
+            {
+              "if": {
+                "flag": "arc.main.hollowmere_fate",
+                "eq": "purged"
+              },
+              "seed": "The purge column has marched for Hollowmere. Only the lanterns remain."
+            },
+            {
+              "if": {
+                "flag": "arc.main.hollowmere_fate",
+                "eq": "abandoned"
+              },
+              "seed": "Grell does not look at you now."
+            }
+          ],
+          "npcs": [
+            "maud_grell",
+            "odo_brask"
+          ],
+          "actions": [
+            {
+              "id": "argue_cure",
+              "label": "Argue for the cure instead of the pyre",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch1_tribunal_done"
+                    }
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "unresolved"
+                  }
+                ]
+              },
+              "keywords": [
+                "cure",
+                "argue",
+                "persuade",
+                "stop",
+                "purge"
+              ],
+              "check": {
+                "skill": "persuasion",
+                "dc": 15,
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "arc.main.cure_recipe"
+                    },
+                    "source": "Wick's cure recipe"
+                  },
+                  {
+                    "if": {
+                      "flag": "arc.main.tooth_want_holder",
+                      "eq": "wardens"
+                    },
+                    "source": "Grell trusts you: the Tooth of Want is in Warden keeping"
+                  }
+                ],
+                "disadvantageIf": [
+                  {
+                    "if": {
+                      "all": [
+                        {
+                          "flag": "world.nettle_status",
+                          "eq": "in_party"
+                        },
+                        {
+                          "flag": "world.nettle_loyalty",
+                          "lte": 39
+                        }
+                      ]
+                    },
+                    "source": "Nettle's open hostility"
+                  }
+                ],
+                "success": {
+                  "text": "Grell is silent a long time. 'Three days,' she says. 'Cure them in three days, or I burn them myself.'",
+                  "flags": [
+                    {
+                      "set": "~ch1_cure_path",
+                      "value": true
+                    },
+                    {
+                      "set": "~ch1_tribunal_done",
+                      "value": true
+                    }
+                  ],
+                  "reputation": [
+                    {
+                      "faction": "briarkin",
+                      "delta": 15
+                    },
+                    {
+                      "faction": "lantern_wardens",
+                      "delta": -5
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "Grell hears you out and is not moved. The order stands."
+                }
+              }
+            },
+            {
+              "id": "threaten_grell",
+              "label": "Threaten Grell until she stays the Purge",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch1_tribunal_done"
+                    }
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "unresolved"
+                  }
+                ]
+              },
+              "keywords": [
+                "threaten",
+                "intimidate",
+                "force"
+              ],
+              "check": {
+                "skill": "intimidation",
+                "dc": 17,
+                "success": {
+                  "text": "Grell's knuckles whiten on the order, but she tears it. 'Three days. And you've made an enemy in this hall.'",
+                  "flags": [
+                    {
+                      "set": "~ch1_cure_path",
+                      "value": true
+                    },
+                    {
+                      "set": "~ch1_tribunal_done",
+                      "value": true
+                    }
+                  ],
+                  "reputation": [
+                    {
+                      "faction": "briarkin",
+                      "delta": 15
+                    },
+                    {
+                      "faction": "lantern_wardens",
+                      "delta": -15
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "Grell smiles thinly. 'I have burned braver.' The order stands.",
+                  "reputation": [
+                    {
+                      "faction": "lantern_wardens",
+                      "delta": -5
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "fake_support",
+              "label": "Pretend to back the Purge to buy Hollowmere time",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch1_tribunal_done"
+                    }
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "unresolved"
+                  }
+                ]
+              },
+              "keywords": [
+                "lie",
+                "deceive",
+                "pretend",
+                "fake"
+              ],
+              "check": {
+                "skill": "deception",
+                "dc": 14,
+                "success": {
+                  "text": "Grell believes you'll stand with the pyres and gives you three days to 'prepare' Hollowmere, which is all the time you need.",
+                  "flags": [
+                    {
+                      "set": "~ch1_cure_path",
+                      "value": true
+                    },
+                    {
+                      "set": "~ch1_tribunal_done",
+                      "value": true
+                    },
+                    {
+                      "set": "~ch1_deceived_grell",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "Grell sees through it. 'Get out of my hall.' The order stands.",
+                  "flags": [
+                    {
+                      "set": "~ch1_deceived_grell",
+                      "value": true
+                    }
+                  ],
+                  "reputation": [
+                    {
+                      "faction": "lantern_wardens",
+                      "delta": -5
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "pledge_purge",
+              "label": "Pledge your sword to the Purge",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch1_tribunal_done"
+                    }
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "unresolved"
+                  }
+                ]
+              },
+              "keywords": [
+                "pledge",
+                "purge",
+                "join",
+                "wardens",
+                "burn"
+              ],
+              "outcome": {
+                "text": "Grell clasps your arm. The purge column marches for Hollowmere at dusk, and a raiding party rides for Thornwife Hollow at dawn. You ride with the raid.",
+                "flags": [
+                  {
+                    "set": "arc.main.hollowmere_fate",
+                    "value": "purged"
+                  },
+                  {
+                    "set": "~ch1_tribunal_done",
+                    "value": true
+                  },
+                  {
+                    "set": "~ch1_joined_purge",
+                    "value": true
+                  }
+                ],
+                "reputation": [
+                  {
+                    "faction": "lantern_wardens",
+                    "delta": 20
+                  },
+                  {
+                    "faction": "order_of_the_dawn_lance",
+                    "delta": 5
+                  },
+                  {
+                    "faction": "briarkin",
+                    "delta": -40
+                  }
+                ],
+                "encounter": "thornwife_raid"
+              }
+            },
+            {
+              "id": "walk_out",
+              "label": "Walk out and leave Hollowmere to its fate",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch1_tribunal_done"
+                    }
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "unresolved"
+                  }
+                ]
+              },
+              "keywords": [
+                "leave",
+                "walk out",
+                "abandon"
+              ],
+              "outcome": {
+                "text": "You leave the tribunal without a word. Nobody stands between Hollowmere and the pyre now, and the Choir will take whoever runs.",
+                "flags": [
+                  {
+                    "set": "arc.main.hollowmere_fate",
+                    "value": "abandoned"
+                  },
+                  {
+                    "set": "~ch1_tribunal_done",
+                    "value": true
+                  }
+                ]
+              }
+            },
+            {
+              "id": "surrender_want",
+              "label": "Give Grell the Tooth of Want",
+              "once": true,
+              "if": {
+                "flag": "arc.main.tooth_want_holder",
+                "eq": "player"
+              },
+              "keywords": [
+                "tooth",
+                "want",
+                "give",
+                "grell"
+              ],
+              "outcome": {
+                "text": "Grell locks the Tooth of Want in the Hold’s vault under a hundred lanterns.",
+                "flags": [
+                  {
+                    "set": "arc.main.tooth_want_holder",
+                    "value": "wardens"
+                  },
+                  {
+                    "set": "~ch1_teeth_to_grell",
+                    "value": true
+                  }
+                ],
+                "reputation": [
+                  {
+                    "faction": "lantern_wardens",
+                    "delta": 5
+                  }
+                ]
+              }
+            },
+            {
+              "id": "surrender_abbey",
+              "label": "Give Grell the Drowned Tooth",
+              "once": true,
+              "if": {
+                "flag": "arc.main.tooth_abbey_holder",
+                "eq": "player"
+              },
+              "keywords": [
+                "tooth",
+                "drowned",
+                "give",
+                "grell"
+              ],
+              "outcome": {
+                "text": "Grell takes the Drowned Tooth with a Warden’s prayer to the Drowned Lady.",
+                "flags": [
+                  {
+                    "set": "arc.main.tooth_abbey_holder",
+                    "value": "wardens"
+                  },
+                  {
+                    "set": "~ch1_teeth_to_grell",
+                    "value": true
+                  }
+                ],
+                "reputation": [
+                  {
+                    "faction": "lantern_wardens",
+                    "delta": 5
+                  }
+                ]
+              }
+            },
+            {
+              "id": "surrender_briar",
+              "label": "Give Grell the Briar Tooth",
+              "once": true,
+              "if": {
+                "flag": "arc.main.tooth_wick_holder",
+                "eq": "player"
+              },
+              "keywords": [
+                "tooth",
+                "briar",
+                "give",
+                "grell"
+              ],
+              "outcome": {
+                "text": "Grell holds the Briar Tooth up to a lantern. 'Witch-work,' she says, and locks it away.",
+                "flags": [
+                  {
+                    "set": "arc.main.tooth_wick_holder",
+                    "value": "wardens"
+                  },
+                  {
+                    "set": "~ch1_teeth_to_grell",
+                    "value": true
+                  }
+                ],
+                "reputation": [
+                  {
+                    "faction": "lantern_wardens",
+                    "delta": 5
+                  }
+                ]
+              }
+            }
+          ],
+          "exits": [
+            {
+              "id": "to_ravensgate",
+              "label": "Take the road back to Ravensgate",
+              "to": "ravensgate_gates",
+              "minutes": 720
+            },
+            {
+              "id": "to_hollowmere",
+              "label": "Take the fen trail to Hollowmere",
+              "to": "hollowmere_stilts",
+              "minutes": 540
+            },
+            {
+              "id": "new_moon",
+              "label": "Ride for Hollowmere as the new moon rises",
+              "to": "night_of_bells",
+              "if": {
+                "any": [
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "purged"
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "abandoned"
+                  },
+                  {
+                    "all": [
+                      {
+                        "flag": "~ch1_cure_path"
+                      },
+                      {
+                        "flag": "arc.main.cure_recipe"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "minutes": 540
+            }
+          ]
+        },
+        {
+          "id": "night_of_bells",
+          "name": "The Night of Bells",
+          "locationId": "hollowmere",
+          "mood": "battle",
+          "seed": "The new moon. Bells toll under the fen from the direction of the Drowned Abbey, and grey Choir boats slide out of the mist toward Hollowmere's landing, their lanterns hooded.",
+          "variants": [
+            {
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_cure_path"
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "unresolved"
+                  }
+                ]
+              },
+              "seed": "Briarkin cure-tents glow along the walkways, full of the sick; Wick's kin stand guard with reed-bows."
+            },
+            {
+              "if": {
+                "flag": "arc.main.hollowmere_fate",
+                "eq": "purged"
+              },
+              "seed": "Warden pyres roar along the far bank. In the smoke and screaming, the Choir boats come to harvest whoever runs."
+            },
+            {
+              "if": {
+                "flag": "arc.main.hollowmere_fate",
+                "eq": "abandoned"
+              },
+              "seed": "The stilt-houses are empty. On the landing, Mother Sallow preaches a farewell sermon to the last of the sick, who follow her lanterns down to the boats."
+            },
+            {
+              "if": {
+                "all": [
+                  {
+                    "flag": "arc.main.tooth_wick_holder",
+                    "eq": "briarkin"
+                  },
+                  {
+                    "flag": "~ch1_cure_path"
+                  }
+                ]
+              },
+              "seed": "Grandmother Wick has come to the tents herself, the Briar Tooth on a cord at her throat. Sallow's deacons are watching her. She must not fall."
+            },
+            {
+              "if": {
+                "flag": "arc.starter.ashby_fate",
+                "eq": "escaped"
+              },
+              "seed": "Brother Ashby stands at Sallow's side, carrying the Choir's banner."
+            },
+            {
+              "if": {
+                "flag": "arc.main.sallow_fate",
+                "eq": "captured"
+              },
+              "seed": "Mother Sallow kneels bound on the landing, still smiling."
+            }
+          ],
+          "npcs": [],
+          "actions": [
+            {
+              "id": "cure_first",
+              "label": "Give the cure to the family in the first tent",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_cure_path"
+                  },
+                  {
+                    "flag": "arc.main.cure_recipe"
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "unresolved"
+                  }
+                ]
+              },
+              "keywords": [
+                "cure",
+                "medicine",
+                "tent",
+                "family"
+              ],
+              "check": {
+                "skill": "medicine",
+                "dc": 13,
+                "success": {
+                  "text": "The fever breaks. A family will live.",
+                  "flags": [
+                    {
+                      "set": "~ch1_family_one",
+                      "value": true
+                    }
+                  ],
+                  "reputation": [
+                    {
+                      "faction": "briarkin",
+                      "delta": 2
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "The fever takes them before the cure can."
+                }
+              }
+            },
+            {
+              "id": "cure_second",
+              "label": "Give the cure to the family by the landing",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_cure_path"
+                  },
+                  {
+                    "flag": "arc.main.cure_recipe"
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "unresolved"
+                  }
+                ]
+              },
+              "keywords": [
+                "cure",
+                "medicine",
+                "landing",
+                "family"
+              ],
+              "check": {
+                "skill": "medicine",
+                "dc": 13,
+                "success": {
+                  "text": "Black veins fade to grey. A family will live.",
+                  "flags": [
+                    {
+                      "set": "~ch1_family_two",
+                      "value": true
+                    }
+                  ],
+                  "reputation": [
+                    {
+                      "faction": "briarkin",
+                      "delta": 2
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "You are too late for them."
+                }
+              }
+            },
+            {
+              "id": "cure_third",
+              "label": "Give the cure to the family in the last stilt-house",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_cure_path"
+                  },
+                  {
+                    "flag": "arc.main.cure_recipe"
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "unresolved"
+                  }
+                ]
+              },
+              "keywords": [
+                "cure",
+                "medicine",
+                "house",
+                "family"
+              ],
+              "check": {
+                "skill": "medicine",
+                "dc": 13,
+                "success": {
+                  "text": "The children stop singing in their sleep. A family will live.",
+                  "flags": [
+                    {
+                      "set": "~ch1_family_three",
+                      "value": true
+                    }
+                  ],
+                  "reputation": [
+                    {
+                      "faction": "briarkin",
+                      "delta": 2
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "The singing does not stop."
+                }
+              }
+            },
+            {
+              "id": "meet_boats",
+              "label": "Meet the Choir's boats at the landing",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch1_bells_fought"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.starter.ashby_fate",
+                      "eq": "escaped"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "fight",
+                "boats",
+                "sallow",
+                "choir",
+                "landing"
+              ],
+              "outcome": {
+                "text": "Mother Sallow steps off the lead boat with her deacons, and the risen sick climb dripping from the water behind her under a cloud of plague flies.",
+                "encounter": "bells_choir"
+              }
+            },
+            {
+              "id": "meet_boats_ashby",
+              "label": "Meet Sallow and Ashby at the landing",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch1_bells_fought"
+                    }
+                  },
+                  {
+                    "flag": "arc.starter.ashby_fate",
+                    "eq": "escaped"
+                  }
+                ]
+              },
+              "keywords": [
+                "fight",
+                "boats",
+                "sallow",
+                "ashby",
+                "choir",
+                "landing"
+              ],
+              "outcome": {
+                "text": "Mother Sallow and Brother Ashby step off the lead boat together. 'Twice now,' Ashby says. 'The Choir is patient.'",
+                "encounter": "bells_choir_ashby"
+              }
+            },
+            {
+              "id": "let_them_go",
+              "label": "Let the Choir boats go",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch1_bells_fought"
+                    }
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "abandoned"
+                  }
+                ]
+              },
+              "keywords": [
+                "leave",
+                "let go",
+                "watch"
+              ],
+              "outcome": {
+                "text": "You watch the lanterns go. Sallow raises a hand to you from the lead boat, as if in blessing.",
+                "flags": [
+                  {
+                    "set": "~ch1_bells_fought",
+                    "value": true
+                  },
+                  {
+                    "set": "arc.main.sallow_fate",
+                    "value": "escaped"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "spot_escape",
+              "label": "Spot Sallow's escape boat in the mist",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_bells_won"
+                  },
+                  {
+                    "flag": "arc.main.sallow_fate",
+                    "eq": "unknown"
+                  }
+                ]
+              },
+              "keywords": [
+                "sallow",
+                "boat",
+                "escape",
+                "spot",
+                "perception"
+              ],
+              "check": {
+                "skill": "perception",
+                "dc": 15,
+                "success": {
+                  "text": "A punt among the reeds, pole dripping: Sallow. You cut her off at the water's edge.",
+                  "flags": [
+                    {
+                      "set": "~ch1_sallow_cornered",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "Somewhere in the mist a pole splashes, once. Mother Sallow is gone.",
+                  "flags": [
+                    {
+                      "set": "arc.main.sallow_fate",
+                      "value": "escaped"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "capture_sallow",
+              "label": "Take Mother Sallow alive",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_sallow_cornered"
+                  },
+                  {
+                    "flag": "arc.main.sallow_fate",
+                    "eq": "unknown"
+                  }
+                ]
+              },
+              "keywords": [
+                "capture",
+                "bind",
+                "alive",
+                "sallow"
+              ],
+              "outcome": {
+                "text": "You bind Mother Sallow hand and foot. She thanks you for your mercy and hums the Choir’s hymn.",
+                "flags": [
+                  {
+                    "set": "arc.main.sallow_fate",
+                    "value": "captured"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "kill_sallow",
+              "label": "Cut Mother Sallow down",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_sallow_cornered"
+                  },
+                  {
+                    "flag": "arc.main.sallow_fate",
+                    "eq": "unknown"
+                  }
+                ]
+              },
+              "keywords": [
+                "kill",
+                "strike",
+                "sallow"
+              ],
+              "outcome": {
+                "text": "Mother Sallow falls into the black water, still smiling, and does not come up.",
+                "flags": [
+                  {
+                    "set": "arc.main.sallow_fate",
+                    "value": "killed"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "question_sallow",
+              "label": "Question the captured Sallow about her masters",
+              "once": true,
+              "if": {
+                "flag": "arc.main.sallow_fate",
+                "eq": "captured"
+              },
+              "keywords": [
+                "question",
+                "interrogate",
+                "sallow",
+                "cantor"
+              ],
+              "check": {
+                "skill": "intimidation",
+                "dc": 14,
+                "success": {
+                  "text": "Sallow finally stops smiling. 'The Cantor wears the ring of the Queen's godmother,' she whispers. 'You will never reach her.'",
+                  "flags": [
+                    {
+                      "set": "~ch1_sallow_confessed",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "Sallow only hums."
+                }
+              }
+            },
+            {
+              "id": "persuade_sallow",
+              "label": "Talk Sallow into confessing",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "arc.main.sallow_fate",
+                    "eq": "captured"
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch1_sallow_confessed"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "persuade",
+                "talk",
+                "confess",
+                "sallow"
+              ],
+              "check": {
+                "skill": "persuasion",
+                "dc": 14,
+                "success": {
+                  "text": "Sallow weeps, suddenly. 'She only wanted no one to be hungry. The Cantor wears the Queen's godmother's ring.'",
+                  "flags": [
+                    {
+                      "set": "~ch1_sallow_confessed",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "'Hunger ends,' Sallow says, and that is all."
+                }
+              }
+            },
+            {
+              "id": "search_letters",
+              "label": "Search the Choir's boats for Sallow's letters",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_bells_fought"
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.main.sallow_fate",
+                      "eq": "unknown"
+                    }
+                  }
+                ]
+              },
+              "keywords": [
+                "search",
+                "letters",
+                "boat",
+                "manifest",
+                "loot"
+              ],
+              "outcome": {
+                "text": "In a wax-sealed satchel: Sallow's letters and a shipping manifest from Port Sorrel, 'grain via Almonry ships', with a note that the Tooth hunters are 'sailing for the Brass Parrot'. There is coin too, and healing draughts.",
+                "flags": [
+                  {
+                    "set": "~ch1_letters",
+                    "value": true
+                  }
+                ],
+                "coins": 8000,
+                "items": [
+                  {
+                    "itemId": "potion_of_healing",
+                    "quantity": 2
+                  }
+                ],
+                "discover": [
+                  "port_sorrel"
+                ]
+              }
+            },
+            {
+              "id": "dawn_cured",
+              "label": "Greet the dawn over a cured Hollowmere",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_letters"
+                  },
+                  {
+                    "flag": "~ch1_cure_path"
+                  },
+                  {
+                    "flag": "arc.main.cure_recipe"
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "unresolved"
+                  }
+                ]
+              },
+              "keywords": [
+                "dawn",
+                "end",
+                "cured",
+                "rest"
+              ],
+              "outcome": {
+                "text": "Dawn comes up over Hollowmere, and for the first time in two years nobody on the stilts is singing in their sleep.",
+                "flags": [
+                  {
+                    "set": "arc.main.hollowmere_fate",
+                    "value": "cured"
+                  },
+                  {
+                    "set": "world.sickness_cure",
+                    "value": "briarkin_cure"
+                  }
+                ],
+                "ending": "fen_cured"
+              }
+            },
+            {
+              "id": "dawn_purged",
+              "label": "Watch the pyres burn down at dawn",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_letters"
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "purged"
+                  }
+                ]
+              },
+              "keywords": [
+                "dawn",
+                "end",
+                "pyres"
+              ],
+              "outcome": {
+                "text": "The pyres burn down to embers at dawn. The Sickness in Hollowmere is ended the Wardens’ way.",
+                "flags": [
+                  {
+                    "set": "world.sickness_cure",
+                    "value": "warden_fire"
+                  }
+                ],
+                "ending": "fen_purged"
+              }
+            },
+            {
+              "id": "dawn_abandoned",
+              "label": "Walk the empty walkways at dawn",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch1_letters"
+                  },
+                  {
+                    "flag": "arc.main.hollowmere_fate",
+                    "eq": "abandoned"
+                  }
+                ]
+              },
+              "keywords": [
+                "dawn",
+                "end",
+                "empty"
+              ],
+              "outcome": {
+                "text": "At dawn Hollowmere is empty but for the gulls. The Choir took everyone it wanted.",
+                "flags": [
+                  {
+                    "set": "world.sickness_cure",
+                    "value": "none"
+                  }
+                ],
+                "ending": "fen_abandoned"
+              }
+            }
+          ],
+          "exits": []
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "id": "odo_brask",
+      "name": "Warden-Sergeant Odo Brask",
+      "statBlock": "warrior_veteran",
+      "personality": "Dour but decent; does the ugly work of the gate and hates half of it.",
+      "secrets": [
+        "Privately doubts Captain Grell's burning order.",
+        "Has let sick children through the postern after dark."
+      ],
+      "voice": "Low gravel, short sentences, a sigh before bad news.",
+      "factions": [
+        "lantern_wardens"
+      ],
+      "attitude": "indifferent"
+    },
+    {
+      "id": "maud_grell",
+      "name": "Warden-Captain Maud Grell",
+      "statBlock": "knight",
+      "personality": "Tireless and iron-willed. Has signed more burning orders than she can count and believes mercy is a luxury the fens cannot afford.",
+      "secrets": [
+        "Keeps a list of every name she has burned, and reads it at night.",
+        "Wants every Tooth in Warden keeping, under the lanterns."
+      ],
+      "voice": "Flat, precise, never raises her voice; ends arguments with a single word.",
+      "factions": [
+        "lantern_wardens"
+      ],
+      "attitude": "indifferent"
+    },
+    {
+      "id": "grandmother_wick",
+      "name": "Grandmother Wick",
+      "statBlock": "druid",
+      "personality": "Ancient, soft-spoken, kind to children and terrifying to everyone else. Every gift has a price.",
+      "secrets": [
+        "Her true name is in one of the jars on her shelf.",
+        "Nettle's true name is in another, kept 'until she's ready'.",
+        "Knows the cure needs the ash of the Drowned Abbey’s dead-bells."
+      ],
+      "voice": "Whispery, amused, calls everyone 'dearie'; answers questions with bargains.",
+      "factions": [
+        "briarkin"
+      ],
+      "attitude": "indifferent",
+      "schedule": [
+        {
+          "scene": "thornwife_moot",
+          "from": 0,
+          "to": 24,
+          "if": {
+            "all": [
+              {
+                "not": {
+                  "flag": "arc.main.wick_fate",
+                  "eq": "burned"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch1_raid_done"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "scene": "night_of_bells",
+          "from": 0,
+          "to": 24,
+          "if": {
+            "all": [
+              {
+                "flag": "arc.main.tooth_wick_holder",
+                "eq": "briarkin"
+              },
+              {
+                "flag": "~ch1_cure_path"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "mother_sallow",
+      "name": "Mother Sallow",
+      "statBlock": "cultist_fanatic",
+      "personality": "Motherly, patient and tireless with the sick. A true believer who thinks the Choir is mercy.",
+      "secrets": [
+        "Her bread is laced with Maw-rot spores.",
+        "Wants the Wardens to burn Hollowmere so the survivors flee to the Choir.",
+        "Knows the Cantor wears the Queen's-godmother ring."
+      ],
+      "voice": "Warm, lilting, calls everyone 'lamb'; hums the Choir's hymn between sentences.",
+      "factions": [
+        "hollow_choir"
+      ],
+      "attitude": "friendly",
+      "schedule": [
+        {
+          "scene": "hollowmere_stilts",
+          "from": 6,
+          "to": 22,
+          "if": {
+            "all": [
+              {
+                "flag": "arc.main.sallow_fate",
+                "eq": "unknown"
+              },
+              {
+                "not": {
+                  "flag": "arc.main.hollowmere_fate",
+                  "eq": "abandoned"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "scene": "night_of_bells",
+          "from": 0,
+          "to": 24,
+          "if": {
+            "any": [
+              {
+                "flag": "arc.main.sallow_fate",
+                "eq": "unknown"
+              },
+              {
+                "flag": "arc.main.sallow_fate",
+                "eq": "captured"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "brother_ashby",
+      "name": "Brother Ashby",
+      "statBlock": "cultist_fanatic",
+      "personality": "The former Millbrook sexton, soft-spoken and fervent, now Sallow’s aide. Holds a grudge against the hero.",
+      "secrets": [
+        "Fled the Sickness in Ravensgate and heard the Choir sing."
+      ],
+      "voice": "Gentle and precise, like a man reading banns; taunts in scripture.",
+      "factions": [
+        "hollow_choir"
+      ],
+      "attitude": "hostile",
+      "schedule": [
+        {
+          "scene": "hollowmere_stilts",
+          "from": 6,
+          "to": 22,
+          "if": {
+            "flag": "arc.starter.ashby_fate",
+            "eq": "escaped"
+          }
+        },
+        {
+          "scene": "night_of_bells",
+          "from": 0,
+          "to": 24,
+          "if": {
+            "flag": "arc.starter.ashby_fate",
+            "eq": "escaped"
+          }
+        }
+      ]
+    },
+    {
+      "id": "nettle",
+      "name": "Nettle",
+      "statBlock": "druid",
+      "personality": "Blunt, funny and fearless around the sick; sharp around authority. Wick's granddaughter and a Briarkin healer hunted by Warden patrols.",
+      "secrets": [
+        "Wants a true cure for the Whispering Sickness.",
+        "Secretly wants her true name, which Wick keeps in a jar."
+      ],
+      "voice": "Quick fen dialect; swears by roots and rot; hums while healing.",
+      "factions": [
+        "briarkin"
+      ],
+      "attitude": "friendly",
+      "schedule": [
+        {
+          "scene": "hollowmere_stilts",
+          "from": 0,
+          "to": 24,
+          "if": {
+            "any": [
+              {
+                "flag": "world.nettle_status",
+                "eq": "unmet"
+              },
+              {
+                "flag": "world.nettle_status",
+                "eq": "met"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "abbot_cendric",
+      "name": "Abbot Cendric",
+      "statBlock": "priest",
+      "personality": "An old priest of Mireth, the last keeper of the Drowned Abbey. Stubborn, gentle, tired to the bone.",
+      "secrets": [
+        "Knows the midnight bells wake the drowned dead.",
+        "Suspects the Choir has been diving for something in the reliquary for weeks."
+      ],
+      "voice": "Slow and liturgical; quotes the Drowned Lady’s litany.",
+      "factions": [
+        "lantern_wardens"
+      ],
+      "attitude": "friendly",
+      "schedule": [
+        {
+          "scene": "drowned_abbey_undercroft",
+          "from": 0,
+          "to": 24,
+          "if": {
+            "flag": "arc.main.abbot_cendric_alive"
+          }
+        }
+      ]
+    }
+  ],
+  "encounters": [
+    {
+      "id": "gibbet_dead",
+      "name": "The gibbet dead",
+      "monsters": [
+        {
+          "id": "zombie",
+          "count": 2
+        }
+      ],
+      "terrain": [
+        "refugee fires",
+        "gibbet posts (half cover)"
+      ],
+      "win": {
+        "text": "The hanged men fall still. The refugees press close to thank you, and Brask, watching from the wall, nods once.",
+        "flags": [
+          {
+            "set": "~ch1_refugees_protected",
+            "value": true
+          }
+        ],
+        "reputation": [
+          {
+            "faction": "lantern_wardens",
+            "delta": 5
+          }
+        ]
+      },
+      "flee": {
+        "text": "You drag the refugees back from the gibbets and let the dead have the dark."
+      }
+    },
+    {
+      "id": "stilts_deacons",
+      "name": "Sallow's deacons",
+      "monsters": [
+        {
+          "id": "cultist",
+          "count": 3
+        },
+        {
+          "id": "giant_toad",
+          "count": 1
+        }
+      ],
+      "terrain": [
+        "narrow stilt walkways",
+        "black water (difficult terrain)"
+      ],
+      "scaling": {
+        "target": "moderate",
+        "pool": [
+          "cultist"
+        ]
+      },
+      "win": {
+        "text": "The deacons break; the child is pulled from the boat alive. Mother Sallow only sighs, blesses the crowd, and withdraws into the mist.",
+        "flags": [
+          {
+            "set": "~ch1_child_saved",
+            "value": true
+          },
+          {
+            "inc": "world.nettle_loyalty",
+            "by": 5
+          }
+        ],
+        "reputation": [
+          {
+            "faction": "briarkin",
+            "delta": 10
+          }
+        ],
+        "loot": "choir_deacon_purses"
+      },
+      "lose": {
+        "text": "You wake bound in the bilge of Sallow's boat, bound for the Drowned Abbey with the sick child beside you. When it moors at the water-gate, you work the ropes loose and slip over the side; the child stays aboard.",
+        "flags": [
+          {
+            "set": "~ch1_child_lost",
+            "value": true
+          }
+        ],
+        "goto": "drowned_abbey_undercroft"
+      },
+      "flee": {
+        "text": "You pull back along the walkways. The Choir boat slides off into the mist with the child aboard.",
+        "flags": [
+          {
+            "set": "~ch1_child_lost",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "stilts_deacons_ashby",
+      "name": "Ashby and the deacons",
+      "monsters": [
+        {
+          "id": "cultist_fanatic",
+          "count": 1
+        },
+        {
+          "id": "cultist",
+          "count": 2
+        },
+        {
+          "id": "giant_toad",
+          "count": 1
+        }
+      ],
+      "terrain": [
+        "narrow stilt walkways",
+        "black water (difficult terrain)"
+      ],
+      "scaling": {
+        "target": "moderate",
+        "pool": [
+          "cultist"
+        ]
+      },
+      "win": {
+        "text": "Ashby dives into the black water and is gone again. The deacons break; the child is pulled from the boat alive. Mother Sallow only sighs, blesses the crowd, and withdraws into the mist.",
+        "flags": [
+          {
+            "set": "~ch1_child_saved",
+            "value": true
+          },
+          {
+            "inc": "world.nettle_loyalty",
+            "by": 5
+          }
+        ],
+        "reputation": [
+          {
+            "faction": "briarkin",
+            "delta": 10
+          }
+        ],
+        "loot": "choir_deacon_purses"
+      },
+      "lose": {
+        "text": "You wake bound in the bilge of Sallow's boat, bound for the Drowned Abbey with the sick child beside you. When it moors at the water-gate, you work the ropes loose and slip over the side; the child stays aboard.",
+        "flags": [
+          {
+            "set": "~ch1_child_lost",
+            "value": true
+          }
+        ],
+        "goto": "drowned_abbey_undercroft"
+      },
+      "flee": {
+        "text": "You pull back along the walkways. The Choir boat slides off into the mist with the child aboard.",
+        "flags": [
+          {
+            "set": "~ch1_child_lost",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "stilts_deacons_ambush",
+      "name": "Ambush at the landing",
+      "monsters": [
+        {
+          "id": "cultist",
+          "count": 2
+        },
+        {
+          "id": "giant_toad",
+          "count": 1
+        }
+      ],
+      "terrain": [
+        "the Choir boat",
+        "black water (difficult terrain)"
+      ],
+      "scaling": {
+        "target": "moderate",
+        "pool": [
+          "cultist"
+        ]
+      },
+      "win": {
+        "text": "The deacons break; the child is pulled from the boat alive. Mother Sallow only sighs, blesses the crowd, and withdraws into the mist.",
+        "flags": [
+          {
+            "set": "~ch1_child_saved",
+            "value": true
+          },
+          {
+            "inc": "world.nettle_loyalty",
+            "by": 5
+          }
+        ],
+        "reputation": [
+          {
+            "faction": "briarkin",
+            "delta": 10
+          }
+        ],
+        "loot": "choir_deacon_purses"
+      },
+      "lose": {
+        "text": "You wake bound in the bilge of Sallow's boat, bound for the Drowned Abbey with the sick child beside you. When it moors at the water-gate, you work the ropes loose and slip over the side; the child stays aboard.",
+        "flags": [
+          {
+            "set": "~ch1_child_lost",
+            "value": true
+          }
+        ],
+        "goto": "drowned_abbey_undercroft"
+      },
+      "flee": {
+        "text": "You pull back along the walkways. The Choir boat slides off into the mist with the child aboard.",
+        "flags": [
+          {
+            "set": "~ch1_child_lost",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "briar_wisp",
+      "name": "The briar-light",
+      "monsters": [
+        {
+          "id": "will_o_wisp",
+          "count": 1
+        }
+      ],
+      "terrain": [
+        "sinkhole (difficult terrain)",
+        "shifting briars"
+      ],
+      "win": {
+        "text": "The wisp gutters out, and in its dying light the true path through the briars shows plain.",
+        "goto": "thornwife_moot"
+      },
+      "flee": {
+        "text": "You stumble out of the briars and back to the Hollowmere trail."
+      }
+    },
+    {
+      "id": "abbey_nave",
+      "name": "The drowned dead",
+      "monsters": [
+        {
+          "id": "zombie",
+          "count": 2
+        },
+        {
+          "id": "ghoul",
+          "count": 1
+        }
+      ],
+      "terrain": [
+        "waist-deep water (difficult terrain)",
+        "broken pews (half cover)"
+      ],
+      "scaling": {
+        "target": "moderate",
+        "pool": [
+          "zombie"
+        ]
+      },
+      "win": {
+        "text": "The last of the drowned dead sinks back under the black water. The way to the reliquary and the bell-loft is open.",
+        "flags": [
+          {
+            "set": "~ch1_nave_cleared",
+            "value": true
+          }
+        ]
+      },
+      "flee": {
+        "text": "You haul yourself back up the stairs, the drowned dead groping after you."
+      }
+    },
+    {
+      "id": "abbey_nave_midnight",
+      "name": "The drowned dead at midnight",
+      "monsters": [
+        {
+          "id": "zombie",
+          "count": 1
+        },
+        {
+          "id": "ghoul",
+          "count": 1
+        },
+        {
+          "id": "specter",
+          "count": 1
+        }
+      ],
+      "terrain": [
+        "waist-deep water (difficult terrain)",
+        "tolling bell-shaft"
+      ],
+      "scaling": {
+        "target": "high",
+        "pool": [
+          "zombie"
+        ]
+      },
+      "win": {
+        "text": "The last of the drowned dead sinks back under the black water. The way to the reliquary and the bell-loft is open.",
+        "flags": [
+          {
+            "set": "~ch1_nave_cleared",
+            "value": true
+          }
+        ]
+      },
+      "flee": {
+        "text": "You haul yourself back up the stairs, the drowned dead groping after you."
+      }
+    },
+    {
+      "id": "abbey_nave_rung",
+      "name": "The faltering dead",
+      "monsters": [
+        {
+          "id": "zombie",
+          "count": 3
+        }
+      ],
+      "terrain": [
+        "waist-deep water (difficult terrain)",
+        "broken pews (half cover)"
+      ],
+      "scaling": {
+        "target": "low",
+        "pool": [
+          "zombie"
+        ]
+      },
+      "win": {
+        "text": "The last of the drowned dead sinks back under the black water. The way to the reliquary and the bell-loft is open.",
+        "flags": [
+          {
+            "set": "~ch1_nave_cleared",
+            "value": true
+          }
+        ]
+      },
+      "flee": {
+        "text": "You haul yourself back up the stairs, the drowned dead groping after you."
+      }
+    },
+    {
+      "id": "abbey_divers",
+      "name": "Sallow's divers",
+      "monsters": [
+        {
+          "id": "cultist",
+          "count": 2
+        }
+      ],
+      "terrain": [
+        "flooded reliquary",
+        "the divers’ boat"
+      ],
+      "win": {
+        "text": "The last diver drops the reliquary box. Inside, wrapped in rotted silk, is a long black tooth: the Drowned Tooth.",
+        "flags": [
+          {
+            "set": "arc.main.tooth_abbey_holder",
+            "value": "player"
+          }
+        ],
+        "loot": "choir_diver_purses"
+      },
+      "lose": {
+        "flags": [
+          {
+            "set": "arc.main.tooth_abbey_holder",
+            "value": "choir"
+          }
+        ]
+      },
+      "flee": {
+        "text": "The divers row off into the mist with the Drowned Tooth.",
+        "flags": [
+          {
+            "set": "arc.main.tooth_abbey_holder",
+            "value": "choir"
+          }
+        ]
+      }
+    },
+    {
+      "id": "thornwife_raid",
+      "name": "The raid on Thornwife Hollow",
+      "monsters": [
+        {
+          "id": "scout",
+          "count": 1
+        },
+        {
+          "id": "giant_spider",
+          "count": 1
+        }
+      ],
+      "terrain": [
+        "briar walls (heavy obscurement)",
+        "burning cottage"
+      ],
+      "scaling": {
+        "target": "moderate",
+        "pool": [
+          "scout"
+        ]
+      },
+      "win": {
+        "text": "The Briarkin archer falls and Wick's briar-guardian curls up in the flames. The Wardens put Thornwife Hollow to the torch.",
+        "flags": [
+          {
+            "set": "~ch1_raid_done",
+            "value": true
+          }
+        ]
+      },
+      "lose": {
+        "flags": [
+          {
+            "set": "~ch1_raid_done",
+            "value": true
+          }
+        ]
+      },
+      "flee": {
+        "text": "You fall back while the Wardens finish the work without you.",
+        "flags": [
+          {
+            "set": "~ch1_raid_done",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "bells_choir",
+      "name": "The Night of Bells",
+      "monsters": [
+        {
+          "id": "cultist_fanatic",
+          "count": 1
+        },
+        {
+          "id": "cultist",
+          "count": 2
+        },
+        {
+          "id": "ghoul",
+          "count": 1
+        },
+        {
+          "id": "swarm_of_insects",
+          "count": 1
+        }
+      ],
+      "terrain": [
+        "stilt walkways",
+        "Choir boats",
+        "black water (difficult terrain)"
+      ],
+      "scaling": {
+        "target": "high",
+        "pool": [
+          "cultist",
+          "ghoul"
+        ]
+      },
+      "win": {
+        "text": "The Choir boats burn or scatter across the black water. Sallow's deacons are down, and she runs for her own small boat.",
+        "flags": [
+          {
+            "set": "~ch1_bells_fought",
+            "value": true
+          },
+          {
+            "set": "~ch1_bells_won",
+            "value": true
+          }
+        ]
+      },
+      "lose": {
+        "text": "You come to on a Hollowmere walkway at grey dawn, dragged out of the water by whoever was still standing. The Choir boats are gone, and Mother Sallow with them.",
+        "flags": [
+          {
+            "set": "~ch1_bells_fought",
+            "value": true
+          },
+          {
+            "set": "arc.main.sallow_fate",
+            "value": "escaped"
+          }
+        ]
+      },
+      "flee": {
+        "text": "You fall back from the landing. In the confusion, Mother Sallow and her boats slip away into the fen.",
+        "flags": [
+          {
+            "set": "~ch1_bells_fought",
+            "value": true
+          },
+          {
+            "set": "arc.main.sallow_fate",
+            "value": "escaped"
+          }
+        ]
+      }
+    },
+    {
+      "id": "bells_choir_ashby",
+      "name": "The Night of Bells",
+      "monsters": [
+        {
+          "id": "cultist_fanatic",
+          "count": 2
+        },
+        {
+          "id": "cultist",
+          "count": 2
+        }
+      ],
+      "terrain": [
+        "stilt walkways",
+        "Choir boats",
+        "black water (difficult terrain)"
+      ],
+      "scaling": {
+        "target": "high",
+        "pool": [
+          "cultist"
+        ]
+      },
+      "win": {
+        "text": "The Choir boats burn or scatter across the black water. Sallow's deacons are down, and she runs for her own small boat. Ashby is dragged off by the risen dead, or dives; nobody sees which.",
+        "flags": [
+          {
+            "set": "~ch1_bells_fought",
+            "value": true
+          },
+          {
+            "set": "~ch1_bells_won",
+            "value": true
+          }
+        ]
+      },
+      "lose": {
+        "text": "You come to on a Hollowmere walkway at grey dawn, dragged out of the water by whoever was still standing. The Choir boats are gone, and Mother Sallow with them.",
+        "flags": [
+          {
+            "set": "~ch1_bells_fought",
+            "value": true
+          },
+          {
+            "set": "arc.main.sallow_fate",
+            "value": "escaped"
+          }
+        ]
+      },
+      "flee": {
+        "text": "You fall back from the landing. In the confusion, Mother Sallow and her boats slip away into the fen.",
+        "flags": [
+          {
+            "set": "~ch1_bells_fought",
+            "value": true
+          },
+          {
+            "set": "arc.main.sallow_fate",
+            "value": "escaped"
+          }
+        ]
+      }
+    }
+  ],
+  "beats": [
+    {
+      "id": "purge_ultimatum",
+      "text": "Grell's heralds cry the Purge ultimatum in the Hold's yard: Hollowmere burns at the new moon, and anyone who shelters the sick burns with it.",
+      "trigger": {
+        "visited": "lantern_hold_tribunal"
+      },
+      "scenes": [
+        "lantern_hold_tribunal"
+      ]
+    },
+    {
+      "id": "the_voice",
+      "text": "Half asleep, you hear a choir under the fen, and one warm voice above it: 'You will never want again.'",
+      "trigger": {
+        "all": [
+          {
+            "timeOfDay": [
+              "night"
+            ]
+          },
+          {
+            "any": [
+              {
+                "flag": "arc.main.tooth_want_holder",
+                "eq": "player"
+              },
+              {
+                "flag": "arc.main.tooth_abbey_holder",
+                "eq": "player"
+              },
+              {
+                "flag": "arc.main.tooth_wick_holder",
+                "eq": "player"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "choir_offer",
+      "text": "A child brings you a grey ribbon and a message in a kind hand: 'Give us the Teeth and Hollowmere lives. Tie them to the landing post. — S.'",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_abbey_done"
+          },
+          {
+            "not": {
+              "any": [
+                {
+                  "all": [
+                    {
+                      "flag": "arc.main.tooth_want_holder",
+                      "eq": "player"
+                    },
+                    {
+                      "flag": "arc.main.tooth_abbey_holder",
+                      "eq": "player"
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "flag": "arc.main.tooth_want_holder",
+                      "eq": "player"
+                    },
+                    {
+                      "flag": "arc.main.tooth_wick_holder",
+                      "eq": "player"
+                    }
+                  ]
+                },
+                {
+                  "all": [
+                    {
+                      "flag": "arc.main.tooth_abbey_holder",
+                      "eq": "player"
+                    },
+                    {
+                      "flag": "arc.main.tooth_wick_holder",
+                      "eq": "player"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "flag": "arc.main.hollowmere_fate",
+            "eq": "unresolved"
+          },
+          {
+            "not": {
+              "flag": "~ch1_tribunal_done"
+            }
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "set": "~ch1_choir_offer",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "offer_takes_want",
+      "text": "The Tooth of Want is gone to the Choir.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_offer_accepted"
+          },
+          {
+            "flag": "arc.main.tooth_want_holder",
+            "eq": "player"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "set": "arc.main.tooth_want_holder",
+            "value": "choir"
+          }
+        ]
+      }
+    },
+    {
+      "id": "offer_takes_abbey",
+      "text": "The Drowned Tooth is gone to the Choir.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_offer_accepted"
+          },
+          {
+            "flag": "arc.main.tooth_abbey_holder",
+            "eq": "player"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "set": "arc.main.tooth_abbey_holder",
+            "value": "choir"
+          }
+        ]
+      }
+    },
+    {
+      "id": "offer_takes_briar",
+      "text": "The Briar Tooth is gone to the Choir.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_offer_accepted"
+          },
+          {
+            "flag": "arc.main.tooth_wick_holder",
+            "eq": "player"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "set": "arc.main.tooth_wick_holder",
+            "value": "choir"
+          }
+        ]
+      }
+    },
+    {
+      "id": "raid_wick_burned",
+      "text": "Wick did not flee in time. The Wardens burned her cottage with her in it.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_raid_done"
+          },
+          {
+            "not": {
+              "visited": "thornwife_moot"
+            }
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "set": "arc.main.wick_fate",
+            "value": "burned"
+          }
+        ]
+      }
+    },
+    {
+      "id": "raid_wick_fled",
+      "text": "Warned by your visit, Grandmother Wick fled the Hollow before the Wardens came.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_raid_done"
+          },
+          {
+            "visited": "thornwife_moot"
+          }
+        ]
+      }
+    },
+    {
+      "id": "raid_shelf_taken",
+      "text": "The Wardens carry the Briar Tooth off Wick's shelf to Lantern Hold.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_raid_done"
+          },
+          {
+            "flag": "arc.main.tooth_wick_holder",
+            "eq": "unclaimed"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "set": "arc.main.tooth_wick_holder",
+            "value": "wardens"
+          }
+        ]
+      }
+    },
+    {
+      "id": "raid_ashes_taken",
+      "text": "The Wardens pull the Briar Tooth from the ashes of Wick's cottage.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_raid_done"
+          },
+          {
+            "flag": "arc.main.wick_fate",
+            "eq": "burned"
+          },
+          {
+            "flag": "arc.main.tooth_wick_holder",
+            "eq": "briarkin"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "set": "arc.main.tooth_wick_holder",
+            "value": "wardens"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nettle_hears_lie",
+      "text": "Nettle heard every word of your lie to Grell, and she does not like how easily it came.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_deceived_grell"
+          },
+          {
+            "flag": "world.nettle_status",
+            "eq": "in_party"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "inc": "world.nettle_loyalty",
+            "by": -10
+          }
+        ]
+      }
+    },
+    {
+      "id": "nettle_leaves_lie",
+      "text": "'I can't tell when you're lying to me either,' Nettle says, and walks off into the fen. She is gone.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_deceived_grell"
+          },
+          {
+            "flag": "world.nettle_status",
+            "eq": "in_party"
+          },
+          {
+            "flag": "world.nettle_loyalty",
+            "lte": 20
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "set": "world.nettle_status",
+            "value": "left"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nettle_leaves_purge",
+      "text": "Nettle stares at you as if you had struck her. 'You'd burn them.' She leaves before the Wardens can see which way she goes.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_joined_purge"
+          },
+          {
+            "flag": "world.nettle_status",
+            "eq": "in_party"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "set": "world.nettle_status",
+            "value": "left"
+          },
+          {
+            "inc": "world.nettle_loyalty",
+            "by": -20
+          }
+        ]
+      }
+    },
+    {
+      "id": "nettle_cure_path",
+      "text": "Nettle whoops loud enough to turn heads in the hall.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_cure_path"
+          },
+          {
+            "flag": "world.nettle_status",
+            "eq": "in_party"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "inc": "world.nettle_loyalty",
+            "by": 20
+          }
+        ]
+      }
+    },
+    {
+      "id": "nettle_theft",
+      "text": "Nettle won't look at you. 'You robbed my gran.'",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_wick_stolen"
+          },
+          {
+            "flag": "world.nettle_status",
+            "eq": "in_party"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "inc": "world.nettle_loyalty",
+            "by": -20
+          }
+        ]
+      }
+    },
+    {
+      "id": "nettle_grell_favour",
+      "text": "Nettle watches you hand a Tooth to the Warden-Captain and says nothing at all.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_teeth_to_grell"
+          },
+          {
+            "flag": "world.nettle_status",
+            "eq": "in_party"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "inc": "world.nettle_loyalty",
+            "by": -5
+          }
+        ]
+      }
+    },
+    {
+      "id": "corwin_cure_path",
+      "text": "Corwin lets out a breath he has been holding since Ravensgate. 'Well argued.'",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_cure_path"
+          },
+          {
+            "flag": "world.corwin_status",
+            "eq": "in_party"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "inc": "world.corwin_loyalty",
+            "by": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "corwin_purge",
+      "text": "Corwin rides with the raid in silence. Later he says only, 'We burned the living today.'",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_joined_purge"
+          },
+          {
+            "flag": "world.corwin_status",
+            "eq": "in_party"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "inc": "world.corwin_loyalty",
+            "by": -10
+          }
+        ]
+      }
+    },
+    {
+      "id": "corwin_theft",
+      "text": "Corwin frowns at the stolen Tooth. 'That was not ours to take.'",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_wick_stolen"
+          },
+          {
+            "flag": "world.corwin_status",
+            "eq": "in_party"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "inc": "world.corwin_loyalty",
+            "by": -5
+          }
+        ]
+      }
+    },
+    {
+      "id": "corwin_offer",
+      "text": "Corwin looks at the grey ribbon on the post for a long time. 'You sold them,' he says.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch1_offer_accepted"
+          },
+          {
+            "flag": "world.corwin_status",
+            "eq": "in_party"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "inc": "world.corwin_loyalty",
+            "by": -20
+          }
+        ]
+      }
+    }
+  ],
+  "deadlines": [
+    {
+      "id": "purge_new_moon",
+      "text": "Stop the Wardens' purge of Hollowmere before the new moon",
+      "met": {
+        "any": [
+          {
+            "flag": "~ch1_tribunal_done"
+          },
+          {
+            "not": {
+              "flag": "arc.main.hollowmere_fate",
+              "eq": "unresolved"
+            }
+          }
+        ]
+      },
+      "within": 8640,
+      "warnAt": 4320,
+      "warning": "Three days gone. Grell's riders cry the Purge ultimatum along every fen road: Hollowmere burns in three more days.",
+      "missed": {
+        "text": "The new moon is up. The Warden column marches on Hollowmere and the pyres are lit; at dawn Grell's riders raid Thornwife Hollow.",
+        "flags": [
+          {
+            "set": "arc.main.hollowmere_fate",
+            "value": "purged"
+          },
+          {
+            "set": "~ch1_tribunal_done",
+            "value": true
+          },
+          {
+            "set": "~ch1_raid_done",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "grell_three_days",
+      "text": "Bring Wick's cure to Hollowmere within Grell's three days",
+      "start": {
+        "flag": "~ch1_cure_path"
+      },
+      "met": {
+        "visited": "night_of_bells"
+      },
+      "within": 4320,
+      "warnAt": 720,
+      "missed": {
+        "text": "Grell's three days are up. The pyres are lit in Hollowmere, and Warden riders raid Thornwife Hollow at dawn.",
+        "flags": [
+          {
+            "set": "arc.main.hollowmere_fate",
+            "value": "purged"
+          },
+          {
+            "set": "~ch1_raid_done",
+            "value": true
+          }
+        ]
+      }
+    }
+  ],
+  "quests": [
+    {
+      "id": "whispering_fen",
+      "name": "The Whispering Fen",
+      "objectives": [
+        {
+          "id": "reach_hollowmere",
+          "text": "Get past the Warden cordon and reach Hollowmere",
+          "done": {
+            "visited": "hollowmere_stilts"
+          }
+        },
+        {
+          "id": "find_wick",
+          "text": "Find Grandmother Wick in Thornwife Hollow",
+          "done": {
+            "visited": "thornwife_moot"
+          },
+          "if": {
+            "visited": "hollowmere_stilts"
+          }
+        },
+        {
+          "id": "bell_ash",
+          "text": "Bring back the ash of the dead-bells from the Drowned Abbey",
+          "done": {
+            "flag": "~ch1_bell_ash"
+          },
+          "if": {
+            "flag": "~ch1_wick_bargain"
+          }
+        },
+        {
+          "id": "drowned_tooth",
+          "text": "Beat Sallow's divers to the Drowned Tooth",
+          "done": {
+            "not": {
+              "flag": "arc.main.tooth_abbey_holder",
+              "eq": "unclaimed"
+            }
+          },
+          "if": {
+            "any": [
+              {
+                "visited": "drowned_abbey_undercroft"
+              },
+              {
+                "flag": "~ch1_wick_bargain"
+              }
+            ]
+          }
+        },
+        {
+          "id": "deliver_ash",
+          "text": "Take the bell-ash back to Wick for the cure",
+          "done": {
+            "flag": "arc.main.cure_recipe"
+          },
+          "if": {
+            "all": [
+              {
+                "flag": "~ch1_bell_ash"
+              },
+              {
+                "not": {
+                  "flag": "arc.main.wick_fate",
+                  "eq": "wronged"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "tribunal",
+          "text": "Face Warden-Captain Grell's tribunal at Lantern Hold",
+          "done": {
+            "flag": "~ch1_tribunal_done"
+          }
+        },
+        {
+          "id": "night_of_bells",
+          "text": "Stand against the Choir on the night of the new moon",
+          "done": {
+            "flag": "~ch1_bells_fought"
+          },
+          "if": {
+            "any": [
+              {
+                "flag": "arc.main.hollowmere_fate",
+                "eq": "purged"
+              },
+              {
+                "flag": "arc.main.hollowmere_fate",
+                "eq": "abandoned"
+              },
+              {
+                "all": [
+                  {
+                    "flag": "~ch1_cure_path"
+                  },
+                  {
+                    "flag": "arc.main.cure_recipe"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "complete": {
+        "any": [
+          {
+            "flag": "~ch1_letters"
+          },
+          {
+            "flag": "~ch1_bells_fought"
+          }
+        ]
+      }
+    }
+  ],
+  "lootTables": [
+    {
+      "id": "choir_deacon_purses",
+      "rolls": 1,
+      "entries": [
+        {
+          "weight": 3,
+          "coins": "2d6",
+          "coinUnit": "sp"
+        },
+        {
+          "weight": 1,
+          "itemId": "potion_of_healing",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "choir_diver_purses",
+      "rolls": 1,
+      "entries": [
+        {
+          "weight": 3,
+          "coins": "3d6",
+          "coinUnit": "sp"
+        },
+        {
+          "weight": 1,
+          "itemId": "potion_of_healing",
+          "quantity": 1
+        }
+      ]
+    }
+  ],
+  "flags": [
+    {
+      "id": "~ch1_pass",
+      "description": "Hero holds a Warden quarantine pass."
+    },
+    {
+      "id": "~ch1_inside",
+      "description": "Hero was let through the Ravensgate gate."
+    },
+    {
+      "id": "~ch1_tooth_refused",
+      "description": "Hero refused to hand the Tooth of Want to Sergeant Brask."
+    },
+    {
+      "id": "~ch1_refugees_protected",
+      "description": "Hero defended the Ravensgate refugees from the gibbet dead."
+    },
+    {
+      "id": "~ch1_sickness_known",
+      "description": "Hero identified the Sickness as spore-borne."
+    },
+    {
+      "id": "~ch1_bread_spores",
+      "description": "Hero found spores in Sallow's bread."
+    },
+    {
+      "id": "~ch1_sallow_suspected",
+      "description": "Hero saw through Sallow's kindness."
+    },
+    {
+      "id": "~ch1_pass_hidden",
+      "description": "Hero hid the Warden pass from Nettle."
+    },
+    {
+      "id": "~ch1_nettle_refused",
+      "description": "Nettle refused to join (saw the Warden pass)."
+    },
+    {
+      "id": "~ch1_child_saved",
+      "description": "Hero saved the sick child from the Choir boat."
+    },
+    {
+      "id": "~ch1_child_lost",
+      "description": "The Choir took the sick child."
+    },
+    {
+      "id": "~ch1_wick_bargain",
+      "description": "Hero heard Wick's bargain (bell-ash for the cure)."
+    },
+    {
+      "id": "~ch1_memory_traded",
+      "description": "Hero traded Wick a memory for the Briar Tooth (story scar)."
+    },
+    {
+      "id": "~ch1_wick_stolen",
+      "description": "Hero stole or tried to steal the Briar Tooth."
+    },
+    {
+      "id": "~ch1_bell_rung",
+      "description": "Hero rang the Abbey's upper bell (the drowned dead falter)."
+    },
+    {
+      "id": "~ch1_nave_failed",
+      "description": "Hero failed to swim the flooded nave at least once."
+    },
+    {
+      "id": "~ch1_nave_crossed",
+      "description": "Hero crossed the flooded nave."
+    },
+    {
+      "id": "~ch1_nave_cleared",
+      "description": "The drowned dead in the Abbey's nave are defeated."
+    },
+    {
+      "id": "~ch1_abbey_choice",
+      "description": "Hero chose between saving the Abbot and chasing the divers."
+    },
+    {
+      "id": "~ch1_bell_ash",
+      "description": "Hero carries the ash of the dead-bells."
+    },
+    {
+      "id": "~ch1_offerings",
+      "description": "Hero took the Abbey's drowned offerings."
+    },
+    {
+      "id": "~ch1_abbey_done",
+      "description": "Hero completed the Drowned Abbey (milestone level 3)."
+    },
+    {
+      "id": "~ch1_choir_offer",
+      "description": "Sallow offered: the Teeth for Hollowmere's life."
+    },
+    {
+      "id": "~ch1_offer_accepted",
+      "description": "Hero accepted the Choir's offer (dark branch)."
+    },
+    {
+      "id": "~ch1_offer_refused",
+      "description": "Hero refused the Choir's offer."
+    },
+    {
+      "id": "~ch1_cure_path",
+      "description": "Grell granted three days for the cure (path A)."
+    },
+    {
+      "id": "~ch1_tribunal_done",
+      "description": "Grell's tribunal is resolved (any path)."
+    },
+    {
+      "id": "~ch1_deceived_grell",
+      "description": "Hero lied to Grell at the tribunal (Nettle heard)."
+    },
+    {
+      "id": "~ch1_joined_purge",
+      "description": "Hero joined the Purge (path B)."
+    },
+    {
+      "id": "~ch1_teeth_to_grell",
+      "description": "Hero handed a Tooth to Grell."
+    },
+    {
+      "id": "~ch1_raid_done",
+      "description": "The Wardens raided Thornwife Hollow."
+    },
+    {
+      "id": "~ch1_bells_fought",
+      "description": "The night of bells is resolved."
+    },
+    {
+      "id": "~ch1_bells_won",
+      "description": "Hero won the fight at the night of bells."
+    },
+    {
+      "id": "~ch1_sallow_cornered",
+      "description": "Hero cut off Sallow’s escape boat."
+    },
+    {
+      "id": "~ch1_sallow_confessed",
+      "description": "Captured Sallow confessed the Cantor clue (Queen’s-godmother ring)."
+    },
+    {
+      "id": "~ch1_family_one",
+      "description": "Cure given to the first family."
+    },
+    {
+      "id": "~ch1_family_two",
+      "description": "Cure given to the second family."
+    },
+    {
+      "id": "~ch1_family_three",
+      "description": "Cure given to the third family."
+    },
+    {
+      "id": "~ch1_letters",
+      "description": "Hero found Sallow's letters and the Port Sorrel manifest (hook to Ch2)."
+    }
+  ],
+  "endings": [
+    {
+      "id": "fen_cured",
+      "name": "The Fen Cured",
+      "text": "Wick's cure saved Hollowmere, and the Wardens stood down. The Briarkin will remember; so will Grell."
+    },
+    {
+      "id": "fen_purged",
+      "name": "The Fen Purged",
+      "text": "Hollowmere burned. The Sickness there is ended, and so is everything else."
+    },
+    {
+      "id": "fen_abandoned",
+      "name": "The Fen Abandoned",
+      "text": "Hollowmere was left to the Choir, and the Choir took it."
+    }
+  ],
+  "improvisedDifficulty": "medium"
+}
