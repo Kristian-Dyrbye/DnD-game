@@ -295,6 +295,17 @@
        "amount": 24,
        "concentration": false
       }
+     },
+     {
+      "kind": "hook",
+      "hook": "animal_friendship",
+      "params": {
+       "creatureTypes": [
+        "beast"
+       ],
+       "endsOnDamage": true,
+       "targetsPerUpcast": 1
+      }
      }
     ],
     "onSuccess": "none"
@@ -952,6 +963,22 @@
        "amount": 1,
        "concentration": true
       }
+     },
+     {
+      "kind": "hook",
+      "hook": "banishment",
+      "params": {
+       "removedFromCombat": true,
+       "permanentIfTypes": [
+        "aberration",
+        "celestial",
+        "elemental",
+        "fey",
+        "fiend"
+       ],
+       "permanentAfterRounds": 10,
+       "targetsPerUpcast": 1
+      }
      }
     ],
     "onSuccess": "none"
@@ -987,7 +1014,17 @@
    "amount": 1,
    "concentration": false
   },
-  "text": "You touch a willing creature. Until the spell ends, the target's skin assumes a bark-like appearance, and the target has an Armor Class of 17 if its AC is lower than that."
+  "text": "You touch a willing creature. Until the spell ends, the target's skin assumes a bark-like appearance, and the target has an Armor Class of 17 if its AC is lower than that.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "barkskin",
+    "params": {
+     "minAc": 17,
+     "durationHours": 1
+    }
+   }
+  ]
  },
  {
   "id": "beacon_of_hope",
@@ -1018,7 +1055,19 @@
    "concentration": true
   },
   "text": "Choose any number of creatures within range. For the duration, each target has Advantage on Wisdom saving throws and Death Saving Throws and regains the maximum number of Hit Points possible from any healing.",
-  "save": "wis"
+  "save": "wis",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "beacon_of_hope",
+    "params": {
+     "wisSaveAdvantage": true,
+     "deathSaveAdvantage": true,
+     "maxHealing": true,
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "befuddlement",
@@ -1072,6 +1121,20 @@
         "type": "psychic"
        }
       ]
+     },
+     {
+      "kind": "hook",
+      "hook": "befuddlement",
+      "params": {
+       "noSpellcasting": true,
+       "noMagicAction": true,
+       "repeatSaveEveryDays": 30,
+       "endedBy": [
+        "greater_restoration",
+        "heal",
+        "wish"
+       ]
+      }
      }
     ],
     "onSuccess": "half"
@@ -1281,20 +1344,56 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "dex",
-    "onFail": [
+    "kind": "area",
+    "area": {
+     "shape": "line",
+     "size": 100,
+     "width": 5
+    },
+    "effects": [
      {
-      "kind": "damage",
-      "damage": [
+      "kind": "save",
+      "ability": "dex",
+      "onFail": [
        {
-        "dice": "6d10",
-        "type": "force"
+        "kind": "damage",
+        "damage": [
+         {
+          "dice": "6d10",
+          "type": "force"
+         }
+        ]
        }
-      ]
+      ],
+      "onSuccess": "half"
      }
-    ],
-    "onSuccess": "half"
+    ]
+   },
+   {
+    "kind": "hook",
+    "hook": "blade_barrier",
+    "params": {
+     "wall": {
+      "lengthFt": 100,
+      "heightFt": 20,
+      "thicknessFt": 5,
+      "ringDiameterFt": 60
+     },
+     "cover": "three_quarters",
+     "difficultTerrain": true,
+     "save": "dex",
+     "damage": {
+      "dice": "6d10",
+      "type": "force"
+     },
+     "onSuccess": "half",
+     "triggers": [
+      "enter",
+      "end_turn"
+     ],
+     "oncePerTurn": true,
+     "durationRounds": 100
+    }
    }
   ]
  },
@@ -1493,7 +1592,25 @@
    "amount": 1,
    "concentration": false
   },
-  "text": "Roll 1d6 at the end of each of your turns for the duration. On a roll of 4–6, you vanish from your current plane of existence and appear in the Ethereal Plane (the spell ends instantly if you are already on that plane). While on the Ethereal Plane, you can\nperceive the plane you left, which is cast in shades of gray, but you can't see anything there more than 60 feet away. You can affect and be affected only by other creatures on the Ethereal Plane, and creatures on the other plane can't perceive you unless they have a special ability that lets them perceive things on the Ethereal Plane.\n\nYou return to the other plane at the start of your next turn and when the spell ends if you are on the Ethereal Plane. You return to an unoccupied space of your choice that you can see within 10 feet of the space you left. If no unoccupied space is available within that range, you appear in the nearest unoccupied space."
+  "text": "Roll 1d6 at the end of each of your turns for the duration. On a roll of 4–6, you vanish from your current plane of existence and appear in the Ethereal Plane (the spell ends instantly if you are already on that plane). While on the Ethereal Plane, you can\nperceive the plane you left, which is cast in shades of gray, but you can't see anything there more than 60 feet away. You can affect and be affected only by other creatures on the Ethereal Plane, and creatures on the other plane can't perceive you unless they have a special ability that lets them perceive things on the Ethereal Plane.\n\nYou return to the other plane at the start of your next turn and when the spell ends if you are on the Ethereal Plane. You return to an unoccupied space of your choice that you can see within 10 feet of the space you left. If no unoccupied space is available within that range, you appear in the nearest unoccupied space.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "blink",
+    "params": {
+     "roll": "1d6",
+     "vanishOn": [
+      4,
+      5,
+      6
+     ],
+     "plane": "ethereal",
+     "rollAt": "end_of_turn",
+     "returnWithinFt": 10,
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "blur",
@@ -1724,7 +1841,40 @@
   "area": {
    "shape": "sphere",
    "size": 20
-  }
+  },
+  "effects": [
+   {
+    "kind": "area",
+    "area": {
+     "shape": "sphere",
+     "size": 20
+    },
+    "effects": [
+     {
+      "kind": "save",
+      "ability": "cha",
+      "onFail": [
+       {
+        "kind": "hook",
+        "hook": "calm_emotions",
+        "params": {
+         "creatureTypes": [
+          "humanoid"
+         ],
+         "options": [
+          "suppress_charmed_frightened",
+          "indifferent"
+         ],
+         "indifferenceEndsOnDamage": true,
+         "durationRounds": 10
+        }
+       }
+      ],
+      "onSuccess": "none"
+     }
+    ]
+   }
+  ]
  },
  {
   "id": "chain_lightning",
@@ -1844,6 +1994,16 @@
        "amount": 1,
        "concentration": false
       }
+     },
+     {
+      "kind": "hook",
+      "hook": "charm_monster",
+      "params": {
+       "advantageIfFighting": true,
+       "endsOnDamage": true,
+       "friendly": true,
+       "targetsPerUpcast": 1
+      }
      }
     ],
     "onSuccess": "none"
@@ -1901,6 +2061,19 @@
        "amount": 1,
        "concentration": false
       }
+     },
+     {
+      "kind": "hook",
+      "hook": "charm_person",
+      "params": {
+       "creatureTypes": [
+        "humanoid"
+       ],
+       "advantageIfFighting": true,
+       "endsOnDamage": true,
+       "friendly": true,
+       "targetsPerUpcast": 1
+      }
      }
     ],
     "onSuccess": "none"
@@ -1957,6 +2130,14 @@
         "type": "necrotic"
        }
       ]
+     },
+     {
+      "kind": "hook",
+      "hook": "chill_touch",
+      "params": {
+       "noHealing": true,
+       "until": "end_of_caster_next_turn"
+      }
      }
     ]
    }
@@ -2229,6 +2410,34 @@
       "onSuccess": "half"
      }
     ]
+   },
+   {
+    "kind": "hook",
+    "hook": "cloudkill",
+    "params": {
+     "zone": {
+      "shape": "sphere",
+      "size": 20
+     },
+     "heavilyObscured": true,
+     "save": "con",
+     "damage": {
+      "dice": "5d8",
+      "type": "poison"
+     },
+     "upcast": "1d8",
+     "onSuccess": "half",
+     "triggers": [
+      "enter",
+      "end_turn",
+      "zone_moves_in"
+     ],
+     "oncePerTurn": true,
+     "driftFt": 10,
+     "driftAt": "start_of_caster_turn",
+     "dispersedByStrongWind": true,
+     "durationRounds": 100
+    }
    }
   ]
  },
@@ -2284,7 +2493,19 @@
       "onFail": [
        {
         "kind": "condition",
-        "condition": "blinded"
+        "condition": "blinded",
+        "duration": {
+         "unit": "round",
+         "amount": 1,
+         "concentration": false
+        }
+       },
+       {
+        "kind": "hook",
+        "hook": "color_spray",
+        "params": {
+         "until": "end_of_caster_next_turn"
+        }
        }
       ],
       "onSuccess": "none"
@@ -2492,6 +2713,16 @@
        "amount": 1,
        "concentration": true
       }
+     },
+     {
+      "kind": "hook",
+      "hook": "compulsion",
+      "params": {
+       "directionAction": "bonus",
+       "forcedMove": "max_movement",
+       "repeatSave": "wis",
+       "repeatAt": "after_forced_move"
+      }
      }
     ],
     "onSuccess": "none"
@@ -2607,7 +2838,50 @@
   "area": {
    "shape": "sphere",
    "size": 10
-  }
+  },
+  "effects": [
+   {
+    "kind": "area",
+    "area": {
+     "shape": "sphere",
+     "size": 10
+    },
+    "effects": [
+     {
+      "kind": "save",
+      "ability": "wis",
+      "onFail": [
+       {
+        "kind": "hook",
+        "hook": "confusion",
+        "params": {
+         "noBonusActions": true,
+         "noReactions": true,
+         "behaviorDie": "1d10",
+         "behavior": {
+          "1": "random_move",
+          "2": "nothing",
+          "3": "nothing",
+          "4": "nothing",
+          "5": "nothing",
+          "6": "nothing",
+          "7": "melee_random",
+          "8": "melee_random",
+          "9": "normal",
+          "10": "normal"
+         },
+         "repeatSave": "wis",
+         "repeatAt": "end_of_turn",
+         "radiusPerUpcastFt": 5,
+         "durationRounds": 10
+        }
+       }
+      ],
+      "onSuccess": "none"
+     }
+    ]
+   }
+  ]
  },
  {
   "id": "conjure_animals",
@@ -2649,21 +2923,30 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "str",
-    "onFail": [
-     {
-      "kind": "damage",
-      "damage": [
-       {
-        "dice": "3d10",
-        "type": "slashing"
-       }
-      ],
-      "upcast": "1d10"
-     }
-    ],
-    "onSuccess": "none"
+    "kind": "hook",
+    "hook": "conjure_animals",
+    "params": {
+     "pack": {
+      "size": "large"
+     },
+     "save": "dex",
+     "damage": {
+      "dice": "3d10",
+      "type": "slashing"
+     },
+     "upcast": "1d10",
+     "onSuccess": "none",
+     "triggerRadiusFt": 10,
+     "triggers": [
+      "zone_moves_in",
+      "enter",
+      "end_turn"
+     ],
+     "oncePerTurn": true,
+     "moveFt": 30,
+     "casterStrSaveAdvantageWithinFt": 5,
+     "durationRounds": 100
+    }
    }
   ]
  },
@@ -2711,30 +2994,40 @@
   },
   "effects": [
    {
-    "kind": "area",
-    "area": {
-     "shape": "cylinder",
-     "size": 10,
-     "width": 40
-    },
-    "effects": [
-     {
-      "kind": "save",
-      "ability": "dex",
-      "onFail": [
-       {
-        "kind": "damage",
-        "damage": [
-         {
-          "dice": "6d12",
-          "type": "radiant"
-         }
-        ]
-       }
-      ],
-      "onSuccess": "half"
-     }
-    ]
+    "kind": "hook",
+    "hook": "conjure_celestial",
+    "params": {
+     "zone": {
+      "shape": "cylinder",
+      "size": 10,
+      "width": 40
+     },
+     "options": {
+      "healing": {
+       "dice": "4d12",
+       "addSpellMod": true
+      },
+      "searing": {
+       "save": "dex",
+       "damage": {
+        "dice": "6d12",
+        "type": "radiant"
+       },
+       "onSuccess": "half"
+      }
+     },
+     "upcast": "1d12",
+     "triggers": [
+      "cast",
+      "zone_moves_in",
+      "enter",
+      "end_turn"
+     ],
+     "oncePerTurn": true,
+     "moveFt": 30,
+     "brightLight": true,
+     "durationRounds": 100
+    }
    }
   ]
  },
@@ -2775,20 +3068,29 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "dex",
-    "onFail": [
-     {
-      "kind": "condition",
-      "condition": "restrained",
-      "duration": {
-       "unit": "minute",
-       "amount": 10,
-       "concentration": true
-      }
-     }
-    ],
-    "onSuccess": "none"
+    "kind": "hook",
+    "hook": "conjure_elemental",
+    "params": {
+     "elements": {
+      "air": "lightning",
+      "earth": "thunder",
+      "fire": "fire",
+      "water": "cold"
+     },
+     "save": "dex",
+     "damageDice": "8d8",
+     "upcast": "1d8",
+     "onFail": "restrained",
+     "triggers": [
+      "enter_space",
+      "start_turn_within_5ft"
+     ],
+     "onlyIfNoneRestrained": true,
+     "restrainedRepeatSave": "dex",
+     "restrainedRepeatAt": "start_of_turn",
+     "restrainedFailDamageDice": "4d8",
+     "durationRounds": 100
+    }
    }
   ]
  },
@@ -2905,30 +3207,29 @@
   },
   "effects": [
    {
-    "kind": "area",
-    "area": {
-     "shape": "emanation",
-     "size": 10
-    },
-    "effects": [
-     {
-      "kind": "save",
-      "ability": "wis",
-      "onFail": [
-       {
-        "kind": "damage",
-        "damage": [
-         {
-          "dice": "5d8",
-          "type": "force"
-         }
-        ],
-        "upcast": "1d8"
-       }
-      ],
-      "onSuccess": "half"
-     }
-    ]
+    "kind": "hook",
+    "hook": "conjure_woodland_beings",
+    "params": {
+     "zone": {
+      "shape": "emanation",
+      "size": 10
+     },
+     "save": "wis",
+     "damage": {
+      "dice": "5d8",
+      "type": "force"
+     },
+     "upcast": "1d8",
+     "onSuccess": "half",
+     "triggers": [
+      "zone_moves_in",
+      "enter",
+      "end_turn"
+     ],
+     "oncePerTurn": true,
+     "bonusActionDisengage": true,
+     "durationRounds": 100
+    }
    }
   ]
  },
@@ -2973,20 +3274,24 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "int",
-    "onFail": [
-     {
-      "kind": "damage",
-      "damage": [
-       {
-        "dice": "6d6",
-        "type": "psychic"
-       }
+    "kind": "hook",
+    "hook": "contact_other_plane",
+    "params": {
+     "selfSave": "int",
+     "dc": 15,
+     "questions": 5,
+     "onFail": {
+      "damage": {
+       "dice": "6d6",
+       "type": "psychic"
+      },
+      "condition": "incapacitated",
+      "until": "long_rest",
+      "endedBy": [
+       "greater_restoration"
       ]
      }
-    ],
-    "onSuccess": "none"
+    }
    }
   ]
  },
@@ -3042,6 +3347,28 @@
         "type": "necrotic"
        }
       ]
+     },
+     {
+      "kind": "condition",
+      "condition": "poisoned",
+      "duration": {
+       "unit": "day",
+       "amount": 7,
+       "concentration": false
+      }
+     },
+     {
+      "kind": "hook",
+      "hook": "contagion",
+      "params": {
+       "chosenAbilitySaveDisadvantage": true,
+       "repeatSave": "con",
+       "repeatAt": "end_of_turn",
+       "successesToEnd": 3,
+       "failuresToLock": 3,
+       "lockedDurationDays": 7,
+       "resistEndingSave": "con"
+      }
      }
     ],
     "onSuccess": "none"
@@ -3152,20 +3479,35 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "str",
-    "onFail": [
-     {
-      "kind": "damage",
-      "damage": [
-       {
-        "dice": "2d8",
-        "type": "bludgeoning"
-       }
-      ]
-     }
-    ],
-    "onSuccess": "half"
+    "kind": "hook",
+    "hook": "control_water",
+    "params": {
+     "cubeFt": 100,
+     "options": [
+      "flood",
+      "part_water",
+      "redirect_flow",
+      "whirlpool"
+     ],
+     "repeatAction": "magic",
+     "flood": {
+      "riseFt": 20,
+      "waveHeightFt": 20,
+      "capsizeChancePct": 25
+     },
+     "whirlpool": {
+      "save": "str",
+      "damage": {
+       "dice": "2d8",
+       "type": "bludgeoning"
+      },
+      "onSuccess": "half",
+      "pullFt": 10,
+      "pullRangeFt": 25,
+      "escapeCheck": "str_athletics"
+     },
+     "durationRounds": 100
+    }
    }
   ]
  },
@@ -3498,7 +3840,24 @@
   "area": {
    "shape": "sphere",
    "size": 15
-  }
+  },
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "darkness",
+    "params": {
+     "zone": {
+      "shape": "sphere",
+      "size": 15
+     },
+     "magicalDarkness": true,
+     "blocksDarkvision": true,
+     "dispelsLightSpellsUpToLevel": 2,
+     "objectEmanationFt": 15,
+     "durationRounds": 100
+    }
+   }
+  ]
  },
  {
   "id": "darkvision",
@@ -3531,7 +3890,17 @@
    "amount": 8,
    "concentration": false
   },
-  "text": "For the duration, a willing creature you touch has Darkvision with a range of 150 feet."
+  "text": "For the duration, a willing creature you touch has Darkvision with a range of 150 feet.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "darkvision",
+    "params": {
+     "darkvisionFt": 150,
+     "durationHours": 8
+    }
+   }
+  ]
  },
  {
   "id": "daylight",
@@ -3599,7 +3968,18 @@
    "amount": 8,
    "concentration": false
   },
-  "text": "You touch a creature and grant it a measure of protection from death. The first time the target would drop to 0 Hit Points before the spell ends, the target instead drops to 1 Hit Point, and the spell ends.\n\nIf the spell is still in effect when the target is subjected to an effect that would kill it instantly without dealing damage, that effect is negated against the target, and the spell ends."
+  "text": "You touch a creature and grant it a measure of protection from death. The first time the target would drop to 0 Hit Points before the spell ends, the target instead drops to 1 Hit Point, and the spell ends.\n\nIf the spell is still in effect when the target is subjected to an effect that would kill it instantly without dealing damage, that effect is negated against the target, and the spell ends.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "death_ward",
+    "params": {
+     "dropTo1Hp": true,
+     "negatesInstantDeath": true,
+     "durationHours": 8
+    }
+   }
+  ]
  },
  {
   "id": "delayed_blast_fireball",
@@ -3839,6 +4219,21 @@
     "dice": "4d6",
     "type": "force"
    }
+  ],
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "dimension_door",
+    "params": {
+     "teleportFt": 500,
+     "passengers": 1,
+     "passengerRangeFt": 5,
+     "blockedDamage": {
+      "dice": "4d6",
+      "type": "force"
+     }
+    }
+   }
   ]
  },
  {
@@ -4068,6 +4463,13 @@
        }
       ],
       "upcast": "1d6"
+     },
+     {
+      "kind": "hook",
+      "hook": "dissonant_whispers",
+      "params": {
+       "reactionMoveAway": true
+      }
      }
     ],
     "onSuccess": "half"
@@ -4253,8 +4655,47 @@
     "ability": "cha",
     "onFail": [
      {
-      "kind": "condition",
-      "condition": "deafened"
+      "kind": "hook",
+      "hook": "divine_word",
+      "params": {
+       "hpThresholds": [
+        {
+         "maxHp": 20,
+         "effect": "dies"
+        },
+        {
+         "maxHp": 30,
+         "conditions": [
+          "blinded",
+          "deafened",
+          "stunned"
+         ],
+         "durationRounds": 600
+        },
+        {
+         "maxHp": 40,
+         "conditions": [
+          "blinded",
+          "deafened"
+         ],
+         "durationRounds": 100
+        },
+        {
+         "maxHp": 50,
+         "conditions": [
+          "deafened"
+         ],
+         "durationRounds": 10
+        }
+       ],
+       "banishTypes": [
+        "celestial",
+        "elemental",
+        "fey",
+        "fiend"
+       ],
+       "banishHours": 24
+      }
      }
     ],
     "onSuccess": "none"
@@ -4309,6 +4750,24 @@
        "unit": "minute",
        "amount": 1,
        "concentration": true
+      }
+     },
+     {
+      "kind": "hook",
+      "hook": "dominate_beast",
+      "params": {
+       "creatureTypes": [
+        "beast"
+       ],
+       "advantageIfFighting": true,
+       "repeatSaveOnDamage": true,
+       "commands": true,
+       "durationRoundsBySlot": {
+        "4": 10,
+        "5": 100,
+        "6": 600,
+        "7": 4800
+       }
       }
      }
     ],
@@ -4366,6 +4825,19 @@
        "amount": 1,
        "concentration": true
       }
+     },
+     {
+      "kind": "hook",
+      "hook": "dominate_monster",
+      "params": {
+       "advantageIfFighting": true,
+       "repeatSaveOnDamage": true,
+       "commands": true,
+       "durationRoundsBySlot": {
+        "8": 600,
+        "9": 4800
+       }
+      }
      }
     ],
     "onSuccess": "none"
@@ -4421,6 +4893,24 @@
        "amount": 1,
        "concentration": true
       }
+     },
+     {
+      "kind": "hook",
+      "hook": "dominate_person",
+      "params": {
+       "creatureTypes": [
+        "humanoid"
+       ],
+       "advantageIfFighting": true,
+       "repeatSaveOnDamage": true,
+       "commands": true,
+       "durationRoundsBySlot": {
+        "5": 10,
+        "6": 100,
+        "7": 600,
+        "8": 4800
+       }
+      }
      }
     ],
     "onSuccess": "none"
@@ -4462,7 +4952,29 @@
   "area": {
    "shape": "cone",
    "size": 15
-  }
+  },
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "dragons_breath",
+    "params": {
+     "cone": 15,
+     "save": "dex",
+     "damageTypes": [
+      "acid",
+      "cold",
+      "fire",
+      "lightning",
+      "poison"
+     ],
+     "dice": "3d6",
+     "upcast": "1d6",
+     "onSuccess": "half",
+     "repeatAction": "magic",
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "dream",
@@ -4504,20 +5016,24 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "wis",
-    "onFail": [
-     {
-      "kind": "damage",
-      "damage": [
-       {
+    "kind": "hook",
+    "hook": "dream",
+    "params": {
+     "messengerIncapacitated": true,
+     "messengerSpeedZero": true,
+     "terrifying": {
+      "maxWords": 10,
+      "save": "wis",
+      "onFail": {
+       "noRestBenefit": true,
+       "damageOnWake": {
         "dice": "3d6",
         "type": "psychic"
        }
-      ]
-     }
-    ],
-    "onSuccess": "none"
+      }
+     },
+     "durationHours": 8
+    }
    }
   ]
  },
@@ -4598,20 +5114,35 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "dex",
-    "onFail": [
-     {
-      "kind": "damage",
-      "damage": [
-       {
-        "dice": "12d6",
-        "type": "bludgeoning"
-       }
-      ]
-     }
-    ],
-    "onSuccess": "half"
+    "kind": "hook",
+    "hook": "earthquake",
+    "params": {
+     "radiusFt": 100,
+     "difficultTerrain": true,
+     "save": "dex",
+     "onFail": {
+      "condition": "prone",
+      "breakConcentration": true
+     },
+     "triggers": [
+      "cast",
+      "end_of_caster_turn"
+     ],
+     "fissures": "1d6",
+     "fissureDepthFt": "1d10*10",
+     "structureDamage": 50,
+     "collapse": {
+      "save": "dex",
+      "damage": {
+       "dice": "12d6",
+       "type": "bludgeoning"
+      },
+      "onSuccess": "half",
+      "condition": "prone",
+      "escapeDc": 20
+     },
+     "durationRounds": 10
+    }
    }
   ]
  },
@@ -4666,6 +5197,20 @@
       ]
      }
     ]
+   },
+   {
+    "kind": "hook",
+    "hook": "eldritch_blast",
+    "params": {
+     "beamsByLevel": {
+      "1": 1,
+      "5": 2,
+      "11": 3,
+      "17": 4
+     },
+     "separateAttacks": true,
+     "noDiceScaling": true
+    }
    }
   ]
  },
@@ -4738,7 +5283,25 @@
    "concentration": true
   },
   "text": "You touch a creature and choose Strength, Dexterity, Intelligence, Wisdom, or Charisma. For the duration, the target has Advantage on ability checks using the chosen ability.",
-  "higherLevels": "You can target one additional creature for each spell slot level above 2. You can choose a different ability for each target."
+  "higherLevels": "You can target one additional creature for each spell slot level above 2. You can choose a different ability for each target.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "enhance_ability",
+    "params": {
+     "abilityChoice": [
+      "str",
+      "dex",
+      "int",
+      "wis",
+      "cha"
+     ],
+     "checkAdvantage": true,
+     "targetsPerUpcast": 1,
+     "durationHours": 1
+    }
+   }
+  ]
  },
  {
   "id": "enlarge_reduce",
@@ -4773,7 +5336,29 @@
    "concentration": true
   },
   "text": "For the duration, the spell enlarges or reduces a creature or an object you can see within range (see the chosen effect below). A targeted object must be neither worn nor carried. If the target is an unwilling creature, it can make a Constitution saving throw. On a successful save, the spell has no effect.\n\nEverything that a targeted creature is wearing and carrying changes size with it. Any item it drops returns to normal size at once. A thrown weapon or piece of ammunition returns to normal size immediately after it hits or misses a target.\n\n_Enlarge._ The target's size increases by one category—from Medium to Large, for example. The target also has Advantage on Strength checks and Strength saving throws. The target's attacks with its enlarged weapons or Unarmed Strikes deal an extra 1d4 damage on a hit.\n\n_Reduce._ The target's size decreases by one category—from Medium to Small, for example. The target also has Disadvantage on Strength checks and Strength saving throws. The target's attacks with its reduced weapons or Unarmed Strikes deal 1d4 less damage on a hit (this can't reduce the damage below 1).",
-  "save": "con"
+  "save": "con",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "enlarge_reduce",
+    "params": {
+     "unwillingSave": "con",
+     "options": {
+      "enlarge": {
+       "sizeSteps": 1,
+       "strAdvantage": true,
+       "extraDamage": "1d4"
+      },
+      "reduce": {
+       "sizeSteps": -1,
+       "strDisadvantage": true,
+       "damagePenalty": "1d4"
+      }
+     },
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "ensnaring_strike",
@@ -4820,14 +5405,27 @@
     "ability": "str",
     "onFail": [
      {
-      "kind": "damage",
-      "damage": [
-       {
+      "kind": "condition",
+      "condition": "restrained",
+      "duration": {
+       "unit": "minute",
+       "amount": 1,
+       "concentration": true
+      }
+     },
+     {
+      "kind": "hook",
+      "hook": "ensnaring_strike",
+      "params": {
+       "trigger": "weapon_hit",
+       "advantageIfLargeOrBigger": true,
+       "startTurnDamage": {
         "dice": "1d6",
         "type": "piercing"
-       }
-      ],
-      "upcast": "1d6"
+       },
+       "upcast": "1d6",
+       "escapeCheck": "str_athletics"
+      }
      }
     ],
     "onSuccess": "none"
@@ -5003,7 +5601,18 @@
    "amount": 10,
    "concentration": true
   },
-  "text": "You take the Dash action, and until the spell ends, you can take that action again as a Bonus Action."
+  "text": "You take the Dash action, and until the spell ends, you can take that action again as a Bonus Action.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "expeditious_retreat",
+    "params": {
+     "dashOnCast": true,
+     "dashAction": "bonus",
+     "durationRounds": 100
+    }
+   }
+  ]
  },
  {
   "id": "eyebite",
@@ -5179,20 +5788,25 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "dex",
-    "onFail": [
-     {
-      "kind": "damage",
-      "damage": [
-       {
-        "dice": "4d8",
-        "type": "force"
-       }
-      ]
-     }
-    ],
-    "onSuccess": "none"
+    "kind": "hook",
+    "hook": "faithful_hound",
+    "params": {
+     "bite": {
+      "save": "dex",
+      "damage": {
+       "dice": "4d8",
+       "type": "force"
+      },
+      "reachFt": 5,
+      "at": "start_of_caster_turn"
+     },
+     "truesightFt": 30,
+     "alarmRangeFt": 30,
+     "leashFt": 300,
+     "moveFt": 30,
+     "moveAction": "magic",
+     "durationHours": 8
+    }
    }
   ]
  },
@@ -5300,6 +5914,16 @@
          "amount": 1,
          "concentration": true
         }
+       },
+       {
+        "kind": "hook",
+        "hook": "fear",
+        "params": {
+         "dropHeld": true,
+         "dashAway": true,
+         "repeatSave": "wis",
+         "repeatAt": "end_of_turn_out_of_sight"
+        }
        }
       ],
       "onSuccess": "none"
@@ -5340,7 +5964,19 @@
    "amount": 1,
    "concentration": false
   },
-  "text": "Choose up to five falling creatures within range. A falling creature's rate of descent slows to 60 feet per round until the spell ends. If a creature lands before the spell ends, the creature takes no damage from the fall, and the spell ends for that creature."
+  "text": "Choose up to five falling creatures within range. A falling creature's rate of descent slows to 60 feet per round until the spell ends. If a creature lands before the spell ends, the creature takes no damage from the fall, and the spell ends for that creature.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "feather_fall",
+    "params": {
+     "maxTargets": 5,
+     "descentFtPerRound": 60,
+     "noFallDamage": true,
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "find_familiar",
@@ -5520,6 +6156,16 @@
         "type": "necrotic"
        }
       ]
+     },
+     {
+      "kind": "hook",
+      "hook": "finger_of_death",
+      "params": {
+       "riseAsZombieIfKilledTypes": [
+        "humanoid"
+       ],
+       "riseAt": "start_of_caster_next_turn"
+      }
      }
     ],
     "onSuccess": "half"
@@ -5692,6 +6338,34 @@
     "dice": "2d8",
     "type": "cold"
    }
+  ],
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "fire_shield",
+    "params": {
+     "options": {
+      "warm": {
+       "resistance": "cold",
+       "retaliate": {
+        "dice": "2d8",
+        "type": "fire"
+       }
+      },
+      "chill": {
+       "resistance": "fire",
+       "retaliate": {
+        "dice": "2d8",
+        "type": "cold"
+       }
+      }
+     },
+     "retaliateTrigger": "melee_hit_within_5ft",
+     "brightLightFt": 10,
+     "dimLightFt": 10,
+     "durationRounds": 100
+    }
+   }
   ]
  },
  {
@@ -5794,7 +6468,27 @@
   },
   "text": "You evoke a fiery blade in your free hand. The blade is similar in size and shape to a scimitar, and it lasts for the duration. If you let go of the blade, it disappears, but you can evoke it again as a Bonus Action.\n\nAs a Magic action, you can make a melee spell attack with the fiery blade. On a hit, the target takes Fire damage equal to 3d6 plus your spellcasting ability modifier.\n\nThe flaming blade sheds Bright Light in a 10-foot radius and Dim Light for an additional 10 feet.",
   "higherLevels": "The damage increases by 1d6 for each spell slot level above 2.",
-  "attack": "melee"
+  "attack": "melee",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "flame_blade",
+    "params": {
+     "attack": "melee_spell",
+     "damage": {
+      "dice": "3d6",
+      "type": "fire"
+     },
+     "addSpellMod": true,
+     "upcast": "1d6",
+     "repeatAction": "magic",
+     "resummonAction": "bonus",
+     "brightLightFt": 10,
+     "dimLightFt": 10,
+     "durationRounds": 100
+    }
+   }
+  ]
  },
  {
   "id": "flame_strike",
@@ -6048,7 +6742,19 @@
    "concentration": true
   },
   "text": "You touch a willing creature. For the duration, the target gains a Fly Speed of 60 feet and can hover. When the spell ends, the target falls if it is still aloft unless it can stop the fall.",
-  "higherLevels": "You can target one additional creature for each spell slot level above 3."
+  "higherLevels": "You can target one additional creature for each spell slot level above 3.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "fly",
+    "params": {
+     "flySpeedFt": 60,
+     "hover": true,
+     "targetsPerUpcast": 1,
+     "durationRounds": 100
+    }
+   }
+  ]
  },
  {
   "id": "fog_cloud",
@@ -6086,7 +6792,23 @@
   "area": {
    "shape": "sphere",
    "size": 20
-  }
+  },
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "fog_cloud",
+    "params": {
+     "zone": {
+      "shape": "sphere",
+      "size": 20
+     },
+     "heavilyObscured": true,
+     "radiusPerUpcastFt": 20,
+     "dispersedByStrongWind": true,
+     "durationHours": 1
+    }
+   }
+  ]
  },
  {
   "id": "forbiddance",
@@ -6219,7 +6941,25 @@
    "concentration": false
   },
   "text": "You touch a willing creature. For the duration, the target's movement is unaffected by Difficult Terrain, and spells and other magical effects can neither reduce the target's Speed nor cause the target to have the Paralyzed or Restrained conditions. The target also has a Swim Speed equal to its Speed.\n\nIn addition, the target can spend 5 feet of movement to automatically escape from nonmagical restraints, such as manacles or a creature imposing the Grappled condition on it.",
-  "higherLevels": "You can target one additional creature for each spell slot level above 4."
+  "higherLevels": "You can target one additional creature for each spell slot level above 4.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "freedom_of_movement",
+    "params": {
+     "ignoreDifficultTerrain": true,
+     "immuneConditions": [
+      "paralyzed",
+      "restrained"
+     ],
+     "noSpeedReduction": true,
+     "swimSpeedEqualsSpeed": true,
+     "escapeCostFt": 5,
+     "targetsPerUpcast": 1,
+     "durationHours": 1
+    }
+   }
+  ]
  },
  {
   "id": "freezing_sphere",
@@ -6414,13 +7154,35 @@
     "ability": "wis",
     "onFail": [
      {
-      "kind": "damage",
-      "damage": [
-       {
+      "kind": "condition",
+      "condition": "charmed",
+      "duration": {
+       "unit": "day",
+       "amount": 30,
+       "concentration": false
+      }
+     },
+     {
+      "kind": "hook",
+      "hook": "geas",
+      "params": {
+       "violationDamage": {
         "dice": "5d10",
         "type": "psychic"
-       }
-      ]
+       },
+       "maxViolationsPerDay": 1,
+       "autoSucceedIfCantUnderstand": true,
+       "durationDaysBySlot": {
+        "5": 30,
+        "7": 365
+       },
+       "permanentAtSlot": 9,
+       "endedBy": [
+        "remove_curse",
+        "greater_restoration",
+        "wish"
+       ]
+      }
      }
     ],
     "onSuccess": "none"
@@ -6623,7 +7385,19 @@
    "amount": 24,
    "concentration": false
   },
-  "text": "Ten berries appear in your hand and are infused with magic for the duration. A creature can take a Bonus Action to eat one berry. Eating a berry restores 1 Hit Point, and the berry provides enough nourishment to sustain a creature for one day.\n\nUneaten berries disappear when the spell ends."
+  "text": "Ten berries appear in your hand and are infused with magic for the duration. A creature can take a Bonus Action to eat one berry. Eating a berry restores 1 Hit Point, and the berry provides enough nourishment to sustain a creature for one day.\n\nUneaten berries disappear when the spell ends.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "goodberry",
+    "params": {
+     "berries": 10,
+     "healPerBerry": 1,
+     "eatAction": "bonus",
+     "durationHours": 24
+    }
+   }
+  ]
  },
  {
   "id": "grease",
@@ -6662,20 +7436,42 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "dex",
-    "onFail": [
+    "kind": "area",
+    "area": {
+     "shape": "cube",
+     "size": 10
+    },
+    "effects": [
      {
-      "kind": "condition",
-      "condition": "prone",
-      "duration": {
-       "unit": "minute",
-       "amount": 1,
-       "concentration": false
-      }
+      "kind": "save",
+      "ability": "dex",
+      "onFail": [
+       {
+        "kind": "condition",
+        "condition": "prone"
+       }
+      ],
+      "onSuccess": "none"
      }
-    ],
-    "onSuccess": "none"
+    ]
+   },
+   {
+    "kind": "hook",
+    "hook": "grease",
+    "params": {
+     "zone": {
+      "shape": "cube",
+      "size": 10
+     },
+     "difficultTerrain": true,
+     "save": "dex",
+     "onFail": "prone",
+     "triggers": [
+      "enter",
+      "end_turn"
+     ],
+     "durationRounds": 10
+    }
    }
   ]
  },
@@ -6756,7 +7552,23 @@
    "unit": "instantaneous",
    "concentration": false
   },
-  "text": "You touch a creature and magically remove one of the following effects from it:\n\n- 1 Exhaustion level\n- The Charmed or Petrified condition\n- A curse, including the target's Attunement to a cursed magic item\n- Any reduction to one of the target's ability scores\n- Any reduction to the target's Hit Point maximum"
+  "text": "You touch a creature and magically remove one of the following effects from it:\n\n- 1 Exhaustion level\n- The Charmed or Petrified condition\n- A curse, including the target's Attunement to a cursed magic item\n- Any reduction to one of the target's ability scores\n- Any reduction to the target's Hit Point maximum",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "greater_restoration",
+    "params": {
+     "removesOneOf": [
+      "exhaustion_level",
+      "charmed",
+      "petrified",
+      "curse",
+      "ability_reduction",
+      "hp_max_reduction"
+     ]
+    }
+   }
+  ]
  },
  {
   "id": "guardian_of_faith",
@@ -6787,7 +7599,29 @@
    "concentration": false
   },
   "text": "A Large spectral guardian appears and hovers for the duration in an unoccupied space that you can see within range. The guardian occupies that space and is invulnerable, and it appears in a form appropriate for your deity or pantheon.\n\nAny enemy that moves to a space within 10 feet of the guardian for the first time on a turn or starts its turn there makes a Dexterity saving throw, taking 20 Radiant damage on a failed save or half as much damage on a successful one. The guardian vanishes when it has dealt a total of 60 damage.",
-  "save": "dex"
+  "save": "dex",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "guardian_of_faith",
+    "params": {
+     "triggerRadiusFt": 10,
+     "save": "dex",
+     "damage": {
+      "dice": "20",
+      "type": "radiant"
+     },
+     "onSuccess": "half",
+     "triggers": [
+      "enter",
+      "start_turn"
+     ],
+     "enemiesOnly": true,
+     "damageCap": 60,
+     "durationHours": 8
+    }
+   }
+  ]
  },
  {
   "id": "guards_and_wards",
@@ -6849,7 +7683,18 @@
    "amount": 1,
    "concentration": true
   },
-  "text": "You touch a willing creature and choose a skill. Until the spell ends, the creature adds 1d4 to any ability check using the chosen skill."
+  "text": "You touch a willing creature and choose a skill. Until the spell ends, the creature adds 1d4 to any ability check using the chosen skill.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "guidance",
+    "params": {
+     "bonusDice": "1d4",
+     "appliesTo": "chosen_skill_checks",
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "guiding_bolt",
@@ -6947,7 +7792,28 @@
    "concentration": true
   },
   "text": "A Line of strong wind 60 feet long and 10 feet wide blasts from you in a direction you choose for the duration. Each creature in the Line must succeed on a Strength saving throw or be pushed 15 feet away from you in a direction following the Line. A creature that ends its turn in the Line must make the same save.\n\nAny creature in the Line must spend 2 feet of movement for every 1 foot it moves when moving closer to you.\n\nThe gust disperses gas or vapor, and it extinguishes candles and similar unprotected flames in the area. It causes protected flames, such as those of lanterns, to dance wildly and has a 50 percent chance to extinguish them.\n\nAs a Bonus Action on your later turns, you can change the direction in which the Line blasts from you.",
-  "save": "str"
+  "save": "str",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "gust_of_wind",
+    "params": {
+     "line": {
+      "lengthFt": 60,
+      "widthFt": 10
+     },
+     "save": "str",
+     "pushFt": 15,
+     "triggers": [
+      "cast",
+      "end_turn"
+     ],
+     "approachCostMultiplier": 2,
+     "redirectAction": "bonus",
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "hallow",
@@ -7068,6 +7934,14 @@
         "type": "necrotic"
        }
       ]
+     },
+     {
+      "kind": "hook",
+      "hook": "harm",
+      "params": {
+       "reduceHpMaxByDamage": true,
+       "minHpMax": 1
+      }
      }
     ],
     "onSuccess": "half"
@@ -7266,21 +8140,25 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "con",
-    "onFail": [
-     {
-      "kind": "damage",
-      "damage": [
-       {
-        "dice": "2d8",
-        "type": "fire"
-       }
-      ],
-      "upcast": "1d8"
-     }
-    ],
-    "onSuccess": "none"
+    "kind": "hook",
+    "hook": "heat_metal",
+    "params": {
+     "damage": {
+      "dice": "2d8",
+      "type": "fire"
+     },
+     "upcast": "1d8",
+     "repeatAction": "bonus",
+     "affects": "contact_with_metal_object",
+     "save": "con",
+     "onFail": "drop_object",
+     "ifNotDropped": {
+      "attackDisadvantage": true,
+      "checkDisadvantage": true,
+      "until": "start_of_caster_next_turn"
+     },
+     "durationRounds": 10
+    }
    }
   ]
  },
@@ -7611,6 +8489,16 @@
      }
     ],
     "onSuccess": "none"
+   },
+   {
+    "kind": "hook",
+    "hook": "hold_monster",
+    "params": {
+     "appliesIfCondition": "paralyzed",
+     "repeatSave": "wis",
+     "repeatAt": "end_of_turn",
+     "targetsPerUpcast": 1
+    }
    }
   ]
  },
@@ -7670,6 +8558,19 @@
      }
     ],
     "onSuccess": "none"
+   },
+   {
+    "kind": "hook",
+    "hook": "hold_person",
+    "params": {
+     "creatureTypes": [
+      "humanoid"
+     ],
+     "appliesIfCondition": "paralyzed",
+     "repeatSave": "wis",
+     "repeatAt": "end_of_turn",
+     "targetsPerUpcast": 1
+    }
    }
   ]
  },
@@ -7713,29 +8614,27 @@
   ],
   "effects": [
    {
-    "kind": "area",
-    "area": {
-     "shape": "emanation",
-     "size": 30
-    },
-    "effects": [
-     {
-      "kind": "save",
-      "ability": "con",
-      "onFail": [
-       {
-        "kind": "condition",
-        "condition": "blinded",
-        "duration": {
-         "unit": "minute",
-         "amount": 1,
-         "concentration": true
-        }
-       }
+    "kind": "hook",
+    "hook": "holy_aura",
+    "params": {
+     "zone": {
+      "shape": "emanation",
+      "size": 30
+     },
+     "alliesSaveAdvantage": true,
+     "attacksAgainstAllies": "disadvantage",
+     "retaliation": {
+      "attackerTypes": [
+       "fiend",
+       "undead"
       ],
-      "onSuccess": "none"
-     }
-    ]
+      "trigger": "melee_hit",
+      "save": "con",
+      "condition": "blinded",
+      "until": "end_of_attacker_next_turn"
+     },
+     "durationRounds": 10
+    }
    }
   ]
  },
@@ -8229,6 +9128,33 @@
       "onSuccess": "half"
      }
     ]
+   },
+   {
+    "kind": "hook",
+    "hook": "incendiary_cloud",
+    "params": {
+     "zone": {
+      "shape": "sphere",
+      "size": 20
+     },
+     "heavilyObscured": true,
+     "save": "dex",
+     "damage": {
+      "dice": "10d8",
+      "type": "fire"
+     },
+     "onSuccess": "half",
+     "triggers": [
+      "enter",
+      "end_turn",
+      "zone_moves_in"
+     ],
+     "oncePerTurn": true,
+     "driftFt": 10,
+     "driftAt": "start_of_caster_turn",
+     "dispersedByStrongWind": true,
+     "durationRounds": 10
+    }
    }
   ]
  },
@@ -8357,6 +9283,31 @@
       "onSuccess": "half"
      }
     ]
+   },
+   {
+    "kind": "hook",
+    "hook": "insect_plague",
+    "params": {
+     "zone": {
+      "shape": "sphere",
+      "size": 20
+     },
+     "lightlyObscured": true,
+     "difficultTerrain": true,
+     "save": "con",
+     "damage": {
+      "dice": "4d10",
+      "type": "piercing"
+     },
+     "upcast": "1d10",
+     "onSuccess": "half",
+     "triggers": [
+      "enter",
+      "end_turn"
+     ],
+     "oncePerTurn": true,
+     "durationRounds": 100
+    }
    }
   ]
  },
@@ -8437,9 +9388,30 @@
        "amount": 1,
        "concentration": true
       }
+     },
+     {
+      "kind": "hook",
+      "hook": "irresistible_dance",
+      "params": {
+       "danceInPlace": true,
+       "dexSaveDisadvantage": true,
+       "attackDisadvantage": true,
+       "attacksAgainst": "advantage",
+       "repeatSave": "wis",
+       "repeatAction": "action"
+      }
      }
     ],
-    "onSuccess": "none"
+    "onSuccess": [
+     {
+      "kind": "hook",
+      "hook": "irresistible_dance",
+      "params": {
+       "danceInPlace": true,
+       "until": "end_of_target_next_turn"
+      }
+     }
+    ]
    }
   ]
  },
@@ -8535,7 +9507,20 @@
    "concentration": false
   },
   "text": "You touch a willing creature. Once on each of its turns until the spell ends, that creature can jump up to 30 feet by spending 10 feet of movement.",
-  "higherLevels": "You can target one additional creature for each spell slot level above 1."
+  "higherLevels": "You can target one additional creature for each spell slot level above 1.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "jump",
+    "params": {
+     "jumpFt": 30,
+     "moveCostFt": 10,
+     "oncePerTurn": true,
+     "targetsPerUpcast": 1,
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "knock",
@@ -8677,7 +9662,21 @@
    "concentration": true
   },
   "text": "One creature or loose object of your choice that you can see within range rises vertically up to 20 feet and remains suspended there for the duration. The spell can levitate an object that weighs up to 500 pounds. An unwilling creature that succeeds on a Constitution saving throw is unaffected.\n\nThe target can move only by pushing or pulling against a fixed object or surface within reach (such as a wall or a ceiling), which allows it to move as if it were climbing. You can change the target's altitude by up to 20 feet in either direction on your turn. If you are the target, you can move up or down as part of your move. Otherwise, you can take a Magic action to move the target, which must remain within the spell's range.\n\nWhen the spell ends, the target floats gently to the ground if it is still aloft.",
-  "save": "con"
+  "save": "con",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "levitate",
+    "params": {
+     "unwillingSave": "con",
+     "riseFt": 20,
+     "maxWeightLb": 500,
+     "altitudeChangeFt": 20,
+     "moveAction": "magic",
+     "durationRounds": 100
+    }
+   }
+  ]
  },
  {
   "id": "light",
@@ -8917,7 +9916,18 @@
    "concentration": false
   },
   "text": "You touch a creature. The target's Speed increases by 10 feet until the spell ends.",
-  "higherLevels": "You can target one additional creature for each spell slot level above 1."
+  "higherLevels": "You can target one additional creature for each spell slot level above 1.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "longstrider",
+    "params": {
+     "speedBonusFt": 10,
+     "targetsPerUpcast": 1,
+     "durationHours": 1
+    }
+   }
+  ]
  },
  {
   "id": "mage_armor",
@@ -9183,7 +10193,22 @@
    "concentration": false
   },
   "text": "You touch a nonmagical weapon. Until the spell ends, that weapon becomes a magic weapon with a +1 bonus to attack rolls and damage rolls. The spell ends early if you cast it again.",
-  "higherLevels": "The bonus increases to +2 with a level 3–5 spell slot. The bonus increases to +3 with a level 6+ spell slot."
+  "higherLevels": "The bonus increases to +2 with a level 3–5 spell slot. The bonus increases to +3 with a level 6+ spell slot.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "magic_weapon",
+    "params": {
+     "bonus": 1,
+     "bonusBySlot": {
+      "2": 1,
+      "3": 2,
+      "6": 3
+     },
+     "durationHours": 1
+    }
+   }
+  ]
  },
  {
   "id": "magnificent_mansion",
@@ -9302,6 +10327,14 @@
     "dice": "5d8",
     "addSpellMod": true,
     "upcast": "1d8"
+   },
+   {
+    "kind": "hook",
+    "hook": "mass_cure_wounds",
+    "params": {
+     "maxTargets": 6,
+     "radiusFt": 30
+    }
    }
   ]
  },
@@ -9332,7 +10365,21 @@
    "unit": "instantaneous",
    "concentration": false
   },
-  "text": "A flood of healing energy flows from you into creatures around you. You restore up to 700 Hit Points, divided as you choose among any number of creatures that you can see within range. Creatures healed by this spell also have the Blinded, Deafened, and Poisoned conditions removed from them."
+  "text": "A flood of healing energy flows from you into creatures around you. You restore up to 700 Hit Points, divided as you choose among any number of creatures that you can see within range. Creatures healed by this spell also have the Blinded, Deafened, and Poisoned conditions removed from them.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "mass_heal",
+    "params": {
+     "healPool": 700,
+     "endsConditions": [
+      "blinded",
+      "deafened",
+      "poisoned"
+     ]
+    }
+   }
+  ]
  },
  {
   "id": "mass_healing_word",
@@ -9370,6 +10417,13 @@
     "dice": "2d4",
     "addSpellMod": true,
     "upcast": "1d4"
+   },
+   {
+    "kind": "hook",
+    "hook": "mass_healing_word",
+    "params": {
+     "maxTargets": 6
+    }
    }
   ]
  },
@@ -9422,6 +10476,20 @@
        "unit": "hour",
        "amount": 24,
        "concentration": false
+      }
+     },
+     {
+      "kind": "hook",
+      "hook": "mass_suggestion",
+      "params": {
+       "maxTargets": 12,
+       "maxWords": 25,
+       "endsOnDamage": true,
+       "durationDaysBySlot": {
+        "7": 10,
+        "8": 30,
+        "9": 366
+       }
       }
      }
     ],
@@ -9736,6 +10804,15 @@
        }
       ],
       "upcast": "1d8"
+     },
+     {
+      "kind": "hook",
+      "hook": "mind_spike",
+      "params": {
+       "knowLocation": true,
+       "cantHideFromCaster": true,
+       "negatesInvisibleVsCaster": true
+      }
      }
     ],
     "onSuccess": "half"
@@ -9844,6 +10921,23 @@
   "text": "Three illusory duplicates of yourself appear in your space. Until the spell ends, the duplicates move with you and mimic your actions, shifting position so it's impossible to track which image is real.\n\nEach time a creature hits you with an attack roll during the spell's duration, roll a d6 for each of your remaining duplicates. If any of the d6s rolls a 3 or higher, one of the duplicates is hit instead of you, and the duplicate is destroyed. The duplicates otherwise ignore all other damage and effects. The spell ends when all three duplicates are destroyed.\n\nA creature is unaffected by this spell if it has the Blinded condition, Blindsight, or Truesight.",
   "conditions": [
    "blinded"
+  ],
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "mirror_image",
+    "params": {
+     "duplicates": 3,
+     "redirectDie": "1d6",
+     "redirectOn": 3,
+     "ignoredBy": [
+      "blinded",
+      "blindsight",
+      "truesight"
+     ],
+     "durationRounds": 10
+    }
+   }
   ]
  },
  {
@@ -10186,7 +11280,22 @@
   "area": {
    "shape": "emanation",
    "size": 30
-  }
+  },
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "pass_without_trace",
+    "params": {
+     "zone": {
+      "shape": "emanation",
+      "size": 30
+     },
+     "stealthBonus": 10,
+     "noTracks": true,
+     "durationHours": 1
+    }
+   }
+  ]
  },
  {
   "id": "phantasmal_force",
@@ -10233,29 +11342,26 @@
   },
   "effects": [
    {
-    "kind": "area",
-    "area": {
-     "shape": "cube",
-     "size": 10
-    },
-    "effects": [
+    "kind": "save",
+    "ability": "int",
+    "onFail": [
      {
-      "kind": "save",
-      "ability": "int",
-      "onFail": [
-       {
-        "kind": "damage",
-        "damage": [
-         {
-          "dice": "2d8",
-          "type": "psychic"
-         }
-        ]
-       }
-      ],
-      "onSuccess": "none"
+      "kind": "hook",
+      "hook": "phantasmal_force",
+      "params": {
+       "maxCubeFt": 10,
+       "damage": {
+        "dice": "2d8",
+        "type": "psychic"
+       },
+       "damageAt": "caster_turn",
+       "damageRangeFt": 5,
+       "studyCheck": "int_investigation",
+       "durationRounds": 10
+      }
      }
-    ]
+    ],
+    "onSuccess": "none"
    }
   ]
  },
@@ -10311,6 +11417,22 @@
        }
       ],
       "upcast": "1d10"
+     },
+     {
+      "kind": "hook",
+      "hook": "phantasmal_killer",
+      "params": {
+       "checkDisadvantage": true,
+       "attackDisadvantage": true,
+       "repeatSave": "wis",
+       "repeatAt": "end_of_turn",
+       "repeatDamage": {
+        "dice": "4d10",
+        "type": "psychic"
+       },
+       "upcast": "1d10",
+       "durationRounds": 10
+      }
      }
     ],
     "onSuccess": "half"
@@ -10573,7 +11695,29 @@
    "concentration": true
   },
   "text": "You attempt to transform a creature that you can see within range into a Beast. The target must succeed on a Wisdom saving throw or shape-shift into a Beast form for the duration. That form can be any Beast you choose that has a Challenge Rating equal to or less than the target's (or the target's level if it doesn't have a Challenge Rating). The target's game statistics are replaced by the stat block of the chosen Beast, but the target retains its alignment, personality, creature type, Hit Points, and Hit Point Dice. See the \"Animals\" section of \"Monsters\" for a sample of Beast stat blocks.\n\nThe target gains a number of Temporary Hit Points equal to the Hit Points of the Beast form. These Temporary Hit Points vanish if any remain when the spell ends. The spell ends early on the target if it has no Temporary Hit Points left.\n\nThe target is limited in the actions it can perform by the anatomy of its new form, and it can't speak or cast spells.\nThe target's gear melds into the new form. The creature can't use or otherwise benefit from any of that equipment.",
-  "save": "wis"
+  "save": "wis",
+  "effects": [
+   {
+    "kind": "save",
+    "ability": "wis",
+    "onFail": [
+     {
+      "kind": "hook",
+      "hook": "polymorph",
+      "params": {
+       "form": "beast",
+       "maxCr": "target_cr_or_level",
+       "tempHpFromForm": true,
+       "endsAtZeroTempHp": true,
+       "noSpeech": true,
+       "noSpellcasting": true,
+       "durationHours": 1
+      }
+     }
+    ],
+    "onSuccess": "none"
+   }
+  ]
  },
  {
   "id": "power_word_heal",
@@ -10713,15 +11857,18 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "con",
-    "onFail": [
-     {
-      "kind": "condition",
-      "condition": "stunned"
+    "kind": "hook",
+    "hook": "power_word_stun",
+    "params": {
+     "hpThreshold": 150,
+     "condition": "stunned",
+     "repeatSave": "con",
+     "repeatAt": "end_of_turn",
+     "otherwise": {
+      "speedZero": true,
+      "until": "start_of_caster_next_turn"
      }
-    ],
-    "onSuccess": "none"
+    }
    }
   ]
  },
@@ -10997,19 +12144,20 @@
   ],
   "effects": [
    {
-    "kind": "attack",
-    "attack": "ranged_spell",
-    "onHit": [
-     {
-      "kind": "damage",
-      "damage": [
-       {
-        "dice": "1d8",
-        "type": "fire"
-       }
-      ]
-     }
-    ]
+    "kind": "hook",
+    "hook": "produce_flame",
+    "params": {
+     "attack": "ranged_spell",
+     "damage": {
+      "dice": "1d8",
+      "type": "fire"
+     },
+     "rangeFt": 60,
+     "repeatAction": "magic",
+     "brightLightFt": 20,
+     "dimLightFt": 20,
+     "durationRounds": 100
+    }
    }
   ]
  },
@@ -11113,7 +12261,23 @@
    "amount": 1,
    "concentration": true
   },
-  "text": "For the duration, the willing creature you touch has Resistance to one damage type of your choice: Acid, Cold, Fire, Lightning, or Thunder."
+  "text": "For the duration, the willing creature you touch has Resistance to one damage type of your choice: Acid, Cold, Fire, Lightning, or Thunder.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "protection_from_energy",
+    "params": {
+     "resistanceChoice": [
+      "acid",
+      "cold",
+      "fire",
+      "lightning",
+      "thunder"
+     ],
+     "durationHours": 1
+    }
+   }
+  ]
  },
  {
   "id": "protection_from_evil_and_good",
@@ -11148,7 +12312,31 @@
    "amount": 10,
    "concentration": true
   },
-  "text": "Until the spell ends, one willing creature you touch is protected against creatures that are Aberrations, Celestials, Elementals, Fey, Fiends, or Undead.\n\nThe protection grants several benefits. Creatures of those types have Disadvantage on attack rolls against the target. The target also can't be possessed by or gain the Charmed or Frightened conditions from them. If the target is already possessed, Charmed, or Frightened by such a creature, the target has Advantage on any new saving throw against the relevant effect."
+  "text": "Until the spell ends, one willing creature you touch is protected against creatures that are Aberrations, Celestials, Elementals, Fey, Fiends, or Undead.\n\nThe protection grants several benefits. Creatures of those types have Disadvantage on attack rolls against the target. The target also can't be possessed by or gain the Charmed or Frightened conditions from them. If the target is already possessed, Charmed, or Frightened by such a creature, the target has Advantage on any new saving throw against the relevant effect.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "protection_from_evil_and_good",
+    "params": {
+     "creatureTypes": [
+      "aberration",
+      "celestial",
+      "elemental",
+      "fey",
+      "fiend",
+      "undead"
+     ],
+     "attacksAgainst": "disadvantage",
+     "immuneConditionsFrom": [
+      "charmed",
+      "frightened"
+     ],
+     "noPossession": true,
+     "saveAdvantageIfAffected": true,
+     "durationRounds": 100
+    }
+   }
+  ]
  },
  {
   "id": "protection_from_poison",
@@ -11247,7 +12435,20 @@
    "unit": "instantaneous",
    "concentration": false
   },
-  "text": "With a touch, you revive a dead creature if it has been dead no longer than 10 days and it wasn't Undead when it died.\n\nThe creature returns to life with 1 Hit Point. This spell also neutralizes any poisons that affected the creature at the time of death.\n\nThis spell closes all mortal wounds, but it doesn't restore missing body parts. If the creature is lacking body parts or organs integral for its survival—its head, for instance—the spell automatically fails.\n\nComing back from the dead is an ordeal. The target takes a −4 penalty to D20 Tests. Every time the target finishes a Long Rest, the penalty is reduced by 1 until it becomes 0."
+  "text": "With a touch, you revive a dead creature if it has been dead no longer than 10 days and it wasn't Undead when it died.\n\nThe creature returns to life with 1 Hit Point. This spell also neutralizes any poisons that affected the creature at the time of death.\n\nThis spell closes all mortal wounds, but it doesn't restore missing body parts. If the creature is lacking body parts or organs integral for its survival—its head, for instance—the spell automatically fails.\n\nComing back from the dead is an ordeal. The target takes a −4 penalty to D20 Tests. Every time the target finishes a Long Rest, the penalty is reduced by 1 until it becomes 0.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "raise_dead",
+    "params": {
+     "maxDaysDead": 10,
+     "hp": 1,
+     "d20Penalty": 4,
+     "penaltyReducedPerLongRest": 1,
+     "neutralizesPoison": true
+    }
+   }
+  ]
  },
  {
   "id": "ray_of_enfeeblement",
@@ -11279,7 +12480,36 @@
    "concentration": true
   },
   "text": "A beam of enervating energy shoots from you toward a creature within range. The target must make a Constitution saving throw. On a successful save, the target has Disadvantage on the next attack roll it makes until the start of your next turn.\n\nOn a failed save, the target has Disadvantage on Strength-based D20 Tests for the duration. During that time, it also subtracts 1d8 from all its damage rolls. The target repeats the save at the end of each of its turns, ending the spell on a success.",
-  "save": "con"
+  "save": "con",
+  "effects": [
+   {
+    "kind": "save",
+    "ability": "con",
+    "onFail": [
+     {
+      "kind": "hook",
+      "hook": "ray_of_enfeeblement",
+      "params": {
+       "strD20Disadvantage": true,
+       "damagePenaltyDice": "1d8",
+       "repeatSave": "con",
+       "repeatAt": "end_of_turn",
+       "durationRounds": 10
+      }
+     }
+    ],
+    "onSuccess": [
+     {
+      "kind": "hook",
+      "hook": "ray_of_enfeeblement",
+      "params": {
+       "nextAttackDisadvantage": true,
+       "until": "start_of_caster_next_turn"
+      }
+     }
+    ]
+   }
+  ]
  },
  {
   "id": "ray_of_frost",
@@ -11331,6 +12561,14 @@
         "type": "cold"
        }
       ]
+     },
+     {
+      "kind": "hook",
+      "hook": "ray_of_frost",
+      "params": {
+       "speedReductionFt": 10,
+       "until": "start_of_caster_next_turn"
+      }
      }
     ]
    }
@@ -11422,6 +12660,23 @@
        }
       ],
       "upcast": "1d8"
+     },
+     {
+      "kind": "condition",
+      "condition": "poisoned",
+      "duration": {
+       "unit": "round",
+       "amount": 1,
+       "concentration": false
+      }
+     },
+     {
+      "kind": "hook",
+      "hook": "ray_of_sickness",
+      "params": {
+       "condition": "poisoned",
+       "until": "end_of_caster_next_turn"
+      }
      }
     ]
    }
@@ -11486,7 +12741,17 @@
    "unit": "instantaneous",
    "concentration": false
   },
-  "text": "At your touch, all curses affecting one creature or object end. If the object is a cursed magic item, its curse remains, but the spell breaks its owner's Attunement to the object so it can be removed or discarded."
+  "text": "At your touch, all curses affecting one creature or object end. If the object is a cursed magic item, its curse remains, but the spell breaks its owner's Attunement to the object so it can be removed or discarded.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "remove_curse",
+    "params": {
+     "endsAllCurses": true,
+     "breaksCursedAttunement": true
+    }
+   }
+  ]
  },
  {
   "id": "resilient_sphere",
@@ -11548,7 +12813,31 @@
    "amount": 1,
    "concentration": true
   },
-  "text": "You touch a willing creature and choose a damage type: Acid, Bludgeoning, Cold, Fire, Lightning, Necrotic, Piercing, Poison, Radiant, Slashing, or Thunder. When the creature takes damage of the chosen type before the spell ends, the creature reduces the total damage taken by 1d4. A creature can benefit from this spell only once per turn."
+  "text": "You touch a willing creature and choose a damage type: Acid, Bludgeoning, Cold, Fire, Lightning, Necrotic, Piercing, Poison, Radiant, Slashing, or Thunder. When the creature takes damage of the chosen type before the spell ends, the creature reduces the total damage taken by 1d4. A creature can benefit from this spell only once per turn.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "resistance",
+    "params": {
+     "damageTypeChoice": [
+      "acid",
+      "bludgeoning",
+      "cold",
+      "fire",
+      "lightning",
+      "necrotic",
+      "piercing",
+      "poison",
+      "radiant",
+      "slashing",
+      "thunder"
+     ],
+     "reduceDice": "1d4",
+     "oncePerTurn": true,
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "resurrection",
@@ -11579,7 +12868,21 @@
    "unit": "instantaneous",
    "concentration": false
   },
-  "text": "With a touch, you revive a dead creature that has been dead for no more than a century, didn't die of old age, and wasn't Undead when it died.\n\nThe creature returns to life with all its Hit Points. This spell also neutralizes any poisons that affected the creature at the time of death. This spell closes all mortal wounds and restores any missing body parts.\n\nComing back from the dead is an ordeal. The target takes a −4 penalty to D20 Tests. Every time the target finishes a Long Rest, the penalty is reduced by 1 until it becomes 0.\n\nCasting this spell to revive a creature that has been dead for 365 days or longer taxes you. Until you finish a Long Rest, you can't cast spells again, and you have Disadvantage on D20 Tests."
+  "text": "With a touch, you revive a dead creature that has been dead for no more than a century, didn't die of old age, and wasn't Undead when it died.\n\nThe creature returns to life with all its Hit Points. This spell also neutralizes any poisons that affected the creature at the time of death. This spell closes all mortal wounds and restores any missing body parts.\n\nComing back from the dead is an ordeal. The target takes a −4 penalty to D20 Tests. Every time the target finishes a Long Rest, the penalty is reduced by 1 until it becomes 0.\n\nCasting this spell to revive a creature that has been dead for 365 days or longer taxes you. Until you finish a Long Rest, you can't cast spells again, and you have Disadvantage on D20 Tests.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "resurrection",
+    "params": {
+     "maxYearsDead": 100,
+     "hpFull": true,
+     "d20Penalty": 4,
+     "penaltyReducedPerLongRest": 1,
+     "restoresBodyParts": true,
+     "casterTaxIfDeadDays": 365
+    }
+   }
+  ]
  },
  {
   "id": "reverse_gravity",
@@ -11740,6 +13043,16 @@
      }
     ],
     "onSuccess": "none"
+   },
+   {
+    "kind": "hook",
+    "hook": "sacred_flame",
+    "params": {
+     "ignoresCover": [
+      "half",
+      "three_quarters"
+     ]
+    }
    }
   ]
  },
@@ -11773,7 +13086,24 @@
    "concentration": false
   },
   "text": "You ward a creature within range. Until the spell ends, any creature who targets the warded creature with an attack roll or a damaging spell must succeed on a Wisdom saving throw or either choose a new target or lose the attack or spell. This spell doesn't protect the warded creature from areas of effect. The spell ends if the warded creature makes an attack roll, casts a spell, or deals damage.",
-  "save": "wis"
+  "save": "wis",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "sanctuary",
+    "params": {
+     "save": "wis",
+     "trigger": "targeted_by_attack_or_damaging_spell",
+     "onFail": "retarget_or_lose",
+     "endsOn": [
+      "attack_roll",
+      "cast_spell",
+      "deal_damage"
+     ],
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "scorching_ray",
@@ -11902,21 +13232,29 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "con",
-    "onFail": [
+    "kind": "damage",
+    "damage": [
      {
-      "kind": "damage",
-      "damage": [
-       {
-        "dice": "1d6",
-        "type": "fire"
-       }
-      ],
-      "upcast": "1d6"
+      "dice": "1d6",
+      "type": "fire"
      }
     ],
-    "onSuccess": "none"
+    "upcast": "1d6"
+   },
+   {
+    "kind": "hook",
+    "hook": "searing_smite",
+    "params": {
+     "trigger": "melee_weapon_hit",
+     "startTurnDamage": {
+      "dice": "1d6",
+      "type": "fire"
+     },
+     "upcast": "1d6",
+     "thenSave": "con",
+     "endsOnSuccess": true,
+     "durationRounds": 10
+    }
    }
   ]
  },
@@ -11983,6 +13321,17 @@
   "text": "For the duration, you see creatures and objects that have the Invisible condition as if they were visible, and you can see into the Ethereal Plane. Creatures and objects there appear ghostly.",
   "conditions": [
    "invisible"
+  ],
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "see_invisibility",
+    "params": {
+     "seeInvisible": true,
+     "seeEthereal": true,
+     "durationHours": 1
+    }
+   }
   ]
  },
  {
@@ -12307,7 +13656,28 @@
    "concentration": false
   },
   "text": "A Club or Quarterstaff you are holding is imbued with nature's power. For the duration, you can use your spellcasting ability instead of Strength for the attack and damage rolls of melee attacks using that weapon, and the weapon's damage die becomes a d8. If the attack deals damage, it can be Force damage or the weapon's normal damage type (your choice).\n\nThe spell ends early if you cast it again or if you let go of the weapon.",
-  "cantripUpgrade": "The damage die changes when you reach levels 5 (d10), 11 (d12), and 17 (2d6)."
+  "cantripUpgrade": "The damage die changes when you reach levels 5 (d10), 11 (d12), and 17 (2d6).",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "shillelagh",
+    "params": {
+     "weapons": [
+      "club",
+      "quarterstaff"
+     ],
+     "useSpellcastingAbility": true,
+     "damageDieByLevel": {
+      "1": "1d8",
+      "5": "1d10",
+      "11": "1d12",
+      "17": "2d6"
+     },
+     "forceDamageOption": true,
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "shining_smite",
@@ -12342,6 +13712,29 @@
    {
     "dice": "2d6",
     "type": "radiant"
+   }
+  ],
+  "effects": [
+   {
+    "kind": "damage",
+    "damage": [
+     {
+      "dice": "2d6",
+      "type": "radiant"
+     }
+    ],
+    "upcast": "1d6"
+   },
+   {
+    "kind": "hook",
+    "hook": "shining_smite",
+    "params": {
+     "trigger": "weapon_hit",
+     "brightLightFt": 5,
+     "attacksAgainst": "advantage",
+     "negatesInvisible": true,
+     "durationRounds": 10
+    }
    }
   ]
  },
@@ -12394,6 +13787,14 @@
         "type": "lightning"
        }
       ]
+     },
+     {
+      "kind": "hook",
+      "hook": "shocking_grasp",
+      "params": {
+       "noOpportunityAttacks": true,
+       "until": "start_of_target_next_turn"
+      }
      }
     ]
    }
@@ -12436,6 +13837,24 @@
   },
   "conditions": [
    "deafened"
+  ],
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "silence",
+    "params": {
+     "zone": {
+      "shape": "sphere",
+      "size": 20
+     },
+     "immuneDamage": [
+      "thunder"
+     ],
+     "condition": "deafened",
+     "blocksVerbal": true,
+     "durationRounds": 100
+    }
+   }
   ]
  },
  {
@@ -12630,29 +14049,29 @@
   ],
   "effects": [
    {
-    "kind": "area",
-    "area": {
-     "shape": "cylinder",
-     "size": 20
-    },
-    "effects": [
-     {
-      "kind": "save",
-      "ability": "dex",
-      "onFail": [
-       {
-        "kind": "condition",
-        "condition": "prone",
-        "duration": {
-         "unit": "minute",
-         "amount": 1,
-         "concentration": true
-        }
-       }
-      ],
-      "onSuccess": "none"
-     }
-    ]
+    "kind": "hook",
+    "hook": "sleet_storm",
+    "params": {
+     "zone": {
+      "shape": "cylinder",
+      "size": 20,
+      "width": 40
+     },
+     "heavilyObscured": true,
+     "difficultTerrain": true,
+     "dousesFlames": true,
+     "save": "dex",
+     "onFail": {
+      "condition": "prone",
+      "breakConcentration": true
+     },
+     "triggers": [
+      "enter",
+      "start_turn"
+     ],
+     "oncePerTurn": true,
+     "durationRounds": 10
+    }
    }
   ]
  },
@@ -12758,7 +14177,39 @@
   },
   "text": "You cast sorcerous energy at one creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d8 damage of a type you choose: Acid, Cold, Fire, Lightning, Poison, Psychic, or Thunder.\n\nIf you roll an 8 on a d8 for this spell, you can roll another d8, and add it to the damage. When you cast this spell, the maximum number of these d8s you can add to the spell's damage equals your spellcasting ability modifier.",
   "cantripUpgrade": "The damage increases by 1d8 when you reach levels 5 (2d8), 11 (3d8), and 17 (4d8).",
-  "attack": "ranged"
+  "attack": "ranged",
+  "effects": [
+   {
+    "kind": "attack",
+    "attack": "ranged_spell",
+    "onHit": [
+     {
+      "kind": "hook",
+      "hook": "sorcerous_burst",
+      "params": {
+       "dice": "1d8",
+       "diceByLevel": {
+        "1": "1d8",
+        "5": "2d8",
+        "11": "3d8",
+        "17": "4d8"
+       },
+       "damageTypes": [
+        "acid",
+        "cold",
+        "fire",
+        "lightning",
+        "poison",
+        "psychic",
+        "thunder"
+       ],
+       "explodeOn": 8,
+       "maxExtraDice": "spell_mod"
+      }
+     }
+    ]
+   }
+  ]
  },
  {
   "id": "spare_the_dying",
@@ -12789,7 +14240,22 @@
    "concentration": false
   },
   "text": "Choose a creature within range that has 0 Hit Points and isn't dead. The creature becomes Stable.",
-  "cantripUpgrade": "The range doubles when you reach levels 5 (30 feet), 11 (60 feet), and 17 (120 feet)."
+  "cantripUpgrade": "The range doubles when you reach levels 5 (30 feet), 11 (60 feet), and 17 (120 feet).",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "spare_the_dying",
+    "params": {
+     "stabilize": true,
+     "rangeFtByLevel": {
+      "1": 15,
+      "5": 30,
+      "11": 60,
+      "17": 120
+     }
+    }
+   }
+  ]
  },
  {
   "id": "speak_with_animals",
@@ -12922,7 +14388,19 @@
    "concentration": true
   },
   "text": "Until the spell ends, one willing creature you touch gains the ability to move up, down, and across vertical surfaces and along ceilings, while leaving its hands free. The target also gains a Climb Speed equal to its Speed.",
-  "higherLevels": "You can target one additional creature for each spell slot level above 2."
+  "higherLevels": "You can target one additional creature for each spell slot level above 2.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "spider_climb",
+    "params": {
+     "climbSpeedEqualsSpeed": true,
+     "ceilings": true,
+     "targetsPerUpcast": 1,
+     "durationHours": 1
+    }
+   }
+  ]
  },
  {
   "id": "spike_growth",
@@ -12964,7 +14442,28 @@
   "area": {
    "shape": "sphere",
    "size": 20
-  }
+  },
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "spike_growth",
+    "params": {
+     "zone": {
+      "shape": "sphere",
+      "size": 20
+     },
+     "difficultTerrain": true,
+     "damage": {
+      "dice": "2d4",
+      "type": "piercing"
+     },
+     "perFeetMoved": 5,
+     "camouflaged": true,
+     "spotCheck": "wis_perception_or_survival",
+     "durationRounds": 100
+    }
+   }
+  ]
  },
  {
   "id": "spirit_guardians",
@@ -13142,6 +14641,15 @@
         "type": "radiant"
        }
       ]
+     },
+     {
+      "kind": "hook",
+      "hook": "starry_wisp",
+      "params": {
+       "dimLightFt": 10,
+       "negatesInvisible": true,
+       "until": "end_of_caster_next_turn"
+      }
      }
     ]
    }
@@ -13189,29 +14697,26 @@
   ],
   "effects": [
    {
-    "kind": "area",
-    "area": {
-     "shape": "sphere",
-     "size": 20
-    },
-    "effects": [
-     {
-      "kind": "save",
-      "ability": "con",
-      "onFail": [
-       {
-        "kind": "condition",
-        "condition": "poisoned",
-        "duration": {
-         "unit": "minute",
-         "amount": 1,
-         "concentration": true
-        }
-       }
-      ],
-      "onSuccess": "none"
-     }
-    ]
+    "kind": "hook",
+    "hook": "stinking_cloud",
+    "params": {
+     "zone": {
+      "shape": "sphere",
+      "size": 20
+     },
+     "heavilyObscured": true,
+     "save": "con",
+     "triggers": [
+      "start_turn"
+     ],
+     "onFail": {
+      "condition": "poisoned",
+      "until": "end_of_current_turn",
+      "noActionOrBonusAction": true
+     },
+     "dispersedByStrongWind": true,
+     "durationRounds": 10
+    }
    }
   ]
  },
@@ -13278,7 +14783,21 @@
    "amount": 1,
    "concentration": true
   },
-  "text": "Until the spell ends, one willing creature you touch has Resistance to Bludgeoning, Piercing, and Slashing damage."
+  "text": "Until the spell ends, one willing creature you touch has Resistance to Bludgeoning, Piercing, and Slashing damage.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "stoneskin",
+    "params": {
+     "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+     ],
+     "durationHours": 1
+    }
+   }
+  ]
  },
  {
   "id": "storm_of_vengeance",
@@ -13386,6 +14905,15 @@
        "amount": 8,
        "concentration": true
       }
+     },
+     {
+      "kind": "hook",
+      "hook": "suggestion",
+      "params": {
+       "maxWords": 25,
+       "endsOnDamage": true,
+       "endsWhenCompleted": true
+      }
      }
     ],
     "onSuccess": "none"
@@ -13469,20 +14997,61 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "con",
-    "onFail": [
+    "kind": "area",
+    "area": {
+     "shape": "line",
+     "size": 60,
+     "width": 5
+    },
+    "effects": [
      {
-      "kind": "damage",
-      "damage": [
+      "kind": "save",
+      "ability": "con",
+      "onFail": [
        {
-        "dice": "6d8",
-        "type": "radiant"
+        "kind": "damage",
+        "damage": [
+         {
+          "dice": "6d8",
+          "type": "radiant"
+         }
+        ]
+       },
+       {
+        "kind": "condition",
+        "condition": "blinded",
+        "duration": {
+         "unit": "round",
+         "amount": 1,
+         "concentration": false
+        }
        }
-      ]
+      ],
+      "onSuccess": "half"
      }
-    ],
-    "onSuccess": "half"
+    ]
+   },
+   {
+    "kind": "hook",
+    "hook": "sunbeam",
+    "params": {
+     "line": {
+      "lengthFt": 60,
+      "widthFt": 5
+     },
+     "repeatAction": "magic",
+     "save": "con",
+     "damage": {
+      "dice": "6d8",
+      "type": "radiant"
+     },
+     "onSuccess": "half",
+     "blindedUntil": "start_of_caster_next_turn",
+     "brightLightFt": 30,
+     "dimLightFt": 30,
+     "sunlight": true,
+     "durationRounds": 10
+    }
    }
   ]
  },
@@ -13552,6 +15121,24 @@
           "type": "radiant"
          }
         ]
+       },
+       {
+        "kind": "condition",
+        "condition": "blinded",
+        "duration": {
+         "unit": "minute",
+         "amount": 1,
+         "concentration": false
+        }
+       },
+       {
+        "kind": "hook",
+        "hook": "sunburst",
+        "params": {
+         "repeatSave": "con",
+         "repeatAt": "end_of_turn",
+         "endsCondition": "blinded"
+        }
        }
       ],
       "onSuccess": "half"
@@ -13611,29 +15198,58 @@
   ],
   "effects": [
    {
-    "kind": "area",
-    "area": {
-     "shape": "sphere",
-     "size": 60
-    },
-    "effects": [
-     {
-      "kind": "save",
-      "ability": "con",
-      "onFail": [
-       {
-        "kind": "damage",
-        "damage": [
-         {
-          "dice": "10d10",
-          "type": "necrotic"
-         }
-        ]
-       }
-      ],
-      "onSuccess": "half"
+    "kind": "hook",
+    "hook": "symbol",
+    "params": {
+     "radiusFt": 60,
+     "glyphDiameterFt": 10,
+     "noticeCheck": "wis_perception",
+     "triggers": [
+      "activate",
+      "enter",
+      "end_turn"
+     ],
+     "oncePerTurn": true,
+     "activeRounds": 100,
+     "options": {
+      "death": {
+       "save": "con",
+       "damage": {
+        "dice": "10d10",
+        "type": "necrotic"
+       },
+       "onSuccess": "half"
+      },
+      "discord": {
+       "save": "wis",
+       "attackDisadvantage": true,
+       "checkDisadvantage": true,
+       "durationRounds": 10
+      },
+      "fear": {
+       "save": "wis",
+       "condition": "frightened",
+       "moveAwayFt": 30,
+       "durationRounds": 10
+      },
+      "pain": {
+       "save": "con",
+       "condition": "incapacitated",
+       "durationRounds": 10
+      },
+      "sleep": {
+       "save": "wis",
+       "condition": "unconscious",
+       "durationRounds": 100,
+       "endsOnDamage": true
+      },
+      "stunning": {
+       "save": "wis",
+       "condition": "stunned",
+       "durationRounds": 10
+      }
      }
-    ]
+    }
    }
   ]
  },
@@ -13680,9 +15296,21 @@
       "kind": "condition",
       "condition": "restrained",
       "duration": {
-       "unit": "minute",
-       "amount": 10,
-       "concentration": true
+       "unit": "round",
+       "amount": 1,
+       "concentration": false
+      }
+     },
+     {
+      "kind": "hook",
+      "hook": "telekinesis",
+      "params": {
+       "moveFt": 30,
+       "maxSize": "huge",
+       "repeatAction": "magic",
+       "until": "end_of_caster_next_turn",
+       "objectMode": true,
+       "durationRounds": 100
       }
      }
     ],
@@ -13887,6 +15515,15 @@
          }
         ],
         "upcast": "1d8"
+       },
+       {
+        "kind": "hook",
+        "hook": "thunderwave",
+        "params": {
+         "pushFt": 10,
+         "pushObjects": true,
+         "audibleFt": 300
+        }
        }
       ],
       "onSuccess": "half"
@@ -14116,7 +15753,20 @@
    "unit": "instantaneous",
    "concentration": false
   },
-  "text": "You touch a creature that has been dead for no longer than 200 years and that died for any reason except old age. The creature is revived with all its Hit Points.\n\nThis spell closes all wounds, neutralizes any poison, cures all magical contagions, and lifts any curses affecting the creature when it died. The spell replaces damaged or missing organs and limbs. If the creature was Undead, it is restored to its non-Undead form.\n\nThe spell can provide a new body if the original no longer exists, in which case you must speak the creature's name. The creature then appears in an unoccupied space you choose within 10 feet of you."
+  "text": "You touch a creature that has been dead for no longer than 200 years and that died for any reason except old age. The creature is revived with all its Hit Points.\n\nThis spell closes all wounds, neutralizes any poison, cures all magical contagions, and lifts any curses affecting the creature when it died. The spell replaces damaged or missing organs and limbs. If the creature was Undead, it is restored to its non-Undead form.\n\nThe spell can provide a new body if the original no longer exists, in which case you must speak the creature's name. The creature then appears in an unoccupied space you choose within 10 feet of you.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "true_resurrection",
+    "params": {
+     "maxYearsDead": 200,
+     "hpFull": true,
+     "restoresUndead": true,
+     "newBody": true,
+     "curesAll": true
+    }
+   }
+  ]
  },
  {
   "id": "true_seeing",
@@ -14184,7 +15834,26 @@
    "concentration": false
   },
   "text": "Guided by a flash of magical insight, you make one attack with the weapon used in the spell's casting. The attack uses your spellcasting ability for the attack and damage rolls instead of using Strength or Dexterity. If the attack deals damage, it can be Radiant damage or the weapon's normal damage type (your choice).",
-  "cantripUpgrade": "Whether you deal Radiant damage or the weapon's normal damage type, the attack deals extra Radiant damage when you reach levels 5 (1d6), 11 (2d6), and 17 (3d6)."
+  "cantripUpgrade": "Whether you deal Radiant damage or the weapon's normal damage type, the attack deals extra Radiant damage when you reach levels 5 (1d6), 11 (2d6), and 17 (3d6).",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "true_strike",
+    "params": {
+     "weaponAttack": true,
+     "useSpellcastingAbility": true,
+     "damageTypeChoice": [
+      "radiant",
+      "weapon"
+     ],
+     "extraRadiantByLevel": {
+      "5": "1d6",
+      "11": "2d6",
+      "17": "3d6"
+     }
+    }
+   }
+  ]
  },
  {
   "id": "tsunami",
@@ -14375,6 +16044,14 @@
         "type": "psychic"
        }
       ]
+     },
+     {
+      "kind": "hook",
+      "hook": "vicious_mockery",
+      "params": {
+       "nextAttackDisadvantage": true,
+       "until": "end_of_target_next_turn"
+      }
      }
     ],
     "onSuccess": "none"
@@ -14426,7 +16103,46 @@
   "area": {
    "shape": "sphere",
    "size": 20
-  }
+  },
+  "effects": [
+   {
+    "kind": "area",
+    "area": {
+     "shape": "sphere",
+     "size": 20
+    },
+    "effects": [
+     {
+      "kind": "save",
+      "ability": "dex",
+      "onFail": [
+       {
+        "kind": "damage",
+        "damage": [
+         {
+          "dice": "10d4",
+          "type": "acid"
+         }
+        ],
+        "upcast": "2d4"
+       },
+       {
+        "kind": "hook",
+        "hook": "vitriolic_sphere",
+        "params": {
+         "delayed": {
+          "dice": "5d4",
+          "type": "acid",
+          "when": "end_of_target_next_turn"
+         }
+        }
+       }
+      ],
+      "onSuccess": "half"
+     }
+    ]
+   }
+  ]
  },
  {
   "id": "wall_of_fire",
@@ -14704,7 +16420,21 @@
    "amount": 1,
    "concentration": false
   },
-  "text": "You touch another creature that is willing and create a mystic connection between you and the target until the spell ends. While the target is within 60 feet of you, it gains a +1 bonus to AC and saving throws, and it has Resistance to all damage. Also, each time it takes damage, you take the same amount of damage.\n\nThe spell ends if you drop to 0 Hit Points or if you and the target become separated by more than 60 feet. It also ends if the spell is cast again on either of the connected creatures."
+  "text": "You touch another creature that is willing and create a mystic connection between you and the target until the spell ends. While the target is within 60 feet of you, it gains a +1 bonus to AC and saving throws, and it has Resistance to all damage. Also, each time it takes damage, you take the same amount of damage.\n\nThe spell ends if you drop to 0 Hit Points or if you and the target become separated by more than 60 feet. It also ends if the spell is cast again on either of the connected creatures.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "warding_bond",
+    "params": {
+     "acBonus": 1,
+     "saveBonus": 1,
+     "resistAll": true,
+     "shareDamage": true,
+     "rangeFt": 60,
+     "durationHours": 1
+    }
+   }
+  ]
  },
  {
   "id": "water_breathing",
@@ -14738,7 +16468,17 @@
    "amount": 24,
    "concentration": false
   },
-  "text": "This spell grants up to ten willing creatures of your choice within range the ability to breathe underwater until the spell ends. Affected creatures also retain their normal mode of respiration."
+  "text": "This spell grants up to ten willing creatures of your choice within range the ability to breathe underwater until the spell ends. Affected creatures also retain their normal mode of respiration.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "water_breathing",
+    "params": {
+     "maxTargets": 10,
+     "durationHours": 24
+    }
+   }
+  ]
  },
  {
   "id": "water_walk",
@@ -14996,20 +16736,45 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "str",
-    "onFail": [
+    "kind": "area",
+    "area": {
+     "shape": "line",
+     "size": 50,
+     "width": 1
+    },
+    "effects": [
      {
-      "kind": "damage",
-      "damage": [
+      "kind": "save",
+      "ability": "str",
+      "onFail": [
        {
-        "dice": "4d8",
-        "type": "bludgeoning"
+        "kind": "damage",
+        "damage": [
+         {
+          "dice": "4d8",
+          "type": "bludgeoning"
+         }
+        ]
        }
-      ]
+      ],
+      "onSuccess": "half"
      }
-    ],
-    "onSuccess": "half"
+    ]
+   },
+   {
+    "kind": "hook",
+    "hook": "wind_wall",
+    "params": {
+     "wall": {
+      "lengthFt": 50,
+      "heightFt": 15,
+      "thicknessFt": 1
+     },
+     "blocksFlyersMaxSize": "small",
+     "deflectsProjectiles": true,
+     "dispersesGas": true,
+     "durationRounds": 10
+    }
    }
   ]
  },
