@@ -558,14 +558,16 @@
         "ravensgate_gates",
         "maw_descent",
         "choir_of_teeth",
-        "defeat_outcomes"
+        "defeat_outcomes",
+        "pells_reckoning"
       ],
       "readBy": [
         "highcrown_audience",
         "lantern_hold_tribunal",
         "lantern_hold_siege",
         "choir_of_teeth",
-        "maw_final_seal"
+        "maw_final_seal",
+        "pells_reckoning"
       ],
       "description": "Holder of Tooth 1, the Tooth of Want, from the loc:millbrook barrow. Giving it to the Brightwater magistrate sends it silently to the Almonry (choir)."
     },
@@ -588,12 +590,14 @@
         "blightwood_crossing",
         "maw_descent",
         "choir_of_teeth",
-        "defeat_outcomes"
+        "defeat_outcomes",
+        "pells_reckoning"
       ],
       "readBy": [
         "abbey_bells_toll",
         "choir_of_teeth",
-        "maw_final_seal"
+        "maw_final_seal",
+        "pells_reckoning"
       ],
       "description": "Holder of Tooth 2, the Drowned Tooth, from loc:drowned_abbey."
     },
@@ -617,12 +621,14 @@
         "blightwood_crossing",
         "maw_descent",
         "choir_of_teeth",
-        "defeat_outcomes"
+        "defeat_outcomes",
+        "pells_reckoning"
       ],
       "readBy": [
         "night_of_bells",
         "choir_of_teeth",
-        "maw_final_seal"
+        "maw_final_seal",
+        "pells_reckoning"
       ],
       "description": "Holder of Tooth 3, the Briar Tooth, kept by Grandmother Wick of fac:briarkin at loc:thornwife_hollow."
     },
@@ -648,12 +654,15 @@
         "maw_descent",
         "choir_of_teeth",
         "side_quests",
-        "defeat_outcomes"
+        "defeat_outcomes",
+        "ch2_salt_and_treason"
       ],
       "readBy": [
         "pells_reckoning",
         "choir_of_teeth",
-        "maw_final_seal"
+        "maw_final_seal",
+        "port_sorrel_docks",
+        "brass_parrot_vault"
       ],
       "description": "Holder of Tooth 4, the Brass Tooth, from the vault on loc:isle_of_brass_parrots; fac:red_gull_brotherhood may secure it."
     },
@@ -677,11 +686,15 @@
         "blightwood_crossing",
         "maw_descent",
         "choir_of_teeth",
-        "defeat_outcomes"
+        "defeat_outcomes",
+        "pells_reckoning",
+        "ch2_salt_and_treason"
       ],
       "readBy": [
         "choir_of_teeth",
-        "maw_final_seal"
+        "maw_final_seal",
+        "singing_reef_lagoon",
+        "pells_reckoning"
       ],
       "description": "Holder of Tooth 5, the Singing Tooth, taken from the sea hag of loc:singing_reef."
     },
@@ -803,7 +816,9 @@
         "pyrraxis_hoard",
         "choir_of_teeth",
         "maw_final_seal",
-        "ending"
+        "ending",
+        "port_sorrel_docks",
+        "brass_parrot_vault"
       ],
       "description": "Derived: number of Teeth held by fac:hollow_choir. Reaching 7 during the finale opens loc:the_maw."
     },
@@ -899,7 +914,8 @@
       "readBy": [
         "lantern_hold_siege",
         "ending",
-        "side_quests"
+        "side_quests",
+        "port_sorrel_docks"
       ],
       "description": "Fate of loc:hollowmere: cured (fac:briarkin), purged (fac:lantern_wardens) or abandoned to fac:hollow_choir."
     },
@@ -930,7 +946,8 @@
       "type": "boolean",
       "default": false,
       "setBy": [
-        "port_sorrel_docks"
+        "port_sorrel_docks",
+        "pells_reckoning"
       ],
       "readBy": [
         "pells_reckoning",
@@ -943,7 +960,8 @@
       "type": "boolean",
       "default": false,
       "setBy": [
-        "wreckers_cove_caves"
+        "wreckers_cove_caves",
+        "pells_reckoning"
       ],
       "readBy": [
         "pells_reckoning",
@@ -994,7 +1012,9 @@
       "readBy": [
         "dawnspire_muster",
         "ending",
-        "side_quests"
+        "side_quests",
+        "gullhaven_truce",
+        "pells_reckoning"
       ],
       "description": "Status of the free port loc:gullhaven run by fac:tidewright_guild."
     },
@@ -1017,7 +1037,8 @@
         "highcrown_audience",
         "dawnspire_muster",
         "ending",
-        "side_quests"
+        "side_quests",
+        "pells_reckoning"
       ],
       "description": "Fate of Governor Cassius Pell of fac:saltwind_trading_company."
     },
@@ -1035,13 +1056,15 @@
         "brass_parrot_vault",
         "pells_reckoning",
         "highcrown_burning",
-        "side_quests"
+        "side_quests",
+        "ch2_salt_and_treason"
       ],
       "readBy": [
         "pells_reckoning",
         "highcrown_burning",
         "ending",
-        "side_quests"
+        "side_quests",
+        "brass_parrot_vault"
       ],
       "description": "Fate of Captain Harrow Vey, fac:hollow_choir smuggler-captain."
     },
@@ -1072,7 +1095,8 @@
       "default": "unclaimed",
       "setBy": [
         "brass_parrot_vault",
-        "side_quests"
+        "side_quests",
+        "ch2_salt_and_treason"
       ],
       "readBy": [
         "dawnspire_muster",
@@ -1196,7 +1220,8 @@
         "pells_reckoning",
         "highcrown_burning",
         "defeat_outcomes",
-        "side_quests"
+        "side_quests",
+        "fort_kestrel_gallows"
       ],
       "readBy": [
         "port_sorrel_docks",
@@ -1386,7 +1411,9 @@
         "vaelthorn_sky_towers",
         "pyrraxis_hoard",
         "highcrown_audience",
-        "ending"
+        "ending",
+        "port_sorrel_docks",
+        "fort_kestrel_gallows"
       ],
       "description": "Ser Corwin Ashvale, dismissed knight of fac:order_of_the_dawn_lance."
     },
@@ -1404,7 +1431,11 @@
         "thornwife_moot",
         "dawnspire_vigil",
         "palace_undercroft",
-        "side_quests"
+        "side_quests",
+        "port_sorrel_docks",
+        "fort_kestrel_gallows",
+        "brass_parrot_vault",
+        "pells_reckoning"
       ],
       "readBy": [
         "dawnspire_vigil",
@@ -1451,7 +1482,8 @@
         "maw_descent",
         "maw_final_seal",
         "defeat_outcomes",
-        "ending"
+        "ending",
+        "port_sorrel_docks"
       ],
       "description": "Nettle, fac:briarkin hedge-witch apprentice."
     },
@@ -1467,7 +1499,9 @@
         "lantern_hold_tribunal",
         "night_of_bells",
         "blightwood_crossing",
-        "side_quests"
+        "side_quests",
+        "port_sorrel_docks",
+        "pells_reckoning"
       ],
       "readBy": [
         "thornwife_moot",
@@ -1508,14 +1542,18 @@
         "fort_kestrel_gallows",
         "pells_reckoning",
         "gullhaven_truce",
-        "side_quests"
+        "side_quests",
+        "ch2_salt_and_treason"
       ],
       "readBy": [
         "fennicks_rest_wager",
         "pells_reckoning",
         "choir_of_teeth",
         "ending",
-        "side_quests"
+        "side_quests",
+        "fort_kestrel_gallows",
+        "gullhaven_truce",
+        "brass_parrot_vault"
       ],
       "description": "Rook Marrowby, fac:red_gull_brotherhood smuggler."
     },
@@ -1530,7 +1568,10 @@
         "fennicks_rest_wager",
         "gullhaven_truce",
         "brass_parrot_vault",
-        "side_quests"
+        "side_quests",
+        "wreckers_cove_caves",
+        "singing_reef_lagoon",
+        "pells_reckoning"
       ],
       "readBy": [
         "pells_reckoning",
@@ -1569,7 +1610,8 @@
       ],
       "readBy": [
         "choir_of_teeth",
-        "ending"
+        "ending",
+        "wreckers_cove_caves"
       ],
       "description": "Aurek Vell, Veyran scholar and nephew of the Cantor."
     },
@@ -1641,7 +1683,8 @@
       "setBy": [
         "defeat_outcomes",
         "fort_kestrel_gallows",
-        "side_quests"
+        "side_quests",
+        "fennicks_rest_wager"
       ],
       "readBy": [
         "fort_kestrel_gallows",
