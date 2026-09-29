@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 1 (Foundation)
-- **Last completed assignment:** A003
-- **Notes for next session:** Start with A004. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. A010 needs Ollama: if `ollama` is still missing, mark it blocked and skip it.
+- **Last completed assignment:** A004
+- **Notes for next session:** Start with A005. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. A010 needs Ollama: if `ollama` is still missing, mark it blocked and skip it.
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -21,7 +21,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A001 — Project scaffold | Spec: §2, §17 | Done: package.json (scripts dev/build/test/typecheck), tsconfig strict, Vite+Preact client "hello" page, Vitest with 1 passing test, folder skeleton per ARCHITECTURE.md; build passes | Dep: A000
 - [done] A002 — Fastify server | Spec: §1, §2 | Done: serves built client, GET /api/health, WebSocket /ws echo, Vite dev proxy; route tests via fastify.inject | Dep: A001
 - [done] A003 — Settings/config system | Spec: §14, §2 | Done: zod settings schema (model name, LLM params, volumes, perf preset, accessibility, objectiveHint=false), defaults + userdata/settings.json load/save, GET/PUT /api/settings; tests | Dep: A002
-- [todo] A004 — LLM provider + Ollama client + mock | Spec: §2, §3, §17 | Done: LlmProvider interface (chat, stream, json, listModels, status); Ollama client over fetch; deterministic MockLlm (scripted responses); tests with mocked fetch | Dep: A001
+- [done] A004 — LLM provider + Ollama client + mock | Spec: §2, §3, §17 | Done: LlmProvider interface (chat, stream, json, listModels, status); Ollama client over fetch; deterministic MockLlm (scripted responses); tests with mocked fetch | Dep: A001
 - [todo] A005 — Structured JSON helper | Spec: §3 | Done: llm/structured.ts: schema→Ollama format, zod validate, 1 retry, typed fallback, never throws; tests for bad JSON/timeouts | Dep: A004
 - [todo] A006 — TTS provider + Piper adapter + mock | Spec: §2, §13 | Done: TtsProvider interface, Piper spawn adapter (path from settings), MockTts, status check; tests with mock | Dep: A001
 - [todo] A007 — Status endpoint + indicator | Spec: §14, §17 | Done: GET /api/status (ollama up, model loaded, tts ready, RSS memory); small UI indicator; tests | Dep: A003, A004, A006
@@ -165,6 +165,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A001 — Scaffold: Vite+Preact client, strict TS, Vitest, folder skeleton — `package.json`, `tsconfig.json`, `vite.config.ts`, `src/client/*`, `src/shared/version.ts`
 - A002 — Fastify server: /api/health, /ws JSON echo, static client + SPA fallback, Vite dev proxy — `src/server/app.ts`, `src/server/main.ts`, `src/server/app.test.ts`
 - A003 — Settings: zod schema with defaults, SettingsStore (atomic write, salvages bad fields), GET/PUT /api/settings — `src/shared/settings.ts`, `src/server/settingsStore.ts`
+- A004 — LLM layer: LlmProvider interface, OllamaClient (chat, NDJSON stream, tags/ps status, typed LlmError), deterministic MockLlm (script queue, per-task handlers), createLlmProvider — `src/llm/*`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -186,6 +187,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A002: Server listens on 127.0.0.1:3210 (env PORT overrides); run via tsx (`npm start`, `npm run dev:server`) instead of a compiled bundle — simplest, no build step for the server.
 - A003: zod 4.6 installed. Nested section defaults use `.prefault({})` (zod 4 `.default({})` skips inner defaults). Settings PUT takes a partial patch merged per section; invalid → 400 with `path: message`.
 - A003: Settings file = userdata/settings.json (gitignored). Corrupt file → defaults; bad fields salvaged one by one.
+- A004: Ollama client uses global fetch (injectable) — no SDK dependency. `think:false` sent only to reasoning models (qwen3, deepseek-r1, magistral, gpt-oss). keep_alive = idleMinutes if unloadWhenIdle, else '60m' (not -1, so a closed game frees RAM).
+- A004: Every LLM call carries `task` (narrate/intent/suggest/summarize/dialogue/banter/backstory) for logging and mock routing. MockLlm default: rotating template narration; `{}` for JSON calls.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -205,6 +208,10 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/server/main.ts` — entry; serves dist/client on 127.0.0.1:3210
 - `src/shared/settings.ts` — SettingsSchema (llm, tts, audio, performance, accessibility, gameplay), defaultSettings, mergeSettings
 - `src/server/settingsStore.ts` — SettingsStore(userDataDir): get/update, persisted to settings.json; exposed as `app.settings`
+- `src/llm/types.ts` — LlmProvider, ChatMessage, ChatOptions (task, format, keepAlive, timeoutMs), LlmStatus, LlmError(kind)
+- `src/llm/ollama.ts` — OllamaClient(config incl. fetch); supportsThinkFlag
+- `src/llm/mock.ts` — MockLlm({script, handlers, streamDelayMs}); `.calls` records every call
+- `src/llm/provider.ts` — createLlmProvider(settings.llm)
 - `src/shared/version.ts` — GAME_TITLE, GAME_VERSION, SAVE_SCHEMA_VERSION
 - `.gitattributes` — *.bat forced to CRLF
 - Planned folders (created with .gitkeep; see ARCHITECTURE.md §2): `src/engine`, `src/llm`, `src/tts`, `src/server`, `src/shared`, `src/client`, `data/srd`, `data/world`, `data/adventures`, `data/tables`, `scripts/`, `tests/`
@@ -213,6 +220,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - git core.autocrlf=true on this machine. The .bat launchers must stay CRLF; `.gitattributes` forces `*.bat` to CRLF (done). LF→CRLF warnings on `git add` are harmless.
 - npm 11 blocks install scripts by default (`allow-scripts` warning for esbuild). Ignore it: tsx/vite work via esbuild's optional platform package. Don't run approve-scripts unless something breaks.
 - To smoke-test the server: `PORT=3299 npx tsx src/server/main.ts &`, curl, then kill the PID from `netstat -ano | grep :3299` with `taskkill //PID <pid> //F` (Git Bash needs `//`).
+- Ollama client unverified against a real server (not installed yet); A010 should confirm `think:false` is accepted and structured `format` schemas work.
 - Node v26.3.0, npm 11.16.0, git 2.53 are installed. Ollama is not installed yet (2026-09-29).
 
 ## Blockers / Owner Review
