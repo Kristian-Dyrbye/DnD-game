@@ -5,7 +5,7 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 4 (Phase 3 Character Creation done)
-- **Last completed assignment:** A106
+- **Last completed assignment:** A114
 - **Notes for next session:** Continue the queue: A098/A099 (starter arc; companions/recruit/approval now exist), A088–A093 (3D equipment/wounds/scars), A070 (3D battle map), A076 (dungeon maps + fog), A075b, then A114–A116. A010 still blocked until Ollama is installed (Ollama/Piper not installed on this PC yet). Playable test URLs: `#play-<class>`, `#play-<class>+map`, `#combat-<class>`.
 
 ## Assignment Queue
@@ -77,12 +77,13 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ### Phase 13 — Polish
 - [done] A075b — Map art polish
 - [done] A111, A112, A113
-- [todo] A114 — Docs + About screen | Spec: §4, §17 | Done: README, ARCHITECTURE, ADVENTURE_FORMAT, CREDITS final; SRD CC-BY-4.0 attribution in About + README | Dep: A113
+- [done] A114 — Docs + About screen
 - [todo] A115 — Full playtest pass | Spec: §17 | Done: play through with mock (and real LLM if available); issues become new queue items | Dep: A114
 - [todo] A116 — Final check | Spec: all | Done: all tests, typecheck, build pass; Status DONE | Dep: A115
 
 ## Completed Log
 <!-- One line per assignment: A<id> — what was built — key files. Compress into per-phase summaries when long. -->
+- A114 — README.md (features, requirements, setup, how to play, settings, model swap, developer commands + test URLs, troubleshooting, SRD 5.2.1 CC-BY-4.0 attribution), ARCHITECTURE.md refreshed (combat/world/adventure/appearance modules, full protocol, campaign flow, combat narration queue), About screen on the title screen (exact SRD attribution wording, asset credits summary) — README.md, ARCHITECTURE.md, src/client/ui/AboutPanel.tsx
 - A106 — starter arc smoke test through buildApp (mock LLM/TTS, seeded dice, real grid fights with a simple attack/approach policy, flag-driven story policy) reaching ch1 with zero error events; it found and fixed: an altar soft-lock after a lost fight (rematch + crypt short rest), suggestion buttons capped at 7 dropping real exits (offered actions are never dropped now, only free-text ideas), stale adventure context after a chained ending — tests/starterSmoke.test.ts, adventure/{suggestions,sessionActions}.ts, starter JSON
 - A068e — encounter `statOverrides` (name, hp / hpPercent, ac per monster id), conditional monster/ally groups (`if` per group, activeGroups at fight start), outcome `revealRoom`, resolveEncounter reveals the encounter's room; validator checks override ids and revealRoom targets — adventure/{schema,runner,fights,validate}.ts, combat/encounter.ts, ADVENTURE_FORMAT.md
 - A098+A099 — starter arc "The Millbrook Disappearances" (11 scenes: green, tavern, Gallows Hill, 3-room barrow on the `barrow` fog map, shrine, shop/chapel, road south, Ravensgate/Brightwater roads; 5 NPCs, 10 encounters, tips on first use of each system, 2 endings → ch1) + engine: outcomes `rest` (short/long), `tip`, ending `next` (session starts the next adventure, extensions.completedAdventures), STARTING_ADVENTURE = millbrook_disappearances — data/adventures/starter/millbrook_disappearances.json, tests/starterArc.test.ts, adventure/{schema,runner,sessionActions}.ts
@@ -267,7 +268,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ## File Map
 <!-- path — purpose (grouped by folder; see ARCHITECTURE.md for the big picture) -->
-- Root: `solo-dnd-build-prompt.md` (spec), `CLAUDE.md` (loop rules), `brain.md`, `ARCHITECTURE.md`, `ADVENTURE_FORMAT.md` (adventure authoring guide), `CREDITS.md`, `run-loop.bat`, `Setup.bat`/`Start Game.bat` (CRLF → scripts/check-deps.mjs), `.claude/settings.json`, `loop_status.txt` (gitignored), `package.json` (dev/build/test/typecheck/srd:*), `tsconfig.json`, `vite.config.ts` (tests: src/**/*.test.ts(x), tests/**/*.test.ts), `.gitattributes` (*.bat CRLF)
+- Root: `README.md` (player + developer guide, SRD attribution), `solo-dnd-build-prompt.md` (spec), `CLAUDE.md` (loop rules), `brain.md`, `ARCHITECTURE.md`, `ADVENTURE_FORMAT.md` (adventure authoring guide), `CREDITS.md`, `run-loop.bat`, `Setup.bat`/`Start Game.bat` (CRLF → scripts/check-deps.mjs), `.claude/settings.json`, `loop_status.txt` (gitignored), `package.json` (dev/build/test/typecheck/srd:*), `tsconfig.json`, `vite.config.ts` (tests: src/**/*.test.ts(x), tests/**/*.test.ts), `.gitattributes` (*.bat CRLF)
 - `scripts/`: check-deps(-lib).mjs, assets-fetch/audio-fetch/voices-fetch.mjs (+ `assets/*manifest.json`; downloads gitignored), srd-fetch.mjs (→ data/srd/_source), `srd/lib.ts` + `srd/import-{core,equipment,origins,feats,classes,spells,monsters,magic-items}.ts` (`npm run srd:import`)
 - `data/srd/*.json` (SRD data, complete) + `overrides/` (hand fixes by id) + `rules-tables.json`; `data/world/lore.json`; `data/world/shops.json` (12 shops + region price multipliers); `data/tables/travel-events.json`; `data/companions.json` (4 companions from DESIGN §11); `data/tables/defeat-outcomes.json` (DESIGN §13 Heroic defeat outcomes); `data/tables/sidequests.json` (quest types, sites, antagonists, complications, twists, rewards, patrons, threads); `data/adventures/`: `starter/millbrook_disappearances.json` (starter arc, the default start), `demo/millbrook_demo.json` (demo/test adventure), `arc1/ch1_whispering_fen.json` (main arc chapter 1), `DESIGN.md` + `flags.json` (campaign bible + flag registry; synced by `tests/campaignDesign.test.ts`)
 - engine/core: `rng.ts` (Rng seeded sfc32, getState), `dice.ts` (parse/roll/format, rollD20, formatD20Test), `creature.ts` (Creature/Character schemas, totalLevel)

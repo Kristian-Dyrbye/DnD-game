@@ -396,6 +396,9 @@ body.cb-helpers .hp-bar.hp-mid div { background-image: repeating-linear-gradient
 .glyph-wave { stroke: #cfe6f2; }
 .glyph-hill { stroke: #e2d6b0; }
 .map-place.heard { opacity: 0.65; }
+.about-panel { width: min(720px, 96vw); text-align: left; }
+.about-body { padding: 0.5rem 1rem 1rem; max-height: 70vh; overflow: auto; }
+.about-body .attribution { font-size: 0.9rem; border-left: 3px solid var(--accent, #c8913a); padding-left: 0.6rem; }
 .combat-narration { margin: 0; padding: 0.4rem 1rem; font-style: italic; color: var(--muted, #c9bfa8); border-top: 1px solid #3a3226; }
 .action-row-more { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; width: 100%; padding-top: 0.4rem; border-top: 1px dashed #3a3226; }
 .action-row-more .skill-pick, .action-row-more .item-use { display: inline-flex; gap: 0.2rem; }

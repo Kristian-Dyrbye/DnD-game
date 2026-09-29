@@ -39,11 +39,18 @@ Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master. Runs fully of
 │  │  ├─ data/                    zod schemas for data/srd, SrdDatabase, bundled loader (loadSrd)
 │  │  ├─ rules/                   abilities, checks, attacks, damage, conditions, effects, spells, rest, leveling, feats, multiclass
 │  │  ├─ character/               character builder, derived stats, creator validation, quick build
-│  │  ├─ combat/                  grid (grid.ts: squares, edge walls/doors, tokens, distance), LOS/cover (los.ts), movement (movement.ts), initiative (initiative.ts), turn loop + action economy (turns.ts), attack pipeline + mastery (attack.ts), actions: Dash/Disengage/Dodge/Help/Hide/Search/Ready/Grapple/Shove + move with OAs (actions.ts, actionEffects.ts, combatState.ts), AoE templates + preview (aoe.ts) and area resolution with shared damage roll (aoeResolve.ts), deterministic enemy AI: planTurn/executePlan/takeAiTurn (ai.ts) with expected-damage scoring, target ranking and morale (aiScore.ts), role-aware companion AI: planCompanionTurn/takeCompanionTurn (companionAi.ts: healer/ranged/defender/striker — heal, keep distance, protect, focus fire) on top of spell/feature actions on the map (castAction.ts: castInCombat/featureInCombat)
-│  │  ├─ world/                   clock, weather, travel, map discovery, fog, factions, shops, flags, schedules
-│  │  ├─ adventure/               adventure schema, scene runner, encounter scaling, side-quest generator + validator
+│  │  ├─ combat/                  grid + edges + tokens (grid.ts), LOS/cover (los.ts), movement + OAs (movement.ts), initiative, turns + action economy (turns.ts),
+│  │  │                           attack pipeline + masteries + stat-block riders (attack.ts), saves/checks in combat + grapple riders (saves.ts),
+│  │  │                           actions: Dash…Ready/Grapple/Shove/drag (actions.ts), Study/Influence/Utilize/Magic items (otherActions.ts),
+│  │  │                           monster save actions (monsterActions.ts), AoE templates + resolution (aoe.ts, aoeResolve.ts),
+│  │  │                           persistent spell zones (zones.ts), spells/features on the map (castAction.ts), enemy AI (ai.ts, aiScore.ts),
+│  │  │                           companion AI (companionAi.ts), the fight controller used by UI and server (encounter.ts)
+│  │  ├─ world/                   clock, weather, travel, map discovery, factions, shops, flags (+ per-adventure typed docs), dungeon maps + fog of war (dungeon.ts)
+│  │  ├─ adventure/               adventure schema, scene runner (outcomes incl. rest/damage/cost/scar/tip), fights ↔ story (fights.ts), defeat outcomes,
+│  │  │                           combat narration queue, suggestions, summary, encounter scaling, side-quest generator + solver/validator, the session port (sessionActions.ts)
 │  │  ├─ party/                   companions, loyalty, control mode
-│  │  ├─ appearance/              wounds, scars, armor wear (data only; rendering lives in the client)
+│  │  ├─ appearance/              appearance, equipment → model parts, monster → model, wound levels (data only; rendering lives in the client)
+│  │  ├─ character/ (also)        scars.ts (permanent scars), armorWear.ts (wear + repair)
 │  │  ├─ session/                 GameSession: owns GameState, applies commands, emits events
 │  │  └─ systems/                 System registry (plugin hooks) — the extension point for §16
 │  ├─ llm/                        Provider interface, Ollama client, mock provider, prompt builders, JSON schemas, fallbacks
@@ -52,7 +59,7 @@ Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master. Runs fully of
 │  ├─ shared/                     Client⇄server protocol types (commands, events), settings schema
 │  └─ client/                     Preact UI, three.js scenes, 2D grid canvas, audio manager
 │     ├─ ui/                      screens: title, creator, main game, combat, map, journal, settings, save browser
-│     ├─ three/                   model loader, character rig/equipment attach, battle scene, preview
+│     ├─ three/                   model loader, character/monster models, equipment attach, wound/wear overlays, scar marks, 3D battle map, preview
 │     └─ audio/                   music crossfade, SFX, TTS playback
 ├─ tests/                         Cross-module tests (smoke playthrough, fixtures); unit tests sit next to the code as *.test.ts
 ├─ saves/, userdata/, logs/       Runtime output (gitignored)
@@ -89,9 +96,10 @@ engine validates the intent/action → chooses check + DC (from adventure data, 
   after each scene: llm.summarize(recent log) → story summary stored in GameState
 ```
 
-- **Protocol** (`src/shared/protocol.ts`): client commands `ping | new_game | get_state | say | choose | save | load` (zod-validated, optional `reqId`); server events `pong | ack | error | snapshot | log | narration(start/chunk/end) | roll | suggestions | saved`. One `GameSession` per server (single player); every open socket receives its events and commands run serially. The session is isomorphic: saves and player-action handling are injected ports (`SavePort`, `ActionPort`), so the scene runner/narrator plug in without touching the socket code. Client state lives in signals in `src/client/net/gameSocket.ts` (reconnect + snapshot on reconnect).
+- **Protocol** (`src/shared/protocol.ts`, zod-validated, optional `reqId`): client commands `ping | new_game | get_state | say | choose | save | load | thumbnail | travel | equip | unequip | repair | shop_* | journal_* | level_up | companion_control | combat_act | combat_flee`; server events `pong | ack | error | snapshot | log | narration(start/chunk/end) | roll | suggestions | objective | saved | journal | shop | mood | tts | combat | hero_fallen | dungeon`. One `GameSession` per server (single player); every open socket receives its events and commands run serially. Saves, actions (the adventure port) and systems are injected ports. Client state lives in signals in `src/client/net/gameSocket.ts` (reconnect + snapshot on reconnect).
+- **Campaign flow**: the server starts the starter arc (`STARTING_ADVENTURE`); an adventure ending with `next` starts the next adventure at once (starter → ch1 → … → ch5). Side quests suspend the main adventure and hand control back when they end.
 - **Structured calls** (intent, suggested actions, summary, banter, backstory) all go through `llm/structured.ts`, which uses Ollama `format` (JSON schema), zod validation, one retry and then a typed fallback. A bad model reply can never throw into the engine.
-- **Combat narration** is fire-and-forget and throttled by the "narration frequency" setting.
+- **Combat narration** is fire-and-forget (`CombatNarrationQueue`: one job running, only the newest waiting) and filtered by the "combat narration" setting (every / key moments / off).
 - **Saves**: `GameState` is plain JSON, with `schemaVersion`, the RNG state, flags, party, world, story summary, journal, and an `extensions` bag. Autosave happens on scene change, rest and pre-combat, plus manual slots.
 
 ## 5. Save Format & Migrations
