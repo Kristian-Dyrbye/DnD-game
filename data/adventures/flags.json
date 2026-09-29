@@ -1,0 +1,1653 @@
+{
+  "$comment": "World-flag registry for data/adventures/DESIGN.md. In descriptions, loc:<id> and fac:<id> reference lore.json ids. setBy/readBy name scene ids, chapter ids, or specials: ending, side_quests, defeat_outcomes, companion_quests.",
+  "specialIds": [
+    "ending",
+    "side_quests",
+    "defeat_outcomes",
+    "companion_quests"
+  ],
+  "chapters": [
+    {
+      "id": "starter",
+      "title": "The Millbrook Disappearances",
+      "regionIds": [
+        "aurelmark"
+      ],
+      "levelRange": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "ch1_whispering_fen",
+      "title": "The Whispering Fen",
+      "regionIds": [
+        "gloamfen"
+      ],
+      "levelRange": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "ch2_salt_and_treason",
+      "title": "Salt and Treason",
+      "regionIds": [
+        "brinescatter_isles"
+      ],
+      "levelRange": [
+        3,
+        5
+      ]
+    },
+    {
+      "id": "ch3_the_gilded_lie",
+      "title": "The Gilded Lie",
+      "regionIds": [
+        "aurelmark"
+      ],
+      "levelRange": [
+        5,
+        7
+      ]
+    },
+    {
+      "id": "ch4_wyrmfire",
+      "title": "Wyrmfire",
+      "regionIds": [
+        "aurelmark"
+      ],
+      "levelRange": [
+        7,
+        9
+      ]
+    },
+    {
+      "id": "ch5_the_hungering_dark",
+      "title": "The Hungering Dark",
+      "regionIds": [
+        "gloamfen"
+      ],
+      "levelRange": [
+        9,
+        10
+      ]
+    }
+  ],
+  "scenes": [
+    {
+      "id": "millbrook_arrival",
+      "chapter": "starter",
+      "locationId": "millbrook"
+    },
+    {
+      "id": "plough_tavern_talk",
+      "chapter": "starter",
+      "locationId": "millbrook"
+    },
+    {
+      "id": "gallows_hill_trail",
+      "chapter": "starter",
+      "locationId": "millbrook"
+    },
+    {
+      "id": "barrow_of_the_first_sheaf",
+      "chapter": "starter",
+      "locationId": "millbrook"
+    },
+    {
+      "id": "barrow_shrine_rest",
+      "chapter": "starter",
+      "locationId": "millbrook"
+    },
+    {
+      "id": "marrows_goods_and_oath",
+      "chapter": "starter",
+      "locationId": "millbrook"
+    },
+    {
+      "id": "road_south",
+      "chapter": "starter",
+      "locationId": "millbrook"
+    },
+    {
+      "id": "ravensgate_gates",
+      "chapter": "ch1_whispering_fen",
+      "locationId": "ravensgate"
+    },
+    {
+      "id": "hollowmere_stilts",
+      "chapter": "ch1_whispering_fen",
+      "locationId": "hollowmere"
+    },
+    {
+      "id": "thornwife_moot",
+      "chapter": "ch1_whispering_fen",
+      "locationId": "thornwife_hollow"
+    },
+    {
+      "id": "drowned_abbey_undercroft",
+      "chapter": "ch1_whispering_fen",
+      "locationId": "drowned_abbey"
+    },
+    {
+      "id": "lantern_hold_tribunal",
+      "chapter": "ch1_whispering_fen",
+      "locationId": "lantern_hold"
+    },
+    {
+      "id": "night_of_bells",
+      "chapter": "ch1_whispering_fen",
+      "locationId": "hollowmere"
+    },
+    {
+      "id": "port_sorrel_docks",
+      "chapter": "ch2_salt_and_treason",
+      "locationId": "port_sorrel"
+    },
+    {
+      "id": "fort_kestrel_gallows",
+      "chapter": "ch2_salt_and_treason",
+      "locationId": "fort_kestrel"
+    },
+    {
+      "id": "fennicks_rest_wager",
+      "chapter": "ch2_salt_and_treason",
+      "locationId": "fennicks_rest"
+    },
+    {
+      "id": "gullhaven_truce",
+      "chapter": "ch2_salt_and_treason",
+      "locationId": "gullhaven"
+    },
+    {
+      "id": "wreckers_cove_caves",
+      "chapter": "ch2_salt_and_treason",
+      "locationId": "wreckers_cove"
+    },
+    {
+      "id": "singing_reef_lagoon",
+      "chapter": "ch2_salt_and_treason",
+      "locationId": "singing_reef"
+    },
+    {
+      "id": "brass_parrot_vault",
+      "chapter": "ch2_salt_and_treason",
+      "locationId": "isle_of_brass_parrots"
+    },
+    {
+      "id": "pells_reckoning",
+      "chapter": "ch2_salt_and_treason",
+      "locationId": "port_sorrel"
+    },
+    {
+      "id": "highcrown_audience",
+      "chapter": "ch3_the_gilded_lie",
+      "locationId": "highcrown"
+    },
+    {
+      "id": "deepanvil_ledgers",
+      "chapter": "ch3_the_gilded_lie",
+      "locationId": "deepanvil_hold"
+    },
+    {
+      "id": "vaelthorn_sky_towers",
+      "chapter": "ch3_the_gilded_lie",
+      "locationId": "ruins_of_old_vaelthorn"
+    },
+    {
+      "id": "dawnspire_vigil",
+      "chapter": "ch3_the_gilded_lie",
+      "locationId": "dawnspire_keep"
+    },
+    {
+      "id": "almoners_masque",
+      "chapter": "ch3_the_gilded_lie",
+      "locationId": "highcrown"
+    },
+    {
+      "id": "palace_undercroft",
+      "chapter": "ch3_the_gilded_lie",
+      "locationId": "highcrown"
+    },
+    {
+      "id": "ashfall_road",
+      "chapter": "ch4_wyrmfire",
+      "locationId": "brightwater"
+    },
+    {
+      "id": "millbrook_remembers",
+      "chapter": "ch4_wyrmfire",
+      "locationId": "millbrook"
+    },
+    {
+      "id": "dawnspire_muster",
+      "chapter": "ch4_wyrmfire",
+      "locationId": "dawnspire_keep"
+    },
+    {
+      "id": "emberpeak_ascent",
+      "chapter": "ch4_wyrmfire",
+      "locationId": "emberpeak"
+    },
+    {
+      "id": "pyrraxis_hoard",
+      "chapter": "ch4_wyrmfire",
+      "locationId": "emberpeak"
+    },
+    {
+      "id": "highcrown_burning",
+      "chapter": "ch4_wyrmfire",
+      "locationId": "highcrown"
+    },
+    {
+      "id": "lantern_hold_siege",
+      "chapter": "ch5_the_hungering_dark",
+      "locationId": "lantern_hold"
+    },
+    {
+      "id": "blightwood_crossing",
+      "chapter": "ch5_the_hungering_dark",
+      "locationId": "blightwood"
+    },
+    {
+      "id": "abbey_bells_toll",
+      "chapter": "ch5_the_hungering_dark",
+      "locationId": "drowned_abbey"
+    },
+    {
+      "id": "maw_descent",
+      "chapter": "ch5_the_hungering_dark",
+      "locationId": "the_maw"
+    },
+    {
+      "id": "choir_of_teeth",
+      "chapter": "ch5_the_hungering_dark",
+      "locationId": "the_maw"
+    },
+    {
+      "id": "maw_final_seal",
+      "chapter": "ch5_the_hungering_dark",
+      "locationId": "the_maw"
+    }
+  ],
+  "locationsUsed": [
+    "blightwood",
+    "brightwater",
+    "dawnspire_keep",
+    "deepanvil_hold",
+    "drowned_abbey",
+    "emberpeak",
+    "fennicks_rest",
+    "fort_kestrel",
+    "gullhaven",
+    "highcrown",
+    "hollowmere",
+    "isle_of_brass_parrots",
+    "lantern_hold",
+    "millbrook",
+    "port_sorrel",
+    "ravensgate",
+    "ruins_of_old_vaelthorn",
+    "singing_reef",
+    "the_maw",
+    "thornwife_hollow",
+    "wreckers_cove"
+  ],
+  "factionsUsed": [
+    "crown_of_aurelmark",
+    "order_of_the_dawn_lance",
+    "ironvault_consortium",
+    "lantern_wardens",
+    "briarkin",
+    "hollow_choir",
+    "saltwind_trading_company",
+    "red_gull_brotherhood",
+    "tidewright_guild"
+  ],
+  "monstersUsed": [
+    "adult_red_dragon",
+    "animated_armor",
+    "animated_flying_sword",
+    "archmage",
+    "bandit",
+    "bandit_captain",
+    "chuul",
+    "commoner",
+    "cultist",
+    "cultist_fanatic",
+    "fire_elemental",
+    "ghast",
+    "ghoul",
+    "giant_rat",
+    "giant_spider",
+    "giant_toad",
+    "gibbering_mouther",
+    "grick",
+    "grimlock",
+    "guard",
+    "guard_captain",
+    "hell_hound",
+    "knight",
+    "mage",
+    "magma_mephit",
+    "merrow",
+    "mimic",
+    "night_hag",
+    "pirate",
+    "pirate_captain",
+    "reef_shark",
+    "rust_monster",
+    "salamander",
+    "scout",
+    "sea_hag",
+    "shadow",
+    "shambling_mound",
+    "shield_guardian",
+    "specter",
+    "spy",
+    "stirge",
+    "swarm_of_insects",
+    "swarm_of_rats",
+    "tough",
+    "warrior_veteran",
+    "wight",
+    "will_o_wisp",
+    "wolf",
+    "worg",
+    "wraith",
+    "young_red_dragon",
+    "zombie"
+  ],
+  "itemsUsed": [
+    "adamantine_armor",
+    "cape_of_the_mountebank",
+    "dragon_scale_mail",
+    "dragon_slayer",
+    "dwarven_thrower",
+    "flame_tongue",
+    "potion_of_healing",
+    "potion_of_healing_greater",
+    "potion_of_healing_superior",
+    "potion_of_heroism",
+    "potion_of_resistance",
+    "potion_of_water_breathing",
+    "ring_of_resistance",
+    "ring_of_swimming"
+  ],
+  "flags": [
+    {
+      "id": "arc.starter.sigil_found",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "millbrook_arrival"
+      ],
+      "readBy": [
+        "plough_tavern_talk"
+      ],
+      "description": "Hero spotted the seven-tooth chalk sigil at the loc:millbrook well; gives advantage persuading the Reeve."
+    },
+    {
+      "id": "arc.starter.reeve_attitude",
+      "type": "string",
+      "values": [
+        "neutral",
+        "friendly",
+        "hostile"
+      ],
+      "default": "neutral",
+      "setBy": [
+        "plough_tavern_talk"
+      ],
+      "readBy": [
+        "ravensgate_gates",
+        "millbrook_remembers"
+      ],
+      "description": "Reeve Hollis Tamsin of loc:millbrook; friendly gives a letter of introduction and a Ch4 militia."
+    },
+    {
+      "id": "arc.starter.missing_list",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "plough_tavern_talk"
+      ],
+      "readBy": [
+        "gallows_hill_trail"
+      ],
+      "description": "Hero obtained the list of missing villagers (or the miller's confession); advantage on tracking."
+    },
+    {
+      "id": "arc.starter.ambush_avoided",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "gallows_hill_trail"
+      ],
+      "readBy": [
+        "barrow_of_the_first_sheaf"
+      ],
+      "description": "Group Stealth succeeded approaching the barrow; fac:hollow_choir cultists are surprised."
+    },
+    {
+      "id": "arc.starter.captives_saved",
+      "type": "number",
+      "default": 0,
+      "min": 0,
+      "max": 4,
+      "setBy": [
+        "barrow_of_the_first_sheaf"
+      ],
+      "readBy": [
+        "marrows_goods_and_oath",
+        "millbrook_remembers",
+        "ending"
+      ],
+      "description": "Number of the four Millbrook captives freed alive from the Tithe Altar."
+    },
+    {
+      "id": "arc.starter.pip_rescued",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "barrow_of_the_first_sheaf"
+      ],
+      "readBy": [
+        "dawnspire_vigil",
+        "millbrook_remembers",
+        "dawnspire_muster",
+        "ending",
+        "side_quests"
+      ],
+      "description": "Pip Hallard, the miller's son, survived; he becomes a page of fac:order_of_the_dawn_lance."
+    },
+    {
+      "id": "arc.starter.ashby_fate",
+      "type": "string",
+      "values": [
+        "unknown",
+        "killed",
+        "captured",
+        "escaped"
+      ],
+      "default": "unknown",
+      "setBy": [
+        "barrow_of_the_first_sheaf",
+        "side_quests"
+      ],
+      "readBy": [
+        "hollowmere_stilts",
+        "night_of_bells",
+        "ending",
+        "side_quests"
+      ],
+      "description": "Fate of Brother Ashby, the fac:hollow_choir cell leader of loc:millbrook."
+    },
+    {
+      "id": "arc.starter.shrine_rekindled",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "barrow_shrine_rest"
+      ],
+      "readBy": [
+        "hollowmere_stilts",
+        "thornwife_moot",
+        "millbrook_remembers",
+        "blightwood_crossing"
+      ],
+      "description": "Hero rekindled the barrow shrine of Thaloren; fac:briarkin and Nettle warm to the hero."
+    },
+    {
+      "id": "arc.starter.dream_heard",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "barrow_shrine_rest"
+      ],
+      "readBy": [
+        "almoners_masque"
+      ],
+      "description": "Hero remembers the Cantor's voice from the Tooth-dream; lowers the masque Insight DC from 17 to 12."
+    },
+    {
+      "id": "arc.starter.marrow_ring_returned",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "marrows_goods_and_oath"
+      ],
+      "readBy": [
+        "millbrook_remembers"
+      ],
+      "description": "Widow Marrow's stolen ring was returned; shop discount now, potions of heroism in Ch4."
+    },
+    {
+      "id": "arc.starter.first_destination",
+      "type": "string",
+      "values": [
+        "ravensgate",
+        "brightwater"
+      ],
+      "default": "ravensgate",
+      "setBy": [
+        "road_south"
+      ],
+      "readBy": [
+        "ravensgate_gates"
+      ],
+      "description": "Where the hero took the Tooth of Want: loc:ravensgate (fac:lantern_wardens) or loc:brightwater (crown magistrate)."
+    },
+    {
+      "id": "arc.main.tooth_want_holder",
+      "type": "string",
+      "values": [
+        "unclaimed",
+        "player",
+        "wardens",
+        "briarkin",
+        "red_gull",
+        "dawn_lance",
+        "choir"
+      ],
+      "default": "unclaimed",
+      "setBy": [
+        "barrow_of_the_first_sheaf",
+        "road_south",
+        "ravensgate_gates",
+        "maw_descent",
+        "choir_of_teeth",
+        "defeat_outcomes"
+      ],
+      "readBy": [
+        "highcrown_audience",
+        "lantern_hold_tribunal",
+        "lantern_hold_siege",
+        "choir_of_teeth",
+        "maw_final_seal"
+      ],
+      "description": "Holder of Tooth 1, the Tooth of Want, from the loc:millbrook barrow. Giving it to the Brightwater magistrate sends it silently to the Almonry (choir)."
+    },
+    {
+      "id": "arc.main.tooth_abbey_holder",
+      "type": "string",
+      "values": [
+        "unclaimed",
+        "player",
+        "wardens",
+        "briarkin",
+        "red_gull",
+        "dawn_lance",
+        "choir"
+      ],
+      "default": "unclaimed",
+      "setBy": [
+        "drowned_abbey_undercroft",
+        "palace_undercroft",
+        "blightwood_crossing",
+        "maw_descent",
+        "choir_of_teeth",
+        "defeat_outcomes"
+      ],
+      "readBy": [
+        "abbey_bells_toll",
+        "choir_of_teeth",
+        "maw_final_seal"
+      ],
+      "description": "Holder of Tooth 2, the Drowned Tooth, from loc:drowned_abbey."
+    },
+    {
+      "id": "arc.main.tooth_wick_holder",
+      "type": "string",
+      "values": [
+        "unclaimed",
+        "player",
+        "wardens",
+        "briarkin",
+        "red_gull",
+        "dawn_lance",
+        "choir"
+      ],
+      "default": "unclaimed",
+      "setBy": [
+        "thornwife_moot",
+        "lantern_hold_tribunal",
+        "palace_undercroft",
+        "blightwood_crossing",
+        "maw_descent",
+        "choir_of_teeth",
+        "defeat_outcomes"
+      ],
+      "readBy": [
+        "night_of_bells",
+        "choir_of_teeth",
+        "maw_final_seal"
+      ],
+      "description": "Holder of Tooth 3, the Briar Tooth, kept by Grandmother Wick of fac:briarkin at loc:thornwife_hollow."
+    },
+    {
+      "id": "arc.main.tooth_parrot_holder",
+      "type": "string",
+      "values": [
+        "unclaimed",
+        "player",
+        "wardens",
+        "briarkin",
+        "red_gull",
+        "dawn_lance",
+        "choir"
+      ],
+      "default": "unclaimed",
+      "setBy": [
+        "brass_parrot_vault",
+        "gullhaven_truce",
+        "pells_reckoning",
+        "palace_undercroft",
+        "blightwood_crossing",
+        "maw_descent",
+        "choir_of_teeth",
+        "side_quests",
+        "defeat_outcomes"
+      ],
+      "readBy": [
+        "pells_reckoning",
+        "choir_of_teeth",
+        "maw_final_seal"
+      ],
+      "description": "Holder of Tooth 4, the Brass Tooth, from the vault on loc:isle_of_brass_parrots; fac:red_gull_brotherhood may secure it."
+    },
+    {
+      "id": "arc.main.tooth_reef_holder",
+      "type": "string",
+      "values": [
+        "unclaimed",
+        "player",
+        "wardens",
+        "briarkin",
+        "red_gull",
+        "dawn_lance",
+        "choir"
+      ],
+      "default": "unclaimed",
+      "setBy": [
+        "singing_reef_lagoon",
+        "gullhaven_truce",
+        "palace_undercroft",
+        "blightwood_crossing",
+        "maw_descent",
+        "choir_of_teeth",
+        "defeat_outcomes"
+      ],
+      "readBy": [
+        "choir_of_teeth",
+        "maw_final_seal"
+      ],
+      "description": "Holder of Tooth 5, the Singing Tooth, taken from the sea hag of loc:singing_reef."
+    },
+    {
+      "id": "arc.main.tooth_vaelthorn_holder",
+      "type": "string",
+      "values": [
+        "unclaimed",
+        "player",
+        "wardens",
+        "briarkin",
+        "red_gull",
+        "dawn_lance",
+        "choir"
+      ],
+      "default": "unclaimed",
+      "setBy": [
+        "vaelthorn_sky_towers",
+        "palace_undercroft",
+        "blightwood_crossing",
+        "maw_descent",
+        "choir_of_teeth",
+        "side_quests",
+        "defeat_outcomes"
+      ],
+      "readBy": [
+        "choir_of_teeth",
+        "maw_final_seal"
+      ],
+      "description": "Holder of Tooth 6, the Sky Tooth, sealed under Dawnbreaker in loc:ruins_of_old_vaelthorn."
+    },
+    {
+      "id": "arc.main.tooth_ember_holder",
+      "type": "string",
+      "values": [
+        "unclaimed",
+        "player",
+        "wardens",
+        "briarkin",
+        "red_gull",
+        "dawn_lance",
+        "choir"
+      ],
+      "default": "unclaimed",
+      "setBy": [
+        "pyrraxis_hoard",
+        "blightwood_crossing",
+        "maw_descent",
+        "choir_of_teeth",
+        "defeat_outcomes"
+      ],
+      "readBy": [
+        "highcrown_burning",
+        "choir_of_teeth",
+        "maw_final_seal"
+      ],
+      "description": "Holder of Tooth 7, the Ember Tooth, lodged in Pyrraxis at loc:emberpeak."
+    },
+    {
+      "id": "arc.main.teeth_secured",
+      "type": "number",
+      "default": 0,
+      "min": 0,
+      "max": 7,
+      "setBy": [
+        "barrow_of_the_first_sheaf",
+        "road_south",
+        "ravensgate_gates",
+        "thornwife_moot",
+        "drowned_abbey_undercroft",
+        "lantern_hold_tribunal",
+        "singing_reef_lagoon",
+        "brass_parrot_vault",
+        "gullhaven_truce",
+        "pells_reckoning",
+        "vaelthorn_sky_towers",
+        "palace_undercroft",
+        "pyrraxis_hoard",
+        "blightwood_crossing",
+        "maw_descent",
+        "choir_of_teeth",
+        "side_quests",
+        "defeat_outcomes"
+      ],
+      "readBy": [
+        "choir_of_teeth",
+        "maw_final_seal",
+        "ending"
+      ],
+      "description": "Derived: number of Teeth held by the player or an ally (holder not unclaimed/choir). Recomputed by the flag engine."
+    },
+    {
+      "id": "arc.main.teeth_choir",
+      "type": "number",
+      "default": 0,
+      "min": 0,
+      "max": 7,
+      "setBy": [
+        "barrow_of_the_first_sheaf",
+        "road_south",
+        "ravensgate_gates",
+        "thornwife_moot",
+        "drowned_abbey_undercroft",
+        "lantern_hold_tribunal",
+        "singing_reef_lagoon",
+        "brass_parrot_vault",
+        "gullhaven_truce",
+        "pells_reckoning",
+        "vaelthorn_sky_towers",
+        "palace_undercroft",
+        "pyrraxis_hoard",
+        "blightwood_crossing",
+        "maw_descent",
+        "choir_of_teeth",
+        "side_quests",
+        "defeat_outcomes"
+      ],
+      "readBy": [
+        "pyrraxis_hoard",
+        "choir_of_teeth",
+        "maw_final_seal",
+        "ending"
+      ],
+      "description": "Derived: number of Teeth held by fac:hollow_choir. Reaching 7 during the finale opens loc:the_maw."
+    },
+    {
+      "id": "arc.main.sallow_fate",
+      "type": "string",
+      "values": [
+        "unknown",
+        "killed",
+        "captured",
+        "escaped"
+      ],
+      "default": "unknown",
+      "setBy": [
+        "night_of_bells",
+        "side_quests"
+      ],
+      "readBy": [
+        "lantern_hold_tribunal",
+        "port_sorrel_docks",
+        "almoners_masque",
+        "lantern_hold_siege",
+        "ending",
+        "side_quests"
+      ],
+      "description": "Fate of Mother Sallow, fac:hollow_choir plague-preacher of loc:hollowmere; captured gives a Cantor clue."
+    },
+    {
+      "id": "arc.main.wick_fate",
+      "type": "string",
+      "values": [
+        "unknown",
+        "ally",
+        "wronged",
+        "burned"
+      ],
+      "default": "unknown",
+      "setBy": [
+        "thornwife_moot",
+        "lantern_hold_tribunal",
+        "night_of_bells"
+      ],
+      "readBy": [
+        "night_of_bells",
+        "lantern_hold_siege",
+        "blightwood_crossing",
+        "maw_final_seal",
+        "ending",
+        "side_quests"
+      ],
+      "description": "Grandmother Wick of fac:briarkin: ally gives the Name-Chant (+1 seal); burned spawns curse-hunters."
+    },
+    {
+      "id": "arc.main.abbot_cendric_alive",
+      "type": "boolean",
+      "default": true,
+      "setBy": [
+        "drowned_abbey_undercroft"
+      ],
+      "readBy": [
+        "abbey_bells_toll",
+        "side_quests"
+      ],
+      "description": "Abbot Cendric of loc:drowned_abbey survived; he leads the Ch5 bell rite."
+    },
+    {
+      "id": "arc.main.cure_recipe",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "thornwife_moot"
+      ],
+      "readBy": [
+        "lantern_hold_tribunal",
+        "palace_undercroft"
+      ],
+      "description": "Hero holds the fac:briarkin cure for the Whispering Sickness (bell-ash delivered)."
+    },
+    {
+      "id": "arc.main.hollowmere_fate",
+      "type": "string",
+      "values": [
+        "unresolved",
+        "cured",
+        "purged",
+        "abandoned"
+      ],
+      "default": "unresolved",
+      "setBy": [
+        "lantern_hold_tribunal",
+        "night_of_bells"
+      ],
+      "readBy": [
+        "lantern_hold_siege",
+        "ending",
+        "side_quests"
+      ],
+      "description": "Fate of loc:hollowmere: cured (fac:briarkin), purged (fac:lantern_wardens) or abandoned to fac:hollow_choir."
+    },
+    {
+      "id": "world.sickness_cure",
+      "type": "string",
+      "values": [
+        "none",
+        "briarkin_cure",
+        "warden_fire",
+        "maw_sealed"
+      ],
+      "default": "none",
+      "setBy": [
+        "night_of_bells",
+        "maw_final_seal"
+      ],
+      "readBy": [
+        "port_sorrel_docks",
+        "palace_undercroft",
+        "lantern_hold_siege",
+        "ending"
+      ],
+      "description": "How the Whispering Sickness is being fought across Orrimar; readable by future arcs."
+    },
+    {
+      "id": "arc.main.almoner_seal_seen",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "port_sorrel_docks"
+      ],
+      "readBy": [
+        "pells_reckoning",
+        "almoners_masque"
+      ],
+      "description": "Clue 2: the Almonry seal on plague grain in loc:port_sorrel."
+    },
+    {
+      "id": "arc.main.choir_ledger_found",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "wreckers_cove_caves"
+      ],
+      "readBy": [
+        "pells_reckoning",
+        "deepanvil_ledgers",
+        "almoners_masque"
+      ],
+      "description": "Clue 3: the fac:hollow_choir ledger from loc:wreckers_cove."
+    },
+    {
+      "id": "arc.main.isles_alliance",
+      "type": "string",
+      "values": [
+        "neutral",
+        "red_gull",
+        "saltwind"
+      ],
+      "default": "neutral",
+      "setBy": [
+        "fennicks_rest_wager"
+      ],
+      "readBy": [
+        "gullhaven_truce",
+        "wreckers_cove_caves",
+        "brass_parrot_vault",
+        "pells_reckoning",
+        "highcrown_audience",
+        "deepanvil_ledgers",
+        "dawnspire_muster",
+        "ending",
+        "side_quests"
+      ],
+      "description": "Side taken in the Isles: fac:red_gull_brotherhood (with fac:tidewright_guild) or fac:saltwind_trading_company."
+    },
+    {
+      "id": "arc.main.gullhaven_fate",
+      "type": "string",
+      "values": [
+        "free",
+        "occupied",
+        "burned"
+      ],
+      "default": "free",
+      "setBy": [
+        "gullhaven_truce",
+        "pells_reckoning",
+        "side_quests"
+      ],
+      "readBy": [
+        "dawnspire_muster",
+        "ending",
+        "side_quests"
+      ],
+      "description": "Status of the free port loc:gullhaven run by fac:tidewright_guild."
+    },
+    {
+      "id": "arc.main.pell_fate",
+      "type": "string",
+      "values": [
+        "unknown",
+        "exposed",
+        "allied",
+        "dead",
+        "fled"
+      ],
+      "default": "unknown",
+      "setBy": [
+        "pells_reckoning",
+        "side_quests"
+      ],
+      "readBy": [
+        "highcrown_audience",
+        "dawnspire_muster",
+        "ending",
+        "side_quests"
+      ],
+      "description": "Fate of Governor Cassius Pell of fac:saltwind_trading_company."
+    },
+    {
+      "id": "arc.main.harrow_vey_fate",
+      "type": "string",
+      "values": [
+        "unknown",
+        "killed",
+        "captured",
+        "escaped"
+      ],
+      "default": "unknown",
+      "setBy": [
+        "brass_parrot_vault",
+        "pells_reckoning",
+        "highcrown_burning",
+        "side_quests"
+      ],
+      "readBy": [
+        "pells_reckoning",
+        "highcrown_burning",
+        "ending",
+        "side_quests"
+      ],
+      "description": "Fate of Captain Harrow Vey, fac:hollow_choir smuggler-captain."
+    },
+    {
+      "id": "arc.main.hag_bargain",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "singing_reef_lagoon",
+        "side_quests"
+      ],
+      "readBy": [
+        "blightwood_crossing",
+        "side_quests"
+      ],
+      "description": "Hero traded memories to the sea hag of loc:singing_reef (lost proficiency until restored)."
+    },
+    {
+      "id": "arc.main.parrot_treasure",
+      "type": "string",
+      "values": [
+        "unclaimed",
+        "player",
+        "red_gull",
+        "saltwind",
+        "choir"
+      ],
+      "default": "unclaimed",
+      "setBy": [
+        "brass_parrot_vault",
+        "side_quests"
+      ],
+      "readBy": [
+        "dawnspire_muster",
+        "ending",
+        "side_quests"
+      ],
+      "description": "Who got the Brass Parrot treasure of loc:isle_of_brass_parrots."
+    },
+    {
+      "id": "arc.main.money_trail_proven",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "deepanvil_ledgers"
+      ],
+      "readBy": [
+        "almoners_masque",
+        "dawnspire_muster",
+        "ending"
+      ],
+      "description": "Clue 4: fac:ironvault_consortium ledgers tie the Almonry to Choir funds."
+    },
+    {
+      "id": "arc.main.dawnbreaker_holder",
+      "type": "string",
+      "values": [
+        "lost",
+        "player",
+        "dawn_lance",
+        "choir"
+      ],
+      "default": "lost",
+      "setBy": [
+        "vaelthorn_sky_towers",
+        "dawnspire_vigil"
+      ],
+      "readBy": [
+        "dawnspire_vigil",
+        "dawnspire_muster",
+        "pyrraxis_hoard",
+        "choir_of_teeth",
+        "maw_final_seal",
+        "ending"
+      ],
+      "description": "Holder of the holy lance Dawnbreaker (dragon_slayer) of fac:order_of_the_dawn_lance."
+    },
+    {
+      "id": "arc.main.vosk_fate",
+      "type": "string",
+      "values": [
+        "unknown",
+        "killed",
+        "captured",
+        "escaped"
+      ],
+      "default": "unknown",
+      "setBy": [
+        "vaelthorn_sky_towers",
+        "emberpeak_ascent",
+        "highcrown_burning",
+        "maw_descent",
+        "side_quests"
+      ],
+      "readBy": [
+        "almoners_masque",
+        "emberpeak_ascent",
+        "highcrown_burning",
+        "maw_descent",
+        "ending",
+        "side_quests"
+      ],
+      "description": "Fate of Vosk the Hollow, fac:hollow_choir archivist-mage."
+    },
+    {
+      "id": "arc.main.cantor_identity_known",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "almoners_masque"
+      ],
+      "readBy": [
+        "palace_undercroft",
+        "choir_of_teeth",
+        "ending"
+      ],
+      "description": "Hero knows the Cantor is Lady Seraphine Vell, Royal Almoner of fac:crown_of_aurelmark."
+    },
+    {
+      "id": "arc.main.cantor_unmasked_publicly",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "almoners_masque"
+      ],
+      "readBy": [
+        "dawnspire_muster",
+        "highcrown_burning",
+        "ending"
+      ],
+      "description": "The Cantor was exposed before the court of loc:highcrown."
+    },
+    {
+      "id": "arc.main.cantor_warned",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "almoners_masque"
+      ],
+      "readBy": [
+        "palace_undercroft"
+      ],
+      "description": "Aurek betrayed the hero and warned his aunt; clean escape in the palace undercroft."
+    },
+    {
+      "id": "world.player_outlawed",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "highcrown_audience",
+        "almoners_masque",
+        "pells_reckoning",
+        "highcrown_burning",
+        "defeat_outcomes",
+        "side_quests"
+      ],
+      "readBy": [
+        "port_sorrel_docks",
+        "fort_kestrel_gallows",
+        "highcrown_audience",
+        "ashfall_road",
+        "dawnspire_muster",
+        "highcrown_burning",
+        "side_quests"
+      ],
+      "description": "Hero is wanted by fac:crown_of_aurelmark or fac:saltwind_trading_company law."
+    },
+    {
+      "id": "world.queen_alive",
+      "type": "boolean",
+      "default": true,
+      "setBy": [
+        "palace_undercroft",
+        "highcrown_burning"
+      ],
+      "readBy": [
+        "dawnspire_muster",
+        "highcrown_burning",
+        "choir_of_teeth",
+        "ending"
+      ],
+      "description": "Queen Isolde Varannis of fac:crown_of_aurelmark survives the Cantor's poison."
+    },
+    {
+      "id": "arc.main.millbrook_militia",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "millbrook_remembers"
+      ],
+      "readBy": [
+        "dawnspire_muster",
+        "highcrown_burning",
+        "ending"
+      ],
+      "description": "loc:millbrook fights for the hero (war council ally, halves Highcrown fire)."
+    },
+    {
+      "id": "arc.main.war_council_allies",
+      "type": "number",
+      "default": 0,
+      "min": 0,
+      "max": 6,
+      "setBy": [
+        "dawnspire_muster"
+      ],
+      "readBy": [
+        "emberpeak_ascent",
+        "pyrraxis_hoard",
+        "highcrown_burning",
+        "lantern_hold_siege"
+      ],
+      "description": "Allies gathered at loc:dawnspire_keep (0-6)."
+    },
+    {
+      "id": "arc.main.pyrraxis_fate",
+      "type": "string",
+      "values": [
+        "unknown",
+        "slain",
+        "freed",
+        "bargained",
+        "raging"
+      ],
+      "default": "unknown",
+      "setBy": [
+        "pyrraxis_hoard"
+      ],
+      "readBy": [
+        "highcrown_burning",
+        "ending",
+        "side_quests"
+      ],
+      "description": "Fate of the red dragon Pyrraxis of loc:emberpeak."
+    },
+    {
+      "id": "arc.main.lantern_hold_held",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "lantern_hold_siege"
+      ],
+      "readBy": [
+        "maw_descent",
+        "maw_final_seal",
+        "ending"
+      ],
+      "description": "loc:lantern_hold survived the siege; fac:lantern_wardens hold the Maw rim (+1 seal)."
+    },
+    {
+      "id": "arc.main.abbey_bells_rung",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "abbey_bells_toll",
+        "side_quests"
+      ],
+      "readBy": [
+        "choir_of_teeth",
+        "maw_final_seal"
+      ],
+      "description": "All nine drowned bells of loc:drowned_abbey were rung (+1 seal, advantage vs Hunger Pull)."
+    },
+    {
+      "id": "arc.main.cantor_parley",
+      "type": "string",
+      "values": [
+        "not_offered",
+        "accepted",
+        "refused"
+      ],
+      "default": "not_offered",
+      "setBy": [
+        "choir_of_teeth"
+      ],
+      "readBy": [
+        "maw_final_seal",
+        "ending"
+      ],
+      "description": "Outcome of the redemption parley with the Cantor in loc:the_maw."
+    },
+    {
+      "id": "arc.main.cantor_fate",
+      "type": "string",
+      "values": [
+        "unknown",
+        "killed",
+        "redeemed",
+        "captured",
+        "escaped"
+      ],
+      "default": "unknown",
+      "setBy": [
+        "choir_of_teeth",
+        "maw_final_seal"
+      ],
+      "readBy": [
+        "maw_final_seal",
+        "ending",
+        "side_quests"
+      ],
+      "description": "Fate of the Cantor, leader of fac:hollow_choir."
+    },
+    {
+      "id": "world.maw_state",
+      "type": "string",
+      "values": [
+        "sleeping",
+        "sealed",
+        "stirring",
+        "opened"
+      ],
+      "default": "sleeping",
+      "setBy": [
+        "maw_final_seal",
+        "defeat_outcomes"
+      ],
+      "readBy": [
+        "ending"
+      ],
+      "description": "State of loc:the_maw after the finale; readable by future arcs."
+    },
+    {
+      "id": "world.corwin_status",
+      "type": "string",
+      "values": [
+        "unmet",
+        "met",
+        "in_party",
+        "waiting",
+        "left",
+        "betrayed",
+        "dead"
+      ],
+      "default": "unmet",
+      "setBy": [
+        "barrow_of_the_first_sheaf",
+        "marrows_goods_and_oath",
+        "dawnspire_vigil"
+      ],
+      "readBy": [
+        "vaelthorn_sky_towers",
+        "pyrraxis_hoard",
+        "highcrown_audience",
+        "ending"
+      ],
+      "description": "Ser Corwin Ashvale, dismissed knight of fac:order_of_the_dawn_lance."
+    },
+    {
+      "id": "world.corwin_loyalty",
+      "type": "number",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "setBy": [
+        "marrows_goods_and_oath",
+        "barrow_of_the_first_sheaf",
+        "lantern_hold_tribunal",
+        "fennicks_rest_wager",
+        "thornwife_moot",
+        "dawnspire_vigil",
+        "palace_undercroft",
+        "side_quests"
+      ],
+      "readBy": [
+        "dawnspire_vigil",
+        "highcrown_audience",
+        "ending"
+      ],
+      "description": "Corwin approval 0-100; <=20 at loc:dawnspire_keep makes him leave."
+    },
+    {
+      "id": "world.corwin_quest_done",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "dawnspire_vigil",
+        "companion_quests"
+      ],
+      "readBy": [
+        "ending"
+      ],
+      "description": "Corwin resolved \"The Broken Oath\" (knighted or Thane exposed)."
+    },
+    {
+      "id": "world.nettle_status",
+      "type": "string",
+      "values": [
+        "unmet",
+        "met",
+        "in_party",
+        "waiting",
+        "left",
+        "betrayed",
+        "dead"
+      ],
+      "default": "unmet",
+      "setBy": [
+        "hollowmere_stilts",
+        "lantern_hold_tribunal",
+        "maw_descent",
+        "side_quests"
+      ],
+      "readBy": [
+        "drowned_abbey_undercroft",
+        "blightwood_crossing",
+        "maw_descent",
+        "maw_final_seal",
+        "defeat_outcomes",
+        "ending"
+      ],
+      "description": "Nettle, fac:briarkin hedge-witch apprentice."
+    },
+    {
+      "id": "world.nettle_loyalty",
+      "type": "number",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "setBy": [
+        "hollowmere_stilts",
+        "thornwife_moot",
+        "lantern_hold_tribunal",
+        "night_of_bells",
+        "blightwood_crossing",
+        "side_quests"
+      ],
+      "readBy": [
+        "thornwife_moot",
+        "lantern_hold_tribunal",
+        "maw_descent",
+        "ending"
+      ],
+      "description": "Nettle approval 0-100; <=20 at loc:the_maw makes her betray the party."
+    },
+    {
+      "id": "world.nettle_quest_done",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "blightwood_crossing",
+        "companion_quests"
+      ],
+      "readBy": [
+        "maw_final_seal",
+        "ending"
+      ],
+      "description": "Nettle learned her true name (\"The Name in the Jar\")."
+    },
+    {
+      "id": "world.rook_status",
+      "type": "string",
+      "values": [
+        "unmet",
+        "met",
+        "in_party",
+        "waiting",
+        "left",
+        "betrayed",
+        "dead"
+      ],
+      "default": "unmet",
+      "setBy": [
+        "fort_kestrel_gallows",
+        "pells_reckoning",
+        "gullhaven_truce",
+        "side_quests"
+      ],
+      "readBy": [
+        "fennicks_rest_wager",
+        "pells_reckoning",
+        "choir_of_teeth",
+        "ending",
+        "side_quests"
+      ],
+      "description": "Rook Marrowby, fac:red_gull_brotherhood smuggler."
+    },
+    {
+      "id": "world.rook_loyalty",
+      "type": "number",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "setBy": [
+        "fort_kestrel_gallows",
+        "fennicks_rest_wager",
+        "gullhaven_truce",
+        "brass_parrot_vault",
+        "side_quests"
+      ],
+      "readBy": [
+        "pells_reckoning",
+        "ending"
+      ],
+      "description": "Rook approval 0-100; <=20 at loc:port_sorrel makes him sell a Tooth."
+    },
+    {
+      "id": "world.rook_quest_done",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "companion_quests"
+      ],
+      "readBy": [
+        "ending"
+      ],
+      "description": "Rook cleared his debt (\"Debt of Salt\") and owns a sloop."
+    },
+    {
+      "id": "world.aurek_status",
+      "type": "string",
+      "values": [
+        "unmet",
+        "met",
+        "in_party",
+        "waiting",
+        "left",
+        "betrayed",
+        "dead"
+      ],
+      "default": "unmet",
+      "setBy": [
+        "highcrown_audience",
+        "almoners_masque"
+      ],
+      "readBy": [
+        "choir_of_teeth",
+        "ending"
+      ],
+      "description": "Aurek Vell, Veyran scholar and nephew of the Cantor."
+    },
+    {
+      "id": "world.aurek_loyalty",
+      "type": "number",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "setBy": [
+        "highcrown_audience",
+        "vaelthorn_sky_towers",
+        "almoners_masque",
+        "palace_undercroft",
+        "side_quests"
+      ],
+      "readBy": [
+        "highcrown_audience",
+        "almoners_masque",
+        "choir_of_teeth",
+        "ending"
+      ],
+      "description": "Aurek approval 0-100; <=20 at the masque makes him warn his aunt; >=70 enables redemption."
+    },
+    {
+      "id": "world.aurek_quest_done",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "companion_quests"
+      ],
+      "readBy": [
+        "maw_final_seal",
+        "ending"
+      ],
+      "description": "Aurek recovered his father's reverse-song research (\"Veyra's Lantern\"; +1 seal)."
+    },
+    {
+      "id": "world.times_defeated",
+      "type": "number",
+      "default": 0,
+      "setBy": [
+        "defeat_outcomes"
+      ],
+      "readBy": [
+        "ending",
+        "side_quests"
+      ],
+      "description": "Heroic-mode defeats suffered this campaign."
+    },
+    {
+      "id": "world.briarkin_favor_owed",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "thornwife_moot",
+        "defeat_outcomes"
+      ],
+      "readBy": [
+        "blightwood_crossing",
+        "side_quests"
+      ],
+      "description": "Hero owes Grandmother Wick of fac:briarkin a favor."
+    },
+    {
+      "id": "world.red_gull_debt",
+      "type": "number",
+      "default": 0,
+      "setBy": [
+        "defeat_outcomes",
+        "fort_kestrel_gallows",
+        "side_quests"
+      ],
+      "readBy": [
+        "fort_kestrel_gallows",
+        "side_quests"
+      ],
+      "description": "Gold owed to fac:red_gull_brotherhood for salvage."
+    }
+  ]
+}
