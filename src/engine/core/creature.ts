@@ -76,6 +76,8 @@ export const CreatureSchema = z.object({
   vulnerabilities: z.array(DamageTypeSchema).default([]),
   conditionImmunities: z.array(ConditionSchema).default([]),
   conditions: z.array(ActiveConditionSchema).default([]),
+  /** Dead (0 HP monster, 3 failed death saves, massive damage, exhaustion 6). */
+  dead: z.boolean().default(false),
   /** 0–6 (2024 exhaustion). */
   exhaustion: z.number().int().min(0).max(6).default(0),
   languages: z.array(z.string()).default([]),

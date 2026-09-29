@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A031
-- **Notes for next session:** Start with A032. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A032
+- **Notes for next session:** Start with A033. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -51,7 +51,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A029 — Ability checks & saves
 - [done] A030 — Attacks & damage
 - [done] A031 — Conditions engine + exhaustion 2024
-- [todo] A032 — Death saves, 0 HP, resting | Spec: §4, §9 | Done: death saves, stabilize, massive damage, healing from 0, short rest (hit dice) and long rest, generic resource recovery; tests | Dep: A031
+- [done] A032 — Death saves, 0 HP, resting
 - [todo] A033 — Effect system | Spec: §4 | Done: data-driven executor for damage/heal/condition/save/area/duration effects; tests | Dep: A031
 - [todo] A034 — Spellcasting engine | Spec: §4 | Done: slots, save DC/attack, upcast, concentration (DC max(10, dmg/2)), rituals, abstract components, pact magic; tests | Dep: A033, A021
 - [todo] A034a — Spell effects pass | Spec: §4 | Done: hand-written effects/hooks in data/srd/overrides/spells.json for the ~40 most-used combat spells that have no auto effects (magic_missile, bless, shield, ice_storm, counterspell, guiding_bolt, spiritual_weapon, etc.); cantrip damage scaling by character level (5/11/17) in the engine; tests | Dep: A034
@@ -167,6 +167,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A029 — d20Test core (adv/dis cancel, exhaustion −2/level, autoFail, math line) + abilityCheck/skillCheck/savingThrow/passiveScore/contest — `src/engine/rules/checks.ts`
 - A030 — attackRoll (nat 20 crit / nat 1 miss, critOn, autoCrit), rollDamage (crit doubles dice only, modifiers on first entry, min 0, math text), applyDamage (immune/resist/vuln once, temp HP first, overflow, massive-damage flag), heal, grantTempHp, isBloodied — `src/engine/rules/damage.ts`
 - A031 — Conditions engine: effectiveConditions (implied + exhaustion), apply/remove (immunities incl. Petrified→Poisoned, same-source dedupe keeps longer duration, Unconscious ends → Prone), tick durations, end-of-turn saves, attack/check/save/initiative modes from data modifiers (source rules for grappled/frightened/charmed/invisible), canAct, effectiveSpeed (speedZero, −5/exhaustion), crawl, resistAll, mayHarm, exhaustion levels + death at 6 — `src/engine/rules/conditions.ts`
+- A032 — Death & rest: resolveDamageAtZero (monster death, unconscious, massive damage, failures at 0 HP incl. crit = 2), rollDeathSave (10+, nat 1/20, stable, dead, exhaustion applies), stabilize, healFromZero; shortRest (hit dice die+Con min 1), longRest (all HP + all hit dice, temp HP gone, −1 exhaustion), rechargeResources, hitDicePool; `dead` flag on Creature — `src/engine/rules/death.ts`, `src/engine/rules/rest.ts`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -219,6 +220,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A030: Creature updates are pure (return new creature + report). Resist and vulnerable on the same type: halve then double. Massive damage flag = overflow ≥ max HP after hitting 0; death/unconscious handling is A032.
 - Owner decision (2026-09-29): max 2 agents at once (main + 1 helper subagent in its own worktree, separate assignment, main merges + updates brain.md). CLAUDE.md §2, .claude/settings.json deny list and run-loop.bat prompt updated.
 - A031: Condition functions take an optional ConditionTable (defaults to loadSrd().conditions). Mode helpers return {advantage[], disadvantage[], autoFail?} that spread straight into check/save options. Frightened 'source visible' defaults to true unless the caller says otherwise (LOS comes in A060).
+- A032: Creature has `dead: boolean`. Death saves apply exhaustion (they are D20 Tests). Heroic-mode defeat is decided by the session (A068), the rules module always reports real death. Long rest also resets death saves.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -245,6 +247,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/rules/checks.ts` — d20Test (shared core), abilityCheck, skillCheck, savingThrow, checkModifiers, saveModifiers, passiveScore, contest
 - `src/engine/rules/damage.ts` — attackRoll, rollDamage, doubleDice, adjustForDefenses, applyDamage, heal, grantTempHp, isBloodied
 - `src/engine/rules/conditions.ts` — effectiveConditions, hasCondition, applyCondition, removeCondition(+FromSource), addExhaustion, tickConditions, endOfTurnSaves, attackModes, checkModes, saveModes, initiativeModes, canAct, effectiveSpeed, isCrawlOnly, resistsAllDamage, mayHarm
+- `src/engine/rules/death.ts` — resolveDamageAtZero, rollDeathSave, stabilize, healFromZero, needsDeathSave
+- `src/engine/rules/rest.ts` — shortRest, longRest, rechargeResources, hitDicePool, restoreCreature
 - `src/engine/data/common.ts` — IdSchema, DiceSchema, CostSchema(CP), DamageSchema, AreaSchema, DurationSchema, EffectSchema/Effect, toId
 - `src/engine/data/schemas.ts` — schemas for every data/srd file + RulesTablesSchema; SRD_FILES registry; record types
 - `src/engine/data/srd.ts` — validateSrdFile, SrdDatabase (maps by id, item(), spellsForClass)
@@ -296,6 +300,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - Editing regexes with sed/python heredocs mangles backslashes; use the Edit tool for code containing regex escapes.
 - Spells source: a few spells use `**Component:**` (singular) instead of `**Components:**`.
 - monsters-A-Z.md uses `### Name` + `#### Actions`; animals.md uses `## Name` + `### Actions`. Ability tables sometimes merge cells ("10 +0") → parse rows as token streams.
+- Helper agents' worktrees live in `.claude/worktrees/` (gitignored). Never `git add` them.
 - TS strict + zod: a fallback lambda's return type widens enums to string; annotate it (`(e): T => ...`).
 - In .bat files escape `&` as `^&` (even in `title`). Edit .bat files with python (read bytes, normalize to CRLF); Git Bash `sed -i` mangles CRLF.
 - Testing .bat from the PowerShell tool: native commands don't follow Push-Location; call `cmd /c "`"<absolute path>`""`. To dry-run Start Game.bat, copy it with `call npm start` replaced by an echo.
