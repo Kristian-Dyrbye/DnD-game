@@ -40,6 +40,12 @@ export interface EffectContext {
   spellMod?: number;
   /** Slot levels above the spell's base level. */
   upcastLevels?: number;
+  /** Flat bonus added to each healing roll (Disciple of Life: 2 + slot level). */
+  healBonus?: number;
+  /** Healing dice count as their maximum (Supreme Healing). */
+  maxHealDice?: boolean;
+  /** Flat bonus added once to each damage roll (Potent Spellcasting: Wis mod on cantrips). */
+  damageBonus?: number;
   /** Id stamped on conditions so they end with the spell/feature (concentration). */
   conditionSourceId?: string;
   /** Distances from source to each target in feet (for attack modes); default 5. */
@@ -81,7 +87,10 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
       for (const id of targetIds) {
         let rolled = shared?.get(effect);
         if (!rolled || state.crit) {
-          rolled = rollDamage(ctx.rng, upcastDamage(effect.damage, effect.upcast, ctx.upcastLevels), { crit: state.crit ?? false });
+          rolled = rollDamage(ctx.rng, upcastDamage(effect.damage, effect.upcast, ctx.upcastLevels), {
+            crit: state.crit ?? false,
+            ...(ctx.damageBonus && { modifiers: [{ value: ctx.damageBonus, label: 'Bonus' }] }),
+          });
           if (shared && !state.crit) shared.set(effect, rolled);
         }
         dealDamage(ctx, id, rolled, state.half ?? false);
@@ -126,10 +135,14 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
         const target = ctx.creatures.get(id);
         if (!target || target.dead) continue;
         const r = roll(expr, ctx.rng);
-        const amount = Math.max(0, r.total + (effect.addSpellMod ? (ctx.spellMod ?? 0) : 0));
+        const diceTotal = ctx.maxHealDice
+          ? expr.terms.reduce((s, t) => s + (t.kind === 'dice' ? t.sign * t.count * t.sides : t.sign * t.value), 0)
+          : r.total;
+        const amount = Math.max(0, diceTotal + (effect.addSpellMod ? (ctx.spellMod ?? 0) : 0) + (ctx.healBonus ?? 0));
         const { creature, healed } = healFromZero(target, amount);
         ctx.creatures.set(id, creature);
-        ctx.log.push({ targetId: id, kind: 'heal', text: `${target.name} regains ${healed} HP (${r.notation}: ${r.total}${effect.addSpellMod ? ` + ${ctx.spellMod ?? 0}` : ''})` });
+        const extras = `${effect.addSpellMod ? ` + ${ctx.spellMod ?? 0}` : ''}${ctx.healBonus ? ` + ${ctx.healBonus}` : ''}`;
+        ctx.log.push({ targetId: id, kind: 'heal', text: `${target.name} regains ${healed} HP (${r.notation}: ${diceTotal}${ctx.maxHealDice ? ' max' : ''}${extras})` });
       }
       return;
     }

@@ -41,6 +41,21 @@ export interface FeatureActionResult {
   log: string[];
 }
 
+export interface FeatureActionParams {
+  rng: Rng;
+  target?: Creature;
+  /** Several targets (Turn Undead, Land's Aid area). */
+  targets?: Creature[];
+  choice?: string;
+}
+
+/** Spell modifiers a feature adds when casting (see spellcasting.castSpell options). */
+export interface SpellOptions {
+  healBonus?: number;
+  maxHealDice?: boolean;
+  cantripDamageBonus?: number;
+}
+
 export interface FeatureAction {
   id: string;
   name: string;
@@ -49,7 +64,7 @@ export interface FeatureAction {
   resource?: string;
   /** Why it can't be used right now, or undefined if usable. */
   problem?(c: Character): string | undefined;
-  use(c: Character, db: SrdDatabase, params: { rng: Rng; target?: Creature; choice?: string }): FeatureActionResult;
+  use(c: Character, db: SrdDatabase, params: FeatureActionParams): FeatureActionResult;
 }
 
 export interface FeatureImpl {
@@ -62,6 +77,8 @@ export interface FeatureImpl {
   saveModes?(c: Character, ability: Ability): Partial<Modes>;
   checkModes?(c: Character, ability: Ability, skill?: Skill): Partial<Modes>;
   initiativeModes?(c: Character): Partial<Modes>;
+  /** Flat bonuses to ability checks (Thaumaturge: +Wis to Arcana/Religion). */
+  checkBonus?(c: Character, ability: Ability, skill?: Skill): Modifier[];
   /** Extra resistances while conditions hold (Rage: B/P/S). */
   resistances?(c: Character): DamageType[];
   conditionImmunities?(c: Character): Condition[];
@@ -72,6 +89,8 @@ export interface FeatureImpl {
   actions?: FeatureAction[];
   /** Applied once when the feature is gained (Primal Champion +4 Str/Con, Jack of All Trades). */
   onGain?(c: Character, db: SrdDatabase): Character;
+  /** Changes to a spell being cast (Disciple of Life, Supreme Healing, Potent Spellcasting). */
+  spellOptions?(c: Character, spell: { level: number; healing: boolean; damaging: boolean }, slotLevel: number): SpellOptions;
   /** Whether the character can cast spells / concentrate while this feature is active (Rage: no). */
   blocksSpellcasting?(c: Character): boolean;
 }

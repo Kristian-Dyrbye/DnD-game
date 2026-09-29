@@ -10,9 +10,11 @@ import type { Ability, Condition, DamageType, Skill } from '../../rules/basics';
 import { featureLevels } from '../featureLevels';
 import { barbarianFeatures } from './barbarian';
 import { bardFeatures } from './bard';
-import type { FeatureAction, FeatureActionResult, FeatureImpl, Modes, WeaponHitContext, WeaponHitRider } from './types';
+import { clericFeatures } from './cleric';
+import { druidFeatures } from './druid';
+import type { FeatureAction, FeatureActionParams, FeatureActionResult, FeatureImpl, Modes, SpellOptions, WeaponHitContext, WeaponHitRider } from './types';
 
-export const ALL_FEATURES: FeatureImpl[] = [...barbarianFeatures, ...bardFeatures];
+export const ALL_FEATURES: FeatureImpl[] = [...barbarianFeatures, ...bardFeatures, ...clericFeatures, ...druidFeatures];
 
 /** Lowest class level at which an owner (class or subclass) grants a feature id, from the SRD data. */
 function grantLevel(db: SrdDatabase, owner: string, featureId: string): number | undefined {
@@ -54,6 +56,9 @@ export const featureSaveModes = (c: Character, db: SrdDatabase, ability: Ability
 export const featureCheckModes = (c: Character, db: SrdDatabase, ability: Ability, skill?: Skill): Modes =>
   merge(activeFeatures(c, db).map((f) => f.checkModes?.(c, ability, skill) ?? {}));
 
+export const featureCheckBonuses = (c: Character, db: SrdDatabase, ability: Ability, skill?: Skill) =>
+  activeFeatures(c, db).flatMap((f) => f.checkBonus?.(c, ability, skill) ?? []);
+
 export const featureInitiativeModes = (c: Character, db: SrdDatabase): Modes =>
   merge(activeFeatures(c, db).map((f) => f.initiativeModes?.(c) ?? {}));
 
@@ -74,6 +79,19 @@ export function weaponHitRiders(c: Character, db: SrdDatabase, ctx: WeaponHitCon
     const r = f.onWeaponHit?.(c, db, ctx);
     return r ? [r] : [];
   });
+}
+
+/** Merged spell options from features for a spell cast at `slotLevel` (0 for cantrips). */
+export function spellOptions(c: Character, db: SrdDatabase, spell: { level: number; healing: boolean; damaging: boolean }, slotLevel: number): SpellOptions {
+  const out: SpellOptions = {};
+  for (const f of activeFeatures(c, db)) {
+    const o = f.spellOptions?.(c, spell, slotLevel);
+    if (!o) continue;
+    if (o.healBonus) out.healBonus = (out.healBonus ?? 0) + o.healBonus;
+    if (o.maxHealDice) out.maxHealDice = true;
+    if (o.cantripDamageBonus) out.cantripDamageBonus = (out.cantripDamageBonus ?? 0) + o.cantripDamageBonus;
+  }
+  return out;
 }
 
 export function canCastSpells(c: Character, db: SrdDatabase): boolean {
@@ -120,7 +138,7 @@ export class FeatureError extends Error {
   }
 }
 
-export function useFeatureAction(c: Character, db: SrdDatabase, actionId: string, params: { rng: Rng; target?: Creature; choice?: string }): FeatureActionResult {
+export function useFeatureAction(c: Character, db: SrdDatabase, actionId: string, params: FeatureActionParams): FeatureActionResult {
   const found = featureActions(c, db).find((a) => a.action.id === actionId);
   if (!found) throw new FeatureError(`${c.name} doesn't have ${actionId}`);
   if (found.problem) throw new FeatureError(found.problem);

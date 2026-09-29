@@ -196,6 +196,10 @@ export interface CastOptions {
   characterLevel: number;
   distances?: Map<string, number>;
   hooks?: Record<string, HookFn>;
+  /** From class features (features.spellOptions): healing bonus, max heal dice, cantrip damage bonus. */
+  healBonus?: number;
+  maxHealDice?: boolean;
+  cantripDamageBonus?: number;
 }
 
 export interface CastResult {
@@ -222,6 +226,9 @@ export function castSpell(o: CastOptions): CastResult {
     spellMod: abilityModifier(o.caster.abilities[o.ability]),
     upcastLevels: o.spell.level > 0 ? level - o.spell.level : 0,
     conditionSourceId: sourceId,
+    ...(o.healBonus && { healBonus: o.healBonus }),
+    ...(o.maxHealDice && { maxHealDice: true }),
+    ...(o.spell.level === 0 && o.cantripDamageBonus && { damageBonus: o.cantripDamageBonus }),
     ...(o.distances && { distances: o.distances }),
     ...(o.hooks && { hooks: o.hooks }),
     onDamaged: (c, id, amount) => concentrationCheck(c, id, amount, o.rng),

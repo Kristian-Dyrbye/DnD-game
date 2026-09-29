@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A039
-- **Notes for next session:** Start with A039b. A048 (3D assets) is with a helper — merge its branch when it reports and merge assets/CREDITS-assets.md into CREDITS.md. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A039b
+- **Notes for next session:** Start with A039c (or A040 if Wild Shape should wait for monster runtime A042 — A039c depends on A042, so do A040 first). A048 (3D assets) is with a helper — merge its branch when it reports and merge assets/CREDITS-assets.md into CREDITS.md. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -60,7 +60,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A037 — Multiclassing
 - [done] A038 — Weapon mastery
 - [done] A039 — Class feature framework + Barbarian + Bard
-- [todo] A039b — Class features: Cleric (+Life) and Druid (+Land) | Spec: §4 | Done: Divine Order, Channel Divinity (Divine Spark, Turn Undead), Blessed Strikes, Divine Intervention, Life features; Druid Primal Order, Wild Resurgence, Elemental Fury, Land features; tests | Dep: A039
+- [done] A039b — Class features: Cleric (+Life) and Druid (+Land)
 - [todo] A039c — Wild Shape | Spec: §4 | Done: transform into Beast stat blocks (CR/fly limits by level), temp HP, revert, Archdruid; tests | Dep: A039b, A042
 - [todo] A040 — Class features batch 2 (Fighter, Monk, Paladin, Ranger) | Spec: §4 | Done: as A039 | Dep: A039
 - [todo] A041 — Class features batch 3 (Rogue, Sorcerer, Warlock, Wizard) | Spec: §4 | Done: as A039 | Dep: A039
@@ -174,6 +174,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 - A039 — Class feature framework (FeatureImpl hooks: resources, save/check/initiative/attack/attacked modes, resistances, condition immunities, onWeaponHit riders, actions, onGain, blocksSpellcasting; registry + merged queries; syncResources; applyOnGain wired into builder + levelUp; pending choices expertise/skills) + Barbarian (Rage, Danger Sense, Reckless, Feral Instinct, Primal Champion, Relentless Rage, Indomitable Might, Brutal Strike dice; Berserker Frenzy, Mindless Rage) + Bard (Bardic Inspiration incl. Font, useInspiration, Jack of All Trades, Words of Creation; Lore Cutting Words, Bonus Proficiencies) — `src/engine/character/features/*`, `src/engine/character/featureLevels.ts`
 
+- A039b — Cleric (Divine Order protector/thaumaturge, Channel Divinity resource + Divine Spark + Turn Undead w/ Sear Undead, Blessed Strikes divine strike/potent spellcasting, Divine Intervention resource; Life: Disciple of Life, Preserve Life, Blessed Healer amount, Supreme Healing) + Druid (Primal Order warden/magician, Wild Shape uses, Elemental Fury primal strike/potent; Land: circle spells by land, Land's Aid, Natural Recovery resource, Nature's Ward); new hooks checkBonus + spellOptions (healBonus, maxHealDice, cantripDamageBonus threaded through castSpell → effects) — `src/engine/character/features/cleric.ts`, `druid.ts`
+
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
 - Owner decisions (fixed, from the planning session): Windows, 8 GB RAM, browser app, Ollama with a 3–4B model, full SRD 5.2 with feats and multiclassing, all 3 ability score methods, a starter arc plus one full linked arc, woven-in procedural side quests, a mixed-tone world, auto dice with visible math, Heroic/Hardcore modes, a 3D grid combat map, autosave plus manual slots in all modes, buttons plus free text, flexible AI/player companions, music + SFX + Piper TTS, a world map plus fog-of-war dungeons, a notes-only journal, factions, day/night, weather, dynamic shops, low-poly CC0 3D models for everyone with wounds, scars, and armor wear. Crafting and home base are future expansions only.
@@ -233,6 +235,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A034a: Spell hook convention: `{kind:'hook', hook:'<spell_id>', params:{…}}`, params carry only what sibling core effects don't. Edit data/srd/overrides/spells.json directly, then `npx tsx scripts/srd/import-spells.ts`.
 - A038: Temporary rules effects (mastery riders, and later spell buffs A042a) live in `creature.effects` (ActiveEffect). Combat must call onTurnEvent(start/end of each turn), consumeAttackEffects after each attack roll, and add attackEffectModes to attack modes. Effect ids are per-creature (`sap-1`), save-safe.
 - A039: Class features = FeatureImpl objects (features/<class>.ts) keyed by (owner class/subclass id, feature id matching classes.json). A test asserts every impl id exists in the data. Resources come from features (syncResources keeps current values). Rage = active effect 'rage' (100 rounds; combat must end it early if not extended, unless Persistent Rage). Reckless = effect until start of own next turn. Resource 'shortRestRegain' for partial short-rest recovery (Rage +1). Retaliation/Intimidating Presence/Countercharm/Magical Secrets/Peerless Skill/Superior Inspiration not automated yet (combat/UI).
+- A039b: Class option choices live in character.choices (divine_order, blessed_strikes, primal_order, elemental_fury, primal_strike_type, land). The session must pass spellOptions(c, db, spell, slot) into castSpell. Feature actions take params {rng, target, targets, choice}.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
