@@ -205,130 +205,24 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
-<!-- path — purpose -->
-- `solo-dnd-build-prompt.md` — the full spec (the Build Prompt)
-- `CLAUDE.md` — loop rules (read automatically)
-- `brain.md` — this memory file
-- `ARCHITECTURE.md` — stack, folders, module boundaries, data flow, §16 extension points
-- `run-loop.bat` — the owner's automation loop
-- `.claude/settings.json` — permission allow/deny list for loop sessions
-- `loop_status.txt` — per-session status word read by the loop (gitignored)
-- `package.json` — scripts: dev, build, preview, test, test:watch, typecheck
-- `tsconfig.json` — strict TS config for all of src/tests/scripts
-- `vite.config.ts` — Vite (client) + Vitest config (tests: src/**/*.test.ts(x), tests/**/*.test.ts)
-- `src/client/three/` — loader.ts (GLTF cache, outfit files/mesh names), characterModel.ts (buildCharacterModel), CharacterPreview.tsx
-- `src/client/` — index.html, main.tsx, styles.css, data.ts (db), ui/App.tsx (screens), ui/state.ts (signals), ui/creator/ (Creator shell + step components)
-- `src/server/app.ts` — buildApp(opts): Fastify app factory (REST, /ws, static). Tests use inject()/injectWS()
-- `src/server/main.ts` — entry; serves dist/client on 127.0.0.1:3210
-- `src/shared/settings.ts` — SettingsSchema (llm, tts, audio, performance, accessibility, gameplay), defaultSettings, mergeSettings
-- `src/server/settingsStore.ts` — SettingsStore(userDataDir): get/update, persisted to settings.json; exposed as `app.settings`
-- `src/engine/core/rng.ts` — Rng.fromSeed, next/int/pick/shuffle, getState/setState
-- `src/engine/core/dice.ts` — parseDice, roll, formatRoll, diceStats, resolveRollMode, rollD20, formatD20Test
-- `src/engine/rules/basics.ts` — ABILITIES, SKILL_ABILITY, DAMAGE_TYPES, SIZES, CREATURE_TYPES, CONDITIONS (+ zod enums); abilityModifier, proficiencyBonus(ForCR), proficiencyContribution, parseCR/formatCR, formatModifier, sizeSquares
-- `src/engine/core/creature.ts` — CreatureSchema, CharacterSchema, CombatantSchema, ActiveCondition, Resource, totalLevel
-- `src/engine/rules/checks.ts` — d20Test (shared core), abilityCheck, skillCheck, savingThrow, checkModifiers, saveModifiers, passiveScore, contest
-- `src/engine/rules/damage.ts` — attackRoll, rollDamage, doubleDice, adjustForDefenses, applyDamage, heal, grantTempHp, isBloodied
-- `src/engine/rules/conditions.ts` — effectiveConditions, hasCondition, applyCondition, removeCondition(+FromSource), addExhaustion, tickConditions, endOfTurnSaves, attackModes, checkModes, saveModes, initiativeModes, canAct, effectiveSpeed, isCrawlOnly, resistsAllDamage, mayHarm
-- `src/engine/rules/death.ts` — resolveDamageAtZero, rollDeathSave, stabilize, healFromZero, needsDeathSave
-- `src/engine/rules/rest.ts` — shortRest, longRest, rechargeResources, hitDicePool, restoreCreature
-- `src/engine/rules/effects.ts` — createEffectContext, executeEffects, upcastDice, durationRounds (HookFn registry)
-- `src/engine/world/lore.ts` + `data/world/lore.json` — world lore schema/data + lookup helpers (MAP_WIDTH/HEIGHT, WEATHER_KINDS, SEASONS...)
-- `src/engine/rules/spellcasting.ts` — spellSlots, pactSlots, spellSaveDc, spellAttackBonus, cantripMultiplier, scaleCantripEffects, slotProblem, expendSlot, recoverSlots, castSpell, concentrationCheck, endConcentration
-- `src/engine/character/builder.ts` — CharacterBuildInput, validateBuild, buildCharacter, autoEquip
-- `src/engine/character/derived.ts` — armorClass, baseSpeed, isProficientWith, weaponAttack, unarmedStrike, maxHitPoints, initiativeModifiers, classLevel, equipped
-- `src/engine/character/leveling.ts` — levelForXp, canLevelUp, featureLevels, featuresAtLevel, pendingChoices, featProblems, applyFeat, levelUp, recompute
-- `src/engine/character/multiclass.ts` — multiclassProblems, multiclassGains, addClass, attacksPerAction
-- `src/engine/rules/activeEffects.ts` — addEffect, hasEffect, removeEffects, onTurnEvent, tickEffects, attackEffectModes, consumeAttackEffects, effectSpeedPenalty
-- `src/engine/rules/mastery.ts` — applyMasteryOnHit, grazeDamage, cleaveDamageModifier
-- `src/engine/character/features/` — types.ts (FeatureImpl, SpellInfo), index.ts (ALL_FEATURES, activeFeatures, feature*Modes/Bonuses, featureResistances, weaponHitRiders, critOn, featureWeaponAttack, spellOptions/spellInfo, syncResources, applyOnGain/OnLevelUp, featureActions, useFeatureAction), one file per class group (barbarian, bard, cleric, druid, fighter, monk, paladin, ranger, rogue, casters)
-- `assets/manifest.json` + `scripts/assets-fetch.mjs` — 3D model packs, roles, monster stand-ins; models land in assets/models/ (gitignored)
-- `src/engine/rules/monsters.ts` — monsterToCreature, actionAvailable, spendAction, rollRecharges, multiattackSequence, actionEffects, actionRange
-- `src/engine/adventure/encounters.ts` — xpBudget, encounterXp, rateEncounter, buildEncounter
-- `assets/voices-manifest.json` + `scripts/voices-fetch.mjs` — Piper binary + voices (tools/piper, assets/voices; gitignored)
-- `assets/audio-manifest.json` + `scripts/audio-fetch.mjs` — music moods, ambience, sfx; files land in assets/audio/ (gitignored)
-- `src/engine/rules/spellHooks.ts` — SPELL_HOOKS + buff/debuff queries (see A042a); `spellHooks2.ts` — SPELL_HOOKS_2, endOfTurnSpellEffects, curseDamageRider
-- `src/engine/character/creator.ts` — CreatorState + step machine
-- `src/engine/data/common.ts` — IdSchema, DiceSchema, CostSchema(CP), DamageSchema, AreaSchema, DurationSchema, EffectSchema/Effect, toId
-- `src/engine/data/schemas.ts` — schemas for every data/srd file + RulesTablesSchema; SRD_FILES registry; record types
-- `src/engine/data/srd.ts` — validateSrdFile, SrdDatabase (maps by id, item(), spellsForClass)
-- `src/engine/data/srdBundle.ts` — static imports of data/srd/*.json; loadSrd()
-- `scripts/srd/lib.ts` — importer helpers: makeItemResolver(ids) (item phrases → [id, qty]), costToCp, weightLb, readSource, sections(md, level), sectionByTitle, htmlTables, tableAfterCaption('**Caption**'), cleanText, num, applyOverrides, writeData (validates)
-- `scripts/srd/import-core.ts` — conditions + rules tables (`npm run srd:import`)
-- `scripts/srd/import-equipment.ts` — weapons/armor/gear (in `npm run srd:import`)
-- `scripts/srd/import-origins.ts` — species + backgrounds (needs equipment JSON first)
-- `scripts/srd/import-feats.ts` — feats
-- `scripts/srd/import-classes.ts` — classes + subclasses (needs equipment JSON)
-- `scripts/srd/import-spells.ts` — spells
-- `scripts/srd/import-monsters.ts` — monsters + animals
-- `scripts/srd/import-magic-items.ts` — magic items
-- `data/srd/overrides/` — hand fixes/mechanics merged by id into importer output
-- `data/srd/rules-tables.json` — core numeric tables
-- `data/srd/*.json` — SRD data arrays (complete)
-- `data/srd/_source/` — fetched SRD Markdown (gitignored; `npm run srd:fetch`)
-- `scripts/srd-fetch.mjs` — downloads SRD Markdown at a pinned commit
-- `CREDITS.md` — SRD CC-BY-4.0 attribution + asset credits
-- `src/engine/adventure/schema.ts` — Adventure format v1 zod schema (chapters/scenes/POIs/actions/exits/checks/outcomes/NPCs/encounters/beats/loot/endings)
-- `src/engine/adventure/{conditions,validate,runner,sessionActions}.ts` — condition eval + flag writes; validateAdventure (refs, SRD ids, reachability); scene runner (start/perform/availableActions/describeScene/resolveEncounter); ActionPort adapter + free-text keyword match
-- `src/server/adventures.ts` — loadAdventures(dir, db): loads + validates data/adventures/**/*.json (files with formatVersion)
-- `data/adventures/demo/millbrook_demo.json` — tiny demo/test adventure (3 scenes, check, gated exit, encounter, loot, beat, ending)
-- `data/adventures/DESIGN.md` + `flags.json` — campaign design bible (starter arc, 5-chapter arc, companions, endings) + flag registry; `tests/campaignDesign.test.ts` keeps them in sync
-- `ADVENTURE_FORMAT.md` — authoring guide for the adventure format
-- `src/client/ui/game/{GameScreen,PartyPanel,StoryLog,ActionInput,DiceTray}.tsx` + `dice.ts` — main game screen (grid layout; collapses <1000px); dice tray helpers (keptIndex etc.)
-- `src/llm/context/{cards,narration,gather}.ts` — retrieval cards (npc/location/faction, tone text, estimateTokens); buildNarrationPrompt (system persona+tone+rules; STATE/WORLD/STORY SO FAR/RECENT/NOTES/SCENE/FIXED FACTS/TASK; budget trimming); gatherNarrationContext(state, lore, adventure, db)
-- `src/engine/adventure/intent.ts` — IntentSchema, intentContext(ctx), keywordIntent (fallback parser), validateIntent (drops invented ids/targets)
-- `src/engine/adventure/resolve.ts` — resolveIntent(ctx, validatedIntent, text) → Resolution {result, via, actionId?, playerAction}; improvisedDc
-- `src/engine/adventure/narration.ts` — Narrator type, narrateInto(session, job, narrator?) (stream → start/chunk/end events → one log entry; template fallback), templateNarration, cleanNarration
-- `src/server/narrator.ts` — llmNarrator(getLlm, lore, db): gather context → buildNarrationPrompt → llm.stream (nothing for mock → template)
-- `src/engine/adventure/suggestions.ts` — dataSuggestions (offered actions, pad with Look around), mergeSuggestions (LLM ideas first, never hides offered actions, max 7)
-- `src/llm/prompts/suggest.ts` — suggestIdeas(provider, narrationContext, offered) → SuggestionIdea[] ([] for mock/failure)
-- `src/engine/adventure/summary.ts` — Summarizer type, updateSummary(state, summarizer?) (LLM or template; state.summary + summaryUpTo), templateSummary, clampSummary (1500 chars)
-- `src/llm/prompts/summary.ts` — summaryMessages + llmSummarizer(getLlm) (throws for mock → template)
-- `src/llm/prompts/intent.ts` — intentMessages + parseIntent(provider, text, ictx) (callStructured; mock provider → keywords directly)
-- `src/engine/combat/grid.ts` — Grid model (cells/edges/tokens, footprints, distanceFt/isAdjacent/withinReach, canStep/canPlace)
-- `src/engine/combat/los.ts` — traceLine, hasLineOfSight, computeCover (+COVER_BONUS)
-- `src/engine/world/clock.ts` — MINUTES_PER_DAY, TIME_COSTS, timeOfDay, clockParts, calendarDate (lore calendar)
-- `src/engine/systems/{registry,clockSystem,index}.ts` — SystemRegistry (init/migrate via extensions._systemVersions, advanceTime, timeAdvanced, rest), clock system (phase/new-day events), createDefaultRegistry(calendar)
-- `src/engine/world/weather.ts` — weatherAt(lore, region, minutes, campaignId) (deterministic per 8h block), weatherEffects (travel×, obscured, perception/ranged disadvantage, flames, heat/cold hazard, description), weatherChangeText
-- `src/engine/systems/weatherSystem.ts` — weather system (extensions.weather), currentWeather; region via injected resolver (server: runner.regionOfState)
-- `src/engine/combat/movement.ts` — movementBudget, standUpCost, reachableSquares (Dijkstra with paths), planMove (preview + OA triggers), moveAlong (beforeStep hook), teleport
-- `src/engine/world/flags.ts` — flag namespaces (arc./world./side./adv.), resolveAdventureFlags (`~name`), FlagRegistry (fromJson, addDocs, defaults, checkValue, clamp), readFlag
-- `src/engine/combat/initiative.ts` — rollInitiative/rollInitiativeOrder (math text), initiativeRollModes, compareInitiative, toEntries
-- `src/engine/combat/turns.ts` — TurnStateSchema, startCombat/addCombatant/removeCombatant, startTurn/endTurn/nextTurn (start/end-of-turn hooks → TurnEvents), spend/canReact, movementLeft/spendMovement/standUp, addDash/setDisengaged/setAttacksLeft, livingSides
-- `src/engine/world/travel.ts` — SRD pace (PACE_MPH, PACE_EFFECTS, effectivePace), MapState (current/visited/known) + initialMap/arriveAt/discover, planRoute (Dijkstra over known routes), legHours, travel(ctx, to, pace) → TravelResult (log, rolls, encounter interrupt)
-- `src/engine/systems/mapSystem.ts` — map system (extensions.map)
-- `data/tables/travel-events.json` — random travel events by region/route/weather/time (flavor, encounter, hazard with check, discovery)
-- `src/engine/adventure/quests.ts` — trackQuests (extensions.quests from flags), currentObjective (hint), questContextLines (LLM)
-- `src/client/ui/settingsState.ts` — client settings signal, loadSettings, updateSettings (PUT deep-merge)
-- `src/engine/world/factions.ts` — TIERS (Hostile≤−60…Revered≥80), tierOf/tierAtLeast, changeReputation (±half ripple to allies/enemies, clamp ±100), getReputation, priceMultiplier/refusesService/canUseSafeHouse, describeChange
-- `src/engine/systems/factionSystem.ts` — reputation system (extensions.reputation from lore defaults)
-- `src/engine/session/journal.ts` — JournalSchema (pages{id,title,body,updatedAt}, nextPage) in GameState.journal; savePage/deletePage/reorderPages (limits 200 pages, 20k chars)
-- `src/client/ui/game/JournalPanel.tsx` — journal modal (page list with ↑↓✕, editor with lined paper)
-- `src/shared/protocol.ts` — ClientCommandSchema (ping/new_game/get_state/say/choose/save/load), ServerEvent union, parseCommand
-- `src/engine/session/gameState.ts` — GameStateSchema (hero, companions, location, time, flags, log, summary, rolls, extensions), LOG_LIMIT/ROLL_LIMIT
-- `src/engine/session/GameSession.ts` — GameSession (handle/on/emit, addLog/addRoll/suggest, autosave, snapshot) + SavePort/ActionPort + newGameState
-- `src/client/net/gameSocket.ts` — client WebSocket (reconnect, outbox) + signals (gameState, storyLog, rollHistory, suggestions, streaming) + applyEvent
-- `src/shared/save.ts` — SaveMetaSchema, SaveFileSchema, SaveListEntry, SLOT_ID_PATTERN
-- `src/engine/session/migrations.ts` — MIGRATIONS chain + migrateSave(raw) (add a step + fixture test per schema bump)
-- `src/server/saveStore.ts` — SaveStore(dir): list/load/save/autosave/delete; `app.saves`; routes GET/PUT/DELETE /api/saves[/:slot]
-- `Setup.bat` / `Start Game.bat` — CRLF launchers → scripts/check-deps.mjs --setup / --start
-- `scripts/check-deps.mjs` — dependency checks/installs; `scripts/check-deps-lib.mjs` — pure helpers (tested)
-- `src/server/port.ts` — DEFAULT_PORT 3210
-- `src/server/services.ts` — Services(settings, rootDir, overrides): llm, tts, status(); exposed as `app.services`
-- `src/shared/status.ts` — SystemStatus type + llmIndicator/ttsIndicator/memoryIndicator
-- `src/client/ui/StatusIndicator.tsx` — polls /api/status every 10 s; corner lights
-- `src/llm/types.ts` — LlmProvider, ChatMessage, ChatOptions (task, format, keepAlive, timeoutMs), LlmStatus, LlmError(kind)
-- `src/llm/ollama.ts` — OllamaClient(config incl. fetch); supportsThinkFlag
-- `src/llm/mock.ts` — MockLlm({script, handlers, streamDelayMs}); `.calls` records every call
-- `src/llm/structured.ts` — callStructured({provider, messages, schema, fallback, task}) → {value, ok, attempts, error}; extractJson, parseReply, toOllamaSchema
-- `src/tts/types.ts` — TtsProvider (synthesize→WAV bytes, listVoices, status), TtsError(kind)
-- `src/tts/piper.ts` — PiperTts({piperPath, voiceDir, defaultVoice, spawn?, fs?})
-- `src/tts/mock.ts` — MockTts(voices?, failWith?)
-- `src/tts/wav.ts` — pcm16ToWav, wavDurationSeconds
-- `src/tts/provider.ts` — createTtsProvider(settings.tts, rootDir, useMock)
-- `src/llm/provider.ts` — createLlmProvider(settings.llm)
-- `src/shared/version.ts` — GAME_TITLE, GAME_VERSION, SAVE_SCHEMA_VERSION
-- `.gitattributes` — *.bat forced to CRLF
-- Still-empty planned folders (.gitkeep): engine/{character,combat,world,adventure,party,appearance,systems}, client/{three,audio}, data/{world,adventures,tables}, assets/
+<!-- path — purpose (grouped by folder; see ARCHITECTURE.md for the big picture) -->
+- Root: `solo-dnd-build-prompt.md` (spec), `CLAUDE.md` (loop rules), `brain.md`, `ARCHITECTURE.md`, `ADVENTURE_FORMAT.md` (adventure authoring guide), `CREDITS.md`, `run-loop.bat`, `Setup.bat`/`Start Game.bat` (CRLF → scripts/check-deps.mjs), `.claude/settings.json`, `loop_status.txt` (gitignored), `package.json` (dev/build/test/typecheck/srd:*), `tsconfig.json`, `vite.config.ts` (tests: src/**/*.test.ts(x), tests/**/*.test.ts), `.gitattributes` (*.bat CRLF)
+- `scripts/`: check-deps(-lib).mjs, assets-fetch/audio-fetch/voices-fetch.mjs (+ `assets/*manifest.json`; downloads gitignored), srd-fetch.mjs (→ data/srd/_source), `srd/lib.ts` + `srd/import-{core,equipment,origins,feats,classes,spells,monsters,magic-items}.ts` (`npm run srd:import`)
+- `data/srd/*.json` (SRD data, complete) + `overrides/` (hand fixes by id) + `rules-tables.json`; `data/world/lore.json`; `data/tables/travel-events.json`; `data/adventures/`: `demo/millbrook_demo.json` (demo/test adventure), `DESIGN.md` + `flags.json` (campaign bible + flag registry; synced by `tests/campaignDesign.test.ts`)
+- engine/core: `rng.ts` (Rng seeded sfc32, getState), `dice.ts` (parse/roll/format, rollD20, formatD20Test), `creature.ts` (Creature/Character schemas, totalLevel)
+- engine/data: `common.ts` (Id/Dice/Cost/Damage/Area/Duration/Effect schemas), `schemas.ts` (all SRD file schemas), `srd.ts` (SrdDatabase), `srdBundle.ts` (loadSrd)
+- engine/rules: basics (enums, modifiers), checks (d20Test, ability/skill/save, passive, contest), damage, conditions (modes, canAct, effectiveSpeed…), death, rest, effects (executor), spellcasting, activeEffects, mastery, monsters (monsterToCreature, recharge, multiattack), spellHooks/2/3 (spell hooks + query helpers)
+- engine/character: builder (CharacterBuildInput incl. originFeatChoices, buildCharacter), derived (AC, speed, weaponAttack, initiativeModifiers), leveling, multiclass, creator (CreatorState steps, creationChoices, toBuildInput), quickBuild, abilityScores, featureLevels, `features/` (FeatureImpl registry per class)
+- engine/appearance/appearance.ts (Appearance data); engine/world: `lore.ts` (schema + lookups), `clock.ts` (TIME_COSTS, timeOfDay, calendarDate), `weather.ts` (weatherAt per 8h block, weatherEffects), `flags.ts` (namespaces, `~name`, FlagRegistry), `travel.ts` (SRD pace, MapState, planRoute, travel), `factions.ts` (tiers, changeReputation ripple, price/safe-house gating)
+- engine/systems: `registry.ts` (SystemRegistry: init/migrate, advanceTime, timeAdvanced, rest), `clockSystem.ts`, `weatherSystem.ts`, `mapSystem.ts`, `factionSystem.ts`, `index.ts` (createDefaultRegistry({lore, regionOf}))
+- engine/adventure: `schema.ts` (Adventure v1: scenes/POIs/actions/exits/checks/outcomes/NPC schedules/encounters/beats/deadlines/quests/loot), `conditions.ts` (evalCondition incl. hours/tier, applyFlagWrites), `validate.ts` (refs, SRD ids, flags, reachability), `runner.ts` (start/perform/availableActions/describeScene/npcsHere/resolveEncounter/checkDeadlines/regionOfState), `intent.ts` (IntentSchema, keywordIntent, validateIntent), `resolve.ts` (resolveIntent, improvised SRD-DC checks), `narration.ts` (narrateInto stream + template), `suggestions.ts` (data + LLM merge), `summary.ts` (rolling summary), `quests.ts` (trackQuests, currentObjective), `sessionActions.ts` (adventureActionPort: the ActionPort), `encounters.ts` (XP budgets)
+- engine/combat: `grid.ts` (cells/edges/tokens, distance, reach), `los.ts` (traceLine, computeCover), `movement.ts` (reachableSquares, planMove/moveAlong + OA triggers), `initiative.ts`, `turns.ts` (TurnState, start/end/nextTurn hooks, spend/canReact, movement budget)
+- engine/session: `gameState.ts` (GameStateSchema: hero, companions, location, time, flags, log, summary(+UpTo), rolls, journal, extensions), `GameSession.ts` (handle/emit, addLog/addRoll/suggest, autosave, timePassed; ports saves/actions/systems), `journal.ts`, `migrations.ts`
+- llm: `types.ts`, `ollama.ts`, `mock.ts` (MockLlm script/handlers/calls), `structured.ts` (callStructured), `provider.ts`, `context/{cards,narration,gather}.ts` (retrieval cards, buildNarrationPrompt with budget, gatherNarrationContext), `prompts/{backstory,intent,suggest,summary}.ts`
+- tts: `types.ts`, `piper.ts`, `mock.ts`, `wav.ts`, `provider.ts`
+- server: `app.ts` (buildApp: REST, /ws → GameSession, adventures + flag registry + systems + LLM ports), `main.ts`, `port.ts`, `services.ts` (llm/tts/status), `settingsStore.ts`, `saveStore.ts` (atomic saves, rotating autosaves), `adventures.ts` (loadAdventures, loadFlagRegistry), `narrator.ts` (llmNarrator)
+- shared: `protocol.ts` (ClientCommandSchema incl. journal_*, ServerEvent incl. narration/roll/suggestions/objective/journal, parseCommand), `settings.ts`, `save.ts`, `status.ts`, `version.ts`
+- client: `main.tsx`, `index.html`, `styles.css`, `data.ts` (db); `net/gameSocket.ts` (ws + signals + applyEvent); `ui/App.tsx`, `ui/state.ts` (screens; `#creator`, `#quickbuild-<class>`, `#play-<class>`), `ui/settingsState.ts`, `ui/text.ts`, `ui/StatusIndicator.tsx`, `ui/creator/*` (creator steps), `ui/game/{GameScreen,PartyPanel,StoryLog,ActionInput,DiceTray,JournalPanel}.tsx` + `dice.ts`; `three/{loader,characterModel,CharacterPreview}`
 
 ## Gotchas & Lessons
 - Bash heredocs containing many quotes/backticks (TS test files) can fail with "unexpected EOF" and write nothing — use the Write tool for TS files.
