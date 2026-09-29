@@ -6,7 +6,7 @@
 - **State:** IN PROGRESS
 - **Current phase:** 3 (Character Creation)
 - **Last completed assignment:** A046
-- **Notes for next session:** Start with A047 (identity, backstory, difficulty, Quick Build). A096 (Piper voices) is with a helper. Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Notes for next session:** Start with A047 (identity, backstory, difficulty, Quick Build). Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -75,7 +75,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A044 — Background + species steps
 - [done] A045 — Ability score methods
 - [done] A046 — Skills, equipment, spells steps
-- [todo] A047 — Identity, backstory, difficulty, Quick Build | Spec: §5, §9 | Done: name/traits/backstory, LLM backstory suggestion (mock), Heroic/Hardcore pick, Quick Build per class; tests | Dep: A046, A005
+- [in-progress] A047 — Identity, backstory, difficulty, Quick Build | Spec: §5, §9 | Done: name/traits/backstory, LLM backstory suggestion (mock), Heroic/Hardcore pick, Quick Build per class; tests | Dep: A046, A005
 - [done] A048 — 3D asset research + import
 - [todo] A049 — 3D preview + appearance customization | Spec: §5, §12 | Done: three.js viewer in creator (rotate), body/face/hair/skin/colors saved to character; build passes | Dep: A048, A043
 
@@ -139,7 +139,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ### Phase 10 — Audio
 - [done] A094 — Audio assets
 - [todo] A095 — Music + SFX manager | Spec: §13 | Done: mood crossfade, SFX hooks (dice, hits, spells, UI, doors, steps), volumes | Dep: A094, A052
-- [in-progress (helper)] A096 — Piper install + voices | Spec: §13, §1 | Done: Setup downloads Piper for Windows + narrator/male/female voices; license in CREDITS | Dep: A006, A009
+- [done] A096 — Piper install + voices
 - [todo] A097 — TTS narration pipeline | Spec: §13 | Done: background generation queue, skip, volume, toggle, never blocks; tests with MockTts | Dep: A096, A057
 
 ### Phase 11 — Content
@@ -193,6 +193,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A045 — Ability scores: engine (STANDARD_ARRAY, point buy costs/budget/canAdjust, 4d6kh3 rolls, scoreProblems per method, suggestAssignment, suggestBackgroundBonus) wired into creator validation; AbilitiesStep UI (method tabs, dropdown assignment from remaining pool, point-buy steppers + budget, animated roll with dropped die shown, background +0/+1/+2 buttons capped at 3 total, final score + modifier, primary tags, suggest buttons); `#creator` URL hash opens the creator; status lights moved bottom-left — `src/engine/character/abilityScores.ts`, `src/client/ui/creator/AbilitiesStep.tsx`
 
 - A046 — Level-1 choices engine: creationChoices (weapon masteries from class proficiencies (barbarian melee only), fighter Fighting Style, rogue Expertise from proficient skills, cleric Divine Order, druid Primal Order, warlock invocations without level prereq, bard 3 instruments, monk artisan tool/instrument), choiceValues/setChoiceValues, spellCounts (+1 cantrip Thaumaturge/Magician); builder input `expertise` + chosen tool proficiencies (+druid herbalism kit, rogue thieves' tools); UI: PickList, SkillsStep, EquipmentStep (class/background packages + item picks), SpellsStep (filterable cantrip/level-1 grids) — `src/engine/character/creator.ts`, `src/client/ui/creator/{PickList,SkillsStep,EquipmentStep,SpellsStep}.tsx`
+
+- A096 (helper) — Piper TTS: rhasspy/piper 2023.11.14-2 Windows zip (MIT; bundles espeak-ng GPL-3 as a separate process) → tools/piper/piper.exe; 4 public-domain LibriVox voices by Bryce Beattie (en_GB-cori-medium narrator, en_US-norman-medium male, en_US-kristin-medium female, en_US-john-medium extra), ~264 MB; assets/voices-manifest.json + scripts/voices-fetch.mjs (--test synthesizes a sample: 9.6 s audio in 0.84 s, 185 MB peak); Setup runs it; default narrator changed to en_GB-cori-medium; credits merged.
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -248,6 +250,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A043: Client imports loadSrd() directly (SRD bundled into the JS, 1.5 MB / 337 KB gz); code-split in A112. UI state = Preact signals in src/client/ui/state.ts. Class blurbs are original game text in classInfo.ts. Creator step components register in Creator.tsx STEP_COMPONENTS (placeholders until built).
 - A034c: hold_person/hold_monster hooks are top-level siblings with params.appliesIfCondition (hook must check the condition). Cantrips with hooks marked noDiceScaling are not dice-multiplied; beamsByLevel hooks fire one attack per beam (allocations or round-robin). beacon_of_hope has a stray `save: 'wis'` hint (harmless).
 - A046: Creator stores weapon masteries in state.weaponMasteries, rogue expertise in state.expertise, all other class picks in state.choices[key] (fighting_style, divine_order, primal_order, eldritch_invocation, tool_proficiencies).
+- A096: Lessac (old default narrator) and voices fine-tuned from it are research-only → not shipped. ryan/hfc voices are CC BY-NC-SA → rejected. Only public-domain voices are used.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -289,6 +292,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `assets/manifest.json` + `scripts/assets-fetch.mjs` — 3D model packs, roles, monster stand-ins; models land in assets/models/ (gitignored)
 - `src/engine/rules/monsters.ts` — monsterToCreature, actionAvailable, spendAction, rollRecharges, multiattackSequence, actionEffects, actionRange
 - `src/engine/adventure/encounters.ts` — xpBudget, encounterXp, rateEncounter, buildEncounter
+- `assets/voices-manifest.json` + `scripts/voices-fetch.mjs` — Piper binary + voices (tools/piper, assets/voices; gitignored)
 - `assets/audio-manifest.json` + `scripts/audio-fetch.mjs` — music moods, ambience, sfx; files land in assets/audio/ (gitignored)
 - `src/engine/rules/spellHooks.ts` — SPELL_HOOKS + buff/debuff queries (see A042a); `spellHooks2.ts` — SPELL_HOOKS_2, endOfTurnSpellEffects, curseDamageRider
 - `src/engine/character/creator.ts` — CreatorState + step machine

@@ -28,7 +28,7 @@ export const TtsSettingsSchema = z.object({
   enabled: z.boolean().default(true),
   piperPath: z.string().default('tools/piper/piper.exe'),
   voiceDir: z.string().default('assets/voices'),
-  narratorVoice: z.string().default('en_US-lessac-medium'),
+  narratorVoice: z.string().default('en_GB-cori-medium'),
   unloadWhenIdle: z.boolean().default(true),
 });
 

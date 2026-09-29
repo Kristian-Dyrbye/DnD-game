@@ -90,11 +90,8 @@ describe('voices manifest', () => {
     for (const v of voices) expect(v.id, v.id).not.toMatch(/lessac/);
   });
 
-  // The settings default was 'en_US-lessac-medium' (research-only dataset, so not shipped).
-  // Skipped only while src/shared/settings.ts still carries that legacy default; once it is
-  // changed to the manifest narrator this runs. TODO: drop the skipIf after that change.
-  const legacyDefault = defaultSettings().tts.narratorVoice === 'en_US-lessac-medium';
-  it.skipIf(legacyDefault)('the default narratorVoice setting is the manifest narrator', () => {
+  // The old default 'en_US-lessac-medium' has a research-only dataset license, so it isn't shipped.
+  it('the default narratorVoice setting is the manifest narrator', () => {
     expect(defaultSettings().tts.narratorVoice).toBe(byRole('narrator')[0]!.id);
   });
 

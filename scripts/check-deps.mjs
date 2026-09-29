@@ -176,7 +176,9 @@ async function setup() {
   if (run('node', [path.join('scripts', 'audio-fetch.mjs')], { shell: false })) console.log(line('ok', 'Music and sound effects ready.'));
   else console.log(line('warn', 'Some audio could not be downloaded. The game works without it; run Setup.bat again later.'));
 
-  // Narration voices (Piper) are added by a later build step.
+  console.log(line('info', 'Downloading the narration voice engine (Piper) and voices (about 280 MB, one time only)...'));
+  if (run('node', [path.join('scripts', 'voices-fetch.mjs')], { shell: false })) console.log(line('ok', 'Narration voices ready.'));
+  else console.log(line('warn', 'Narration voices could not be downloaded. The game works without them (text only); run Setup.bat again later.'));
   console.log('\nSetup finished. Start the game with "Start Game.bat".\n');
   return 0;
 }

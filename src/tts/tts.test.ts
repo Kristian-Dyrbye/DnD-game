@@ -12,7 +12,7 @@ import { defaultSettings } from '../shared/settings';
 
 const VOICE_DIR = path.join('C:', 'game', 'assets', 'voices');
 const PIPER = path.join('C:', 'game', 'tools', 'piper', 'piper.exe');
-const NARRATOR = 'en_US-lessac-medium';
+const NARRATOR = 'en_GB-cori-medium';
 
 interface FakeFiles {
   [file: string]: string;
@@ -63,7 +63,7 @@ const installed: FakeFiles = {
   [PIPER]: '',
   [path.join(VOICE_DIR, `${NARRATOR}.onnx`)]: '',
   [path.join(VOICE_DIR, `${NARRATOR}.onnx.json`)]: JSON.stringify({ audio: { sample_rate: 16000 } }),
-  [path.join(VOICE_DIR, 'en_GB-alan-low.onnx')]: '',
+  [path.join(VOICE_DIR, 'en_US-norman-medium.onnx')]: '',
 };
 
 function piper(b: Behaviour, files: FakeFiles = installed) {
@@ -86,7 +86,7 @@ describe('PiperTts', () => {
 
   it('lists voices and reports ready status', async () => {
     const { tts } = piper({});
-    expect(await tts.listVoices()).toEqual(['en_GB-alan-low', NARRATOR]);
+    expect(await tts.listVoices()).toEqual([NARRATOR, 'en_US-norman-medium'].sort());
     expect(await tts.status()).toMatchObject({ ready: true, binaryFound: true });
   });
 
