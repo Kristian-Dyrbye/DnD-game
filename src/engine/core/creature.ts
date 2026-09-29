@@ -170,6 +170,37 @@ export const InventoryItemSchema = z.object({
 });
 export type InventoryItem = z.infer<typeof InventoryItemSchema>;
 
+export const SCAR_LOCATIONS = [
+  'left_cheek',
+  'right_cheek',
+  'brow',
+  'jaw',
+  'neck',
+  'chest',
+  'back',
+  'left_shoulder',
+  'right_shoulder',
+  'left_arm',
+  'right_arm',
+  'left_hand',
+  'right_hand',
+  'left_leg',
+  'right_leg',
+] as const;
+export type ScarLocation = (typeof SCAR_LOCATIONS)[number];
+
+/** A permanent scar: where, what made it, where it happened (spec §12). */
+export const ScarSchema = z.object({
+  id: z.string(),
+  location: z.enum(SCAR_LOCATIONS),
+  cause: z.enum(['crit', 'down', 'story']),
+  description: z.string(),
+  origin: z.string().optional(),
+  /** Campaign minutes when it happened. */
+  at: z.number().int().min(0).default(0),
+});
+export type Scar = z.infer<typeof ScarSchema>;
+
 /** Player characters and companions: a creature plus class, species, background and progression. */
 export const CharacterSchema = CreatureSchema.extend({
   kind: z.literal('character'),
@@ -202,6 +233,8 @@ export const CharacterSchema = CreatureSchema.extend({
   choices: z.record(z.string(), z.array(z.string())).default({}),
   personality: z.object({ traits: z.string(), ideals: z.string(), bonds: z.string(), flaws: z.string(), backstory: z.string() }).partial().default({}),
   appearance: AppearanceSchema.prefault({}),
+  /** Permanent scars with their origin (character/scars.ts). */
+  scars: z.array(ScarSchema).default([]),
 });
 export type Character = z.infer<typeof CharacterSchema>;
 

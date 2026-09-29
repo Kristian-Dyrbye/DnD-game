@@ -5,6 +5,8 @@
  * texture atlas, build width and size scale. The built-in weapon meshes stay hidden; the equipped
  * gear is attached to the hand slots instead (equipmentModels.ts).
  */
+import type { ScarLocation } from '../../engine/core/creature';
+import { attachScarMarks } from './scarMarks';
 import type { WoundLevel } from '../../engine/appearance/wounds';
 import { addWoundOverlays, setWounds, tickWounds } from './wounds';
 import type { EquipmentLook } from '../../engine/appearance/equipmentVisuals';
@@ -96,7 +98,7 @@ function applySkin(mesh: THREE.Mesh, tone: string): void {
 
 // ---------------------------------------------------------------- build
 
-export async function buildCharacterModel(a: Appearance, size = 'medium', look?: EquipmentLook): Promise<CharacterModel> {
+export async function buildCharacterModel(a: Appearance, size = 'medium', look?: EquipmentLook, scars: readonly ScarLocation[] = []): Promise<CharacterModel> {
   const base = await loadGltf(OUTFIT_FILES[a.outfit]);
   const root = cloneSkinned(base.scene);
   const prefix = OUTFIT_PREFIX[a.outfit];
@@ -150,6 +152,8 @@ export async function buildCharacterModel(a: Appearance, size = 'medium', look?:
   // Weapons and shields in the hands (A088); wound decal overlays (A090).
   await attachEquipment(root, look);
   addWoundOverlays(root);
+  // Permanent scar marks (A091), placed before scaling.
+  attachScarMarks(root, scars);
 
   const scale = sizeScale(size);
   const width = buildWidth(a.build);

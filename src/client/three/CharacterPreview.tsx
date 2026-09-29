@@ -3,6 +3,7 @@
  * the appearance changes; renders only while mounted; shows a friendly message if the models
  * haven't been downloaded yet (Setup.bat runs scripts/assets-fetch.mjs).
  */
+import type { ScarLocation } from '../../engine/core/creature';
 import type { WoundLevel } from '../../engine/appearance/wounds';
 import { lookKey, type EquipmentLook } from '../../engine/appearance/equipmentVisuals';
 import { useEffect, useRef, useState } from 'preact/hooks';
@@ -25,7 +26,7 @@ function frame(camera: THREE.PerspectiveCamera, controls: OrbitControls, obj: TH
   controls.update();
 }
 
-export function CharacterPreview({ appearance, size = 'medium', height = 260, look, wounds = 0, seed = 'hero' }: { appearance: Appearance; size?: string; height?: number; look?: EquipmentLook; wounds?: WoundLevel; seed?: string }) {
+export function CharacterPreview({ appearance, size = 'medium', height = 260, look, wounds = 0, seed = 'hero', scars = [] }: { appearance: Appearance; size?: string; height?: number; look?: EquipmentLook; wounds?: WoundLevel; seed?: string; scars?: readonly ScarLocation[] }) {
   const host = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<{ scene: THREE.Scene; camera: THREE.PerspectiveCamera; controls: OrbitControls; model?: CharacterModel } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -107,10 +108,10 @@ export function CharacterPreview({ appearance, size = 'medium', height = 260, lo
   }, [wounds, seed]);
 
   // (Re)build the model when the look changes.
-  const key = JSON.stringify(appearance) + size + lookKey(look);
+  const key = JSON.stringify(appearance) + size + lookKey(look) + scars.join(',');
   useEffect(() => {
     let cancelled = false;
-    buildCharacterModel(appearance, size, look)
+    buildCharacterModel(appearance, size, look, scars)
       .then((model) => {
         const holder = sceneRef.current;
         if (cancelled || !holder) return model.dispose();

@@ -3,6 +3,7 @@
  * Read-only: it never changes state. Retrieval is by relevance to the current scene (NPCs present,
  * the scene's lore location, factions tied to either).
  */
+import { scarSummary } from '../../engine/character/scars';
 import { timeOfDay } from '../../engine/adventure/conditions';
 import { describeScene, findScene, getProgress, npcsHere } from '../../engine/adventure/runner';
 import { questContextLines } from '../../engine/adventure/quests';
@@ -24,7 +25,8 @@ export function describeMember(c: Character, db?: SrdDatabase): string {
   const classes = c.classes.map((cl) => `${db?.classes.get(cl.classId)?.name ?? cl.classId} ${cl.level}`).join('/');
   const conds = [...c.conditions.map((x) => x.condition), ...(c.exhaustion ? [`exhaustion ${c.exhaustion}`] : [])];
   const hp = c.hp === 0 ? 'down (0 HP)' : c.hp < c.maxHp / 2 ? `wounded (${c.hp}/${c.maxHp} HP)` : `${c.hp}/${c.maxHp} HP`;
-  return `${c.name}, ${species} ${classes}, ${hp}${conds.length ? `, ${conds.join(', ')}` : ''}`;
+  const scars = scarSummary(c);
+  return `${c.name}, ${species} ${classes}, ${hp}${conds.length ? `, ${conds.join(', ')}` : ''}${scars ? `; ${scars}` : ''}`;
 }
 
 export function recentLines(log: readonly LogEntry[], n = RECENT_EXCHANGES): string[] {

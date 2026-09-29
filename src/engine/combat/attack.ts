@@ -21,6 +21,7 @@
  * 6. Mastery (only if the character has it): Graze on a miss; Cleave (returns `cleaveAvailable`),
  *    Push (moves the target), Sap, Slow, Topple, Vex on a hit.
  */
+import type { ScarMark } from '../character/scars';
 import type { Character, Creature } from '../core/creature';
 import type { Modifier } from '../core/dice';
 import { roll } from '../core/dice';
@@ -443,7 +444,7 @@ export function dealCombatDamage(
   sourceId: string,
   targetId: string,
   instances: DamageInstance[],
-  opts: { crit?: boolean; text?: string } = {},
+  opts: { crit?: boolean; text?: string; weapon?: string } = {},
 ): DamageOutcome {
   const events: CombatEvent[] = [];
   const found = state.creatures[targetId];
@@ -478,6 +479,19 @@ export function dealCombatDamage(
     if (dom.save) events.push({ kind: 'save', targetId, text: `${after.name} fights the domination: ${dom.save.text}` });
   }
   let next = withCreature(state, after);
+
+  // Dramatic moments for permanent scars (character/scars.ts): a crit taken or dropping to 0 HP.
+  if (isCharacter(after) && report.totalAfterDefenses > 0 && (opts.crit || zero.event === 'unconscious' || zero.event === 'died')) {
+    const source = state.creatures[sourceId];
+    const mark: ScarMark = {
+      targetId,
+      cause: zero.event === 'unconscious' || zero.event === 'died' ? 'down' : 'crit',
+      sourceName: source?.name ?? 'foe',
+      ...(opts.weapon && { weapon: opts.weapon }),
+      ...(instances[0] && { damageType: instances[0].type }),
+    };
+    next = { ...next, scarMarks: [...(next.scarMarks ?? []), mark] };
+  }
 
   if (report.totalAfterDefenses > 0) {
     for (const share of wardingBondDamage(before, report.totalAfterDefenses)) {
@@ -710,7 +724,7 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
     attacker.id,
     target.id,
     rolled.parts.map((p) => ({ amount: p.total, type: p.type })),
-    { crit: res.crit, text: rolled.text },
+    { crit: res.crit, text: rolled.text, weapon: profile.unarmed ? 'fist' : profile.name },
   );
   next = dealt.state;
   events.push(...dealt.events);

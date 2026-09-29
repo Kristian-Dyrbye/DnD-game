@@ -12,7 +12,8 @@ export type Screen = 'title' | 'creator' | 'game' | 'combat';
 
 const hash = typeof location !== 'undefined' ? location.hash : '';
 // Test shortcuts: `#creator` opens the creator; `#quickbuild-<class>` opens a Quick Build at the review step;
-// `#play-<class>` starts a game straight away with that Quick Build (`#play-<class>+map` also opens the map).
+// `#play-<class>` starts a game straight away with that Quick Build (`#play-<class>+map` also opens the map,
+// `#play-<class>+scars` gives the hero two test scars).
 const quick = /^#(?:quickbuild|play)-(\w+)(?:\+\w+)?$/.exec(hash)?.[1];
 
 /** `#combat-<class>`: the local combat sandbox (battle map test). */
@@ -31,6 +32,16 @@ export const continueWorldNext = signal(false);
 export function beginAdventure(): void {
   const s = creator.value;
   hero.value = buildCharacter(toBuildInput(s), db);
+  // `#play-<class>+scars`: a test hero with two scars (A091).
+  if (hash.endsWith('+scars')) {
+    hero.value = {
+      ...hero.value,
+      scars: [
+        { id: 'scar-1', location: 'left_cheek', cause: 'crit', description: 'Scimitar of the Goblin Boss', origin: 'The Old Mill', at: 0 },
+        { id: 'scar-2', location: 'right_arm', cause: 'story', description: 'fire from the burning barn', origin: 'Millbrook', at: 0 },
+      ],
+    };
+  }
   heroMode.value = s.difficulty ?? 'heroic';
   send({ type: 'new_game', hero: hero.value, mode: heroMode.value, ...(continueWorldNext.value && { continueWorld: true }) });
   continueWorldNext.value = false;

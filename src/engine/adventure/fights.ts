@@ -15,6 +15,7 @@ import type { FlagRegistry } from '../world/flags';
 import type { Rng } from '../core/rng';
 import type { AdventureEncounter } from './schema';
 import type { Grid, Point } from '../combat/grid';
+import { rollScars } from '../character/scars';
 import { buildDungeonGrid, dungeonProgress, fogSquares, revealRoom, roomSpawns } from '../world/dungeon';
 import { applyDefeat, pickDefeatOutcome, recordFallen, type DefeatResult, type DefeatTable } from './defeat';
 import { getProgress, resolveEncounter, type RunContext, type StepResult } from './runner';
@@ -90,6 +91,8 @@ export interface FightResult {
   defeat?: DefeatResult;
   /** Hardcore: the hero died. */
   heroDied?: boolean;
+  /** New permanent scars ("Mira will carry a scar: …"). */
+  scars?: string[];
 }
 
 /** Copies the combat versions of the party (HP, conditions, resources, slots) back into the story. */
@@ -112,6 +115,16 @@ export function finishFight(ctx: RunContext, how: FightEnd, deps: { db: SrdDatab
   const { state } = ctx;
   syncParty(state, f.enc);
   delete state.extensions.combat;
+  // Permanent scars from the fight's dramatic moments (A091).
+  const marks = f.enc.state.scarMarks ?? [];
+  let scarLines: string[] = [];
+  if (marks.length) {
+    const scene = ctx.adventure.chapters.flatMap((c) => c.scenes).find((s) => s.id === getProgress(state)?.sceneId);
+    const r = rollScars([state.hero, ...state.companions], marks, deps.rng, `${scene?.name ?? state.location.name}, ${ctx.adventure.name}`, state.time);
+    state.hero = r.party[0]!;
+    state.companions = r.party.slice(1);
+    scarLines = r.lines;
+  }
 
   let xp = 0;
   if (how === 'win') {
@@ -126,7 +139,7 @@ export function finishFight(ctx: RunContext, how: FightEnd, deps: { db: SrdDatab
     state.hero.dead = true;
     state.hero.hp = 0;
     recordFallen(state, state.hero, f.enc.log.at(-2) ?? 'fell in battle');
-    return { how, xp, step: { facts: [`${state.hero.name} has fallen.`], rolls: [], entered: [], items: [], coins: 0, xp: 0 }, heroDied: true };
+    return { how, xp, step: { facts: [`${state.hero.name} has fallen.`], rolls: [], entered: [], items: [], coins: 0, xp: 0 }, heroDied: true, ...(scarLines.length && { scars: scarLines }) };
   }
 
   const def = ctx.adventure.encounters.find((e) => e.id === f.encounterId);
@@ -149,5 +162,5 @@ export function finishFight(ctx: RunContext, how: FightEnd, deps: { db: SrdDatab
   }
   const step = resolveEncounter(ctx, f.encounterId, how);
   if (defeat) step.facts.unshift(...defeat.facts);
-  return { how, xp, step, ...(defeat && { defeat }) };
+  return { how, xp, step, ...(defeat && { defeat }), ...(scarLines.length && { scars: scarLines }) };
 }

@@ -108,6 +108,7 @@ Every field is optional:
 | `removeItems` | `[{ "itemId": "lance", "quantity": 1 }]`: takes items from the hero (as many as they carry). Pair it with an `item` condition. |
 | `cost` | Copper paid (`500` = 5 gp). If the hero can't pay, the player is told so and nothing else in the outcome happens. Gate the action with a `coins` condition to hide it instead. |
 | `damage` | `{ "dice": "2d6", "type": "fire", "target": "hero" \| "party", "save"?: { "ability": "dex", "dc": 13, "half": true } }`. One roll is shared by all targets; a successful save halves it (or negates it with `half: false`). Heroic mode never drops a character below 1 HP; in Hardcore a character can drop to 0 HP (unconscious and stable). |
+| `scar` | `{ "description": "rope burn from the gallows", "location"?: "neck", "damageType"?: "fire" }`: a permanent scar on the hero, logged with the scene and adventure as its origin. Without `location`, a plausible spot for the damage type is picked. Locations: left/right_cheek, brow, jaw, neck, chest, back, left/right_shoulder, left/right_arm, left/right_hand, left/right_leg. Fights also leave scars on their own (critical hits taken, dropping to 0 HP). |
 | `exhaustion` | Exhaustion levels gained by the whole party (negative values remove levels). |
 
 Recruit, approval and companionLeaves take effect in the same step, so a beat triggered by the new status or loyalty fires straight away.

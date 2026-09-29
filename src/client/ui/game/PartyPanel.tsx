@@ -1,4 +1,5 @@
 /** Left panel: the hero (and later companions) with HP bar, AC, level/XP, conditions and coins. */
+import { SCAR_LABEL, scarText } from '../../../engine/character/scars';
 import type { Character } from '../../../engine/core/creature';
 import { totalLevel } from '../../../engine/core/creature';
 import { db } from '../../data';
@@ -35,6 +36,15 @@ function MemberCard({ c, lead, onLevelUp, loyalty, control, onToggle }: { c: Cha
           {[...c.conditions.map((x) => x.condition), ...(c.exhaustion ? [`exhaustion ${c.exhaustion}`] : [])].map((x) => (
             <span key={x} class="tag tag-condition">
               {x}
+            </span>
+          ))}
+        </p>
+      )}
+      {c.scars.length > 0 && (
+        <p class="member-scars" aria-label="Scars">
+          {c.scars.map((s) => (
+            <span key={s.id} class="tag tag-scar" tabIndex={0} title={scarText(s)}>
+              ⚔ {SCAR_LABEL[s.location]}
             </span>
           ))}
         </p>

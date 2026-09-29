@@ -167,6 +167,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
   const endFight = async (session: GameSession, ctx: RunContext, how: FightEnd) => {
     const res = finishFight(ctx, how, { db: db!, rng: session.rng, ...(opts.lore && { lore: opts.lore }), ...(opts.flags && { flags: opts.flags }), ...(opts.defeats && { defeats: opts.defeats }) });
     emitFight(session);
+    for (const line of res.scars ?? []) session.addLog('system', line);
     if (res.heroDied) {
       session.addLog('narration', `${session.current.hero.name} has fallen. The world goes on without them…`);
       session.emit({ type: 'hero_fallen', name: session.current.hero.name });

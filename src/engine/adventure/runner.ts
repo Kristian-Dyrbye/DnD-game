@@ -7,6 +7,7 @@
  * Progress lives in `state.extensions.adventure`. Action ids: scene actions use their own id,
  * POI actions are `<poi>.<action>`, exits are `exit.<id>`.
  */
+import { giveScar, scarText } from '../character/scars';
 import { revealRoom } from '../world/dungeon';
 import { applyDamage, rollDamage } from '../rules/damage';
 import { changeApproval, partingLine, partWithCompanion, recruitCompanion, recruitFlagsOnly, type CompanionRoster } from '../party/companions';
@@ -346,6 +347,11 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
     state.extensions.flagTimes = times;
   }
   if (o.damage) storyDamage(ctx, o.damage, result);
+  if (o.scar) {
+    const scene = findScene(ctx.adventure, getProgress(state)?.sceneId ?? '');
+    state.hero = giveScar(state.hero, { description: o.scar.description, ...(o.scar.location && { location: o.scar.location }), ...(o.scar.damageType && { damageType: o.scar.damageType }), origin: `${scene?.name ?? state.location.name}, ${ctx.adventure.name}`, at: state.time }, ctx.rng);
+    result.facts.push(`${state.hero.name} will carry a scar: ${scarText(state.hero.scars.at(-1)!)}.`);
+  }
   if (o.exhaustion) {
     for (const c of [state.hero, ...state.companions]) c.exhaustion = Math.max(0, Math.min(6, c.exhaustion + o.exhaustion));
     result.facts.push(o.exhaustion > 0 ? `Exhaustion +${o.exhaustion}.` : `Exhaustion ${o.exhaustion}.`);

@@ -288,7 +288,8 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
       }
       const look = c.kind === 'character' ? equipmentLook(c as Character, db) : undefined;
       let entry = h.models.get(t.id);
-      if (entry && entry.look !== lookKey(look)) {
+      const scarKey = c.kind === 'character' ? (c as Character).scars.map((s) => s.location).join(',') : '';
+      if (entry && entry.look !== lookKey(look) + scarKey) {
         // Gear changed (e.g. a new weapon): rebuild this model.
         entry.model?.dispose();
         h.models.delete(t.id);
@@ -304,11 +305,11 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
         continue;
       }
       if (withModels.has(t.id) && !entry) {
-        const slot = { loading: true, failed: false, look: lookKey(look) } as { model?: CharacterModel; loading: boolean; failed: boolean; look: string };
+        const slot = { loading: true, failed: false, look: lookKey(look) + scarKey } as { model?: CharacterModel; loading: boolean; failed: boolean; look: string };
         h.models.set(t.id, slot);
         const building =
           c.kind === 'character'
-            ? buildCharacterModel((c as Character).appearance, c.size, look)
+            ? buildCharacterModel((c as Character).appearance, c.size, look, (c as Character).scars.map((s) => s.location))
             : buildMonsterModel(monsterVisual(c.statBlockId ?? c.id, c.creatureType), c.size);
         building
           .then((model) => {

@@ -8,6 +8,7 @@ import { ABILITIES, DamageTypeSchema, SKILLS } from '../rules/basics';
 import { TIERS } from '../world/factions';
 import { DungeonMapSchema } from '../world/dungeon';
 import { AdventureFlagDocSchema } from '../world/flags';
+import { SCAR_LOCATIONS } from '../core/creature';
 
 export const ADVENTURE_FORMAT_VERSION = 1;
 
@@ -95,6 +96,8 @@ export const OutcomeSchema = z
       })
       .strict()
       .optional(),
+    /** A permanent scar on the hero from a story event (spec §12), logged with this adventure as origin. */
+    scar: z.object({ description: z.string(), location: z.enum(SCAR_LOCATIONS).optional(), damageType: z.string().optional() }).strict().optional(),
     /** Exhaustion levels gained (negative: removed). */
     exhaustion: z.number().int().min(-6).max(6).default(0),
     xp: z.number().int().min(0).default(0),

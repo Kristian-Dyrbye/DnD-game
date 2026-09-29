@@ -12,6 +12,7 @@ import type { ConditionTable } from '../rules/conditions';
 import type { Grid, GridToken } from './grid';
 import type { Creatures, TurnState } from './turns';
 import type { Zone } from './zones';
+import type { ScarMark } from '../character/scars';
 
 export interface CombatState {
   grid: Grid;
@@ -19,6 +20,8 @@ export interface CombatState {
   creatures: Creatures;
   /** Persistent spell zones (Spirit Guardians, Web...), see zones.ts. */
   zones?: Zone[];
+  /** Crits taken / drops to 0 HP by characters this fight (scars, character/scars.ts). */
+  scarMarks?: ScarMark[];
 }
 
 export interface CombatContext {

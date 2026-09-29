@@ -2,13 +2,14 @@
  * Loads the 3D preview (and three.js with it) only when a preview is first shown, so the title
  * screen and 2D-only play start without the 3D engine in memory. Shows a placeholder meanwhile.
  */
+import type { ScarLocation } from '../../engine/core/creature';
 import type { WoundLevel } from '../../engine/appearance/wounds';
 import type { ComponentType } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import type { Appearance } from '../../engine/appearance/appearance';
 import type { EquipmentLook } from '../../engine/appearance/equipmentVisuals';
 
-type PreviewProps = { appearance: Appearance; size?: string; height?: number; look?: EquipmentLook; wounds?: WoundLevel; seed?: string };
+type PreviewProps = { appearance: Appearance; size?: string; height?: number; look?: EquipmentLook; wounds?: WoundLevel; seed?: string; scars?: readonly ScarLocation[] };
 let loaded: ComponentType<PreviewProps> | null = null;
 
 export function CharacterPreview(props: PreviewProps) {
