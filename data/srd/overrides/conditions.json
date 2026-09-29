@@ -1,0 +1,17 @@
+[
+ {"id": "blinded", "modifiers": {"autoFailChecksRequiring": ["sight"], "attacksAgainst": "advantage", "ownAttacks": "disadvantage"}},
+ {"id": "charmed", "modifiers": {"cantHarmSource": true}},
+ {"id": "deafened", "modifiers": {"autoFailChecksRequiring": ["hearing"]}},
+ {"id": "exhaustion", "modifiers": {}},
+ {"id": "frightened", "modifiers": {"abilityChecks": "disadvantage", "ownAttacks": "disadvantage", "whileSourceVisible": true, "cantApproachSource": true}},
+ {"id": "grappled", "modifiers": {"speedZero": true, "ownAttacks": "disadvantage", "exceptAgainstSource": true}},
+ {"id": "incapacitated", "modifiers": {"incapacitated": true, "initiative": "disadvantage"}},
+ {"id": "invisible", "modifiers": {"initiative": "advantage", "attacksAgainst": "disadvantage", "ownAttacks": "advantage"}},
+ {"id": "paralyzed", "modifiers": {"implies": ["incapacitated"], "speedZero": true, "autoFailSaves": ["str", "dex"], "attacksAgainst": "advantage", "autoCritWithin5ft": true}},
+ {"id": "petrified", "modifiers": {"implies": ["incapacitated"], "speedZero": true, "attacksAgainst": "advantage", "autoFailSaves": ["str", "dex"], "resistAllDamage": true, "immuneTo": ["poisoned"]}},
+ {"id": "poisoned", "modifiers": {"ownAttacks": "disadvantage", "abilityChecks": "disadvantage"}},
+ {"id": "prone", "modifiers": {"crawlOnly": true, "ownAttacks": "disadvantage", "attacksAgainstWithin5ft": "advantage", "attacksAgainstBeyond5ft": "disadvantage"}},
+ {"id": "restrained", "modifiers": {"speedZero": true, "attacksAgainst": "advantage", "ownAttacks": "disadvantage", "saves": {"dex": "disadvantage"}}},
+ {"id": "stunned", "modifiers": {"implies": ["incapacitated"], "autoFailSaves": ["str", "dex"], "attacksAgainst": "advantage"}},
+ {"id": "unconscious", "modifiers": {"implies": ["incapacitated", "prone"], "speedZero": true, "attacksAgainst": "advantage", "autoFailSaves": ["str", "dex"], "autoCritWithin5ft": true}}
+]

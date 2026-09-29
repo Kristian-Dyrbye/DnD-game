@@ -14,6 +14,7 @@ import subclasses from '../../../data/srd/subclasses.json';
 import spells from '../../../data/srd/spells.json';
 import monsters from '../../../data/srd/monsters.json';
 import magicItems from '../../../data/srd/magic-items.json';
+import rulesTables from '../../../data/srd/rules-tables.json';
 import { SrdDatabase } from './srd';
 import type { SrdFileName } from './schemas';
 
@@ -35,6 +36,6 @@ export const SRD_RAW: Record<SrdFileName, unknown> = {
 let cached: SrdDatabase | undefined;
 
 export function loadSrd(): SrdDatabase {
-  cached ??= new SrdDatabase(SRD_RAW);
+  cached ??= new SrdDatabase(SRD_RAW, rulesTables);
   return cached;
 }

@@ -5,7 +5,9 @@
  */
 import type { z } from 'zod';
 import {
+  RulesTablesSchema,
   SRD_FILES,
+  type RulesTables,
   type Armor,
   type Background,
   type ClassData,
@@ -68,10 +70,26 @@ export class SrdDatabase {
   readonly monsters: ReadonlyMap<string, Monster>;
   readonly magicItems: ReadonlyMap<string, MagicItem>;
   readonly reports: FileValidation[];
+  /** Core rules tables (XP, spell slots, encounter budgets, DCs). Undefined if not provided. */
+  readonly tables: RulesTables | undefined;
 
-  /** @param files raw JSON per file name; missing files count as empty. */
-  constructor(files: Partial<Record<SrdFileName, unknown>>) {
+  /**
+   * @param files raw JSON per file name; missing files count as empty.
+   * @param rulesTables raw rules-tables.json object.
+   */
+  constructor(files: Partial<Record<SrdFileName, unknown>>, rulesTables?: unknown) {
     const reports: FileValidation[] = [];
+    if (rulesTables === undefined) {
+      this.tables = undefined;
+    } else {
+      const parsed = RulesTablesSchema.safeParse(rulesTables);
+      this.tables = parsed.success ? parsed.data : undefined;
+      reports.push({
+        file: 'rules-tables.json',
+        count: parsed.success ? 1 : 0,
+        errors: parsed.success ? [] : parsed.error.issues.slice(0, 5).map((i) => `rules-tables.json ${i.path.join('.')}: ${i.message}`),
+      });
+    }
     const load = <N extends SrdFileName>(name: N) => {
       const { records, report } = validateSrdFile(name, files[name] ?? []);
       reports.push(report);
@@ -90,6 +108,12 @@ export class SrdDatabase {
     this.monsters = load('monsters.json') as Map<string, Monster>;
     this.magicItems = load('magic-items.json') as Map<string, MagicItem>;
     this.reports = reports;
+  }
+
+  /** Rules tables, or throws if they weren't loaded. */
+  get rules(): RulesTables {
+    if (!this.tables) throw new Error('rules-tables.json not loaded');
+    return this.tables;
   }
 
   get errors(): string[] {

@@ -26,7 +26,7 @@ Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master. Runs fully of
 ```
 /
 ├─ Start Game.bat / Setup.bat     Windows launchers (CRLF)
-├─ scripts/                       Node helper scripts (dependency checks, asset/voice download, SRD import, LLM benchmark)
+├─ scripts/                       Node helper scripts (dependency checks, asset/voice download, SRD fetch/import, LLM benchmark)
 ├─ data/
 │  ├─ srd/                        SRD 5.2 rules as JSON (classes, spells, monsters, items, feats, ...) + zod-validated
 │  ├─ world/lore.json             Continent, regions (tone profiles), factions, gods, locations
@@ -35,7 +35,8 @@ Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master. Runs fully of
 ├─ assets/                        Committed manifests + small CC0 assets; large packs downloaded by Setup.bat
 ├─ src/
 │  ├─ engine/                     PURE TypeScript: no DOM, no Node APIs, no I/O. Deterministic with a seeded RNG.
-│  │  ├─ core/                    rng, dice, ids, event bus, shared types
+│  │  ├─ core/                    rng, dice, creature schemas, event bus, shared types
+│  │  ├─ data/                    zod schemas for data/srd, SrdDatabase, bundled loader (loadSrd)
 │  │  ├─ rules/                   abilities, checks, attacks, damage, conditions, effects, spells, rest, leveling, feats, multiclass
 │  │  ├─ character/               character builder, derived stats, creator validation, quick build
 │  │  ├─ combat/                  grid, LOS/cover, movement, initiative, actions, AoE, mastery, AI (enemy + companion)

@@ -26,10 +26,45 @@ import {
 
 // ---------------------------------------------------------------- conditions
 
+const RollModeSchema = z.enum(['advantage', 'disadvantage']);
+
+/** Machine-readable rules of a condition, read by the conditions engine (A031). */
+export const ConditionModifiersSchema = z.object({
+  /** No actions, bonus actions or reactions; concentration breaks; can't speak. */
+  incapacitated: z.boolean().optional(),
+  speedZero: z.boolean().optional(),
+  /** Other conditions this one includes (Unconscious → Incapacitated, Prone). */
+  implies: z.array(ConditionSchema).optional(),
+  ownAttacks: RollModeSchema.optional(),
+  attacksAgainst: RollModeSchema.optional(),
+  /** Prone: attacks from within 5 ft have Advantage, others Disadvantage. */
+  attacksAgainstWithin5ft: RollModeSchema.optional(),
+  attacksAgainstBeyond5ft: RollModeSchema.optional(),
+  abilityChecks: RollModeSchema.optional(),
+  autoFailSaves: z.array(AbilitySchema).optional(),
+  saves: z.partialRecord(AbilitySchema, RollModeSchema).optional(),
+  autoCritWithin5ft: z.boolean().optional(),
+  autoFailChecksRequiring: z.array(z.enum(['sight', 'hearing'])).optional(),
+  initiative: RollModeSchema.optional(),
+  resistAllDamage: z.boolean().optional(),
+  /** Frightened: modifiers only apply while the source is in line of sight. */
+  whileSourceVisible: z.boolean().optional(),
+  /** Grappled: attack Disadvantage only against targets other than the source. */
+  exceptAgainstSource: z.boolean().optional(),
+  /** Charmed: can't attack or harm the source. */
+  cantHarmSource: z.boolean().optional(),
+  /** Frightened: can't willingly move closer to the source. */
+  cantApproachSource: z.boolean().optional(),
+  /** Prone: crawl only; standing costs half speed. */
+  crawlOnly: z.boolean().optional(),
+  immuneTo: z.array(ConditionSchema).optional(),
+});
+
 export const ConditionDataSchema = z.object({
   id: ConditionSchema,
   name: z.string(),
   text: TextSchema,
+  modifiers: ConditionModifiersSchema,
 });
 
 // ---------------------------------------------------------------- equipment
@@ -398,4 +433,5 @@ export type Spell = z.infer<typeof SpellSchema>;
 export type Monster = z.infer<typeof MonsterSchema>;
 export type MagicItem = z.infer<typeof MagicItemSchema>;
 export type ConditionData = z.infer<typeof ConditionDataSchema>;
+export type ConditionModifiers = z.infer<typeof ConditionModifiersSchema>;
 export type RulesTables = z.infer<typeof RulesTablesSchema>;
