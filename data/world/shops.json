@@ -1,0 +1,18 @@
+{
+  "$comment": "Shops (spec §11.5). kind picks the stock pool; locationId ties the shop to a lore location (settlement size sets magic rarity availability); factionId (lore) sets reputation pricing; regionPriceMultiplier per region lives in `regions`.",
+  "regions": { "aurelmark": 1.0, "gloamfen": 1.25, "brinescatter_isles": 1.1 },
+  "shops": [
+    { "id": "marrows_goods", "name": "Marrow's Goods", "locationId": "millbrook", "kind": "general", "factionId": "crown_of_aurelmark", "restockDays": 7, "hours": { "from": 7, "to": 19 } },
+    { "id": "brightwater_forge", "name": "The Brightwater Forge", "locationId": "brightwater", "kind": "smith", "factionId": "ironvault_consortium", "restockDays": 5, "hours": { "from": 7, "to": 18 } },
+    { "id": "brightwater_market", "name": "Brightwater Market Stalls", "locationId": "brightwater", "kind": "general", "restockDays": 3, "hours": { "from": 6, "to": 18 } },
+    { "id": "hearth_and_herb", "name": "Hearth & Herb Apothecary", "locationId": "brightwater", "kind": "alchemist", "restockDays": 7, "hours": { "from": 8, "to": 18 } },
+    { "id": "highcrown_arcana", "name": "The Gilded Quill Arcana", "locationId": "highcrown", "kind": "magic", "factionId": "crown_of_aurelmark", "restockDays": 14, "hours": { "from": 9, "to": 17 } },
+    { "id": "highcrown_armory", "name": "Royal Armory Outlet", "locationId": "highcrown", "kind": "smith", "factionId": "order_of_the_dawn_lance", "restockDays": 5, "hours": { "from": 7, "to": 19 } },
+    { "id": "ravensgate_provisioner", "name": "Ravensgate Provisioner", "locationId": "ravensgate", "kind": "general", "restockDays": 7, "hours": { "from": 7, "to": 19 } },
+    { "id": "hollowmere_trader", "name": "The Last Lantern Trading Post", "locationId": "hollowmere", "kind": "general", "factionId": "lantern_wardens", "restockDays": 10, "hours": { "from": 8, "to": 16 } },
+    { "id": "lantern_hold_quartermaster", "name": "Lantern Hold Quartermaster", "locationId": "lantern_hold", "kind": "smith", "factionId": "lantern_wardens", "restockDays": 10, "hours": { "from": 6, "to": 20 } },
+    { "id": "port_sorrel_chandlery", "name": "Port Sorrel Chandlery", "locationId": "port_sorrel", "kind": "general", "factionId": "saltwind_trading_company", "restockDays": 3, "hours": { "from": 6, "to": 20 } },
+    { "id": "port_sorrel_curios", "name": "Saltwind Curios", "locationId": "port_sorrel", "kind": "magic", "factionId": "saltwind_trading_company", "restockDays": 14, "hours": { "from": 10, "to": 18 } },
+    { "id": "gullhaven_black_market", "name": "The Gull's Nest", "locationId": "gullhaven", "kind": "alchemist", "factionId": "red_gull_brotherhood", "restockDays": 7, "hours": { "from": 18, "to": 4 } }
+  ]
+}

@@ -19,6 +19,7 @@ import { allScenes } from './validate';
 import { SKILL_ABILITY } from '../rules/basics';
 import type { FlagRegistry } from '../world/flags';
 import { TIME_COSTS } from '../world/clock';
+import { addItem } from '../character/inventory';
 import { discover, getMap } from '../world/travel';
 import { changeReputation, type ReputationChange } from '../world/factions';
 import type { Lore } from '../world/lore';
@@ -338,12 +339,7 @@ function fireBeats(ctx: RunContext, result: StepResult, depth = 0): void {
 }
 
 function giveItem(hero: Character, itemId: string, quantity: number, db: SrdDatabase | undefined, result: StepResult): void {
-  const unique = db ? db.weapons.has(itemId) || db.armor.has(itemId) || db.magicItems.has(itemId) : false;
-  const existing = hero.inventory.find((i) => i.itemId === itemId && !i.equipped);
-  const nextUid = () => `i${hero.inventory.reduce((m, i) => Math.max(m, Number(i.uid.replace(/\D/g, '')) || 0), 0) + 1}`;
-  if (existing && !unique) existing.quantity += quantity;
-  else if (unique) for (let i = 0; i < quantity; i++) hero.inventory.push({ uid: nextUid(), itemId, quantity: 1 });
-  else hero.inventory.push({ uid: nextUid(), itemId, quantity });
+  addItem(hero, itemId, quantity, db);
   const r = result.items.find((i) => i.itemId === itemId);
   if (r) r.quantity += quantity;
   else result.items.push({ itemId, quantity });
