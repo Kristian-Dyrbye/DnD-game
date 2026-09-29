@@ -11,6 +11,7 @@ import type { Journal } from '../engine/session/journal';
 import type { ShopView } from '../engine/world/shops';
 import type { Ambience, Mood } from '../engine/world/mood';
 import type { Encounter } from '../engine/combat/encounter';
+import type { DungeonView } from '../engine/world/dungeon';
 import { SLOT_ID_PATTERN, type SaveMeta } from './save';
 
 const base = { reqId: z.string().max(40).optional() };
@@ -115,6 +116,8 @@ export type ServerEvent =
   | { type: 'saved'; meta: SaveMeta }
   /** Current objective for the optional hint (the client shows it only if the setting is on). */
   | { type: 'objective'; text: string | null }
+  /** Dungeon/building map of the current scene with fog of war (null outside mapped scenes). */
+  | { type: 'dungeon'; view: DungeonView | null }
   /** The journal after a change (also part of every snapshot). `savedId` is the page just saved. */
   | { type: 'journal'; journal: Journal; savedId?: string }
   /** Spoken audio for a log entry is ready at /api/tts/<entryId>.wav (only when TTS is on). */

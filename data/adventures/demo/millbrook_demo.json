@@ -178,7 +178,11 @@
               "to": "millbrook_square",
               "minutes": 15
             }
-          ]
+          ],
+          "map": {
+            "id": "old_mill",
+            "room": "mill_floor"
+          }
         },
         {
           "id": "mill_cellar",
@@ -241,7 +245,11 @@
               "label": "Climb back up to the mill",
               "to": "old_mill"
             }
-          ]
+          ],
+          "map": {
+            "id": "old_mill",
+            "room": "cellar"
+          }
         }
       ]
     }
@@ -292,7 +300,9 @@
       "flee": {
         "text": "You scramble up the ladder and slam the hatch.",
         "goto": "old_mill"
-      }
+      },
+      "map": "old_mill",
+      "room": "cellar"
     }
   ],
   "beats": [
@@ -387,6 +397,78 @@
           "if": {
             "flag": "~rats_cleared"
           }
+        }
+      ]
+    }
+  ],
+  "maps": [
+    {
+      "id": "old_mill",
+      "name": "The Old Mill",
+      "width": 10,
+      "height": 13,
+      "rooms": [
+        {
+          "id": "mill_floor",
+          "name": "Mill floor",
+          "x": 1,
+          "y": 1,
+          "w": 7,
+          "h": 5,
+          "blocking": [
+            {
+              "x": 4,
+              "y": 2
+            }
+          ]
+        },
+        {
+          "id": "stairs",
+          "name": "Cellar stairs",
+          "x": 4,
+          "y": 6,
+          "w": 1,
+          "h": 1
+        },
+        {
+          "id": "cellar",
+          "name": "Cellar",
+          "x": 1,
+          "y": 7,
+          "w": 8,
+          "h": 5,
+          "blocking": [
+            {
+              "x": 7,
+              "y": 8
+            },
+            {
+              "x": 2,
+              "y": 10
+            }
+          ],
+          "difficult": [
+            {
+              "x": 5,
+              "y": 10
+            },
+            {
+              "x": 6,
+              "y": 10
+            }
+          ]
+        }
+      ],
+      "doors": [
+        {
+          "x": 4,
+          "y": 5,
+          "side": "S"
+        },
+        {
+          "x": 4,
+          "y": 6,
+          "side": "S"
         }
       ]
     }

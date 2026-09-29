@@ -365,6 +365,9 @@ body.cb-helpers .hp-bar.hp-mid div { background-image: repeating-linear-gradient
 .battle-3d { position: relative; width: 100%; min-height: 360px; }
 .battle-3d canvas { display: block; width: 100%; }
 .view-toggle { position: absolute; top: 0.5rem; right: 0.5rem; z-index: 2; }
+.dungeon-panel { padding: 0.5rem; border-bottom: 1px solid #3a3226; }
+.dungeon-panel h2 { font-size: 0.95rem; margin: 0 0 0.4rem; }
+.dungeon-panel canvas { max-width: 100%; height: auto; }
 .combat-narration { margin: 0; padding: 0.4rem 1rem; font-style: italic; color: var(--muted, #c9bfa8); border-top: 1px solid #3a3226; }
 .action-row-more { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; width: 100%; padding-top: 0.4rem; border-top: 1px dashed #3a3226; }
 .action-row-more .skill-pick, .action-row-more .item-use { display: inline-flex; gap: 0.2rem; }

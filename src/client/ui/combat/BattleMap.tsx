@@ -8,6 +8,7 @@ import { cellKey, footprintSize, type Grid, type Point } from '../../../engine/c
 import type { Creatures } from '../../../engine/combat/turns';
 
 export const CELL = 48;
+const CELL_DEFAULT = CELL;
 
 export interface BattleMapProps {
   grid: Grid;
@@ -19,6 +20,10 @@ export interface BattleMapProps {
   aoe?: ReadonlySet<string>;
   /** Squares covered by lasting spell zones (Web, Spirit Guardians...). */
   zones?: ReadonlySet<string>;
+  /** Squares under fog of war: drawn black, tokens there hidden. */
+  fog?: ReadonlySet<string>;
+  /** Draw each square this many pixels wide (default CELL). */
+  cell?: number;
   path?: readonly Point[];
   onSquare?: (p: Point) => void;
   onHover?: (p: Point | null) => void;
@@ -38,6 +43,7 @@ function initials(name: string): string {
 
 export function BattleMap(p: BattleMapProps) {
   const canvas = useRef<HTMLCanvasElement>(null);
+  const CELL = p.cell ?? CELL_DEFAULT;
   const w = p.grid.width * CELL;
   const h = p.grid.height * CELL;
 
@@ -121,10 +127,19 @@ export function BattleMap(p: BattleMapProps) {
       ctx.stroke();
       ctx.setLineDash([]);
     }
+    // Fog of war.
+    if (p.fog?.size) {
+      ctx.fillStyle = '#0b0a08';
+      for (const k of p.fog) {
+        const [fx, fy] = k.split(',').map(Number);
+        ctx.fillRect(fx! * CELL, fy! * CELL, CELL, CELL);
+      }
+    }
     // Tokens.
     for (const t of Object.values(p.grid.tokens)) {
       const c = p.creatures[t.id];
       if (!c) continue;
+      if (p.fog?.has(cellKey({ x: t.x, y: t.y }))) continue;
       const n = footprintSize(t.size);
       const cx = t.x * CELL + (n * CELL) / 2;
       const cy = t.y * CELL + (n * CELL) / 2;
@@ -165,7 +180,7 @@ export function BattleMap(p: BattleMapProps) {
       ctx.fillText(down ? '✕' : initials(c.name), cx, cy);
       ctx.globalAlpha = 1;
     }
-  }, [p.grid, p.creatures, p.activeId, p.reachable, p.targets, p.aoe, p.zones, p.path]);
+  }, [p.grid, p.creatures, p.activeId, p.reachable, p.targets, p.aoe, p.zones, p.fog, p.path, CELL]);
 
   const toSquare = (e: MouseEvent): Point | null => {
     const el = canvas.current;

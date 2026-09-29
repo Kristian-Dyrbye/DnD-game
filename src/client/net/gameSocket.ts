@@ -3,6 +3,7 @@
  * (game state, story log, rolls, suggested actions), reconnects with backoff, and re-requests a
  * snapshot after reconnecting. Commands sent while disconnected wait in a small outbox.
  */
+import type { DungeonView } from '../../engine/world/dungeon';
 import { signal } from '@preact/signals';
 import type { GameState, LogEntry, RollRecord } from '../../engine/session/gameState';
 import type { ClientCommand, ServerEvent, SuggestedAction } from '../../shared/protocol';
@@ -24,6 +25,8 @@ export const streaming = signal<{ entryId: number; text: string } | null>(null);
 export const lastError = signal<string | null>(null);
 /** Current objective text (shown only when the objective hint setting is on). */
 export const objective = signal<string | null>(null);
+/** Map of the current dungeon/building scene with fog (A076). */
+export const dungeon = signal<DungeonView | null>(null);
 /** The running fight (server state) and whether fleeing is allowed. */
 export const fight = signal<{ encounter: Encounter; canFlee: boolean } | null>(null);
 /** Hardcore: name of the hero who just died (shows the "continue this world" screen). */
@@ -79,6 +82,9 @@ export function applyEvent(e: ServerEvent): void {
       return;
     case 'objective':
       objective.value = e.text;
+      return;
+    case 'dungeon':
+      dungeon.value = e.view;
       return;
     case 'shop':
       shopView.value = e.shop;

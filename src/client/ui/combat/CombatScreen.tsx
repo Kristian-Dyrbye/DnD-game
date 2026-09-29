@@ -95,6 +95,7 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
   }, [mode, hover, state]);
 
   const hoverPath = mode.kind === 'move' && hover ? reach.get(cellKey(hover))?.path : undefined;
+  const fogKeys = useMemo(() => (enc.fog?.length ? new Set(enc.fog) : undefined), [enc.fog]);
   const zoneKeys = useMemo(() => new Set((state.zones ?? []).flatMap((z) => zoneSquares(state, z).map((s) => cellKey(s)))), [state]);
   const myZones = hero ? zonesOfCaster(state, heroId) : [];
   const holdingZones = hero ? (state.zones ?? []).filter((z) => z.condition && hero.conditions.some((x) => x.condition === z.condition && x.sourceId === z.sourceId)) : [];
@@ -173,6 +174,7 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
               targets,
               ...(aoe && { aoe }),
               zones: zoneKeys,
+              ...(fogKeys && { fog: fogKeys }),
               ...(hoverPath && { path: [{ x: state.grid.tokens[heroId]!.x, y: state.grid.tokens[heroId]!.y }, ...hoverPath] }),
               onSquare,
               onHover: setHover,

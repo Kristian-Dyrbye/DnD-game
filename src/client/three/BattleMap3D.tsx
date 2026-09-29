@@ -210,6 +210,7 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
     const blockMat = new THREE.MeshStandardMaterial({ color: 0x4a443a, roughness: 0.9 });
     for (let y = 0; y < grid.height; y++) {
       for (let x = 0; x < grid.width; x++) {
+        if (p.fog?.has(cellKey({ x, y }))) continue;
         const t = terrainOf(grid, x, y);
         if (t === 'blocking') {
           const b = new THREE.Mesh(block, blockMat);
@@ -234,7 +235,7 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
       }
     }
     for (const s of edgeSegments(grid)) {
-      if (s.open) continue;
+      if (s.open || p.fog?.has(cellKey({ x: Math.floor(s.x0), y: Math.floor(s.z0) }))) continue;
       const len = Math.hypot(s.x1 - s.x0, s.z1 - s.z0);
       const w = new THREE.Mesh(new THREE.BoxGeometry(s.x1 !== s.x0 ? len : 0.12, s.door ? 0.8 : 1.2, s.z1 !== s.z0 ? len : 0.12), new THREE.MeshStandardMaterial({ color: s.door ? 0xc8913a : 0xd8d0c0 }));
       w.position.set((s.x0 + s.x1) / 2, s.door ? 0.4 : 0.6, (s.z0 + s.z1) / 2);
@@ -246,7 +247,7 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
       h.board.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineDashedMaterial({ color: 0xffd76a, dashSize: 0.2, gapSize: 0.12 })).computeLineDistances());
     }
     h.dirty = true;
-  }, [p.grid, p.reachable, p.aoe, p.zones, p.path]);
+  }, [p.grid, p.reachable, p.aoe, p.zones, p.fog, p.path]);
 
   // Tokens: models or stand-ins, rings, positions.
   useEffect(() => {
@@ -260,7 +261,7 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
     const withModels = modelTokens(grid, creatures, sides, settings.value?.performance.maxNpcModels ?? 12);
     for (const t of Object.values(grid.tokens)) {
       const c = creatures[t.id];
-      if (!c) continue;
+      if (!c || p.fog?.has(cellKey({ x: t.x, y: t.y }))) continue;
       const n = footprintSize(t.size);
       const at = tokenCentre(t);
       const down = c.hp <= 0;
@@ -323,7 +324,7 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
       h.tokens.add(pawn);
     }
     h.dirty = true;
-  }, [p.grid, p.creatures, p.sides, p.activeId, p.targets, modelsReady]);
+  }, [p.grid, p.creatures, p.sides, p.activeId, p.targets, p.fog, modelsReady]);
 
   return (
     <div class="battle-3d" ref={host} aria-label="3D battle map: drag to rotate, wheel to zoom, right-drag to pan, click a square to act">

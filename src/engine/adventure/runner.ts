@@ -7,6 +7,7 @@
  * Progress lives in `state.extensions.adventure`. Action ids: scene actions use their own id,
  * POI actions are `<poi>.<action>`, exits are `exit.<id>`.
  */
+import { revealRoom } from '../world/dungeon';
 import { applyDamage, rollDamage } from '../rules/damage';
 import { changeApproval, partingLine, partWithCompanion, recruitCompanion, recruitFlagsOnly, type CompanionRoster } from '../party/companions';
 import { roll } from '../core/dice';
@@ -293,8 +294,14 @@ function enterScene(ctx: RunContext, sceneId: string, result: StepResult, depth 
   const scene = findScene(ctx.adventure, sceneId);
   if (!scene) throw new AdventureError(`Unknown scene "${sceneId}"`);
   const p = getProgress(ctx.state)!;
+  const fromRoom = findScene(ctx.adventure, p.sceneId)?.map;
   p.sceneId = sceneId;
   p.entries = (p.entries ?? 0) + 1;
+  if (scene.map) {
+    // Fog of war: the room is revealed on entry; remember where we came from (fights start by that door).
+    revealRoom(ctx.state.extensions, scene.map.id, scene.map.room);
+    ctx.state.extensions.dungeonAt = { map: scene.map.id, room: scene.map.room, ...(fromRoom?.id === scene.map.id && { from: fromRoom.room }) };
+  } else delete ctx.state.extensions.dungeonAt;
   const firstVisit = !p.visited.includes(sceneId);
   if (firstVisit) p.visited.push(sceneId);
   ctx.state.location = { adventureId: ctx.adventure.id, sceneId, name: scene.name };

@@ -6,6 +6,7 @@
 import { z } from 'zod';
 import { ABILITIES, DamageTypeSchema, SKILLS } from '../rules/basics';
 import { TIERS } from '../world/factions';
+import { DungeonMapSchema } from '../world/dungeon';
 
 export const ADVENTURE_FORMAT_VERSION = 1;
 
@@ -185,6 +186,8 @@ export const SceneSchema = z
     pois: z.array(PoiSchema).default([]),
     actions: z.array(ActionSchema).default([]),
     exits: z.array(ExitSchema).default([]),
+    /** Room of a dungeon/building map (adventure `maps`) this scene takes place in (fog of war, fights). */
+    map: z.object({ id: Id, room: Id }).strict().optional(),
     onEnter: OutcomeSchema.optional(),
     /** DC tier for checks the player improvises here (SRD table; default: the adventure's, else medium). */
     improvisedDifficulty: z.enum(DIFFICULTIES).optional(),
@@ -233,6 +236,8 @@ export const EncounterSchema = z
     monsters: z.array(z.object({ id: z.string(), count: z.number().int().min(1).default(1) })).min(1),
     /** Grid map reference (A064) and terrain notes. */
     map: z.string().optional(),
+    /** Room of `map` where the fight happens (default: the current scene's room). */
+    room: z.string().optional(),
     terrain: z.array(z.string()).default([]),
     /** Scale by party: add/remove monsters to hit this difficulty (A068). */
     scaling: z.object({ target: z.enum(['low', 'moderate', 'high']), pool: z.array(z.string()).default([]) }).optional(),
@@ -349,6 +354,8 @@ export const AdventureSchema = z
     deadlines: z.array(DeadlineSchema).default([]),
     quests: z.array(QuestSchema).default([]),
     lootTables: z.array(LootTableSchema).default([]),
+    /** Dungeon/building maps (rooms, doors) for scenes and fights (engine/world/dungeon.ts). */
+    maps: z.array(DungeonMapSchema).default([]),
     /** Documented flags this adventure reads/writes (for editors and validation). */
     flags: z.array(z.object({ id: z.string(), description: z.string() })).default([]),
     endings: z.array(z.object({ id: Id, name: z.string(), text: z.string() })).default([]),

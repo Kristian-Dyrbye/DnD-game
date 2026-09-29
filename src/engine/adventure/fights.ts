@@ -14,6 +14,8 @@ import type { Lore } from '../world/lore';
 import type { FlagRegistry } from '../world/flags';
 import type { Rng } from '../core/rng';
 import type { AdventureEncounter } from './schema';
+import type { Grid, Point } from '../combat/grid';
+import { buildDungeonGrid, dungeonProgress, fogSquares, revealRoom, roomSpawns } from '../world/dungeon';
 import { applyDefeat, pickDefeatOutcome, recordFallen, type DefeatResult, type DefeatTable } from './defeat';
 import { getProgress, resolveEncounter, type RunContext, type StepResult } from './runner';
 import { scaleMonsters } from './encounters';
@@ -26,6 +28,22 @@ export function bossesOf(def: AdventureEncounter, db: SrdDatabase): string[] {
   const sorted = [...def.monsters].sort((a, b) => xp(b.id) - xp(a.id));
   const top = sorted[0];
   return top && sorted.length > 1 && xp(top.id) > xp(sorted[1]!.id) ? [top.id] : [];
+}
+
+/**
+ * The dungeon map a fight uses (spec §11.1 "seamless start of combat on the same map"): the
+ * encounter's `map`/`room`, else the current scene's room. The room is revealed; other unrevealed
+ * rooms stay under fog.
+ */
+export function fightMap(ctx: RunContext, def: AdventureEncounter): { grid: Grid; spawns: { party: Point[]; foes: Point[] }; fog: string[] } | undefined {
+  const at = ctx.state.extensions.dungeonAt as { map: string; room: string; from?: string } | undefined;
+  const mapId = def.map && ctx.adventure.maps.some((m) => m.id === def.map) ? def.map : at?.map;
+  const map = ctx.adventure.maps.find((m) => m.id === mapId);
+  if (!map) return undefined;
+  const room = def.room ?? (at?.map === map.id ? at.room : undefined) ?? map.rooms[0]!.id;
+  revealRoom(ctx.state.extensions, map.id, room);
+  const revealed = dungeonProgress(ctx.state.extensions, map.id).revealed;
+  return { grid: buildDungeonGrid(map), spawns: roomSpawns(map, room, at?.map === map.id && at.room === room ? at.from : undefined), fog: [...fogSquares(map, revealed)] };
 }
 
 export interface ActiveFight {
@@ -46,7 +64,11 @@ export function startFight(ctx: RunContext, encounterId: string, rng: Rng, db: S
   // Scale to the real party with SRD budgets (authored lists assume a party of four).
   const party = [ctx.state.hero, ...ctx.state.companions].filter((c) => !c.dead);
   const monsters = db.tables ? scaleMonsters(def.monsters, party.map((c) => c.classes.reduce((s, x) => s + x.level, 0)), db, db.tables, { pool: def.scaling?.pool ?? [], bossIds: bossesOf(def, db) }) : def.monsters;
-  const enc = setupEncounter({ hero: ctx.state.hero, companions: ctx.state.companions, playerControlled: playerControlled(ctx.state), monsters, allies: def.allies, db }, cctx);
+  const place = fightMap(ctx, def);
+  const enc = setupEncounter(
+    { hero: ctx.state.hero, companions: ctx.state.companions, playerControlled: playerControlled(ctx.state), monsters, allies: def.allies, db, ...(place && { grid: place.grid, spawns: place.spawns, fog: place.fog }) },
+    cctx,
+  );
   const fight: ActiveFight = { adventureId: ctx.adventure.id, encounterId, enc };
   ctx.state.extensions.combat = fight;
   return fight;

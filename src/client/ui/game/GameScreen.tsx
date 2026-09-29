@@ -7,7 +7,8 @@ import { timeOfDay } from '../../../engine/world/clock';
 import { weatherEffects, type WeatherState } from '../../../engine/world/weather';
 import { CharacterPreview } from '../../three/LazyCharacterPreview';
 import { useEffect, useState } from 'preact/hooks';
-import { connection, fight, gameState, heroFallen, lastError, objective, send, storyLog, streaming } from '../../net/gameSocket';
+import { connection, dungeon, fight, gameState, heroFallen, lastError, objective, send, storyLog, streaming } from '../../net/gameSocket';
+import { DungeonPanel } from './DungeonPanel';
 
 /** Previews (reachable squares, attack checks) need a context; they never roll. */
 const previewCtx = { rng: Rng.fromSeed('preview'), db };
@@ -161,6 +162,7 @@ export function GameScreen() {
       {inventoryOpen && <InventoryPanel onClose={() => setInventoryOpen(false)} />}
       {shopId && <ShopPanel shopId={shopId} onClose={() => setShopId(null)} />}
       <aside class="game-side">
+        {dungeon.value && h && <DungeonPanel view={dungeon.value} hero={h} />}
         <div class="hero-view">{h && <CharacterPreview appearance={h.appearance} size={h.size} height={240} />}</div>
         <DiceTray />
       </aside>

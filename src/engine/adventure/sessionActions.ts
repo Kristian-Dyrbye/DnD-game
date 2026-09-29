@@ -3,6 +3,7 @@
  * validateIntent → resolveIntent) are resolved by the engine, rolls are shown, then the facts are
  * narrated (streamed LLM or template). Until combat (A068) exists, encounters auto-resolve as wins.
  */
+import { dungeonView } from '../world/dungeon';
 import { CombatNarrationQueue, pickMoments, type CombatNarrationMode } from './combatNarration';
 import { logSince } from '../combat/encounter';
 import type { SrdDatabase } from '../data/srd';
@@ -193,6 +194,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
 
   const offer = (session: GameSession, ctx: RunContext) => {
     session.emit({ type: 'objective', text: currentObjective(ctx) ?? null });
+    session.emit({ type: 'dungeon', view: dungeonView(ctx.adventure.maps, session.current.extensions) });
     if (opts.lore) {
       const p = getProgress(ctx.state);
       const scene = p && !p.away ? findScene(ctx.adventure, p.sceneId) : undefined;

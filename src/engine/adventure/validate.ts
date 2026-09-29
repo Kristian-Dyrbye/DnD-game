@@ -3,6 +3,7 @@
  * monster and item ids) + reachability. Used by tests for authored content, by the side-quest
  * generator (reject and regenerate) and by a future editor/importer.
  */
+import { checkDungeonMap } from '../world/dungeon';
 import type { CompanionRoster } from '../party/companions';
 import type { SrdDatabase } from '../data/srd';
 import { FlagRegistry, isNamespaced, resolveAdventureFlags, type FlagValue } from '../world/flags';
@@ -100,6 +101,16 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
     outcome(b.outcome, `beat ${b.id}`);
     for (const s of b.scenes) if (!sceneIds.has(s)) errors.push(`beat ${b.id}: unknown scene "${s}"`);
   }
+  // Maps: sound geometry; scenes and encounters name existing maps and rooms.
+  for (const m of adv.maps) errors.push(...checkDungeonMap(m));
+  const room = (mapId: string | undefined, roomId: string | undefined, where: string) => {
+    if (!mapId) return;
+    const m = adv.maps.find((x) => x.id === mapId);
+    if (!m) errors.push(`${where}: unknown map "${mapId}"`);
+    else if (roomId && !m.rooms.some((r) => r.id === roomId)) errors.push(`${where}: map ${mapId} has no room "${roomId}"`);
+  };
+  for (const s of scenes) room(s.map?.id, s.map?.room, `scene ${s.id}`);
+  for (const e of adv.encounters) if (e.map && adv.maps.length) room(e.map, e.room, `encounter ${e.id}`);
   for (const n of adv.npcs) if (db && !db.monsters.has(n.statBlock)) errors.push(`npc ${n.id}: unknown stat block "${n.statBlock}"`);
   for (const n of adv.npcs) for (const e of n.schedule) if (!sceneIds.has(e.scene)) errors.push(`npc ${n.id}: schedule names unknown scene "${e.scene}"`);
   for (const d of adv.deadlines) outcome(d.missed, `deadline ${d.id}.missed`);

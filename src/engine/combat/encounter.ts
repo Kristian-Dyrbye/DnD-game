@@ -43,6 +43,8 @@ export interface Encounter {
   focusId?: string;
   /** Lines ever pushed to `log` (the log itself is capped), for picking up new lines. */
   logSeq?: number;
+  /** Squares hidden by fog of war (dungeon fights): not drawn, tokens there not shown. */
+  fog?: string[];
 }
 
 export const LOG_CAP = 200;
@@ -107,6 +109,9 @@ export interface EncounterSetup {
   allies?: { id: string; count: number }[];
   db: SrdDatabase;
   grid?: Grid;
+  /** Preferred starting squares (dungeon rooms): party first, foes second; random edges otherwise. */
+  spawns?: { party: Point[]; foes: Point[] };
+  fog?: string[];
 }
 
 /** Places everyone, rolls initiative and runs AI turns until the hero is up (or it's over). */
@@ -121,8 +126,13 @@ export function setupEncounter(setup: EncounterSetup, ctx: CombatContext): Encou
   const allies = spawn(setup.allies ?? [], 'ally_', 'Allied ');
   const party: Creature[] = [setup.hero, ...(setup.companions ?? []), ...allies];
   const foes: Creature[] = spawn(setup.monsters);
-  for (const c of party) place(grid, c, [0, 1], ctx.rng);
-  for (const c of foes) place(grid, c, [grid.width - 2, grid.width - 1], ctx.rng);
+  const spawnAt = (c: Creature, spots: readonly Point[] | undefined, cols: number[]) => {
+    const spot = spots?.find((p) => canPlace(grid, c.size, p));
+    if (spot) placeToken(grid, { id: c.id, x: spot.x, y: spot.y, size: c.size });
+    else place(grid, c, cols, ctx.rng);
+  };
+  for (const c of party) spawnAt(c, setup.spawns?.party, [0, 1]);
+  for (const c of foes) spawnAt(c, setup.spawns?.foes, [grid.width - 2, grid.width - 1]);
   const rolls = rollInitiativeOrder(
     [...party.map((c) => ({ creature: c, side: 'party' as const })), ...foes.map((c) => ({ creature: c, side: 'enemy' as const, group: c.id.replace(/_\d+$/, '') }))],
     { rng: ctx.rng, ...(ctx.db && { db: ctx.db }) },
@@ -136,6 +146,7 @@ export function setupEncounter(setup: EncounterSetup, ctx: CombatContext): Encou
     roster: Object.fromEntries(turns.order.map((e) => [e.id, e.side])),
     log: ['Roll for initiative!', ...rolls.map((r) => `${creatures[r.id]?.name ?? r.id}: ${r.text}`)],
     status: 'ongoing',
+    ...(setup.fog?.length && { fog: setup.fog }),
   };
   advance(enc, ctx);
   return enc;

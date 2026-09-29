@@ -183,6 +183,24 @@ The loader resolves `~name` to the full id, so saves and later arcs only ever se
 - `bosses` lists monster ids that are never removed. When it is empty, the single most expensive monster type counts as the boss.
 - In Heroic mode, `lose` is the **defeat outcome** (captured, robbed, rescued...).
 
+## Maps (dungeons and buildings)
+
+Rooms, doors and fog of war on the same grid as combat (spec §11.1):
+
+```json
+"maps": [{ "id": "old_mill", "name": "The Old Mill", "width": 10, "height": 13,
+  "rooms": [
+    { "id": "mill_floor", "name": "Mill floor", "x": 1, "y": 1, "w": 7, "h": 5, "blocking": [{ "x": 4, "y": 2 }] },
+    { "id": "cellar", "name": "Cellar", "x": 1, "y": 7, "w": 8, "h": 5, "difficult": [{ "x": 5, "y": 10 }] }
+  ],
+  "doors": [{ "x": 4, "y": 5, "side": "S", "locked": false }] }]
+```
+
+- Rooms are rectangles of 5-ft squares and must not overlap. Squares outside every room are solid rock. Where two rooms touch, the edge is a wall unless a door is listed there.
+- A door sits on one `side` of square (`x`, `y`) and must join two rooms. Locked doors start closed.
+- Give a scene `"map": { "id": "old_mill", "room": "mill_floor" }`. Entering the scene reveals the room; the other rooms stay under fog of war, and the player sees the map beside the story.
+- A fight in a mapped scene uses the same map. The party starts at the door it came through and the foes at the far side of the room. An encounter can name a different `map` and `room`.
+
 ## Beats
 
 ```json
