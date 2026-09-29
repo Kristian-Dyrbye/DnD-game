@@ -170,6 +170,7 @@ export class GameSession {
           this.start(newGameState(cmd.hero, cmd.mode, seed));
           this.emit(this.snapshot());
           await this.ports.actions?.begin?.(this);
+          this.emit(this.snapshot());
           this.autosave();
           return;
         }
@@ -194,11 +195,13 @@ export class GameSession {
         case 'say':
           if (!this.running) return this.fail('No game is running', reqId);
           await (this.ports.actions ?? fallbackActions).say(this, cmd.text);
+          this.emit(this.snapshot());
           this.emit({ type: 'ack', command: cmd.type, ...(reqId && { reqId }) });
           return;
         case 'choose':
           if (!this.running) return this.fail('No game is running', reqId);
           await (this.ports.actions ?? fallbackActions).choose(this, cmd.actionId);
+          this.emit(this.snapshot());
           this.emit({ type: 'ack', command: cmd.type, ...(reqId && { reqId }) });
           return;
       }

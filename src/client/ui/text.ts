@@ -36,3 +36,11 @@ export function groupNames(entries: { name: string; quantity: number; note?: str
   }
   return [...map].map(([k, n]) => (n > 1 ? `${n} × ${k}` : k));
 }
+
+/** "Day 2, 14:05 (day)" from minutes since the campaign began (day 1, 00:00). */
+export function formatClock(minutes: number, timeOfDay: string): string {
+  const day = Math.floor(minutes / 1440) + 1;
+  const h = Math.floor((minutes % 1440) / 60);
+  const m = minutes % 60;
+  return `Day ${day}, ${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')} (${timeOfDay})`;
+}

@@ -11,8 +11,9 @@ import { send } from '../net/gameSocket';
 export type Screen = 'title' | 'creator' | 'game';
 
 const hash = typeof location !== 'undefined' ? location.hash : '';
-// Test shortcuts: `#creator` opens the creator; `#quickbuild-<class>` opens a Quick Build at the review step.
-const quick = /^#quickbuild-(\w+)$/.exec(hash)?.[1];
+// Test shortcuts: `#creator` opens the creator; `#quickbuild-<class>` opens a Quick Build at the review step;
+// `#play-<class>` starts a game straight away with that Quick Build.
+const quick = /^#(?:quickbuild|play)-(\w+)$/.exec(hash)?.[1];
 
 export const screen = signal<Screen>(hash === '#creator' || (quick && db.classes.has(quick)) ? 'creator' : 'title');
 export const creator = signal<CreatorState>(quick && db.classes.has(quick) ? quickBuild(quick, db, Rng.fromSeed(quick)) : newCreatorState());
@@ -32,3 +33,5 @@ export function startNewCharacter(): void {
   creator.value = newCreatorState();
   screen.value = 'creator';
 }
+
+if (quick && db.classes.has(quick) && hash.startsWith('#play-')) beginAdventure();

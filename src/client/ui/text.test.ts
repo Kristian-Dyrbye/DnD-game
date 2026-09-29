@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { firstSentence, formatCoins, plain } from './text';
+import { firstSentence, formatClock, formatCoins, plain } from './text';
 
 describe('UI text helpers', () => {
   it('strips emphasis and trims to the first sentence', () => {
@@ -21,5 +21,10 @@ describe('item display helpers', () => {
     expect(itemDisplayName("Clothes, Traveler's")).toBe("Traveler's Clothes");
     expect(itemDisplayName('Rope')).toBe('Rope');
     expect(groupNames([{ name: 'Javelin', quantity: 1 }, { name: 'Javelin', quantity: 1 }, { name: 'Arrows', quantity: 20 }, { name: 'Shield', quantity: 1, note: 'equipped' }])).toEqual(['2 × Javelin', '20 × Arrows', 'Shield (equipped)']);
+  });
+
+  it('formats the campaign clock', () => {
+    expect(formatClock(8 * 60, 'day')).toBe('Day 1, 08:00 (day)');
+    expect(formatClock(1440 + 19 * 60 + 5, 'dusk')).toBe('Day 2, 19:05 (dusk)');
   });
 });
