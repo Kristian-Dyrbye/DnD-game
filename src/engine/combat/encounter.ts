@@ -13,7 +13,7 @@ import { takeCompanionTurn } from './companionAi';
 import { resolveAttack } from './attack';
 import { dash, disengage, dodge, escapeGrapple, grapple, moveCreature, readiedOf, ready, shove, triggerReadied } from './actions';
 import { checkAttack, findProfile } from './attack';
-import { canReact } from './turns';
+import { canReact, standUp } from './turns';
 import { influence, study, useMagicItem, utilize, type InfluenceSkill, type StudySkill } from './otherActions';
 import { escapeZone, zoneAct, zonesOfCaster, type Zone } from './zones';
 import { reachProblem } from './castAction';
@@ -71,7 +71,9 @@ export type PlayerAction =
   | { kind: 'ready'; attackProfileId?: string; spellId?: string }
   /** Use a zone you created: move it to `to` (Spiritual Weapon then strikes `targetId` or an adjacent foe), or a Call Lightning bolt. */
   | { kind: 'zone'; zoneId: string; to?: Point; targetId?: string }
-  | { kind: 'escape_zone'; zoneId: string };
+  | { kind: 'escape_zone'; zoneId: string }
+  /** Stand up from Prone (costs half your Speed). */
+  | { kind: 'stand' };
 
 /** A simple arena: open ground with a few pillars and patches of difficult terrain (seeded). */
 export function defaultArena(rng: Rng, width = 12, height = 10): Grid {
@@ -389,6 +391,13 @@ function otherAction(enc: Encounter, ctx: CombatContext, id: string, a: PlayerAc
       return ready(s, ctx, id, 'an enemy comes within reach', { kind: 'attack', ...(a.attackProfileId && { profileId: a.attackProfileId }) });
     case 'escape_zone':
       return escapeZone(s, ctx, id, a.zoneId);
+    case 'stand': {
+      const c = s.creatures[id];
+      if (!c) return undefined;
+      const r = standUp(s.turns, id, c, ctx.table);
+      if (!r.ok) return { ok: false, error: r.error, state: s, events: [] };
+      return { ok: true, state: { ...s, turns: r.state, creatures: { ...s.creatures, [id]: r.creature } }, events: [{ kind: 'move', actorId: id, text: `${c.name} stands up (${r.costFt} ft).` }] };
+    }
     default:
       return undefined;
   }

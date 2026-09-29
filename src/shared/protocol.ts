@@ -36,6 +36,7 @@ export const PlayerActionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('ready'), attackProfileId: z.string().max(120).optional(), spellId: z.string().max(60).optional() }),
   z.object({ kind: z.literal('zone'), zoneId: z.string().max(120), to: PointSchema.optional(), targetId: z.string().max(60).optional() }),
   z.object({ kind: z.literal('escape_zone'), zoneId: z.string().max(120) }),
+  z.object({ kind: z.literal('stand') }),
 ]);
 
 export const ClientCommandSchema = z.discriminatedUnion('type', [

@@ -16,7 +16,8 @@ import { reachableSquares } from '../../../engine/combat/movement';
 import { lowestSlotFor, reachProblem, spellEconomy, spellRangeFt } from '../../../engine/combat/castAction';
 import { featureActions } from '../../../engine/character/features';
 import { INFLUENCE_SKILLS, STUDY_SKILLS, usableMagicItems, type InfluenceSkill, type StudySkill } from '../../../engine/combat/otherActions';
-import { grappledBy } from '../../../engine/combat/actions';
+import { grappledBy, reachableForMove } from '../../../engine/combat/actions';
+import { hasCondition } from '../../../engine/rules/conditions';
 import { zoneNeedsAim, zoneSquares, zonesOfCaster } from '../../../engine/combat/zones';
 import { budgetOf, currentId, movementLeft } from '../../../engine/combat/turns';
 import type { Character } from '../../../engine/core/creature';
@@ -61,8 +62,7 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
   const reach = useMemo(() => {
     if (!myTurn || !hero || mode.kind !== 'move') return new Map<string, { x: number; y: number; path: Point[] }>();
     const dragging = drag ? grappledBy(state, heroId) : [];
-    const left = movementLeft(state.turns, heroId, hero);
-    return reachableSquares(state.grid, heroId, dragging.length ? Math.floor(left / 2) : left, { isHostile: (a, b) => (sides[a] ?? 'x') !== (sides[b] ?? 'y'), ...(dragging.length && { ignore: dragging }) });
+    return reachableForMove(state, ctx, heroId, { drag: dragging });
   }, [state, mode, myTurn, drag]);
   const reachKeys = useMemo(() => new Set([...reach.values()].map((r) => cellKey(r))), [reach]);
 
@@ -245,6 +245,11 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
                 End turn
               </button>
               <div class="action-row-more">
+                {hero && hasCondition(hero, 'prone') && (
+                  <button type="button" class="primary" title="Costs half your Speed" onClick={() => run({ kind: 'stand' })}>
+                    Stand up
+                  </button>
+                )}
                 <button type="button" class={mode.kind === 'grapple' ? 'selected' : ''} disabled={!budget.action && !(budget.attacksLeft ?? 0)} title="Unarmed Strike: grab a creature within 5 ft (needs a free hand)" onClick={() => setMode({ kind: 'grapple' })}>
                   Grapple
                 </button>

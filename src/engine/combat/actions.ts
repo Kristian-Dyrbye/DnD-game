@@ -38,7 +38,7 @@ import { attackProfiles, canSee, findProfile, meleeReach, pushAway, resolveAttac
 import { areHostile, cloneGridTokens, dbOf, fail, withCreature, type ActionResult, type CombatContext, type CombatEvent, type CombatState } from './combatState';
 import { canPlace, distanceFt, moveToken, type Grid, type Point } from './grid';
 import { computeCover } from './los';
-import { moveAlong, type MoveMode, type OpportunityTrigger } from './movement';
+import { moveAlong, reachableSquares, type MoveMode, type OpportunityTrigger, type ReachableSquare } from './movement';
 import { addDash, canReact, currentId, movementLeft, setDisengaged, spend, spendMovement, type EconomyKind } from './turns';
 import { effectiveSpeed } from '../rules/conditions';
 import { combatCheck, combatSave, grappleTarget } from './saves';
@@ -486,6 +486,28 @@ export interface MoveOptions {
   takeOpportunity?: (attackerId: string, targetId: string) => boolean;
   /** Creatures the mover grapples and drags along (they end next to the mover). */
   drag?: readonly string[];
+}
+
+/**
+ * Squares the creature can walk to this turn under exactly the rules `moveCreature` uses (movement
+ * left, crawling while Prone, dragging at double cost, passing Incapacitated creatures), so previews
+ * (the battle map, AI helpers, tests) never offer a move that will be refused.
+ */
+export function reachableForMove(state: CombatState, ctx: CombatContext, id: string, opts: { drag?: readonly string[] } = {}): Map<string, ReachableSquare> {
+  const mover = state.creatures[id];
+  if (!mover || !state.grid.tokens[id]) return new Map();
+  const left = movementLeft(state.turns, id, mover, ctx.table ? { table: ctx.table } : {});
+  const drag = opts.drag ?? [];
+  const costFactor = drag.some((d) => state.creatures[d] && dragDoublesCost(mover, state.creatures[d]!)) ? 2 : 1;
+  return reachableSquares(state.grid, id, Math.floor(left / costFactor), {
+    isHostile: (a, b) => areHostile(state, ctx, a, b),
+    isIncapacitated: (x) => {
+      const c = state.creatures[x];
+      return !!c && (!canAct(c, ctx.table) || c.dead);
+    },
+    crawling: isCrawlOnly(mover, ctx.table),
+    ...(drag.length && { ignore: drag }),
+  });
 }
 
 /** Dragging costs 1 extra foot per foot unless the creature is Tiny or 2+ sizes smaller than the mover. */

@@ -5,7 +5,7 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 4 (Phase 3 Character Creation done)
-- **Last completed assignment:** A114
+- **Last completed assignment:** A115
 - **Notes for next session:** Continue the queue: A098/A099 (starter arc; companions/recruit/approval now exist), A088–A093 (3D equipment/wounds/scars), A070 (3D battle map), A076 (dungeon maps + fog), A075b, then A114–A116. A010 still blocked until Ollama is installed (Ollama/Piper not installed on this PC yet). Playable test URLs: `#play-<class>`, `#play-<class>+map`, `#combat-<class>`.
 
 ## Assignment Queue
@@ -78,11 +78,13 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A075b — Map art polish
 - [done] A111, A112, A113
 - [done] A114 — Docs + About screen
-- [todo] A115 — Full playtest pass | Spec: §17 | Done: play through with mock (and real LLM if available); issues become new queue items | Dep: A114
+- [done] A115 — Full playtest pass (mock LLM; real-LLM pass queued as A115b)
+- [blocked] A115b — Playtest with the real LLM | Spec: §17 | Done: play starter + ch1 with Ollama (qwen3:4b): narration quality, intent parsing on free text, suggestion ideas, JSON validity, speed on 8 GB; issues become queue items | Dep: A010 (owner installs Ollama)
 - [todo] A116 — Final check | Spec: all | Done: all tests, typecheck, build pass; Status DONE | Dep: A115
 
 ## Completed Log
 <!-- One line per assignment: A<id> — what was built — key files. Compress into per-phase summaries when long. -->
+- A115 — exploratory playtest: every authored adventure (starter + ch1–ch4, ch5 when present) played through the real session by a seeded random player with real grid fights, 3 seeds × 250 steps, asserting no error events/crashes/dead ends (tests/playtest.test.ts, shared tests/helpers/combatPolicy.ts). Finding fixed: Prone heroes were offered moves the engine refused (reachable squares ignored crawling) and had no way to stand up → engine reachableForMove (same rules as moveCreature) used by the battle map + PlayerAction 'stand' + Stand up button
 - A114 — README.md (features, requirements, setup, how to play, settings, model swap, developer commands + test URLs, troubleshooting, SRD 5.2.1 CC-BY-4.0 attribution), ARCHITECTURE.md refreshed (combat/world/adventure/appearance modules, full protocol, campaign flow, combat narration queue), About screen on the title screen (exact SRD attribution wording, asset credits summary) — README.md, ARCHITECTURE.md, src/client/ui/AboutPanel.tsx
 - A106 — starter arc smoke test through buildApp (mock LLM/TTS, seeded dice, real grid fights with a simple attack/approach policy, flag-driven story policy) reaching ch1 with zero error events; it found and fixed: an altar soft-lock after a lost fight (rematch + crypt short rest), suggestion buttons capped at 7 dropping real exits (offered actions are never dropped now, only free-text ideas), stale adventure context after a chained ending — tests/starterSmoke.test.ts, adventure/{suggestions,sessionActions}.ts, starter JSON
 - A068e — encounter `statOverrides` (name, hp / hpPercent, ac per monster id), conditional monster/ally groups (`if` per group, activeGroups at fight start), outcome `revealRoom`, resolveEncounter reveals the encounter's room; validator checks override ids and revealRoom targets — adventure/{schema,runner,fights,validate}.ts, combat/encounter.ts, ADVENTURE_FORMAT.md
@@ -135,6 +137,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A115: Playtest with the real LLM isn't possible (Ollama not installed): queued as A115b (blocked with A010). Automated playtests use template narration; they check robustness, not prose quality.
 - A106: Suggestion buttons: every offered action/exit is always shown; the model's free-text ideas only fill room under MAX_SUGGESTIONS (7). Authored defeats must leave a way forward: any once-per-visit fight (onEnter/beat) that can be lost needs a rematch action.
 - A068e: Legendary/extra actions in statOverrides were left out (would need monster-runtime support); overrides cover name/HP/AC. If every conditional monster group is off, the fight falls back to the unfiltered groups rather than starting empty.
 - A104 (helper): Millbrook burns if the hero arrives > 24 h after first seeing the dragon (`since`). A 'wavering Millbrook' middle branch (Persuasion DC 15) was added. Near-miss allies via Persuasion DC 16 (adv. if Pip carries messages). Artillery drives off the brood-guardian and removes one fanatic (no per-round damage). Pyrraxis: freeing = skill challenge with number flags (3 failures close it), bargain pays a chosen Tooth, retreat/loss → raging + Ember Tooth to the Choir. Vey and Vosk hold their own palace rooms. Throne-hall allies = one chosen war-council contingent (4 encounter variants). A still-sick Queen gets a DC 20 retry with a 2-day deadline. Isolde's letter = `arc.main.ch4_isolde_letter` (ch5 reads it). Corwin at loyalty ≤ 20 leaves at the muster and reappears as NPC `ser_corwin`. XP +11,000 (L8) and +14,000 (L9).

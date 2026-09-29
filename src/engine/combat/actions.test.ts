@@ -5,7 +5,7 @@ import { addEffect, hasEffect } from '../rules/activeEffects';
 import { applyCondition, hasCondition } from '../rules/conditions';
 import { monsterToCreature } from '../rules/monsters';
 import { dodgeSaveModes, hideDc, isHidden } from './actionEffects';
-import { dash, disengage, dodge, dragDoublesCost, escapeGrapple, freeHands, grapple, grappledBy, help, hide, holdsReadiedSpell, moveCreature, ready, searchFor, settleGrapples, shove, triggerReadied } from './actions';
+import { dash, disengage, dodge, dragDoublesCost, reachableForMove, escapeGrapple, freeHands, grapple, grappledBy, help, hide, holdsReadiedSpell, moveCreature, ready, searchFor, settleGrapples, shove, triggerReadied } from './actions';
 import { attackProfiles, checkAttack, characterAttackProfile, pushAway, resolveAttack } from './attack';
 import type { CombatContext, CombatState } from './combatState';
 import { createGrid, placeToken, setEdge } from './grid';
@@ -542,6 +542,21 @@ describe('Opportunity Attacks and movement', () => {
     if (!d.ok) throw new Error(d.error);
     const r = moveCreature(d.state, ctx(15, 5), 'g1', [{ x: 2, y: 0 }]);
     expect(r.ok && r.triggers).toEqual([]);
+  });
+});
+
+describe('movement previews match moveCreature', () => {
+  it('a Prone creature crawls: previewed squares cost double and every one of them is accepted', () => {
+    const prone = applyCondition(hero(), { condition: 'prone' }).creature;
+    const s = setup([
+      { c: prone, side: 'party', x: 0, y: 0 },
+      { c: goblin('g1'), side: 'enemy', x: 15, y: 15 },
+    ]);
+    const reach = reachableForMove(s, ctx(), 'hero');
+    expect(Math.max(...[...reach.values()].map((r) => r.costFt))).toBeLessThanOrEqual(30);
+    expect([...reach.values()].some((r) => r.path.length === 3)).toBe(true); // 3 squares × 10 ft
+    expect([...reach.values()].some((r) => r.path.length === 4)).toBe(false);
+    for (const r of reach.values()) expect(moveCreature(s, ctx(), 'hero', r.path).ok).toBe(true);
   });
 });
 
