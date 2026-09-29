@@ -10,12 +10,17 @@ import fastifyStatic from '@fastify/static';
 import fastifyWebsocket from '@fastify/websocket';
 import { GAME_VERSION } from '../shared/version';
 import { SettingsStore } from './settingsStore';
+import { Services, type ServiceOverrides } from './services';
 
 export interface AppOptions {
   /** Absolute path to the built client (dist/client). Static serving is skipped if it doesn't exist. */
   clientDir?: string;
   /** Folder for settings.json (and later other per-user data). Defaults to <cwd>/userdata. */
   userDataDir?: string;
+  /** Project root, used to resolve relative tool paths (Piper, voices). Defaults to cwd. */
+  rootDir?: string;
+  /** Fixed LLM/TTS providers (tests use the mocks). */
+  services?: ServiceOverrides;
   logger?: boolean;
 }
 
@@ -34,6 +39,10 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
     if (!res.ok) return reply.code(400).send({ error: res.error });
     return res.settings;
   });
+
+  const services = new Services(settings, opts.rootDir ?? process.cwd(), opts.services);
+  app.decorate('services', services);
+  app.get('/api/status', async () => services.status());
 
   // Game channel. For now it echoes JSON messages back; GameSession wiring comes in A050.
   app.register(async (scope) => {
@@ -69,5 +78,6 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
 declare module 'fastify' {
   interface FastifyInstance {
     settings: SettingsStore;
+    services: Services;
   }
 }
