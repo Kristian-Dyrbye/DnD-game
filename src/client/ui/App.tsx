@@ -3,6 +3,9 @@ import { GAME_TITLE } from '../../shared/version';
 import { StatusIndicator } from './StatusIndicator';
 import { Creator } from './creator/Creator';
 import { screen, startNewCharacter } from './state';
+import { useEffect } from 'preact/hooks';
+import { audio } from '../audio/AudioManager';
+import { loadSettings } from './settingsState';
 import { GameScreen } from './game/GameScreen';
 
 function TitleScreen() {
@@ -20,6 +23,11 @@ function TitleScreen() {
 }
 
 export function App() {
+  // Menu music outside the game; in game the server sends the mood.
+  useEffect(() => {
+    void loadSettings();
+    if (screen.value !== 'game') audio.setMood('menu', null);
+  }, [screen.value]);
   return (
     <>
       {screen.value === 'creator' ? <Creator /> : screen.value === 'game' ? <GameScreen /> : <TitleScreen />}

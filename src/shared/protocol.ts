@@ -8,6 +8,7 @@ import { CharacterSchema } from '../engine/core/creature';
 import type { GameState, LogEntry, RollRecord } from '../engine/session/gameState';
 import type { Journal } from '../engine/session/journal';
 import type { ShopView } from '../engine/world/shops';
+import type { Ambience, Mood } from '../engine/world/mood';
 import { SLOT_ID_PATTERN, type SaveMeta } from './save';
 
 const base = { reqId: z.string().max(40).optional() };
@@ -65,6 +66,8 @@ export type ServerEvent =
   | { type: 'objective'; text: string | null }
   /** The journal after a change (also part of every snapshot). `savedId` is the page just saved. */
   | { type: 'journal'; journal: Journal; savedId?: string }
+  /** Music mood + ambience bed for the current place (the client crossfades). */
+  | { type: 'mood'; mood: Mood; ambience: Ambience }
   /** A shop's current offer (after shop_open and every trade). */
   | { type: 'shop'; shop: ShopView };
 

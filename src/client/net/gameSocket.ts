@@ -7,6 +7,8 @@ import { signal } from '@preact/signals';
 import type { GameState, LogEntry, RollRecord } from '../../engine/session/gameState';
 import type { ClientCommand, ServerEvent, SuggestedAction } from '../../shared/protocol';
 import type { ShopView } from '../../engine/world/shops';
+import { audio } from '../audio/AudioManager';
+import { sfxForEvent } from '../audio/audioLogic';
 
 export type Connection = 'connecting' | 'open' | 'closed';
 
@@ -31,7 +33,12 @@ const outbox: string[] = [];
 
 /** Applies one server event to the signals. Exported for tests. */
 export function applyEvent(e: ServerEvent): void {
+  const fx = sfxForEvent(e);
+  if (fx) audio.sfx(fx);
   switch (e.type) {
+    case 'mood':
+      audio.setMood(e.mood, e.ambience);
+      return;
     case 'snapshot':
       gameState.value = e.state;
       storyLog.value = e.state.log;

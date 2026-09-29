@@ -11,7 +11,7 @@ import { buy, haggle, sell, shopView, type ShopTable } from '../world/shops';
 import { equipItem, itemName, unequipItem } from '../character/inventory';
 import type { Lore } from '../world/lore';
 import type { ActionPort, GameSession } from '../session/GameSession';
-import { arriveInScene, availableActions, getProgress, leaveScenes, sceneForLocation, type AvailableAction, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
+import { arriveInScene, availableActions, findScene, getProgress, leaveScenes, sceneForLocation, type AvailableAction, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
 import type { Adventure } from './schema';
 import { intentContext, keywordIntent, validateIntent, type Intent, type IntentContext } from './intent';
 import { narrateInto, type Narrator } from './narration';
@@ -21,6 +21,7 @@ import { acceptOffer, activeSideQuest, finishActive, offerSources, offersAt, ref
 import type { SideQuestTables } from './sidequestTables';
 import type { SuggestedAction } from '../../shared/protocol';
 import { MINUTES_PER_DAY } from '../world/clock';
+import { moodFor } from '../world/mood';
 import { dataSuggestions, mergeSuggestions, type SuggestionIdea } from './suggestions';
 import { updateSummary, type Summarizer } from './summary';
 
@@ -121,6 +122,12 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
 
   const offer = (session: GameSession, ctx: RunContext) => {
     session.emit({ type: 'objective', text: currentObjective(ctx) ?? null });
+    if (opts.lore) {
+      const p = getProgress(ctx.state);
+      const scene = p && !p.away ? findScene(ctx.adventure, p.sceneId) : undefined;
+      const place = scene?.locationId ?? getMap(ctx.state)?.current;
+      session.emit({ type: 'mood', ...moodFor(opts.lore, { ...(scene?.mood && { sceneMood: scene.mood }), ...(place && { locationId: place }) }) });
+    }
     const offered = availableActions(ctx);
     const jobs = jobButtons(session);
     session.suggest([...dataSuggestions(offered), ...jobs]);
