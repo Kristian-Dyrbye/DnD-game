@@ -120,9 +120,15 @@ export function keywordIntent(text: string, ictx: IntentContext): Intent {
   const names = new Set([...ictx.npcs, ...ictx.pois].flatMap((x) => words(x.name)));
   const match = bestAction(text, ictx.actions, names);
   const target = findTarget(text, ictx);
-  // A strong match on an offered action wins (e.g. "talk to the mayor" → talk_mayor).
-  if (match && match.score >= 2) return { action: 'choose_action', actionId: match.id, ...(target && { target }) };
-  const skill = SKILL_WORDS.find(([re]) => re.test(lower))?.[1];
+  const skillHit = SKILL_WORDS.map(([re, sk]) => [re.exec(lower)?.[0], sk] as const).find(([m]) => m);
+  const skill = skillHit?.[1];
+  // A strong match on an offered action wins ("talk to the mayor" → talk_mayor) — unless the text
+  // uses a skill verb the action doesn't ("persuade Hobb about the reward" is a Persuasion attempt).
+  if (match && match.score >= 2) {
+    const opt = ictx.actions.find((a) => a.id === match.id)!;
+    const vocab = `${opt.label} ${opt.keywords.join(' ')}`.toLowerCase();
+    if (!skillHit || vocab.includes(skillHit[0]!.trim())) return { action: 'choose_action', actionId: match.id, ...(target && { target }) };
+  }
   const verb = VERB_ACTIONS.find(([re]) => re.test(lower))?.[1];
   if (verb === 'attack') return { action: 'attack', ...(target && { target }) };
   if (skill) return { action: 'skill_check', skill, ...(target && { target }), approach: text.slice(0, 160) };

@@ -26,6 +26,8 @@ export interface AdventureProgress {
   done: string[];
   beats: string[];
   ending?: string;
+  /** Scene entries so far (improvised attempts reset on each new entry). */
+  entries?: number;
 }
 
 export interface RunContext {
@@ -200,6 +202,7 @@ function enterScene(ctx: RunContext, sceneId: string, result: StepResult, depth 
   if (!scene) throw new AdventureError(`Unknown scene "${sceneId}"`);
   const p = getProgress(ctx.state)!;
   p.sceneId = sceneId;
+  p.entries = (p.entries ?? 0) + 1;
   const firstVisit = !p.visited.includes(sceneId);
   if (firstVisit) p.visited.push(sceneId);
   ctx.state.location = { adventureId: ctx.adventure.id, sceneId, name: scene.name };

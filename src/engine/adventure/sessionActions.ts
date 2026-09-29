@@ -1,13 +1,14 @@
 /**
- * Connects the scene runner to a GameSession (its ActionPort). Until narration (A057), intent
- * resolution (A056) and combat (A068) exist, scene text and fixed facts are logged as-is, free text
- * only triggers offered actions (via the intent parser), and encounters are auto-resolved as wins.
+ * Connects the scene runner to a GameSession (its ActionPort). Until narration (A057) and combat
+ * (A068) exist, scene text and fixed facts are logged as-is and encounters are
+ * auto-resolved as wins. Free text goes intent parser → validateIntent → resolveIntent.
  */
 import type { SrdDatabase } from '../data/srd';
 import type { ActionPort, GameSession } from '../session/GameSession';
 import { availableActions, describeScene, getProgress, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
 import type { Adventure } from './schema';
 import { intentContext, keywordIntent, validateIntent, type Intent, type IntentContext } from './intent';
+import { resolveIntent } from './resolve';
 
 export interface AdventurePortOptions {
   /** Free text → Intent (the LLM parser on the server). Defaults to the keyword parser. */
@@ -83,11 +84,10 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       const ctx = ctxFor(session);
       const ictx = intentContext(ctx);
       const v = validateIntent(await parse(text, ictx), ictx);
-      if (v.actionId) run(session, v.actionId);
-      else {
-        session.addLog('system', 'Nothing obvious comes of that. Try one of the suggested actions.');
-        offer(session, ctx);
-      }
+      const r = resolveIntent(ctx, v, text);
+      publish(session, ctx, r.result);
+      offer(session, ctx);
+      if (r.result.entered.length) session.autosave();
     },
   };
 }

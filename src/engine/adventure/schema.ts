@@ -13,6 +13,10 @@ const FlagValue = z.union([z.boolean(), z.number(), z.string()]);
 
 // ---------------------------------------------------------------- conditions
 
+/** SRD DC tiers (rules-tables dcByDifficulty). */
+export const DIFFICULTIES = ['very_easy', 'easy', 'medium', 'hard', 'very_hard', 'nearly_impossible'] as const;
+export type DifficultyTier = (typeof DIFFICULTIES)[number];
+
 export const TIMES_OF_DAY = ['dawn', 'day', 'dusk', 'night'] as const;
 
 export type Condition =
@@ -149,6 +153,8 @@ export const SceneSchema = z
     actions: z.array(ActionSchema).default([]),
     exits: z.array(ExitSchema).default([]),
     onEnter: OutcomeSchema.optional(),
+    /** DC tier for checks the player improvises here (SRD table; default: the adventure's, else medium). */
+    improvisedDifficulty: z.enum(DIFFICULTIES).optional(),
     /** Mood hint for music (A095). */
     mood: z.string().optional(),
   })
@@ -255,6 +261,7 @@ export const AdventureSchema = z
     /** Documented flags this adventure reads/writes (for editors and validation). */
     flags: z.array(z.object({ id: z.string(), description: z.string() })).default([]),
     endings: z.array(z.object({ id: Id, name: z.string(), text: z.string() })).default([]),
+    improvisedDifficulty: z.enum(DIFFICULTIES).default('medium'),
   })
   .strict();
 export type Adventure = z.infer<typeof AdventureSchema>;

@@ -26,6 +26,7 @@ This is how to write adventures for Solo D&D. Authored arcs and generated side q
 | `npcs`, `encounters`, `beats`, `lootTables` | arrays | Scenes and outcomes refer to these by id. |
 | `flags` | `{ id, description }[]` | Lists the flags this adventure reads or writes, for editors and reviewers. |
 | `endings` | `{ id, name, text }[]` | An outcome with `ending` finishes the adventure. |
+| `improvisedDifficulty` | `very_easy` … `nearly_impossible` | The DC tier for checks the player improvises in free text (SRD table). Defaults to `medium` (DC 15). A scene can override it. |
 
 ## Chapters and scenes
 
@@ -43,6 +44,7 @@ A scene has these fields:
 - `exits`: `{ id, label, to, if?, check?, minutes }`. A gated exit with a failed `check` keeps the hero in place and applies `check.failure`.
 - `onEnter`: an outcome applied on the **first** visit only.
 - `mood`: a music hint.
+- `improvisedDifficulty`: an optional DC tier for improvised checks in this scene.
 
 ### Action ids
 
@@ -71,6 +73,17 @@ The runner and the suggested-action buttons use these ids:
 - `advantageIf` / `disadvantageIf`: `[{ if, source }]`.
 - `outcome` is applied after the check. On an action without a check, it is the whole result.
 - `keywords` let free text match the action until intent parsing lands.
+
+## Free text and improvised checks
+
+Free text goes through the intent parser. The engine then decides what happens:
+
+1. If the text matches an offered action or exit, that action is performed.
+2. If the text describes a skill attempt ("I persuade...", "I force..."), the engine uses an offered action or exit whose check uses that skill.
+3. Otherwise the attempt is **improvised**. It rolls against the scene's `improvisedDifficulty` DC and produces a fact only, never flags or loot.
+4. Each skill and target combination can be improvised once per scene entry.
+
+To make an approach matter mechanically, author it as an action with a `check`.
 
 ## Outcomes
 
