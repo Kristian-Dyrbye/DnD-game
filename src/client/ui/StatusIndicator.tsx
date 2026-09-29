@@ -53,8 +53,20 @@ export function StatusIndicator() {
       <Light ind={llmIndicator(status.llm)} />
       <Light ind={ttsIndicator(status.tts, ttsEnabled)} />
       <Light ind={memoryIndicator(status.memory)} />
+      {tabHeapMB() !== undefined && <Light ind={tabIndicator(tabHeapMB()!)} />}
     </div>
   );
+}
+
+/** Chromium exposes the tab's JS heap; the tab's budget share is well under 1.5 GB (spec §1). */
+function tabHeapMB(): number | undefined {
+  const mem = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory;
+  return mem ? Math.round(mem.usedJSHeapSize / 1048576) : undefined;
+}
+
+export function tabIndicator(mb: number): Indicator {
+  const light = mb > 1000 ? 'error' : mb > 600 ? 'warn' : 'ok';
+  return { light, label: `Game ${mb} MB`, detail: `Browser tab memory (JavaScript heap). Budget: under 1 GB.${light !== 'ok' ? ' Try the Low performance preset or 2D battle map.' : ''}` };
 }
 
 function Light({ ind }: { ind: Indicator }) {

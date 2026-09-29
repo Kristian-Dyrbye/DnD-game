@@ -17,7 +17,7 @@ import { IdentityStep } from './IdentityStep';
 import { DifficultyStep } from './DifficultyStep';
 import { ReviewStep } from './ReviewStep';
 import { AppearanceStep } from './AppearanceStep';
-import { CharacterPreview } from '../../three/CharacterPreview';
+import { CharacterPreview } from '../../three/LazyCharacterPreview';
 import { defaultAppearanceFor } from '../../../engine/appearance/appearance';
 
 const STEP_COMPONENTS: Partial<Record<CreatorStep, ComponentType>> = {

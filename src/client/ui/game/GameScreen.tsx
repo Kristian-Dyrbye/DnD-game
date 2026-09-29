@@ -5,7 +5,7 @@
  */
 import { timeOfDay } from '../../../engine/world/clock';
 import { weatherEffects, type WeatherState } from '../../../engine/world/weather';
-import { CharacterPreview } from '../../three/CharacterPreview';
+import { CharacterPreview } from '../../three/LazyCharacterPreview';
 import { useEffect, useState } from 'preact/hooks';
 import { connection, gameState, lastError, objective, send } from '../../net/gameSocket';
 import { loadSettings, settings, updateSettings } from '../settingsState';

@@ -37,6 +37,13 @@ describe('OllamaClient', () => {
     });
   });
 
+  it('caps the context window (num_ctx) for the memory budget', async () => {
+    const f = fakeFetch(() => json({ message: { content: 'x' } }));
+    const c = new OllamaClient({ baseUrl: 'http://127.0.0.1:11434', model: 'qwen3:4b', numCtx: 4096, fetch: f.fn });
+    await c.chat([{ role: 'user', content: 'hi' }]);
+    expect(f.calls[0]!.body).toMatchObject({ options: { num_ctx: 4096 } });
+  });
+
   it('does not send think for models without a reasoning mode', async () => {
     const { c, calls } = client(() => json({ message: { content: 'x' } }), 'llama3.2:3b');
     await c.chat([{ role: 'user', content: 'hi' }]);

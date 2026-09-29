@@ -8,6 +8,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { Appearance } from '../../engine/appearance/appearance';
 import { buildCharacterModel, type CharacterModel } from './characterModel';
+import { settings } from '../ui/settingsState';
 
 /** Points the camera at the model so the whole figure fits (models differ in scale). */
 function frame(camera: THREE.PerspectiveCamera, controls: OrbitControls, obj: THREE.Object3D): void {
@@ -38,7 +39,11 @@ export function CharacterPreview({ appearance, size = 'medium', height = 260 }: 
       setError('3D preview unavailable (WebGL is disabled).');
       return;
     }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Texture quality → render resolution; the frame cap below keeps idle previews cheap.
+    const perf = settings.value?.performance;
+    const maxRatio = perf?.textureQuality === 'low' ? 1 : perf?.textureQuality === 'high' ? 2 : 1.5;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxRatio));
+    const frameMs = 1000 / Math.min(perf?.fpsCap ?? 60, 60);
     renderer.setSize(el.clientWidth, height);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     el.appendChild(renderer.domElement);
@@ -65,12 +70,15 @@ export function CharacterPreview({ appearance, size = 'medium', height = 260 }: 
     sceneRef.current = { scene, camera, controls };
     const clock = new THREE.Clock();
     let raf = 0;
-    const tick = () => {
+    let last = 0;
+    const tick = (now: number) => {
       raf = requestAnimationFrame(tick);
+      if (now - last < frameMs) return;
+      last = now;
       sceneRef.current?.model?.mixer.update(clock.getDelta());
       renderer.render(scene, camera);
     };
-    tick();
+    raf = requestAnimationFrame(tick);
 
     const onResize = () => {
       renderer.setSize(el.clientWidth, height);

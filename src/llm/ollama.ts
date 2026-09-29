@@ -18,6 +18,8 @@ export interface OllamaConfig {
   keepAlive?: string | number;
   /** Default request timeout for chat calls, ms. */
   timeoutMs?: number;
+  /** Context window (Ollama num_ctx). Smaller = less RAM; prompts are budgeted to fit 4096. */
+  numCtx?: number;
   fetch?: typeof fetch;
 }
 
@@ -109,6 +111,7 @@ export class OllamaClient implements LlmProvider {
     const temperature = opts.temperature ?? this.config.temperature;
     if (temperature !== undefined) options.temperature = temperature;
     if (opts.maxTokens !== undefined) options.num_predict = opts.maxTokens;
+    if (this.config.numCtx !== undefined) options.num_ctx = this.config.numCtx;
     const keepAlive = opts.keepAlive ?? this.config.keepAlive;
     return {
       model,
