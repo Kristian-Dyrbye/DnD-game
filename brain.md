@@ -54,10 +54,10 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A032 — Death saves, 0 HP, resting
 - [done] A033 — Effect system
 - [done] A034 — Spellcasting engine
-- [in-progress (helper)] A034a — Spell effects pass | Spec: §4 | Done: hand-written effects/hooks in data/srd/overrides/spells.json for the ~40 most-used combat spells that have no auto effects (magic_missile, bless, shield, ice_storm, counterspell, guiding_bolt, spiritual_weapon, etc.); tests (cantrip scaling moved into A034) | Dep: A033
+- [done] A034a — Spell effects pass
 - [done] A035 — Character builder + derived stats
 - [done] A036 — Leveling + feats
-- [todo] A037 — Multiclassing | Spec: §4 | Done: prereqs, proficiencies gained, multiclass slot table, pact magic separate; tests | Dep: A036
+- [in-progress] A037 — Multiclassing | Spec: §4 | Done: prereqs, proficiencies gained, multiclass slot table, pact magic separate; tests | Dep: A036
 - [todo] A038 — Weapon mastery | Spec: §4, §10 | Done: cleave, graze, nick, push, sap, slow, topple, vex; tests | Dep: A030, A015
 - [todo] A039 — Class features batch 1 (Barbarian, Bard, Cleric, Druid) | Spec: §4 | Done: mechanical features 1–20 as hooks/effects; tests for key ones | Dep: A036, A034
 - [todo] A040 — Class features batch 2 (Fighter, Monk, Paladin, Ranger) | Spec: §4 | Done: as A039 | Dep: A039
@@ -65,12 +65,15 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [todo] A042 — Monster runtime + encounter builder | Spec: §4, §6 | Done: combatant from stat block (multiattack, recharge, legendary); XP-budget encounter scaling by party size/level; tests | Dep: A024, A030
 
 ### Phase 3 — Character Creation
+- [todo] A042a — Active effects + spell hooks batch 1 (buffs) | Spec: §4 | Done: generic active-effect/buff store on creatures (bonus dice to attacks/saves, AC bonus, speed mult, advantage grants, durations, concentration-linked); implement hooks bless, bane, shield, shield_of_faith, mage_armor, haste, slow, heroism, hex, hunters_mark, guiding_bolt, faerie_fire, divine_favor, blur, aid, false_life, heal, invisibility, greater_invisibility using params in data/srd/overrides/spells.json; tests | Dep: A034a, A042
+- [todo] A042b — Spell hooks batch 2 (projectiles & utility) | Spec: §4 | Done: magic_missile, scorching_ray, chromatic_orb, chain_lightning, meteor_swarm, misty_step, dispel_magic, counterspell, revivify, power_word_kill/heal, lesser_restoration, command, sleep, hypnotic_pattern, bestow_curse, blindness_deafness, disintegrate, ice_knife, acid_arrow, vampiric_touch, divine_smite, prayer_of_healing; tests | Dep: A042a
+- [todo] A034c — Fix remaining partial auto spell effects | Spec: §4 | Done: overrides for banishment, conjure_*, contagion, divine_word, geas, dream, heat_metal etc. (audit all auto effects vs text); tests | Dep: A034a
 - [todo] A043 — Creator state machine + class step UI | Spec: §5 | Done: engine-side wizard state + validation; class step with summaries + beginner tags; tests | Dep: A035, A002
 - [todo] A044 — Background + species steps | Spec: §5 | Done: UI shows ASI options + origin feat; validation tests | Dep: A043
 - [todo] A045 — Ability score methods | Spec: §5 | Done: standard array, point buy (27, cost table), 4d6-drop-lowest animated with player assignment; engine tests | Dep: A043, A011
 - [todo] A046 — Skills, equipment, spells steps | Spec: §5 | Done: skill picks, starting package vs gold, spell selection; tests | Dep: A044, A034
 - [todo] A047 — Identity, backstory, difficulty, Quick Build | Spec: §5, §9 | Done: name/traits/backstory, LLM backstory suggestion (mock), Heroic/Hardcore pick, Quick Build per class; tests | Dep: A046, A005
-- [todo] A048 — 3D asset research + import | Spec: §12 | Done: pick CC0 modular kits (Quaternius/KayKit), verify license, download to assets/, manifest, CREDITS.md entries | Dep: A001
+- [in-progress (helper)] A048 — 3D asset research + import | Spec: §12 | Done: pick CC0 modular kits (Quaternius/KayKit), verify license, download to assets/, manifest, CREDITS.md entries | Dep: A001
 - [todo] A049 — 3D preview + appearance customization | Spec: §5, §12 | Done: three.js viewer in creator (rotate), body/face/hair/skin/colors saved to character; build passes | Dep: A048, A043
 
 ### Phase 4 — Narration Loop
@@ -91,6 +94,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [todo] A062 — Initiative, turns, action economy | Spec: §10 | Done: initiative order, turn manager, action/bonus/reaction/move/object tracking; tests | Dep: A061, A029
 - [todo] A063 — Combat actions | Spec: §10 | Done: attack (ranges, long range/adjacent disadvantage), dash, disengage, dodge, help, hide, ready, grapple, shove, 2024 versions; mastery wired; tests | Dep: A062, A038
 - [todo] A064 — AoE templates | Spec: §10 | Done: cone, cube, sphere, line, cylinder → affected squares/creatures; tests | Dep: A060
+- [todo] A064a — Zone spell hooks | Spec: §4, §10 | Done: persistent zones on the grid: spirit_guardians, moonbeam, web, entangle, black_tentacles, wall_of_fire, call_lightning, flaming_sphere, spiritual_weapon, ice_storm terrain; triggers (enter/start turn), once-per-turn; tests | Dep: A064, A042a
 - [todo] A065 — 2D token battle map UI | Spec: §10, §14 | Done: canvas grid, tokens, reachable highlight, turn tracker, action bar, AoE preview, combat log | Dep: A063, A064, A052
 - [todo] A066 — Enemy AI | Spec: §10 | Done: deterministic targeting, ability use, morale/flee; tests | Dep: A063, A042
 - [todo] A067 — Companion AI | Spec: §6 | Done: role-aware tactics (heal, keep distance, protect); tests | Dep: A066
@@ -230,6 +234,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A071: Starting location = Millbrook (tag `starting_location`, Aurelmark). Routes stored once (undirected). Faction defaultReputation 0 except Hollow Choir −60, Lantern Wardens −10. region.mapBounds boxes contain their locations.
 - A034: Spell condition source id = `<casterId>:<spellId>`. castSpell hooks concentrationCheck into EffectContext.onDamaged. Third-casters supported in math (floor(level/3)) though no SRD class uses it.
 - A035: Weapons/armor are stored one inventory entry per item (so each can be equipped); other items stack. Generic choice tags resolve via input.choiceItems or DEFAULT_CHOICE_ITEM (holy_symbol→amulet, gaming_set→dice_set, instrument→lute). Fighting style feats go into featIds. Level > 1 builds use fixed average HP (no ASIs/features; leveling = A036).
+- A034a: Spell hook convention: `{kind:'hook', hook:'<spell_id>', params:{…}}`, params carry only what sibling core effects don't. Edit data/srd/overrides/spells.json directly, then `npx tsx scripts/srd/import-spells.ts`.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
