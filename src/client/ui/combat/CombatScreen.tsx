@@ -37,7 +37,7 @@ type Mode =
 
 const SKILL_NAME = (s: string) => s.replace('_', ' ').replace(/^./, (m) => m.toUpperCase());
 
-export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Encounter; ctx: CombatContext; act: (a: PlayerAction) => string | undefined; onLeave?: () => void; leaveLabel?: string }) {
+export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: { enc: Encounter; ctx: CombatContext; act: (a: PlayerAction) => string | undefined; onLeave?: () => void; leaveLabel?: string; narration?: string | undefined }) {
   const [mode, setMode] = useState<Mode>({ kind: 'move' });
   const [hover, setHover] = useState<Point | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -172,6 +172,11 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Enco
             onHover={setHover}
           />
         </div>
+        {narration && (
+          <p class="combat-narration" aria-live="polite">
+            {narration}
+          </p>
+        )}
         <section class="action-bar" aria-label="Actions">
           {!myTurn ? (
             <p class="hint small">{enc.status === 'ongoing' ? 'Waiting…' : enc.status === 'won' ? 'The fight is won.' : 'You have fallen.'}</p>

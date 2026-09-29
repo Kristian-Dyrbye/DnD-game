@@ -7,7 +7,7 @@ import { timeOfDay } from '../../../engine/world/clock';
 import { weatherEffects, type WeatherState } from '../../../engine/world/weather';
 import { CharacterPreview } from '../../three/LazyCharacterPreview';
 import { useEffect, useState } from 'preact/hooks';
-import { connection, fight, gameState, heroFallen, lastError, objective, send } from '../../net/gameSocket';
+import { connection, fight, gameState, heroFallen, lastError, objective, send, storyLog, streaming } from '../../net/gameSocket';
 
 /** Previews (reachable squares, attack checks) need a context; they never roll. */
 const previewCtx = { rng: Rng.fromSeed('preview'), db };
@@ -53,6 +53,7 @@ export function GameScreen() {
       <CombatScreen
         enc={f.encounter}
         ctx={previewCtx}
+        narration={streaming.value?.text || [...storyLog.value].reverse().find((e) => e.kind === 'narration')?.text}
         act={(a) => {
           send({ type: 'combat_act', action: a });
           return undefined;

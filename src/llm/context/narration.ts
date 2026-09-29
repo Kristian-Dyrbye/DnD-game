@@ -28,7 +28,7 @@ export interface NarrationContext {
   scene: string;
 }
 
-export type NarrationKind = 'scene' | 'outcome';
+export type NarrationKind = 'scene' | 'outcome' | 'combat';
 
 export interface NarrationRequest {
   kind: NarrationKind;
@@ -124,5 +124,6 @@ function section(title: string, lines: string[]): string {
 
 function task(req: NarrationRequest): string {
   if (req.kind === 'scene') return 'Describe the hero arriving in this scene, weaving in the fixed facts.';
+  if (req.kind === 'combat') return 'In one or two short, vivid sentences, narrate these moments of the fight. No numbers or game terms; do not add new hits, deaths or effects.';
   return `The player: "${req.playerAction ?? 'acts'}". Narrate what happens, following the fixed facts exactly.`;
 }

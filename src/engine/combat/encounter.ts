@@ -41,6 +41,8 @@ export interface Encounter {
   status: EncounterStatus;
   /** The hero's last attack target (companions focus on it). */
   focusId?: string;
+  /** Lines ever pushed to `log` (the log itself is capped), for picking up new lines. */
+  logSeq?: number;
 }
 
 export const LOG_CAP = 200;
@@ -89,7 +91,9 @@ function place(grid: Grid, c: Creature, cols: number[], rng: Rng): void {
 }
 
 const push = (enc: Encounter, lines: string[]) => {
-  enc.log.push(...lines.filter(Boolean));
+  const kept = lines.filter(Boolean);
+  enc.logSeq = (enc.logSeq ?? enc.log.length) + kept.length;
+  enc.log.push(...kept);
   if (enc.log.length > LOG_CAP) enc.log.splice(0, enc.log.length - LOG_CAP);
 };
 
@@ -262,6 +266,12 @@ export function areaTargets(enc: Encounter, ctx: CombatContext, casterId: string
 function foesNextTo(enc: Encounter, ctx: CombatContext, casterId: string, spellId: string, aim: Point): string[] {
   if (spellId !== 'spiritual_weapon') return [];
   return Object.keys(enc.state.creatures).filter((f) => (enc.state.creatures[f]?.hp ?? 0) > 0 && enc.state.grid.tokens[f] && areHostile(enc.state, ctx, casterId, f) && distanceFt({ ...aim, size: 'medium' }, enc.state.grid.tokens[f]!) <= 5);
+}
+
+/** Log lines added since `seq` (a previous `logSeq`), as far as the capped log still holds them. */
+export function logSince(enc: Encounter, seq: number): string[] {
+  const n = Math.min(enc.log.length, (enc.logSeq ?? enc.log.length) - seq);
+  return n > 0 ? enc.log.slice(-n) : [];
 }
 
 /** Does the player control this creature (the hero, or a companion toggled to player control)? */

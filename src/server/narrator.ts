@@ -17,7 +17,8 @@ export function llmNarrator(getLlm: () => LlmProvider, lore: Lore, db?: SrdDatab
     const context = gatherNarrationContext(job.ctx.state, lore, job.ctx.adventure, db);
     const prompt = buildNarrationPrompt(context, { kind: job.kind, facts: job.facts, ...(job.playerAction && { playerAction: job.playerAction }) });
     try {
-      yield* llm.stream(prompt.messages, { task: 'narrate', temperature: 0.8, maxTokens: 450, timeoutMs: 90_000, ...(signal && { signal }) });
+      const combat = job.kind === 'combat';
+      yield* llm.stream(prompt.messages, { task: 'narrate', temperature: 0.8, maxTokens: combat ? 90 : 450, timeoutMs: combat ? 30_000 : 90_000, ...(signal && { signal }) });
     } catch (err) {
       // The engine falls back to template narration; the notice tells the player why.
       onError?.(err);

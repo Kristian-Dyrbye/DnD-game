@@ -3,6 +3,8 @@
  * validateIntent → resolveIntent) are resolved by the engine, rolls are shown, then the facts are
  * narrated (streamed LLM or template). Until combat (A068) exists, encounters auto-resolve as wins.
  */
+import { CombatNarrationQueue, pickMoments, type CombatNarrationMode } from './combatNarration';
+import { logSince } from '../combat/encounter';
 import type { SrdDatabase } from '../data/srd';
 import type { FlagRegistry } from '../world/flags';
 import { describeChange } from '../world/factions';
@@ -37,6 +39,8 @@ export interface AdventurePortOptions {
   parseIntent?: (text: string, ictx: IntentContext) => Promise<Intent>;
   /** Streams narration (the LLM on the server). Without it, template narration is used. */
   narrator?: Narrator;
+  /** Combat narration frequency (settings.llm.combatNarration); default 'key'. */
+  combatNarration?: () => CombatNarrationMode;
   /** Contextual action ideas (the LLM). Without it, only the data-driven buttons are shown. */
   suggester?: (ctx: RunContext, offered: AvailableAction[]) => Promise<SuggestionIdea[]>;
   /** Condenses the story after each scene (the LLM). Without it, the template summary is used. */
@@ -139,9 +143,17 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       const fight = startFight(ctx, r.encounter, session.rng, db);
       session.addLog('system', `Combat! ${def?.name ?? 'Enemies'} attack.`);
       session.emit({ type: 'mood', mood: 'battle', ambience: null });
+      narrateCombat(session, ctx, fight.enc.log);
       emitFight(session);
       if (fight.enc.status !== 'ongoing') await endFight(session, ctx, fight.enc.status === 'won' ? 'win' : 'lose');
     }
+  };
+
+  // Combat narration runs in the background; the command returns at once (A069).
+  const combatVoice = new CombatNarrationQueue(opts.narrator);
+  const narrateCombat = (session: GameSession, ctx: RunContext, lines: readonly string[]) => {
+    const facts = pickMoments(lines, opts.combatNarration?.() ?? 'key');
+    if (facts.length) combatVoice.push(session, { kind: 'combat', facts, ctx });
   };
 
   const emitFight = (session: GameSession) => {
@@ -259,6 +271,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       await pendingIdeas;
       await pendingSummary;
       await pendingBanter;
+      await combatVoice.idle();
     },
     async begin(session) {
       const ctx = ctxFor(session);
@@ -349,8 +362,11 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
           if (def && !def.canFlee) throw new Error('There is no escape from this fight!');
           await endFight(session, ctx, 'flee');
         } else {
+          const seq = f.enc.logSeq ?? f.enc.log.length;
           const err = fightAct(session.current, cmd.action, session.rng, db);
           if (err) throw new Error(err);
+          const now = activeFight(session.current);
+          if (now) narrateCombat(session, ctx, logSince(now.enc, seq));
           const status = activeFight(session.current)!.enc.status;
           if (status === 'ongoing') emitFight(session);
           else await endFight(session, ctx, status === 'won' ? 'win' : 'lose');

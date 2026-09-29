@@ -163,6 +163,7 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
     ...(defaultAdventure && { actions: adventureActionPort(adventures, defaultAdventure, srd, {
         parseIntent: async (text, ictx) => (await parseIntent(services.llm, text, ictx)).intent,
         narrator: llmNarrator(() => services.llm, lore, srd, (err) => notices?.report('llm', err)),
+        combatNarration: () => settings.get().llm.combatNarration,
         summarizer: llmSummarizer(() => services.llm),
         flags: flagRegistry,
         lore,

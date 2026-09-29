@@ -9,7 +9,8 @@ import type { GameSession } from '../session/GameSession';
 import { describeScene, type RunContext } from './runner';
 
 export interface NarrationJob {
-  kind: 'scene' | 'outcome';
+  /** 'combat': brief background narration of combat moments (A069). */
+  kind: 'scene' | 'outcome' | 'combat';
   playerAction?: string;
   /** Fixed facts, in order. */
   facts: string[];
@@ -23,7 +24,7 @@ export type Narrator = (job: NarrationJob, signal?: AbortSignal) => AsyncIterabl
 
 /** Deterministic narration from data: facts on the way, the scene description, then arrival facts. */
 export function templateNarration(job: NarrationJob): string {
-  if (job.kind === 'outcome') return job.facts.join(' ') || 'Nothing much happens.';
+  if (job.kind === 'outcome' || job.kind === 'combat') return job.facts.join(' ') || 'Nothing much happens.';
   const d = describeScene(job.ctx);
   const scene = [d.seed, ...d.pois.map((p) => p.seed), ...(d.npcs.length ? [`Here: ${d.npcs.join(', ')}.`] : [])].join(' ');
   const cut = job.arrivalIndex ?? 0;
