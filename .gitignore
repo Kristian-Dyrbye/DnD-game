@@ -34,3 +34,6 @@ Thumbs.db
 desktop.ini
 .vscode/
 .idea/
+
+# Helper-agent git worktrees
+.claude/worktrees/
