@@ -6,10 +6,14 @@ import type { ComponentType } from 'preact';
 import { STEP_LABELS, canAdvance, goToStep, nextStep, prevStep, stepProblems, stepsFor, type CreatorStep } from '../../../engine/character/creator';
 import { db } from '../../data';
 import { creator, screen } from '../state';
+import { BackgroundStep } from './BackgroundStep';
 import { ClassStep } from './ClassStep';
+import { SpeciesStep } from './SpeciesStep';
 
 const STEP_COMPONENTS: Partial<Record<CreatorStep, ComponentType>> = {
   class: ClassStep,
+  background: BackgroundStep,
+  species: SpeciesStep,
 };
 
 function Placeholder({ step }: { step: CreatorStep }) {

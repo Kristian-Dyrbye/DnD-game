@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 3 (Character Creation)
-- **Last completed assignment:** A043
-- **Notes for next session:** Start with A044 (background + species steps). A096 (Piper voices) is with a helper. Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A044
+- **Notes for next session:** Start with A045 (ability score methods). A096 (Piper voices) is with a helper. Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -72,7 +72,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A034c — Fix remaining partial auto spell effects
 - [todo] A042c — Spell hooks batch 3 (from A034c) | Spec: §4 | Done: implement cantrip riders (ray_of_frost, chill_touch, shocking_grasp, vicious_mockery, starry_wisp, sacred_flame cover, produce_flame/shillelagh/true_strike/sorcerous_burst own scaling), hold/dominate repeat saves (hook sibling with appliesIfCondition), charm/control riders (charm_person/monster, fear, suggestion, banishment, compulsion), common buffs (barkskin, enhance_ability, enlarge_reduce, fly, longstrider, mirror_image, protection_from_energy, protection_from_evil_and_good, resistance, guidance, sanctuary, stoneskin, magic_weapon, warding_bond, death_ward, beacon_of_hope, spider_climb, see_invisibility, darkvision); tests | Dep: A042b
 - [done] A043 — Creator state machine + class step UI
-- [todo] A044 — Background + species steps | Spec: §5 | Done: UI shows ASI options + origin feat; validation tests | Dep: A043
+- [done] A044 — Background + species steps
 - [todo] A045 — Ability score methods | Spec: §5 | Done: standard array, point buy (27, cost table), 4d6-drop-lowest animated with player assignment; engine tests | Dep: A043, A011
 - [todo] A046 — Skills, equipment, spells steps | Spec: §5 | Done: skill picks, starting package vs gold, spell selection; tests | Dep: A044, A034
 - [todo] A047 — Identity, backstory, difficulty, Quick Build | Spec: §5, §9 | Done: name/traits/backstory, LLM backstory suggestion (mock), Heroic/Hardcore pick, Quick Build per class; tests | Dep: A046, A005
@@ -188,8 +188,11 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 - A034c (helper) — Spell audit: 171 overrides (63 wrong/partial auto effects fixed — summons, zones, delayed/conditional damage now hooks; 54 more spells covered); only 16 spells still use importer effects (all verified); guard tests in `src/engine/rules/spellAudit.test.ts`. Eldritch Blast beams by level (castSpell beamsByLevel + levelTableValue).
 
+- A044 — BackgroundStep (abilities, origin feat + first sentence, skills, tool, gear package A or coins) and SpeciesStep (size, speed, darkvision, trait summaries; lineage/ancestry + size sub-choices) + UI text helpers (plain, firstSentence, formatCoins) — `src/client/ui/creator/{BackgroundStep,SpeciesStep}.tsx`, `src/client/ui/text.ts`
+
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
+- Infra decisions (A001–A012, condensed): TS 7 native tsc, Vite 8, Vitest 5, Preact 10; strict tsconfig w/ noUncheckedIndexedAccess + verbatimModuleSyntax, bundler resolution (no .js suffixes); server = tsx, 127.0.0.1:3210 (PORT env), opens browser itself (OPEN_BROWSER=1); zod 4 (.prefault({}) for nested defaults); settings in userdata/settings.json (salvage bad fields); LLM via injectable fetch, think:false only for reasoning models, keep_alive idle/60m, every call tagged with `task`; structured calls retry once (not when unreachable) then typed fallback; Piper spawned per utterance (--output_raw → WAV); providers in app.services (rebuilt on settings change); saves = {schemaVersion, meta, state} + migration chain, 3 rotating autosaves, slot-id regex; check-deps.mjs plain JS (DEFAULT_MODEL/GAME_PORT synced by test), allowScripts esbuild:false; RNG sfc32+cyrb128 (state in saves); math line format `d20: 14 + 5 (Persuasion) = 19 vs DC 15 — Success` with real minus sign; snake_case ids; Creature = current state, static data by id; exhaustion numeric; hit dice per die size.
 - Owner decisions (fixed, from the planning session): Windows, 8 GB RAM, browser app, Ollama with a 3–4B model, full SRD 5.2 with feats and multiclassing, all 3 ability score methods, a starter arc plus one full linked arc, woven-in procedural side quests, a mixed-tone world, auto dice with visible math, Heroic/Hardcore modes, a 3D grid combat map, autosave plus manual slots in all modes, buttons plus free text, flexible AI/player companions, music + SFX + Piper TTS, a world map plus fog-of-war dungeons, a notes-only journal, factions, day/night, weather, dynamic shops, low-poly CC0 3D models for everyone with wounds, scars, and armor wear. Crafting and home base are future expansions only.
 - Owner decision (2026-09-29): §15 "current objective" hint — include it as a toggle in Settings, default OFF.
 - Owner setup (2026-09-29): Ollama being installed by the owner before the loop starts; A000 picks the model. Kit duplicates deleted; `.claude/settings.json` lives in project root.
@@ -203,23 +206,6 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A000: TTS = Piper Windows binary spawned per request; voices downloaded by Setup.bat.
 - A000: Saves = versioned JSON + migration chain; systems keep data in state.extensions[id].
 - A000: §16 readiness = System Registry (hooks: initState, migrate, onTimeAdvance, onRest, downtimeActivities, commands, promptCards); namespaced flags (arc.<id>.*, world.*); standalone validateAdventure().
-- A001: Tooling versions installed: TypeScript 7.0 (native `tsc`), Vite 8, Vitest 5, Preact 10, @preact/signals 2. Vite root = src/client, build → dist/client.
-- A001: tsconfig: strict + noUncheckedIndexedAccess + verbatimModuleSyntax (use `import type` for types); moduleResolution Bundler, so no .js suffixes in imports. Server will run through tsx/bundling, not plain tsc emit.
-- A002: Server listens on 127.0.0.1:3210 (env PORT overrides); run via tsx (`npm start`, `npm run dev:server`) instead of a compiled bundle — simplest, no build step for the server.
-- A003: zod 4.6 installed. Nested section defaults use `.prefault({})` (zod 4 `.default({})` skips inner defaults). Settings PUT takes a partial patch merged per section; invalid → 400 with `path: message`.
-- A003: Settings file = userdata/settings.json (gitignored). Corrupt file → defaults; bad fields salvaged one by one.
-- A004: Ollama client uses global fetch (injectable) — no SDK dependency. `think:false` sent only to reasoning models (qwen3, deepseek-r1, magistral, gpt-oss). keep_alive = idleMinutes if unloadWhenIdle, else '60m' (not -1, so a closed game frees RAM).
-- A004: Every LLM call carries `task` (narrate/intent/suggest/summarize/dialogue/banter/backstory) for logging and mock routing. MockLlm default: rotating template narration; `{}` for JSON calls.
-- A005: Structured retry is skipped for `unreachable`/`aborted` errors (retrying can't help); retry message includes the zod error. zod 4 `z.toJSONSchema` builds the Ollama format ($schema stripped). extractJson strips ```fences, <think> blocks, chatter.
-- A006: Piper is spawned once per utterance (`--model <voice>.onnx --output_raw`, text on stdin), PCM wrapped as WAV using sample_rate from <voice>.onnx.json. No resident process → near-zero idle RAM, so tts.unloadWhenIdle is effectively always true. Voice ids = .onnx file names.
-- A007: Providers live in `app.services` (Services): `.llm`/`.tts` getters rebuild when their settings section changes; tests pass `buildApp({services:{llm: new MockLlm(), tts: new MockTts()}})`. Indicator: mock = amber, model not loaded = amber, missing = red; RAM warn < 1 GB free, error < 400 MB.
-- A008: Save file = {schemaVersion, meta, state}; state validated later by the engine GameState schema (A050). Autosaves rotate auto-1 (newest) → auto-3. Slot ids /^[a-z0-9][a-z0-9_-]{0,39}$/ (blocks path traversal). SaveError kinds → HTTP 400/404/422 via app error handler.
-- A008: Engine may import plain constants/types from `src/shared` (ARCHITECTURE.md updated).
-- A009: check-deps is plain JS (runs before npm install); pure logic in check-deps-lib.mjs + .d.mts types, tested from tests/check-deps.test.ts. DEFAULT_MODEL and GAME_PORT are duplicated there; a test keeps them in sync with settings.ts and server/port.ts.
-- A009: package.json `allowScripts: {esbuild: false}` silences npm 11's install-script warning (esbuild works via its optional platform package).
-- A009: Server opens the browser itself (OPEN_BROWSER=1) after listen, so the page never loads before the server is up.
-- A011: RNG = sfc32 seeded by cyrb128 string hash; RngState = 4 uint32 stored in saves. Math-line format: `d20: 14 + 5 (Persuasion) = 19 vs DC 15 — Success`; adv/dis: `d20 (adv: 7, 14 → 14) ...`; damage: `2d6+3: [4, 2] + 3 = 9`, dropped dice as ~x~. Uses the real minus sign (−) in display text.
-- A012: Ids are snake_case strings (skills `sleight_of_hand`, classes `fighter`). Creature holds CURRENT state; static rules data is referenced by id (classId, statBlockId). Exhaustion stored as a number 0–6 on the creature, not as an ActiveCondition. hitDice stored per die size ({d10: 3}) for multiclass.
 - A013: SRD source = community Markdown of SRD 5.2.1 (github downfallx/dnd-5e-srd-markdown @1b4b99d, CC-BY-4.0) — alt: official PDF (hard to parse), 5e-bits (2014-focused) — cleanest structured text. Source is gitignored; generated JSON is committed. Importers: write `scripts/srd/import-<kind>.ts` (run with `npx tsx`), parse Markdown → validate with the zod schema → write data/srd/<file>.json. Hand fixes go in `data/srd/overrides/<file>.json` merged by id.
 - A013: Money stored in copper (CP) integers everywhere (1 GP = 100). Data ids snake_case via toId(). Monster saves stored as final printed bonuses for all six abilities. Spells keep importer hints (save, damage, area, attack) plus hand-refined `effects`.
 - A013: Effect union (damage, heal, temp_hp, save, attack, condition, area, hook) in engine/data/common.ts; complex features use `{kind:'hook', hook:'name'}` implemented in code.
