@@ -7,6 +7,7 @@
 import type { SrdDatabase } from '../data/srd';
 import { ABILITIES, type Ability, type AbilityScores, type Skill } from '../rules/basics';
 import { validateBuild, type CharacterBuildInput } from './builder';
+import { scoreProblems } from './abilityScores';
 
 export const CREATOR_STEPS = ['class', 'background', 'species', 'abilities', 'skills', 'equipment', 'spells', 'appearance', 'identity', 'difficulty', 'review'] as const;
 export type CreatorStep = (typeof CREATOR_STEPS)[number];
@@ -121,9 +122,7 @@ export function stepProblems(s: CreatorState, step: CreatorStep, db: SrdDatabase
       return out;
     }
     case 'abilities': {
-      const out: string[] = [];
-      if (!s.abilityMethod) out.push('Choose a method');
-      if (ABILITIES.some((a) => s.baseScores[a] === undefined)) out.push('Assign all six scores');
+      const out = scoreProblems(s.abilityMethod, s.baseScores, s.rolledPool);
       const bonus = Object.values(s.backgroundBonus).filter(Boolean).sort().join(',');
       if (bonus !== '1,2' && bonus !== '1,1,1') out.push('Apply your background increase (+2/+1 or +1/+1/+1)');
       return out;

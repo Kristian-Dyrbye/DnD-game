@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 3 (Character Creation)
-- **Last completed assignment:** A044
-- **Notes for next session:** Start with A045 (ability score methods). A096 (Piper voices) is with a helper. Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A045
+- **Notes for next session:** Start with A046 (skills, equipment, spells steps). A096 (Piper voices) is with a helper. Phase 2 engine is complete except zone spells (A064a). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -73,7 +73,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [todo] A042c — Spell hooks batch 3 (from A034c) | Spec: §4 | Done: implement cantrip riders (ray_of_frost, chill_touch, shocking_grasp, vicious_mockery, starry_wisp, sacred_flame cover, produce_flame/shillelagh/true_strike/sorcerous_burst own scaling), hold/dominate repeat saves (hook sibling with appliesIfCondition), charm/control riders (charm_person/monster, fear, suggestion, banishment, compulsion), common buffs (barkskin, enhance_ability, enlarge_reduce, fly, longstrider, mirror_image, protection_from_energy, protection_from_evil_and_good, resistance, guidance, sanctuary, stoneskin, magic_weapon, warding_bond, death_ward, beacon_of_hope, spider_climb, see_invisibility, darkvision); tests | Dep: A042b
 - [done] A043 — Creator state machine + class step UI
 - [done] A044 — Background + species steps
-- [todo] A045 — Ability score methods | Spec: §5 | Done: standard array, point buy (27, cost table), 4d6-drop-lowest animated with player assignment; engine tests | Dep: A043, A011
+- [done] A045 — Ability score methods
 - [todo] A046 — Skills, equipment, spells steps | Spec: §5 | Done: skill picks, starting package vs gold, spell selection; tests | Dep: A044, A034
 - [todo] A047 — Identity, backstory, difficulty, Quick Build | Spec: §5, §9 | Done: name/traits/backstory, LLM backstory suggestion (mock), Heroic/Hardcore pick, Quick Build per class; tests | Dep: A046, A005
 - [done] A048 — 3D asset research + import
@@ -189,6 +189,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A034c (helper) — Spell audit: 171 overrides (63 wrong/partial auto effects fixed — summons, zones, delayed/conditional damage now hooks; 54 more spells covered); only 16 spells still use importer effects (all verified); guard tests in `src/engine/rules/spellAudit.test.ts`. Eldritch Blast beams by level (castSpell beamsByLevel + levelTableValue).
 
 - A044 — BackgroundStep (abilities, origin feat + first sentence, skills, tool, gear package A or coins) and SpeciesStep (size, speed, darkvision, trait summaries; lineage/ancestry + size sub-choices) + UI text helpers (plain, firstSentence, formatCoins) — `src/client/ui/creator/{BackgroundStep,SpeciesStep}.tsx`, `src/client/ui/text.ts`
+
+- A045 — Ability scores: engine (STANDARD_ARRAY, point buy costs/budget/canAdjust, 4d6kh3 rolls, scoreProblems per method, suggestAssignment, suggestBackgroundBonus) wired into creator validation; AbilitiesStep UI (method tabs, dropdown assignment from remaining pool, point-buy steppers + budget, animated roll with dropped die shown, background +0/+1/+2 buttons capped at 3 total, final score + modifier, primary tags, suggest buttons); `#creator` URL hash opens the creator; status lights moved bottom-left — `src/engine/character/abilityScores.ts`, `src/client/ui/creator/AbilitiesStep.tsx`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -342,6 +344,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - Helper agents' worktrees live in `.claude/worktrees/` (gitignored). Never `git add` them.
 - TS strict + zod: a fallback lambda's return type widens enums to string; annotate it (`(e): T => ...`).
 - In .bat files escape `&` as `^&` (even in `title`). Edit .bat files with python (read bytes, normalize to CRLF); Git Bash `sed -i` mangles CRLF.
+- UI screenshots: build, run the server on a spare port, then `msedge.exe --headless=new --disable-gpu --window-size=1400,900 --virtual-time-budget=4000 --screenshot=<png> "http://127.0.0.1:<port>/#creator"` and Read the PNG.
 - Testing .bat from the PowerShell tool: native commands don't follow Push-Location; call `cmd /c "`"<absolute path>`""`. To dry-run Start Game.bat, copy it with `call npm start` replaced by an echo.
 - npm 11 blocks install scripts by default (`allow-scripts` warning for esbuild). Ignore it: tsx/vite work via esbuild's optional platform package. Don't run approve-scripts unless something breaks.
 - To smoke-test the server: `PORT=3299 npx tsx src/server/main.ts &`, curl, then kill the PID from `netstat -ano | grep :3299` with `taskkill //PID <pid> //F` (Git Bash needs `//`).

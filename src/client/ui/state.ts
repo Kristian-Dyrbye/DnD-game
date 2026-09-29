@@ -4,7 +4,8 @@ import { newCreatorState, type CreatorState } from '../../engine/character/creat
 
 export type Screen = 'title' | 'creator' | 'game';
 
-export const screen = signal<Screen>('title');
+// `#creator` in the URL opens the character creator directly (handy for testing).
+export const screen = signal<Screen>(typeof location !== 'undefined' && location.hash === '#creator' ? 'creator' : 'title');
 export const creator = signal<CreatorState>(newCreatorState());
 
 export function startNewCharacter(): void {

@@ -30,8 +30,12 @@ body {
 
 .status-indicator {
   position: fixed;
-  right: 0.75rem;
+  left: 0.75rem;
   bottom: 0.75rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  border-radius: 10px;
   display: flex;
   gap: 0.75rem;
   padding: 0.35rem 0.7rem;
@@ -131,3 +135,29 @@ legend { color: var(--accent); padding: 0 0.35rem; }
 .option-pill.selected { border-color: var(--accent); background: #2c2519; }
 .option-pill input { position: absolute; opacity: 0; pointer-events: none; }
 .option-pill:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.method-tabs { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+.method-tabs button.selected { border-color: var(--accent); background: #2c2519; }
+.ability-table { border-collapse: collapse; margin: 1rem 0; min-width: 520px; }
+.ability-table th, .ability-table td { padding: 0.4rem 0.75rem; border-bottom: 1px solid #3a3226; text-align: left; }
+.ability-table td.score { font-size: 1.2rem; font-weight: bold; color: var(--accent); }
+.ability-table select { font: inherit; background: #211c16; color: var(--fg); border: 1px solid #4a3f30; border-radius: 4px; padding: 0.2rem 0.4rem; }
+.tag-primary { background: #4a3b1f; color: #f0d7a0; margin-left: 0.4rem; }
+.stepper { display: inline-flex; align-items: center; gap: 0.4rem; }
+.stepper button { padding: 0.1rem 0.6rem; }
+.stepper-value { min-width: 1.6rem; text-align: center; }
+.bonus-buttons { display: inline-flex; gap: 0.25rem; }
+.bonus-buttons button { padding: 0.1rem 0.5rem; font-size: 0.85rem; }
+.bonus-buttons button.selected { border-color: var(--accent); background: #2c2519; }
+.points-left { font-weight: bold; }
+.points-left.over { color: #e0483e; }
+.muted { color: #6f6556; }
+.quick-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.roll-panel { display: flex; flex-direction: column; gap: 0.75rem; margin: 0.5rem 0; }
+.dice-sets { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem; }
+.dice-set { display: flex; align-items: center; gap: 0.3rem; }
+.die { display: inline-grid; place-items: center; width: 1.9rem; height: 1.9rem; border-radius: 6px; background: #efe6d2; color: #1b160f; font-weight: bold; }
+.die.dropped { opacity: 0.35; text-decoration: line-through; }
+.dice-set.rolling .die { animation: die-shake 0.2s infinite alternate; }
+.die-total { margin-left: 0.3rem; color: var(--accent); }
+@keyframes die-shake { from { transform: rotate(-12deg) translateY(-2px); } to { transform: rotate(12deg) translateY(2px); } }
+@media (prefers-reduced-motion: reduce) { .dice-set.rolling .die { animation: none; } }
