@@ -41,6 +41,8 @@ Your saves are in `saves/`, your settings in `userdata/settings.json`.
 
 The default model is `qwen3:4b`; the fallback is `llama3.2:3b`. Any Ollama model works: pull it (`ollama pull <name>`) and set it in Settings → AI. Small 3–4B instruction models give the best balance on 8 GB machines; larger models narrate better but use more memory.
 
+To compare models on your own PC, run `node scripts/bench-llm.mjs` (add `--pull` to download the candidates first, or name models to test). It measures JSON reliability, speed and memory with the game's real prompt shapes and recommends a default; results go to `userdata/bench-llm.json`.
+
 ## For developers
 
 ```bash

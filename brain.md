@@ -19,7 +19,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ### Phase 1 — Foundation
 - [done] A001, A002, A003, A004, A005, A006, A007, A008, A009
-- [blocked] A010 — Pick & benchmark LLM (needs Ollama) | Spec: §2, §3 | Done: scripts/bench-llm.mjs tests JSON validity + speed for qwen3:4b vs llama3.2:3b (+ any newer 3–4B); result in Decisions Log; README note on swapping models | Dep: A005, owner installs Ollama
+- [blocked] A010 — Pick & benchmark LLM (needs Ollama) | Spec: §2, §3 | Done: run `node scripts/bench-llm.mjs --pull` (script + tested helpers ready: JSON validity, sensible intents, tok/s, first token, memory, score + recommendation → userdata/bench-llm.json); record the result in the Decisions Log and set DEFAULT_MODEL if another model wins (README already explains swapping) | Dep: A005, owner installs Ollama
 
 ### Phase 2 — Rules Engine
 - [done] A011, A012, A013, A014, A015, A016, A017, A018, A019, A020, A021, A022, A023, A024, A025, A026, A027, A028, A029, A030, A031, A032, A033, A034, A034a, A035, A036, A037, A038, A039, A039b, A039c, A040, A041, A042
@@ -274,7 +274,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 ## File Map
 <!-- path — purpose (grouped by folder; see ARCHITECTURE.md for the big picture) -->
 - Root: `README.md` (player + developer guide, SRD attribution), `solo-dnd-build-prompt.md` (spec), `CLAUDE.md` (loop rules), `brain.md`, `ARCHITECTURE.md`, `ADVENTURE_FORMAT.md` (adventure authoring guide), `CREDITS.md`, `run-loop.bat`, `Setup.bat`/`Start Game.bat` (CRLF → scripts/check-deps.mjs), `.claude/settings.json`, `loop_status.txt` (gitignored), `package.json` (dev/build/test/typecheck/srd:*), `tsconfig.json`, `vite.config.ts` (tests: src/**/*.test.ts(x), tests/**/*.test.ts), `.gitattributes` (*.bat CRLF)
-- `scripts/`: check-deps(-lib).mjs, assets-fetch/audio-fetch/voices-fetch.mjs (+ `assets/*manifest.json`; downloads gitignored), srd-fetch.mjs (→ data/srd/_source), `srd/lib.ts` + `srd/import-{core,equipment,origins,feats,classes,spells,monsters,magic-items}.ts` (`npm run srd:import`)
+- `scripts/`: bench-llm(-lib).mjs (A010 model benchmark, needs Ollama), check-deps(-lib).mjs, assets-fetch/audio-fetch/voices-fetch.mjs (+ `assets/*manifest.json`; downloads gitignored), srd-fetch.mjs (→ data/srd/_source), `srd/lib.ts` + `srd/import-{core,equipment,origins,feats,classes,spells,monsters,magic-items}.ts` (`npm run srd:import`)
 - `data/srd/*.json` (SRD data, complete) + `overrides/` (hand fixes by id) + `rules-tables.json`; `data/world/lore.json`; `data/world/shops.json` (12 shops + region price multipliers); `data/tables/travel-events.json`; `data/companions.json` (4 companions from DESIGN §11); `data/tables/defeat-outcomes.json` (DESIGN §13 Heroic defeat outcomes); `data/tables/sidequests.json` (quest types, sites, antagonists, complications, twists, rewards, patrons, threads); `data/adventures/`: `starter/millbrook_disappearances.json` (starter arc, the default start), `demo/millbrook_demo.json` (demo/test adventure), `arc1/ch1_whispering_fen.json` (main arc chapter 1), `DESIGN.md` + `flags.json` (campaign bible + flag registry; synced by `tests/campaignDesign.test.ts`)
 - engine/core: `rng.ts` (Rng seeded sfc32, getState), `dice.ts` (parse/roll/format, rollD20, formatD20Test), `creature.ts` (Creature/Character schemas, totalLevel)
 - engine/data: `common.ts` (Id/Dice/Cost/Damage/Area/Duration/Effect schemas), `schemas.ts` (all SRD file schemas), `srd.ts` (SrdDatabase), `srdBundle.ts` (loadSrd)
