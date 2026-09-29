@@ -43,6 +43,8 @@ export interface StepResult {
   rolls: D20TestResult[];
   /** Scenes entered during this step (last = current). */
   entered: string[];
+  /** Index in `facts` where the last scene arrival begins (facts before it happened on the way). */
+  arrivalIndex?: number;
   encounter?: string;
   ending?: string;
   items: { itemId: string; quantity: number }[];
@@ -207,6 +209,7 @@ function enterScene(ctx: RunContext, sceneId: string, result: StepResult, depth 
   if (firstVisit) p.visited.push(sceneId);
   ctx.state.location = { adventureId: ctx.adventure.id, sceneId, name: scene.name };
   result.entered.push(sceneId);
+  result.arrivalIndex = result.facts.length;
   if (scene.onEnter && firstVisit) applyOutcome(ctx, scene.onEnter, result, depth + 1);
   fireBeats(ctx, result, depth + 1);
 }

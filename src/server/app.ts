@@ -18,6 +18,9 @@ import { adventureActionPort } from '../engine/adventure/sessionActions';
 import { loadSrd } from '../engine/data/srdBundle';
 import { loadAdventures } from './adventures';
 import { parseIntent } from '../llm/prompts/intent';
+import { LoreSchema } from '../engine/world/lore';
+import loreJson from '../../data/world/lore.json';
+import { llmNarrator } from './narrator';
 
 /** Adventure a new campaign starts with. */
 export const STARTING_ADVENTURE = 'millbrook_demo';
@@ -101,11 +104,15 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   // reloaded page can reconnect and ask for a snapshot. Commands run one at a time, in order.
   // Adventures: the default one starts on new_game (the demo until the starter arc exists, A099).
   const srd = loadSrd();
+  const lore = LoreSchema.parse(loreJson);
   const { adventures, problems } = loadAdventures(opts.adventuresDir ?? path.join(opts.rootDir ?? process.cwd(), 'data', 'adventures'), srd);
   for (const p of problems) app.log.warn({ file: p.file, errors: p.errors }, 'Skipping invalid adventure');
   const defaultAdventure = adventures.has(STARTING_ADVENTURE) ? STARTING_ADVENTURE : [...adventures.keys()][0];
   const session = new GameSession({
-    ...(defaultAdventure && { actions: adventureActionPort(adventures, defaultAdventure, srd, { parseIntent: async (text, ictx) => (await parseIntent(services.llm, text, ictx)).intent }) }),
+    ...(defaultAdventure && { actions: adventureActionPort(adventures, defaultAdventure, srd, {
+        parseIntent: async (text, ictx) => (await parseIntent(services.llm, text, ictx)).intent,
+        narrator: llmNarrator(() => services.llm, lore, srd),
+      }) }),
     saves: {
       save: (slot, meta, state) => saves.save(slot, meta, state).meta,
       autosave: (meta, state) => saves.autosave(meta, state).meta,

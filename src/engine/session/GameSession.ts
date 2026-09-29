@@ -115,9 +115,14 @@ export class GameSession {
     return { type: 'snapshot', state: structuredClone(this.current) };
   }
 
-  addLog(kind: LogEntry['kind'], text: string, speaker?: string): LogEntry {
+  /** Reserves an id for a log entry that is streamed first and logged when complete. */
+  reserveId(): number {
+    return this.current.nextId++;
+  }
+
+  addLog(kind: LogEntry['kind'], text: string, speaker?: string, id?: number): LogEntry {
     const s = this.current;
-    const entry: LogEntry = { id: s.nextId++, kind, text, ...(speaker && { speaker }) };
+    const entry: LogEntry = { id: id ?? s.nextId++, kind, text, ...(speaker && { speaker }) };
     s.log.push(entry);
     if (s.log.length > LOG_LIMIT) s.log.splice(0, s.log.length - LOG_LIMIT);
     this.emit({ type: 'log', entry });
