@@ -5,7 +5,7 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 4 (Phase 3 Character Creation done)
-- **Last completed assignment:** A069
+- **Last completed assignment:** A070
 - **Notes for next session:** Continue the queue: A098/A099 (starter arc; companions/recruit/approval now exist), A088–A093 (3D equipment/wounds/scars), A070 (3D battle map), A076 (dungeon maps + fog), A075b, then A114–A116. A010 still blocked until Ollama is installed (Ollama/Piper not installed on this PC yet). Playable test URLs: `#play-<class>`, `#play-<class>+map`, `#combat-<class>`.
 
 ## Assignment Queue
@@ -37,7 +37,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A068c — Adventure outcomes cost/damage/exhaustion, conditions coins/since, encounter allies, deadline docs
 - [done] A064a — Zone spell hooks (combat/zones.ts)
 - [done] A069 — Async combat narration
-- [todo] A070 — 3D battle map | Spec: §10, §12 | Done: three.js grid with models, orbit/zoom camera, 2D/3D toggle | Dep: A065, A049
+- [done] A070 — 3D battle map (client/three/BattleMap3D.tsx)
 
 ### Phase 6 — Exploration
 - [done] A071
@@ -80,6 +80,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ## Completed Log
 <!-- One line per assignment: A<id> — what was built — key files. Compress into per-phase summaries when long. -->
+- A070 — 3D battle map: three.js board (tiles, raised blocking squares, difficult tint, walls/doors, overlays for reach/zones/AoE, dashed path), KayKit models for characters (maxNpcModels, party first) + side-coloured pawns for monsters, HP/active/target rings, OrbitControls (rotate/zoom/pan), ground-plane picking, fps cap + render-on-change, lazy chunk with 2D fallback, 2D/3D toggle following settings.performance.gridMode — client/three/{BattleMap3D,LazyBattleMap3D,battle3d}.tsx/ts, ui/combat/CombatScreen.tsx
 - A069 — background combat narration: moments from new combat-log lines (every/key/off), CombatNarrationQueue (one running, newest waiting), 'combat' narration kind (90 tokens), narration strip on CombatScreen — adventure/combatNarration.ts, sessionActions.ts, server/narrator.ts, llm/context/narration.ts, combat/encounter.ts (logSeq/logSince)
 - Phase 0–1 (A000–A009, A010 blocked): repo + ARCHITECTURE.md; Vite+Preact client, strict TS, Vitest; Fastify server (/api/health, /ws echo, static + SPA fallback, dev proxy); settings schema + store + /api/settings; LLM layer (LlmProvider, OllamaClient w/ NDJSON streaming + status, deterministic MockLlm, callStructured w/ zod + retry + fallback); TTS layer (PiperTts spawn-per-utterance → WAV, MockTts); /api/status + StatusIndicator; saves (envelope, migration chain, rotating autosaves, /api/saves); Setup.bat / Start Game.bat + scripts/check-deps.mjs. Key dirs: src/server, src/shared, src/llm, src/tts, src/client, scripts/.
 - Phase 2 part 1 (A011–A028): seeded Rng + dice/d20 math (engine/core); core vocabulary + Creature/Character schemas (engine/rules/basics, engine/core/creature); SRD data pipeline (engine/data schemas + SrdDatabase + loadSrd; scripts/srd importers; `npm run srd:fetch`, `npm run srd:import`). Data: 15 conditions (+modifiers), rules tables, 38 weapons, 13 armor, 150 gear, 9 species, 4 backgrounds, 17 feats, 12 classes + 12 subclasses, 339 spells (93 with auto effects), 330 monsters/animals, 271 magic items. Tests per file in src/engine/data/*Data.test.ts.
@@ -116,6 +117,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A070: 3D map uses 1 world unit per square (x→x, y→z); models are scaled to 1.1× their footprint in height; renders only when something changes or a model animates (idle animations keep it rendering at the fps cap, max 60). Monsters use capsule stand-ins until A089. View = the player's toggle, else settings.performance.gridMode (it may load after mount); WebGL failure or a failed chunk load falls back to 2D. Verified with a headless Edge + SwiftShader screenshot of #combat-fighter.
 - A069: Combat narration never blocks: moments are parsed from the encounter log lines after each combat command (crit, unconscious, slain, fight start/end = key; hits/misses/casts only in 'every'; max 4 facts, numbers stripped) and pushed to a CombatNarrationQueue that runs one job at a time and keeps only the newest waiting job. Kind 'combat' prompt: 1–2 short sentences, no numbers, maxTokens 90, 30 s timeout; mock/failed → template = the facts. Encounter.logSeq counts pushed lines so new lines survive the 200-line cap. CombatScreen shows the latest narration (streaming or last log entry) above the action bar.
 - A068c: `cost` is all-or-nothing (short → a fact "You can't afford that" and the outcome stops); StepResult.coins goes negative for payments (session logs "Paid …"). Story `damage` never kills: Heroic floor 1 HP, Hardcore floor 0 with stable death saves. `since` uses the time a flag was last written by an outcome (state.extensions.flagTimes, global across adventures); flags set before A068c have no time → `since` is false. Allies are spawned as `ally_<id>_<n>` named "Allied <Name>" on the party side and act with the companion AI; they get no XP and aren't synced back to the story.
 - A068b: With RunContext.companions the runner applies party outcomes immediately (session passes the roster; old collect-only path kept when no roster). Without db (solver) recruit only writes status/loyalty flags. Bosses: encounter `bosses`, else the single most expensive monster type if it outranks the rest.
@@ -251,7 +253,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - tts: `types.ts`, `piper.ts`, `mock.ts`, `wav.ts`, `provider.ts`, `queue.ts` (TtsQueue: background, drop-oldest, cache, speakable)
 - server: `app.ts` (buildApp: REST, /ws → GameSession, adventures + flag registry + systems + LLM ports), `main.ts`, `port.ts`, `services.ts` (llm/tts/status), `settingsStore.ts`, `saveStore.ts` (atomic saves, rotating autosaves), `adventures.ts` (loadAdventures, loadFlagRegistry), `narrator.ts` (llmNarrator + onError), `notices.ts` (Notices: throttled friendly LLM/TTS problem lines)
 - shared: `protocol.ts` (ClientCommandSchema incl. journal_*, ServerEvent incl. narration/roll/suggestions/objective/journal, parseCommand), `settings.ts`, `save.ts`, `status.ts`, `version.ts`
-- client: `main.tsx`, `index.html`, `styles.css`, `data.ts` (db); `net/gameSocket.ts` (ws + signals + applyEvent); `ui/App.tsx`, `ui/state.ts` (screens; `#creator`, `#quickbuild-<class>`, `#play-<class>`, `#play-<class>+map`), `ui/settingsState.ts` (+applyAccessibility), `ui/SettingsPanel.tsx`, `ui/text.ts`, `ui/StatusIndicator.tsx`, `ui/creator/*` (creator steps), `ui/game/LevelUpPanel.tsx`, `ui/game/{GameScreen,PartyPanel,StoryLog,ActionInput,DiceTray,JournalPanel,WorldMap,InventoryPanel,ShopPanel}.tsx`; `ui/combat/{BattleMap,CombatScreen}.tsx` + `combatDemo.ts` + `dice.ts`; `three/{loader,characterModel,CharacterPreview}`; `audio/AudioManager.ts` (music crossfade, ambience, SFX pools, unlock on first gesture) + `audio/audioLogic.ts` (pickVariant, channelVolume, sfxForEvent)
+- client: `three/BattleMap3D.tsx` (3D battle map) + `three/LazyBattleMap3D.tsx` + `three/battle3d.ts` (pure helpers), `main.tsx`, `index.html`, `styles.css`, `data.ts` (db); `net/gameSocket.ts` (ws + signals + applyEvent); `ui/App.tsx`, `ui/state.ts` (screens; `#creator`, `#quickbuild-<class>`, `#play-<class>`, `#play-<class>+map`), `ui/settingsState.ts` (+applyAccessibility), `ui/SettingsPanel.tsx`, `ui/text.ts`, `ui/StatusIndicator.tsx`, `ui/creator/*` (creator steps), `ui/game/LevelUpPanel.tsx`, `ui/game/{GameScreen,PartyPanel,StoryLog,ActionInput,DiceTray,JournalPanel,WorldMap,InventoryPanel,ShopPanel}.tsx`; `ui/combat/{BattleMap,CombatScreen}.tsx` + `combatDemo.ts` + `dice.ts`; `three/{loader,characterModel,CharacterPreview}`; `audio/AudioManager.ts` (music crossfade, ambience, SFX pools, unlock on first gesture) + `audio/audioLogic.ts` (pickVariant, channelVolume, sfxForEvent)
 
 ## Gotchas & Lessons
 - Big chapters can't be solved start-to-finish (solver hits node limits even at 60k): solve in legs, each with a stand-in ending that fires on the leg's milestone flag (tests/arc1Ch2.test.ts pattern).

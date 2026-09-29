@@ -22,6 +22,8 @@ import { budgetOf, currentId, movementLeft } from '../../../engine/combat/turns'
 import type { Character } from '../../../engine/core/creature';
 import { db } from '../../data';
 import { BattleMap } from './BattleMap';
+import { BattleMap3D } from '../../three/LazyBattleMap3D';
+import { settings } from '../settingsState';
 
 type Mode =
   | { kind: 'move' }
@@ -44,6 +46,9 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
   const [studySkill, setStudySkill] = useState<StudySkill>('arcana');
   const [influenceSkill, setInfluenceSkill] = useState<InfluenceSkill>('intimidation');
   const [drag, setDrag] = useState(false);
+  // The player's toggle wins; until then follow the performance setting (it may load after mount).
+  const [chosenView, setView] = useState<'2d' | '3d' | null>(null);
+  const view = chosenView ?? settings.value?.performance.gridMode ?? '2d';
   const { state } = enc;
   // The player acts for the hero and any companion toggled to player control.
   const upNow = currentId(state.turns);
@@ -158,19 +163,25 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
       </header>
       <main class="combat-main">
         <div class="battle-wrap">
-          <BattleMap
-            grid={state.grid}
-            creatures={state.creatures}
-            sides={sides}
-            {...(activeId && { activeId })}
-            reachable={reachKeys}
-            targets={targets}
-            {...(aoe && { aoe })}
-            zones={zoneKeys}
-            {...(hoverPath && { path: [{ x: state.grid.tokens[heroId]!.x, y: state.grid.tokens[heroId]!.y }, ...hoverPath] })}
-            onSquare={onSquare}
-            onHover={setHover}
-          />
+          {(() => {
+            const mapProps = {
+              grid: state.grid,
+              creatures: state.creatures,
+              sides,
+              ...(activeId && { activeId }),
+              reachable: reachKeys,
+              targets,
+              ...(aoe && { aoe }),
+              zones: zoneKeys,
+              ...(hoverPath && { path: [{ x: state.grid.tokens[heroId]!.x, y: state.grid.tokens[heroId]!.y }, ...hoverPath] }),
+              onSquare,
+              onHover: setHover,
+            };
+            return view === '3d' ? <BattleMap3D {...mapProps} onUnavailable={() => setView('2d')} /> : <BattleMap {...mapProps} />;
+          })()}
+          <button type="button" class="view-toggle" onClick={() => setView(view === '3d' ? '2d' : '3d')} title="Switch between the 3D map and the 2D token map">
+            {view === '3d' ? '2D map' : '3D map'}
+          </button>
         </div>
         {narration && (
           <p class="combat-narration" aria-live="polite">
