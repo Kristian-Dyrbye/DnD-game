@@ -28,6 +28,8 @@ export type ClientCommand = z.infer<typeof ClientCommandSchema>;
 export interface SuggestedAction {
   id: string;
   label: string;
+  /** Free-text suggestion: clicking sends this as a `say` command instead of `choose`. */
+  say?: string;
 }
 
 export type ServerEvent =

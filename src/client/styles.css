@@ -289,3 +289,4 @@ input[type='color'] { width: 2.2rem; height: 1.8rem; border: 1px solid #4a3f30; 
 .last-roll:not(.rolling) .die.d20.kept { animation: die-land 0.25s ease-out; }
 @keyframes die-land { from { transform: scale(1.25); } to { transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) { .die.d20.tumbling, .last-roll .die.d20.kept { animation: none; } }
+.suggestions button.idea { border-style: dashed; font-style: italic; }

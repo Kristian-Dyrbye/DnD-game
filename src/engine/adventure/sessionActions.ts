@@ -5,21 +5,30 @@
  */
 import type { SrdDatabase } from '../data/srd';
 import type { ActionPort, GameSession } from '../session/GameSession';
-import { availableActions, getProgress, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
+import { availableActions, getProgress, type AvailableAction, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
 import type { Adventure } from './schema';
 import { intentContext, keywordIntent, validateIntent, type Intent, type IntentContext } from './intent';
 import { narrateInto, type Narrator } from './narration';
 import { resolveIntent } from './resolve';
+import { dataSuggestions, mergeSuggestions, type SuggestionIdea } from './suggestions';
 
 export interface AdventurePortOptions {
   /** Free text → Intent (the LLM parser on the server). Defaults to the keyword parser. */
   parseIntent?: (text: string, ictx: IntentContext) => Promise<Intent>;
   /** Streams narration (the LLM on the server). Without it, template narration is used. */
   narrator?: Narrator;
+  /** Contextual action ideas (the LLM). Without it, only the data-driven buttons are shown. */
+  suggester?: (ctx: RunContext, offered: AvailableAction[]) => Promise<SuggestionIdea[]>;
 }
 
-export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, defaultId: string, db?: SrdDatabase, opts: AdventurePortOptions = {}): ActionPort {
+/** The ActionPort plus a hook for tests to wait for background suggestion calls. */
+export interface AdventureActionPort extends ActionPort {
+  idle(): Promise<void>;
+}
+
+export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, defaultId: string, db?: SrdDatabase, opts: AdventurePortOptions = {}): AdventureActionPort {
   const parse = opts.parseIntent ?? (async (text: string, ictx: IntentContext) => keywordIntent(text, ictx));
+  let pendingIdeas: Promise<void> = Promise.resolve();
   const ctxFor = (session: GameSession): RunContext => {
     const id = getProgress(session.current)?.adventureId ?? defaultId;
     const adventure = adventures.get(id);
@@ -66,8 +75,19 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     }
   };
 
+  // Data-driven buttons at once; LLM ideas replace them when they arrive, unless the player has
+  // acted in the meantime (the log moved on). Never awaited, so it never slows a turn down.
   const offer = (session: GameSession, ctx: RunContext) => {
-    session.suggest(availableActions(ctx).map((a) => ({ id: a.id, label: a.check ? `${a.label} (${a.check})` : a.label })));
+    const offered = availableActions(ctx);
+    session.suggest(dataSuggestions(offered));
+    if (!opts.suggester || offered.length === 0) return;
+    const stamp = session.current.nextId;
+    pendingIdeas = opts
+      .suggester(ctx, offered)
+      .then((ideas) => {
+        if (ideas.length && session.running && session.current.nextId === stamp) session.suggest(mergeSuggestions(offered, ideas));
+      })
+      .catch(() => undefined);
   };
 
   const finish = async (session: GameSession, ctx: RunContext, r: StepResult, playerAction?: string) => {
@@ -77,6 +97,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
   };
 
   return {
+    idle: () => pendingIdeas,
     async begin(session) {
       const ctx = ctxFor(session);
       if (!getProgress(session.current)) await publish(session, ctx, startAdventure(ctx));

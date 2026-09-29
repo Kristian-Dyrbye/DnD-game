@@ -16,7 +16,7 @@ export function ActionInput() {
     <section class="action-input" aria-label="Your actions">
       <div class="suggestions">
         {suggestions.value.map((a) => (
-          <button key={a.id} type="button" disabled={offline} onClick={() => send({ type: 'choose', actionId: a.id })}>
+          <button key={a.id} type="button" disabled={offline} class={a.say ? 'idea' : undefined} onClick={() => send(a.say ? { type: 'say', text: a.say } : { type: 'choose', actionId: a.id })}>
             {a.label}
           </button>
         ))}
