@@ -6,7 +6,7 @@
 - **State:** IN PROGRESS
 - **Current phase:** 4 (Phase 3 Character Creation done)
 - **Last completed assignment:** A058
-- **Notes for next session:** Start with A059 (rolling story summary). The demo adventure (data/adventures/demo/millbrook_demo.json) is playable end to end on the main game screen; `#play-<class>` opens it directly. Phase 2 engine is complete except zone spells (A064a). A060 (grid/LOS/cover) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Notes for next session:** Start with A059 (rolling story summary). The demo adventure (data/adventures/demo/millbrook_demo.json) is playable end to end on the main game screen; `#play-<class>` opens it directly. Phase 2 engine is complete except zone spells (A064a). A061 (movement + opportunity attacks) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -25,14 +25,13 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A011, A012, A013, A014, A015, A016, A017, A018, A019, A020, A021, A022, A023, A024, A025, A026, A027, A028, A029, A030, A031, A032, A033, A034, A034a, A035, A036, A037, A038, A039, A039b, A039c, A040, A041, A042
 
 ### Phase 3 — Character Creation
-- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A046b, A047, A048, A049, A050, A051, A052, A053, A054, A055, A056, A057, A058, A100
+- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A046b, A047, A048, A049, A050, A051, A052, A053, A054, A055, A056, A057, A058, A060, A100
 
 ### Phase 4 — Narration Loop
 - [todo] A059 — Rolling story summary | Spec: §3 | Done: summarize after each scene, stored in state, used instead of transcript; tests | Dep: A057
 
 ### Phase 5 — Grid Combat
-- [in-progress (helper)] A060 — Grid model, LOS, cover | Spec: §10 | Done: squares, terrain, walls, LOS, half/three-quarters cover; tests | Dep: A012
-- [todo] A061 — Movement + opportunity attacks | Spec: §10 | Done: reachable squares with difficult terrain, OA triggers, disengage; tests | Dep: A060
+- [in-progress (helper)] A061 — Movement + opportunity attacks | Spec: §10 | Done: reachable squares with difficult terrain, OA triggers, disengage; tests | Dep: A060
 - [todo] A062 — Initiative, turns, action economy | Spec: §10 | Done: initiative order, turn manager, action/bonus/reaction/move/object tracking; tests | Dep: A061, A029
 - [todo] A063 — Combat actions | Spec: §10 | Done: attack (ranges, long range/adjacent disadvantage), dash, disengage, dodge, help, hide, ready, grapple, shove, 2024 versions; mastery wired; tests | Dep: A062, A038
 - [todo] A064 — AoE templates | Spec: §10 | Done: cone, cube, sphere, line, cylinder → affected squares/creatures; tests | Dep: A060
@@ -133,6 +132,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A060 (helper): Grid is plain JSON (GridSchema): cells stored sparsely by "x,y" (terrain normal/difficult, blocking, coverObstacle half/three_quarters, hazards), edges stored once as N/W of a square ("x,y,N"/"x,y,W"; wall or door{open}), tokens {id,x,y(top-left),size}. Every square 5 ft incl. diagonals (Chebyshev). Cover: best attacker corner → 4 corners of each target square; 1–2 blocked half, 3 three-quarters, 4/no LOS total; creatures give half cover max; sources don't stack. Corner-grazing doesn't block; diagonal pillar pairs/wall joints do. Arrow slits = thick blocking squares with a gap. For A061: canStep only checks walls/blocking; large creatures use canPlace per step; diagonal past one pillar corner allowed. For A064: traceLine works corner-to-corner; use it for "effect reaches square".
 - A058: Suggestions = data buttons immediately; the LLM suggester runs in the background (not awaited) and its merged list replaces the buttons only if the log hasn't moved on (stamp = state.nextId). Ideas that aren't offered actions become `say` buttons (dashed style) that go through intent parsing. Offered actions/exits are always kept (max 7 buttons total; up to 5 ideas). adventureActionPort now returns AdventureActionPort with idle() for tests.
 - A057: Narration is injected into the engine as a `Narrator` port (engine must not import llm). Order per action: rolls → narration (awaited, streamed) → system lines (items/XP) → ending → auto-encounter. Mock provider → template narration (canned mock prose ignores facts). On mid-stream failure the partial text is discarded and the template is logged under the same entry id (client replaces the streaming text). Narration params: temp 0.8, 450 tokens, 90 s timeout. Commands are serial, so the next command waits for narration to finish (fine outside combat; A069 makes combat narration async).
 - A056: Free-text resolution order: offered action → authored check (action or gated exit) with the same skill → improvised check at SRD DC tier (adventure `improvisedDifficulty` default medium=15, scene override) that yields a fact only (no flags/loot) and can be tried once per skill+target per scene entry (progress.entries). attack → an offered action whose outcome starts an encounter, else refused. talk/look/move/rest/use_item/cast_spell produce plain facts for now (dialogue A057+, rest system later). Keyword parser: skill verbs beat a keyword match unless the verb is in that action's label/keywords.
@@ -281,6 +281,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/adventure/suggestions.ts` — dataSuggestions (offered actions, pad with Look around), mergeSuggestions (LLM ideas first, never hides offered actions, max 7)
 - `src/llm/prompts/suggest.ts` — suggestIdeas(provider, narrationContext, offered) → SuggestionIdea[] ([] for mock/failure)
 - `src/llm/prompts/intent.ts` — intentMessages + parseIntent(provider, text, ictx) (callStructured; mock provider → keywords directly)
+- `src/engine/combat/grid.ts` — Grid model (cells/edges/tokens, footprints, distanceFt/isAdjacent/withinReach, canStep/canPlace)
+- `src/engine/combat/los.ts` — traceLine, hasLineOfSight, computeCover (+COVER_BONUS)
 - `src/shared/protocol.ts` — ClientCommandSchema (ping/new_game/get_state/say/choose/save/load), ServerEvent union, parseCommand
 - `src/engine/session/gameState.ts` — GameStateSchema (hero, companions, location, time, flags, log, summary, rolls, extensions), LOG_LIMIT/ROLL_LIMIT
 - `src/engine/session/GameSession.ts` — GameSession (handle/on/emit, addLog/addRoll/suggest, autosave, snapshot) + SavePort/ActionPort + newGameState
