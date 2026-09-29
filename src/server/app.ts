@@ -41,7 +41,7 @@ import { llmSummarizer } from '../llm/prompts/summary';
 import { gatherNarrationContext } from '../llm/context/gather';
 
 /** Adventure a new campaign starts with. */
-export const STARTING_ADVENTURE = 'millbrook_demo';
+export const STARTING_ADVENTURE = 'millbrook_disappearances';
 import { backstoryMessages, templateBackstory, type BackstorySummary } from '../llm/prompts/backstory';
 
 export interface AppOptions {

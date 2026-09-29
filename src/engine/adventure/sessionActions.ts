@@ -131,9 +131,26 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       session.addLog('system', p.status === 'waiting' ? `${def.name} will wait for you.` : p.status === 'left' ? `${def.name} leaves the party.` : p.status === 'betrayed' ? `${def.name} has betrayed you!` : `${def.name} is dead.`);
     }
     for (const c of r.reputation ?? []) if (!c.ripple || c.newTier) session.addLog('system', describeChange(c, opts.lore));
+    for (const tip of r.tips ?? []) {
+      const seen = (session.current.extensions.tipsSeen as string[] | undefined) ?? [];
+      if (seen.includes(tip)) continue;
+      session.current.extensions.tipsSeen = [...seen, tip];
+      session.addLog('system', `Tip: ${tip}`);
+    }
     if (r.ending) {
       const end = ctx.adventure.endings.find((e) => e.id === r.ending);
       session.addLog('narration', end?.text ?? 'The adventure ends.');
+      // The campaign goes on: the next chapter starts where this one ended (spec §7.2).
+      const next = end?.next ? adventures.get(end.next) : undefined;
+      if (next) {
+        const done = (session.current.extensions.completedAdventures as { id: string; ending: string }[] | undefined) ?? [];
+        session.current.extensions.completedAdventures = [...done, { id: ctx.adventure.id, ending: r.ending }];
+        session.addLog('system', `— ${next.name} —`);
+        const nextCtx: RunContext = { ...ctx, adventure: next };
+        await publish(session, nextCtx, startAdventure(nextCtx));
+        session.autosave();
+        return;
+      }
     }
     if (r.encounter) {
       const def = ctx.adventure.encounters.find((e) => e.id === r.encounter);

@@ -1,0 +1,2691 @@
+{
+  "formatVersion": 1,
+  "id": "millbrook_disappearances",
+  "name": "The Millbrook Disappearances",
+  "arcId": "starter",
+  "kind": "starter",
+  "levelRange": [
+    1,
+    2
+  ],
+  "regionId": "aurelmark",
+  "summary": "Villagers vanish from Millbrook; a cult of hunger digs beneath Gallows Hill for the first of seven Teeth. Teaches exploration, talk, skill checks, grid combat, rest, shops, companions and travel.",
+  "start": {
+    "chapter": "starter",
+    "scene": "millbrook_arrival"
+  },
+  "improvisedDifficulty": "easy",
+  "chapters": [
+    {
+      "id": "starter",
+      "name": "The Millbrook Disappearances",
+      "summary": "From the chalked sigil at the well to the altar under Gallows Hill, and onto the road.",
+      "start": "millbrook_arrival",
+      "scenes": [
+        {
+          "id": "millbrook_arrival",
+          "name": "Millbrook Green",
+          "locationId": "millbrook",
+          "mood": "uneasy",
+          "seed": "Millbrook's green at dusk: shutters slamming one after another, a dog howling at the old well, the chapel bell silent. Four villagers have vanished in two weeks and nobody stays out after dark.",
+          "variants": [
+            {
+              "if": {
+                "timeOfDay": [
+                  "dawn",
+                  "day"
+                ]
+              },
+              "seed": "By daylight the village pretends to be normal: carts, chickens, the smell of bread. People still glance at Gallows Hill before they speak."
+            },
+            {
+              "if": {
+                "flag": "~altar_won"
+              },
+              "seed": "Word of the barrow has spread. Doors that were barred now stand open, and people nod as you pass."
+            },
+            {
+              "if": {
+                "flag": "world.corwin_status",
+                "eq": "in_party"
+              },
+              "seed": "Ser Corwin walks beside you, still stiff from the chains, greeting every child by name."
+            }
+          ],
+          "onEnter": {
+            "text": "You reach Millbrook as the light goes: shutters slam, a door is barred behind a frightened face, and somewhere a dog will not stop howling at the well.",
+            "minutes": 600,
+            "tip": "Places of interest in a scene have their own actions. Look around, or type what you want to do in your own words."
+          },
+          "npcs": [],
+          "pois": [
+            {
+              "id": "well",
+              "name": "The Well",
+              "seed": "An old stone well with a rope-worn lip. Something is chalked on the capstone.",
+              "actions": [
+                {
+                  "id": "examine",
+                  "label": "Examine the well",
+                  "once": true,
+                  "keywords": [
+                    "well",
+                    "chalk",
+                    "sigil"
+                  ],
+                  "outcome": {
+                    "text": "Chalked on the capstone: a black mouth ringed with seven teeth. It is fresh — the chalk still smears.",
+                    "flags": [
+                      {
+                        "set": "~sigil_found",
+                        "value": true
+                      }
+                    ],
+                    "tip": "Clues you find are worth writing down: the Journal button keeps your own notes."
+                  }
+                },
+                {
+                  "id": "sigil_lore",
+                  "label": "Recall what the sigil means (Religion DC 10)",
+                  "if": {
+                    "flag": "~sigil_found"
+                  },
+                  "once": true,
+                  "check": {
+                    "dc": 10,
+                    "success": {
+                      "text": "The mouth and seven teeth: the old mark of Vashkul, the Hungering Dark of the fen-tales. Someone here worships hunger itself.",
+                      "flags": [
+                        {
+                          "set": "~sigil_known",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "It tugs at a memory of fen-tales and sermons, but the meaning slips away."
+                    },
+                    "skill": "religion"
+                  }
+                },
+                {
+                  "id": "footprints",
+                  "label": "Study the wet footprints (Investigation DC 12)",
+                  "once": true,
+                  "keywords": [
+                    "footprints",
+                    "tracks",
+                    "mud"
+                  ],
+                  "check": {
+                    "dc": 12,
+                    "success": {
+                      "text": "Several people, barefoot, walking in step. The mud on their heels is the grey clay of the barrow on Gallows Hill.",
+                      "flags": [
+                        {
+                          "set": "~tracks_read",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Wet prints lead away from the well toward Gallows Hill, but the rain has blurred them."
+                    },
+                    "skill": "investigation"
+                  }
+                },
+                {
+                  "id": "rat",
+                  "label": "Investigate the scurrying at the well",
+                  "if": {
+                    "all": [
+                      {
+                        "timeOfDay": [
+                          "dusk",
+                          "night"
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "~rat_seen"
+                        }
+                      }
+                    ]
+                  },
+                  "once": true,
+                  "outcome": {
+                    "text": "Something big and grey bolts out from the well's shadow, teeth bared.",
+                    "flags": [
+                      {
+                        "set": "~rat_seen",
+                        "value": true
+                      }
+                    ],
+                    "encounter": "well_rat",
+                    "tip": "In combat you act on the battle map: move, attack, then End turn. Enemies act in initiative order."
+                  }
+                }
+              ]
+            },
+            {
+              "id": "chapel",
+              "name": "Chapel of Solenne",
+              "seed": "A small chapel of the dawn goddess, candles guttering. A kneeler is worn smooth where someone prays every night.",
+              "actions": [
+                {
+                  "id": "pray",
+                  "label": "Say a prayer for the missing",
+                  "once": true,
+                  "outcome": {
+                    "text": "The candles steady for a moment. On the kneeler someone has carved four names: Pip, Tobin, Maddy, Moll.",
+                    "flags": [
+                      {
+                        "set": "~names_seen",
+                        "value": true
+                      }
+                    ],
+                    "minutes": 10
+                  }
+                }
+              ]
+            },
+            {
+              "id": "shop_front",
+              "name": "Marrow's General Goods",
+              "seed": "A crooked shopfront with a hand-painted sign. Shuttered at night; by day Widow Marrow's voice carries into the street."
+            }
+          ],
+          "actions": [
+            {
+              "id": "listen",
+              "label": "Listen to the village (passive Perception)",
+              "once": true,
+              "check": {
+                "dc": 10,
+                "success": {
+                  "text": "Behind a shutter a woman whispers: 'the hill took them, the hill and the hooded brother'."
+                },
+                "failure": {
+                  "text": "Only the dog and the wind."
+                },
+                "skill": "perception"
+              }
+            },
+            {
+              "id": "wait_evening",
+              "label": "Wait until morning",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~altar_won"
+                  },
+                  {
+                    "hours": {
+                      "from": 17,
+                      "to": 24
+                    }
+                  }
+                ]
+              },
+              "outcome": {
+                "text": "You doze on the chapel steps until the sun comes up.",
+                "minutes": 660
+              }
+            },
+            {
+              "id": "wait_night",
+              "label": "Wait until morning",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~altar_won"
+                  },
+                  {
+                    "hours": {
+                      "from": 0,
+                      "to": 5
+                    }
+                  }
+                ]
+              },
+              "outcome": {
+                "text": "You doze on the chapel steps until the sun comes up.",
+                "minutes": 360
+              }
+            }
+          ],
+          "exits": [
+            {
+              "id": "tavern",
+              "label": "Go into the Plough and Lantern",
+              "to": "plough_tavern_talk",
+              "minutes": 2
+            },
+            {
+              "id": "hill",
+              "label": "Follow the tracks toward Gallows Hill",
+              "to": "gallows_hill_trail",
+              "if": {
+                "any": [
+                  {
+                    "flag": "~barrow_key"
+                  },
+                  {
+                    "flag": "~tracks_read"
+                  }
+                ]
+              },
+              "minutes": 20
+            },
+            {
+              "id": "shop",
+              "label": "Visit Marrow's shop and the chapel",
+              "to": "marrows_goods_and_oath",
+              "if": {
+                "all": [
+                  {
+                    "timeOfDay": [
+                      "dawn",
+                      "day"
+                    ]
+                  },
+                  {
+                    "flag": "~altar_won"
+                  }
+                ]
+              },
+              "minutes": 5
+            },
+            {
+              "id": "road",
+              "label": "Take the road south",
+              "to": "road_south",
+              "if": {
+                "flag": "~oath_done"
+              },
+              "minutes": 10
+            }
+          ]
+        },
+        {
+          "id": "plough_tavern_talk",
+          "name": "The Plough and Lantern",
+          "locationId": "millbrook",
+          "mood": "tavern",
+          "seed": "A low, smoky taproom. Reeve Hollis Tamsin drinks alone at the hearth. Miller Oda Hallard weeps in a corner and flinches whenever the door opens.",
+          "variants": [
+            {
+              "if": {
+                "not": {
+                  "flag": "~altar_won"
+                }
+              },
+              "seed": "A big man in a threadbare surcoat of the Dawn Lance is arguing with the Reeve: 'Let me search the hill!' — 'You were dismissed from the Lance, Ashvale. Sit down.'"
+            },
+            {
+              "if": {
+                "flag": "~altar_won"
+              },
+              "seed": "The taproom is loud with relief. Somebody has pinned the barrow key above the bar like a trophy."
+            }
+          ],
+          "npcs": [
+            "reeve_tamsin",
+            "oda_hallard"
+          ],
+          "onEnter": {
+            "text": "The knight — Ser Corwin Ashvale — slams a coin on the bar and storms out into the night, toward the hill.",
+            "tip": "Talking can be done with the buttons or in your own words. Skills like Persuasion and Insight are rolled for you, with the math shown in the dice tray."
+          },
+          "actions": [
+            {
+              "id": "persuade_reeve",
+              "label": "Ask the Reeve for help (Persuasion DC 12)",
+              "if": {
+                "not": {
+                  "flag": "~barrow_key"
+                }
+              },
+              "once": true,
+              "check": {
+                "dc": 12,
+                "success": {
+                  "text": "The Reeve looks at you properly for the first time. He slides over a list of the missing — and an iron key. 'The old barrow gate. God help you.'",
+                  "flags": [
+                    {
+                      "set": "arc.starter.reeve_attitude",
+                      "value": "friendly"
+                    },
+                    {
+                      "set": "arc.starter.missing_list",
+                      "value": true
+                    },
+                    {
+                      "set": "~barrow_key",
+                      "value": true
+                    }
+                  ],
+                  "items": [],
+                  "tip": "Showing evidence (like the sigil) can give you advantage on a check."
+                },
+                "failure": {
+                  "text": "'I've buried enough strangers' good intentions,' he mutters, but his hand strays to the key on his belt.",
+                  "flags": [
+                    {
+                      "set": "~reeve_refused",
+                      "value": true
+                    }
+                  ]
+                },
+                "skill": "persuasion",
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~sigil_found"
+                    },
+                    "source": "showed him the sigil"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "intimidate_reeve",
+              "label": "Demand the barrow key (Intimidation DC 10)",
+              "if": {
+                "not": {
+                  "flag": "~barrow_key"
+                }
+              },
+              "once": true,
+              "check": {
+                "dc": 10,
+                "success": {
+                  "text": "The Reeve's face hardens, but he tosses the key onto the table. 'Take it. And don't come back here.'",
+                  "flags": [
+                    {
+                      "set": "arc.starter.reeve_attitude",
+                      "value": "hostile"
+                    },
+                    {
+                      "set": "~barrow_key",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "Half the taproom stands up. The Reeve does not move.",
+                  "flags": [
+                    {
+                      "set": "~reeve_refused",
+                      "value": true
+                    }
+                  ]
+                },
+                "skill": "intimidation"
+              }
+            },
+            {
+              "id": "deposit",
+              "label": "Pay the Reeve a 5 gp 'deposit' for the key",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~reeve_refused"
+                  },
+                  {
+                    "not": {
+                      "flag": "~barrow_key"
+                    }
+                  }
+                ]
+              },
+              "outcome": {
+                "cost": 500,
+                "text": "The coins vanish into his coat. The key clinks onto the table.",
+                "flags": [
+                  {
+                    "set": "~barrow_key",
+                    "value": true
+                  }
+                ]
+              }
+            },
+            {
+              "id": "insight_oda",
+              "label": "Watch Miller Oda (Insight DC 13)",
+              "once": true,
+              "check": {
+                "dc": 13,
+                "success": {
+                  "text": "Her grief is real, but so is her guilt: she keeps touching an empty purse.",
+                  "flags": [
+                    {
+                      "set": "~oda_guilty",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "A mother crying for her son. Nothing more to see."
+                },
+                "skill": "insight"
+              }
+            },
+            {
+              "id": "oda_confess",
+              "label": "Gently ask Oda what she's hiding (Persuasion DC 11)",
+              "if": {
+                "flag": "~oda_guilty"
+              },
+              "once": true,
+              "check": {
+                "dc": 11,
+                "success": {
+                  "text": "'A hooded brother came down from the hill. He paid me to leave the mill after dark — he wanted the grain from my stones. I didn't know he'd take Pip!'",
+                  "flags": [
+                    {
+                      "set": "arc.starter.missing_list",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "She shakes her head and hides her face."
+                },
+                "skill": "persuasion"
+              }
+            },
+            {
+              "id": "brawl",
+              "label": "Pick a fight with the loudmouths at the bar",
+              "if": {
+                "not": {
+                  "flag": "~brawled"
+                }
+              },
+              "once": true,
+              "outcome": {
+                "text": "Two farmhands are only too happy to oblige. Fists only.",
+                "flags": [
+                  {
+                    "set": "~brawled",
+                    "value": true
+                  }
+                ],
+                "encounter": "tavern_brawl"
+              }
+            },
+            {
+              "id": "sleep_free",
+              "label": "Sleep in the room the Reeve pays for (long rest)",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~altar_won"
+                  },
+                  {
+                    "flag": "arc.starter.reeve_attitude",
+                    "eq": "friendly"
+                  }
+                ]
+              },
+              "check": {
+                "dc": 10,
+                "success": {
+                  "rest": "long",
+                  "text": "In the night the black Tooth whispers. A woman's voice, cultured and sad, sings: 'you will never want again.' You remember every note.",
+                  "flags": [
+                    {
+                      "set": "arc.starter.dream_heard",
+                      "value": true
+                    },
+                    {
+                      "set": "~slept",
+                      "value": true
+                    }
+                  ],
+                  "tip": "A long rest restores Hit Points, Hit Dice and spell slots. Level up from your character card when you have enough XP."
+                },
+                "failure": {
+                  "rest": "long",
+                  "text": "You wake before dawn, shaking, the words 'never want again' still in your ears.",
+                  "flags": [
+                    {
+                      "set": "~slept",
+                      "value": true
+                    }
+                  ]
+                },
+                "save": "wis"
+              }
+            },
+            {
+              "id": "sleep_paid",
+              "label": "Rent a room for 5 sp and sleep (long rest)",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~altar_won"
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.starter.reeve_attitude",
+                      "eq": "friendly"
+                    }
+                  }
+                ]
+              },
+              "check": {
+                "dc": 10,
+                "success": {
+                  "cost": 50,
+                  "rest": "long",
+                  "text": "In the night the black Tooth whispers. A woman's voice, cultured and sad, sings: 'you will never want again.' You remember every note.",
+                  "flags": [
+                    {
+                      "set": "arc.starter.dream_heard",
+                      "value": true
+                    },
+                    {
+                      "set": "~slept",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "cost": 50,
+                  "rest": "long",
+                  "text": "You wake before dawn, shaking, the words 'never want again' still in your ears.",
+                  "flags": [
+                    {
+                      "set": "~slept",
+                      "value": true
+                    }
+                  ]
+                },
+                "save": "wis"
+              }
+            }
+          ],
+          "exits": [
+            {
+              "id": "out",
+              "label": "Step back out onto the green",
+              "to": "millbrook_arrival",
+              "minutes": 2
+            }
+          ]
+        },
+        {
+          "id": "gallows_hill_trail",
+          "name": "Gallows Hill Track",
+          "locationId": "millbrook",
+          "mood": "tense",
+          "seed": "A muddy track along the flooded millrace, through bramble, up to a grassy mound crowned with an old gibbet. Two hooded figures keep watch on the barrow mound.",
+          "variants": [
+            {
+              "if": {
+                "flag": "~barrow_alerted"
+              },
+              "seed": "A bone chime rattles on the mound. The lookouts are gone — inside, and waiting."
+            }
+          ],
+          "actions": [
+            {
+              "id": "track",
+              "label": "Follow the barefoot tracks (Survival DC 12)",
+              "once": true,
+              "check": {
+                "dc": 12,
+                "success": {
+                  "text": "The tracks lead true, along the millrace to a ford.",
+                  "flags": [
+                    {
+                      "set": "~tracked",
+                      "value": true
+                    }
+                  ],
+                  "tip": "Some checks have advantage when you know more — the missing list names where Pip was taken."
+                },
+                "failure": {
+                  "text": "You lose the trail in the bramble and cast about for an hour. Something whines in the dark — stirges.",
+                  "minutes": 60,
+                  "flags": [
+                    {
+                      "set": "~tracked",
+                      "value": true
+                    }
+                  ],
+                  "encounter": "stirge_nest"
+                },
+                "skill": "survival",
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "arc.starter.missing_list"
+                    },
+                    "source": "the missing list names the spot"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "ford_athletics",
+              "label": "Wade the millrace (Athletics DC 10)",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~tracked"
+                  },
+                  {
+                    "not": {
+                      "flag": "~crossed"
+                    }
+                  }
+                ]
+              },
+              "check": {
+                "dc": 10,
+                "success": {
+                  "text": "You brace against the current and make the far bank.",
+                  "flags": [
+                    {
+                      "set": "~crossed",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "The current knocks you against the stones before you haul yourself out, soaked.",
+                  "flags": [
+                    {
+                      "set": "~crossed",
+                      "value": true
+                    }
+                  ],
+                  "damage": {
+                    "dice": "1d4",
+                    "type": "bludgeoning"
+                  }
+                },
+                "skill": "athletics"
+              }
+            },
+            {
+              "id": "ford_acrobatics",
+              "label": "Hop across on the stones (Acrobatics DC 12)",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~tracked"
+                  },
+                  {
+                    "not": {
+                      "flag": "~crossed"
+                    }
+                  }
+                ]
+              },
+              "check": {
+                "dc": 12,
+                "success": {
+                  "text": "Stone to stone, dry-footed.",
+                  "flags": [
+                    {
+                      "set": "~crossed",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "A stone rolls; you land hard in the shallows.",
+                  "flags": [
+                    {
+                      "set": "~crossed",
+                      "value": true
+                    }
+                  ],
+                  "damage": {
+                    "dice": "1d4",
+                    "type": "bludgeoning"
+                  }
+                },
+                "skill": "acrobatics"
+              }
+            },
+            {
+              "id": "sneak",
+              "label": "Creep up on the barrow (Stealth DC 13)",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~crossed"
+                  },
+                  {
+                    "not": {
+                      "flag": "~approached"
+                    }
+                  }
+                ]
+              },
+              "check": {
+                "dc": 13,
+                "success": {
+                  "text": "You slip past the lookouts' backs to the barrow door. They never turn.",
+                  "flags": [
+                    {
+                      "set": "arc.starter.ambush_avoided",
+                      "value": true
+                    },
+                    {
+                      "set": "~approached",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "A twig snaps. A lookout shakes a bone chime and both vanish into the barrow. They know you're coming.",
+                  "flags": [
+                    {
+                      "set": "~barrow_alerted",
+                      "value": true
+                    },
+                    {
+                      "set": "~approached",
+                      "value": true
+                    }
+                  ]
+                },
+                "skill": "stealth"
+              }
+            }
+          ],
+          "exits": [
+            {
+              "id": "barrow",
+              "label": "Unlock the barrow gate and go in",
+              "to": "barrow_of_the_first_sheaf",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~approached"
+                  },
+                  {
+                    "flag": "~barrow_key"
+                  }
+                ]
+              },
+              "minutes": 5
+            },
+            {
+              "id": "force",
+              "label": "Force the barrow gate (Athletics DC 14)",
+              "to": "barrow_of_the_first_sheaf",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~approached"
+                  },
+                  {
+                    "not": {
+                      "flag": "~barrow_key"
+                    }
+                  }
+                ]
+              },
+              "minutes": 10,
+              "check": {
+                "dc": 14,
+                "success": {
+                  "text": "The rusted gate gives with a shriek."
+                },
+                "failure": {
+                  "text": "The gate holds. Perhaps the Reeve has a key."
+                },
+                "skill": "athletics"
+              }
+            },
+            {
+              "id": "back",
+              "label": "Return to the village",
+              "to": "millbrook_arrival",
+              "minutes": 20
+            }
+          ]
+        },
+        {
+          "id": "barrow_of_the_first_sheaf",
+          "name": "Barrow: Root Hall",
+          "locationId": "millbrook",
+          "mood": "dungeon",
+          "map": {
+            "id": "barrow",
+            "room": "root_hall"
+          },
+          "seed": "A long hall of packed earth and old stone, split by roots as thick as a man. Rats the size of dogs scatter from the torchlight — then turn.",
+          "onEnter": {
+            "text": "Three giant rats come at you through the roots.",
+            "encounter": "root_hall_rats",
+            "tip": "Roots are difficult terrain (double movement). Leaving an enemy's reach provokes an Opportunity Attack."
+          },
+          "exits": [
+            {
+              "id": "crypt",
+              "label": "Go deeper, to the crypt",
+              "to": "barrow_sheaf_crypt",
+              "minutes": 2
+            },
+            {
+              "id": "out",
+              "label": "Leave the barrow",
+              "to": "gallows_hill_trail",
+              "if": {
+                "not": {
+                  "flag": "~altar_won"
+                }
+              },
+              "minutes": 5
+            }
+          ]
+        },
+        {
+          "id": "barrow_sheaf_crypt",
+          "name": "Barrow: Sheaf Crypt",
+          "locationId": "millbrook",
+          "mood": "dungeon",
+          "map": {
+            "id": "barrow",
+            "room": "sheaf_crypt"
+          },
+          "seed": "Stone niches full of old grain-offerings. A big man hangs in chains against the far wall, beaten bloody: Ser Corwin.",
+          "variants": [
+            {
+              "if": {
+                "flag": "arc.starter.ambush_avoided"
+              },
+              "seed": "Two cultists crouch over a brazier with their backs to you — they have not heard you."
+            },
+            {
+              "if": {
+                "not": {
+                  "flag": "arc.starter.ambush_avoided"
+                }
+              },
+              "seed": "Two cultists wait behind a barricade of coffin-lids."
+            },
+            {
+              "if": {
+                "flag": "~chained"
+              },
+              "seed": "You are chained beside Corwin. Your gear lies on a table across the room."
+            }
+          ],
+          "onEnter": {
+            "encounter": "crypt_cultists"
+          },
+          "actions": [
+            {
+              "id": "free_corwin",
+              "label": "Unchain the knight",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~crypt_cleared"
+                  },
+                  {
+                    "not": {
+                      "flag": "~corwin_freed"
+                    }
+                  }
+                ]
+              },
+              "once": true,
+              "outcome": {
+                "text": "Corwin sags into your arms. 'They took the children to the altar. Go — I'll follow if I can stand.'",
+                "flags": [
+                  {
+                    "set": "~corwin_freed",
+                    "value": true
+                  },
+                  {
+                    "set": "world.corwin_status",
+                    "value": "met"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "slip_chains",
+              "label": "Work the chains loose (Strength DC 12)",
+              "if": {
+                "flag": "~chained"
+              },
+              "check": {
+                "dc": 12,
+                "success": {
+                  "text": "The old staple tears out of the wall.",
+                  "flags": [
+                    {
+                      "clear": "arc.starter.chained"
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "Your wrists bleed, but after a long while Corwin works both your chains loose.",
+                  "minutes": 30,
+                  "flags": [
+                    {
+                      "clear": "arc.starter.chained"
+                    }
+                  ]
+                },
+                "ability": "str"
+              }
+            }
+          ],
+          "exits": [
+            {
+              "id": "altar",
+              "label": "Descend to the altar",
+              "to": "barrow_tithe_altar",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~crypt_cleared"
+                  },
+                  {
+                    "not": {
+                      "flag": "~chained"
+                    }
+                  }
+                ]
+              },
+              "minutes": 2
+            },
+            {
+              "id": "hall",
+              "label": "Back to the Root Hall",
+              "to": "barrow_of_the_first_sheaf",
+              "if": {
+                "not": {
+                  "flag": "~chained"
+                }
+              },
+              "minutes": 2
+            }
+          ]
+        },
+        {
+          "id": "barrow_tithe_altar",
+          "name": "Barrow: The Tithe Altar",
+          "locationId": "millbrook",
+          "mood": "battle",
+          "map": {
+            "id": "barrow",
+            "room": "tithe_altar"
+          },
+          "seed": "A round chamber around a stone altar carved like a jaw. Four captives are chained to it — a boy in a miller's smock, a shepherd, two small twin girls. In the altar's basin sits a black, tooth-shaped stone that drinks the torchlight.",
+          "variants": [
+            {
+              "if": {
+                "flag": "~altar_won"
+              },
+              "seed": "The altar is quiet now. The captives stare at the black Tooth as if it might bite."
+            }
+          ],
+          "actions": [
+            {
+              "id": "free_fast",
+              "label": "Break the captives' chains before the altar feeds again (Athletics DC 12)",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~altar_won"
+                  },
+                  {
+                    "not": {
+                      "flag": "~captives_freed"
+                    }
+                  }
+                ]
+              },
+              "once": true,
+              "check": {
+                "dc": 12,
+                "success": {
+                  "text": "Link after link gives. Everyone still chained walks out alive, Pip first.",
+                  "flags": [
+                    {
+                      "set": "~captives_freed",
+                      "value": true
+                    },
+                    {
+                      "set": "arc.starter.pip_rescued",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "You free Pip and the twins — but the shepherd Tobin has stopped breathing by the time his chain breaks.",
+                  "flags": [
+                    {
+                      "set": "~captives_freed",
+                      "value": true
+                    },
+                    {
+                      "set": "arc.starter.pip_rescued",
+                      "value": true
+                    },
+                    {
+                      "set": "~tobin_died",
+                      "value": true
+                    }
+                  ]
+                },
+                "skill": "athletics"
+              }
+            },
+            {
+              "id": "free_tools",
+              "label": "Pick the shackles with thieves' tools (Dexterity DC 12)",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~altar_won"
+                  },
+                  {
+                    "not": {
+                      "flag": "~captives_freed"
+                    }
+                  },
+                  {
+                    "item": "thieves_tools"
+                  }
+                ]
+              },
+              "once": true,
+              "check": {
+                "dc": 12,
+                "success": {
+                  "text": "Click, click, click, click. Everyone still chained walks out alive.",
+                  "flags": [
+                    {
+                      "set": "~captives_freed",
+                      "value": true
+                    },
+                    {
+                      "set": "arc.starter.pip_rescued",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "The picks slip in your sweating fingers; by the time the last lock opens, Tobin is gone.",
+                  "flags": [
+                    {
+                      "set": "~captives_freed",
+                      "value": true
+                    },
+                    {
+                      "set": "arc.starter.pip_rescued",
+                      "value": true
+                    },
+                    {
+                      "set": "~tobin_died",
+                      "value": true
+                    }
+                  ]
+                },
+                "ability": "dex"
+              }
+            },
+            {
+              "id": "chase",
+              "label": "Chase Brother Ashby into the collapsing tunnel (Athletics DC 13)",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~altar_won"
+                  },
+                  {
+                    "flag": "arc.starter.ashby_fate",
+                    "eq": "unknown"
+                  }
+                ]
+              },
+              "once": true,
+              "check": {
+                "dc": 13,
+                "success": {
+                  "text": "You tackle him in the dark as the roof comes down behind you. Brother Ashby is your prisoner.",
+                  "flags": [
+                    {
+                      "set": "arc.starter.ashby_fate",
+                      "value": "captured"
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "Earth pours down between you. His laughter fades into the hill.",
+                  "flags": [
+                    {
+                      "set": "arc.starter.ashby_fate",
+                      "value": "escaped"
+                    }
+                  ]
+                },
+                "skill": "athletics"
+              }
+            },
+            {
+              "id": "kill_ashby",
+              "label": "Cut Brother Ashby down before he reaches the tunnel",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~altar_won"
+                  },
+                  {
+                    "flag": "arc.starter.ashby_fate",
+                    "eq": "unknown"
+                  }
+                ]
+              },
+              "once": true,
+              "outcome": {
+                "text": "Ashby falls across the altar's lip. The captives watch in silence.",
+                "flags": [
+                  {
+                    "set": "arc.starter.ashby_fate",
+                    "value": "killed"
+                  },
+                  {
+                    "set": "~cruel",
+                    "value": true
+                  }
+                ]
+              }
+            },
+            {
+              "id": "let_go",
+              "label": "Let Ashby flee — the captives matter more",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~altar_won"
+                  },
+                  {
+                    "flag": "arc.starter.ashby_fate",
+                    "eq": "unknown"
+                  }
+                ]
+              },
+              "once": true,
+              "outcome": {
+                "text": "He is gone into the dark. The captives are what matter.",
+                "flags": [
+                  {
+                    "set": "arc.starter.ashby_fate",
+                    "value": "escaped"
+                  }
+                ]
+              }
+            }
+          ],
+          "exits": [
+            {
+              "id": "shrine",
+              "label": "Carry the rescued to the little shrine above",
+              "to": "barrow_shrine_rest",
+              "if": {
+                "flag": "~captives_freed"
+              },
+              "minutes": 5
+            },
+            {
+              "id": "crypt",
+              "label": "Back to the crypt",
+              "to": "barrow_sheaf_crypt",
+              "minutes": 2
+            }
+          ]
+        },
+        {
+          "id": "barrow_shrine_rest",
+          "name": "Shrine of Thaloren",
+          "locationId": "millbrook",
+          "mood": "calm",
+          "seed": "A small shrine off the barrow's upper hall: an antler-brazier cold for centuries, a carved stag on the wall. The rescued villagers huddle here, too weak to walk.",
+          "variants": [
+            {
+              "if": {
+                "flag": "arc.starter.shrine_rekindled"
+              },
+              "seed": "The antler-brazier burns with a clean green flame. The dark feels further away."
+            }
+          ],
+          "onEnter": {
+            "text": "Corwin limps in behind you and sits heavily against the wall.",
+            "tip": "A short rest (1 hour) lets you spend Hit Dice to heal. Rests are only safe in safe places."
+          },
+          "actions": [
+            {
+              "id": "rekindle",
+              "label": "Rekindle the antler-brazier (Religion DC 10)",
+              "if": {
+                "not": {
+                  "flag": "arc.starter.shrine_rekindled"
+                }
+              },
+              "once": true,
+              "check": {
+                "dc": 10,
+                "success": {
+                  "text": "You speak the old harvest-words and the brazier catches.",
+                  "flags": [
+                    {
+                      "set": "arc.starter.shrine_rekindled",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "The words won't come; the brazier stays cold."
+                },
+                "skill": "religion"
+              }
+            },
+            {
+              "id": "rekindle_nature",
+              "label": "Coax a fire from the old tinder (Nature DC 12)",
+              "if": {
+                "not": {
+                  "flag": "arc.starter.shrine_rekindled"
+                }
+              },
+              "once": true,
+              "check": {
+                "dc": 12,
+                "success": {
+                  "text": "Dry moss, patience, and the brazier catches.",
+                  "flags": [
+                    {
+                      "set": "arc.starter.shrine_rekindled",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "The tinder is rotten through."
+                },
+                "skill": "nature"
+              }
+            },
+            {
+              "id": "rest_safe",
+              "label": "Take a short rest by the fire",
+              "if": {
+                "flag": "arc.starter.shrine_rekindled"
+              },
+              "once": true,
+              "outcome": {
+                "rest": "short",
+                "text": "An hour by the green flame. Even the twins sleep."
+              }
+            },
+            {
+              "id": "rest_cold",
+              "label": "Take a short rest in the dark",
+              "if": {
+                "not": {
+                  "flag": "arc.starter.shrine_rekindled"
+                }
+              },
+              "once": true,
+              "outcome": {
+                "text": "You settle in the dark — and the rats come back for the scraps.",
+                "encounter": "shrine_rats"
+              }
+            }
+          ],
+          "exits": [
+            {
+              "id": "home",
+              "label": "Lead everyone home to Millbrook",
+              "to": "millbrook_arrival",
+              "minutes": 40
+            }
+          ]
+        },
+        {
+          "id": "marrows_goods_and_oath",
+          "name": "Marrow's Goods and the Chapel",
+          "locationId": "millbrook",
+          "mood": "village",
+          "seed": "Widow Agna Marrow's cluttered shop — potions, rope, a chain shirt on a dummy — and across the lane the Chapel of Solenne, where Ser Corwin kneels at the altar.",
+          "npcs": [
+            "agna_marrow",
+            "corwin_npc"
+          ],
+          "onEnter": {
+            "tip": "Open the shop from the menu bar to buy, sell and haggle. Stock is limited and prices depend on your reputation."
+          },
+          "actions": [
+            {
+              "id": "return_ring",
+              "label": "Return Widow Marrow's stolen ring",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~has_ring"
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.starter.marrow_ring_returned"
+                    }
+                  }
+                ]
+              },
+              "once": true,
+              "outcome": {
+                "text": "She turns the ring over and over, then presses a potion into your hand. 'My Harl's ring. Anything you need, you ask me first.'",
+                "flags": [
+                  {
+                    "set": "arc.starter.marrow_ring_returned",
+                    "value": true
+                  }
+                ],
+                "items": [
+                  {
+                    "itemId": "potion_of_healing",
+                    "quantity": 1
+                  }
+                ],
+                "reputation": [
+                  {
+                    "faction": "crown_of_aurelmark",
+                    "delta": 3
+                  }
+                ]
+              }
+            },
+            {
+              "id": "recruit",
+              "label": "Ask Corwin to ride with you",
+              "if": {
+                "all": [
+                  {
+                    "flag": "world.corwin_status",
+                    "eq": "met"
+                  },
+                  {
+                    "not": {
+                      "flag": "~cruel"
+                    }
+                  }
+                ]
+              },
+              "once": true,
+              "outcome": {
+                "text": "'The Choir took children from under my nose. I will not wait for the Lance's permission.' He rises and offers his hand.",
+                "recruit": "corwin",
+                "flags": [
+                  {
+                    "set": "~oath_done",
+                    "value": true
+                  }
+                ],
+                "tip": "Companions fight beside you. On their party card you can switch who controls them in combat: the AI or you."
+              }
+            },
+            {
+              "id": "recruit_cruel",
+              "label": "Ask Corwin to ride with you (Persuasion DC 10)",
+              "if": {
+                "all": [
+                  {
+                    "flag": "world.corwin_status",
+                    "eq": "met"
+                  },
+                  {
+                    "flag": "~cruel"
+                  }
+                ]
+              },
+              "once": true,
+              "check": {
+                "dc": 10,
+                "success": {
+                  "text": "He looks at you a long moment. 'Ashby deserved a trial. But the children need us.' He comes.",
+                  "recruit": "corwin",
+                  "flags": [
+                    {
+                      "set": "~oath_done",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "'I'll come. But I'll be watching how you use that blade.'",
+                  "recruit": "corwin",
+                  "approval": [
+                    {
+                      "companion": "corwin",
+                      "delta": -15
+                    }
+                  ],
+                  "flags": [
+                    {
+                      "set": "~oath_done",
+                      "value": true
+                    }
+                  ]
+                },
+                "skill": "persuasion"
+              }
+            },
+            {
+              "id": "corwin_story",
+              "label": "Ask why the Lance dismissed him (Insight DC 12)",
+              "if": {
+                "flag": "world.corwin_status",
+                "eq": "in_party"
+              },
+              "once": true,
+              "check": {
+                "dc": 12,
+                "success": {
+                  "text": "He struck a captain who ordered a plague village abandoned to the fen. He would do it again.",
+                  "approval": [
+                    {
+                      "companion": "corwin",
+                      "delta": 5
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "'A disagreement over orders,' he says, and changes the subject."
+                },
+                "skill": "insight"
+              }
+            },
+            {
+              "id": "go_alone",
+              "label": "Set out alone",
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~oath_done"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "world.corwin_status",
+                      "eq": "met"
+                    }
+                  }
+                ]
+              },
+              "once": true,
+              "outcome": {
+                "text": "The road is yours alone.",
+                "flags": [
+                  {
+                    "set": "~oath_done",
+                    "value": true
+                  }
+                ]
+              }
+            }
+          ],
+          "exits": [
+            {
+              "id": "green",
+              "label": "Back to the green",
+              "to": "millbrook_arrival",
+              "minutes": 5
+            }
+          ]
+        },
+        {
+          "id": "road_south",
+          "name": "The South Road",
+          "locationId": "millbrook",
+          "mood": "travel",
+          "seed": "The Reeve walks you to the milestone at the edge of the village. 'That black thing is unholy. Someone must take it where it can be kept.' Two roads: east to Ravensgate and the Lantern Wardens, who know fen-evil; or south to Brightwater and the Crown's magistrate, the proper authority.",
+          "variants": [
+            {
+              "if": {
+                "flag": "arc.starter.reeve_attitude",
+                "eq": "hostile"
+              },
+              "seed": "The Reeve won't come. It is Corwin who walks you to the milestone and says the words."
+            }
+          ],
+          "onEnter": {
+            "tip": "The world map (Map button) shows known places, routes and travel time by pace. Slow is safer; fast gets you there sooner but careless."
+          },
+          "actions": [
+            {
+              "id": "to_ravensgate",
+              "label": "Take the east road to Ravensgate (30 miles)",
+              "once": true,
+              "outcome": {
+                "flags": [
+                  {
+                    "set": "arc.starter.first_destination",
+                    "value": "ravensgate"
+                  }
+                ],
+                "discover": [
+                  "ravensgate"
+                ],
+                "minutes": 540,
+                "goto": "road_ravensgate"
+              }
+            },
+            {
+              "id": "to_brightwater",
+              "label": "Take the south road to Brightwater (25 miles)",
+              "once": true,
+              "outcome": {
+                "flags": [
+                  {
+                    "set": "arc.starter.first_destination",
+                    "value": "brightwater"
+                  }
+                ],
+                "discover": [
+                  "brightwater"
+                ],
+                "minutes": 480,
+                "goto": "road_brightwater"
+              }
+            }
+          ]
+        },
+        {
+          "id": "road_ravensgate",
+          "name": "Barley Fields at Dusk",
+          "locationId": "ravensgate",
+          "mood": "travel",
+          "seed": "Barley rustles on both sides of the road as the light fails. Something moves through it, low and fast, circling.",
+          "onEnter": {
+            "text": "Two wolves break from the barley.",
+            "encounter": "barley_wolves"
+          },
+          "actions": [
+            {
+              "id": "arrive",
+              "label": "Walk on to the gates of Ravensgate",
+              "if": {
+                "flag": "~wolves_done"
+              },
+              "outcome": {
+                "text": "Ravensgate's black walls rise over the last dry ridge before the fen. The gates are sealed against the plague — and a Warden-Sergeant is looking for outsiders who aren't sick yet.",
+                "ending": "starter_ravensgate"
+              }
+            }
+          ]
+        },
+        {
+          "id": "road_brightwater",
+          "name": "The Toll Bridge",
+          "locationId": "brightwater",
+          "mood": "travel",
+          "seed": "A plank bridge over the Brightwater, and two hard-faced men with a chain across it. 'Toll's five gold. Road repairs.' There have been no repairs.",
+          "actions": [
+            {
+              "id": "pay",
+              "label": "Pay the 5 gp toll",
+              "if": {
+                "not": {
+                  "flag": "~bridge_done"
+                }
+              },
+              "outcome": {
+                "cost": 500,
+                "text": "They drop the chain with mock bows.",
+                "flags": [
+                  {
+                    "set": "~bridge_done",
+                    "value": true
+                  }
+                ]
+              }
+            },
+            {
+              "id": "talk_down",
+              "label": "Talk them out of it (Persuasion DC 12)",
+              "if": {
+                "not": {
+                  "flag": "~bridge_done"
+                }
+              },
+              "once": true,
+              "check": {
+                "dc": 12,
+                "success": {
+                  "text": "After a moment's thought about the knight — or the look in your eye — they decide the toll is waived today.",
+                  "flags": [
+                    {
+                      "set": "~bridge_done",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "text": "'Five gold, or the river.'"
+                },
+                "skill": "persuasion"
+              }
+            },
+            {
+              "id": "fight",
+              "label": "Clear the bridge by force",
+              "if": {
+                "not": {
+                  "flag": "~bridge_done"
+                }
+              },
+              "once": true,
+              "outcome": {
+                "text": "They draw.",
+                "encounter": "toll_bandits"
+              }
+            },
+            {
+              "id": "hand_over",
+              "label": "Hand the Tooth to the magistrate's clerk",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~bridge_done"
+                  },
+                  {
+                    "flag": "arc.main.tooth_want_holder",
+                    "eq": "player"
+                  }
+                ]
+              },
+              "once": true,
+              "outcome": {
+                "text": "The clerk wraps the black Tooth in silk, seals the box with the Royal Almonry's wheat-and-crown, and 'forwards it for safekeeping'. He gives you a crown writ for Ravensgate: the plague's source wants investigating.",
+                "flags": [
+                  {
+                    "set": "arc.main.tooth_want_holder",
+                    "value": "choir"
+                  },
+                  {
+                    "set": "~writ",
+                    "value": true
+                  }
+                ],
+                "ending": "starter_brightwater"
+              }
+            },
+            {
+              "id": "keep",
+              "label": "Keep the Tooth and ask only for a writ",
+              "if": {
+                "flag": "~bridge_done"
+              },
+              "once": true,
+              "outcome": {
+                "text": "The magistrate grumbles, but signs a crown writ sending you to Ravensgate to find the plague's source.",
+                "flags": [
+                  {
+                    "set": "~writ",
+                    "value": true
+                  }
+                ],
+                "ending": "starter_brightwater"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "maps": [
+    {
+      "id": "barrow",
+      "name": "Barrow of the First Sheaf",
+      "width": 27,
+      "height": 25,
+      "rooms": [
+        {
+          "id": "root_hall",
+          "name": "Root Hall",
+          "x": 1,
+          "y": 2,
+          "w": 10,
+          "h": 8,
+          "difficult": [
+            {
+              "x": 3,
+              "y": 4
+            },
+            {
+              "x": 4,
+              "y": 4
+            },
+            {
+              "x": 4,
+              "y": 5
+            },
+            {
+              "x": 7,
+              "y": 6
+            },
+            {
+              "x": 8,
+              "y": 6
+            },
+            {
+              "x": 8,
+              "y": 7
+            }
+          ],
+          "blocking": [
+            {
+              "x": 6,
+              "y": 3
+            }
+          ]
+        },
+        {
+          "id": "sheaf_crypt",
+          "name": "Sheaf Crypt",
+          "x": 11,
+          "y": 1,
+          "w": 12,
+          "h": 10,
+          "blocking": [
+            {
+              "x": 14,
+              "y": 4
+            },
+            {
+              "x": 14,
+              "y": 7
+            },
+            {
+              "x": 19,
+              "y": 4
+            },
+            {
+              "x": 19,
+              "y": 7
+            }
+          ]
+        },
+        {
+          "id": "tithe_altar",
+          "name": "The Tithe Altar",
+          "x": 10,
+          "y": 11,
+          "w": 14,
+          "h": 12,
+          "blocking": [
+            {
+              "x": 16,
+              "y": 17
+            },
+            {
+              "x": 17,
+              "y": 17
+            }
+          ]
+        }
+      ],
+      "doors": [
+        {
+          "x": 10,
+          "y": 5,
+          "side": "E"
+        },
+        {
+          "x": 16,
+          "y": 10,
+          "side": "S"
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "id": "reeve_tamsin",
+      "name": "Reeve Hollis Tamsin",
+      "statBlock": "commoner",
+      "personality": "Tired, honest and proud; ashamed he cannot protect his village.",
+      "voice": "Slow farmer's drawl, long pauses.",
+      "factions": [
+        "crown_of_aurelmark"
+      ],
+      "attitude": "indifferent",
+      "secrets": [
+        "He keeps the only key to the old barrow gate."
+      ]
+    },
+    {
+      "id": "oda_hallard",
+      "name": "Miller Oda Hallard",
+      "statBlock": "commoner",
+      "personality": "Frightened mother; guilt makes her snappish.",
+      "voice": "Quick, breathless, trails off.",
+      "attitude": "indifferent",
+      "secrets": [
+        "She took coin from a 'hooded brother' to leave her mill after dark."
+      ]
+    },
+    {
+      "id": "agna_marrow",
+      "name": "Widow Agna Marrow",
+      "statBlock": "commoner",
+      "personality": "Sharp, gossip-hungry, a hard haggler with a soft heart she hides.",
+      "voice": "Brisk, sing-song, calls everyone 'dearie'.",
+      "attitude": "indifferent",
+      "secrets": [
+        "The cultists stole her dead husband's ring from the shop."
+      ]
+    },
+    {
+      "id": "corwin_npc",
+      "name": "Ser Corwin Ashvale",
+      "statBlock": "knight",
+      "personality": "Earnest, stubborn and dry-humoured; ashamed of his dismissal but never mopes.",
+      "voice": "Deep, measured, a soldier's clipped courtesy.",
+      "attitude": "friendly",
+      "secrets": [
+        "He was dismissed from the Dawn Lance for striking a captain who ordered a plague village abandoned."
+      ]
+    },
+    {
+      "id": "brother_ashby",
+      "name": "Brother Ashby",
+      "statBlock": "cultist",
+      "personality": "Soft-spoken, fervent former sexton; believes hunger can be ended.",
+      "voice": "Gentle, almost kind, quotes hymns.",
+      "attitude": "hostile",
+      "factions": [
+        "hollow_choir"
+      ]
+    }
+  ],
+  "encounters": [
+    {
+      "id": "well_rat",
+      "name": "Rat at the Well",
+      "monsters": [
+        {
+          "id": "giant_rat",
+          "count": 1
+        }
+      ],
+      "win": {
+        "text": "The rat squeals and vanishes down the well shaft."
+      },
+      "lose": {
+        "text": "You come round at the well's edge with a bitten ankle; the rat is long gone.",
+        "minutes": 30
+      }
+    },
+    {
+      "id": "tavern_brawl",
+      "name": "Tavern Brawl",
+      "monsters": [
+        {
+          "id": "commoner",
+          "count": 2
+        }
+      ],
+      "scaling": {
+        "target": "low",
+        "pool": [
+          "commoner"
+        ]
+      },
+      "win": {
+        "text": "The farmhands buy you a drink afterwards. Millbrook respects a good fight."
+      },
+      "lose": {
+        "text": "You wake in the tavern stable, lighter by some coin and all your dignity.",
+        "minutes": 120
+      }
+    },
+    {
+      "id": "stirge_nest",
+      "name": "Stirge Nest",
+      "monsters": [
+        {
+          "id": "stirge",
+          "count": 2
+        }
+      ],
+      "scaling": {
+        "target": "low",
+        "pool": [
+          "stirge"
+        ]
+      },
+      "win": {
+        "text": "The last stirge drops into the bramble."
+      },
+      "lose": {
+        "text": "The Reeve's search party finds you at dawn, pale and bitten. The cultists have moved one captive deeper.",
+        "minutes": 360,
+        "flags": [
+          {
+            "set": "~one_taken",
+            "value": true
+          }
+        ],
+        "goto": "millbrook_arrival"
+      }
+    },
+    {
+      "id": "root_hall_rats",
+      "name": "Rats of the Root Hall",
+      "monsters": [
+        {
+          "id": "giant_rat",
+          "count": 3
+        }
+      ],
+      "map": "barrow",
+      "room": "root_hall",
+      "scaling": {
+        "target": "moderate",
+        "pool": [
+          "giant_rat"
+        ]
+      },
+      "win": {
+        "text": "The last rat thrashes and lies still among the roots."
+      },
+      "lose": {
+        "text": "You crawl back out of the barrow to the gibbet, bleeding. The children are still down there.",
+        "goto": "gallows_hill_trail",
+        "minutes": 60
+      }
+    },
+    {
+      "id": "crypt_cultists",
+      "name": "Cultists of the Crypt",
+      "monsters": [
+        {
+          "id": "cultist",
+          "count": 2
+        }
+      ],
+      "map": "barrow",
+      "room": "sheaf_crypt",
+      "scaling": {
+        "target": "moderate",
+        "pool": [
+          "cultist"
+        ]
+      },
+      "win": {
+        "text": "The second cultist falls against the niches, spilling grain.",
+        "flags": [
+          {
+            "set": "~crypt_cleared",
+            "value": true
+          }
+        ]
+      },
+      "lose": {
+        "text": "You wake chained beside Ser Corwin. Your gear is on a table across the room.",
+        "flags": [
+          {
+            "set": "~chained",
+            "value": true
+          },
+          {
+            "set": "~crypt_cleared",
+            "value": true
+          },
+          {
+            "set": "~one_taken",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "altar_fight",
+      "name": "The Tithe Altar",
+      "monsters": [
+        {
+          "id": "cultist",
+          "count": 2
+        }
+      ],
+      "bosses": [
+        "cultist"
+      ],
+      "map": "barrow",
+      "room": "tithe_altar",
+      "win": {
+        "text": "Brother Ashby, bleeding, backs toward a collapsing tunnel behind the altar. Among the cult's things: 25 gold, a healing potion, a sickle — and a woman's ring engraved 'A. & H.'",
+        "flags": [
+          {
+            "set": "~altar_won",
+            "value": true
+          },
+          {
+            "set": "~has_ring",
+            "value": true
+          },
+          {
+            "set": "arc.main.tooth_want_holder",
+            "value": "player"
+          }
+        ],
+        "coins": 2500,
+        "items": [
+          {
+            "itemId": "potion_of_healing",
+            "quantity": 1
+          },
+          {
+            "itemId": "sickle",
+            "quantity": 1
+          }
+        ],
+        "xp": 250
+      },
+      "lose": {
+        "text": "You wake chained in the crypt beside Corwin. Ashby has fled with one of the captives.",
+        "flags": [
+          {
+            "set": "~chained",
+            "value": true
+          },
+          {
+            "set": "~one_taken",
+            "value": true
+          }
+        ],
+        "goto": "barrow_sheaf_crypt"
+      }
+    },
+    {
+      "id": "altar_fight_alerted",
+      "name": "The Tithe Altar (alerted)",
+      "monsters": [
+        {
+          "id": "cultist",
+          "count": 2
+        },
+        {
+          "id": "swarm_of_rats",
+          "count": 1
+        }
+      ],
+      "bosses": [
+        "cultist"
+      ],
+      "map": "barrow",
+      "room": "tithe_altar",
+      "scaling": {
+        "target": "moderate",
+        "pool": [
+          "giant_rat"
+        ]
+      },
+      "win": {
+        "text": "Brother Ashby, bleeding, backs toward a collapsing tunnel behind the altar. Among the cult's things: 25 gold, a healing potion, a sickle — and a woman's ring engraved 'A. & H.'",
+        "flags": [
+          {
+            "set": "~altar_won",
+            "value": true
+          },
+          {
+            "set": "~has_ring",
+            "value": true
+          },
+          {
+            "set": "arc.main.tooth_want_holder",
+            "value": "player"
+          }
+        ],
+        "coins": 2500,
+        "items": [
+          {
+            "itemId": "potion_of_healing",
+            "quantity": 1
+          },
+          {
+            "itemId": "sickle",
+            "quantity": 1
+          }
+        ],
+        "xp": 250
+      },
+      "lose": {
+        "text": "You wake chained in the crypt beside Corwin. Ashby has fled with one of the captives.",
+        "flags": [
+          {
+            "set": "~chained",
+            "value": true
+          },
+          {
+            "set": "~one_taken",
+            "value": true
+          }
+        ],
+        "goto": "barrow_sheaf_crypt"
+      }
+    },
+    {
+      "id": "shrine_rats",
+      "name": "Rats in the Shrine",
+      "monsters": [
+        {
+          "id": "giant_rat",
+          "count": 2
+        }
+      ],
+      "scaling": {
+        "target": "low",
+        "pool": [
+          "giant_rat"
+        ]
+      },
+      "win": {
+        "text": "With the rats gone you rest at last.",
+        "rest": "short"
+      },
+      "lose": {
+        "text": "You drive them off at last, bloodied, and rest where you fall.",
+        "rest": "short"
+      }
+    },
+    {
+      "id": "barley_wolves",
+      "name": "Wolves in the Barley",
+      "monsters": [
+        {
+          "id": "wolf",
+          "count": 2
+        }
+      ],
+      "scaling": {
+        "target": "moderate",
+        "pool": [
+          "wolf"
+        ]
+      },
+      "win": {
+        "text": "The wolves limp back into the barley.",
+        "flags": [
+          {
+            "set": "~wolves_done",
+            "value": true
+          }
+        ]
+      },
+      "flee": {
+        "text": "You run for the road and the wolves lose interest at the ditch.",
+        "flags": [
+          {
+            "set": "~wolves_done",
+            "value": true
+          }
+        ]
+      },
+      "lose": {
+        "text": "You wake on the roadside at dawn; your purse is lighter, but the black Tooth lies untouched where it fell — the robbers who found you fled from it.",
+        "flags": [
+          {
+            "set": "~wolves_done",
+            "value": true
+          }
+        ],
+        "minutes": 480
+      }
+    },
+    {
+      "id": "toll_bandits",
+      "name": "Toll-Bridge Shakedown",
+      "monsters": [
+        {
+          "id": "bandit",
+          "count": 2
+        }
+      ],
+      "scaling": {
+        "target": "moderate",
+        "pool": [
+          "bandit"
+        ]
+      },
+      "win": {
+        "text": "The chain rattles into the river after them.",
+        "flags": [
+          {
+            "set": "~bridge_done",
+            "value": true
+          }
+        ]
+      },
+      "lose": {
+        "text": "You wake on the bank at dawn, robbed. They left the black Tooth — none of them would touch it.",
+        "flags": [
+          {
+            "set": "~bridge_done",
+            "value": true
+          }
+        ],
+        "minutes": 480
+      }
+    }
+  ],
+  "beats": [
+    {
+      "id": "altar_calm",
+      "text": "The captives are chained to the altar, and it is feeding.",
+      "trigger": {
+        "all": [
+          {
+            "visited": "barrow_tithe_altar"
+          },
+          {
+            "not": {
+              "flag": "~barrow_alerted"
+            }
+          }
+        ]
+      },
+      "scenes": [
+        "barrow_tithe_altar"
+      ],
+      "outcome": {
+        "encounter": "altar_fight"
+      }
+    },
+    {
+      "id": "altar_alerted",
+      "text": "They were waiting: the rats come boiling out of the altar's jaw.",
+      "trigger": {
+        "all": [
+          {
+            "visited": "barrow_tithe_altar"
+          },
+          {
+            "flag": "~barrow_alerted"
+          }
+        ]
+      },
+      "scenes": [
+        "barrow_tithe_altar"
+      ],
+      "outcome": {
+        "encounter": "altar_fight_alerted"
+      }
+    },
+    {
+      "id": "captives_all",
+      "text": "Four children and a shepherd walk out of the barrow.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~captives_freed"
+          },
+          {
+            "not": {
+              "flag": "~tobin_died"
+            }
+          },
+          {
+            "not": {
+              "flag": "~one_taken"
+            }
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "set": "arc.starter.captives_saved",
+            "value": 4
+          }
+        ]
+      }
+    },
+    {
+      "id": "captives_three",
+      "text": "Three captives are saved.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~captives_freed"
+          },
+          {
+            "any": [
+              {
+                "all": [
+                  {
+                    "flag": "~tobin_died"
+                  },
+                  {
+                    "not": {
+                      "flag": "~one_taken"
+                    }
+                  }
+                ]
+              },
+              {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~tobin_died"
+                    }
+                  },
+                  {
+                    "flag": "~one_taken"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "set": "arc.starter.captives_saved",
+            "value": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "captives_two",
+      "text": "Only two captives are saved.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~captives_freed"
+          },
+          {
+            "flag": "~tobin_died"
+          },
+          {
+            "flag": "~one_taken"
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "set": "arc.starter.captives_saved",
+            "value": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "village_thanks",
+      "text": "The Reeve's report to the Crown will speak well of you.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~oath_done"
+          },
+          {
+            "flag": "arc.starter.captives_saved",
+            "gte": 3
+          }
+        ]
+      },
+      "outcome": {
+        "reputation": [
+          {
+            "faction": "crown_of_aurelmark",
+            "delta": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "corwin_all_saved",
+      "text": "Corwin will not stop talking about the children you brought home.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "world.corwin_status",
+            "eq": "in_party"
+          },
+          {
+            "flag": "arc.starter.captives_saved",
+            "gte": 4
+          }
+        ]
+      },
+      "outcome": {
+        "approval": [
+          {
+            "companion": "corwin",
+            "delta": 10
+          }
+        ]
+      }
+    }
+  ],
+  "quests": [
+    {
+      "id": "millbrook_disappearances",
+      "name": "The Millbrook Disappearances",
+      "objectives": [
+        {
+          "id": "clues",
+          "text": "Find out what is taking the villagers",
+          "done": {
+            "any": [
+              {
+                "flag": "~tracks_read"
+              },
+              {
+                "flag": "~barrow_key"
+              }
+            ]
+          }
+        },
+        {
+          "id": "key",
+          "text": "Get into the barrow on Gallows Hill",
+          "done": {
+            "visited": "barrow_of_the_first_sheaf"
+          },
+          "if": {
+            "any": [
+              {
+                "flag": "~tracks_read"
+              },
+              {
+                "flag": "~barrow_key"
+              }
+            ]
+          }
+        },
+        {
+          "id": "altar",
+          "text": "Reach the altar and stop the feeding",
+          "done": {
+            "flag": "~altar_won"
+          },
+          "if": {
+            "visited": "barrow_of_the_first_sheaf"
+          }
+        },
+        {
+          "id": "free",
+          "text": "Free the captives",
+          "done": {
+            "flag": "~captives_freed"
+          },
+          "if": {
+            "flag": "~altar_won"
+          }
+        },
+        {
+          "id": "rest",
+          "text": "Rest at the tavern",
+          "done": {
+            "flag": "~slept"
+          },
+          "if": {
+            "flag": "~captives_freed"
+          }
+        },
+        {
+          "id": "oath",
+          "text": "See Widow Marrow and Ser Corwin in the village by day",
+          "done": {
+            "flag": "~oath_done"
+          },
+          "if": {
+            "flag": "~slept"
+          }
+        },
+        {
+          "id": "road",
+          "text": "Take the Tooth somewhere it can be kept",
+          "done": {
+            "visited": "road_south"
+          },
+          "if": {
+            "flag": "~oath_done"
+          }
+        }
+      ]
+    }
+  ],
+  "flags": [
+    {
+      "id": "~barrow_key",
+      "description": "Has the key to the barrow gate."
+    },
+    {
+      "id": "~reeve_refused",
+      "description": "The Reeve refused to help at first."
+    },
+    {
+      "id": "~tracks_read",
+      "description": "Read the footprints at the well."
+    },
+    {
+      "id": "~sigil_known",
+      "description": "Knows the sigil is Vashkul's."
+    },
+    {
+      "id": "~names_seen",
+      "description": "Saw the names of the missing in the chapel."
+    },
+    {
+      "id": "~rat_seen",
+      "description": "Met the rat at the well."
+    },
+    {
+      "id": "~oda_guilty",
+      "description": "Noticed Oda's guilt."
+    },
+    {
+      "id": "~brawled",
+      "description": "Picked the tavern fight."
+    },
+    {
+      "id": "~tracked",
+      "description": "Followed the tracks up Gallows Hill."
+    },
+    {
+      "id": "~crossed",
+      "description": "Crossed the millrace."
+    },
+    {
+      "id": "~approached",
+      "description": "Reached the barrow door."
+    },
+    {
+      "id": "~barrow_alerted",
+      "description": "The lookouts rang the alarm."
+    },
+    {
+      "id": "~crypt_cleared",
+      "description": "Beat the crypt cultists."
+    },
+    {
+      "id": "~corwin_freed",
+      "description": "Unchained Corwin."
+    },
+    {
+      "id": "~chained",
+      "description": "Captured and chained in the crypt."
+    },
+    {
+      "id": "~one_taken",
+      "description": "Ashby dragged one captive away (captives cap −1)."
+    },
+    {
+      "id": "~altar_won",
+      "description": "Won the fight at the Tithe Altar."
+    },
+    {
+      "id": "~has_ring",
+      "description": "Carries Widow Marrow's stolen ring."
+    },
+    {
+      "id": "~captives_freed",
+      "description": "Freed the captives at the altar."
+    },
+    {
+      "id": "~tobin_died",
+      "description": "Tobin the shepherd died at the altar."
+    },
+    {
+      "id": "~cruel",
+      "description": "Killed Ashby instead of taking him or letting him go."
+    },
+    {
+      "id": "~slept",
+      "description": "Long rest at the tavern after the barrow."
+    },
+    {
+      "id": "~oath_done",
+      "description": "Settled things with Corwin (or set out alone)."
+    },
+    {
+      "id": "~wolves_done",
+      "description": "Got past the wolves on the Ravensgate road."
+    },
+    {
+      "id": "~bridge_done",
+      "description": "Got past the toll bridge."
+    },
+    {
+      "id": "~writ",
+      "description": "Carries the crown writ from Brightwater."
+    }
+  ],
+  "endings": [
+    {
+      "id": "starter_ravensgate",
+      "name": "To Ravensgate",
+      "text": "Warden-Sergeant Odo Brask needs outsiders who aren't sick yet to go into Hollowmere, where the sick hear the same voice you heard in the barrow. The Whispering Fen is waiting.",
+      "next": "ch1_whispering_fen"
+    },
+    {
+      "id": "starter_brightwater",
+      "name": "Sent to Ravensgate",
+      "text": "With a crown writ in your pack you take the fen road to Ravensgate, where the plague is said to begin. The Whispering Fen is waiting.",
+      "next": "ch1_whispering_fen"
+    }
+  ]
+}

@@ -25,7 +25,7 @@ This is how to write adventures for Solo D&D. Authored arcs and generated side q
 | `chapters` | Chapter[] | At least one. |
 | `npcs`, `encounters`, `beats`, `lootTables` | arrays | Scenes and outcomes refer to these by id. |
 | `flags` | `{ id, description, type?, default?, values?, min?, max? }[]` | Lists the flags this adventure reads or writes. A local flag may declare a `type` (`number`, `string` or `boolean`), a `default`, allowed `values` and `min`/`max` bounds; the runner uses them (defaults, clamping) and the validator checks writes against them. |
-| `endings` | `{ id, name, text }[]` | An outcome with `ending` finishes the adventure. |
+| `endings` | `{ id, name, text, next? }[]` | An outcome with `ending` finishes the adventure. `next` names the adventure id that starts straight away — this is how the campaign chains the starter arc into chapter 1, chapter 1 into chapter 2, and so on. |
 | `improvisedDifficulty` | `very_easy` … `nearly_impossible` | The DC tier for checks the player improvises in free text (SRD table). Defaults to `medium` (DC 15). A scene can override it. |
 
 ## Chapters and scenes
@@ -105,6 +105,8 @@ Every field is optional:
 | `approval` | `[{ "companion": "nettle", "delta": 10 }]`: ±5 for minor choices, ±10 significant, ±20 defining. Only companions in the party react. Loyalty is kept in `world.<id>_loyalty` (0–100). Author leave or betray points as actions or beats with `{ "flag": "world.<id>_loyalty", "lte": 20 }`. |
 | `goto` | Moves to a scene. This is applied last. |
 | `ending` | Finishes the adventure. |
+| `rest` | `"short"` or `"long"`: the party rests here (use it only in safe places). A short rest spends Hit Dice automatically (1 hour); a long rest restores HP, Hit Dice, spell slots and daily resources (8 hours). |
+| `tip` | A one-line tutorial tip, shown as a system line the first time this outcome happens in a campaign (the starter arc teaches with these). |
 | `removeItems` | `[{ "itemId": "lance", "quantity": 1 }]`: takes items from the hero (as many as they carry). Pair it with an `item` condition. |
 | `cost` | Copper paid (`500` = 5 gp). If the hero can't pay, the player is told so and nothing else in the outcome happens. Gate the action with a `coins` condition to hide it instead. |
 | `damage` | `{ "dice": "2d6", "type": "fire", "target": "hero" \| "party", "save"?: { "ability": "dex", "dc": 13, "half": true } }`. One roll is shared by all targets; a successful save halves it (or negates it with `half: false`). Heroic mode never drops a character below 1 HP; in Hardcore a character can drop to 0 HP (unconscious and stable). |

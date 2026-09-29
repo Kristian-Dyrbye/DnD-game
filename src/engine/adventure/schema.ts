@@ -114,6 +114,13 @@ export const OutcomeSchema = z
     approval: z.array(z.object({ companion: z.string(), delta: z.number().int().min(-50).max(50) })).default([]),
     /** A companion leaves the party: to wait, or for good (left / betrayed / dead). */
     companionLeaves: z.object({ id: z.string(), status: z.enum(['waiting', 'left', 'betrayed', 'dead']) }).optional(),
+    /**
+     * The party rests here (safe places only): 'short' spends Hit Dice automatically (1 hour),
+     * 'long' restores HP, Hit Dice, spell slots and daily resources (8 hours).
+     */
+    rest: z.enum(['short', 'long']).optional(),
+    /** A one-line tutorial tip shown the first time this outcome happens (spec §4 starter arc: "the UI shows a one-line tip"). */
+    tip: z.string().optional(),
     /** Ends the adventure with this ending id. */
     ending: Id.optional(),
   })
@@ -368,7 +375,8 @@ export const AdventureSchema = z
     /** Documented flags this adventure reads/writes (for editors and validation). */
     /** Flags this adventure reads/writes; local ones may declare `type` (number/string), `default`, `values`, `min`/`max`. */
     flags: z.array(AdventureFlagDocSchema).default([]),
-    endings: z.array(z.object({ id: Id, name: z.string(), text: z.string() })).default([]),
+    /** `next`: the adventure (id) that starts right after this ending — how the campaign chains chapters. */
+    endings: z.array(z.object({ id: Id, name: z.string(), text: z.string(), next: Id.optional() })).default([]),
     improvisedDifficulty: z.enum(DIFFICULTIES).default('medium'),
   })
   .strict();

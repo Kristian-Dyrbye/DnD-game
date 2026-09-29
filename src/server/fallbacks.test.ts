@@ -64,7 +64,7 @@ describe('fallbacks end to end', () => {
     await app.tts.idle();
     const logs = () => events.filter((e): e is Extract<ServerEvent, { type: 'log' }> => e.type === 'log').map((e) => e.entry.text);
     // Template narration of the opening scene.
-    expect(logs().some((t) => t.includes('mossy well'))).toBe(true);
+    expect(logs().some((t) => t.includes("Millbrook's green at dusk"))).toBe(true);
     // Friendly notices, once each.
     expect(logs().filter((t) => t === llmNoticeText(new LlmError('unreachable', 'x')))).toHaveLength(1);
     expect(logs().filter((t) => t === ttsNoticeText(new TtsError('not_installed', 'x')))).toHaveLength(1);
@@ -72,15 +72,15 @@ describe('fallbacks end to end', () => {
     expect(events.some((e) => e.type === 'suggestions' && e.actions.length > 0)).toBe(true);
 
     // Free text → keyword intent fallback → the action happens.
-    await app.session.handle({ type: 'say', text: 'I go and talk to the mayor' });
+    await app.session.handle({ type: 'say', text: 'I examine the chalk on the stones' });
     await app.tts.idle();
-    expect(app.session.current.flags['adv.millbrook_demo.has_key']).toBe(true);
+    expect(app.session.current.flags['arc.starter.sigil_found']).toBe(true);
     // Still just one notice each after more failures.
     expect(logs().filter((t) => t === llmNoticeText(new LlmError('unreachable', 'x')))).toHaveLength(1);
     expect(events.filter((e) => e.type === 'error')).toEqual([]);
 
     // Scene change → summary falls back to the template.
-    await app.session.handle({ type: 'choose', actionId: 'exit.to_mill' });
+    await app.session.handle({ type: 'choose', actionId: 'exit.tavern' });
     await new Promise((r) => setTimeout(r, 20));
     expect(app.session.current.summary.length).toBeGreaterThan(0);
 

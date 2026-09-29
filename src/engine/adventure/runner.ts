@@ -7,6 +7,7 @@
  * Progress lives in `state.extensions.adventure`. Action ids: scene actions use their own id,
  * POI actions are `<poi>.<action>`, exits are `exit.<id>`.
  */
+import { hitDicePool, longRest, shortRest } from '../rules/rest';
 import { giveScar, scarText } from '../character/scars';
 import { revealRoom } from '../world/dungeon';
 import { applyDamage, rollDamage } from '../rules/damage';
@@ -82,6 +83,8 @@ export interface StepResult {
   xp: number;
   /** Reputation changes (including ripples to allies/enemies). */
   reputation?: ReputationChange[];
+  /** Tutorial tips to show (once each, by the session). */
+  tips?: string[];
   /** Items taken from the hero by `removeItems`. */
   removed?: { itemId: string; quantity: number }[];
   /** Party changes already applied (RunContext.companions given): log lines in order. */
@@ -340,6 +343,7 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
     result.coins -= o.cost;
   }
   if (o.text) result.facts.push(o.text);
+  if (o.tip) (result.tips ??= []).push(o.tip);
   applyFlagWrites(state.flags, o.flags, flagsFor(ctx));
   if (o.flags.length) {
     const times = { ...((state.extensions.flagTimes as Record<string, number> | undefined) ?? {}) };
@@ -347,6 +351,7 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
     state.extensions.flagTimes = times;
   }
   if (o.damage) storyDamage(ctx, o.damage, result);
+  if (o.rest) storyRest(ctx, o.rest, result);
   if (o.scar) {
     const scene = findScene(ctx.adventure, getProgress(state)?.sceneId ?? '');
     state.hero = giveScar(state.hero, { description: o.scar.description, ...(o.scar.location && { location: o.scar.location }), ...(o.scar.damageType && { damageType: o.scar.damageType }), origin: `${scene?.name ?? state.location.name}, ${ctx.adventure.name}`, at: state.time }, ctx.rng);
@@ -407,6 +412,51 @@ function storyDamage(ctx: RunContext, d: NonNullable<Outcome['damage']>, result:
     else state.companions = state.companions.map((x) => (x.id === c.id ? next : x));
     result.facts.push(`${c.name} takes ${c.hp - hp} ${d.type} damage${hp === 0 ? ' and falls unconscious' : ''}.`);
   }
+}
+
+/**
+ * A rest in a safe place (spec §8 resting): short = spend Hit Dice (largest first) while at least
+ * one die's average is missing, recharge short-rest resources and pact slots; long = full HP, all
+ * Hit Dice, spell slots and resources, −1 Exhaustion. A stable character at 0 HP wakes at 1 HP first.
+ */
+function storyRest(ctx: RunContext, kind: 'short' | 'long', result: StepResult): void {
+  const { state } = ctx;
+  const rest = (c: Character): Character => {
+    if (c.dead) return c;
+    let cur: Character = c.hp < 1 ? { ...c, hp: 1, conditions: c.conditions.filter((x) => x.condition !== 'unconscious'), deathSaves: { successes: 0, failures: 0, stable: false } } : c;
+    if (kind === 'short') {
+      const avg = (die: string) => Number(die.slice(1)) / 2 + 1;
+      const spend: string[] = [];
+      const pool = { ...cur.hitDice };
+      let missing = cur.maxHp - cur.hp;
+      for (const die of Object.keys(pool).sort((a, b) => Number(b.slice(1)) - Number(a.slice(1)))) {
+        while ((pool[die] ?? 0) > 0 && missing >= avg(die)) {
+          spend.push(die);
+          pool[die]! -= 1;
+          missing -= avg(die);
+        }
+      }
+      cur = shortRest(cur, ctx.rng, spend).character;
+      if (cur.spellcasting?.pact) cur = { ...cur, spellcasting: { ...cur.spellcasting, pact: { ...cur.spellcasting.pact, current: cur.spellcasting.pact.max } } };
+      return cur;
+    }
+    const classes = cur.classes.map((x) => ({ hitDie: ctx.db?.classes.get(x.classId)?.hitDie ?? 'd8', level: x.level }));
+    cur = longRest(cur, hitDicePool(classes));
+    if (cur.spellcasting) {
+      const { concentration: _c, ...sc } = cur.spellcasting;
+      cur = { ...cur, spellcasting: { ...sc, slots: [...sc.maxSlots], ...(sc.pact && { pact: { ...sc.pact, current: sc.pact.max } }) } };
+    }
+    return cur;
+  };
+  const before = state.hero.hp;
+  state.hero = rest(state.hero);
+  state.companions = state.companions.map(rest);
+  state.time += kind === 'short' ? TIME_COSTS.short_rest : TIME_COSTS.long_rest;
+  result.facts.push(
+    kind === 'short'
+      ? `The party takes a short rest (1 hour).${state.hero.hp > before ? ` ${state.hero.name} recovers ${state.hero.hp - before} HP.` : ''}`
+      : 'The party takes a long rest (8 hours) and wakes restored.',
+  );
 }
 
 /** Recruit / approval / parting outcomes applied straight away (lines go to `result.partyLog`). */
