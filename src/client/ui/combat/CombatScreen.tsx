@@ -1,8 +1,10 @@
 /**
  * Combat screen (spec §10): 2D battle map, turn tracker, action bar and combat log. Moving: click a
  * highlighted square. Attacking: pick an attack, then a highlighted enemy. Area spells can be
- * cast: area spells show their template under the cursor; click to cast. Previews use the same
- * engine code as the rules (reachableSquares, checkAttack, previewArea).
+ * cast: area spells show their template under the cursor; click to cast. Zone spells (Web,
+ * Spiritual Weapon...) are placed by clicking a square and can be moved later. A second row holds
+ * Grapple/Shove, Study/Influence, potions, Ready and escaping. Previews use the same engine code as
+ * the rules (reachableSquares, checkAttack, previewArea).
  */
 import { useMemo, useState } from 'preact/hooks';
 import { templateFromArea, templateFromCaster, previewArea } from '../../../engine/combat/aoe';
@@ -13,17 +15,35 @@ import { cellKey, type Point } from '../../../engine/combat/grid';
 import { reachableSquares } from '../../../engine/combat/movement';
 import { lowestSlotFor, reachProblem, spellEconomy, spellRangeFt } from '../../../engine/combat/castAction';
 import { featureActions } from '../../../engine/character/features';
+import { INFLUENCE_SKILLS, STUDY_SKILLS, usableMagicItems, type InfluenceSkill, type StudySkill } from '../../../engine/combat/otherActions';
+import { grappledBy } from '../../../engine/combat/actions';
+import { zoneNeedsAim, zoneSquares, zonesOfCaster } from '../../../engine/combat/zones';
 import { budgetOf, currentId, movementLeft } from '../../../engine/combat/turns';
 import type { Character } from '../../../engine/core/creature';
 import { db } from '../../data';
 import { BattleMap } from './BattleMap';
 
-type Mode = { kind: 'move' } | { kind: 'attack'; profile: AttackProfile } | { kind: 'area'; spellId: string } | { kind: 'spell'; spellId: string } | { kind: 'feature'; actionId: string };
+type Mode =
+  | { kind: 'move' }
+  | { kind: 'attack'; profile: AttackProfile }
+  | { kind: 'area'; spellId: string }
+  | { kind: 'spell'; spellId: string }
+  | { kind: 'feature'; actionId: string }
+  | { kind: 'grapple' }
+  | { kind: 'shove'; effect: 'push' | 'prone' }
+  | { kind: 'influence'; skill: InfluenceSkill }
+  | { kind: 'item'; uid: string }
+  | { kind: 'zone'; zoneId: string };
+
+const SKILL_NAME = (s: string) => s.replace('_', ' ').replace(/^./, (m) => m.toUpperCase());
 
 export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Encounter; ctx: CombatContext; act: (a: PlayerAction) => string | undefined; onLeave?: () => void; leaveLabel?: string }) {
   const [mode, setMode] = useState<Mode>({ kind: 'move' });
   const [hover, setHover] = useState<Point | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [studySkill, setStudySkill] = useState<StudySkill>('arcana');
+  const [influenceSkill, setInfluenceSkill] = useState<InfluenceSkill>('intimidation');
+  const [drag, setDrag] = useState(false);
   const { state } = enc;
   // The player acts for the hero and any companion toggled to player control.
   const upNow = currentId(state.turns);
@@ -35,9 +55,10 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Enco
 
   const reach = useMemo(() => {
     if (!myTurn || !hero || mode.kind !== 'move') return new Map<string, { x: number; y: number; path: Point[] }>();
+    const dragging = drag ? grappledBy(state, heroId) : [];
     const left = movementLeft(state.turns, heroId, hero);
-    return reachableSquares(state.grid, heroId, left, { isHostile: (a, b) => (sides[a] ?? 'x') !== (sides[b] ?? 'y') });
-  }, [state, mode, myTurn]);
+    return reachableSquares(state.grid, heroId, dragging.length ? Math.floor(left / 2) : left, { isHostile: (a, b) => (sides[a] ?? 'x') !== (sides[b] ?? 'y'), ...(dragging.length && { ignore: dragging }) });
+  }, [state, mode, myTurn, drag]);
   const reachKeys = useMemo(() => new Set([...reach.values()].map((r) => cellKey(r))), [reach]);
 
   const profiles = hero ? attackProfiles(hero, db) : [];
@@ -50,7 +71,10 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Enco
       const healing = (spell.effects ?? []).some((e) => e.kind === 'heal' || e.kind === 'temp_hp');
       return new Set(Object.keys(state.creatures).filter((id) => (healing ? sides[id] === 'party' : sides[id] === 'enemy' && state.creatures[id]!.hp > 0) && !reachProblem(state, heroId, id, spellRangeFt(spell))));
     }
-    if (mode.kind === 'feature') return new Set(Object.keys(state.creatures).filter((id) => sides[id] === 'party' && !reachProblem(state, heroId, id, 5)));
+    if (mode.kind === 'feature' || mode.kind === 'item') return new Set(Object.keys(state.creatures).filter((id) => sides[id] === 'party' && !reachProblem(state, heroId, id, 5)));
+    const foes = (maxFt: number) => new Set(Object.keys(state.creatures).filter((id) => sides[id] === 'enemy' && state.creatures[id]!.hp > 0 && !reachProblem(state, heroId, id, maxFt)));
+    if (mode.kind === 'grapple' || mode.kind === 'shove') return foes(5);
+    if (mode.kind === 'influence') return foes(60);
     return new Set<string>();
   }, [state, mode, myTurn]);
 
@@ -66,6 +90,13 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Enco
   }, [mode, hover, state]);
 
   const hoverPath = mode.kind === 'move' && hover ? reach.get(cellKey(hover))?.path : undefined;
+  const zoneKeys = useMemo(() => new Set((state.zones ?? []).flatMap((z) => zoneSquares(state, z).map((s) => cellKey(s)))), [state]);
+  const myZones = hero ? zonesOfCaster(state, heroId) : [];
+  const holdingZones = hero ? (state.zones ?? []).filter((z) => z.condition && hero.conditions.some((x) => x.condition === z.condition && x.sourceId === z.sourceId)) : [];
+  const items = hero ? usableMagicItems(hero, ctx) : [];
+  const grappling = hero ? grappledBy(state, heroId) : [];
+  const grappled = !!hero?.effects.some((e) => e.key === 'grappled_by');
+  const readyProfile = profiles[0];
 
   const run = (a: PlayerAction) => {
     setError(act(a) ?? null);
@@ -76,7 +107,11 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Enco
     if (!myTurn) return;
     if (mode.kind === 'move') {
       const r = reach.get(cellKey(p));
-      if (r) run({ kind: 'move', path: r.path });
+      if (r) run({ kind: 'move', path: r.path, ...(drag && grappling.length && { drag: grappling }) });
+      return;
+    }
+    if (mode.kind === 'zone') {
+      run({ kind: 'zone', zoneId: mode.zoneId, to: p });
       return;
     }
     if (mode.kind === 'area') {
@@ -88,6 +123,10 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Enco
       run({ kind: 'cast', spellId: mode.spellId, targetIds: [clicked] });
       return;
     }
+    if (mode.kind === 'grapple' && clicked && targets.has(clicked)) return run({ kind: 'grapple', targetId: clicked });
+    if (mode.kind === 'shove' && clicked && targets.has(clicked)) return run({ kind: 'shove', targetId: clicked, effect: mode.effect });
+    if (mode.kind === 'influence' && clicked && targets.has(clicked)) return run({ kind: 'influence', targetId: clicked, skill: mode.skill });
+    if (mode.kind === 'item' && clicked && targets.has(clicked)) return run({ kind: 'use_item', uid: mode.uid, targetId: clicked });
     if (mode.kind === 'feature' && clicked && targets.has(clicked)) {
       run({ kind: 'feature', actionId: mode.actionId, targetId: clicked });
       return;
@@ -127,6 +166,7 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Enco
             reachable={reachKeys}
             targets={targets}
             {...(aoe && { aoe })}
+            zones={zoneKeys}
             {...(hoverPath && { path: [{ x: state.grid.tokens[heroId]!.x, y: state.grid.tokens[heroId]!.y }, ...hoverPath] })}
             onSquare={onSquare}
             onHover={setHover}
@@ -163,7 +203,7 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Enco
                     class={`spell${selected ? ' selected' : ''}`}
                     disabled={!usable || !!noSlot}
                     title={`${sp.level === 0 ? 'Cantrip' : `Level ${sp.level}`} · ${econ === 'bonusAction' ? 'bonus action' : 'action'}${sp.area ? ' · area: click a square' : ''}`}
-                    onClick={() => (selfOnly ? run({ kind: 'cast', spellId: sp.id, targetIds: [heroId] }) : setMode(sp.area ? { kind: 'area', spellId: sp.id } : { kind: 'spell', spellId: sp.id }))}
+                    onClick={() => (selfOnly ? run({ kind: 'cast', spellId: sp.id, targetIds: [heroId] }) : setMode(sp.area || zoneNeedsAim(sp) ? { kind: 'area', spellId: sp.id } : { kind: 'spell', spellId: sp.id }))}
                   >
                     ✦ {sp.name}
                   </button>
@@ -186,6 +226,78 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel }: { enc: Enco
               <button type="button" class="primary" onClick={() => run({ kind: 'end_turn' })}>
                 End turn
               </button>
+              <div class="action-row-more">
+                <button type="button" class={mode.kind === 'grapple' ? 'selected' : ''} disabled={!budget.action && !(budget.attacksLeft ?? 0)} title="Unarmed Strike: grab a creature within 5 ft (needs a free hand)" onClick={() => setMode({ kind: 'grapple' })}>
+                  Grapple
+                </button>
+                <button type="button" class={mode.kind === 'shove' && mode.effect === 'prone' ? 'selected' : ''} disabled={!budget.action && !(budget.attacksLeft ?? 0)} onClick={() => setMode({ kind: 'shove', effect: 'prone' })}>
+                  Shove prone
+                </button>
+                <button type="button" class={mode.kind === 'shove' && mode.effect === 'push' ? 'selected' : ''} disabled={!budget.action && !(budget.attacksLeft ?? 0)} onClick={() => setMode({ kind: 'shove', effect: 'push' })}>
+                  Shove away
+                </button>
+                {grappled && (
+                  <button type="button" disabled={!budget.action} onClick={() => run({ kind: 'escape_grapple' })}>
+                    Escape grapple
+                  </button>
+                )}
+                {grappling.length > 0 && (
+                  <label class="small">
+                    <input type="checkbox" checked={drag} onChange={(e) => setDrag((e.target as HTMLInputElement).checked)} /> Drag grappled (double cost)
+                  </label>
+                )}
+                {holdingZones.map((z) => (
+                  <button key={z.id} type="button" disabled={!budget.action} onClick={() => run({ kind: 'escape_zone', zoneId: z.id })}>
+                    Break free of {z.name}
+                  </button>
+                ))}
+                {myZones.map((z) => (
+                  <button key={z.id} type="button" class={`spell${mode.kind === 'zone' && mode.zoneId === z.id ? ' selected' : ''}`} disabled={z.bolt || z.move?.economy === 'action' ? !budget.action : !budget.bonusAction} title="Click a square" onClick={() => setMode({ kind: 'zone', zoneId: z.id })}>
+                    ✦ {z.bolt ? `${z.name}: new bolt` : `Move ${z.name}`}
+                  </button>
+                ))}
+                {items.map((it) => (
+                  <span key={it.uid} class="item-use">
+                    <button type="button" disabled={it.bonusAction ? !budget.bonusAction : !budget.action} onClick={() => run({ kind: 'use_item', uid: it.uid })}>
+                      ⚗ {it.name}
+                    </button>
+                    {it.bonusAction && (
+                      <button type="button" class={mode.kind === 'item' && mode.uid === it.uid ? 'selected' : ''} disabled={!budget.bonusAction} title="Give it to an ally within 5 ft" onClick={() => setMode({ kind: 'item', uid: it.uid })}>
+                        give
+                      </button>
+                    )}
+                  </span>
+                ))}
+                <span class="skill-pick">
+                  <select value={studySkill} aria-label="Study skill" onChange={(e) => setStudySkill((e.target as HTMLSelectElement).value as StudySkill)}>
+                    {STUDY_SKILLS.map((s) => (
+                      <option key={s} value={s}>
+                        {SKILL_NAME(s)}
+                      </option>
+                    ))}
+                  </select>
+                  <button type="button" disabled={!budget.action} onClick={() => run({ kind: 'study', skill: studySkill, topic: 'the foes and the battlefield' })}>
+                    Study
+                  </button>
+                </span>
+                <span class="skill-pick">
+                  <select value={influenceSkill} aria-label="Influence skill" onChange={(e) => setInfluenceSkill((e.target as HTMLSelectElement).value as InfluenceSkill)}>
+                    {INFLUENCE_SKILLS.map((s) => (
+                      <option key={s} value={s}>
+                        {SKILL_NAME(s)}
+                      </option>
+                    ))}
+                  </select>
+                  <button type="button" class={mode.kind === 'influence' ? 'selected' : ''} disabled={!budget.action} title="Then click a foe within 60 ft" onClick={() => setMode({ kind: 'influence', skill: influenceSkill })}>
+                    Influence
+                  </button>
+                </span>
+                {readyProfile && (
+                  <button type="button" disabled={!budget.action} title="Attack when an enemy comes within reach (uses your Reaction)" onClick={() => run({ kind: 'ready', attackProfileId: readyProfile.id })}>
+                    Ready {readyProfile.name}
+                  </button>
+                )}
+              </div>
             </>
           )}
           {error && <p class="game-error">{error}</p>}

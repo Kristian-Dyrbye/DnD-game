@@ -1,7 +1,7 @@
 /**
  * 2D battle map (spec §10, §14 "2D top-down token fallback"): a canvas grid with terrain, walls,
  * tokens (side colour, initials, HP ring), the active creature, reachable squares, valid targets
- * and an area-of-effect preview. Pure rendering + click/hover callbacks; rules live in the engine.
+ * an area-of-effect preview and lasting spell zones. Pure rendering + click/hover callbacks; rules live in the engine.
  */
 import { useEffect, useRef } from 'preact/hooks';
 import { cellKey, footprintSize, type Grid, type Point } from '../../../engine/combat/grid';
@@ -17,6 +17,8 @@ export interface BattleMapProps {
   reachable?: ReadonlySet<string>;
   targets?: ReadonlySet<string>;
   aoe?: ReadonlySet<string>;
+  /** Squares covered by lasting spell zones (Web, Spirit Guardians...). */
+  zones?: ReadonlySet<string>;
   path?: readonly Point[];
   onSquare?: (p: Point) => void;
   onHover?: (p: Point | null) => void;
@@ -63,6 +65,10 @@ export function BattleMap(p: BattleMapProps) {
             ctx.lineTo(x * CELL + i + CELL, y * CELL);
             ctx.stroke();
           }
+        }
+        if (p.zones?.has(key)) {
+          ctx.fillStyle = 'rgba(170,110,255,0.22)';
+          ctx.fillRect(x * CELL, y * CELL, CELL, CELL);
         }
         if (p.reachable?.has(key)) {
           ctx.fillStyle = 'rgba(120,200,255,0.18)';
@@ -159,7 +165,7 @@ export function BattleMap(p: BattleMapProps) {
       ctx.fillText(down ? '✕' : initials(c.name), cx, cy);
       ctx.globalAlpha = 1;
     }
-  }, [p.grid, p.creatures, p.activeId, p.reachable, p.targets, p.aoe, p.path]);
+  }, [p.grid, p.creatures, p.activeId, p.reachable, p.targets, p.aoe, p.zones, p.path]);
 
   const toSquare = (e: MouseEvent): Point | null => {
     const el = canvas.current;

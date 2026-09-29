@@ -11,7 +11,14 @@ import { monsterToCreature } from '../rules/monsters';
 import { takeAiTurn, type AiOptions } from './ai';
 import { takeCompanionTurn } from './companionAi';
 import { resolveAttack } from './attack';
-import { dash, disengage, dodge, moveCreature } from './actions';
+import { dash, disengage, dodge, escapeGrapple, grapple, moveCreature, readiedOf, ready, shove, triggerReadied } from './actions';
+import { checkAttack, findProfile } from './attack';
+import { canReact } from './turns';
+import { influence, study, useMagicItem, utilize, type InfluenceSkill, type StudySkill } from './otherActions';
+import { escapeZone, zoneAct, zonesOfCaster, type Zone } from './zones';
+import { reachProblem } from './castAction';
+import { areHostile } from './combatState';
+import type { ActionResult } from './combatState';
 import { castInCombat, featureInCombat, spellRangeFt } from './castAction';
 import { previewArea, templateFromArea, templateFromCaster } from './aoe';
 import { dbOf } from './combatState';
@@ -39,7 +46,8 @@ export interface Encounter {
 export const LOG_CAP = 200;
 
 export type PlayerAction =
-  | { kind: 'move'; path: Point[] }
+  /** `drag`: creatures the mover grapples and drags along (double movement cost). */
+  | { kind: 'move'; path: Point[]; drag?: string[] }
   | { kind: 'attack'; targetId: string; profileId?: string }
   | { kind: 'dash' }
   | { kind: 'disengage' }
@@ -47,7 +55,19 @@ export type PlayerAction =
   | { kind: 'end_turn' }
   /** Cast a prepared spell; `area` = the aimed square for area spells (targets are then the creatures inside). */
   | { kind: 'cast'; spellId: string; targetIds: string[]; slotLevel?: number; area?: Point }
-  | { kind: 'feature'; actionId: string; targetId?: string };
+  | { kind: 'feature'; actionId: string; targetId?: string }
+  | { kind: 'grapple'; targetId: string }
+  | { kind: 'shove'; targetId: string; effect: 'push' | 'prone' }
+  | { kind: 'escape_grapple' }
+  | { kind: 'study'; skill: StudySkill; topic: string }
+  | { kind: 'influence'; targetId: string; skill: InfluenceSkill }
+  | { kind: 'utilize'; what: string }
+  | { kind: 'use_item'; uid: string; targetId?: string }
+  /** Ready an attack (fires when an enemy ends its turn within reach) or a spell (within range). */
+  | { kind: 'ready'; attackProfileId?: string; spellId?: string }
+  /** Use a zone you created: move it to `to` (Spiritual Weapon then strikes `targetId` or an adjacent foe), or a Call Lightning bolt. */
+  | { kind: 'zone'; zoneId: string; to?: Point; targetId?: string }
+  | { kind: 'escape_zone'; zoneId: string };
 
 /** A simple arena: open ground with a few pillars and patches of difficult terrain (seeded). */
 export function defaultArena(rng: Rng, width = 12, height = 10): Grid {
@@ -153,7 +173,66 @@ function advance(enc: Encounter, ctx: CombatContext, aiOpts: AiOptions = {}): vo
         : takeAiTurn(enc.state, ctx, id, { roster: enc.roster, ...aiOpts });
     enc.state = res.state;
     push(enc, res.events.map((e: CombatEvent) => e.text));
+    if (enc.roster[id] === 'party') companionZones(enc, ctx, id);
+    else fireReadied(enc, ctx, id);
   }
+}
+
+/**
+ * Readied actions of player-controlled creatures fire when an enemy ends its turn in reach (attack)
+ * or range (spell) — checked after each enemy turn rather than mid-move (simplification).
+ */
+function fireReadied(enc: Encounter, ctx: CombatContext, foeId: string): void {
+  const foe = enc.state.creatures[foeId];
+  if (!foe || foe.hp <= 0) return;
+  for (const pcId of enc.controlled ?? [enc.heroId]) {
+    const pc = enc.state.creatures[pcId];
+    const r = pc ? readiedOf(pc) : undefined;
+    if (!pc || !r || pc.hp <= 0 || !areHostile(enc.state, ctx, pcId, foeId) || !canReact(enc.state.turns, pcId, pc, ctx.table)) continue;
+    let fire = false;
+    if (r.action.kind === 'attack') {
+      const profile = findProfile(pc, dbOf(ctx), r.action.profileId);
+      fire = !!profile && checkAttack(enc.state, ctx, pcId, foeId, profile).ok;
+    }
+    else if (r.action.kind === 'spell') {
+      const spell = dbOf(ctx).spells.get(r.action.spellId);
+      fire = !!spell && !reachProblem(enc.state, pcId, foeId, spellRangeFt(spell));
+    }
+    if (!fire) continue;
+    const t = triggerReadied(enc.state, ctx, pcId, { targetId: foeId, targetIds: [foeId] });
+    push(enc, t.events.map((x) => x.text));
+    if (t.ok) enc.state = t.state;
+  }
+}
+
+/** AI companions keep using their zones: Spiritual Weapon moves next to the nearest foe and strikes. */
+function companionZones(enc: Encounter, ctx: CombatContext, id: string): void {
+  for (const z of zonesOfCaster(enc.state, id)) {
+    if (!z.attack || !enc.state.turns.budgets[id]?.bonusAction) continue;
+    const pick = strikeSpot(enc, ctx, z, id);
+    if (!pick) continue;
+    const r = zoneAct(enc.state, ctx, id, z.id, pick);
+    push(enc, r.events.map((x) => x.text));
+    if (r.ok) enc.state = r.state;
+  }
+}
+
+/** A square next to the nearest hostile within the zone's move range, and that hostile. */
+function strikeSpot(enc: Encounter, ctx: CombatContext, z: Zone, casterId: string): { to: Point; targetId: string } | undefined {
+  if (!z.point || !z.move) return undefined;
+  const foes = Object.keys(enc.state.creatures)
+    .filter((f) => (enc.state.creatures[f]?.hp ?? 0) > 0 && enc.state.grid.tokens[f] && areHostile(enc.state, ctx, casterId, f))
+    .sort((a, b) => distanceFt({ ...z.point!, size: 'medium' }, enc.state.grid.tokens[a]!) - distanceFt({ ...z.point!, size: 'medium' }, enc.state.grid.tokens[b]!));
+  for (const f of foes) {
+    const t = enc.state.grid.tokens[f]!;
+    for (let dy = -1; dy <= 1; dy++)
+      for (let dx = -1; dx <= 1; dx++) {
+        const to = { x: t.x + dx, y: t.y + dy };
+        if (to.x < 0 || to.y < 0 || to.x >= enc.state.grid.width || to.y >= enc.state.grid.height) continue;
+        if (distanceFt({ ...z.point, size: 'medium' }, { ...to, size: 'medium' }) <= z.move.ft && distanceFt({ ...to, size: 'medium' }, t) <= (z.attack?.reachFt ?? 5)) return { to, targetId: f };
+      }
+  }
+  return undefined;
 }
 
 /** Zone effects at the start/end of a creature's turn (Spirit Guardians, Web, Black Tentacles...). */
@@ -172,6 +251,12 @@ export function areaTargets(enc: Encounter, ctx: CombatContext, casterId: string
   const centre = { x: aim.x + 0.5, y: aim.y + 0.5 };
   const tpl = fromSelf ? templateFromCaster(enc.state.grid, casterId, spell.area, centre) : templateFromArea(spell.area, { origin: centre });
   return previewArea(enc.state.grid, tpl, { excludeIds: fromSelf ? [casterId] : [] }).creatureIds.filter((id) => (enc.state.creatures[id]?.hp ?? 0) > 0);
+}
+
+/** Spiritual Weapon: the foes next to where it appears (it strikes the first). */
+function foesNextTo(enc: Encounter, ctx: CombatContext, casterId: string, spellId: string, aim: Point): string[] {
+  if (spellId !== 'spiritual_weapon') return [];
+  return Object.keys(enc.state.creatures).filter((f) => (enc.state.creatures[f]?.hp ?? 0) > 0 && enc.state.grid.tokens[f] && areHostile(enc.state, ctx, casterId, f) && distanceFt({ ...aim, size: 'medium' }, enc.state.grid.tokens[f]!) <= 5);
 }
 
 /** Does the player control this creature (the hero, or a companion toggled to player control)? */
@@ -201,7 +286,7 @@ export function playerAct(enc: Encounter, ctx: CombatContext, a: PlayerAction): 
         : castInCombat(enc.state, ctx, {
             casterId: id,
             spellId: a.spellId,
-            targetIds: a.area ? [...areaTargets(enc, ctx, id, a.spellId, a.area), ...a.targetIds] : a.targetIds,
+            targetIds: a.area ? [...areaTargets(enc, ctx, id, a.spellId, a.area), ...a.targetIds, ...foesNextTo(enc, ctx, id, a.spellId, a.area)] : a.targetIds,
             ...(a.area && { areaTargets: true, aim: a.area }),
             ...(a.slotLevel && { slot: { kind: 'slot' as const, level: a.slotLevel } }),
           });
@@ -212,22 +297,75 @@ export function playerAct(enc: Encounter, ctx: CombatContext, a: PlayerAction): 
     checkEnd(enc);
     return undefined;
   }
+  if (a.kind === 'zone') {
+    const z = enc.state.zones?.find((x) => x.id === a.zoneId);
+    let targetId = a.targetId;
+    if (z?.attack && a.to && !targetId) {
+      // Strike the first foe next to the new spot.
+      const to = a.to;
+      targetId = Object.keys(enc.state.creatures).find((f) => (enc.state.creatures[f]?.hp ?? 0) > 0 && enc.state.grid.tokens[f] && areHostile(enc.state, ctx, id, f) && distanceFt({ ...to, size: 'medium' }, enc.state.grid.tokens[f]!) <= (z.attack?.reachFt ?? 5));
+    }
+    return finish(enc, ctx, id, zoneAct(enc.state, ctx, id, a.zoneId, { ...(a.to && { to: a.to }), ...(targetId && { targetId }) }));
+  }
+  const other = otherAction(enc, ctx, id, a);
+  if (other) return finish(enc, ctx, id, other);
   const res =
     a.kind === 'move'
-      ? moveCreature(enc.state, ctx, id, a.path)
+      ? moveCreature(enc.state, ctx, id, a.path, { ...(a.drag?.length && { drag: a.drag }) })
       : a.kind === 'attack'
         ? resolveAttack(enc.state, ctx, { attackerId: id, targetId: a.targetId, kind: 'action', ...(a.profileId && { profile: a.profileId }) })
         : a.kind === 'dash'
           ? dash(enc.state, ctx, id)
           : a.kind === 'disengage'
             ? disengage(enc.state, ctx, id)
-            : dodge(enc.state, ctx, id);
+            : a.kind === 'dodge'
+              ? dodge(enc.state, ctx, id)
+              : undefined;
+  if (!res) return 'Unknown action.';
   push(enc, res.events.map((e) => e.text));
   if (!res.ok) return res.error;
   enc.state = res.state;
   if (a.kind === 'attack') enc.focusId = a.targetId;
   if (checkEnd(enc)) return undefined;
   // Dropping on your own turn (e.g. an Opportunity Attack) ends it.
+  if ((enc.state.creatures[id]?.hp ?? 0) <= 0) advance(enc, ctx);
+  return undefined;
+}
+
+/** The new combat actions (grapple, shove, study, influence, items, ready, zones). */
+function otherAction(enc: Encounter, ctx: CombatContext, id: string, a: PlayerAction): ActionResult | undefined {
+  const s = enc.state;
+  switch (a.kind) {
+    case 'grapple':
+      return grapple(s, ctx, id, a.targetId);
+    case 'shove':
+      return shove(s, ctx, id, a.targetId, { effect: a.effect });
+    case 'escape_grapple':
+      return escapeGrapple(s, ctx, id);
+    case 'study':
+      return study(s, ctx, id, { skill: a.skill, topic: a.topic });
+    case 'influence':
+      return influence(s, ctx, id, a.targetId, { skill: a.skill });
+    case 'utilize':
+      return utilize(s, ctx, id, a.what);
+    case 'use_item':
+      return useMagicItem(s, ctx, id, a.uid, a.targetId);
+    case 'ready':
+      if (a.spellId) return ready(s, ctx, id, 'an enemy comes within range', { kind: 'spell', spellId: a.spellId });
+      return ready(s, ctx, id, 'an enemy comes within reach', { kind: 'attack', ...(a.attackProfileId && { profileId: a.attackProfileId }) });
+    case 'escape_zone':
+      return escapeZone(s, ctx, id, a.zoneId);
+    default:
+      return undefined;
+  }
+}
+
+/** Log, apply and check the end of a player action result. */
+function finish(enc: Encounter, ctx: CombatContext, id: string, r: ActionResult): string | undefined {
+  push(enc, r.events.map((e) => e.text));
+  if (!r.ok) return r.error;
+  enc.state = r.state;
+  if (checkEnd(enc)) return undefined;
   if ((enc.state.creatures[id]?.hp ?? 0) <= 0) advance(enc, ctx);
   return undefined;
 }

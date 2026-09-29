@@ -4,6 +4,7 @@
  * trusted by the client. Every command may carry `reqId`, echoed on its `error` / `ack` events.
  */
 import { z } from 'zod';
+import { INFLUENCE_SKILLS, STUDY_SKILLS } from '../engine/combat/otherActions';
 import { CharacterSchema } from '../engine/core/creature';
 import type { GameState, LogEntry, RollRecord } from '../engine/session/gameState';
 import type { Journal } from '../engine/session/journal';
@@ -16,7 +17,7 @@ const base = { reqId: z.string().max(40).optional() };
 
 const PointSchema = z.object({ x: z.number().int().min(0).max(200), y: z.number().int().min(0).max(200) });
 export const PlayerActionSchema = z.discriminatedUnion('kind', [
-  z.object({ kind: z.literal('move'), path: z.array(PointSchema).min(1).max(80) }),
+  z.object({ kind: z.literal('move'), path: z.array(PointSchema).min(1).max(80), drag: z.array(z.string().max(60)).max(4).optional() }),
   z.object({ kind: z.literal('attack'), targetId: z.string().max(60), profileId: z.string().max(120).optional() }),
   z.object({ kind: z.literal('dash') }),
   z.object({ kind: z.literal('disengage') }),
@@ -24,6 +25,16 @@ export const PlayerActionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('end_turn') }),
   z.object({ kind: z.literal('cast'), spellId: z.string().max(60), targetIds: z.array(z.string().max(60)).max(20), slotLevel: z.number().int().min(1).max(9).optional(), area: PointSchema.optional() }),
   z.object({ kind: z.literal('feature'), actionId: z.string().max(60), targetId: z.string().max(60).optional() }),
+  z.object({ kind: z.literal('grapple'), targetId: z.string().max(60) }),
+  z.object({ kind: z.literal('shove'), targetId: z.string().max(60), effect: z.enum(['push', 'prone']) }),
+  z.object({ kind: z.literal('escape_grapple') }),
+  z.object({ kind: z.literal('study'), skill: z.enum(STUDY_SKILLS), topic: z.string().max(120) }),
+  z.object({ kind: z.literal('influence'), targetId: z.string().max(60), skill: z.enum(INFLUENCE_SKILLS) }),
+  z.object({ kind: z.literal('utilize'), what: z.string().max(120) }),
+  z.object({ kind: z.literal('use_item'), uid: z.string().max(20), targetId: z.string().max(60).optional() }),
+  z.object({ kind: z.literal('ready'), attackProfileId: z.string().max(120).optional(), spellId: z.string().max(60).optional() }),
+  z.object({ kind: z.literal('zone'), zoneId: z.string().max(120), to: PointSchema.optional(), targetId: z.string().max(60).optional() }),
+  z.object({ kind: z.literal('escape_zone'), zoneId: z.string().max(120) }),
 ]);
 
 export const ClientCommandSchema = z.discriminatedUnion('type', [
