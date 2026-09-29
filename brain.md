@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A027
-- **Notes for next session:** Start with A028. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A028
+- **Notes for next session:** Start with A029 (SRD data is complete; now the rules engine). A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -47,7 +47,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A025 — SRD data: monsters G–M | Spec: §4 | Done: as A024 | Dep: A024
 - [done] A026 — SRD data: monsters N–S | Spec: §4 | Done: as A024 | Dep: A024
 - [done] A027 — SRD data: monsters T–Z | Spec: §4 | Done: as A024 | Dep: A024
-- [todo] A028 — SRD data: magic items | Spec: §4, §11.5 | Done: all SRD magic items with rarity, attunement, effect refs; validated (split if too big) | Dep: A013
+- [done] A028 — SRD data: magic items | Spec: §4, §11.5 | Done: all SRD magic items with rarity, attunement, effect refs; validated (split if too big) | Dep: A013
 - [todo] A029 — Ability checks & saves | Spec: §4, §8 | Done: checks/saves with proficiency, expertise, adv/dis sources, DC, math string; tests | Dep: A012
 - [todo] A030 — Attacks & damage | Spec: §4 | Done: to-hit, nat 20/1, crit dice, resist/vuln/immune, temp HP, damage application; tests | Dep: A029
 - [todo] A031 — Conditions engine + exhaustion 2024 | Spec: §4 | Done: apply/remove/duration, data-driven roll modifiers, exhaustion −2/level d20 & −5 ft speed, death at 6; tests | Dep: A014, A030
@@ -182,6 +182,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A018–A020 — One generic importer for all 12 classes + 12 SRD subclasses: core traits, features 1–20, table columns (rages, sneak_attack...), cantrips/prepared arrays, starting equipment A/B(/C), multiclass prereqs + gains, Metamagic/Invocation option lists, subclass always-prepared spells (Circle of the Land keyed `arid:3`); added Spellbook gear item — `scripts/srd/import-classes.ts`
 - A021–A023 — All 339 spells (one importer): header fields, higherLevels/cantripUpgrade text, hints (attack, save, damage, area, conditions), auto effects for 93 unambiguous spells (spell attack, save-for-damage with area/half, heal + mod, save-or-condition), upcast dice — `scripts/srd/import-spells.ts`
 - A024–A027 — All 330 stat blocks (235 monsters + 95 animals, one importer): size/type/tags/swarm, AC, init, HP+dice, speeds, abilities+saves, skills, resist/immune/vuln/condition immunities, senses, CR/XP/PB, gear, traits/actions/bonus/reactions/legendary (attack bonus, reach/range, always-on damage, save DC/area/half, recharge, per-day, legendary cost), multiattack pairs, parsed spellcasting — `scripts/srd/import-monsters.ts`
+- A028 — 271 magic items: category, rarity, attunement (+ by whom), base item, charges; +1/+2/+3 items expanded per rarity (weapon_1..3, armor_1..3, shield_1..3, ammunition_1..3, wand_of_the_war_mage_1..3); Potions of Healing expanded into 4 potions with heal effects — `scripts/srd/import-magic-items.ts`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -228,6 +229,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A018: Spellbook added as gear (50 GP, 3 lb., classic SRD values) because the 2024 SRD has no gear row for it.
 - A021: Spells imported with ONE importer, so A022/A023 were completed in the same session. Auto effects only for unambiguous patterns; other spells keep hints + text and get hand effects/hooks in A034a (new queue item). Cantrip scaling is NOT in data (engine rule, A034a).
 - A024: Monsters imported with ONE importer (A025–A027 done in the same session). Attack `damage` = always-on damage only; conditional extras ("plus 1d4 if Advantage", Bloodied alternatives) stay in text for hooks. Multiattack "A or B" / "any combination" → first option. Hydra multiattack = 5 Bites (starting heads). Source typos fixed: Will-o'-Wisp STR (derived from mod), Archmage XP 8,400 (override), 'Long Strider' → longstrider.
+- A028: Magic item ids for +N items end in _N (weapon_1). `potion_of_healing` exists both as gear (buyable, 50 GP) and as a magic item (with heal effect) — separate maps, same id on purpose. 'Rarity Varies' items (spell_scroll, ioun_stone, figurine...) keep rarity 'varies'.
+- A028: `npm run srd:import` rebuilds all SRD JSON deterministically (verified no diff on rerun).
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -263,6 +266,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `scripts/srd/import-classes.ts` — classes + subclasses (needs equipment JSON)
 - `scripts/srd/import-spells.ts` — spells
 - `scripts/srd/import-monsters.ts` — monsters + animals
+- `scripts/srd/import-magic-items.ts` — magic items
 - `data/srd/overrides/` — hand fixes/mechanics merged by id into importer output
 - `data/srd/rules-tables.json` — core numeric tables
 - `data/srd/*.json` — SRD data (arrays; empty until A014–A028 fill them)
