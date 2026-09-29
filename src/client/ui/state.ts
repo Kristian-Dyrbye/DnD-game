@@ -6,6 +6,7 @@ import { quickBuild } from '../../engine/character/quickBuild';
 import type { Character } from '../../engine/core/creature';
 import { Rng } from '../../engine/core/rng';
 import { db } from '../data';
+import { send } from '../net/gameSocket';
 
 export type Screen = 'title' | 'creator' | 'game';
 
@@ -23,6 +24,7 @@ export function beginAdventure(): void {
   const s = creator.value;
   hero.value = buildCharacter(toBuildInput(s), db);
   heroMode.value = s.difficulty ?? 'heroic';
+  send({ type: 'new_game', hero: hero.value, mode: heroMode.value });
   screen.value = 'game';
 }
 

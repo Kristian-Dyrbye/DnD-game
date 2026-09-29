@@ -54,8 +54,9 @@ export class Rng {
     return out;
   }
 
+  /** Normalised to unsigned 32-bit so equal generators always compare (and save) equal. */
   getState(): RngState {
-    return [this.a, this.b, this.c, this.d];
+    return [this.a >>> 0, this.b >>> 0, this.c >>> 0, this.d >>> 0];
   }
 
   setState(state: RngState): void {

@@ -5,6 +5,11 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import { buildApp } from './app';
 import { GAME_VERSION } from '../shared/version';
+import { buildCharacter } from '../engine/character/builder';
+import { toBuildInput } from '../engine/character/creator';
+import { quickBuild } from '../engine/character/quickBuild';
+import { Rng } from '../engine/core/rng';
+import { loadSrd } from '../engine/data/srdBundle';
 
 let app: FastifyInstance | undefined;
 
@@ -21,14 +26,44 @@ describe('server app', () => {
     expect(res.json()).toEqual({ ok: true, version: GAME_VERSION });
   });
 
-  it('echoes JSON over the WebSocket channel', async () => {
-    app = await buildApp();
-    await app.ready();
-    const ws = await app.injectWS('/ws');
-    const reply = new Promise<string>((resolve) => ws.once('message', (d) => resolve(d.toString())));
-    ws.send(JSON.stringify({ hello: 'world' }));
-    expect(JSON.parse(await reply)).toEqual({ type: 'echo', payload: { hello: 'world' } });
-    ws.terminate();
+  it('runs a game over the WebSocket channel: ping, new_game snapshot, save', async () => {
+    const savesDir = fs.mkdtempSync(path.join(os.tmpdir(), 'dnd-ws-'));
+    try {
+      app = await buildApp({ savesDir, sessionPorts: { newSeed: () => 'ws-test' } });
+      await app.ready();
+      const ws = await app.injectWS('/ws');
+      const events: { type: string; [k: string]: unknown }[] = [];
+      ws.on('message', (d: Buffer) => events.push(JSON.parse(d.toString())));
+      const until = async (pred: () => boolean) => {
+        for (let i = 0; i < 400 && !pred(); i++) await new Promise((r) => setTimeout(r, 5));
+        expect(pred()).toBe(true);
+      };
+      ws.send(JSON.stringify({ type: 'ping', reqId: 'p1' }));
+      await until(() => events.some((e) => e.type === 'pong'));
+      expect(events[0]).toEqual({ type: 'pong', reqId: 'p1' });
+
+      const db = loadSrd();
+      const hero = buildCharacter(toBuildInput(quickBuild('fighter', db, Rng.fromSeed(1))), db);
+      ws.send(JSON.stringify({ type: 'new_game', hero, mode: 'heroic' }));
+      await until(() => events.some((e) => e.type === 'saved'));
+      const snap = events.find((e) => e.type === 'snapshot') as unknown as { state: { hero: { name: string }; location: { name: string } } };
+      expect(snap.state.hero.name).toBe(hero.name);
+      expect(snap.state.location.name).toBe('Millbrook');
+      expect(fs.readdirSync(savesDir)).toContain('auto-1.json');
+
+      ws.send(JSON.stringify({ type: 'save', slot: 'slot-1', name: 'My save' }));
+      await until(() => events.filter((e) => e.type === 'saved').length === 2);
+      expect(fs.existsSync(path.join(savesDir, 'slot-1.json'))).toBe(true);
+
+      ws.send(JSON.stringify({ type: 'nonsense', reqId: 'x' }));
+      await until(() => events.some((e) => e.type === 'error'));
+      expect(events.find((e) => e.type === 'error')).toMatchObject({ reqId: 'x' });
+      ws.terminate();
+    } finally {
+      await app?.close();
+      app = undefined;
+      fs.rmSync(savesDir, { recursive: true, force: true });
+    }
   });
 
   it('reports invalid JSON on the WebSocket channel', async () => {

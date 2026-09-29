@@ -89,6 +89,7 @@ engine validates the intent/action → chooses check + DC (from adventure data, 
   after each scene: llm.summarize(recent log) → story summary stored in GameState
 ```
 
+- **Protocol** (`src/shared/protocol.ts`): client commands `ping | new_game | get_state | say | choose | save | load` (zod-validated, optional `reqId`); server events `pong | ack | error | snapshot | log | narration(start/chunk/end) | roll | suggestions | saved`. One `GameSession` per server (single player); every open socket receives its events and commands run serially. The session is isomorphic: saves and player-action handling are injected ports (`SavePort`, `ActionPort`), so the scene runner/narrator plug in without touching the socket code. Client state lives in signals in `src/client/net/gameSocket.ts` (reconnect + snapshot on reconnect).
 - **Structured calls** (intent, suggested actions, summary, banter, backstory) all go through `llm/structured.ts`, which uses Ollama `format` (JSON schema), zod validation, one retry and then a typed fallback. A bad model reply can never throw into the engine.
 - **Combat narration** is fire-and-forget and throttled by the "narration frequency" setting.
 - **Saves**: `GameState` is plain JSON, with `schemaVersion`, the RNG state, flags, party, world, story summary, journal, and an `extensions` bag. Autosave happens on scene change, rest and pre-combat, plus manual slots.

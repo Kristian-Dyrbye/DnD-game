@@ -3,6 +3,7 @@ import { GAME_TITLE } from '../../shared/version';
 import { StatusIndicator } from './StatusIndicator';
 import { Creator } from './creator/Creator';
 import { hero, screen, startNewCharacter } from './state';
+import { connection, gameState, lastError, storyLog } from '../net/gameSocket';
 
 function TitleScreen() {
   return (
@@ -18,13 +19,20 @@ function TitleScreen() {
   );
 }
 
-/** Placeholder until the game screen (Phase 4). */
+/** Minimal game screen until the full layout (A052): shows the server's story log. */
 function GameScreen() {
   const h = hero.value;
+  const state = gameState.value;
   return (
     <main class="title-screen">
-      <h1>{h?.name ?? 'Your hero'}</h1>
-      <p>Your adventure begins in Millbrook… (the story screen arrives in the next build phase)</p>
+      <h1>{state?.hero.name ?? h?.name ?? 'Your hero'}</h1>
+      <p>{state ? `Your adventure begins in ${state.location.name}…` : connection.value === 'open' ? 'Starting your adventure…' : 'Connecting to the game server…'}</p>
+      <ul class="story-log">
+        {storyLog.value.map((e) => (
+          <li key={e.id} class={`log-${e.kind}`}>{e.text}</li>
+        ))}
+      </ul>
+      {lastError.value && <p class="hint">{lastError.value}</p>}
       <button type="button" onClick={() => (screen.value = 'title')}>Back to title</button>
     </main>
   );

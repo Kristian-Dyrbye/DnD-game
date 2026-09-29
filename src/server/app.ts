@@ -12,6 +12,8 @@ import { GAME_VERSION } from '../shared/version';
 import { SettingsStore } from './settingsStore';
 import { Services, type ServiceOverrides } from './services';
 import { SaveError, SaveStore, type SaveMetaInput } from './saveStore';
+import { GameSession, type SessionPorts } from '../engine/session/GameSession';
+import { parseCommand } from '../shared/protocol';
 import { backstoryMessages, templateBackstory, type BackstorySummary } from '../llm/prompts/backstory';
 
 export interface AppOptions {
@@ -27,6 +29,8 @@ export interface AppOptions {
   rootDir?: string;
   /** Fixed LLM/TTS providers (tests use the mocks). */
   services?: ServiceOverrides;
+  /** Overrides for the game session (tests inject actions/seeds). */
+  sessionPorts?: Partial<SessionPorts>;
   logger?: boolean;
 }
 
@@ -84,18 +88,29 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
     return reply.code(204).send();
   });
 
-  // Game channel. For now it echoes JSON messages back; GameSession wiring comes in A050.
+  // Game channel: one GameSession per server (single player). Every socket sees its events, so a
+  // reloaded page can reconnect and ask for a snapshot. Commands run one at a time, in order.
+  const session = new GameSession({
+    saves: {
+      save: (slot, meta, state) => saves.save(slot, meta, state).meta,
+      autosave: (meta, state) => saves.autosave(meta, state).meta,
+      load: (slot) => saves.load(slot).state,
+    },
+    ...opts.sessionPorts,
+  });
+  app.decorate('session', session);
+  let queue: Promise<void> = Promise.resolve();
   app.register(async (scope) => {
     scope.get('/ws', { websocket: true }, (socket) => {
+      const off = session.on((e) => socket.send(JSON.stringify(e)));
+      socket.on('close', off);
       socket.on('message', (raw: Buffer) => {
-        let payload: unknown;
-        try {
-          payload = JSON.parse(raw.toString());
-        } catch {
-          socket.send(JSON.stringify({ type: 'error', message: 'Invalid JSON' }));
+        const parsed = parseCommand(raw.toString());
+        if (!parsed.ok) {
+          socket.send(JSON.stringify({ type: 'error', message: parsed.error, ...(parsed.reqId && { reqId: parsed.reqId }) }));
           return;
         }
-        socket.send(JSON.stringify({ type: 'echo', payload }));
+        queue = queue.then(() => session.handle(parsed.command));
       });
     });
   });
@@ -129,5 +144,6 @@ declare module 'fastify' {
     settings: SettingsStore;
     services: Services;
     saves: SaveStore;
+    session: GameSession;
   }
 }
