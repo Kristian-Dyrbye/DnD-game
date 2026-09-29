@@ -11,6 +11,7 @@ import { intentContext, keywordIntent, validateIntent, type Intent, type IntentC
 import { narrateInto, type Narrator } from './narration';
 import { resolveIntent } from './resolve';
 import { dataSuggestions, mergeSuggestions, type SuggestionIdea } from './suggestions';
+import { updateSummary, type Summarizer } from './summary';
 
 export interface AdventurePortOptions {
   /** Free text → Intent (the LLM parser on the server). Defaults to the keyword parser. */
@@ -19,9 +20,11 @@ export interface AdventurePortOptions {
   narrator?: Narrator;
   /** Contextual action ideas (the LLM). Without it, only the data-driven buttons are shown. */
   suggester?: (ctx: RunContext, offered: AvailableAction[]) => Promise<SuggestionIdea[]>;
+  /** Condenses the story after each scene (the LLM). Without it, the template summary is used. */
+  summarizer?: Summarizer;
 }
 
-/** The ActionPort plus a hook for tests to wait for background suggestion calls. */
+/** The ActionPort plus a hook for tests to wait for background suggestion/summary work. */
 export interface AdventureActionPort extends ActionPort {
   idle(): Promise<void>;
 }
@@ -29,6 +32,7 @@ export interface AdventureActionPort extends ActionPort {
 export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, defaultId: string, db?: SrdDatabase, opts: AdventurePortOptions = {}): AdventureActionPort {
   const parse = opts.parseIntent ?? (async (text: string, ictx: IntentContext) => keywordIntent(text, ictx));
   let pendingIdeas: Promise<void> = Promise.resolve();
+  let pendingSummary: Promise<void> = Promise.resolve();
   const ctxFor = (session: GameSession): RunContext => {
     const id = getProgress(session.current)?.adventureId ?? defaultId;
     const adventure = adventures.get(id);
@@ -93,11 +97,19 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
   const finish = async (session: GameSession, ctx: RunContext, r: StepResult, playerAction?: string) => {
     await publish(session, ctx, r, playerAction);
     offer(session, ctx);
-    if (r.entered.length) session.autosave();
+    if (r.entered.length) {
+      session.autosave();
+      // Condense the finished scene in the background (chained so updates never overlap).
+      const state = session.current;
+      pendingSummary = pendingSummary.then(() => updateSummary(state, opts.summarizer)).catch(() => undefined);
+    }
   };
 
   return {
-    idle: () => pendingIdeas,
+    idle: async () => {
+      await pendingIdeas;
+      await pendingSummary;
+    },
     async begin(session) {
       const ctx = ctxFor(session);
       if (!getProgress(session.current)) await publish(session, ctx, startAdventure(ctx));

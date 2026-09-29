@@ -53,8 +53,10 @@ export const GameStateSchema = z.object({
   flags: z.record(z.string(), z.union([z.boolean(), z.number(), z.string()])).default({}),
   /** Recent story log; older text is condensed into `summary`. */
   log: z.array(LogEntrySchema).default([]),
-  /** Rolling story summary maintained by the LLM (A055). */
+  /** Rolling story summary (LLM-condensed after each scene, template fallback). Used instead of a long transcript. */
   summary: z.string().default(''),
+  /** Log entries up to this id are already folded into `summary`. */
+  summaryUpTo: z.number().int().default(0),
   rolls: z.array(RollRecordSchema).default([]),
   /** Next id for log entries and rolls. */
   nextId: z.number().int().default(1),

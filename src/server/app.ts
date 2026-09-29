@@ -22,6 +22,7 @@ import { LoreSchema } from '../engine/world/lore';
 import loreJson from '../../data/world/lore.json';
 import { llmNarrator } from './narrator';
 import { suggestIdeas } from '../llm/prompts/suggest';
+import { llmSummarizer } from '../llm/prompts/summary';
 import { gatherNarrationContext } from '../llm/context/gather';
 
 /** Adventure a new campaign starts with. */
@@ -114,6 +115,7 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
     ...(defaultAdventure && { actions: adventureActionPort(adventures, defaultAdventure, srd, {
         parseIntent: async (text, ictx) => (await parseIntent(services.llm, text, ictx)).intent,
         narrator: llmNarrator(() => services.llm, lore, srd),
+        summarizer: llmSummarizer(() => services.llm),
         suggester: (ctx, offered) => suggestIdeas(services.llm, gatherNarrationContext(ctx.state, lore, ctx.adventure, srd), offered),
       }) }),
     saves: {
