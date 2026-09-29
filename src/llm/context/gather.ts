@@ -10,6 +10,7 @@ import type { Character } from '../../engine/core/creature';
 import type { SrdDatabase } from '../../engine/data/srd';
 import type { GameState, LogEntry } from '../../engine/session/gameState';
 import type { Lore } from '../../engine/world/lore';
+import { weatherEffects, type WeatherState } from '../../engine/world/weather';
 import { factionCard, locationCard, npcCard, toneText, type PromptCard } from './cards';
 import type { NarrationContext } from './narration';
 
@@ -40,7 +41,8 @@ export function gatherNarrationContext(state: GameState, lore: Lore, adventure?:
   const regionId = location?.regionId ?? adventure?.regionId;
   const region = lore.regions.find((r) => r.id === regionId);
   const reputation = (state.extensions.reputation as Record<string, number> | undefined) ?? {};
-  const weather = (state.extensions.weather as { kind?: string } | undefined)?.kind;
+  const w = state.extensions.weather as WeatherState | undefined;
+  const weather = w ? weatherEffects(w).description.toLowerCase() : undefined;
 
   const cards: PromptCard[] = [];
   const factionIds = new Set<string>(location?.factionIds ?? []);

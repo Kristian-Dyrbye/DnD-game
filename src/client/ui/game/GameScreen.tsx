@@ -3,7 +3,8 @@
  * left, story log + actions in the centre, 3D hero view and dice tray on the right. Collapses to a
  * single column on narrow windows.
  */
-import { timeOfDay } from '../../../engine/adventure/conditions';
+import { timeOfDay } from '../../../engine/world/clock';
+import { weatherEffects, type WeatherState } from '../../../engine/world/weather';
 import { CharacterPreview } from '../../three/CharacterPreview';
 import { connection, gameState, lastError, send } from '../../net/gameSocket';
 import { hero, screen } from '../state';
@@ -16,12 +17,14 @@ import { StoryLog } from './StoryLog';
 export function GameScreen() {
   const state = gameState.value;
   const h = state?.hero ?? hero.value;
+  const weather = state?.extensions.weather as WeatherState | undefined;
   return (
     <div class="game-screen">
       <header class="game-bar">
         <div class="game-where">
           <strong>{state?.location.name ?? '…'}</strong>
           {state && <span class="muted">{formatClock(state.time, timeOfDay(state.time))}</span>}
+          {weather && <span class="muted weather">{weatherEffects(weather).description}</span>}
         </div>
         <nav class="game-menu" aria-label="Game menu">
           <button type="button" disabled title="World map (coming soon)">

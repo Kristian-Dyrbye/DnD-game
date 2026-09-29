@@ -289,3 +289,10 @@ function rollLoot(ctx: RunContext, tableId: string, result: StepResult): void {
     }
   }
 }
+
+/** Lore region the party is in: the current scene's lore location, else the adventure's region. */
+export function regionOfState(state: GameState, adventures: ReadonlyMap<string, Adventure>, lore: { locations: { id: string; regionId: string }[] }): string | undefined {
+  const adv = state.location.adventureId ? adventures.get(state.location.adventureId) : undefined;
+  const scene = adv && state.location.sceneId ? findScene(adv, state.location.sceneId) : undefined;
+  return lore.locations.find((l) => l.id === scene?.locationId)?.regionId ?? adv?.regionId;
+}

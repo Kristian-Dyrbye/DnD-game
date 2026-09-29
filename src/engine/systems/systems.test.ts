@@ -84,25 +84,26 @@ describe('SystemRegistry', () => {
   });
 
   it('clock system reports phase changes and new days (only the final state on long jumps)', () => {
-    const reg = createDefaultRegistry(lore.calendar);
+    const reg = createDefaultRegistry({ lore });
     const s = newGameState(hero(), 'heroic', 1);
-    expect(reg.advanceTime(s, 30)).toEqual([]);
+    const clock = (evs: { systemId: string; text: string }[]) => evs.filter((e) => e.systemId === 'clock').map((e) => e.text);
+    expect(clock(reg.advanceTime(s, 30))).toEqual([]);
     s.time = 17 * 60 + 50;
-    expect(reg.advanceTime(s, 20).map((e) => e.text)).toEqual(['Dusk settles in.']);
+    expect(clock(reg.advanceTime(s, 20))).toEqual(['Dusk settles in.']);
     s.time = 22 * 60;
-    expect(reg.advanceTime(s, TIME_COSTS.long_rest).map((e) => e.text)).toEqual(['A new day begins (day 2). It is Forgeday, 2 Seedwake 1247 AR. Dawn breaks.']);
+    expect(clock(reg.advanceTime(s, TIME_COSTS.long_rest))).toEqual(['A new day begins (day 2). It is Forgeday, 2 Seedwake 1247 AR. Dawn breaks.']);
   });
 });
 
 describe('time in play', () => {
   it('actions, exits and improvised attempts advance the clock; systems report it in the log', async () => {
     const adventure = validateAdventure(structuredClone(demo), db).adventure!;
-    const reg = createDefaultRegistry(lore.calendar);
+    const reg = createDefaultRegistry({ lore });
     const session = new GameSession({ actions: adventureActionPort(new Map([[adventure.id, adventure]]), adventure.id, db), newSeed: () => 's', systems: reg });
     const events: ServerEvent[] = [];
     session.on((e) => events.push(e));
     await session.handle({ type: 'new_game', hero: hero(), mode: 'heroic' });
-    expect(session.current.extensions[VERSIONS_KEY]).toEqual({ clock: 1 });
+    expect(session.current.extensions[VERSIONS_KEY]).toEqual({ clock: 1, weather: 1 });
     const t0 = session.current.time;
     await session.handle({ type: 'choose', actionId: 'talk_mayor' });
     expect(session.current.time).toBe(t0 + TIME_COSTS.explore_action);
