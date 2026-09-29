@@ -6,7 +6,7 @@ import type { Character, Creature } from '../../core/creature';
 import { abilityModifier, type Condition } from '../../rules/basics';
 import { addEffect, hasEffect } from '../../rules/activeEffects';
 import { canAct, removeCondition } from '../../rules/conditions';
-import { heal } from '../../rules/damage';
+import { healFromZero } from '../../rules/death';
 import { classLevel } from '../derived';
 import type { FeatureImpl } from './types';
 
@@ -45,7 +45,7 @@ export const paladinFeatures: FeatureImpl[] = [
             patient = removeCondition(patient, 'poisoned');
             text = `${c.name} cures ${who.name}'s poison.`;
           } else {
-            const r = heal(patient, spend);
+            const r = healFromZero(patient, spend); // at 0 HP: wakes up (SRD: any healing)
             patient = r.creature;
             text = `${c.name} lays hands on ${who.name}: +${r.healed} HP.`;
           }

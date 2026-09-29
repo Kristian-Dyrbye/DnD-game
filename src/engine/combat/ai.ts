@@ -40,6 +40,8 @@ import { areHostile, cloneGridTokens, dbOf, withCreature, type ActionResult, typ
 import { distanceFt, footprintSize, moveToken, type GridToken, type Point } from './grid';
 import { planMove, reachableSquares, standUpCost, type PathOptions } from './movement';
 import { addDash, canReact, movementLeft, spend, standUp } from './turns';
+import type { SlotChoice } from '../rules/spellcasting';
+import { castInCombat, featureInCombat } from './castAction';
 
 // ---------------------------------------------------------------- plan shapes
 
@@ -50,9 +52,13 @@ export type AiStep =
   | { kind: 'disengage'; bonus?: boolean }
   | { kind: 'dodge' }
   | { kind: 'attack'; profileId: string; targetId: string }
-  | { kind: 'area'; actionName: string; aim: Point };
+  | { kind: 'area'; actionName: string; aim: Point }
+  /** Cast a known spell (companions): Action or Bonus Action from its casting time. */
+  | { kind: 'cast'; spellId: string; targetIds: string[]; slot?: SlotChoice }
+  /** Use a class-feature action (Second Wind, Lay On Hands...). */
+  | { kind: 'feature'; actionId: string; targetId?: string; choice?: string };
 
-export type AiIntent = 'attack' | 'area' | 'approach' | 'flee' | 'defend' | 'idle';
+export type AiIntent = 'attack' | 'area' | 'approach' | 'flee' | 'defend' | 'heal' | 'protect' | 'idle';
 
 export interface AiPlan {
   actorId: string;
@@ -111,7 +117,7 @@ function areaActions(c: Creature, ctx: CombatContext): MonsterAction[] {
 }
 
 /** Does it fight better at range (best ranged average ≥ best melee average)? */
-function prefersRange(profiles: readonly AttackProfile[]): boolean {
+export function prefersRange(profiles: readonly AttackProfile[]): boolean {
   const best = (melee: boolean) => Math.max(-1, ...profiles.filter((p) => p.melee === melee).map((p) => averageDamage(p.damage, p.damageModifiers)));
   const ranged = best(false);
   return ranged >= 0 && ranged >= best(true);
@@ -119,14 +125,14 @@ function prefersRange(profiles: readonly AttackProfile[]): boolean {
 
 // ---------------------------------------------------------------- planning context
 
-interface Dest {
+export interface Dest {
   x: number;
   y: number;
   costFt: number;
   path: Point[];
 }
 
-interface Planner {
+export interface Planner {
   state: CombatState;
   ctx: CombatContext;
   opts: AiOptions;
@@ -140,14 +146,14 @@ interface Planner {
 const centerOf = (t: Pick<GridToken, 'x' | 'y' | 'size'>): Point => ({ x: t.x + footprintSize(t.size) / 2, y: t.y + footprintSize(t.size) / 2 });
 const at = (p: Planner, d: Point): GridToken => ({ ...p.token, x: d.x, y: d.y });
 
-function movedState(p: Planner, d: Point): CombatState {
+export function movedState(p: Planner, d: Point): CombatState {
   if (d.x === p.token.x && d.y === p.token.y) return p.state;
   const grid = cloneGridTokens(p.state.grid);
   moveToken(grid, p.id, d);
   return { ...p.state, grid };
 }
 
-function destinations(p: Planner, budgetFt: number): Dest[] {
+export function destinations(p: Planner, budgetFt: number): Dest[] {
   const out: Dest[] = [{ x: p.token.x, y: p.token.y, costFt: 0, path: [] }];
   if (budgetFt > 0) {
     const reach = [...reachableSquares(p.state.grid, p.id, budgetFt, p.pathOpts).values()];
@@ -158,7 +164,7 @@ function destinations(p: Planner, budgetFt: number): Dest[] {
 }
 
 /** Expected damage the mover takes from Opportunity Attacks along a path. */
-function oaCost(p: Planner, path: readonly Point[], budgetFt: number, disengaged: boolean): number {
+export function oaCost(p: Planner, path: readonly Point[], budgetFt: number, disengaged: boolean): number {
   if (path.length === 0 || disengaged) return 0;
   const db = dbOf(p.ctx);
   const plan = planMove(p.state.grid, p.id, path, {
@@ -183,7 +189,7 @@ function oaCost(p: Planner, path: readonly Point[], budgetFt: number, disengaged
 }
 
 /** Conscious hostiles able to act that threaten (are within reach of) a square. */
-function threatsAt(p: Planner, d: Point): number {
+export function threatsAt(p: Planner, d: Point): number {
   const db = dbOf(p.ctx);
   const me = at(p, d);
   return p.hostiles.filter((h) => {
@@ -204,6 +210,27 @@ interface AttackOption {
   bonusDisengage: boolean;
 }
 
+/** The Attack action on `targetId` from square `dest`: best profile per slot by expected damage. */
+export function attackAt(p: Planner, targetId: string, dest: Point, slots: readonly AttackProfile[][]): { attacks: { profileId: string; expected: number }[]; expected: number } | undefined {
+  const target = p.state.creatures[targetId];
+  if (!target) return undefined;
+  const hyp = movedState(p, dest);
+  const attacks: { profileId: string; expected: number }[] = [];
+  let expected = 0;
+  for (const slot of slots) {
+    let pick: { profileId: string; expected: number } | undefined;
+    for (const prof of slot) {
+      const e = expectedAttackDamage(prof, checkAttack(hyp, p.ctx, p.id, targetId, prof), target);
+      if (e > 0 && (!pick || e > pick.expected)) pick = { profileId: prof.id, expected: e };
+    }
+    if (pick) {
+      attacks.push(pick);
+      expected += pick.expected;
+    }
+  }
+  return attacks.length ? { attacks, expected } : undefined;
+}
+
 function bestAttackOn(p: Planner, targetId: string, dests: readonly Dest[], slots: readonly AttackProfile[][], budgetFt: number, rangedMind: boolean, canBonusDisengage: boolean, disengaged: boolean): AttackOption | undefined {
   const target = p.state.creatures[targetId];
   const tt = p.state.grid.tokens[targetId];
@@ -212,21 +239,9 @@ function bestAttackOn(p: Planner, targetId: string, dests: readonly Dest[], slot
   let best: AttackOption | undefined;
   for (const dest of dests) {
     if (distanceFt(at(p, dest), tt) > maxRange) continue;
-    const hyp = movedState(p, dest);
-    const attacks: { profileId: string; expected: number }[] = [];
-    let expected = 0;
-    for (const slot of slots) {
-      let pick: { profileId: string; expected: number } | undefined;
-      for (const prof of slot) {
-        const e = expectedAttackDamage(prof, checkAttack(hyp, p.ctx, p.id, targetId, prof), target);
-        if (e > 0 && (!pick || e > pick.expected)) pick = { profileId: prof.id, expected: e };
-      }
-      if (pick) {
-        attacks.push(pick);
-        expected += pick.expected;
-      }
-    }
-    if (attacks.length === 0) continue;
+    const a = attackAt(p, targetId, dest, slots);
+    if (!a) continue;
+    const { attacks, expected } = a;
     const oa = oaCost(p, dest.path, budgetFt, disengaged);
     const useBonus = oa > 0 && canBonusDisengage;
     const threat = rangedMind ? threatsAt(p, dest) * AI_TUNING.rangedThreatPenalty : 0;
@@ -277,7 +292,7 @@ function bestArea(p: Planner, dests: readonly Dest[], budgetFt: number, disengag
 
 // ---------------------------------------------------------------- flee and approach
 
-function minHostileDistance(p: Planner, d: Point): number {
+export function minHostileDistance(p: Planner, d: Point): number {
   const me = at(p, d);
   let min = Infinity;
   for (const h of p.hostiles) {
@@ -314,12 +329,12 @@ function planFlee(p: Planner, prefix: AiStep[], budgetFt: number, reason: string
   return { actorId: p.id, intent: 'flee', steps: [...prefix, ...best.steps], reason: `flees (${reason})` };
 }
 
-function lexLess(a: readonly number[], b: readonly number[]): boolean {
+export function lexLess(a: readonly number[], b: readonly number[]): boolean {
   for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return a[i]! < b[i]!;
   return false;
 }
 
-function planApproach(p: Planner, prefix: AiStep[], budgetFt: number, rangedMind: boolean, slots: readonly AttackProfile[][]): AiPlan {
+export function planApproach(p: Planner, prefix: AiStep[], budgetFt: number, rangedMind: boolean, slots: readonly AttackProfile[][]): AiPlan {
   const db = dbOf(p.ctx);
   const b = p.state.turns.budgets[p.id]!;
   const cands: TargetCandidate[] = p.hostiles
@@ -352,11 +367,21 @@ function planApproach(p: Planner, prefix: AiStep[], budgetFt: number, rangedMind
 
 // ---------------------------------------------------------------- planTurn
 
-const idle = (actorId: string, reason: string): AiPlan => ({ actorId, intent: 'idle', steps: [], reason });
+export const idle = (actorId: string, reason: string): AiPlan => ({ actorId, intent: 'idle', steps: [], reason });
 
-/** Decide the whole turn for `actorId` (whose turn must have started). Pure. */
-export function planTurn(state: CombatState, ctx: CombatContext, actorId: string, opts: AiOptions = {}): AiPlan {
-  const db = dbOf(ctx);
+export interface TurnSetup {
+  p: Planner;
+  /** Steps every plan starts with (stand up from Prone). */
+  prefix: AiStep[];
+  /** Movement left after the prefix. */
+  budgetFt: number;
+}
+
+/**
+ * Shared start of a turn plan: idle when down / can't act / no enemies; stands up from Prone when
+ * movement allows. Returns the planning context, or the idle plan.
+ */
+export function setupTurn(state: CombatState, ctx: CombatContext, actorId: string, opts: AiOptions = {}): TurnSetup | AiPlan {
   let actor = state.creatures[actorId];
   const token = state.grid.tokens[actorId];
   const b = state.turns.budgets[actorId];
@@ -396,6 +421,18 @@ export function planTurn(state: CombatState, ctx: CombatContext, actorId: string
       },
     },
   };
+  return { p, prefix, budgetFt };
+}
+
+/** Decide the whole turn for `actorId` (whose turn must have started). Pure. */
+export function planTurn(state: CombatState, ctx: CombatContext, actorId: string, opts: AiOptions = {}): AiPlan {
+  const db = dbOf(ctx);
+  const setup = setupTurn(state, ctx, actorId, opts);
+  if ('intent' in setup) return setup;
+  const { p, prefix, budgetFt } = setup;
+  const { actor, token, state: base, hostiles } = p;
+  const b = state.turns.budgets[actorId]!;
+  const tableOpt = ctx.table ? { table: ctx.table } : {};
 
   const morale = moraleCheck(base, ctx, actorId, opts);
   if (morale.flee) {
@@ -409,7 +446,7 @@ export function planTurn(state: CombatState, ctx: CombatContext, actorId: string
   const dests = destinations(p, budgetFt);
   const bonusDis = b.bonusAction && bonusMobility(actor, ctx).disengage && !b.disengaged;
 
-  const visible = hostiles.filter((h) => canSee(base, ctx, actor!, base.creatures[h]!));
+  const visible = hostiles.filter((h) => canSee(base, ctx, actor, base.creatures[h]!));
   const options = new Map<string, AttackOption>();
   if (slots.length) {
     for (const h of visible) {
@@ -575,6 +612,17 @@ export function executePlan(state: CombatState, ctx: CombatContext, plan: AiPlan
           events.push(...r.events);
           cur = r.state;
         }
+        break;
+      }
+      case 'cast':
+      case 'feature': {
+        const r =
+          step.kind === 'cast'
+            ? castInCombat(cur, ctx, { casterId: id, spellId: step.spellId, targetIds: step.targetIds, ...(step.slot && { slot: step.slot }) })
+            : featureInCombat(cur, ctx, { actorId: id, actionId: step.actionId, ...(step.targetId && { targetId: step.targetId }), ...(step.choice && { choice: step.choice }) });
+        if (!r.ok) note(r.error);
+        events.push(...r.events);
+        cur = r.state;
         break;
       }
       case 'area': {
