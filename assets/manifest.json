@@ -1,0 +1,2220 @@
+{
+  "version": 1,
+  "description": "CC0 3D asset packs for the battle grid, characters and dungeon. Fetch with `node scripts/assets-fetch.mjs` (downloads into assets/_packs/, copies into assets/models/). Both folders are gitignored; this manifest is committed.",
+  "researchedOn": "2026-09-29",
+  "styleNote": "KayKit (characters, skeletons, weapons, dungeon) and Quaternius (monsters, animals) are both chunky, cute low-poly styles with flat/gradient colours, so they sit together on one grid. KayKit models are ~1 unit = 1 m (characters ~2 m tall with big heads); Quaternius models need per-role normalisation by bounding box.",
+  "notes": [
+    "All chosen packs are CC0 1.0. Per-file downloads come from the authors' own distribution points: KayKit's official GitHub repositories and the models Quaternius uploaded to Poly Pizza under his own account. No zip extraction or itch.io click-through is needed.",
+    "License watch: on 2026-08-28 quaternius.com introduced the Quaternius Asset License (QAL v1.0) for new releases (e.g. Bestiary). The packs used here are still labelled CC0 on their quaternius.com pages and on Poly Pizza; CC0 dedications are irrevocable, and QAL section 7 says changes do not apply retroactively. Re-check before adding any newer Quaternius pack.",
+    "Roles: {file} is a path under assets/models; {node} names a mesh inside that file (e.g. a helmet or cape to show/hide or clone onto another character). KayKit characters and skeletons share one rig with handslot.l / handslot.r / head bones for attaching weapons, shields and helmets.",
+    "Monster models: first matching monsterRules[].match (regex on the SRD monster id) wins, else monsterStandIns[creatureType]. Final scale = sizeScale[size] * (rule.scale ?? 1); tint multiplies material colour."
+  ],
+  "totals": {
+    "files": 137,
+    "bytes": 55098040
+  },
+  "packs": [
+    {
+      "id": "kaykit-adventurers",
+      "name": "KayKit Character Pack: Adventurers 1.0",
+      "author": "Kay Lousberg (KayKit)",
+      "url": "https://kaylousberg.com/game-assets/characters-adventurers",
+      "repository": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "KayKit : Character Pack: Adventurers 1.0 — Created/distributed by Kay Lousberg (www.kaylousberg.com), creation date 13/03/2023. \"License: (Creative Commons Zero, CC0) http://creativecommons.org/publicdomain/zero/1.0/ — This content is free to use in personal, educational and commercial projects.\" (LICENSE.txt in the official repository)",
+      "licenseCheckedOn": "2026-09-29",
+      "style": "KayKit chunky low-poly, single 1024px gradient atlas per pack",
+      "covers": "Hero/companion/NPC humanoids: 4 classes (+hooded rogue) on one shared rig, 76 animations each, modular Head/Body/Arm/Leg meshes (mix-and-match appearance), toggleable hats/helmet/capes/shields, handslot.l/handslot.r bones for attaching weapons; 25+ separate weapon/shield/prop glTFs.",
+      "download": {
+        "url": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/main/addons/kaykit_character_pack_adventures/",
+        "method": "per-file",
+        "manual": false,
+        "fallback": "Whole pack (FBX+glTF) also at https://kaylousberg.itch.io/kaykit-adventurers (itch.io name-your-price, click-through) and https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0",
+        "bytes": 18467234
+      },
+      "files": [
+        {
+          "from": "Characters/gltf/Knight.glb",
+          "target": "characters/Knight.glb",
+          "role": "hero_knight",
+          "sha256": "60428e3abc09ba83e595d256e3af8c5c976b46cdae599f0802fc82b4a3445168",
+          "bytes": 3659532
+        },
+        {
+          "from": "Characters/gltf/Barbarian.glb",
+          "target": "characters/Barbarian.glb",
+          "role": "hero_barbarian",
+          "sha256": "cefc311a0e10c7858b6141f5ada7e33268727564fb8ac1347aab97d000669cc6",
+          "bytes": 3613268
+        },
+        {
+          "from": "Characters/gltf/Mage.glb",
+          "target": "characters/Mage.glb",
+          "role": "hero_mage",
+          "sha256": "cf898585da33fab50c724d31605fb931eb2912e6d2280092141e98ca81ad507d",
+          "bytes": 3589240
+        },
+        {
+          "from": "Characters/gltf/Rogue.glb",
+          "target": "characters/Rogue.glb",
+          "role": "hero_rogue",
+          "sha256": "e825437cd4d2ee9c1960b517a74a69101e33eb409ae7fa8cedc7134a998fbb7d",
+          "bytes": 3616284
+        },
+        {
+          "from": "Characters/gltf/Rogue_Hooded.glb",
+          "target": "characters/Rogue_Hooded.glb",
+          "role": "hero_rogue_hooded",
+          "sha256": "93e6e25213009952276d9cf34f5d96a243767334c66f280db0433ddfabb91545",
+          "bytes": 3597652
+        },
+        {
+          "from": "Assets/gltf/sword_1handed.gltf",
+          "target": "weapons/sword_1handed.gltf",
+          "role": "weapon_sword",
+          "sha256": "f88345d0c89d52710ddb00555964fe7a6f4024874d7ee902ee4c742c048a1958",
+          "bytes": 3080
+        },
+        {
+          "from": "Assets/gltf/sword_1handed.bin",
+          "target": "weapons/sword_1handed.bin",
+          "sidecar": true,
+          "sha256": "780ebfd002cd181fd5b1626f5a6ae8dda0ff2df58c3ff1fd6e7584f53a969d8a",
+          "bytes": 13256
+        },
+        {
+          "from": "Assets/gltf/knight_texture.png",
+          "target": "weapons/knight_texture.png",
+          "sidecar": true,
+          "sha256": "5d250ccc5da020e6126bfa3839f83bd9a465a951ed223e4d13c08b1925e154d4",
+          "bytes": 14172
+        },
+        {
+          "from": "Assets/gltf/sword_2handed.gltf",
+          "target": "weapons/sword_2handed.gltf",
+          "role": "weapon_greatsword",
+          "sha256": "0f67613f6233d637be60cb27e320dd3b855b73d1ca0249df46999f68efb05494",
+          "bytes": 3081
+        },
+        {
+          "from": "Assets/gltf/sword_2handed.bin",
+          "target": "weapons/sword_2handed.bin",
+          "sidecar": true,
+          "sha256": "0f54186de924388d70b7b5b7b9052c8dda2e20647c4fb36a949723b7ed6b7646",
+          "bytes": 19912
+        },
+        {
+          "from": "Assets/gltf/axe_1handed.gltf",
+          "target": "weapons/axe_1handed.gltf",
+          "role": "weapon_axe",
+          "sha256": "dbe0ba59abcae66a464809ee281179b10f85e41ef0d69786d39627472ca7e5dd",
+          "bytes": 3087
+        },
+        {
+          "from": "Assets/gltf/axe_1handed.bin",
+          "target": "weapons/axe_1handed.bin",
+          "sidecar": true,
+          "sha256": "0e3e5f009e0706506971fe5b1eae0fa30b0b28c70fd67c4b7943d975a821f4af",
+          "bytes": 12524
+        },
+        {
+          "from": "Assets/gltf/barbarian_texture.png",
+          "target": "weapons/barbarian_texture.png",
+          "sidecar": true,
+          "sha256": "7329b2ff9709e8d54c886d5ef49c08bd42b12be3bbb2facb1488a6b48b1e8a80",
+          "bytes": 15089
+        },
+        {
+          "from": "Assets/gltf/axe_2handed.gltf",
+          "target": "weapons/axe_2handed.gltf",
+          "role": "weapon_greataxe",
+          "sha256": "9570c2300c57db64a412a377c78f1681a66d7c47d75bb7643e69573e66a3a1d5",
+          "bytes": 3083
+        },
+        {
+          "from": "Assets/gltf/axe_2handed.bin",
+          "target": "weapons/axe_2handed.bin",
+          "sidecar": true,
+          "sha256": "e5ca2d08f8baa12b510fb27c6a01bb711f102107c8f672443d1d1945f1fb40c0",
+          "bytes": 21960
+        },
+        {
+          "from": "Assets/gltf/dagger.gltf",
+          "target": "weapons/dagger.gltf",
+          "role": "weapon_dagger",
+          "sha256": "33c577d4d5d268295f13494c930d20d11bf1a82e862aa7bdab4d7d51bc26fcd0",
+          "bytes": 3065
+        },
+        {
+          "from": "Assets/gltf/dagger.bin",
+          "target": "weapons/dagger.bin",
+          "sidecar": true,
+          "sha256": "2ef02dbdc53839cd2506f9dea40dcc401cdda830ae6a887f499333cce0d11be3",
+          "bytes": 7656
+        },
+        {
+          "from": "Assets/gltf/rogue_texture.png",
+          "target": "weapons/rogue_texture.png",
+          "sidecar": true,
+          "sha256": "a4032e877c3b91939f5cdbb630349c1998fdbc3211bbd587c111125500fe4cc5",
+          "bytes": 16670
+        },
+        {
+          "from": "Assets/gltf/crossbow_1handed.gltf",
+          "target": "weapons/crossbow_1handed.gltf",
+          "role": "weapon_crossbow_light",
+          "sha256": "04fb009d03becf748614610ab21c52cf3a68f4cb21fc0b9544309c498f404136",
+          "bytes": 3083
+        },
+        {
+          "from": "Assets/gltf/crossbow_1handed.bin",
+          "target": "weapons/crossbow_1handed.bin",
+          "sidecar": true,
+          "sha256": "0401a7f6a6264d60d17fee260518715161aac96f7b4e8e541fd562b1815f9a2a",
+          "bytes": 25200
+        },
+        {
+          "from": "Assets/gltf/crossbow_2handed.gltf",
+          "target": "weapons/crossbow_2handed.gltf",
+          "role": "weapon_crossbow_heavy",
+          "sha256": "c38dcbc7beefb76805aaf99098c681b346a021bb44988daf0c5ce787018673ed",
+          "bytes": 3083
+        },
+        {
+          "from": "Assets/gltf/crossbow_2handed.bin",
+          "target": "weapons/crossbow_2handed.bin",
+          "sidecar": true,
+          "sha256": "1fcadb445d622190bac4bf9b0e6df2b961ed43309b3cfbf8996259175971a537",
+          "bytes": 34896
+        },
+        {
+          "from": "Assets/gltf/staff.gltf",
+          "target": "weapons/staff.gltf",
+          "role": "weapon_staff",
+          "sha256": "eb2e277510325a242974ee842453882de2d55b09ec94a43148aff1dd4237c67a",
+          "bytes": 3061
+        },
+        {
+          "from": "Assets/gltf/staff.bin",
+          "target": "weapons/staff.bin",
+          "sidecar": true,
+          "sha256": "acf921e547edd8e05e24e0b2edec74fec7c987ccad1ee73549a0726a8059ebce",
+          "bytes": 18576
+        },
+        {
+          "from": "Assets/gltf/mage_texture.png",
+          "target": "weapons/mage_texture.png",
+          "sidecar": true,
+          "sha256": "ea49f094b960402635fe51db9f1864960c97271b17f2e3554e5aca1b2bbba144",
+          "bytes": 16311
+        },
+        {
+          "from": "Assets/gltf/wand.gltf",
+          "target": "weapons/wand.gltf",
+          "role": "weapon_wand",
+          "sha256": "b726392709e3e7fb4b5157f950500d4a98281503f7cac7d6afdf164578169338",
+          "bytes": 3058
+        },
+        {
+          "from": "Assets/gltf/wand.bin",
+          "target": "weapons/wand.bin",
+          "sidecar": true,
+          "sha256": "db1c466f40f5ae29468e56dff16af6bfd448518f543a5a4ae2638557084473d9",
+          "bytes": 5956
+        },
+        {
+          "from": "Assets/gltf/shield_round.gltf",
+          "target": "weapons/shield_round.gltf",
+          "role": "shield_round",
+          "sha256": "ac502d8b193da7b1224139e3b825f856ec9fa15cd5aa6ca10295cc927402c275",
+          "bytes": 3083
+        },
+        {
+          "from": "Assets/gltf/shield_round.bin",
+          "target": "weapons/shield_round.bin",
+          "sidecar": true,
+          "sha256": "42da365328fc8804f44cd3db6becc8bc98729f11862b63e51b42820559d6e1e0",
+          "bytes": 12008
+        },
+        {
+          "from": "Assets/gltf/shield_square.gltf",
+          "target": "weapons/shield_square.gltf",
+          "role": "shield_square",
+          "sha256": "d2af4fbe4c0e8b93f3c88594b99ab601d5589920d4b0b8dc629143413e7c66c1",
+          "bytes": 3081
+        },
+        {
+          "from": "Assets/gltf/shield_square.bin",
+          "target": "weapons/shield_square.bin",
+          "sidecar": true,
+          "sha256": "10937706e32da2a09c3e9f2399c5daf5fd3b47e22c8b898a06c0d28d7630a6b6",
+          "bytes": 10724
+        },
+        {
+          "from": "Assets/gltf/shield_spikes.gltf",
+          "target": "weapons/shield_spikes.gltf",
+          "role": "shield_spiked",
+          "sha256": "c2bb6202c2236ff477573ae4770c55c0586d9a554b6df861bc62d7ec0134e31f",
+          "bytes": 3083
+        },
+        {
+          "from": "Assets/gltf/shield_spikes.bin",
+          "target": "weapons/shield_spikes.bin",
+          "sidecar": true,
+          "sha256": "de615f1d5bd01a6562a91d0f41960e50c4e35712388b38af4e549832b0677e0c",
+          "bytes": 21464
+        },
+        {
+          "from": "Assets/gltf/shield_badge.gltf",
+          "target": "weapons/shield_badge.gltf",
+          "role": "shield_badge",
+          "sha256": "51b687316b2f9bfe89e586a6ef5f91cface8a326c9d604c8acea7699d6f3523d",
+          "bytes": 3080
+        },
+        {
+          "from": "Assets/gltf/shield_badge.bin",
+          "target": "weapons/shield_badge.bin",
+          "sidecar": true,
+          "sha256": "3c0f04767c839868df1f852cb335848c3ba7d94da3078e4c7f8a422f2369560c",
+          "bytes": 10628
+        },
+        {
+          "from": "Assets/gltf/spellbook_open.gltf",
+          "target": "weapons/spellbook_open.gltf",
+          "role": "spellbook",
+          "sha256": "5a7891f8fe12a0c84dfbb64454b0b6b51328894011021e5c664bc8701aaf40ad",
+          "bytes": 3076
+        },
+        {
+          "from": "Assets/gltf/spellbook_open.bin",
+          "target": "weapons/spellbook_open.bin",
+          "sidecar": true,
+          "sha256": "888e45aff64aba1bea6ef3abfad27024b2697f7adbab319c089bc70c077c4a5b",
+          "bytes": 15128
+        },
+        {
+          "from": "Assets/gltf/quiver.gltf",
+          "target": "weapons/quiver.gltf",
+          "role": "quiver",
+          "sha256": "9d209d5e66037e713393f648c7ae8815687c23d63779e40b17d7917d7e45e015",
+          "bytes": 3065
+        },
+        {
+          "from": "Assets/gltf/quiver.bin",
+          "target": "weapons/quiver.bin",
+          "sidecar": true,
+          "sha256": "47091e8d290ab093560f92b680c0cd83934ea2190e817d51dd4ddb0c7825934e",
+          "bytes": 13884
+        },
+        {
+          "from": "Assets/gltf/arrow.gltf",
+          "target": "weapons/arrow.gltf",
+          "role": "arrow",
+          "sha256": "316d885d2377b8d389edab91df4fc2797264beff317adfd66bc88357d68f6b8c",
+          "bytes": 3058
+        },
+        {
+          "from": "Assets/gltf/arrow.bin",
+          "target": "weapons/arrow.bin",
+          "sidecar": true,
+          "sha256": "4b12b8c3d0d6a13d50e2f56a07be898d9663052b61ab878659f28875464381f5",
+          "bytes": 2648
+        },
+        {
+          "from": "Assets/gltf/smokebomb.gltf",
+          "target": "weapons/smokebomb.gltf",
+          "role": "throwable",
+          "sha256": "6a71950c30598377555791b6f54db77d9b69c7a0d14f3619ed84f47490bf8ce5",
+          "bytes": 3073
+        },
+        {
+          "from": "Assets/gltf/smokebomb.bin",
+          "target": "weapons/smokebomb.bin",
+          "sidecar": true,
+          "sha256": "a50b0b4807f6f5f9f21ebf9adda2555fa024c36c8afd1395c3d3d6e9d5566e36",
+          "bytes": 11460
+        },
+        {
+          "from": "Assets/gltf/mug_full.gltf",
+          "target": "weapons/mug_full.gltf",
+          "role": "prop_mug",
+          "sha256": "354aa166f25c2e2f88b309129fb5638f98f852358f638293865c7b8767516fda",
+          "bytes": 3084
+        },
+        {
+          "from": "Assets/gltf/mug_full.bin",
+          "target": "weapons/mug_full.bin",
+          "sidecar": true,
+          "sha256": "b79442e95a5f2d02aec88fca5ea16574e5a5210daf1bc6e294a39a4c7d1aeecb",
+          "bytes": 15772
+        }
+      ]
+    },
+    {
+      "id": "kaykit-skeletons",
+      "name": "KayKit Character Pack: Skeletons 1.0",
+      "author": "Kay Lousberg (KayKit)",
+      "url": "https://kaylousberg.com/game-assets/characters-skeletons",
+      "repository": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Skeletons-1.0",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "KayKit : Character Pack: Skeletons 1.0 — Created/distributed by Kay Lousberg (www.kaylousberg.com), creation date 02/02/2024. \"License: (Creative Commons Zero, CC0) http://creativecommons.org/publicdomain/zero/1.0/ — This content is free to use in personal, educational and commercial projects.\" (LICENSE.txt in the official repository)",
+      "licenseCheckedOn": "2026-09-29",
+      "style": "KayKit chunky low-poly, single 1024px gradient atlas per pack",
+      "covers": "Undead humanoids on the same rig as Adventurers (shares its animation names, 95 animations incl. awaken/resurrect), plus skeleton weapons/shields.",
+      "download": {
+        "url": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Character-Pack-Skeletons-1.0/main/addons/kaykit_character_pack_skeletons/",
+        "method": "per-file",
+        "manual": false,
+        "fallback": "Whole pack (FBX+glTF) also at https://kaylousberg.itch.io/kaykit-skeletons (itch.io name-your-price, click-through) and https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Skeletons-1.0",
+        "bytes": 19467942
+      },
+      "files": [
+        {
+          "from": "Characters/gltf/Skeleton_Minion.glb",
+          "target": "monsters/Skeleton_Minion.glb",
+          "role": "skeleton",
+          "sha256": "6ffc003f895bed0b074791e0e490846210a2e2f8fc7da300aba53cc185f95968",
+          "bytes": 4814296
+        },
+        {
+          "from": "Characters/gltf/Skeleton_Warrior.glb",
+          "target": "monsters/Skeleton_Warrior.glb",
+          "role": "skeleton_warrior",
+          "sha256": "178b6fda810b814c250d8a2010c24dfd9b458b9006dd323353e620b7ff118bbe",
+          "bytes": 4863620
+        },
+        {
+          "from": "Characters/gltf/Skeleton_Rogue.glb",
+          "target": "monsters/Skeleton_Rogue.glb",
+          "role": "skeleton_rogue",
+          "sha256": "4003f2b77891bb56f7e0de7d555abcb497aebbcaee35b614211f16275f9ccae3",
+          "bytes": 4827024
+        },
+        {
+          "from": "Characters/gltf/Skeleton_Mage.glb",
+          "target": "monsters/Skeleton_Mage.glb",
+          "role": "skeleton_mage",
+          "sha256": "e05b0f5cfa395271c9f75fd07c0a0613c56f401ece4ab644e080001a79971075",
+          "bytes": 4761048
+        },
+        {
+          "from": "Assets/gltf/Skeleton_Blade.gltf",
+          "target": "weapons/Skeleton_Blade.gltf",
+          "role": "weapon_scimitar",
+          "sha256": "682a1df2eecb93dea35de628d6b93ca40d1b83586422356f3c1956741f2abf76",
+          "bytes": 3047
+        },
+        {
+          "from": "Assets/gltf/Skeleton_Blade.bin",
+          "target": "weapons/Skeleton_Blade.bin",
+          "sidecar": true,
+          "sha256": "ccf4f6642130d11650400fa649669ccdb784280eef235fac3a12a197cbc7debe",
+          "bytes": 20056
+        },
+        {
+          "from": "Assets/gltf/skeleton_texture.png",
+          "target": "weapons/skeleton_texture.png",
+          "sidecar": true,
+          "sha256": "15741a25c53e04fa9bf3beac3bc0de442359404b1ff9be863b892cb551ad3657",
+          "bytes": 17037
+        },
+        {
+          "from": "Assets/gltf/Skeleton_Axe.gltf",
+          "target": "weapons/Skeleton_Axe.gltf",
+          "role": "weapon_axe_rusty",
+          "sha256": "44c8b65942cbb573c99dc14c2a188fad8c47e29ad9764d27b47e6f57bb7e4ebd",
+          "bytes": 3045
+        },
+        {
+          "from": "Assets/gltf/Skeleton_Axe.bin",
+          "target": "weapons/Skeleton_Axe.bin",
+          "sidecar": true,
+          "sha256": "f994f9e1b3297961a2b27120adb81ccc61ef7a901586b584fa53fdba8b962cc7",
+          "bytes": 25348
+        },
+        {
+          "from": "Assets/gltf/Skeleton_Staff.gltf",
+          "target": "weapons/Skeleton_Staff.gltf",
+          "role": "weapon_staff_bone",
+          "sha256": "6bb554fef0889dc9e1a69a71ddae793a772fc18eea059ded61be4f8157fd2f04",
+          "bytes": 3057
+        },
+        {
+          "from": "Assets/gltf/Skeleton_Staff.bin",
+          "target": "weapons/Skeleton_Staff.bin",
+          "sidecar": true,
+          "sha256": "2b91a59316cea919b2a8b3d94ab85e3b5faa9fdb607a9ab633a6bb6d1e6bbf2f",
+          "bytes": 69244
+        },
+        {
+          "from": "Assets/gltf/Skeleton_Shield_Small_A.gltf",
+          "target": "weapons/Skeleton_Shield_Small_A.gltf",
+          "role": "shield_bone_small",
+          "sha256": "9d1d5acb0d945d36aebc57ffb9b64ad016967973e4353a632246e5c7e07346e2",
+          "bytes": 3069
+        },
+        {
+          "from": "Assets/gltf/Skeleton_Shield_Small_A.bin",
+          "target": "weapons/Skeleton_Shield_Small_A.bin",
+          "sidecar": true,
+          "sha256": "0a56f31d33ec36483163aa680279884b1b488cd634fe73541089d7032fac7962",
+          "bytes": 21688
+        },
+        {
+          "from": "Assets/gltf/Skeleton_Shield_Large_A.gltf",
+          "target": "weapons/Skeleton_Shield_Large_A.gltf",
+          "role": "shield_bone_large",
+          "sha256": "7844df0f1607259c45d01fd4f9d7bad03b5bfe50897a136831915fecff240a92",
+          "bytes": 3071
+        },
+        {
+          "from": "Assets/gltf/Skeleton_Shield_Large_A.bin",
+          "target": "weapons/Skeleton_Shield_Large_A.bin",
+          "sidecar": true,
+          "sha256": "06d975dbf7058088c0ad2cde1932e15435b5d374de3be21199a97d3be25d776d",
+          "bytes": 33292
+        }
+      ]
+    },
+    {
+      "id": "kaykit-dungeon-remastered",
+      "name": "KayKit Dungeon Remastered 1.0",
+      "author": "Kay Lousberg (KayKit)",
+      "url": "https://kaylousberg.com/game-assets/dungeon-remastered",
+      "repository": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "KayKit : Dungeon Remastered 1.0 — Created/distributed by Kay Lousberg (www.kaylousberg.com), creation date 13/03/2023. \"License: (Creative Commons Zero, CC0) http://creativecommons.org/publicdomain/zero/1.0/ — This content is free to use in personal, educational and commercial projects.\" (LICENSE.txt in the official repository)",
+      "licenseCheckedOn": "2026-09-29",
+      "style": "KayKit chunky low-poly, single 1024px gradient atlas per pack",
+      "covers": "Battle-map tiles (large and small floor tiles in stone/dirt/wood; normalise to grid squares by bounding box), walls, doors, stairs, pillars and props (barrels, crates, chests, tables, torches, banners, traps). GLBs embed the shared dungeon_texture.",
+      "download": {
+        "url": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/main/addons/kaykit_dungeon_remastered/",
+        "method": "per-file",
+        "manual": false,
+        "fallback": "Whole pack (FBX+glTF) also at https://kaylousberg.itch.io/kaykit-dungeon-remastered (itch.io name-your-price, click-through) and https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+        "bytes": 1889760
+      },
+      "files": [
+        {
+          "from": "Assets/gltf/floor_tile_large.gltf.glb",
+          "target": "dungeon/floor_tile_large.glb",
+          "role": "dungeon_floor",
+          "sha256": "5b6bbbc683f6729d094732056f157a928435de97ec3cf94c341c7465907fe17b",
+          "bytes": 28100
+        },
+        {
+          "from": "Assets/gltf/floor_tile_small.gltf.glb",
+          "target": "dungeon/floor_tile_small.glb",
+          "role": "dungeon_floor_small",
+          "sha256": "645f02c82d1fa15e3e1daa7892b70c8a9d44f44d0e520d76ae6afd08633c5b34",
+          "bytes": 20740
+        },
+        {
+          "from": "Assets/gltf/floor_tile_small_broken_A.gltf.glb",
+          "target": "dungeon/floor_tile_small_broken_A.glb",
+          "role": "dungeon_floor_broken",
+          "sha256": "d1acc3407f941623b3b01ec9a1751c36a5ca82bb14721fc8f28e5559317edad4",
+          "bytes": 22132
+        },
+        {
+          "from": "Assets/gltf/floor_tile_small_decorated.gltf.glb",
+          "target": "dungeon/floor_tile_small_decorated.glb",
+          "role": "dungeon_floor_decorated",
+          "sha256": "4dd8a74dc00c2272957938f1612c730e06bfddca7a9d9cdc6f316594d4a0f3cf",
+          "bytes": 40812
+        },
+        {
+          "from": "Assets/gltf/floor_tile_large_rocks.gltf.glb",
+          "target": "dungeon/floor_tile_large_rocks.glb",
+          "role": "dungeon_floor_rocks",
+          "sha256": "fb06b1e9ca7a5d14f6757119490c4b3c077a30e31ef580da6925b6657f14c14d",
+          "bytes": 38384
+        },
+        {
+          "from": "Assets/gltf/floor_dirt_large.gltf.glb",
+          "target": "dungeon/floor_dirt_large.glb",
+          "role": "dungeon_floor_dirt",
+          "sha256": "48cc8018237fbdca3f7fccef95c93ef32e877d8fc59f481b9369fed71fec895b",
+          "bytes": 24620
+        },
+        {
+          "from": "Assets/gltf/floor_dirt_small_A.gltf.glb",
+          "target": "dungeon/floor_dirt_small_A.glb",
+          "role": "dungeon_floor_dirt_small",
+          "sha256": "b5be9118f0b66b8e429569c7095d5be003c526f6f61ebe8061dcaf4b67b37f00",
+          "bytes": 20460
+        },
+        {
+          "from": "Assets/gltf/floor_wood_large.gltf.glb",
+          "target": "dungeon/floor_wood_large.glb",
+          "role": "dungeon_floor_wood",
+          "sha256": "d22eb1c1fb6ab434e8c9599ecb2cd00c2e34a713783603ba7a3e2cbb1611709d",
+          "bytes": 35612
+        },
+        {
+          "from": "Assets/gltf/floor_tile_big_grate.gltf.glb",
+          "target": "dungeon/floor_tile_big_grate.glb",
+          "role": "trap_grate",
+          "sha256": "6c393b10cb00ad69177f58d1b30af05f3c7f350bc331508529ef6323ff9efae3",
+          "bytes": 36296
+        },
+        {
+          "from": "Assets/gltf/floor_tile_big_spikes.glb",
+          "target": "dungeon/floor_tile_big_spikes.glb",
+          "role": "trap_spikes",
+          "sha256": "7a4e94decf860b64456a45cc1c2d7bb26f0b3ca75824ccf2c4d0addee088d9ad",
+          "bytes": 80644
+        },
+        {
+          "from": "Assets/gltf/wall.gltf.glb",
+          "target": "dungeon/wall.glb",
+          "role": "dungeon_wall",
+          "sha256": "f2f343a7bdf2d45947e3f354494e16095a923485e05637e3804e3b81ce11d921",
+          "bytes": 53132
+        },
+        {
+          "from": "Assets/gltf/wall_half.gltf.glb",
+          "target": "dungeon/wall_half.glb",
+          "role": "dungeon_wall_half",
+          "sha256": "9e65c438f55d96cbcd554489bf2dec236feb575a8192c709d3bf6886599339a8",
+          "bytes": 36840
+        },
+        {
+          "from": "Assets/gltf/wall_corner.gltf.glb",
+          "target": "dungeon/wall_corner.glb",
+          "role": "dungeon_wall_corner",
+          "sha256": "3c8cbcbf3abf78c9dc49f440b152340ef681fee9cccf9ca6ed27b6670a34eb81",
+          "bytes": 49212
+        },
+        {
+          "from": "Assets/gltf/wall_doorway.glb",
+          "target": "dungeon/wall_doorway.glb",
+          "role": "dungeon_wall_doorway",
+          "sha256": "2be5369a2d1d1d8795150b2156d8343b3e37620d78de256cb03276c54ea70c97",
+          "bytes": 100596
+        },
+        {
+          "from": "Assets/gltf/wall_broken.gltf.glb",
+          "target": "dungeon/wall_broken.glb",
+          "role": "dungeon_wall_broken",
+          "sha256": "ee7598ef2b88aaeb7b61e46d5f1da1a059de3860b080b38b7a507ca2f461302c",
+          "bytes": 69276
+        },
+        {
+          "from": "Assets/gltf/wall_arched.gltf.glb",
+          "target": "dungeon/wall_arched.glb",
+          "role": "dungeon_wall_arched",
+          "sha256": "916a7d81b8d6ebddb069440a0f9ecb14c9c2a1e5cd7769acf2218d630bd56cb8",
+          "bytes": 69124
+        },
+        {
+          "from": "Assets/gltf/wall_gated.gltf.glb",
+          "target": "dungeon/wall_gated.glb",
+          "role": "dungeon_wall_gated",
+          "sha256": "68e766c2b4eb05c4bf2c0fcd908ea5dc5192dda56cfdd5d56b7cbf446063220c",
+          "bytes": 46364
+        },
+        {
+          "from": "Assets/gltf/wall_window_open.gltf.glb",
+          "target": "dungeon/wall_window_open.glb",
+          "role": "dungeon_wall_window",
+          "sha256": "7cb4804e55bd90a4c61198b6b9c557ccb87c485b13dfad4b184c9b6d8632438f",
+          "bytes": 57256
+        },
+        {
+          "from": "Assets/gltf/wall_pillar.gltf.glb",
+          "target": "dungeon/wall_pillar.glb",
+          "role": "dungeon_wall_pillar",
+          "sha256": "f85030386f9f183bbc03a0817a1967a40758f24828295ed2a1c88d4c004eb5eb",
+          "bytes": 55156
+        },
+        {
+          "from": "Assets/gltf/pillar.gltf.glb",
+          "target": "dungeon/pillar.glb",
+          "role": "dungeon_pillar",
+          "sha256": "e31da496461921475384c62ce761cd23924892bd6f32aeea68bd913545caee33",
+          "bytes": 25552
+        },
+        {
+          "from": "Assets/gltf/column.gltf.glb",
+          "target": "dungeon/column.glb",
+          "role": "dungeon_column",
+          "sha256": "761adf0fcc1a86ab1c42740b7a8ad340d73982f94257e7892b2c7998f98c304e",
+          "bytes": 20260
+        },
+        {
+          "from": "Assets/gltf/stairs.gltf.glb",
+          "target": "dungeon/stairs.glb",
+          "role": "dungeon_stairs",
+          "sha256": "5ba16e5d919aaa8958435c4b73c1f8a94c98febeacf716faa1359f24e6b27d70",
+          "bytes": 43368
+        },
+        {
+          "from": "Assets/gltf/barrier.gltf.glb",
+          "target": "dungeon/barrier.glb",
+          "role": "prop_barrier",
+          "sha256": "2c6a1b89de1c87778c7ae9afc17fa9eabc4aa4148f3b8748f062b5c8ec7f6c00",
+          "bytes": 23292
+        },
+        {
+          "from": "Assets/gltf/barrel_large.gltf.glb",
+          "target": "dungeon/barrel_large.glb",
+          "role": "prop_barrel",
+          "sha256": "9fae6a79056241baf253fe9272dc7a7ddb174e1caf153eb5013c58a596722148",
+          "bytes": 44292
+        },
+        {
+          "from": "Assets/gltf/box_large.gltf.glb",
+          "target": "dungeon/box_large.glb",
+          "role": "prop_crate",
+          "sha256": "6dacda267f04769f8ebbb7e991885785054923ea3d5eb19e833768a911d5b661",
+          "bytes": 28740
+        },
+        {
+          "from": "Assets/gltf/crates_stacked.gltf.glb",
+          "target": "dungeon/crates_stacked.glb",
+          "role": "prop_crates_stacked",
+          "sha256": "43182b077ead9b033804300ef453b7402bdc979f00cfce2d7f0c91dcf6bb5d3c",
+          "bytes": 103704
+        },
+        {
+          "from": "Assets/gltf/chest.glb",
+          "target": "dungeon/chest.glb",
+          "role": "prop_chest",
+          "sha256": "f72fd2201cd42ad399928a0b7bcc34d5b0e6d0624aeaf824fef81852109955f8",
+          "bytes": 81412
+        },
+        {
+          "from": "Assets/gltf/chest_gold.glb",
+          "target": "dungeon/chest_gold.glb",
+          "role": "prop_chest_gold",
+          "sha256": "04708d5f88ed59d361c8a6cec1efe8b7028dbc641dfae0a1467f272e14a94b6e",
+          "bytes": 140140
+        },
+        {
+          "from": "Assets/gltf/table_medium.gltf.glb",
+          "target": "dungeon/table_medium.glb",
+          "role": "prop_table",
+          "sha256": "9686a202ea2f825062dfab02d89cded25d7acc07847b88c1e39f0e09e085872a",
+          "bytes": 33832
+        },
+        {
+          "from": "Assets/gltf/chair.gltf.glb",
+          "target": "dungeon/chair.glb",
+          "role": "prop_chair",
+          "sha256": "5f133281686d398304c0a458c4d407dd483eeea8aba67220b585ceb89366efa2",
+          "bytes": 36252
+        },
+        {
+          "from": "Assets/gltf/bed_frame.gltf.glb",
+          "target": "dungeon/bed_frame.glb",
+          "role": "prop_bed",
+          "sha256": "37a9c963005b9db56df45518ed1d47bb37c8441f1207cf9079b0651458906d43",
+          "bytes": 30688
+        },
+        {
+          "from": "Assets/gltf/shelf_small_candles.gltf.glb",
+          "target": "dungeon/shelf_small_candles.glb",
+          "role": "prop_shelf",
+          "sha256": "d6f6a809c1e4635b143fd3c6e790331aa049d625abd390429c1e5887f77cbb96",
+          "bytes": 30036
+        },
+        {
+          "from": "Assets/gltf/torch_mounted.gltf.glb",
+          "target": "dungeon/torch_mounted.glb",
+          "role": "prop_torch_wall",
+          "sha256": "a617c159e02932db48ca81ec46f1f100acc8904fb6ece43e919d2f93c13950e9",
+          "bytes": 33220
+        },
+        {
+          "from": "Assets/gltf/torch_lit.gltf.glb",
+          "target": "dungeon/torch_lit.glb",
+          "role": "prop_torch",
+          "sha256": "45fcfeb3b129722019d42aef0acae8f6c5f8f6dbdf5d3346ceea1f084b69b396",
+          "bytes": 31244
+        },
+        {
+          "from": "Assets/gltf/candle_lit.gltf.glb",
+          "target": "dungeon/candle_lit.glb",
+          "role": "prop_candle",
+          "sha256": "a884f27540b8b91e3d47914453cbf2c4d48f4ca8504ace9960a8d9b4e79a6c48",
+          "bytes": 22648
+        },
+        {
+          "from": "Assets/gltf/banner_red.gltf.glb",
+          "target": "dungeon/banner_red.glb",
+          "role": "prop_banner",
+          "sha256": "c69c6eaffc834d6dcc7d19f8fd87145af4323265755588bf5bde85d71e0e3ff3",
+          "bytes": 24216
+        },
+        {
+          "from": "Assets/gltf/rubble_large.gltf.glb",
+          "target": "dungeon/rubble_large.glb",
+          "role": "prop_rubble",
+          "sha256": "0292da1b5788a5a52b616d5d27d3270c676a5fbf9e921b6dd3dc30364d355b54",
+          "bytes": 60196
+        },
+        {
+          "from": "Assets/gltf/rubble_half.gltf.glb",
+          "target": "dungeon/rubble_half.glb",
+          "role": "prop_rubble_small",
+          "sha256": "7514ccbda643c13d5a782579e4f01ee6402eec5519590d3f048d396cdaedec24",
+          "bytes": 38836
+        },
+        {
+          "from": "Assets/gltf/coin_stack_medium.gltf.glb",
+          "target": "dungeon/coin_stack_medium.glb",
+          "role": "prop_coins",
+          "sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+          "bytes": 63996
+        },
+        {
+          "from": "Assets/gltf/keyring.gltf.glb",
+          "target": "dungeon/keyring.glb",
+          "role": "prop_keys",
+          "sha256": "0313e8cf5a13000d15e0d37d8656b501c63ac7d44b0c46ee30c36a6c1bbe0481",
+          "bytes": 49100
+        },
+        {
+          "from": "Assets/gltf/sword_shield_broken.gltf.glb",
+          "target": "dungeon/sword_shield_broken.glb",
+          "role": "prop_weapon_rack",
+          "sha256": "5a056d05102aaa0fb91e7a9f0e88775f90bba5397309c9da5e3c51c2238c85f8",
+          "bytes": 39980
+        }
+      ]
+    },
+    {
+      "id": "quaternius-ultimate-monsters",
+      "name": "Quaternius Ultimate Monsters",
+      "author": "Quaternius",
+      "url": "https://quaternius.com/packs/ultimatemonsters.html",
+      "repository": "https://poly.pizza/bundle/Ultimate-Monsters-Bundle-5oyGWAmOB6",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "quaternius.com pack page https://quaternius.com/packs/ultimatemonsters.html shows License: \"CC0\" (links https://creativecommons.org/publicdomain/zero/1.0/) and \"free to use in personal and commercial projects\"; every model in the Poly Pizza bundle https://poly.pizza/bundle/Ultimate-Monsters-Bundle-5oyGWAmOB6 (uploaded by the Quaternius account) is marked \"Licence: CC0 1.0\" / \"Public Domain (CC0)\".",
+      "licenseCheckedOn": "2026-09-29",
+      "style": "Quaternius cute low-poly, flat vertex/material colours (no textures)",
+      "covers": "50 animated monsters in 3 rigs: Blob (Idle/Walk/Jump/Bite_Front/HitRecieve/Death…), Flying (Flying_Idle/Fast_Flying/Headbutt/Punch/HitReact/Death…) and Big bipeds (Idle/Walk/Run/Punch/Weapon/HitReact/Death…). ~1–7k tris, 60–520 KB each.",
+      "download": {
+        "url": "https://static.poly.pizza/",
+        "method": "per-file",
+        "manual": false,
+        "fallback": "Full pack (FBX/OBJ/Blend) via the Download button on https://quaternius.com/packs/ultimatemonsters.html (Google Drive folder 18m4KpzpEzhC9wl7jzr6dUc0N8Jozr79C).",
+        "bytes": 6667940
+      },
+      "files": [
+        {
+          "from": "Pink Slime (poly.pizza/m/AyP8sQmDLh)",
+          "url": "https://static.poly.pizza/3ddbff73-430c-4ca0-bb25-11211683fbb9.glb",
+          "target": "monsters/Slime.glb",
+          "role": "ooze_slime",
+          "sha256": "34bb111a7931bb957f992e127d71fac321aaeea1bdcc7da56fa5aba55c83d783",
+          "bytes": 62652
+        },
+        {
+          "from": "Green Blob (poly.pizza/m/y4kJh8EeYS)",
+          "url": "https://static.poly.pizza/64ab590e-1f77-4678-b357-78c430fd73bf.glb",
+          "target": "monsters/Blob.glb",
+          "role": "ooze_blob",
+          "sha256": "31c46edd6306e4ab21bec4608b41003baa74f430f27d357b90c9b6401d88a584",
+          "bytes": 74812
+        },
+        {
+          "from": "Green Spiky Blob (poly.pizza/m/IoWG5F9WUc)",
+          "url": "https://static.poly.pizza/cd25a048-719e-4ec4-bbf5-a266776fe129.glb",
+          "target": "monsters/SpikyBlob.glb",
+          "role": "spiky_blob",
+          "sha256": "ad5e8b1cdf8c0d328b4b44537d3da8fa98119a9a99fb6163e2f325dbb8bbecc1",
+          "bytes": 185820
+        },
+        {
+          "from": "Mushnub Evolved (poly.pizza/m/0SZyA6MV51)",
+          "url": "https://static.poly.pizza/84bc88a5-22d8-44e6-af9b-58f8465eb238.glb",
+          "target": "monsters/Mushnub.glb",
+          "role": "fungus",
+          "sha256": "fe364b07af250c48073c319c0b4460239ca39daab37269a4e23217be46a3331c",
+          "bytes": 149516
+        },
+        {
+          "from": "Fish (blob) (poly.pizza/m/7V4gaDMQV8)",
+          "url": "https://static.poly.pizza/f7d91eb6-da8e-405d-a647-18ff54b97752.glb",
+          "target": "monsters/Fish.glb",
+          "role": "fish",
+          "sha256": "1fdc84f17ce6f69e5812989788dec6f14860e48e281afbdb6a9b26cf0540d569",
+          "bytes": 156880
+        },
+        {
+          "from": "Dragon (flying) (poly.pizza/m/3rUm1cN3yp)",
+          "url": "https://static.poly.pizza/ae5b8510-1fa5-4d53-b943-a4f3b88fb629.glb",
+          "target": "monsters/Dragon_Small.glb",
+          "role": "dragon_small",
+          "sha256": "d8a12f3f819e86518f5a44984db611ffaaa800895da33928d66519e629615705",
+          "bytes": 251540
+        },
+        {
+          "from": "Dragon Evolved (flying) (poly.pizza/m/LlwD0QNUPj)",
+          "url": "https://static.poly.pizza/90ed3740-d8c4-4910-88ce-ac2ed426022d.glb",
+          "target": "monsters/Dragon.glb",
+          "role": "dragon",
+          "sha256": "f660d8f48be4ea3f39639f6206a0181127e7fe7503cb4bad8d07d27d80528f3a",
+          "bytes": 436000
+        },
+        {
+          "from": "Ghost (flying) (poly.pizza/m/Iip30bDHmu)",
+          "url": "https://static.poly.pizza/810f60a2-6e45-4c4e-a0d5-da91cd7288bd.glb",
+          "target": "monsters/Ghost.glb",
+          "role": "ghost",
+          "sha256": "4ed7656e2155d47b7d5fe08f31a7e764d79255f477d90040e4472552d7d5ac68",
+          "bytes": 203360
+        },
+        {
+          "from": "Ghost Skull (flying) (poly.pizza/m/TX8r9WBXpe)",
+          "url": "https://static.poly.pizza/0716bf8e-1894-4a90-8d10-34868975a239.glb",
+          "target": "monsters/GhostSkull.glb",
+          "role": "ghost_skull",
+          "sha256": "d1e2268fe9621583ff879d6e6e3ace80b0a6a2373ec0139a8139c88fe6e4d942",
+          "bytes": 232384
+        },
+        {
+          "from": "Hywirl (flying) (poly.pizza/m/zjr7CmWGER)",
+          "url": "https://static.poly.pizza/6500a805-0588-4823-bb8d-2f8ffdf338ab.glb",
+          "target": "monsters/Hywirl.glb",
+          "role": "fey_sprite",
+          "sha256": "90b8f9f252999e71c1bd4bfa76bb219c577a1ecfb10294ca0eb41f903a60d8bd",
+          "bytes": 200868
+        },
+        {
+          "from": "Demon (flying) (poly.pizza/m/Mo2ky6vkf8)",
+          "url": "https://static.poly.pizza/c2e39eb4-4b8e-4d31-b014-d637bf4e15c6.glb",
+          "target": "monsters/Imp.glb",
+          "role": "imp",
+          "sha256": "9b235359e2e28a8000a92de055ab9c8a9ed123da279461d452357dbbc30de117",
+          "bytes": 321140
+        },
+        {
+          "from": "Goleling (flying) (poly.pizza/m/71gomWolax)",
+          "url": "https://static.poly.pizza/51bf31d7-1aee-4a51-acb1-d667843af205.glb",
+          "target": "monsters/Bat.glb",
+          "role": "bat",
+          "sha256": "fe6b5a04aef77aa9b38afee216802823b543d2409674bc86bd8bd152cb8cebce",
+          "bytes": 217332
+        },
+        {
+          "from": "Armabee (flying) (poly.pizza/m/42djT5zJnx)",
+          "url": "https://static.poly.pizza/de63aaf6-9170-47f7-933d-439af68826a6.glb",
+          "target": "monsters/Armabee.glb",
+          "role": "insect_flying",
+          "sha256": "9a47899a2320aa42d5f550598a981c26517c6e27723980f5d2080a557eb88dc2",
+          "bytes": 143736
+        },
+        {
+          "from": "Orc (big) (poly.pizza/m/5vO2YJsPEf)",
+          "url": "https://static.poly.pizza/52a479b3-a635-4a23-92cb-6697eaa5eed5.glb",
+          "target": "monsters/Orc.glb",
+          "role": "orc",
+          "sha256": "fb5d9da18e16fd3bd6f066692576845d411acf19536d46c7598f5d701b6db19f",
+          "bytes": 512984
+        },
+        {
+          "from": "Blue Demon (big) (poly.pizza/m/S7jYW6Amye)",
+          "url": "https://static.poly.pizza/6fbb8914-bd11-45e1-a906-51ace2ca5d2d.glb",
+          "target": "monsters/Goblin.glb",
+          "role": "goblin",
+          "sha256": "6a8e743deba6f43f0f9b1e702016b04ddba1d3bf73b7101d2c86d64ae526f87c",
+          "bytes": 439488
+        },
+        {
+          "from": "Demon (big) (poly.pizza/m/LnfIziKv4o)",
+          "url": "https://static.poly.pizza/46b52ba4-5d2a-4fc8-85cc-3e980f199141.glb",
+          "target": "monsters/Demon.glb",
+          "role": "demon",
+          "sha256": "7da854e1d43428b89b1afca0feca3f323b869b1d8ed7df74d17354260b607262",
+          "bytes": 485516
+        },
+        {
+          "from": "Alien (big) (poly.pizza/m/RRliSQBP7r)",
+          "url": "https://static.poly.pizza/b048d82a-7fc2-4631-b859-4bde0ed19b59.glb",
+          "target": "monsters/Aberration.glb",
+          "role": "aberration",
+          "sha256": "746d9caf75897297dfd76678c55dc3dfe84e5b9e6ce816276db300cea11c27bb",
+          "bytes": 480976
+        },
+        {
+          "from": "Dino (big) (poly.pizza/m/wuerCFCWNR)",
+          "url": "https://static.poly.pizza/1c1ae302-b948-4de4-961a-44f762b722cf.glb",
+          "target": "monsters/Dino.glb",
+          "role": "reptile_biped",
+          "sha256": "19b9a3841ebfd7595da9cd595b74e231da29730fe8030a2d17a021bc26b563ef",
+          "bytes": 404176
+        },
+        {
+          "from": "Yeti (big) (poly.pizza/m/ceRHrn8HHE)",
+          "url": "https://static.poly.pizza/40a831b3-686a-4af8-b189-a13b38a3c26a.glb",
+          "target": "monsters/Yeti.glb",
+          "role": "yeti",
+          "sha256": "789fcdd3d32a1bf6ceaa0e30f9ac5d8d2c52d15fa0181d4d1d980a1b2a2ac869",
+          "bytes": 423024
+        },
+        {
+          "from": "Fish (big) (poly.pizza/m/ypEYhCImAB)",
+          "url": "https://static.poly.pizza/6c98561f-4fb5-404c-91e9-a54024e1f6c5.glb",
+          "target": "monsters/FishFolk.glb",
+          "role": "fishfolk",
+          "sha256": "a04abb34053ec7b7080ca8e32ad6e8775e7b4d4b03e2cd2ef27a01e87c82fcca",
+          "bytes": 461616
+        },
+        {
+          "from": "Mushroom King (big) (poly.pizza/m/grnFTziU8u)",
+          "url": "https://static.poly.pizza/798301fb-b950-460c-9c67-526621ad8500.glb",
+          "target": "monsters/MushroomKing.glb",
+          "role": "plant_brute",
+          "sha256": "45bbb9d659697d0127be159af0a58fae3fe8eef430adacaf994efcf0769b2e09",
+          "bytes": 444228
+        },
+        {
+          "from": "Frog (big) (poly.pizza/m/37wofOCOzG)",
+          "url": "https://static.poly.pizza/9018566d-c4e9-4f20-9c99-964622a6e674.glb",
+          "target": "monsters/FrogFolk.glb",
+          "role": "frogfolk",
+          "sha256": "e649e23848548c74f22a22071ebcd5ddcf78254a9f4ce94417078a7431482309",
+          "bytes": 379892
+        }
+      ]
+    },
+    {
+      "id": "quaternius-animated-animals",
+      "name": "Quaternius Ultimate Animated Animal Pack",
+      "author": "Quaternius",
+      "url": "https://quaternius.com/packs/ultimateanimatedanimals.html",
+      "repository": "https://poly.pizza/bundle/Animated-Animal-Pack-ILAPXeUYiS",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "quaternius.com pack page https://quaternius.com/packs/ultimateanimatedanimals.html shows License: \"CC0\" (links https://creativecommons.org/publicdomain/zero/1.0/) and \"free to use in personal and commercial projects\"; every model in the Poly Pizza bundle https://poly.pizza/bundle/Animated-Animal-Pack-ILAPXeUYiS (uploaded by the Quaternius account) is marked \"Licence: CC0 1.0\" / \"Public Domain (CC0)\".",
+      "licenseCheckedOn": "2026-09-29",
+      "style": "Quaternius cute low-poly, flat vertex/material colours (no textures)",
+      "covers": "Rigged quadrupeds with 12+ animations (Idle, Walk, Gallop, Attack, HitReact, Death, Eating…). ~1.9k tris, ~1 MB each.",
+      "download": {
+        "url": "https://static.poly.pizza/",
+        "method": "per-file",
+        "manual": false,
+        "fallback": "Full pack (FBX/OBJ/Blend/glTF) via the Download button on https://quaternius.com/packs/ultimateanimatedanimals.html (Google Drive folder 1uJ3N5HfB7jKTseJUNQr3N4YaN0UuEtHk, includes glTF).",
+        "bytes": 6145160
+      },
+      "files": [
+        {
+          "from": "Wolf (poly.pizza/m/P1gU3Qkr9r)",
+          "url": "https://static.poly.pizza/f1d12388-e39b-4157-b32a-646a1d089fc4.glb",
+          "target": "animals/Wolf.glb",
+          "role": "wolf",
+          "sha256": "16ac96339d06f7def9af20d5d9b27622d61e53580dab43970c9edb1bffbe8f84",
+          "bytes": 986712
+        },
+        {
+          "from": "Fox (poly.pizza/m/Bc97C66HKi)",
+          "url": "https://static.poly.pizza/e18e86df-1692-48d8-ac6e-1e25ab4ad574.glb",
+          "target": "animals/Fox.glb",
+          "role": "fox",
+          "sha256": "9917771e1414c46557b011cbaaee6de82a827605008227a364c3862f0be62ddc",
+          "bytes": 960228
+        },
+        {
+          "from": "Deer (poly.pizza/m/T6Cs7tmMHJ)",
+          "url": "https://static.poly.pizza/4b6c2a41-43c7-404c-ae37-e8c4645ff93b.glb",
+          "target": "animals/Deer.glb",
+          "role": "deer",
+          "sha256": "fabf360b22eaccccd056ee99d698a9562d15aa245821f96e4fbad6db3751604e",
+          "bytes": 1007564
+        },
+        {
+          "from": "Stag (poly.pizza/m/tQdzbZ1Cmw)",
+          "url": "https://static.poly.pizza/a9c69fbc-bf7c-4585-9a49-a82e0be1ac6b.glb",
+          "target": "animals/Stag.glb",
+          "role": "stag",
+          "sha256": "3c2df7c13a3d37c8660684e46aa1e5a2bf7e91a9b279983921d48bd93d0b67ed",
+          "bytes": 1044172
+        },
+        {
+          "from": "Horse (poly.pizza/m/qvTrSG9pZF)",
+          "url": "https://static.poly.pizza/d37dbc87-ca61-4b2c-a2da-d2f0c4240bef.glb",
+          "target": "animals/Horse.glb",
+          "role": "horse",
+          "sha256": "fae7a7ec91e0d6a33554efb896fac9c4e8c632644183bcb8cc962f673d3ce609",
+          "bytes": 1108124
+        },
+        {
+          "from": "Bull (poly.pizza/m/a8PIIYwF7r)",
+          "url": "https://static.poly.pizza/5704ef69-2c27-4de8-a942-70a29458af21.glb",
+          "target": "animals/Bull.glb",
+          "role": "bull",
+          "sha256": "545642d15d4d062efb45915ac6e776c2b5921ff89de3544f65e450bbfd16ce16",
+          "bytes": 1038360
+        }
+      ]
+    },
+    {
+      "id": "quaternius-easy-enemies",
+      "name": "Quaternius Easy Enemy Pack (Animated Enemies)",
+      "author": "Quaternius",
+      "url": "https://quaternius.com/packs/easyenemy.html",
+      "repository": "https://poly.pizza/bundle/Animated-Enemies-a53OJwHrhh",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "quaternius.com pack page https://quaternius.com/packs/easyenemy.html shows License: \"CC0\" (links https://creativecommons.org/publicdomain/zero/1.0/) and \"free to use in personal and commercial projects\"; every model in the Poly Pizza bundle https://poly.pizza/bundle/Animated-Enemies-a53OJwHrhh (uploaded by the Quaternius account) is marked \"Licence: CC0 1.0\" / \"Public Domain (CC0)\".",
+      "licenseCheckedOn": "2026-09-29",
+      "style": "Quaternius cute low-poly, flat vertex/material colours (no textures)",
+      "covers": "Small animated vermin: snake, wasp, rat, spider, frog (Attack/Idle/Jump/Walk/Death).",
+      "download": {
+        "url": "https://static.poly.pizza/",
+        "method": "per-file",
+        "manual": false,
+        "fallback": "Full pack (FBX/OBJ/Blend) via the Download button on https://quaternius.com/packs/easyenemy.html (Google Drive folder 1VbJIslXPWK-1KybQN6yezZrfJcw608qe).",
+        "bytes": 2245084
+      },
+      "files": [
+        {
+          "from": "Snake (poly.pizza/m/x9x0viZs8V)",
+          "url": "https://static.poly.pizza/0f3a551e-743e-48f5-936f-804c6c3b88bd.glb",
+          "target": "animals/Snake.glb",
+          "role": "snake",
+          "sha256": "70b4af1088dec939e167b07c0a5e69992a4851beac8bd24a9da1189b65ae101c",
+          "bytes": 216696
+        },
+        {
+          "from": "Wasp (poly.pizza/m/3aQgc75sUR)",
+          "url": "https://static.poly.pizza/71cadefd-8e65-423a-9a95-3cdf7e012586.glb",
+          "target": "animals/Wasp.glb",
+          "role": "wasp",
+          "sha256": "050fe9f39c61f62c00691303fa44f85cbd6548d385f27d95011fa9936d2b48a3",
+          "bytes": 441256
+        },
+        {
+          "from": "Rat (poly.pizza/m/iltq5bVNaV)",
+          "url": "https://static.poly.pizza/64cb7150-8031-44ab-a0c9-e1529a572b23.glb",
+          "target": "animals/Rat.glb",
+          "role": "rat",
+          "sha256": "68f67077981102e957059fd00aaf3799e6867c269de900bd52c9f12cec1d5f56",
+          "bytes": 550764
+        },
+        {
+          "from": "Spider (poly.pizza/m/yRYJiAJyiM)",
+          "url": "https://static.poly.pizza/4259fbdb-afb5-4d40-9108-363625dd6b6e.glb",
+          "target": "animals/Spider.glb",
+          "role": "spider",
+          "sha256": "d759e35f6cf5adc7eb7e3f70135cd2a808787fc36337a523015592ba840ccd6d",
+          "bytes": 449008
+        },
+        {
+          "from": "Frog (poly.pizza/m/9Z2V8fpazF)",
+          "url": "https://static.poly.pizza/08416495-b056-4ed7-b23b-5a10e82277a0.glb",
+          "target": "animals/Frog.glb",
+          "role": "frog",
+          "sha256": "92dc96c90e7228676f8c43dc7711ba5ed5505029ebb2f6d4ad198d9e35bdbfe0",
+          "bytes": 587360
+        }
+      ]
+    },
+    {
+      "id": "quaternius-rpg-items",
+      "name": "Quaternius Ultimate RPG Pack (items)",
+      "author": "Quaternius",
+      "url": "https://quaternius.com/packs/ultimaterpg.html",
+      "repository": "https://poly.pizza/bundle/Ultimate-RPG-Items-Bundle-h8mhlZ0dG8",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "quaternius.com pack page https://quaternius.com/packs/ultimaterpg.html shows License: \"CC0\" (links https://creativecommons.org/publicdomain/zero/1.0/) and \"free to use in personal and commercial projects\"; every model in the Poly Pizza bundle https://poly.pizza/bundle/Ultimate-RPG-Items-Bundle-h8mhlZ0dG8 (uploaded by the Quaternius account) is marked \"Licence: CC0 1.0\" / \"Public Domain (CC0)\".",
+      "licenseCheckedOn": "2026-09-29",
+      "style": "Quaternius cute low-poly, flat vertex/material colours (no textures)",
+      "covers": "Static weapons KayKit lacks (bow, spear, warhammer). Not rigged; attach to handslot bones.",
+      "download": {
+        "url": "https://static.poly.pizza/",
+        "method": "per-file",
+        "manual": false,
+        "fallback": "Full pack (FBX/OBJ/Blend) via the Download button on https://quaternius.com/packs/ultimaterpg.html (Google Drive folder 1IhdL3W5XdJrjf_axqAnKvEybMaC3FwF-).",
+        "bytes": 214920
+      },
+      "files": [
+        {
+          "from": "Wooden Bow (poly.pizza/m/QnpqjLSKFU)",
+          "url": "https://static.poly.pizza/e1abc1c7-47db-48c3-9c65-0879273e8bc8.glb",
+          "target": "weapons/Bow.glb",
+          "role": "weapon_bow",
+          "sha256": "0aca54204443e70af43a9cc7e98c5c9ae42c938595078c801f2303fedd2f6d8f",
+          "bytes": 39108
+        },
+        {
+          "from": "Spear (poly.pizza/m/fH1zmvjPNx)",
+          "url": "https://static.poly.pizza/85591d23-e537-4562-8b28-80c30c0e696d.glb",
+          "target": "weapons/Spear.glb",
+          "role": "weapon_spear",
+          "sha256": "782d0df743960a7e5151e646be151272a30d3ed3698af4b7d1b713c41cc445f0",
+          "bytes": 69892
+        },
+        {
+          "from": "Doublesided Hammer (poly.pizza/m/UIXvQ73DS1)",
+          "url": "https://static.poly.pizza/97f342bf-7e3b-4155-a306-91b35e321c7b.glb",
+          "target": "weapons/Hammer.glb",
+          "role": "weapon_hammer",
+          "sha256": "372b0fe8863f4f58c4bc126ff5f73bc24e035569d6954b474c3b26226afe5b16",
+          "bytes": 105920
+        }
+      ]
+    }
+  ],
+  "roles": {
+    "hero_knight": {
+      "file": "characters/Knight.glb"
+    },
+    "hero_barbarian": {
+      "file": "characters/Barbarian.glb"
+    },
+    "hero_mage": {
+      "file": "characters/Mage.glb"
+    },
+    "hero_rogue": {
+      "file": "characters/Rogue.glb"
+    },
+    "hero_rogue_hooded": {
+      "file": "characters/Rogue_Hooded.glb"
+    },
+    "weapon_sword": {
+      "file": "weapons/sword_1handed.gltf"
+    },
+    "weapon_greatsword": {
+      "file": "weapons/sword_2handed.gltf"
+    },
+    "weapon_axe": {
+      "file": "weapons/axe_1handed.gltf"
+    },
+    "weapon_greataxe": {
+      "file": "weapons/axe_2handed.gltf"
+    },
+    "weapon_dagger": {
+      "file": "weapons/dagger.gltf"
+    },
+    "weapon_crossbow_light": {
+      "file": "weapons/crossbow_1handed.gltf"
+    },
+    "weapon_crossbow_heavy": {
+      "file": "weapons/crossbow_2handed.gltf"
+    },
+    "weapon_staff": {
+      "file": "weapons/staff.gltf"
+    },
+    "weapon_wand": {
+      "file": "weapons/wand.gltf"
+    },
+    "shield_round": {
+      "file": "weapons/shield_round.gltf"
+    },
+    "shield_square": {
+      "file": "weapons/shield_square.gltf"
+    },
+    "shield_spiked": {
+      "file": "weapons/shield_spikes.gltf"
+    },
+    "shield_badge": {
+      "file": "weapons/shield_badge.gltf"
+    },
+    "spellbook": {
+      "file": "weapons/spellbook_open.gltf"
+    },
+    "quiver": {
+      "file": "weapons/quiver.gltf"
+    },
+    "arrow": {
+      "file": "weapons/arrow.gltf"
+    },
+    "throwable": {
+      "file": "weapons/smokebomb.gltf"
+    },
+    "prop_mug": {
+      "file": "weapons/mug_full.gltf"
+    },
+    "skeleton": {
+      "file": "monsters/Skeleton_Minion.glb"
+    },
+    "skeleton_warrior": {
+      "file": "monsters/Skeleton_Warrior.glb"
+    },
+    "skeleton_rogue": {
+      "file": "monsters/Skeleton_Rogue.glb"
+    },
+    "skeleton_mage": {
+      "file": "monsters/Skeleton_Mage.glb"
+    },
+    "weapon_scimitar": {
+      "file": "weapons/Skeleton_Blade.gltf"
+    },
+    "weapon_axe_rusty": {
+      "file": "weapons/Skeleton_Axe.gltf"
+    },
+    "weapon_staff_bone": {
+      "file": "weapons/Skeleton_Staff.gltf"
+    },
+    "shield_bone_small": {
+      "file": "weapons/Skeleton_Shield_Small_A.gltf"
+    },
+    "shield_bone_large": {
+      "file": "weapons/Skeleton_Shield_Large_A.gltf"
+    },
+    "dungeon_floor": {
+      "file": "dungeon/floor_tile_large.glb"
+    },
+    "dungeon_floor_small": {
+      "file": "dungeon/floor_tile_small.glb"
+    },
+    "dungeon_floor_broken": {
+      "file": "dungeon/floor_tile_small_broken_A.glb"
+    },
+    "dungeon_floor_decorated": {
+      "file": "dungeon/floor_tile_small_decorated.glb"
+    },
+    "dungeon_floor_rocks": {
+      "file": "dungeon/floor_tile_large_rocks.glb"
+    },
+    "dungeon_floor_dirt": {
+      "file": "dungeon/floor_dirt_large.glb"
+    },
+    "dungeon_floor_dirt_small": {
+      "file": "dungeon/floor_dirt_small_A.glb"
+    },
+    "dungeon_floor_wood": {
+      "file": "dungeon/floor_wood_large.glb"
+    },
+    "trap_grate": {
+      "file": "dungeon/floor_tile_big_grate.glb"
+    },
+    "trap_spikes": {
+      "file": "dungeon/floor_tile_big_spikes.glb"
+    },
+    "dungeon_wall": {
+      "file": "dungeon/wall.glb"
+    },
+    "dungeon_wall_half": {
+      "file": "dungeon/wall_half.glb"
+    },
+    "dungeon_wall_corner": {
+      "file": "dungeon/wall_corner.glb"
+    },
+    "dungeon_wall_doorway": {
+      "file": "dungeon/wall_doorway.glb"
+    },
+    "dungeon_wall_broken": {
+      "file": "dungeon/wall_broken.glb"
+    },
+    "dungeon_wall_arched": {
+      "file": "dungeon/wall_arched.glb"
+    },
+    "dungeon_wall_gated": {
+      "file": "dungeon/wall_gated.glb"
+    },
+    "dungeon_wall_window": {
+      "file": "dungeon/wall_window_open.glb"
+    },
+    "dungeon_wall_pillar": {
+      "file": "dungeon/wall_pillar.glb"
+    },
+    "dungeon_pillar": {
+      "file": "dungeon/pillar.glb"
+    },
+    "dungeon_column": {
+      "file": "dungeon/column.glb"
+    },
+    "dungeon_stairs": {
+      "file": "dungeon/stairs.glb"
+    },
+    "prop_barrier": {
+      "file": "dungeon/barrier.glb"
+    },
+    "prop_barrel": {
+      "file": "dungeon/barrel_large.glb"
+    },
+    "prop_crate": {
+      "file": "dungeon/box_large.glb"
+    },
+    "prop_crates_stacked": {
+      "file": "dungeon/crates_stacked.glb"
+    },
+    "prop_chest": {
+      "file": "dungeon/chest.glb"
+    },
+    "prop_chest_gold": {
+      "file": "dungeon/chest_gold.glb"
+    },
+    "prop_table": {
+      "file": "dungeon/table_medium.glb"
+    },
+    "prop_chair": {
+      "file": "dungeon/chair.glb"
+    },
+    "prop_bed": {
+      "file": "dungeon/bed_frame.glb"
+    },
+    "prop_shelf": {
+      "file": "dungeon/shelf_small_candles.glb"
+    },
+    "prop_torch_wall": {
+      "file": "dungeon/torch_mounted.glb"
+    },
+    "prop_torch": {
+      "file": "dungeon/torch_lit.glb"
+    },
+    "prop_candle": {
+      "file": "dungeon/candle_lit.glb"
+    },
+    "prop_banner": {
+      "file": "dungeon/banner_red.glb"
+    },
+    "prop_rubble": {
+      "file": "dungeon/rubble_large.glb"
+    },
+    "prop_rubble_small": {
+      "file": "dungeon/rubble_half.glb"
+    },
+    "prop_coins": {
+      "file": "dungeon/coin_stack_medium.glb"
+    },
+    "prop_keys": {
+      "file": "dungeon/keyring.glb"
+    },
+    "prop_weapon_rack": {
+      "file": "dungeon/sword_shield_broken.glb"
+    },
+    "ooze_slime": {
+      "file": "monsters/Slime.glb"
+    },
+    "ooze_blob": {
+      "file": "monsters/Blob.glb"
+    },
+    "spiky_blob": {
+      "file": "monsters/SpikyBlob.glb"
+    },
+    "fungus": {
+      "file": "monsters/Mushnub.glb"
+    },
+    "fish": {
+      "file": "monsters/Fish.glb"
+    },
+    "dragon_small": {
+      "file": "monsters/Dragon_Small.glb"
+    },
+    "dragon": {
+      "file": "monsters/Dragon.glb"
+    },
+    "ghost": {
+      "file": "monsters/Ghost.glb"
+    },
+    "ghost_skull": {
+      "file": "monsters/GhostSkull.glb"
+    },
+    "fey_sprite": {
+      "file": "monsters/Hywirl.glb"
+    },
+    "imp": {
+      "file": "monsters/Imp.glb"
+    },
+    "bat": {
+      "file": "monsters/Bat.glb"
+    },
+    "insect_flying": {
+      "file": "monsters/Armabee.glb"
+    },
+    "orc": {
+      "file": "monsters/Orc.glb"
+    },
+    "goblin": {
+      "file": "monsters/Goblin.glb"
+    },
+    "demon": {
+      "file": "monsters/Demon.glb"
+    },
+    "aberration": {
+      "file": "monsters/Aberration.glb"
+    },
+    "reptile_biped": {
+      "file": "monsters/Dino.glb"
+    },
+    "yeti": {
+      "file": "monsters/Yeti.glb"
+    },
+    "fishfolk": {
+      "file": "monsters/FishFolk.glb"
+    },
+    "plant_brute": {
+      "file": "monsters/MushroomKing.glb"
+    },
+    "frogfolk": {
+      "file": "monsters/FrogFolk.glb"
+    },
+    "wolf": {
+      "file": "animals/Wolf.glb"
+    },
+    "fox": {
+      "file": "animals/Fox.glb"
+    },
+    "deer": {
+      "file": "animals/Deer.glb"
+    },
+    "stag": {
+      "file": "animals/Stag.glb"
+    },
+    "horse": {
+      "file": "animals/Horse.glb"
+    },
+    "bull": {
+      "file": "animals/Bull.glb"
+    },
+    "snake": {
+      "file": "animals/Snake.glb"
+    },
+    "wasp": {
+      "file": "animals/Wasp.glb"
+    },
+    "rat": {
+      "file": "animals/Rat.glb"
+    },
+    "spider": {
+      "file": "animals/Spider.glb"
+    },
+    "frog": {
+      "file": "animals/Frog.glb"
+    },
+    "weapon_bow": {
+      "file": "weapons/Bow.glb"
+    },
+    "weapon_spear": {
+      "file": "weapons/Spear.glb"
+    },
+    "weapon_hammer": {
+      "file": "weapons/Hammer.glb"
+    },
+    "humanoid_base": {
+      "file": "characters/Knight.glb",
+      "note": "Default rig for any humanoid; all KayKit characters/skeletons share this skeleton and animation names."
+    },
+    "helmet": {
+      "file": "characters/Knight.glb",
+      "node": "Knight_Helmet",
+      "note": "Heavy/medium armor helmet; copy/attach this mesh or toggle visibility."
+    },
+    "hat_mage": {
+      "file": "characters/Mage.glb",
+      "node": "Mage_Hat"
+    },
+    "hat_barbarian": {
+      "file": "characters/Barbarian.glb",
+      "node": "Barbarian_Hat",
+      "note": "Horned helm"
+    },
+    "hood": {
+      "file": "characters/Rogue_Hooded.glb",
+      "node": "Rogue_Head_Hooded"
+    },
+    "cloak": {
+      "file": "characters/Knight.glb",
+      "node": "Knight_Cape"
+    },
+    "cloak_mage": {
+      "file": "characters/Mage.glb",
+      "node": "Mage_Cape"
+    },
+    "cloak_rogue": {
+      "file": "characters/Rogue.glb",
+      "node": "Rogue_Cape"
+    },
+    "cloak_barbarian": {
+      "file": "characters/Barbarian.glb",
+      "node": "Barbarian_Cape"
+    },
+    "armor_heavy": {
+      "file": "characters/Knight.glb",
+      "node": "Knight_Body",
+      "note": "Torso mesh; swap body/arm/leg meshes between classes for armor looks."
+    },
+    "armor_light": {
+      "file": "characters/Rogue.glb",
+      "node": "Rogue_Body"
+    },
+    "armor_medium": {
+      "file": "characters/Barbarian.glb",
+      "node": "Barbarian_Body"
+    },
+    "robe": {
+      "file": "characters/Mage.glb",
+      "node": "Mage_Body"
+    },
+    "goblin_standin": {
+      "file": "monsters/Goblin.glb",
+      "note": "Alias of goblin"
+    },
+    "giant": {
+      "file": "monsters/Orc.glb",
+      "note": "Orc scaled by creature size + tint"
+    }
+  },
+  "sizeScale": {
+    "tiny": 0.5,
+    "small": 0.8,
+    "medium": 1,
+    "large": 1.8,
+    "huge": 2.6,
+    "gargantuan": 3.6
+  },
+  "monsterStandIns": {
+    "aberration": {
+      "role": "aberration",
+      "tint": "#8e6bbf"
+    },
+    "beast": {
+      "role": "wolf"
+    },
+    "celestial": {
+      "role": "hero_knight",
+      "tint": "#ffe6a0",
+      "scale": 1.1
+    },
+    "construct": {
+      "role": "hero_knight",
+      "tint": "#8c9098"
+    },
+    "dragon": {
+      "role": "dragon"
+    },
+    "elemental": {
+      "role": "ghost",
+      "tint": "#7fb2e6"
+    },
+    "fey": {
+      "role": "fey_sprite"
+    },
+    "fiend": {
+      "role": "demon"
+    },
+    "giant": {
+      "role": "giant",
+      "tint": "#b08968"
+    },
+    "humanoid": {
+      "role": "humanoid_base"
+    },
+    "monstrosity": {
+      "role": "reptile_biped",
+      "tint": "#9a6b4f"
+    },
+    "ooze": {
+      "role": "ooze_slime",
+      "tint": "#6aa84f"
+    },
+    "plant": {
+      "role": "plant_brute"
+    },
+    "undead": {
+      "role": "skeleton"
+    }
+  },
+  "monsterRules": [
+    {
+      "match": "black_dragon",
+      "role": "dragon",
+      "tint": "#3a3a3a"
+    },
+    {
+      "match": "blue_dragon",
+      "role": "dragon",
+      "tint": "#3d7bd9"
+    },
+    {
+      "match": "brass_dragon",
+      "role": "dragon",
+      "tint": "#c9a13b"
+    },
+    {
+      "match": "bronze_dragon",
+      "role": "dragon",
+      "tint": "#a8733a"
+    },
+    {
+      "match": "copper_dragon",
+      "role": "dragon",
+      "tint": "#c46f3c"
+    },
+    {
+      "match": "gold_dragon",
+      "role": "dragon",
+      "tint": "#f1c232"
+    },
+    {
+      "match": "green_dragon",
+      "role": "dragon",
+      "tint": "#4f9a3c"
+    },
+    {
+      "match": "red_dragon",
+      "role": "dragon",
+      "tint": "#c0392b"
+    },
+    {
+      "match": "silver_dragon",
+      "role": "dragon",
+      "tint": "#c8d0d8"
+    },
+    {
+      "match": "white_dragon",
+      "role": "dragon",
+      "tint": "#eef4f8"
+    },
+    {
+      "match": "^pseudodragon$",
+      "role": "dragon_small"
+    },
+    {
+      "match": "^wyvern$",
+      "role": "dragon_small",
+      "tint": "#6b8e4e"
+    },
+    {
+      "match": "^dragon_turtle$",
+      "role": "dragon",
+      "tint": "#2e7d6b"
+    },
+    {
+      "match": "^half_dragon$",
+      "role": "reptile_biped",
+      "tint": "#c0392b"
+    },
+    {
+      "match": "^kobold",
+      "role": "reptile_biped",
+      "tint": "#a0522d",
+      "scale": 0.8
+    },
+    {
+      "match": "^skeleton$",
+      "role": "skeleton"
+    },
+    {
+      "match": "skeleton$",
+      "role": "skeleton_warrior"
+    },
+    {
+      "match": "zombie",
+      "role": "skeleton_warrior",
+      "tint": "#7d9a6b"
+    },
+    {
+      "match": "^(ghost|specter|wraith|shadow|banshee)$",
+      "role": "ghost"
+    },
+    {
+      "match": "^will_o_wisp$",
+      "role": "ghost_skull",
+      "tint": "#9fd8ff"
+    },
+    {
+      "match": "^lich$",
+      "role": "skeleton_mage"
+    },
+    {
+      "match": "^mummy",
+      "role": "skeleton",
+      "tint": "#d8c8a0"
+    },
+    {
+      "match": "^(ghoul|ghast)$",
+      "role": "skeleton_rogue",
+      "tint": "#8fa07f"
+    },
+    {
+      "match": "^wight$",
+      "role": "skeleton_warrior",
+      "tint": "#9aa6b2"
+    },
+    {
+      "match": "^vampire",
+      "role": "hero_rogue_hooded",
+      "tint": "#d8d0dc"
+    },
+    {
+      "match": "crawling_claws",
+      "role": "rat",
+      "tint": "#c8b89a"
+    },
+    {
+      "match": "^goblin",
+      "role": "goblin",
+      "tint": "#6fae4a"
+    },
+    {
+      "match": "^hobgoblin",
+      "role": "orc",
+      "tint": "#c0592b",
+      "scale": 0.9
+    },
+    {
+      "match": "^bugbear",
+      "role": "yeti",
+      "tint": "#8b5a2b"
+    },
+    {
+      "match": "^gnoll",
+      "role": "orc",
+      "tint": "#c2a36b"
+    },
+    {
+      "match": "^(orc|half_orc)",
+      "role": "orc"
+    },
+    {
+      "match": "^sahuagin|^merfolk|^merrow",
+      "role": "fishfolk"
+    },
+    {
+      "match": "^(green|night|sea)_hag$",
+      "role": "hero_mage",
+      "tint": "#6b8e5a"
+    },
+    {
+      "match": "^(satyr|dryad)$",
+      "role": "hero_rogue",
+      "tint": "#7aa35a"
+    },
+    {
+      "match": "^sprite$",
+      "role": "fey_sprite",
+      "scale": 0.6
+    },
+    {
+      "match": "^(blink_dog)$",
+      "role": "fox",
+      "tint": "#d9c36b"
+    },
+    {
+      "match": "^(hell_hound)$",
+      "role": "wolf",
+      "tint": "#b03a2e"
+    },
+    {
+      "match": "^(worg|winter_wolf|death_dog)$",
+      "role": "wolf",
+      "scale": 1.2
+    },
+    {
+      "match": "^centaur",
+      "role": "horse",
+      "tint": "#8b5a2b"
+    },
+    {
+      "match": "^(imp|quasit|lemure|dretch|homunculus)$",
+      "role": "imp"
+    },
+    {
+      "match": "^(incubus|succubus|erinyes|rakshasa)$",
+      "role": "hero_rogue_hooded",
+      "tint": "#9b3b5a"
+    },
+    {
+      "match": "_devil$|^pit_fiend$|^balor$|^glabrezu$|^hezrou$|^marilith$|^nalfeshnee$|^vrock$",
+      "role": "demon"
+    },
+    {
+      "match": "^oni$",
+      "role": "orc",
+      "tint": "#4a6fb0"
+    },
+    {
+      "match": "^troll",
+      "role": "orc",
+      "tint": "#5b8a4a"
+    },
+    {
+      "match": "^ogre$|^ettin$|^hill_giant$",
+      "role": "giant",
+      "tint": "#b08968"
+    },
+    {
+      "match": "^frost_giant$",
+      "role": "giant",
+      "tint": "#b8d8f0"
+    },
+    {
+      "match": "^fire_giant$",
+      "role": "giant",
+      "tint": "#c0392b"
+    },
+    {
+      "match": "^stone_giant$",
+      "role": "giant",
+      "tint": "#8c8c8c"
+    },
+    {
+      "match": "^cloud_giant$",
+      "role": "giant",
+      "tint": "#e8eef5"
+    },
+    {
+      "match": "^storm_giant$",
+      "role": "giant",
+      "tint": "#5f7fa8"
+    },
+    {
+      "match": "^animated_armor$|^shield_guardian$",
+      "role": "hero_knight",
+      "tint": "#8c9098"
+    },
+    {
+      "match": "^animated_flying_sword$",
+      "role": "weapon_sword"
+    },
+    {
+      "match": "^animated_rug",
+      "role": "ooze_blob",
+      "tint": "#8e3b46"
+    },
+    {
+      "match": "golem$",
+      "role": "yeti",
+      "tint": "#9a8a78"
+    },
+    {
+      "match": "^gargoyle$",
+      "role": "bat",
+      "tint": "#7d7d7d",
+      "scale": 1.6
+    },
+    {
+      "match": "^fire_elemental$|^magma_mephit$|^magmin$|^salamander$|^efreeti$|^azer",
+      "role": "ghost",
+      "tint": "#ff6a00"
+    },
+    {
+      "match": "^water_elemental$|^steam_mephit$",
+      "role": "ooze_slime",
+      "tint": "#4a90d9",
+      "scale": 1.5
+    },
+    {
+      "match": "^earth_elemental$|^xorn$",
+      "role": "yeti",
+      "tint": "#7a5c3e"
+    },
+    {
+      "match": "^air_elemental$|^djinni$|^invisible_stalker$|^dust_mephit$",
+      "role": "ghost",
+      "tint": "#e0e8f0"
+    },
+    {
+      "match": "^ice_mephit$",
+      "role": "imp",
+      "tint": "#bfe3ff"
+    },
+    {
+      "match": "^(pegasus|unicorn)$",
+      "role": "horse",
+      "tint": "#f5f5f5"
+    },
+    {
+      "match": "^couatl$",
+      "role": "snake",
+      "tint": "#e0c060"
+    },
+    {
+      "match": "^giant_(eagle|owl)$",
+      "role": "dragon_small",
+      "tint": "#8b6b4a"
+    },
+    {
+      "match": "^giant_elk$",
+      "role": "stag"
+    },
+    {
+      "match": "^sphinx",
+      "role": "yeti",
+      "tint": "#e0c080"
+    },
+    {
+      "match": "^black_pudding$",
+      "role": "ooze_blob",
+      "tint": "#222222"
+    },
+    {
+      "match": "^gelatinous_cube$",
+      "role": "ooze_slime",
+      "tint": "#7fe0d0"
+    },
+    {
+      "match": "^gray_ooze$",
+      "role": "ooze_slime",
+      "tint": "#8a8a8a"
+    },
+    {
+      "match": "^ochre_jelly$",
+      "role": "ooze_slime",
+      "tint": "#cc9a3c"
+    },
+    {
+      "match": "fungus$",
+      "role": "fungus"
+    },
+    {
+      "match": "^awakened_shrub$",
+      "role": "fungus",
+      "tint": "#4f7a3a"
+    },
+    {
+      "match": "^shambling_mound$",
+      "role": "ooze_blob",
+      "tint": "#4f6b2a"
+    },
+    {
+      "match": "^mimic$",
+      "role": "prop_chest"
+    },
+    {
+      "match": "^owlbear$",
+      "role": "yeti",
+      "tint": "#8b5a2b"
+    },
+    {
+      "match": "spider$|^ettercap$|^drider$",
+      "role": "spider"
+    },
+    {
+      "match": "^werewolf$",
+      "role": "wolf",
+      "tint": "#6b5a4a"
+    },
+    {
+      "match": "^wererat$",
+      "role": "rat",
+      "scale": 1.8
+    },
+    {
+      "match": "^werebear$",
+      "role": "yeti",
+      "tint": "#6b4a2b"
+    },
+    {
+      "match": "^wereboar$",
+      "role": "bull",
+      "tint": "#6b5a4a"
+    },
+    {
+      "match": "^weretiger$",
+      "role": "fox",
+      "tint": "#e08a2b",
+      "scale": 1.4
+    },
+    {
+      "match": "^(griffon|hippogriff|harpy|cockatrice|axe_beak|stirge|roc|giant_vulture)$",
+      "role": "dragon_small",
+      "tint": "#a07850"
+    },
+    {
+      "match": "^(purple_worm|remorhaz|behir|guardian_naga|spirit_naga|lamia)$",
+      "role": "snake",
+      "tint": "#7a4fa0",
+      "scale": 2.5
+    },
+    {
+      "match": "^flying_snake$",
+      "role": "snake",
+      "tint": "#4fa04f"
+    },
+    {
+      "match": "^(basilisk|bulette|ankheg|hydra|tarrasque|chimera|manticore|rust_monster)$",
+      "role": "reptile_biped",
+      "tint": "#9a6b4f"
+    },
+    {
+      "match": "^medusa$",
+      "role": "hero_rogue_hooded",
+      "tint": "#5a8a5a"
+    },
+    {
+      "match": "^gorgon$",
+      "role": "bull",
+      "tint": "#8c9098",
+      "scale": 1.1
+    },
+    {
+      "match": "^nightmare$",
+      "role": "horse",
+      "tint": "#2a1a1a"
+    },
+    {
+      "match": "^minotaur",
+      "role": "bull",
+      "tint": "#6b4a2b",
+      "scale": 1.2
+    },
+    {
+      "match": "^kraken$",
+      "role": "aberration",
+      "tint": "#4a2b6b"
+    },
+    {
+      "match": "^doppelganger$",
+      "role": "hero_rogue",
+      "tint": "#b0b0c0"
+    },
+    {
+      "match": "^(darkmantle|cloaker)$",
+      "role": "bat",
+      "tint": "#3a2b4a"
+    },
+    {
+      "match": "^gibbering_mouther$|^otyugh$|^roper$",
+      "role": "ooze_blob",
+      "tint": "#9a7a8a"
+    },
+    {
+      "match": "^(knight|guard|guard_captain|warrior_infantry|warrior_veteran|gladiator)$",
+      "role": "hero_knight"
+    },
+    {
+      "match": "^(berserker|tough|tough_boss)$",
+      "role": "hero_barbarian"
+    },
+    {
+      "match": "^(mage|archmage|cultist|cultist_fanatic|priest|priest_acolyte|druid)$",
+      "role": "hero_mage"
+    },
+    {
+      "match": "^(bandit|bandit_captain|assassin|spy|scout|pirate|pirate_captain)$",
+      "role": "hero_rogue_hooded"
+    },
+    {
+      "match": "^(commoner|noble)$",
+      "role": "hero_rogue"
+    },
+    {
+      "match": "bat",
+      "role": "bat",
+      "tint": "#4a3b3b"
+    },
+    {
+      "match": "^(giant_)?rat$|^swarm_of_rats$",
+      "role": "rat"
+    },
+    {
+      "match": "snake",
+      "role": "snake"
+    },
+    {
+      "match": "wasp|insects|centipede|fire_beetle|scorpion",
+      "role": "wasp"
+    },
+    {
+      "match": "frog|toad",
+      "role": "frog"
+    },
+    {
+      "match": "wolf|jackal|hyena|mastiff",
+      "role": "wolf"
+    },
+    {
+      "match": "^(cat|panther|lion|tiger|saber_toothed_tiger|weasel|giant_weasel|badger|giant_badger)$",
+      "role": "fox"
+    },
+    {
+      "match": "^(deer|goat|giant_goat)$",
+      "role": "deer"
+    },
+    {
+      "match": "^elk$",
+      "role": "stag"
+    },
+    {
+      "match": "^(draft_horse|riding_horse|warhorse|pony|mule|camel)$",
+      "role": "horse"
+    },
+    {
+      "match": "boar|rhinoceros|hippopotamus|elephant|mammoth",
+      "role": "bull",
+      "tint": "#6b6b6b"
+    },
+    {
+      "match": "bear",
+      "role": "yeti",
+      "tint": "#6b4a2b"
+    },
+    {
+      "match": "^(ape|giant_ape|baboon)$",
+      "role": "yeti",
+      "tint": "#5a4a3a"
+    },
+    {
+      "match": "crocodile|lizard|allosaurus|ankylosaurus|tyrannosaurus|triceratops|pteranodon|plesiosaurus|archelon",
+      "role": "reptile_biped",
+      "tint": "#6b8e4e"
+    },
+    {
+      "match": "eagle|hawk|owl|raven|vulture|blood_hawk",
+      "role": "dragon_small",
+      "tint": "#8b6b4a",
+      "scale": 0.7
+    },
+    {
+      "match": "shark|piranha|seahorse|octopus|killer_whale|crab",
+      "role": "fish"
+    }
+  ],
+  "candidates": [
+    {
+      "name": "Quaternius Universal Base Characters + Modular Character Outfits - Fantasy + Universal Animation Library 1/2",
+      "url": "https://quaternius.com/packs/universalbasecharacters.html",
+      "license": "CC0 (\"Free to use in personal, educational and commercial projects. (CC0 License)\")",
+      "download": "itch.io name-your-price click-through (https://quaternius.itch.io/universal-base-characters) - manual only",
+      "formats": "FBX/glTF/Blend",
+      "rigged": true,
+      "verdict": "Not chosen: realistic proportions clash with the chibi KayKit/Quaternius-monster style and it can only be downloaded manually. Best future upgrade if deeper body/face/hair customisation is wanted (§16)."
+    },
+    {
+      "name": "Quaternius Ultimate Modular Men / Women Packs",
+      "url": "https://quaternius.com/packs/ultimatemodularcharacters.html",
+      "license": "CC0",
+      "download": "Google Drive folder (manual) or per-model on poly.pizza",
+      "formats": "FBX/OBJ/glTF/Blend",
+      "rigged": true,
+      "verdict": "Not chosen: modern/sci-fi outfits; head/torso/legs swap only."
+    },
+    {
+      "name": "Quaternius Bestiary - Dungeon Monsters Kit",
+      "url": "https://quaternius.com/packs/bestiarydungeonmonsterskit.html",
+      "license": "QAL (Quaternius Asset License v1.0) - NOT CC0",
+      "download": "itch.io",
+      "verdict": "Rejected: not CC0 (QAL forbids redistributing assets; spec requires CC0)."
+    },
+    {
+      "name": "Quaternius Modular Dungeons Pack",
+      "url": "https://quaternius.com/packs/modulardungeon.html",
+      "license": "CC0",
+      "download": "Google Drive (manual) / poly.pizza bundle",
+      "formats": "FBX/OBJ/Blend",
+      "rigged": false,
+      "verdict": "Not chosen: KayKit Dungeon Remastered matches the KayKit characters and has direct GitHub downloads."
+    },
+    {
+      "name": "KayKit Medieval Hexagon Pack 1.0",
+      "url": "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0",
+      "license": "CC0 1.0 (same LICENSE.txt wording as other KayKit packs)",
+      "download": "GitHub direct",
+      "formats": "FBX/glTF/OBJ",
+      "rigged": false,
+      "verdict": "Not needed now; candidate for an overland/travel map later."
+    },
+    {
+      "name": "Quaternius RPG Character Pack",
+      "url": "https://quaternius.com/packs/rpgcharacters.html",
+      "license": "CC0",
+      "download": "Google Drive (manual)",
+      "formats": "FBX/OBJ/Blend",
+      "rigged": true,
+      "verdict": "Not chosen: no glTF, older style; KayKit Adventurers covers the same classes with 76 animations."
+    }
+  ]
+}
