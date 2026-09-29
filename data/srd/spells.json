@@ -39,6 +39,27 @@
     "dice": "2d4",
     "type": "acid"
    }
+  ],
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "acid_arrow",
+    "params": {
+     "attack": "ranged_spell",
+     "damage": {
+      "dice": "4d4",
+      "type": "acid"
+     },
+     "upcast": "1d4",
+     "missDamage": "half",
+     "delayed": {
+      "dice": "2d4",
+      "type": "acid",
+      "upcast": "1d4",
+      "when": "end_of_target_next_turn"
+     }
+    }
+   }
   ]
  },
  {
@@ -144,7 +165,19 @@
    "concentration": false
   },
   "text": "Choose up to three creatures within range. Each target's Hit Point maximum and current Hit Points increase by 5 for the duration.",
-  "higherLevels": "Each target's Hit Points increase by 5 for each spell slot level above 2."
+  "higherLevels": "Each target's Hit Points increase by 5 for each spell slot level above 2.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "aid",
+    "params": {
+     "hpMaxBonus": 5,
+     "hpMaxBonusPerUpcast": 5,
+     "targets": 3,
+     "durationHours": 8
+    }
+   }
+  ]
  },
  {
   "id": "alarm",
@@ -842,7 +875,30 @@
   },
   "text": "Up to three creatures of your choice that you can see within range must each make a Charisma saving throw. Whenever a target that fails this save makes an attack roll or a saving throw before the spell ends, the target must subtract 1d4 from the attack roll or save.",
   "higherLevels": "You can target one additional creature for each spell slot level above 1.",
-  "save": "cha"
+  "save": "cha",
+  "effects": [
+   {
+    "kind": "save",
+    "ability": "cha",
+    "onFail": [
+     {
+      "kind": "hook",
+      "hook": "bane",
+      "params": {
+       "penaltyDice": "1d4",
+       "appliesTo": [
+        "attack",
+        "save"
+       ],
+       "targets": 3,
+       "targetsPerUpcast": 1,
+       "durationRounds": 10
+      }
+     }
+    ],
+    "onSuccess": "none"
+   }
+  ]
  },
  {
   "id": "banishment",
@@ -1066,13 +1122,22 @@
     "ability": "wis",
     "onFail": [
      {
-      "kind": "damage",
-      "damage": [
-       {
+      "kind": "hook",
+      "hook": "bestow_curse",
+      "params": {
+       "options": [
+        "ability_disadvantage",
+        "attack_disadvantage_vs_caster",
+        "dodge_or_save",
+        "extra_damage"
+       ],
+       "extraDamage": {
         "dice": "1d8",
         "type": "necrotic"
-       }
-      ]
+       },
+       "turnSave": "wis",
+       "durationRounds": 10
+      }
      }
     ],
     "onSuccess": "none"
@@ -1121,20 +1186,60 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "str",
-    "onFail": [
+    "kind": "area",
+    "area": {
+     "shape": "cube",
+     "size": 20
+    },
+    "effects": [
      {
-      "kind": "damage",
-      "damage": [
+      "kind": "save",
+      "ability": "str",
+      "onFail": [
        {
-        "dice": "3d6",
-        "type": "bludgeoning"
+        "kind": "damage",
+        "damage": [
+         {
+          "dice": "3d6",
+          "type": "bludgeoning"
+         }
+        ]
+       },
+       {
+        "kind": "condition",
+        "condition": "restrained",
+        "duration": {
+         "unit": "minute",
+         "amount": 1,
+         "concentration": true
+        }
        }
-      ]
+      ],
+      "onSuccess": "none"
      }
-    ],
-    "onSuccess": "none"
+    ]
+   },
+   {
+    "kind": "hook",
+    "hook": "black_tentacles",
+    "params": {
+     "zone": {
+      "shape": "cube",
+      "size": 20
+     },
+     "difficultTerrain": true,
+     "save": "str",
+     "damage": {
+      "dice": "3d6",
+      "type": "bludgeoning"
+     },
+     "triggers": [
+      "enter",
+      "end_turn"
+     ],
+     "oncePerTurn": true,
+     "escapeCheck": "str_athletics"
+    }
    }
   ]
  },
@@ -1225,7 +1330,23 @@
    "concentration": true
   },
   "text": "You bless up to three creatures within range. Whenever a target makes an attack roll or a saving throw before the spell ends, the target adds 1d4 to the attack roll or save.",
-  "higherLevels": "You can target one additional creature for each spell slot level above 1."
+  "higherLevels": "You can target one additional creature for each spell slot level above 1.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "bless",
+    "params": {
+     "bonusDice": "1d4",
+     "appliesTo": [
+      "attack",
+      "save"
+     ],
+     "targets": 3,
+     "targetsPerUpcast": 1,
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "blight",
@@ -1319,7 +1440,30 @@
   },
   "text": "One creature that you can see within range must succeed on a Constitution saving throw, or it has the Blinded or Deafened condition (your choice) for the duration. At the end of each of its turns, the target repeats the save, ending the spell on itself on a success.",
   "higherLevels": "You can target one additional creature for each spell slot level above 2.",
-  "save": "con"
+  "save": "con",
+  "effects": [
+   {
+    "kind": "save",
+    "ability": "con",
+    "onFail": [
+     {
+      "kind": "hook",
+      "hook": "blindness_deafness",
+      "params": {
+       "conditionChoice": [
+        "blinded",
+        "deafened"
+       ],
+       "durationRounds": 10,
+       "repeatSave": "con",
+       "repeatAt": "end_of_turn",
+       "targetsPerUpcast": 1
+      }
+     }
+    ],
+    "onSuccess": "none"
+   }
+  ]
  },
  {
   "id": "blink",
@@ -1379,7 +1523,21 @@
    "amount": 1,
    "concentration": true
   },
-  "text": "Your body becomes blurred. For the duration, any creature has Disadvantage on attack rolls against you. An attacker is immune to this effect if it perceives you with Blindsight or Truesight."
+  "text": "Your body becomes blurred. For the duration, any creature has Disadvantage on attack rolls against you. An attacker is immune to this effect if it perceives you with Blindsight or Truesight.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "blur",
+    "params": {
+     "attacksAgainst": "disadvantage",
+     "ignoredBySenses": [
+      "blindsight",
+      "truesight"
+     ],
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "burning_hands",
@@ -1489,21 +1647,46 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "dex",
-    "onFail": [
+    "kind": "area",
+    "area": {
+     "shape": "sphere",
+     "size": 5
+    },
+    "effects": [
      {
-      "kind": "damage",
-      "damage": [
+      "kind": "save",
+      "ability": "dex",
+      "onFail": [
        {
-        "dice": "3d10",
-        "type": "lightning"
+        "kind": "damage",
+        "damage": [
+         {
+          "dice": "3d10",
+          "type": "lightning"
+         }
+        ],
+        "upcast": "1d10"
        }
       ],
-      "upcast": "1d10"
+      "onSuccess": "half"
      }
-    ],
-    "onSuccess": "half"
+    ]
+   },
+   {
+    "kind": "hook",
+    "hook": "call_lightning",
+    "params": {
+     "repeatAction": "magic",
+     "radiusFt": 5,
+     "damage": {
+      "dice": "3d10",
+      "type": "lightning"
+     },
+     "upcast": "1d10",
+     "save": "dex",
+     "stormBonusDice": "1d10",
+     "durationRounds": 100
+    }
    }
   ]
  },
@@ -1597,6 +1780,16 @@
      }
     ],
     "onSuccess": "half"
+   },
+   {
+    "kind": "hook",
+    "hook": "chain_lightning",
+    "params": {
+     "primaryTargets": 1,
+     "leapTargets": 3,
+     "leapTargetsPerUpcast": 1,
+     "leapRangeFt": 30
+    }
    }
   ]
  },
@@ -1801,7 +1994,34 @@
   },
   "text": "You hurl an orb of energy at a target within range. Choose Acid, Cold, Fire, Lightning, Poison, or Thunder for the type of orb you create, and then make a ranged spell attack against the target. On a hit, the target takes 3d8 damage of the chosen type.\n\nIf you roll the same number on two or more of the d8s, the orb leaps to a different target of your choice within 30 feet of the target. Make an attack roll against the new target, and make a new damage roll. The orb can't leap again unless you cast the spell with a level 2+ spell slot.",
   "higherLevels": "The damage increases by 1d8 for each spell slot level above 1. The orb can leap a maximum number of times equal to the level of the slot expended, and a creature can be targeted only once by each casting of this spell.",
-  "attack": "ranged"
+  "attack": "ranged",
+  "effects": [
+   {
+    "kind": "attack",
+    "attack": "ranged_spell",
+    "onHit": [
+     {
+      "kind": "hook",
+      "hook": "chromatic_orb",
+      "params": {
+       "dice": "3d8",
+       "upcast": "1d8",
+       "damageTypes": [
+        "acid",
+        "cold",
+        "fire",
+        "lightning",
+        "poison",
+        "thunder"
+       ],
+       "leapOnDoubles": true,
+       "leapRangeFt": 30,
+       "maxLeapsPerSlotLevel": 1
+      }
+     }
+    ]
+   }
+  ]
  },
  {
   "id": "circle_of_death",
@@ -2114,8 +2334,20 @@
     "ability": "wis",
     "onFail": [
      {
-      "kind": "condition",
-      "condition": "prone"
+      "kind": "hook",
+      "hook": "command",
+      "params": {
+       "options": [
+        "approach",
+        "drop",
+        "flee",
+        "grovel",
+        "halt"
+       ],
+       "grovelCondition": "prone",
+       "targetsPerUpcast": 1,
+       "durationRounds": 1
+      }
      }
     ],
     "onSuccess": "none"
@@ -3000,7 +3232,26 @@
    "concentration": false
   },
   "text": "You attempt to interrupt a creature in the process of casting a spell. The creature makes a Constitution saving throw. On a failed save, the spell dissipates with no effect, and the action, Bonus Action, or Reaction used to cast it is wasted. If that spell was cast with a spell slot, the slot isn't expended.",
-  "save": "con"
+  "save": "con",
+  "effects": [
+   {
+    "kind": "save",
+    "ability": "con",
+    "onFail": [
+     {
+      "kind": "hook",
+      "hook": "counterspell",
+      "params": {
+       "reaction": true,
+       "rangeFt": 60,
+       "interrupt": true,
+       "refundSlot": true
+      }
+     }
+    ],
+    "onSuccess": "none"
+   }
+  ]
  },
  {
   "id": "create_food_and_water",
@@ -3673,6 +3924,13 @@
        }
       ],
       "upcast": "3d6"
+     },
+     {
+      "kind": "hook",
+      "hook": "disintegrate",
+      "params": {
+       "dustAtZeroHp": true
+      }
      }
     ],
     "onSuccess": "none"
@@ -3746,7 +4004,19 @@
    "concentration": false
   },
   "text": "Choose one creature, object, or magical effect within range. Any ongoing spell of level 3 or lower on the target ends. For each ongoing spell of level 4 or higher on the target, make an ability check using your spellcasting ability (DC 10 plus that spell's level). On a successful check, the spell ends.",
-  "higherLevels": "You automatically end a spell on the target if the spell's level is equal to or less than the level of the spell slot you use."
+  "higherLevels": "You automatically end a spell on the target if the spell's level is equal to or less than the level of the spell slot you use.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "dispel_magic",
+    "params": {
+     "autoEndMaxLevel": 3,
+     "autoEndMaxLevelPerUpcast": 1,
+     "checkDcBase": 10,
+     "check": "spellcasting_ability"
+    }
+   }
+  ]
  },
  {
   "id": "dissonant_whispers",
@@ -3869,6 +4139,20 @@
     "dice": "1d4",
     "type": "radiant"
    }
+  ],
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "divine_favor",
+    "params": {
+     "extraDamage": {
+      "dice": "1d4",
+      "type": "radiant"
+     },
+     "appliesTo": "weapon_attacks",
+     "durationRounds": 10
+    }
+   }
   ]
  },
  {
@@ -3903,6 +4187,31 @@
    {
     "dice": "2d8",
     "type": "radiant"
+   }
+  ],
+  "effects": [
+   {
+    "kind": "damage",
+    "damage": [
+     {
+      "dice": "2d8",
+      "type": "radiant"
+     }
+    ],
+    "upcast": "1d8"
+   },
+   {
+    "kind": "hook",
+    "hook": "divine_smite",
+    "params": {
+     "trigger": "melee_weapon_hit",
+     "bonusVsCreatureTypes": [
+      "fiend",
+      "undead"
+     ],
+     "bonusDice": "1d8",
+     "bonusType": "radiant"
+    }
    }
   ]
  },
@@ -4561,20 +4870,41 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "str",
-    "onFail": [
+    "kind": "area",
+    "area": {
+     "shape": "cube",
+     "size": 20
+    },
+    "effects": [
      {
-      "kind": "condition",
-      "condition": "restrained",
-      "duration": {
-       "unit": "minute",
-       "amount": 1,
-       "concentration": true
-      }
+      "kind": "save",
+      "ability": "str",
+      "onFail": [
+       {
+        "kind": "condition",
+        "condition": "restrained",
+        "duration": {
+         "unit": "minute",
+         "amount": 1,
+         "concentration": true
+        }
+       }
+      ],
+      "onSuccess": "none"
      }
-    ],
-    "onSuccess": "none"
+    ]
+   },
+   {
+    "kind": "hook",
+    "hook": "entangle",
+    "params": {
+     "zone": {
+      "shape": "cube",
+      "size": 20
+     },
+     "difficultTerrain": true,
+     "escapeCheck": "str_athletics"
+    }
    }
   ]
  },
@@ -4780,7 +5110,35 @@
   "area": {
    "shape": "cube",
    "size": 20
-  }
+  },
+  "effects": [
+   {
+    "kind": "area",
+    "area": {
+     "shape": "cube",
+     "size": 20
+    },
+    "effects": [
+     {
+      "kind": "save",
+      "ability": "dex",
+      "onFail": [
+       {
+        "kind": "hook",
+        "hook": "faerie_fire",
+        "params": {
+         "attacksAgainst": "advantage",
+         "negatesInvisible": true,
+         "dimLightFt": 10,
+         "durationRounds": 10
+        }
+       }
+      ],
+      "onSuccess": "none"
+     }
+    ]
+   }
+  ]
  },
  {
   "id": "faithful_hound",
@@ -4867,7 +5225,20 @@
    "concentration": false
   },
   "text": "You gain 2d4 + 4 Temporary Hit Points.",
-  "higherLevels": "You gain 5 additional Temporary Hit Points for each spell slot level above 1."
+  "higherLevels": "You gain 5 additional Temporary Hit Points for each spell slot level above 1.",
+  "effects": [
+   {
+    "kind": "temp_hp",
+    "dice": "2d4+4"
+   },
+   {
+    "kind": "hook",
+    "hook": "false_life",
+    "params": {
+     "extraTempHpPerUpcast": 5
+    }
+   }
+  ]
  },
  {
   "id": "fear",
@@ -5470,7 +5841,46 @@
    "shape": "cylinder",
    "size": 10,
    "width": 40
-  }
+  },
+  "effects": [
+   {
+    "kind": "area",
+    "area": {
+     "shape": "cylinder",
+     "size": 10,
+     "width": 40
+    },
+    "effects": [
+     {
+      "kind": "save",
+      "ability": "dex",
+      "onFail": [
+       {
+        "kind": "damage",
+        "damage": [
+         {
+          "dice": "5d6",
+          "type": "fire"
+         }
+        ],
+        "upcast": "1d6"
+       },
+       {
+        "kind": "damage",
+        "damage": [
+         {
+          "dice": "5d6",
+          "type": "radiant"
+         }
+        ],
+        "upcast": "1d6"
+       }
+      ],
+      "onSuccess": "half"
+     }
+    ]
+   }
+  ]
  },
  {
   "id": "flaming_sphere",
@@ -5514,21 +5924,27 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "dex",
-    "onFail": [
-     {
-      "kind": "damage",
-      "damage": [
-       {
-        "dice": "2d6",
-        "type": "fire"
-       }
-      ],
-      "upcast": "1d6"
-     }
-    ],
-    "onSuccess": "half"
+    "kind": "hook",
+    "hook": "flaming_sphere",
+    "params": {
+     "damage": {
+      "dice": "2d6",
+      "type": "fire"
+     },
+     "upcast": "1d6",
+     "save": "dex",
+     "onSuccess": "half",
+     "triggerRadiusFt": 5,
+     "triggers": [
+      "end_turn_within",
+      "ram"
+     ],
+     "moveFt": 30,
+     "moveAction": "bonus",
+     "brightLightFt": 20,
+     "dimLightFt": 20,
+     "durationRounds": 10
+    }
    }
   ]
  },
@@ -6295,6 +6711,17 @@
   "text": "A creature you touch has the Invisible condition until the spell ends.",
   "conditions": [
    "invisible"
+  ],
+  "effects": [
+   {
+    "kind": "condition",
+    "condition": "invisible",
+    "duration": {
+     "unit": "minute",
+     "amount": 1,
+     "concentration": true
+    }
+   }
   ]
  },
  {
@@ -6475,6 +6902,14 @@
        }
       ],
       "upcast": "1d6"
+     },
+     {
+      "kind": "hook",
+      "hook": "guiding_bolt",
+      "params": {
+       "nextAttackAgainst": "advantage",
+       "until": "end_of_caster_next_turn"
+      }
      }
     ]
    }
@@ -6670,7 +7105,35 @@
    "concentration": true
   },
   "text": "Choose a willing creature that you can see within range. Until the spell ends, the target's Speed is doubled, it gains a +2 bonus to Armor Class, it has Advantage on Dexterity saving throws, and it gains an additional action on each of its turns. That action can be used to take only the Attack (one attack only), Dash, Disengage, Hide, or Utilize action.\n\nWhen the spell ends, the target is Incapacitated and has a Speed of 0 until the end of its next turn, as a wave of lethargy washes over it.",
-  "save": "dex"
+  "save": "dex",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "haste",
+    "params": {
+     "speedMultiplier": 2,
+     "acBonus": 2,
+     "saveAdvantage": [
+      "dex"
+     ],
+     "extraAction": [
+      "attack_one",
+      "dash",
+      "disengage",
+      "hide",
+      "utilize"
+     ],
+     "durationRounds": 10,
+     "onEnd": {
+      "conditions": [
+       "incapacitated"
+      ],
+      "speedZero": true,
+      "rounds": 1
+     }
+    }
+   }
+  ]
  },
  {
   "id": "heal",
@@ -6701,7 +7164,26 @@
    "concentration": false
   },
   "text": "Choose a creature that you can see within range. Positive energy washes through the target, restoring 70 Hit Points. This spell also ends the Blinded, Deafened, and Poisoned conditions on the target.",
-  "higherLevels": "The healing increases by 10 for each spell slot level above 6."
+  "higherLevels": "The healing increases by 10 for each spell slot level above 6.",
+  "effects": [
+   {
+    "kind": "heal",
+    "dice": "70",
+    "addSpellMod": false,
+    "upcast": "10"
+   },
+   {
+    "kind": "hook",
+    "hook": "heal",
+    "params": {
+     "endsConditions": [
+      "blinded",
+      "deafened",
+      "poisoned"
+     ]
+    }
+   }
+  ]
  },
  {
   "id": "healing_word",
@@ -6924,7 +7406,21 @@
    "concentration": true
   },
   "text": "A willing creature you touch is imbued with bravery. Until the spell ends, the creature is immune to the Frightened condition and gains Temporary Hit Points equal to your spellcasting ability modifier at the start of each of its turns.",
-  "higherLevels": "You can target one additional creature for each spell slot level above 1."
+  "higherLevels": "You can target one additional creature for each spell slot level above 1.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "heroism",
+    "params": {
+     "immuneConditions": [
+      "frightened"
+     ],
+     "tempHpEachTurn": "spell_mod",
+     "targetsPerUpcast": 1,
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "hex",
@@ -6962,6 +7458,27 @@
     "dice": "1d6",
     "type": "necrotic"
    }
+  ],
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "hex",
+    "params": {
+     "extraDamage": {
+      "dice": "1d6",
+      "type": "necrotic"
+     },
+     "trigger": "attack_hit",
+     "checkDisadvantage": "chosen_ability",
+     "retarget": "bonus_action",
+     "durationHours": 1,
+     "durationHoursBySlot": {
+      "2": 4,
+      "3": 8,
+      "5": 24
+     }
+    }
+   }
   ]
  },
  {
@@ -6997,7 +7514,48 @@
   },
   "text": "One creature of your choice that you can see within range makes a Wisdom saving throw. On a failed save, it has the Prone and Incapacitated conditions for the duration. During that time, it laughs uncontrollably if it's capable of laughter, and it can't end the Prone condition on itself.\n\nAt the end of each of its turns and each time it takes damage, it makes another Wisdom saving throw. The target has Advantage on the save if the save is triggered by damage. On a successful save, the spell ends.",
   "higherLevels": "You can target one additional creature for each spell slot level above 1.",
-  "save": "wis"
+  "save": "wis",
+  "effects": [
+   {
+    "kind": "save",
+    "ability": "wis",
+    "onFail": [
+     {
+      "kind": "condition",
+      "condition": "prone",
+      "duration": {
+       "unit": "minute",
+       "amount": 1,
+       "concentration": true
+      }
+     },
+     {
+      "kind": "condition",
+      "condition": "incapacitated",
+      "duration": {
+       "unit": "minute",
+       "amount": 1,
+       "concentration": true
+      }
+     },
+     {
+      "kind": "hook",
+      "hook": "hideous_laughter",
+      "params": {
+       "repeatSave": "wis",
+       "repeatAt": [
+        "end_of_turn",
+        "on_damage"
+       ],
+       "advantageOnDamageSave": true,
+       "cantStand": true,
+       "targetsPerUpcast": 1
+      }
+     }
+    ],
+    "onSuccess": "none"
+   }
+  ]
  },
  {
   "id": "hold_monster",
@@ -7216,6 +7774,29 @@
     "dice": "1d6",
     "type": "force"
    }
+  ],
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "hunters_mark",
+    "params": {
+     "extraDamage": {
+      "dice": "1d6",
+      "type": "force"
+     },
+     "trigger": "attack_hit",
+     "checkAdvantage": [
+      "perception",
+      "survival"
+     ],
+     "retarget": "bonus_action",
+     "durationHours": 1,
+     "durationHoursBySlot": {
+      "3": 8,
+      "5": 24
+     }
+    }
+   }
   ]
  },
  {
@@ -7259,6 +7840,51 @@
   "conditions": [
    "charmed",
    "incapacitated"
+  ],
+  "effects": [
+   {
+    "kind": "area",
+    "area": {
+     "shape": "cube",
+     "size": 30
+    },
+    "effects": [
+     {
+      "kind": "save",
+      "ability": "wis",
+      "onFail": [
+       {
+        "kind": "condition",
+        "condition": "charmed",
+        "duration": {
+         "unit": "minute",
+         "amount": 1,
+         "concentration": true
+        }
+       },
+       {
+        "kind": "condition",
+        "condition": "incapacitated",
+        "duration": {
+         "unit": "minute",
+         "amount": 1,
+         "concentration": true
+        }
+       },
+       {
+        "kind": "hook",
+        "hook": "hypnotic_pattern",
+        "params": {
+         "speedZero": true,
+         "endsOnDamage": true,
+         "endsOnShake": true
+        }
+       }
+      ],
+      "onSuccess": "none"
+     }
+    ]
+   }
   ]
  },
  {
@@ -7303,6 +7929,41 @@
    {
     "dice": "2d6",
     "type": "cold"
+   }
+  ],
+  "effects": [
+   {
+    "kind": "attack",
+    "attack": "ranged_spell",
+    "onHit": [
+     {
+      "kind": "damage",
+      "damage": [
+       {
+        "dice": "1d10",
+        "type": "piercing"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "kind": "hook",
+    "hook": "ice_knife",
+    "params": {
+     "explosion": {
+      "radiusFt": 5,
+      "save": "dex",
+      "damage": {
+       "dice": "2d6",
+       "type": "cold"
+      },
+      "upcast": "1d6",
+      "onSuccess": "none",
+      "includesTarget": true,
+      "hitOrMiss": true
+     }
+    }
    }
   ]
  },
@@ -7353,7 +8014,52 @@
    "shape": "cylinder",
    "size": 20,
    "width": 40
-  }
+  },
+  "effects": [
+   {
+    "kind": "area",
+    "area": {
+     "shape": "cylinder",
+     "size": 20,
+     "width": 40
+    },
+    "effects": [
+     {
+      "kind": "save",
+      "ability": "dex",
+      "onFail": [
+       {
+        "kind": "damage",
+        "damage": [
+         {
+          "dice": "2d10",
+          "type": "bludgeoning"
+         },
+         {
+          "dice": "4d6",
+          "type": "cold"
+         }
+        ],
+        "upcast": "1d10"
+       }
+      ],
+      "onSuccess": "half"
+     }
+    ]
+   },
+   {
+    "kind": "hook",
+    "hook": "ice_storm",
+    "params": {
+     "difficultTerrain": true,
+     "zone": {
+      "shape": "cylinder",
+      "size": 20
+     },
+     "until": "end_of_caster_next_turn"
+    }
+   }
+  ]
  },
  {
   "id": "identify",
@@ -7772,6 +8478,29 @@
   "higherLevels": "You can target one additional creature for each spell slot level above 2.",
   "conditions": [
    "invisible"
+  ],
+  "effects": [
+   {
+    "kind": "condition",
+    "condition": "invisible",
+    "duration": {
+     "unit": "hour",
+     "amount": 1,
+     "concentration": true
+    }
+   },
+   {
+    "kind": "hook",
+    "hook": "invisibility",
+    "params": {
+     "endsOn": [
+      "attack_roll",
+      "deal_damage",
+      "cast_spell"
+     ],
+     "targetsPerUpcast": 1
+    }
+   }
   ]
  },
  {
@@ -7901,7 +8630,21 @@
    "unit": "instantaneous",
    "concentration": false
   },
-  "text": "You touch a creature and end one condition on it: Blinded, Deafened, Paralyzed, or Poisoned."
+  "text": "You touch a creature and end one condition on it: Blinded, Deafened, Paralyzed, or Poisoned.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "lesser_restoration",
+    "params": {
+     "endsOneOf": [
+      "blinded",
+      "deafened",
+      "paralyzed",
+      "poisoned"
+     ]
+    }
+   }
+  ]
  },
  {
   "id": "levitate",
@@ -8205,7 +8948,19 @@
    "amount": 8,
    "concentration": false
   },
-  "text": "You touch a willing creature who isn't wearing armor. Until the spell ends, the target's base AC becomes 13 plus its Dexterity modifier. The spell ends early if the target dons armor."
+  "text": "You touch a willing creature who isn't wearing armor. Until the spell ends, the target's base AC becomes 13 plus its Dexterity modifier. The spell ends early if the target dons armor.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "mage_armor",
+    "params": {
+     "baseAc": 13,
+     "addDexMod": true,
+     "endsIfArmorDonned": true,
+     "durationHours": 8
+    }
+   }
+  ]
  },
  {
   "id": "mage_hand",
@@ -8347,6 +9102,21 @@
    {
     "dice": "1d4+1",
     "type": "force"
+   }
+  ],
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "magic_missile",
+    "params": {
+     "darts": 3,
+     "dartsPerUpcast": 1,
+     "autoHit": true,
+     "damage": {
+      "dice": "1d4+1",
+      "type": "force"
+     }
+    }
    }
   ]
  },
@@ -8839,7 +9609,46 @@
   "area": {
    "shape": "sphere",
    "size": 40
-  }
+  },
+  "effects": [
+   {
+    "kind": "area",
+    "area": {
+     "shape": "sphere",
+     "size": 40
+    },
+    "effects": [
+     {
+      "kind": "save",
+      "ability": "dex",
+      "onFail": [
+       {
+        "kind": "damage",
+        "damage": [
+         {
+          "dice": "20d6",
+          "type": "fire"
+         },
+         {
+          "dice": "20d6",
+          "type": "bludgeoning"
+         }
+        ]
+       }
+      ],
+      "onSuccess": "half"
+     }
+    ]
+   },
+   {
+    "kind": "hook",
+    "hook": "meteor_swarm",
+    "params": {
+     "points": 4,
+     "onceEvenIfOverlapping": true
+    }
+   }
+  ]
  },
  {
   "id": "mind_blank",
@@ -9099,7 +9908,17 @@
    "unit": "instantaneous",
    "concentration": false
   },
-  "text": "Briefly surrounded by silvery mist, you teleport up to 30 feet to an unoccupied space you can see."
+  "text": "Briefly surrounded by silvery mist, you teleport up to 30 feet to an unoccupied space you can see.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "misty_step",
+    "params": {
+     "teleportFt": 30,
+     "requiresSight": true
+    }
+   }
+  ]
  },
  {
   "id": "modify_memory",
@@ -9208,6 +10027,32 @@
       "onSuccess": "half"
      }
     ]
+   },
+   {
+    "kind": "hook",
+    "hook": "moonbeam",
+    "params": {
+     "zone": {
+      "shape": "cylinder",
+      "size": 5,
+      "width": 40
+     },
+     "moveFt": 60,
+     "moveAction": "magic",
+     "save": "con",
+     "damage": {
+      "dice": "2d10",
+      "type": "radiant"
+     },
+     "upcast": "1d10",
+     "triggers": [
+      "enter",
+      "end_turn",
+      "zone_moves_in"
+     ],
+     "oncePerTurn": true,
+     "revertsShapechangers": true
+    }
    }
   ]
  },
@@ -9761,6 +10606,23 @@
   "text": "A wave of healing energy washes over one creature you can see within range. The target regains all its Hit Points. If the creature has the Charmed, Frightened, Paralyzed, Poisoned, or Stunned condition, the condition ends. If the creature has the Prone condition, it can use its Reaction to stand up.",
   "conditions": [
    "prone"
+  ],
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "power_word_heal",
+    "params": {
+     "healToMax": true,
+     "endsConditions": [
+      "charmed",
+      "frightened",
+      "paralyzed",
+      "poisoned",
+      "stunned"
+     ],
+     "standAsReaction": true
+    }
+   }
   ]
  },
  {
@@ -9798,6 +10660,19 @@
    {
     "dice": "12d12",
     "type": "psychic"
+   }
+  ],
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "power_word_kill",
+    "params": {
+     "hpThreshold": 100,
+     "otherwise": {
+      "dice": "12d12",
+      "type": "psychic"
+     }
+    }
    }
   ]
  },
@@ -9879,7 +10754,24 @@
    "concentration": false
   },
   "text": "Up to five creatures of your choice who remain within range for the spell's entire casting gain the benefits of a Short Rest and also regain 2d8 Hit Points. A creature can't be affected by this spell again until that creature finishes a Long Rest.",
-  "higherLevels": "The healing increases by 1d8 for each spell slot level above 2."
+  "higherLevels": "The healing increases by 1d8 for each spell slot level above 2.",
+  "effects": [
+   {
+    "kind": "heal",
+    "dice": "2d8",
+    "addSpellMod": false,
+    "upcast": "1d8"
+   },
+   {
+    "kind": "hook",
+    "hook": "prayer_of_healing",
+    "params": {
+     "targets": 5,
+     "shortRestBenefit": true,
+     "oncePerLongRest": true
+    }
+   }
+  ]
  },
  {
   "id": "prestidigitation",
@@ -10754,7 +11646,17 @@
    "unit": "instantaneous",
    "concentration": false
   },
-  "text": "You touch a creature that has died within the last minute. That creature revives with 1 Hit Point. This spell can't revive a creature that has died of old age, nor does it restore any missing body parts."
+  "text": "You touch a creature that has died within the last minute. That creature revives with 1 Hit Point. This spell can't revive a creature that has died of old age, nor does it restore any missing body parts.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "revivify",
+    "params": {
+     "maxRoundsDead": 10,
+     "hp": 1
+    }
+   }
+  ]
  },
  {
   "id": "rope_trick",
@@ -10912,19 +11814,17 @@
   ],
   "effects": [
    {
-    "kind": "attack",
-    "attack": "ranged_spell",
-    "onHit": [
-     {
-      "kind": "damage",
-      "damage": [
-       {
-        "dice": "2d6",
-        "type": "fire"
-       }
-      ]
+    "kind": "hook",
+    "hook": "scorching_ray",
+    "params": {
+     "rays": 3,
+     "raysPerUpcast": 1,
+     "attack": "ranged_spell",
+     "damage": {
+      "dice": "2d6",
+      "type": "fire"
      }
-    ]
+    }
    }
   ]
  },
@@ -11316,7 +12216,25 @@
    "amount": 1,
    "concentration": false
   },
-  "text": "An imperceptible barrier of magical force protects you. Until the start of your next turn, you have a +5\nbonus to AC, including against the triggering attack, and you take no damage from _Magic Missile_."
+  "text": "An imperceptible barrier of magical force protects you. Until the start of your next turn, you have a +5\nbonus to AC, including against the triggering attack, and you take no damage from _Magic Missile_.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "shield",
+    "params": {
+     "reaction": true,
+     "acBonus": 5,
+     "trigger": [
+      "hit_by_attack",
+      "targeted_by_magic_missile"
+     ],
+     "immuneToSpells": [
+      "magic_missile"
+     ],
+     "until": "start_of_caster_next_turn"
+    }
+   }
+  ]
  },
  {
   "id": "shield_of_faith",
@@ -11348,7 +12266,17 @@
    "amount": 10,
    "concentration": true
   },
-  "text": "A shimmering field surrounds a creature of your choice within range, granting it a +2 bonus to AC for the duration."
+  "text": "A shimmering field surrounds a creature of your choice within range, granting it a +2 bonus to AC for the duration.",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "shield_of_faith",
+    "params": {
+     "acBonus": 2,
+     "durationRounds": 100
+    }
+   }
+  ]
  },
  {
   "id": "shillelagh",
@@ -11617,6 +12545,47 @@
   "conditions": [
    "incapacitated",
    "unconscious"
+  ],
+  "effects": [
+   {
+    "kind": "area",
+    "area": {
+     "shape": "sphere",
+     "size": 5
+    },
+    "effects": [
+     {
+      "kind": "save",
+      "ability": "wis",
+      "onFail": [
+       {
+        "kind": "condition",
+        "condition": "incapacitated",
+        "duration": {
+         "unit": "round",
+         "amount": 1,
+         "concentration": true
+        }
+       },
+       {
+        "kind": "hook",
+        "hook": "sleep",
+        "params": {
+         "secondSave": "wis",
+         "onSecondFail": "unconscious",
+         "endsOnDamage": true,
+         "autoSucceedIf": [
+          "no_sleep",
+          "immune_exhaustion"
+         ],
+         "durationRounds": 10
+        }
+       }
+      ],
+      "onSuccess": "none"
+     }
+    ]
+   }
   ]
  },
  {
@@ -11723,7 +12692,42 @@
   "area": {
    "shape": "cube",
    "size": 40
-  }
+  },
+  "effects": [
+   {
+    "kind": "area",
+    "area": {
+     "shape": "cube",
+     "size": 40
+    },
+    "effects": [
+     {
+      "kind": "save",
+      "ability": "wis",
+      "onFail": [
+       {
+        "kind": "hook",
+        "hook": "slow",
+        "params": {
+         "maxTargets": 6,
+         "speedMultiplier": 0.5,
+         "acPenalty": 2,
+         "dexSavePenalty": 2,
+         "noReactions": true,
+         "actionOrBonusAction": true,
+         "maxAttacks": 1,
+         "somaticFailChancePct": 25,
+         "repeatSave": "wis",
+         "repeatAt": "end_of_turn",
+         "durationRounds": 10
+        }
+       }
+      ],
+      "onSuccess": "none"
+     }
+    ]
+   }
+  ]
  },
  {
   "id": "sorcerous_burst",
@@ -12006,7 +13010,36 @@
   "area": {
    "shape": "emanation",
    "size": 15
-  }
+  },
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "spirit_guardians",
+    "params": {
+     "zone": {
+      "shape": "emanation",
+      "size": 15
+     },
+     "speedMultiplier": 0.5,
+     "save": "wis",
+     "onSuccess": "half",
+     "damage": {
+      "dice": "3d8",
+      "type": "radiant",
+      "evilType": "necrotic"
+     },
+     "upcast": "1d8",
+     "triggers": [
+      "enter",
+      "end_turn",
+      "zone_moves_in"
+     ],
+     "oncePerTurn": true,
+     "excludeChosen": true,
+     "durationRounds": 100
+    }
+   }
+  ]
  },
  {
   "id": "spiritual_weapon",
@@ -12038,7 +13071,26 @@
   },
   "text": "You create a floating, spectral force that resembles a weapon of your choice and lasts for the duration. The force appears within range in a space of your choice, and you can immediately make one melee spell attack against one creature within 5 feet of the force. On a hit, the target takes Force damage equal to 1d8 plus your spellcasting ability modifier.\n\nAs a Bonus Action on your later turns, you can move the force up to 20 feet and repeat the attack against a creature within 5 feet of it.",
   "higherLevels": "The damage increases by 1d8 for every slot level above 2.",
-  "attack": "melee"
+  "attack": "melee",
+  "effects": [
+   {
+    "kind": "hook",
+    "hook": "spiritual_weapon",
+    "params": {
+     "attack": "melee_spell",
+     "damage": {
+      "dice": "1d8",
+      "type": "force"
+     },
+     "addSpellMod": true,
+     "upcast": "1d8",
+     "reachFt": 5,
+     "moveFt": 20,
+     "repeatAction": "bonus",
+     "durationRounds": 10
+    }
+   }
+  ]
  },
  {
   "id": "starry_wisp",
@@ -13260,6 +14312,15 @@
        }
       ],
       "upcast": "1d6"
+     },
+     {
+      "kind": "hook",
+      "hook": "vampiric_touch",
+      "params": {
+       "healFractionOfDamage": 0.5,
+       "repeatAction": "magic",
+       "durationRounds": 10
+      }
      }
     ]
    }
@@ -13409,21 +14470,56 @@
   ],
   "effects": [
    {
-    "kind": "save",
-    "ability": "dex",
-    "onFail": [
+    "kind": "area",
+    "area": {
+     "shape": "line",
+     "size": 60,
+     "width": 1
+    },
+    "effects": [
      {
-      "kind": "damage",
-      "damage": [
+      "kind": "save",
+      "ability": "dex",
+      "onFail": [
        {
-        "dice": "5d8",
-        "type": "fire"
+        "kind": "damage",
+        "damage": [
+         {
+          "dice": "5d8",
+          "type": "fire"
+         }
+        ],
+        "upcast": "1d8"
        }
       ],
-      "upcast": "1d8"
+      "onSuccess": "half"
      }
-    ],
-    "onSuccess": "half"
+    ]
+   },
+   {
+    "kind": "hook",
+    "hook": "wall_of_fire",
+    "params": {
+     "wall": {
+      "lengthFt": 60,
+      "heightFt": 20,
+      "thicknessFt": 1,
+      "ringDiameterFt": 20
+     },
+     "opaque": true,
+     "damage": {
+      "dice": "5d8",
+      "type": "fire"
+     },
+     "upcast": "1d8",
+     "hotSideRangeFt": 10,
+     "triggers": [
+      "end_turn_near_hot_side",
+      "enter"
+     ],
+     "oncePerTurn": true,
+     "durationRounds": 10
+    }
    }
   ]
  },
@@ -13736,18 +14832,44 @@
       "ability": "dex",
       "onFail": [
        {
-        "kind": "damage",
-        "damage": [
-         {
-          "dice": "2d4",
-          "type": "fire"
-         }
-        ]
+        "kind": "condition",
+        "condition": "restrained",
+        "duration": {
+         "unit": "hour",
+         "amount": 1,
+         "concentration": true
+        }
        }
       ],
       "onSuccess": "none"
      }
     ]
+   },
+   {
+    "kind": "hook",
+    "hook": "web",
+    "params": {
+     "zone": {
+      "shape": "cube",
+      "size": 20
+     },
+     "difficultTerrain": true,
+     "lightlyObscured": true,
+     "save": "dex",
+     "triggers": [
+      "enter",
+      "start_turn"
+     ],
+     "escapeCheck": "str_athletics",
+     "collapsesIfUnanchored": true,
+     "burn": {
+      "damage": {
+       "dice": "2d4",
+       "type": "fire"
+      },
+      "trigger": "start_turn_in_fire"
+     }
+    }
    }
   ]
  },
