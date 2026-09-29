@@ -11,6 +11,7 @@ import { createEffectContext, executeEffects } from '../../rules/effects';
 import { spellSaveDc } from '../../rules/spellcasting';
 import { classLevel } from '../derived';
 import type { FeatureImpl } from './types';
+import { wildShapeActions } from './wildShape';
 
 const level = (c: Character) => classLevel(c, 'druid');
 const wis = (c: Character) => abilityModifier(c.abilities.wis);
@@ -55,6 +56,8 @@ export const druidFeatures: FeatureImpl[] = [
       const max = Number(db.classes.get('druid')?.columns.wild_shape?.[level(c) - 1] ?? 2);
       return { wild_shape: { current: max, max, recharge: 'long', shortRestRegain: 1 } };
     },
+    actions: wildShapeActions,
+    blocksSpellcasting: (c) => c.effects.some((e) => e.key === 'wild_shape'),
   },
   {
     id: 'elemental_fury',

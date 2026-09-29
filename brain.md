@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A042
-- **Notes for next session:** Start with A039c (Wild Shape), then A042a/A042b (spell hooks). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A039c
+- **Notes for next session:** Start with A042a (spell hooks batch 1), then A042b. A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -61,7 +61,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A038 — Weapon mastery
 - [done] A039 — Class feature framework + Barbarian + Bard
 - [done] A039b — Class features: Cleric (+Life) and Druid (+Land)
-- [todo] A039c — Wild Shape | Spec: §4 | Done: transform into Beast stat blocks (CR/fly limits by level), temp HP, revert, Archdruid; tests | Dep: A039b, A042
+- [done] A039c — Wild Shape
 - [done] A040 — Class features batch 2 (Fighter, Monk, Paladin, Ranger)
 - [done] A041 — Class features batch 3 (Rogue, Sorcerer, Warlock, Wizard)
 - [done] A042 — Monster runtime + encounter builder
@@ -185,6 +185,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A042 — Monster runtime: monsterToCreature (printed saveBonuses/skillBonuses, legendary actions/resistance, recharge + per-day resources), actionAvailable/spendAction, rollRecharges (d6 ≥ recharge, refresh legendary), multiattackSequence, actionEffects (attack/save/area → Effects), actionRange; encounters: xpBudget (per character, low/moderate/high), rateEncounter (trivial…deadly), buildEncounter (leader + fill, CR ≤ party level, max 2/char + 2) — `src/engine/rules/monsters.ts`, `src/engine/adventure/encounters.ts`
 - A094 (helper) — CC0 audio: 32 packs (Kenney + OpenGameArt), 151 files, ~47 MB; assets/audio-manifest.json (moods: menu, town, tavern, 3 regional wilderness, dungeon, battle, boss, victory(one-shot); ambience; 48 sfx events), scripts/audio-fetch.mjs (Windows tar.exe for zips), Setup runs it, credits merged into CREDITS.md, tests/audio-manifest.test.ts. Nobody has listened to the tracks yet (owner review).
 
+- A039c — Wild Shape: beastShapeLimits (4/6/8 forms, CR 1/4, 1/2, 1; fly at 8), eligible/known forms (choices.wild_shape_forms), actions wild_shape (effect {beastId}, temp HP = druid level, duration half level hours) + revert_form, blocks spellcasting, checkWildShapeEnds (incapacitated/dead), wildShapeCombatant (beast Str/Dex/Con/AC/speed/size/attacks via statBlockId, druid HP/mind/type, best save & skill bonuses), Archdruid Evergreen — `src/engine/character/features/wildShape.ts`
+
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
 - Owner decisions (fixed, from the planning session): Windows, 8 GB RAM, browser app, Ollama with a 3–4B model, full SRD 5.2 with feats and multiclassing, all 3 ability score methods, a starter arc plus one full linked arc, woven-in procedural side quests, a mixed-tone world, auto dice with visible math, Heroic/Hardcore modes, a 3D grid combat map, autosave plus manual slots in all modes, buttons plus free text, flexible AI/player companions, music + SFX + Piper TTS, a world map plus fog-of-war dungeons, a notes-only journal, factions, day/night, weather, dynamic shops, low-poly CC0 3D models for everyone with wounds, scars, and armor wear. Crafting and home base are future expansions only.
@@ -249,6 +251,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A040: Permanent class traits can be stored as effects without expiry (Evasion = effect 'evasion', read by effects.ts). Aura features are helpers taking a distance (combat supplies positions). Combat must use featureWeaponAttack(c, db, weaponAttack(...)) and critOn(c, db). Not automated yet: Horde Breaker extra attack, Defensive Tactics, Abjure Foes, Divine Sense, Relentless Hunter concentration immunity (helper exists), Acrobatic Movement, Self-Restoration, Perfect Focus, Quivering Palm, Holy Nimbus/Smite of Protection — add to A042a follow-up if needed.
 - A041: Call spellOptions(c, db, spellInfo(spell, classId), slotLevel) and spread into castSpell; Sculpt Spells ids go in castSpell.sculptTargetIds. Not automated yet: Cunning Action (combat), Elusive, Supreme Sneak/Use Magic Device/Thief's Reflexes, most Metamagic effects (costs only), invocations other than Agonizing Blast, Mystic Arcanum, Contact Patron, Memorize Spell/Spell Mastery/Signature Spells, Overchannel, Hurl Through Hell, Dragon Wings/Companion.
 - A042: Monsters keep printed save/skill totals in creature.saveBonuses/skillBonuses (checks.ts uses them first). Encounter XP uses no group multiplier (2024). Monster attack effects need ctx.attackBonus = action.attack.bonus.
+- A039c: Combat must use wildShapeCombatant(c, db) as the druid's combat creature and route attacks through the beast's stat block (statBlockId). Nature Magician (Archdruid) not automated.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
