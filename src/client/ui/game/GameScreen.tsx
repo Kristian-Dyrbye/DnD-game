@@ -6,13 +6,14 @@
 import { timeOfDay } from '../../../engine/world/clock';
 import { weatherEffects, type WeatherState } from '../../../engine/world/weather';
 import { CharacterPreview } from '../../three/CharacterPreview';
-import { useEffect } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { connection, gameState, lastError, objective, send } from '../../net/gameSocket';
 import { loadSettings, settings, updateSettings } from '../settingsState';
 import { hero, screen } from '../state';
 import { formatClock } from '../text';
 import { ActionInput } from './ActionInput';
 import { DiceTray } from './DiceTray';
+import { JournalPanel } from './JournalPanel';
 import { PartyPanel } from './PartyPanel';
 import { StoryLog } from './StoryLog';
 
@@ -24,6 +25,7 @@ export function GameScreen() {
     void loadSettings();
   }, []);
   const hintOn = settings.value?.gameplay.objectiveHint ?? false;
+  const [journalOpen, setJournalOpen] = useState(false);
   return (
     <div class="game-screen">
       <header class="game-bar">
@@ -36,7 +38,7 @@ export function GameScreen() {
           <button type="button" disabled title="World map (coming soon)">
             Map
           </button>
-          <button type="button" disabled title="Journal (coming soon)">
+          <button type="button" disabled={!state} onClick={() => setJournalOpen(true)}>
             Journal
           </button>
           <button
@@ -74,6 +76,7 @@ export function GameScreen() {
         )}
         <ActionInput />
       </main>
+      {journalOpen && <JournalPanel onClose={() => setJournalOpen(false)} />}
       <aside class="game-side">
         <div class="hero-view">{h && <CharacterPreview appearance={h.appearance} size={h.size} height={240} />}</div>
         <DiceTray />

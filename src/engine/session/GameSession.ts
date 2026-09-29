@@ -10,6 +10,7 @@ import type { SaveMeta } from '../../shared/save';
 import { totalLevel, type Character } from '../core/creature';
 import { Rng } from '../core/rng';
 import type { SystemRegistry } from '../systems/registry';
+import { deletePage, reorderPages, savePage } from './journal';
 import { GameStateSchema, LOG_LIMIT, ROLL_LIMIT, type GameState, type LogEntry, type RollRecord } from './gameState';
 
 /** Metadata the session provides for a save; the store adds slot id, kind and timestamp. */
@@ -201,6 +202,18 @@ export class GameSession {
           this.start(this.ports.saves.load(cmd.slot));
           this.emit(this.snapshot());
           await this.ports.actions?.begin?.(this);
+          return;
+        }
+        case 'journal_save':
+        case 'journal_delete':
+        case 'journal_reorder': {
+          if (!this.running) return this.fail('No game is running', reqId);
+          const j = this.current.journal;
+          let savedId: string | undefined;
+          if (cmd.type === 'journal_save') savedId = savePage(j, cmd.page, this.current.time);
+          else if (cmd.type === 'journal_delete') deletePage(j, cmd.id);
+          else reorderPages(j, cmd.ids);
+          this.emit({ type: 'journal', journal: structuredClone(j), ...(savedId && { savedId }) });
           return;
         }
         case 'save': {

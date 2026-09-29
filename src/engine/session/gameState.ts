@@ -6,6 +6,7 @@
  */
 import { z } from 'zod';
 import { CharacterSchema } from '../core/creature';
+import { JournalSchema } from './journal';
 
 export const LogEntrySchema = z.object({
   id: z.number().int(),
@@ -61,6 +62,8 @@ export const GameStateSchema = z.object({
   /** Next id for log entries and rolls. */
   nextId: z.number().int().default(1),
   playTimeMinutes: z.number().min(0).default(0),
+  /** The player's own notebook (no automatic quest log). */
+  journal: JournalSchema.prefault({}),
   /** Per-system state, keyed by system id (ARCHITECTURE.md §6). */
   extensions: z.record(z.string(), z.unknown()).default({}),
 });

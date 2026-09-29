@@ -19,6 +19,8 @@ export const streaming = signal<{ entryId: number; text: string } | null>(null);
 export const lastError = signal<string | null>(null);
 /** Current objective text (shown only when the objective hint setting is on). */
 export const objective = signal<string | null>(null);
+/** The journal page the server just saved (so the editor can select a new page). */
+export const lastSavedPage = signal<{ id: string; at: number } | null>(null);
 
 let ws: WebSocket | null = null;
 let retry = 0;
@@ -51,6 +53,10 @@ export function applyEvent(e: ServerEvent): void {
       return;
     case 'objective':
       objective.value = e.text;
+      return;
+    case 'journal':
+      if (gameState.value) gameState.value = { ...gameState.value, journal: e.journal };
+      if (e.savedId) lastSavedPage.value = { id: e.savedId, at: Date.now() };
       return;
     default:
       return;

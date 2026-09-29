@@ -6,6 +6,7 @@
 import { z } from 'zod';
 import { CharacterSchema } from '../engine/core/creature';
 import type { GameState, LogEntry, RollRecord } from '../engine/session/gameState';
+import type { Journal } from '../engine/session/journal';
 import { SLOT_ID_PATTERN, type SaveMeta } from './save';
 
 const base = { reqId: z.string().max(40).optional() };
@@ -22,6 +23,10 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
   z.object({ ...base, type: z.literal('choose'), actionId: z.string().min(1).max(80) }),
   z.object({ ...base, type: z.literal('save'), slot: z.string().regex(SLOT_ID_PATTERN), name: z.string().max(80).optional() }),
   z.object({ ...base, type: z.literal('load'), slot: z.string().regex(SLOT_ID_PATTERN) }),
+  /** Journal: create (no id) or update a page. */
+  z.object({ ...base, type: z.literal('journal_save'), page: z.object({ id: z.string().max(12).optional(), title: z.string().max(200), body: z.string().max(25_000) }) }),
+  z.object({ ...base, type: z.literal('journal_delete'), id: z.string().max(12) }),
+  z.object({ ...base, type: z.literal('journal_reorder'), ids: z.array(z.string().max(12)).max(250) }),
 ]);
 export type ClientCommand = z.infer<typeof ClientCommandSchema>;
 
@@ -46,7 +51,9 @@ export type ServerEvent =
   | { type: 'suggestions'; actions: SuggestedAction[] }
   | { type: 'saved'; meta: SaveMeta }
   /** Current objective for the optional hint (the client shows it only if the setting is on). */
-  | { type: 'objective'; text: string | null };
+  | { type: 'objective'; text: string | null }
+  /** The journal after a change (also part of every snapshot). `savedId` is the page just saved. */
+  | { type: 'journal'; journal: Journal; savedId?: string };
 
 /** Parses a raw WebSocket message into a command, or returns a player-safe error message. */
 export function parseCommand(raw: string): { ok: true; command: ClientCommand } | { ok: false; error: string; reqId?: string } {

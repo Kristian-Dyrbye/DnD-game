@@ -291,3 +291,22 @@ input[type='color'] { width: 2.2rem; height: 1.8rem; border: 1px solid #4a3f30; 
 @media (prefers-reduced-motion: reduce) { .die.d20.tumbling, .last-roll .die.d20.kept { animation: none; } }
 .suggestions button.idea { border-style: dashed; font-style: italic; }
 .objective-hint { grid-area: hint; margin: 0; padding: 0.3rem 1rem; font: 0.85rem system-ui, sans-serif; color: #d8c08a; background: #211c16; border-bottom: 1px solid #3a3226; }
+
+/* ---------- journal (A083) ---------- */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); display: grid; place-items: center; z-index: 20; padding: 1rem; }
+.journal { width: min(980px, 100%); height: min(640px, 100%); display: flex; flex-direction: column; background: #1d1813; border: 1px solid #5a4a30; border-radius: 10px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); }
+.journal-head { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; border-bottom: 1px solid #3a3226; }
+.journal-head h2 { margin: 0 auto 0 0; color: var(--accent); font-size: 1.2rem; }
+.journal-body { flex: 1; display: grid; grid-template-columns: 260px 1fr; min-height: 0; }
+.journal-pages { list-style: none; margin: 0; padding: 0.5rem; overflow-y: auto; border-right: 1px solid #3a3226; }
+.journal-pages li { display: flex; align-items: center; gap: 0.25rem; border-radius: 6px; }
+.journal-pages li.selected { background: #2c2519; }
+.page-link { flex: 1; text-align: left; background: none; border: none; display: flex; flex-direction: column; padding: 0.4rem 0.5rem; }
+.page-link small { color: #8d8270; font: 0.72rem system-ui, sans-serif; }
+.page-tools { display: flex; gap: 0.15rem; }
+.page-tools button { padding: 0.1rem 0.4rem; font-size: 0.8rem; }
+.journal-editor { display: flex; flex-direction: column; gap: 0.5rem; padding: 0.75rem 1rem; min-height: 0; }
+.journal-editor input, .journal-editor textarea { font: inherit; background: #f3ead6; color: #2a2016; border: 1px solid #b9a67f; border-radius: 6px; padding: 0.5rem 0.7rem; }
+.journal-editor textarea { flex: 1; resize: none; line-height: 1.5; background-image: repeating-linear-gradient(transparent, transparent 1.45em, #e2d5b8 1.5em); }
+.journal-actions { display: flex; align-items: center; gap: 0.75rem; }
+@media (max-width: 700px) { .journal-body { grid-template-columns: 1fr; grid-template-rows: 160px 1fr; } .journal-pages { border-right: none; border-bottom: 1px solid #3a3226; } }
