@@ -6,7 +6,7 @@
 - **State:** IN PROGRESS
 - **Current phase:** 4 (Phase 3 Character Creation done)
 - **Last completed assignment:** A077
-- **Notes for next session:** Phase 4 (narration loop) is done. Next: A074 (travel + world map engine), A082 (quest tracking + objective hint), A079 (factions). The demo adventure (data/adventures/demo/millbrook_demo.json) is playable end to end on the main game screen; `#play-<class>` opens it directly. Phase 2 engine is complete except zone spells (A064a). A062 (initiative/turns/action economy) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Notes for next session:** Phase 4 (narration loop) is done. Next: A074 (travel + world map engine), A082 (quest tracking + objective hint), A079 (factions). The demo adventure (data/adventures/demo/millbrook_demo.json) is playable end to end on the main game screen; `#play-<class>` opens it directly. Phase 2 engine is complete except zone spells (A064a). A063 (combat actions) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -25,13 +25,12 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A011, A012, A013, A014, A015, A016, A017, A018, A019, A020, A021, A022, A023, A024, A025, A026, A027, A028, A029, A030, A031, A032, A033, A034, A034a, A035, A036, A037, A038, A039, A039b, A039c, A040, A041, A042
 
 ### Phase 3 — Character Creation
-- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A046b, A047, A048, A049, A050, A051, A052, A053, A054, A055, A056, A057, A058, A059, A060, A061, A072, A073, A077, A078, A100
+- [done] A042a, A042b, A034c, A042c, A043, A044, A045, A046, A046b, A047, A048, A049, A050, A051, A052, A053, A054, A055, A056, A057, A058, A059, A060, A061, A062, A072, A073, A077, A078, A100
 
 ### Phase 4 — Narration Loop
 
 ### Phase 5 — Grid Combat
-- [in-progress (helper)] A062 — Initiative, turns, action economy | Spec: §10 | Done: initiative order, turn manager, action/bonus/reaction/move/object tracking; tests | Dep: A061, A029
-- [todo] A063 — Combat actions | Spec: §10 | Done: attack (ranges, long range/adjacent disadvantage), dash, disengage, dodge, help, hide, ready, grapple, shove, 2024 versions; mastery wired; tests | Dep: A062, A038
+- [in-progress (helper)] A063 — Combat actions | Spec: §10 | Done: attack (ranges, long range/adjacent disadvantage), dash, disengage, dodge, help, hide, ready, grapple, shove, 2024 versions; mastery wired; tests | Dep: A062, A038
 - [todo] A064 — AoE templates | Spec: §10 | Done: cone, cube, sphere, line, cylinder → affected squares/creatures; tests | Dep: A060
 - [todo] A064a — Zone spell hooks | Spec: §4, §10 | Done: persistent zones on the grid: spirit_guardians, moonbeam, web, entangle, black_tentacles, wall_of_fire, call_lightning, flaming_sphere, spiritual_weapon, ice_storm terrain; triggers (enter/start turn), once-per-turn; tests | Dep: A064, A042a
 - [todo] A065 — 2D token battle map UI | Spec: §10, §14 | Done: canvas grid, tokens, reachable highlight, turn tracker, action bar, AoE preview, combat log | Dep: A063, A064, A052
@@ -127,6 +126,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A062 (helper): initiative = Dex check (+Alert/JoAT, monster printed initiative), adv/dis from conditions/features/effects, surprise = disadvantage; ties: Dex mod → party → id; optional shared group rolls. TurnState (zod, plain JSON): round, order, currentIndex, budgets{action,bonusAction,reaction,movementSpentFt,dashes,disengaged,objectInteraction,attacksLeft}, turnActive. Reaction regained at start of own turn; all reactions available at combat start. Effects/conditions tick at end of the affected creature's own turn (simplification). Monster at 0 HP → dead + removed; dead characters skipped. TODO: Beacon of Hope death-save advantage, concentration break on Incapacitated, Attack action decrementing attacksLeft (A063).
 - A077: NPC presence = scene.npcs for unscheduled NPCs + schedule entries {scene, from, to, if?} for scheduled ones (schedule overrides scene lists). Deadlines start when `start` holds (clock starts after the action's own time cost), are met when `met` holds (also on the ending step), missed → `missed` outcome; one warning at warnAt. Checked at the end of fireBeats (every perform/enter/encounter resolution) — not on improvised/talk/look turns (next action catches up). Day/night-only content uses timeOfDay/hours conditions (no separate encounter field).
 - A078: `~name` flags are resolved at validation time (validateAdventure returns the resolved adventure) → runtime only sees absolute ids. Demo flags moved to `~` (= adv.millbrook_demo.*). RunContext.flags (FlagRegistry) supplies defaults for conditions, clamps numbers, starts `inc` from defaults and skips invalid writes at runtime (validator reports them as errors). Server: loadFlagRegistry(data/adventures) + each adventure's docs. Undocumented/un-namespaced flags are warnings, not errors.
 - A061 (helper): movement.ts follows SRD 5.2.1 text: ally/Tiny spaces are NOT difficult terrain (other creatures' spaces are); crawling costs +1 ft per ft (10 ft/square, 15 in difficult), not doubling; pass through ally/Incapacitated/Tiny/±2 sizes, never end in another's space; OA when leaving a hostile's reach (needs sight/reaction; none with Disengage, forced, teleport), resolved in moveAlong's beforeStep hook (return false to halt). Unhandled (A062/A063): prone-if-ending-in-another's-space, dragging grappled creatures, climb/swim costs, OA-avoiding pathing.
@@ -292,6 +292,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/systems/weatherSystem.ts` — weather system (extensions.weather), currentWeather; region via injected resolver (server: runner.regionOfState)
 - `src/engine/combat/movement.ts` — movementBudget, standUpCost, reachableSquares (Dijkstra with paths), planMove (preview + OA triggers), moveAlong (beforeStep hook), teleport
 - `src/engine/world/flags.ts` — flag namespaces (arc./world./side./adv.), resolveAdventureFlags (`~name`), FlagRegistry (fromJson, addDocs, defaults, checkValue, clamp), readFlag
+- `src/engine/combat/initiative.ts` — rollInitiative/rollInitiativeOrder (math text), initiativeRollModes, compareInitiative, toEntries
+- `src/engine/combat/turns.ts` — TurnStateSchema, startCombat/addCombatant/removeCombatant, startTurn/endTurn/nextTurn (start/end-of-turn hooks → TurnEvents), spend/canReact, movementLeft/spendMovement/standUp, addDash/setDisengaged/setAttacksLeft, livingSides
 - `src/shared/protocol.ts` — ClientCommandSchema (ping/new_game/get_state/say/choose/save/load), ServerEvent union, parseCommand
 - `src/engine/session/gameState.ts` — GameStateSchema (hero, companions, location, time, flags, log, summary, rolls, extensions), LOG_LIMIT/ROLL_LIMIT
 - `src/engine/session/GameSession.ts` — GameSession (handle/on/emit, addLog/addRoll/suggest, autosave, snapshot) + SavePort/ActionPort + newGameState
