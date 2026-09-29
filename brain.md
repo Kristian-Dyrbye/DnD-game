@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A039c
-- **Notes for next session:** Start with A042a (spell hooks batch 1), then A042b. A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A042a
+- **Notes for next session:** Start with A042b (spell hooks batch 2), then Phase 3 (A043). A034c (spell effects audit) is with a helper — merge its branch when it reports. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -67,7 +67,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A042 — Monster runtime + encounter builder
 
 ### Phase 3 — Character Creation
-- [todo] A042a — Active effects + spell hooks batch 1 (buffs) | Spec: §4 | Done: generic active-effect/buff store on creatures (bonus dice to attacks/saves, AC bonus, speed mult, advantage grants, durations, concentration-linked); implement hooks bless, bane, shield, shield_of_faith, mage_armor, haste, slow, heroism, hex, hunters_mark, guiding_bolt, faerie_fire, divine_favor, blur, aid, false_life, heal, invisibility, greater_invisibility using params in data/srd/overrides/spells.json; tests | Dep: A034a, A042
+- [done] A042a — Active effects + spell hooks batch 1 (buffs)
 - [todo] A042b — Spell hooks batch 2 (projectiles & utility) | Spec: §4 | Done: magic_missile, scorching_ray, chromatic_orb, chain_lightning, meteor_swarm, misty_step, dispel_magic, counterspell, revivify, power_word_kill/heal, lesser_restoration, command, sleep, hypnotic_pattern, bestow_curse, blindness_deafness, disintegrate, ice_knife, acid_arrow, vampiric_touch, divine_smite, prayer_of_healing; tests | Dep: A042a
 - [in-progress (helper)] A034c — Fix remaining partial auto spell effects | Spec: §4 | Done: overrides for banishment, conjure_*, contagion, divine_word, geas, dream, heat_metal etc. (audit all auto effects vs text); tests | Dep: A034a
 - [todo] A043 — Creator state machine + class step UI | Spec: §5 | Done: engine-side wizard state + validation; class step with summaries + beginner tags; tests | Dep: A035, A002
@@ -187,6 +187,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 - A039c — Wild Shape: beastShapeLimits (4/6/8 forms, CR 1/4, 1/2, 1; fly at 8), eligible/known forms (choices.wild_shape_forms), actions wild_shape (effect {beastId}, temp HP = druid level, duration half level hours) + revert_form, blocks spellcasting, checkWildShapeEnds (incapacitated/dead), wildShapeCombatant (beast Str/Dex/Con/AC/speed/size/attacks via statBlockId, druid HP/mind/type, best save & skill bonuses), Archdruid Evergreen — `src/engine/character/features/wildShape.ts`
 
+- A042a — Spell hooks batch 1 (SPELL_HOOKS auto-registered in castSpell): bless, bane, shield, shield_of_faith, mage_armor, haste, slow, heroism, blur, faerie_fire, divine_favor, hex, hunters_mark, guiding_bolt, invisibility, aid, false_life, heal; queries effectiveAc, rollEffectBonuses, effectSaveAdjustments, attackedEffectModes, consumeAttackedEffects, effectDamageRiders, startOfTurnEffects, breakInvisibility, revertExpiredEffects; speed multipliers + effect condition immunities; endConcentration also removes spell effects; ctx.slotLevel — `src/engine/rules/spellHooks.ts`
+
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
 - Owner decisions (fixed, from the planning session): Windows, 8 GB RAM, browser app, Ollama with a 3–4B model, full SRD 5.2 with feats and multiclassing, all 3 ability score methods, a starter arc plus one full linked arc, woven-in procedural side quests, a mixed-tone world, auto dice with visible math, Heroic/Hardcore modes, a 3D grid combat map, autosave plus manual slots in all modes, buttons plus free text, flexible AI/player companions, music + SFX + Piper TTS, a world map plus fog-of-war dungeons, a notes-only journal, factions, day/night, weather, dynamic shops, low-poly CC0 3D models for everyone with wounds, scars, and armor wear. Crafting and home base are future expansions only.
@@ -252,6 +254,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A041: Call spellOptions(c, db, spellInfo(spell, classId), slotLevel) and spread into castSpell; Sculpt Spells ids go in castSpell.sculptTargetIds. Not automated yet: Cunning Action (combat), Elusive, Supreme Sneak/Use Magic Device/Thief's Reflexes, most Metamagic effects (costs only), invocations other than Agonizing Blast, Mystic Arcanum, Contact Patron, Memorize Spell/Spell Mastery/Signature Spells, Overchannel, Hurl Through Hell, Dragon Wings/Companion.
 - A042: Monsters keep printed save/skill totals in creature.saveBonuses/skillBonuses (checks.ts uses them first). Encounter XP uses no group multiplier (2024). Monster attack effects need ctx.attackBonus = action.attack.bonus.
 - A039c: Combat must use wildShapeCombatant(c, db) as the druid's combat creature and route attacks through the beast's stat block (statBlockId). Nature Magician (Archdruid) not automated.
+- A042a: Spell buffs = ActiveEffects keyed by spell id (slow spell = 'slow_spell', guiding bolt target = 'guided'), sourceId `<caster>:<spell>`, data = hook params. Combat must: use effectiveAc(c, wearingArmor); add rollEffectBonuses to attacks/saves; spread effectSaveAdjustments; add attackedEffectModes + consumeAttackedEffects; add effectDamageRiders on hits; call startOfTurnEffects; call revertExpiredEffects for expired effects; breakInvisibility on attack/cast. Haste lethargy on end and Slow repeat saves not automated yet.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -294,6 +297,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/rules/monsters.ts` — monsterToCreature, actionAvailable, spendAction, rollRecharges, multiattackSequence, actionEffects, actionRange
 - `src/engine/adventure/encounters.ts` — xpBudget, encounterXp, rateEncounter, buildEncounter
 - `assets/audio-manifest.json` + `scripts/audio-fetch.mjs` — music moods, ambience, sfx; files land in assets/audio/ (gitignored)
+- `src/engine/rules/spellHooks.ts` — SPELL_HOOKS + buff/debuff queries (see A042a)
 - `src/engine/data/common.ts` — IdSchema, DiceSchema, CostSchema(CP), DamageSchema, AreaSchema, DurationSchema, EffectSchema/Effect, toId
 - `src/engine/data/schemas.ts` — schemas for every data/srd file + RulesTablesSchema; SRD_FILES registry; record types
 - `src/engine/data/srd.ts` — validateSrdFile, SrdDatabase (maps by id, item(), spellsForClass)

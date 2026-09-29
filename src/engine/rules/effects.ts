@@ -40,6 +40,8 @@ export interface EffectContext {
   spellMod?: number;
   /** Slot levels above the spell's base level. */
   upcastLevels?: number;
+  /** Level the spell was cast at (0 = cantrip). Hooks use it for slot-based durations. */
+  slotLevel?: number;
   /** Flat bonus added to each healing roll (Disciple of Life: 2 + slot level). */
   healBonus?: number;
   /** Healing dice count as their maximum (Supreme Healing). */

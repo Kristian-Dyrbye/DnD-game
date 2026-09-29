@@ -12,6 +12,7 @@ import { abilityModifier, type Ability } from './basics';
 import { canAct, saveModes } from './conditions';
 import { savingThrow, type D20TestResult } from './checks';
 import { createEffectContext, executeEffects, type EffectContext, type HookFn } from './effects';
+import { SPELL_HOOKS, revertExpiredEffects } from './spellHooks';
 
 // ---------------------------------------------------------------- slot tables
 
@@ -150,8 +151,9 @@ export function endConcentration(ctx: Pick<EffectContext, 'creatures'>, casterId
   const conc = caster?.spellcasting?.concentration;
   if (!caster || !conc) return undefined;
   for (const [id, c] of ctx.creatures) {
-    if (c.conditions.some((x) => x.sourceId === conc.sourceId)) {
-      ctx.creatures.set(id, { ...c, conditions: c.conditions.filter((x) => x.sourceId !== conc.sourceId) });
+    if (c.conditions.some((x) => x.sourceId === conc.sourceId) || c.effects.some((e) => e.sourceId === conc.sourceId)) {
+      const cleaned = { ...c, conditions: c.conditions.filter((x) => x.sourceId !== conc.sourceId), effects: c.effects.filter((e) => e.sourceId !== conc.sourceId) };
+      ctx.creatures.set(id, revertExpiredEffects(cleaned, c.effects.filter((e) => e.sourceId === conc.sourceId)));
     }
   }
   const fresh = ctx.creatures.get(casterId) as Character;
@@ -231,6 +233,7 @@ export function castSpell(o: CastOptions): CastResult {
     attackBonus: spellAttackBonus(o.caster, o.ability),
     spellMod: abilityModifier(o.caster.abilities[o.ability]),
     upcastLevels: o.spell.level > 0 ? level - o.spell.level : 0,
+    slotLevel: level,
     conditionSourceId: sourceId,
     ...(o.healBonus && { healBonus: o.healBonus }),
     ...(o.maxHealDice && { maxHealDice: true }),
@@ -241,7 +244,7 @@ export function castSpell(o: CastOptions): CastResult {
     ...(o.potentCantrip && o.spell.level === 0 && { potentCantrip: true }),
     ...(o.sculptTargetIds?.length && { sculptIds: new Set(o.sculptTargetIds) }),
     ...(o.distances && { distances: o.distances }),
-    ...(o.hooks && { hooks: o.hooks }),
+    hooks: { ...SPELL_HOOKS, ...(o.hooks ?? {}) },
     onDamaged: (c, id, amount) => concentrationCheck(c, id, amount, o.rng),
   });
 

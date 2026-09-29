@@ -41,6 +41,8 @@ export function hasCondition(c: Creature, cond: Condition, table: ConditionTable
 /** Conditions this creature can't receive: its own immunities plus any granted by other conditions (Petrified → Poisoned). */
 export function conditionImmunities(c: Creature, table: ConditionTable = defaultTable()): Set<Condition> {
   const out = new Set<Condition>(c.conditionImmunities);
+  // Spell effects that grant immunity (Heroism: Frightened).
+  for (const e of c.effects) for (const cond of (e.data.immuneConditions as Condition[] | undefined) ?? []) out.add(cond);
   for (const cond of effectiveConditions(c, table)) for (const i of table.get(cond)?.modifiers.immuneTo ?? []) out.add(i);
   return out;
 }
@@ -232,10 +234,11 @@ export function canAct(c: Creature, table: ConditionTable = defaultTable()): boo
   return !activeModifiers(c, table).some((m) => m.mods.incapacitated);
 }
 
-/** Walking speed after conditions, exhaustion and speed effects like Slow (never below 0). */
+/** Walking speed after conditions, exhaustion and speed effects (Slow mastery, Haste ×2, slow spell ×½); never below 0. */
 export function effectiveSpeed(c: Creature, table: ConditionTable = defaultTable(), base = c.speed.walk): number {
   if (activeModifiers(c, table).some((m) => m.mods.speedZero)) return 0;
-  return Math.max(0, base - 5 * c.exhaustion - effectSpeedPenalty(c));
+  const mult = c.effects.reduce((m, e) => m * (typeof e.data.speedMultiplier === 'number' ? e.data.speedMultiplier : 1), 1);
+  return Math.max(0, Math.floor((base - 5 * c.exhaustion - effectSpeedPenalty(c)) * mult));
 }
 
 /** Prone creatures can only crawl (1 extra foot per foot) or spend half their speed to stand. */

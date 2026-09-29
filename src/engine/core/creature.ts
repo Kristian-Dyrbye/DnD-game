@@ -77,7 +77,7 @@ export const ActiveEffectSchema = z.object({
     .optional(),
   roundsLeft: z.number().int().min(0).optional(),
   /** Removed after the next attack roll it affects. */
-  consumeOn: z.enum(['own_attack', 'own_attack_vs_target']).optional(),
+  consumeOn: z.enum(['own_attack', 'own_attack_vs_target', 'attacked']).optional(),
   data: z.record(z.string(), z.unknown()).default({}),
 });
 export type ActiveEffect = z.infer<typeof ActiveEffectSchema>;
