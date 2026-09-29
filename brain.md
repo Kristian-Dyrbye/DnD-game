@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A040
-- **Notes for next session:** Start with A041 (A039c Wild Shape waits for A042). A094 (audio assets) is with a helper — merge its branch when it reports and merge its credits into CREDITS.md. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A041
+- **Notes for next session:** Start with A042 (then A039c Wild Shape, A042a/b spell hooks). A094 (audio assets) is with a helper — merge its branch when it reports and merge its credits into CREDITS.md. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -63,7 +63,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A039b — Class features: Cleric (+Life) and Druid (+Land)
 - [todo] A039c — Wild Shape | Spec: §4 | Done: transform into Beast stat blocks (CR/fly limits by level), temp HP, revert, Archdruid; tests | Dep: A039b, A042
 - [done] A040 — Class features batch 2 (Fighter, Monk, Paladin, Ranger)
-- [todo] A041 — Class features batch 3 (Rogue, Sorcerer, Warlock, Wizard) | Spec: §4 | Done: as A039 | Dep: A039
+- [done] A041 — Class features batch 3 (Rogue, Sorcerer, Warlock, Wizard)
 - [todo] A042 — Monster runtime + encounter builder | Spec: §4, §6 | Done: combatant from stat block (multiattack, recharge, legendary); XP-budget encounter scaling by party size/level; tests | Dep: A024, A030
 
 ### Phase 3 — Character Creation
@@ -180,6 +180,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 - A040 — Fighter (Second Wind, Action Surge effect, Indomitable, Tactical Mind, Studied Attacks; Champion crit 19/18, Remarkable Athlete, Heroic Warrior, Survivor), Monk (Martial Arts modifyAttack: Dex/die/force, Focus + Flurry/Patient Defense/Step effects, Uncanny Metabolism, Deflect, Stunning Strike, Evasion effect, Disciplined Survivor, Body and Mind; Open Hand technique, Wholeness of Body), Paladin (Lay On Hands pool/cure, free Divine Smite/Find Steed + always prepared, Channel Divinity 2→3, Radiant Strikes, auras via distance helpers; Devotion Sacred Weapon), Ranger (Favored Enemy free Hunter's Mark, Deft Explorer expertise, Roving speed, Tireless, Nature's Veil, Feral Senses, Foe Slayer die, Precise Hunter; Hunter Colossus Slayer); new hooks critOn, modifyAttack (featureWeaponAttack), saveBonus; Evasion in effect executor; weaponMasteryCount from table or text — `src/engine/character/features/{fighter,monk,paladin,ranger}.ts`
 
+- A041 — Rogue (Sneak Attack rider w/ ally/advantage rules + dice spent, Cunning Strike poison/trip/withdraw/daze/knock out/obscure, Steady Aim effect, Evasion, Slippery Mind, Uncanny Dodge/Reliable Talent/Stroke of Luck helpers; Thief climb speed), Sorcerer (Innate Sorcery +1 DC/adv, Font of Magic slot⇄points, Metamagic costs, Sorcerous Restoration; Draconic AC/HP/affinity/wings), Warlock (Agonizing Blast, Magical Cunning; Fiend blessing/resilience/luck), Wizard (Arcane Recovery, Scholar expertise; Evoker Potent Cantrip, Empowered Evocation, Sculpt Spells in executor); spellOptions now takes SpellInfo (spellInfo helper) and can add saveDcBonus/attackAdvantage/damageBonus/potentCantrip; onLevelUp hook — `features/rogue.ts`, `features/casters.ts`
+
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
 - Owner decisions (fixed, from the planning session): Windows, 8 GB RAM, browser app, Ollama with a 3–4B model, full SRD 5.2 with feats and multiclassing, all 3 ability score methods, a starter arc plus one full linked arc, woven-in procedural side quests, a mixed-tone world, auto dice with visible math, Heroic/Hardcore modes, a 3D grid combat map, autosave plus manual slots in all modes, buttons plus free text, flexible AI/player companions, music + SFX + Piper TTS, a world map plus fog-of-war dungeons, a notes-only journal, factions, day/night, weather, dynamic shops, low-poly CC0 3D models for everyone with wounds, scars, and armor wear. Crafting and home base are future expansions only.
@@ -242,6 +244,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A039b: Class option choices live in character.choices (divine_order, blessed_strikes, primal_order, elemental_fury, primal_strike_type, land). The session must pass spellOptions(c, db, spell, slot) into castSpell. Feature actions take params {rng, target, targets, choice}.
 - A048: KayKit characters share one rig (76 animations) with swappable head/body/arm/leg meshes, toggleable helmet/hat/cape/shield meshes and hand-slot bones → equipment attach (A088). Quaternius models differ in scale: size by bounding box. Quaternius's newer packs use a non-CC0 license (QAL, 2026-08-28) — don't add new Quaternius packs without checking. Upgrade option: Quaternius Universal Base Characters (itch.io manual download) for deeper appearance customization.
 - A040: Permanent class traits can be stored as effects without expiry (Evasion = effect 'evasion', read by effects.ts). Aura features are helpers taking a distance (combat supplies positions). Combat must use featureWeaponAttack(c, db, weaponAttack(...)) and critOn(c, db). Not automated yet: Horde Breaker extra attack, Defensive Tactics, Abjure Foes, Divine Sense, Relentless Hunter concentration immunity (helper exists), Acrobatic Movement, Self-Restoration, Perfect Focus, Quivering Palm, Holy Nimbus/Smite of Protection — add to A042a follow-up if needed.
+- A041: Call spellOptions(c, db, spellInfo(spell, classId), slotLevel) and spread into castSpell; Sculpt Spells ids go in castSpell.sculptTargetIds. Not automated yet: Cunning Action (combat), Elusive, Supreme Sneak/Use Magic Device/Thief's Reflexes, most Metamagic effects (costs only), invocations other than Agonizing Blast, Mystic Arcanum, Contact Patron, Memorize Spell/Spell Mastery/Signature Spells, Overchannel, Hurl Through Hell, Dragon Wings/Companion.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -279,7 +282,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/character/multiclass.ts` — multiclassProblems, multiclassGains, addClass, attacksPerAction
 - `src/engine/rules/activeEffects.ts` — addEffect, hasEffect, removeEffects, onTurnEvent, tickEffects, attackEffectModes, consumeAttackEffects, effectSpeedPenalty
 - `src/engine/rules/mastery.ts` — applyMasteryOnHit, grazeDamage, cleaveDamageModifier
-- `src/engine/character/features/` — types.ts (FeatureImpl), index.ts (ALL_FEATURES, activeFeatures, feature*Modes, featureResistances, weaponHitRiders, syncResources, applyOnGain, featureActions, useFeatureAction), barbarian.ts, bard.ts
+- `src/engine/character/features/` — types.ts (FeatureImpl, SpellInfo), index.ts (ALL_FEATURES, activeFeatures, feature*Modes/Bonuses, featureResistances, weaponHitRiders, critOn, featureWeaponAttack, spellOptions/spellInfo, syncResources, applyOnGain/OnLevelUp, featureActions, useFeatureAction), one file per class group (barbarian, bard, cleric, druid, fighter, monk, paladin, ranger, rogue, casters)
 - `assets/manifest.json` + `scripts/assets-fetch.mjs` — 3D model packs, roles, monster stand-ins; models land in assets/models/ (gitignored)
 - `src/engine/data/common.ts` — IdSchema, DiceSchema, CostSchema(CP), DamageSchema, AreaSchema, DurationSchema, EffectSchema/Effect, toId
 - `src/engine/data/schemas.ts` — schemas for every data/srd file + RulesTablesSchema; SRD_FILES registry; record types

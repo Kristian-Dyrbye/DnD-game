@@ -109,7 +109,7 @@ describe('levelUp', () => {
       },
       db,
     );
-    let c = levelUp(wiz, db, { classId: 'wizard', hp: { mode: 'average' }, ignoreXp: true }).character;
+    let c = levelUp(wiz, db, { classId: 'wizard', hp: { mode: 'average' }, ignoreXp: true, expertise: ['investigation'] }).character;
     c = levelUp(c, db, { classId: 'wizard', hp: { mode: 'average' }, ignoreXp: true, subclassId: 'evoker' }).character;
     expect(c.spellcasting!.maxSlots.slice(0, 2)).toEqual([4, 2]);
     expect(c.spellcasting!.slots.slice(0, 2)).toEqual([4, 2]);

@@ -44,8 +44,14 @@ export interface EffectContext {
   healBonus?: number;
   /** Healing dice count as their maximum (Supreme Healing). */
   maxHealDice?: boolean;
-  /** Flat bonus added once to each damage roll (Potent Spellcasting: Wis mod on cantrips). */
+  /** Flat bonus added once to each damage roll (Potent Spellcasting, Empowered Evocation). */
   damageBonus?: number;
+  /** Spell attack rolls have Advantage (Innate Sorcery). */
+  attackAdvantage?: string;
+  /** Potent Cantrip: a miss or a successful save still deals half the damage. */
+  potentCantrip?: boolean;
+  /** Sculpt Spells: these creatures automatically succeed on saves and take no damage on "half". */
+  sculptIds?: Set<string>;
   /** Id stamped on conditions so they end with the spell/feature (concentration). */
   conditionSourceId?: string;
   /** Distances from source to each target in feet (for attack modes); default 5. */
@@ -104,6 +110,11 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
         const target = ctx.creatures.get(id);
         if (!target || target.dead) continue;
         const dc = effect.dc ?? ctx.saveDc ?? 10;
+        if (ctx.sculptIds?.has(id)) {
+          ctx.log.push({ targetId: id, kind: 'save', text: `${target.name} is shielded from the spell (Sculpt Spells)` });
+          if (Array.isArray(effect.onSuccess)) for (const e of effect.onSuccess) runEffect(e, [id], ctx, { ...state, sharedDamage: shared });
+          continue;
+        }
         const res = savingThrow(target, effect.ability, { rng: ctx.rng, dc, ...saveModes(target, effect.ability) });
         ctx.log.push({ targetId: id, kind: 'save', text: `${target.name} ${ABILITY_NAMES[effect.ability]} save: ${res.text}` });
         // Evasion (Monk/Rogue 7): Dex saves for half damage → none on a success, half on a failure.
@@ -115,7 +126,7 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
         }
         if (!res.success) {
           for (const e of effect.onFail) runEffect(e, [id], ctx, { ...state, sharedDamage: shared });
-        } else if (effect.onSuccess === 'half') {
+        } else if (effect.onSuccess === 'half' || (effect.onSuccess === 'none' && ctx.potentCantrip)) {
           for (const e of effect.onFail) if (e.kind === 'damage') runEffect(e, [id], ctx, { ...state, half: true, sharedDamage: shared });
         } else if (Array.isArray(effect.onSuccess)) {
           for (const e of effect.onSuccess) runEffect(e, [id], ctx, { ...state, sharedDamage: shared });
@@ -130,9 +141,11 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
         const source = ctx.creatures.get(ctx.source.id) ?? ctx.source;
         const modes = attackModes({ attacker: source, target, distanceFt: ctx.distances?.get(id) ?? 5 });
         const mods: Modifier[] = [{ value: ctx.attackBonus ?? 0, label: 'Spell attack' }];
-        const res = attackRoll({ rng: ctx.rng, label: 'Spell attack', modifiers: mods, targetAc: target.ac, advantage: modes.advantage, disadvantage: modes.disadvantage, exhaustion: source.exhaustion, ...(modes.autoCrit && { autoCrit: modes.autoCrit }) });
+        const advantage = [...modes.advantage, ...(ctx.attackAdvantage ? [ctx.attackAdvantage] : [])];
+        const res = attackRoll({ rng: ctx.rng, label: 'Spell attack', modifiers: mods, targetAc: target.ac, advantage, disadvantage: modes.disadvantage, exhaustion: source.exhaustion, ...(modes.autoCrit && { autoCrit: modes.autoCrit }) });
         ctx.log.push({ targetId: id, kind: 'attack', text: `${source.name} → ${target.name}: ${res.text}` });
         if (res.hit) for (const e of effect.onHit) runEffect(e, [id], ctx, { ...state, crit: res.crit, sharedDamage: new Map() });
+        else if (ctx.potentCantrip) for (const e of effect.onHit) if (e.kind === 'damage') runEffect(e, [id], ctx, { ...state, half: true, sharedDamage: new Map() });
       }
       return;
     }

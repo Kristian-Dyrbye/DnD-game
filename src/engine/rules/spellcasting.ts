@@ -196,10 +196,16 @@ export interface CastOptions {
   characterLevel: number;
   distances?: Map<string, number>;
   hooks?: Record<string, HookFn>;
-  /** From class features (features.spellOptions): healing bonus, max heal dice, cantrip damage bonus. */
+  /** From class features (features.spellOptions). */
   healBonus?: number;
   maxHealDice?: boolean;
   cantripDamageBonus?: number;
+  damageBonus?: number;
+  saveDcBonus?: number;
+  attackAdvantage?: string;
+  potentCantrip?: boolean;
+  /** Creatures shielded by Sculpt Spells. */
+  sculptTargetIds?: string[];
 }
 
 export interface CastResult {
@@ -221,14 +227,19 @@ export function castSpell(o: CastOptions): CastResult {
     rng: o.rng,
     source: o.caster,
     targets: o.targets,
-    saveDc: spellSaveDc(o.caster, o.ability),
+    saveDc: spellSaveDc(o.caster, o.ability) + (o.saveDcBonus ?? 0),
     attackBonus: spellAttackBonus(o.caster, o.ability),
     spellMod: abilityModifier(o.caster.abilities[o.ability]),
     upcastLevels: o.spell.level > 0 ? level - o.spell.level : 0,
     conditionSourceId: sourceId,
     ...(o.healBonus && { healBonus: o.healBonus }),
     ...(o.maxHealDice && { maxHealDice: true }),
-    ...(o.spell.level === 0 && o.cantripDamageBonus && { damageBonus: o.cantripDamageBonus }),
+    ...((o.damageBonus || (o.spell.level === 0 && o.cantripDamageBonus)) && {
+      damageBonus: (o.damageBonus ?? 0) + (o.spell.level === 0 ? (o.cantripDamageBonus ?? 0) : 0),
+    }),
+    ...(o.attackAdvantage && { attackAdvantage: o.attackAdvantage }),
+    ...(o.potentCantrip && o.spell.level === 0 && { potentCantrip: true }),
+    ...(o.sculptTargetIds?.length && { sculptIds: new Set(o.sculptTargetIds) }),
     ...(o.distances && { distances: o.distances }),
     ...(o.hooks && { hooks: o.hooks }),
     onDamaged: (c, id, amount) => concentrationCheck(c, id, amount, o.rng),

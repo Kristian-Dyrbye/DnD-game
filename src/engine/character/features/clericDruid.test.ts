@@ -4,7 +4,7 @@ import { CreatureSchema, type Character, type Creature } from '../../core/creatu
 import { loadSrd } from '../../data/srdBundle';
 import { buildCharacter, type CharacterBuildInput } from '../builder';
 import { weaponAttack } from '../derived';
-import { featureCheckBonuses, featureConditionImmunities, featureResistances, spellOptions, syncResources, useFeatureAction, weaponHitRiders } from './index';
+import { featureCheckBonuses, featureConditionImmunities, featureResistances, spellInfo, spellOptions, syncResources, useFeatureAction, weaponHitRiders } from './index';
 import { blessedHealerAmount, divineSparkDice } from './cleric';
 import { landSpells } from './druid';
 import { castSpell } from '../../rules/spellcasting';
@@ -96,16 +96,16 @@ describe('Cleric', () => {
     expect(weaponHitRiders(lvl7, db, { ...ctx, firstHitThisTurn: true })).toContainEqual({ extraDamage: [{ dice: '1d8', type: 'radiant' }], text: 'Divine Strike' });
     expect(weaponHitRiders(lvl7, db, { ...ctx, firstHitThisTurn: false })).toEqual([]);
     const potent = withLevel(cleric, 7, undefined, { blessed_strikes: ['potent_spellcasting'] });
-    expect(spellOptions(potent, db, { level: 0, healing: false, damaging: true }, 0)).toEqual({ cantripDamageBonus: 3 });
+    expect(spellOptions(potent, db, spellInfo(db.spells.get('sacred_flame')!, 'cleric'), 0)).toEqual({ cantripDamageBonus: 3 });
   });
 
   it('Life Domain: Disciple of Life adds 2 + slot level; Supreme Healing maxes dice', () => {
     const life = withLevel(cleric, 3, 'life_domain');
-    const opts = spellOptions(life, db, { level: 1, healing: true, damaging: false }, 2);
+    const opts = spellOptions(life, db, spellInfo(db.spells.get('cure_wounds')!, 'cleric'), 2);
     expect(opts).toEqual({ healBonus: 4 });
     const r = castSpell({ rng: fixed(1, 1, 1, 1), caster: { ...life, spellcasting: { ...life.spellcasting!, slots: [4, 2, 0, 0, 0, 0, 0, 0, 0] } }, spell: db.spells.get('cure_wounds')!, slot: { kind: 'slot', level: 2 }, ability: 'wis', targets: [{ ...zombie('ally'), creatureType: 'humanoid', hp: 1, maxHp: 60 }], characterLevel: 3, ...opts });
     expect(r.ctx.creatures.get('ally')!.hp).toBe(1 + 4 + 3 + 4);
-    expect(spellOptions(withLevel(cleric, 17, 'life_domain'), db, { level: 1, healing: true, damaging: false }, 1)).toMatchObject({ maxHealDice: true, healBonus: 3 });
+    expect(spellOptions(withLevel(cleric, 17, 'life_domain'), db, spellInfo(db.spells.get('cure_wounds')!, 'cleric'), 1)).toMatchObject({ maxHealDice: true, healBonus: 3 });
     expect(blessedHealerAmount(withLevel(cleric, 6, 'life_domain'), 3)).toBe(5);
     expect(blessedHealerAmount(withLevel(cleric, 5, 'life_domain'), 3)).toBe(0);
   });

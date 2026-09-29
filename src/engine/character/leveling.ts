@@ -13,7 +13,7 @@ import { abilityModifier, proficiencyBonus, type Ability, type Skill } from '../
 import { pactSlots, spellSlots } from '../rules/spellcasting';
 import { armorClass, baseSpeed, classLevel } from './derived';
 import { featureLevels, weaponMasteryCount } from './featureLevels';
-import { applyOnGain, syncResources } from './features';
+import { applyOnGain, applyOnLevelUp, syncResources } from './features';
 
 export class LevelError extends Error {
   constructor(message: string) {
@@ -67,7 +67,7 @@ export function pendingChoices(c: Character, db: SrdDatabase, classId: string, n
   if (names.includes('Ability Score Improvement')) out.push({ kind: 'feat', reason: 'asi' });
   if (names.includes('Epic Boon')) out.push({ kind: 'feat', reason: 'epic_boon' });
   if (names.includes('Expertise')) out.push({ kind: 'expertise', count: 2 });
-  if (names.includes('Deft Explorer')) out.push({ kind: 'expertise', count: 1 });
+  if (names.includes('Deft Explorer') || names.includes('Scholar')) out.push({ kind: 'expertise', count: 1 });
   const sub = current?.subclassId;
   if (sub && featuresAtLevel(db, classId, newLevel, sub).some((f) => f.name === 'Bonus Proficiencies' && sub === 'college_of_lore')) {
     out.push({ kind: 'skills', count: 3 });
@@ -214,6 +214,8 @@ export function levelUp(c: Character, db: SrdDatabase, o: LevelUpOptions): Level
     }
   }
 
+  // Features gained earlier in this class react to the new level (Draconic Resilience +1 HP).
+  if (c.classes.some((x) => x.classId === o.classId)) c = applyOnLevelUp(c, db, o.classId);
   const die = Number(cls.hitDie.slice(1));
   const rolled = o.hp.mode === 'average' ? die / 2 + 1 : roll(`1${cls.hitDie}`, o.hp.rng).total;
   const hpGained = Math.max(1, rolled + abilityModifier(c.abilities.con)) + (c.speciesId === 'dwarf' ? 1 : 0);

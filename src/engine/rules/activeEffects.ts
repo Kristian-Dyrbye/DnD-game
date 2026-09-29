@@ -72,6 +72,7 @@ export function attackEffectModes(attacker: Creature, targetId: string): { advan
   for (const e of attacker.effects) {
     if (e.key === 'sap') disadvantage.push('Sapped');
     if (e.key === 'vex' && e.targetId === targetId) advantage.push('Vex');
+    if (e.key === 'steady_aim') advantage.push('Steady Aim');
   }
   return { advantage, disadvantage };
 }

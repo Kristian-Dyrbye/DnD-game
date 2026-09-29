@@ -25,6 +25,11 @@ export interface WeaponHitContext {
   firstHitThisTurn: boolean;
   /** The attack had advantage (Sneak Attack) / Reckless Attack was used. */
   hadAdvantage: boolean;
+  hadDisadvantage?: boolean;
+  /** A non-incapacitated ally is within 5 ft of the target (Sneak Attack without Advantage). */
+  allyAdjacentToTarget?: boolean;
+  /** Sneak Attack dice given up for Cunning Strike effects. */
+  sneakAttackDiceSpent?: number;
 }
 
 export interface WeaponHitRider {
@@ -54,6 +59,21 @@ export interface SpellOptions {
   healBonus?: number;
   maxHealDice?: boolean;
   cantripDamageBonus?: number;
+  damageBonus?: number;
+  saveDcBonus?: number;
+  attackAdvantage?: string;
+  potentCantrip?: boolean;
+}
+
+/** What spellOptions hooks know about the spell being cast. */
+export interface SpellInfo {
+  id: string;
+  level: number;
+  school: string;
+  /** Class the spell is cast through ('sorcerer', 'feat:magic_initiate:wizard'...). */
+  classId: string;
+  healing: boolean;
+  damaging: boolean;
 }
 
 export interface FeatureAction {
@@ -96,7 +116,9 @@ export interface FeatureImpl {
   /** Applied once when the feature is gained (Primal Champion +4 Str/Con, Jack of All Trades). */
   onGain?(c: Character, db: SrdDatabase): Character;
   /** Changes to a spell being cast (Disciple of Life, Supreme Healing, Potent Spellcasting). */
-  spellOptions?(c: Character, spell: { level: number; healing: boolean; damaging: boolean }, slotLevel: number): SpellOptions;
+  spellOptions?(c: Character, spell: SpellInfo, slotLevel: number): SpellOptions;
+  /** Runs on every later level gained in the owning class (Draconic Resilience: +1 HP). */
+  onLevelUp?(c: Character, db: SrdDatabase): Character;
   /** Whether the character can cast spells / concentrate while this feature is active (Rage: no). */
   blocksSpellcasting?(c: Character): boolean;
 }

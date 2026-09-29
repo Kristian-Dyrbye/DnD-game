@@ -54,6 +54,10 @@ export function armorClass(c: Character, db: SrdDatabase): ArmorClassResult {
       const con = abilityModifier(c.abilities.con);
       options.push({ ac: 10 + dex + con, breakdown: [{ value: 10, label: 'Unarmored Defense' }, { value: dex, label: 'Dexterity' }, { value: con, label: 'Constitution' }] });
     }
+    if (c.classes.some((x) => x.subclassId === 'draconic_sorcery' && x.level >= 3)) {
+      const cha = abilityModifier(c.abilities.cha);
+      options.push({ ac: 10 + dex + cha, breakdown: [{ value: 10, label: 'Draconic Resilience' }, { value: dex, label: 'Dexterity' }, { value: cha, label: 'Charisma' }] });
+    }
     if (classLevel(c, 'monk') > 0 && !shield) {
       const wis = abilityModifier(c.abilities.wis);
       options.push({ ac: 10 + dex + wis, breakdown: [{ value: 10, label: 'Unarmored Defense' }, { value: dex, label: 'Dexterity' }, { value: wis, label: 'Wisdom' }] });

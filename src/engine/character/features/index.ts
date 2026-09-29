@@ -6,6 +6,7 @@
 import type { Character, Creature, Resource } from '../../core/creature';
 import type { Rng } from '../../core/rng';
 import type { SrdDatabase } from '../../data/srd';
+import type { Spell } from '../../data/schemas';
 import type { Ability, Condition, DamageType, Skill } from '../../rules/basics';
 import type { WeaponAttack } from '../derived';
 import { featureLevels } from '../featureLevels';
@@ -17,9 +18,11 @@ import { fighterFeatures } from './fighter';
 import { monkFeatures } from './monk';
 import { paladinFeatures } from './paladin';
 import { rangerFeatures } from './ranger';
-import type { FeatureAction, FeatureActionParams, FeatureActionResult, FeatureImpl, Modes, SpellOptions, WeaponHitContext, WeaponHitRider } from './types';
+import { rogueFeatures } from './rogue';
+import { casterFeatures } from './casters';
+import type { FeatureAction, FeatureActionParams, FeatureActionResult, FeatureImpl, Modes, SpellInfo, SpellOptions, WeaponHitContext, WeaponHitRider } from './types';
 
-export const ALL_FEATURES: FeatureImpl[] = [...barbarianFeatures, ...bardFeatures, ...clericFeatures, ...druidFeatures, ...fighterFeatures, ...monkFeatures, ...paladinFeatures, ...rangerFeatures];
+export const ALL_FEATURES: FeatureImpl[] = [...barbarianFeatures, ...bardFeatures, ...clericFeatures, ...druidFeatures, ...fighterFeatures, ...monkFeatures, ...paladinFeatures, ...rangerFeatures, ...rogueFeatures, ...casterFeatures];
 
 /** Lowest class level at which an owner (class or subclass) grants a feature id, from the SRD data. */
 function grantLevel(db: SrdDatabase, owner: string, featureId: string): number | undefined {
@@ -87,7 +90,7 @@ export function weaponHitRiders(c: Character, db: SrdDatabase, ctx: WeaponHitCon
 }
 
 /** Merged spell options from features for a spell cast at `slotLevel` (0 for cantrips). */
-export function spellOptions(c: Character, db: SrdDatabase, spell: { level: number; healing: boolean; damaging: boolean }, slotLevel: number): SpellOptions {
+export function spellOptions(c: Character, db: SrdDatabase, spell: SpellInfo, slotLevel: number): SpellOptions {
   const out: SpellOptions = {};
   for (const f of activeFeatures(c, db)) {
     const o = f.spellOptions?.(c, spell, slotLevel);
@@ -95,8 +98,20 @@ export function spellOptions(c: Character, db: SrdDatabase, spell: { level: numb
     if (o.healBonus) out.healBonus = (out.healBonus ?? 0) + o.healBonus;
     if (o.maxHealDice) out.maxHealDice = true;
     if (o.cantripDamageBonus) out.cantripDamageBonus = (out.cantripDamageBonus ?? 0) + o.cantripDamageBonus;
+    if (o.damageBonus) out.damageBonus = (out.damageBonus ?? 0) + o.damageBonus;
+    if (o.saveDcBonus) out.saveDcBonus = (out.saveDcBonus ?? 0) + o.saveDcBonus;
+    if (o.attackAdvantage) out.attackAdvantage = o.attackAdvantage;
+    if (o.potentCantrip) out.potentCantrip = true;
   }
   return out;
+}
+
+/** Runs onLevelUp for the class's already-gained features (called by levelUp). */
+export function applyOnLevelUp(c: Character, db: SrdDatabase, classId: string): Character {
+  const sub = c.classes.find((x) => x.classId === classId)?.subclassId;
+  return activeFeatures(c, db)
+    .filter((f) => f.owner === classId || f.owner === sub)
+    .reduce((acc, f) => f.onLevelUp?.(acc, db) ?? acc, c);
 }
 
 /** Lowest natural roll that scores a critical hit for this character (default 20). */
@@ -160,4 +175,17 @@ export function useFeatureAction(c: Character, db: SrdDatabase, actionId: string
   if (!found) throw new FeatureError(`${c.name} doesn't have ${actionId}`);
   if (found.problem) throw new FeatureError(found.problem);
   return found.action.use(c, db, params);
+}
+
+/** SpellInfo for spellOptions() from SRD spell data and the class it's cast through. */
+export function spellInfo(spell: Spell, classId: string): SpellInfo {
+  const json = JSON.stringify(spell.effects ?? []);
+  return {
+    id: spell.id,
+    level: spell.level,
+    school: spell.school,
+    classId,
+    healing: json.includes('"kind":"heal"'),
+    damaging: Boolean(spell.damage?.length) || json.includes('"kind":"damage"'),
+  };
 }
