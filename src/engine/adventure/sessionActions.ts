@@ -19,7 +19,9 @@ import { currentObjective } from './quests';
 import { resolveIntent } from './resolve';
 import { activeFight, fightAct, finishFight, startFight, type FightEnd } from './fights';
 import type { DefeatTable } from './defeat';
-import { canLevelUp } from '../character/leveling';
+import { canLevelUp, levelUp } from '../character/leveling';
+import { totalLevel } from '../core/creature';
+import type { Ability, Skill } from '../rules/basics';
 import { acceptOffer, activeSideQuest, finishActive, offerSources, offersAt, refreshOffers, roadOffer, sideQuestState, type SideQuestDeps } from './sideQuests';
 import type { SideQuestTables } from './sidequestTables';
 import type { SuggestedAction } from '../../shared/protocol';
@@ -268,6 +270,25 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       session.autosave();
     },
     async command(session, cmd) {
+      if (cmd.type === 'level_up') {
+        if (!db) throw new Error('Leveling needs the SRD data');
+        if (activeFight(session.current)) throw new Error('Finish the fight first.');
+        const before = totalLevel(session.current.hero);
+        const res = levelUp(session.current.hero, db, {
+          classId: cmd.classId,
+          hp: cmd.hpMode === 'roll' ? { mode: 'roll', rng: session.rng } : { mode: 'average' },
+          ...(cmd.subclassId && { subclassId: cmd.subclassId }),
+          ...(cmd.feat && { feat: { featId: cmd.feat.featId, ...(cmd.feat.increases && { increases: cmd.feat.increases as Partial<Record<Ability, number>> }) } }),
+          ...(cmd.cantrips && { cantrips: cmd.cantrips }),
+          ...(cmd.spells && { spells: cmd.spells }),
+          ...(cmd.weaponMasteries && { weaponMasteries: cmd.weaponMasteries }),
+          ...(cmd.expertise && { expertise: cmd.expertise as Skill[] }),
+          ...(cmd.skills && { skills: cmd.skills as Skill[] }),
+        });
+        session.current.hero = res.character;
+        session.addLog('system', `Level ${before + 1}! +${res.hpGained} HP${res.features.length ? `. New: ${res.features.join(', ')}` : ''}.`);
+        return;
+      }
       if (cmd.type === 'combat_act' || cmd.type === 'combat_flee') {
         if (!db) throw new Error('Combat needs the SRD data');
         const f = activeFight(session.current);

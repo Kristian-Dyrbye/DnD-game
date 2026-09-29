@@ -23,6 +23,7 @@ import { JournalPanel } from './JournalPanel';
 import { WorldMap } from './WorldMap';
 import { speaking, ttsPlayer } from '../../audio/ttsPlayer';
 import { InventoryPanel } from './InventoryPanel';
+import { LevelUpPanel } from './LevelUpPanel';
 import { ShopPanel } from './ShopPanel';
 import { getMap } from '../../../engine/world/travel';
 import { shopsAt } from '../../../engine/world/shops';
@@ -41,6 +42,7 @@ export function GameScreen() {
   const voiceOn = settings.value?.tts.enabled ?? false;
   const [journalOpen, setJournalOpen] = useState(false);
   const [inventoryOpen, setInventoryOpen] = useState(false);
+  const [levelUpOpen, setLevelUpOpen] = useState(false);
   const [shopId, setShopId] = useState<string | null>(null);
   const here = state ? getMap(state)?.current : undefined;
   const localShops = here ? shopsAt(shops, here) : [];
@@ -138,7 +140,8 @@ export function GameScreen() {
           <span class="muted">Objective:</span> {objective.value}
         </p>
       )}
-      {h && <PartyPanel hero={h} companions={state?.companions ?? []} />}
+      {h && <PartyPanel hero={h} companions={state?.companions ?? []} onLevelUp={() => setLevelUpOpen(true)} />}
+      {levelUpOpen && h && <LevelUpPanel hero={h} onClose={() => setLevelUpOpen(false)} />}
       <main class="game-main">
         {connection.value !== 'open' && <p class="connection-note">{connection.value === 'connecting' ? 'Connecting to the game server…' : 'Disconnected — retrying…'}</p>}
         <StoryLog />

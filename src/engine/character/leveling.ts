@@ -281,3 +281,16 @@ export function recompute(c: Character, db: SrdDatabase): Character {
   }
   return { ...next, ac: armorClass(next, db).ac, speed: { ...next.speed, walk: baseSpeed(next, db) } };
 }
+
+/** Highest spell level a class can prepare at a class level (0 = none), for spell pickers. */
+export function maxSpellLevelAt(db: SrdDatabase, classId: string, level: number): number {
+  const cls = db.classes.get(classId);
+  if (!cls || !db.tables) return 0;
+  if (cls.spellcasting.progression === 'pact') return pactSlots(level, db.tables)?.level ?? 0;
+  const slots = spellSlots([{ progression: cls.spellcasting.progression, level }], db.tables);
+  let max = 0;
+  slots.forEach((n, i) => {
+    if (n > 0) max = i + 1;
+  });
+  return max;
+}

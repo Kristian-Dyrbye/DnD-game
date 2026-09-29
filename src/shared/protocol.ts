@@ -36,6 +36,20 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
     /** Hardcore: a new hero continues in the same world (flags, map, reputation, time kept). */
     continueWorld: z.boolean().optional(),
   }),
+  /** Level up the hero (choices as required by leveling.pendingChoices). */
+  z.object({
+    ...base,
+    type: z.literal('level_up'),
+    classId: z.string().max(40),
+    hpMode: z.enum(['average', 'roll']),
+    subclassId: z.string().max(60).optional(),
+    feat: z.object({ featId: z.string().max(60), increases: z.record(z.string(), z.number().int().min(1).max(2)).optional() }).optional(),
+    cantrips: z.array(z.string().max(60)).max(6).optional(),
+    spells: z.array(z.string().max(60)).max(10).optional(),
+    weaponMasteries: z.array(z.string().max(60)).max(6).optional(),
+    expertise: z.array(z.string().max(40)).max(4).optional(),
+    skills: z.array(z.string().max(40)).max(4).optional(),
+  }),
   /** Combat: one hero action on the battle map, or fleeing the fight. */
   z.object({ ...base, type: z.literal('combat_act'), action: PlayerActionSchema }),
   z.object({ ...base, type: z.literal('combat_flee') }),

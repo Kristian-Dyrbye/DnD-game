@@ -3,8 +3,9 @@ import type { Character } from '../../../engine/core/creature';
 import { totalLevel } from '../../../engine/core/creature';
 import { db } from '../../data';
 import { formatCoins } from '../text';
+import { canLevelUp } from '../../../engine/character/leveling';
 
-function MemberCard({ c, lead }: { c: Character; lead?: boolean }) {
+function MemberCard({ c, lead, onLevelUp }: { c: Character; lead?: boolean; onLevelUp?: () => void }) {
   const pct = Math.max(0, Math.min(100, (c.hp / c.maxHp) * 100));
   const classes = c.classes.map((cl) => `${db.classes.get(cl.classId)?.name ?? cl.classId} ${cl.level}`).join(' / ');
   const hpClass = pct <= 25 ? 'low' : pct <= 50 ? 'mid' : 'ok';
@@ -38,15 +39,20 @@ function MemberCard({ c, lead }: { c: Character; lead?: boolean }) {
         </p>
       )}
       {lead && <p class="member-coins">{formatCoins(c.coins)}</p>}
+      {lead && onLevelUp && canLevelUp(c, db) && (
+        <button type="button" class="primary level-up" onClick={onLevelUp}>
+          Level up!
+        </button>
+      )}
     </article>
   );
 }
 
-export function PartyPanel({ hero, companions }: { hero: Character; companions: Character[] }) {
+export function PartyPanel({ hero, companions, onLevelUp }: { hero: Character; companions: Character[]; onLevelUp?: () => void }) {
   return (
     <aside class="party-panel" aria-label="Party">
       <h2>Party</h2>
-      <MemberCard c={hero} lead />
+      <MemberCard c={hero} lead {...(onLevelUp && { onLevelUp })} />
       {companions.map((c) => (
         <MemberCard key={c.id} c={c} />
       ))}
