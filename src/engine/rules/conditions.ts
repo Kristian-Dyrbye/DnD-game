@@ -56,8 +56,8 @@ function activeModifiers(c: Creature, table: ConditionTable): { cond: Condition;
 
 // ---------------------------------------------------------------- applying / removing
 
-export interface ApplyResult {
-  creature: Creature;
+export interface ApplyResult<T extends Creature = Creature> {
+  creature: T;
   applied: boolean;
   /** Why it wasn't applied. */
   reason?: 'immune';
@@ -66,7 +66,7 @@ export interface ApplyResult {
 }
 
 /** Adds a condition. Exhaustion adds a level. Re-applying keeps the longer duration. */
-export function applyCondition(c: Creature, ac: ActiveCondition, table: ConditionTable = defaultTable()): ApplyResult {
+export function applyCondition<T extends Creature>(c: T, ac: ActiveCondition, table: ConditionTable = defaultTable()): ApplyResult<T> {
   if (conditionImmunities(c, table).has(ac.condition)) return { creature: c, applied: false, reason: 'immune' };
   if (ac.condition === 'exhaustion') return addExhaustion(c, 1);
   const existing = c.conditions.find((x) => x.condition === ac.condition && x.sourceId === ac.sourceId);
@@ -82,7 +82,7 @@ export function applyCondition(c: Creature, ac: ActiveCondition, table: Conditio
 }
 
 /** Removes a condition (all sources, or only the given source). Removing Unconscious leaves the creature Prone. */
-export function removeCondition(c: Creature, cond: Condition, sourceId?: string): Creature {
+export function removeCondition<T extends Creature>(c: T, cond: Condition, sourceId?: string): T {
   const conditions = c.conditions.filter((x) => !(x.condition === cond && (sourceId === undefined || x.sourceId === sourceId)));
   const next = { ...c, conditions };
   if (cond === 'unconscious' && !conditions.some((x) => x.condition === 'unconscious') && !conditions.some((x) => x.condition === 'prone')) {
@@ -96,7 +96,7 @@ export function removeConditionsFromSource(c: Creature, sourceId: string): Creat
   return { ...c, conditions: c.conditions.filter((x) => x.sourceId !== sourceId) };
 }
 
-export function addExhaustion(c: Creature, levels: number): ApplyResult {
+export function addExhaustion<T extends Creature>(c: T, levels: number): ApplyResult<T> {
   const exhaustion = Math.min(6, Math.max(0, c.exhaustion + levels));
   return { creature: { ...c, exhaustion }, applied: levels > 0, ...(exhaustion >= 6 && { died: true }) };
 }

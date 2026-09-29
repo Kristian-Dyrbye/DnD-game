@@ -86,6 +86,12 @@ export interface FeatureImpl {
   attackModes?(c: Character, attack: { melee: boolean; ability: Ability }): Partial<Modes>;
   attackedModes?(c: Character, attackerIsMelee: boolean): Partial<Modes>;
   onWeaponHit?(c: Character, db: SrdDatabase, ctx: WeaponHitContext): WeaponHitRider | undefined;
+  /** Lowest natural d20 that crits (Improved Critical: 19). The lowest from all features wins. */
+  critOn?(c: Character): number;
+  /** Adjusts a weapon/unarmed attack profile (Martial Arts die, Dexterous Attacks, Sacred Weapon). */
+  modifyAttack?(c: Character, db: SrdDatabase, attack: WeaponAttack): WeaponAttack;
+  /** Bonus to every saving throw (Aura of Protection on the paladin themself). */
+  saveBonus?(c: Character): Modifier[];
   actions?: FeatureAction[];
   /** Applied once when the feature is gained (Primal Champion +4 Str/Con, Jack of All Trades). */
   onGain?(c: Character, db: SrdDatabase): Character;

@@ -41,3 +41,5 @@ desktop.ini
 # Downloaded 3D asset packs (fetched by scripts/assets-fetch.mjs; manifest is committed)
 assets/_packs/
 assets/models/
+assets/_audio_packs/
+assets/audio/

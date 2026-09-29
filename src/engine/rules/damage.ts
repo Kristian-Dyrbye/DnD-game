@@ -157,13 +157,13 @@ export function applyDamage(c: Creature, instances: DamageInstance[], opts: Defe
 }
 
 /** Healing up to max HP. Returns the amount actually restored. */
-export function heal(c: Creature, amount: number): { creature: Creature; healed: number } {
+export function heal<T extends Creature>(c: T, amount: number): { creature: T; healed: number } {
   const healed = Math.max(0, Math.min(amount, c.maxHp - c.hp));
   return { creature: { ...c, hp: c.hp + healed }, healed };
 }
 
 /** Temporary HP don't stack: keep whichever is higher. */
-export function grantTempHp(c: Creature, amount: number): Creature {
+export function grantTempHp<T extends Creature>(c: T, amount: number): T {
   return { ...c, tempHp: Math.max(c.tempHp, amount) };
 }
 

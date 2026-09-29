@@ -22,6 +22,7 @@ import { hitDicePool } from '../rules/rest';
 import { pactSlots, spellSlots } from '../rules/spellcasting';
 import { armorClass, baseSpeed, maxHitPoints } from './derived';
 import { applyOnGain, syncResources } from './features';
+import { weaponMasteryCount } from './featureLevels';
 
 export interface CharacterBuildInput {
   id: string;
@@ -134,7 +135,7 @@ export function validateBuild(input: CharacterBuildInput, db: SrdDatabase): stri
   if (!cls.startingEquipment[input.classEquipment]) problems.push('Invalid class equipment option');
 
   // Weapon masteries
-  const masteryCount = Number(cls.columns.weapon_mastery?.[level - 1] ?? 0);
+  const masteryCount = weaponMasteryCount(cls, level);
   if ((input.weaponMasteries?.length ?? 0) > masteryCount) problems.push(`${cls.name} can master ${masteryCount} weapon(s)`);
   for (const w of input.weaponMasteries ?? []) if (!db.weapons.has(w)) problems.push(`Unknown weapon ${w}`);
 

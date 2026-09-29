@@ -7,14 +7,19 @@ import type { Character, Creature, Resource } from '../../core/creature';
 import type { Rng } from '../../core/rng';
 import type { SrdDatabase } from '../../data/srd';
 import type { Ability, Condition, DamageType, Skill } from '../../rules/basics';
+import type { WeaponAttack } from '../derived';
 import { featureLevels } from '../featureLevels';
 import { barbarianFeatures } from './barbarian';
 import { bardFeatures } from './bard';
 import { clericFeatures } from './cleric';
 import { druidFeatures } from './druid';
+import { fighterFeatures } from './fighter';
+import { monkFeatures } from './monk';
+import { paladinFeatures } from './paladin';
+import { rangerFeatures } from './ranger';
 import type { FeatureAction, FeatureActionParams, FeatureActionResult, FeatureImpl, Modes, SpellOptions, WeaponHitContext, WeaponHitRider } from './types';
 
-export const ALL_FEATURES: FeatureImpl[] = [...barbarianFeatures, ...bardFeatures, ...clericFeatures, ...druidFeatures];
+export const ALL_FEATURES: FeatureImpl[] = [...barbarianFeatures, ...bardFeatures, ...clericFeatures, ...druidFeatures, ...fighterFeatures, ...monkFeatures, ...paladinFeatures, ...rangerFeatures];
 
 /** Lowest class level at which an owner (class or subclass) grants a feature id, from the SRD data. */
 function grantLevel(db: SrdDatabase, owner: string, featureId: string): number | undefined {
@@ -93,6 +98,18 @@ export function spellOptions(c: Character, db: SrdDatabase, spell: { level: numb
   }
   return out;
 }
+
+/** Lowest natural roll that scores a critical hit for this character (default 20). */
+export function critOn(c: Character, db: SrdDatabase): number {
+  return Math.min(20, ...activeFeatures(c, db).map((f) => f.critOn?.(c) ?? 20));
+}
+
+/** Weapon attack profile with every feature adjustment applied. */
+export function featureWeaponAttack(c: Character, db: SrdDatabase, attack: WeaponAttack): WeaponAttack {
+  return activeFeatures(c, db).reduce((a, f) => f.modifyAttack?.(c, db, a) ?? a, attack);
+}
+
+export const featureSaveBonuses = (c: Character, db: SrdDatabase) => activeFeatures(c, db).flatMap((f) => f.saveBonus?.(c) ?? []);
 
 export function canCastSpells(c: Character, db: SrdDatabase): boolean {
   return !activeFeatures(c, db).some((f) => f.blocksSpellcasting?.(c));

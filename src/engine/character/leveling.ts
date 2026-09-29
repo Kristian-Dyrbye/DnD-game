@@ -12,7 +12,7 @@ import type { SrdDatabase } from '../data/srd';
 import { abilityModifier, proficiencyBonus, type Ability, type Skill } from '../rules/basics';
 import { pactSlots, spellSlots } from '../rules/spellcasting';
 import { armorClass, baseSpeed, classLevel } from './derived';
-import { featureLevels } from './featureLevels';
+import { featureLevels, weaponMasteryCount } from './featureLevels';
 import { applyOnGain, syncResources } from './features';
 
 export class LevelError extends Error {
@@ -67,6 +67,7 @@ export function pendingChoices(c: Character, db: SrdDatabase, classId: string, n
   if (names.includes('Ability Score Improvement')) out.push({ kind: 'feat', reason: 'asi' });
   if (names.includes('Epic Boon')) out.push({ kind: 'feat', reason: 'epic_boon' });
   if (names.includes('Expertise')) out.push({ kind: 'expertise', count: 2 });
+  if (names.includes('Deft Explorer')) out.push({ kind: 'expertise', count: 1 });
   const sub = current?.subclassId;
   if (sub && featuresAtLevel(db, classId, newLevel, sub).some((f) => f.name === 'Bonus Proficiencies' && sub === 'college_of_lore')) {
     out.push({ kind: 'skills', count: 3 });
@@ -76,11 +77,8 @@ export function pendingChoices(c: Character, db: SrdDatabase, classId: string, n
   if (cantrips > 0) out.push({ kind: 'cantrips', classId, count: cantrips });
   const spells = newLevel === 1 ? (cls.spellcasting.preparedSpells?.[0] ?? 0) : diff(cls.spellcasting.preparedSpells);
   if (spells > 0) out.push({ kind: 'spells', classId, count: spells });
-  const mastery = cls.columns.weapon_mastery;
-  if (mastery) {
-    const more = Number(mastery[newLevel - 1] ?? 0) - (newLevel > 1 ? Number(mastery[newLevel - 2] ?? 0) : 0);
-    if (more > 0) out.push({ kind: 'weapon_mastery', count: more });
-  }
+  const more = weaponMasteryCount(cls, newLevel) - (newLevel > 1 ? weaponMasteryCount(cls, newLevel - 1) : 0);
+  if (more > 0) out.push({ kind: 'weapon_mastery', count: more });
   return out;
 }
 

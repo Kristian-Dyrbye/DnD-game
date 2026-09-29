@@ -103,6 +103,8 @@ export function baseSpeed(c: Character, db: SrdDatabase): number {
     const bonus = typeof col === 'string' ? Number(/\d+/.exec(col)?.[0] ?? 0) : 0;
     speed += bonus;
   }
+  // Ranger Roving (6): +10 ft while not wearing Heavy armor.
+  if (classLevel(c, 'ranger') >= 6 && armor?.category !== 'heavy') speed += 10;
   if (armor?.strengthRequirement && c.abilities.str < armor.strengthRequirement) speed -= 10;
   return Math.max(0, speed);
 }

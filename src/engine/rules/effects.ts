@@ -13,7 +13,7 @@ import type { Creature } from '../core/creature';
 import type { Rng } from '../core/rng';
 import type { Damage, Duration, Effect } from '../data/common';
 import { ABILITY_NAMES } from './basics';
-import { applyCondition, attackModes, resistsAllDamage, saveModes } from './conditions';
+import { applyCondition, attackModes, canAct, resistsAllDamage, saveModes } from './conditions';
 import { applyDamage, attackRoll, grantTempHp, rollDamage, type DamageRollResult } from './damage';
 import { healFromZero, resolveDamageAtZero } from './death';
 import { savingThrow } from './checks';
@@ -106,6 +106,13 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
         const dc = effect.dc ?? ctx.saveDc ?? 10;
         const res = savingThrow(target, effect.ability, { rng: ctx.rng, dc, ...saveModes(target, effect.ability) });
         ctx.log.push({ targetId: id, kind: 'save', text: `${target.name} ${ABILITY_NAMES[effect.ability]} save: ${res.text}` });
+        // Evasion (Monk/Rogue 7): Dex saves for half damage → none on a success, half on a failure.
+        const evasion = effect.ability === 'dex' && effect.onSuccess === 'half' && target.effects.some((e) => e.key === 'evasion') && canAct(target);
+        if (evasion) {
+          if (!res.success) for (const e of effect.onFail) runEffect(e, [id], ctx, { ...state, half: e.kind === 'damage' ? true : state.half, sharedDamage: shared });
+          else ctx.log.push({ targetId: id, kind: 'info', text: `${target.name} evades all damage (Evasion)` });
+          continue;
+        }
         if (!res.success) {
           for (const e of effect.onFail) runEffect(e, [id], ctx, { ...state, sharedDamage: shared });
         } else if (effect.onSuccess === 'half') {

@@ -168,7 +168,11 @@ async function setup() {
     }
   }
 
-  // Narration voices (Piper) and asset packs are added by later build steps.
+  console.log(line('info', 'Downloading 3D models (about 50 MB, one time only)...'));
+  if (run('node', [path.join('scripts', 'assets-fetch.mjs')], { shell: false })) console.log(line('ok', '3D models ready.'));
+  else console.log(line('warn', 'Some 3D models could not be downloaded. The game will use simple shapes; run Setup.bat again later.'));
+
+  // Narration voices (Piper) are added by a later build step.
   console.log('\nSetup finished. Start the game with "Start Game.bat".\n');
   return 0;
 }
