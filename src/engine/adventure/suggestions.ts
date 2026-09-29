@@ -12,7 +12,10 @@ export interface SuggestionIdea {
   actionId?: string;
 }
 
-/** Max buttons shown; spec asks for 3–5 ideas, plus the scene's real options. */
+/**
+ * Max buttons when the model adds ideas. The scene's real options are never dropped: free-text ideas
+ * only fill whatever room is left under this cap.
+ */
 export const MAX_SUGGESTIONS = 7;
 const MAX_LABEL = 60;
 
@@ -22,7 +25,7 @@ const button = (a: AvailableAction): SuggestedAction => ({ id: a.id, label: a.ch
 export function dataSuggestions(offered: AvailableAction[]): SuggestedAction[] {
   const ordered = [...offered.filter((a) => a.kind !== 'exit'), ...offered.filter((a) => a.kind === 'exit')].map(button);
   if (ordered.length < 3) ordered.push({ id: 'say:look', label: 'Look around', say: 'I look around carefully.' });
-  return ordered.slice(0, MAX_SUGGESTIONS);
+  return ordered;
 }
 
 /**
@@ -36,6 +39,8 @@ export function mergeSuggestions(offered: AvailableAction[], ideas: SuggestionId
   const seen = new Set<string>();
   const labels = new Set<string>();
   let n = 0;
+  // Free-text ideas only use the room the real options leave (every offered action stays).
+  let freeRoom = Math.max(0, MAX_SUGGESTIONS - offered.length);
   for (const idea of ideas.slice(0, 5)) {
     const label = idea.label.trim().replace(/\s+/g, ' ');
     if (!label || label.length > MAX_LABEL || labels.has(label.toLowerCase())) continue;
@@ -44,9 +49,13 @@ export function mergeSuggestions(offered: AvailableAction[], ideas: SuggestionId
       if (seen.has(real.id)) continue;
       seen.add(real.id);
       out.push(button(real));
-    } else out.push({ id: `say:${n++}`, label, say: label });
+    } else {
+      if (freeRoom <= 0) continue;
+      freeRoom--;
+      out.push({ id: `say:${n++}`, label, say: label });
+    }
     labels.add(label.toLowerCase());
   }
   for (const a of dataSuggestions(offered)) if (!seen.has(a.id) && !a.say) out.push(a);
-  return out.slice(0, MAX_SUGGESTIONS);
+  return out;
 }

@@ -255,10 +255,9 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     maybeBanter(session);
     // A finished side quest hands control back to the main adventure.
     const done = finishActive(session.current);
-    if (done) {
-      session.addLog('system', `Job ${done.ending === 'done' ? 'complete' : 'over'}: ${done.name}.`);
-      ctx = ctxFor(session);
-    }
+    if (done) session.addLog('system', `Job ${done.ending === 'done' ? 'complete' : 'over'}: ${done.name}.`);
+    // A finished side quest or a chained next chapter changes the active adventure: re-read it.
+    ctx = ctxFor(session);
     offer(session, ctx);
     if (r.entered.length) {
       session.autosave();

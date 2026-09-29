@@ -957,6 +957,27 @@
               }
             },
             {
+              "id": "bind_wounds",
+              "label": "Bind your wounds with Corwin (short rest)",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~beaten"
+                  },
+                  {
+                    "not": {
+                      "flag": "~chained"
+                    }
+                  }
+                ]
+              },
+              "once": true,
+              "outcome": {
+                "rest": "short",
+                "text": "Corwin tears his surcoat into bandages. 'Again, then. Together.'"
+              }
+            },
+            {
               "id": "slip_chains",
               "label": "Work the chains loose (Strength DC 12)",
               "if": {
@@ -1036,6 +1057,26 @@
             }
           ],
           "actions": [
+            {
+              "id": "rematch",
+              "label": "Face the cultists at the altar again",
+              "if": {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~altar_won"
+                    }
+                  },
+                  {
+                    "flag": "~beaten"
+                  }
+                ]
+              },
+              "outcome": {
+                "text": "The cult is waiting, and so is the altar.",
+                "encounter": "altar_fight_alerted"
+              }
+            },
             {
               "id": "free_fast",
               "label": "Break the captives' chains before the altar feeds again (Athletics DC 12)",
@@ -2110,6 +2151,10 @@
           {
             "set": "~one_taken",
             "value": true
+          },
+          {
+            "set": "~beaten",
+            "value": true
           }
         ],
         "goto": "barrow_sheaf_crypt"
@@ -2177,6 +2222,10 @@
           },
           {
             "set": "~one_taken",
+            "value": true
+          },
+          {
+            "set": "~beaten",
             "value": true
           }
         ],
@@ -2628,6 +2677,10 @@
     {
       "id": "~chained",
       "description": "Captured and chained in the crypt."
+    },
+    {
+      "id": "~beaten",
+      "description": "Lost the altar fight at least once."
     },
     {
       "id": "~one_taken",

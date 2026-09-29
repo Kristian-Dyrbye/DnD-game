@@ -5,7 +5,7 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 4 (Phase 3 Character Creation done)
-- **Last completed assignment:** A068e
+- **Last completed assignment:** A106
 - **Notes for next session:** Continue the queue: A098/A099 (starter arc; companions/recruit/approval now exist), A088–A093 (3D equipment/wounds/scars), A070 (3D battle map), A076 (dungeon maps + fog), A075b, then A114–A116. A010 still blocked until Ollama is installed (Ollama/Piper not installed on this PC yet). Playable test URLs: `#play-<class>`, `#play-<class>+map`, `#combat-<class>`.
 
 ## Assignment Queue
@@ -70,7 +70,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A103 — Arc chapter 3 "The Gilded Lie" (helper)
 - [done] A104 — Arc chapter 4 "Wyrmfire" (helper)
 - [in-progress (helper)] A105 — Arc chapter 5 + endings | Spec: §7.2 | Done: 2+ endings depending on flags; tests that flags change content | Dep: A104
-- [todo] A106 — Starter arc smoke test | Spec: §17 | Done: automated playthrough of starter arc key path with MockLlm | Dep: A099
+- [done] A106 — Starter arc smoke test
 
 ### Phase 12 — Procedural Side Quests
 
@@ -83,6 +83,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ## Completed Log
 <!-- One line per assignment: A<id> — what was built — key files. Compress into per-phase summaries when long. -->
+- A106 — starter arc smoke test through buildApp (mock LLM/TTS, seeded dice, real grid fights with a simple attack/approach policy, flag-driven story policy) reaching ch1 with zero error events; it found and fixed: an altar soft-lock after a lost fight (rematch + crypt short rest), suggestion buttons capped at 7 dropping real exits (offered actions are never dropped now, only free-text ideas), stale adventure context after a chained ending — tests/starterSmoke.test.ts, adventure/{suggestions,sessionActions}.ts, starter JSON
 - A068e — encounter `statOverrides` (name, hp / hpPercent, ac per monster id), conditional monster/ally groups (`if` per group, activeGroups at fight start), outcome `revealRoom`, resolveEncounter reveals the encounter's room; validator checks override ids and revealRoom targets — adventure/{schema,runner,fights,validate}.ts, combat/encounter.ts, ADVENTURE_FORMAT.md
 - A098+A099 — starter arc "The Millbrook Disappearances" (11 scenes: green, tavern, Gallows Hill, 3-room barrow on the `barrow` fog map, shrine, shop/chapel, road south, Ravensgate/Brightwater roads; 5 NPCs, 10 encounters, tips on first use of each system, 2 endings → ch1) + engine: outcomes `rest` (short/long), `tip`, ending `next` (session starts the next adventure, extensions.completedAdventures), STARTING_ADVENTURE = millbrook_disappearances — data/adventures/starter/millbrook_disappearances.json, tests/starterArc.test.ts, adventure/{schema,runner,sessionActions}.ts
 - A075b — world map art: seeded organic region coastlines (superellipse + low-frequency waves, Catmull-Rom Béziers), terrain glyphs by region tone (trees/hills, reeds, waves) kept clear of places, SVG icons per location kind (city, town, fortress, port, temple, dungeon/ruin, wilderness), greedy non-overlapping label placement, blurred fog mask lifting around known/visited places, region names only once a place there is known — client/ui/game/{WorldMap.tsx,mapArt.ts}
@@ -133,6 +134,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A106: Suggestion buttons: every offered action/exit is always shown; the model's free-text ideas only fill room under MAX_SUGGESTIONS (7). Authored defeats must leave a way forward: any once-per-visit fight (onEnter/beat) that can be lost needs a rematch action.
 - A068e: Legendary/extra actions in statOverrides were left out (would need monster-runtime support); overrides cover name/HP/AC. If every conditional monster group is off, the fight falls back to the unfiltered groups rather than starting empty.
 - A104 (helper): Millbrook burns if the hero arrives > 24 h after first seeing the dragon (`since`). A 'wavering Millbrook' middle branch (Persuasion DC 15) was added. Near-miss allies via Persuasion DC 16 (adv. if Pip carries messages). Artillery drives off the brood-guardian and removes one fanatic (no per-round damage). Pyrraxis: freeing = skill challenge with number flags (3 failures close it), bargain pays a chosen Tooth, retreat/loss → raging + Ember Tooth to the Choir. Vey and Vosk hold their own palace rooms. Throne-hall allies = one chosen war-council contingent (4 encounter variants). A still-sick Queen gets a DC 20 retry with a 2-day deadline. Isolde's letter = `arc.main.ch4_isolde_letter` (ch5 reads it). Corwin at loyalty ≤ 20 leaves at the muster and reappears as NPC `ser_corwin`. XP +11,000 (L8) and +14,000 (L9).
 - A098/A099: Starter arc follows DESIGN §4 with simplifications: no group checks (single Stealth DC 13), the altar's per-round feeding is one timed Athletics/Dex check after the fight (fail → Tobin dies), Ashby's flight is a post-fight choice (chase DC 13 / cut down (sets `~cruel`) / let go), level 2 comes from fight XP + 250 XP at the altar, the Tooth/ring/key are flags (no SRD items). Captives saved = 4 − Tobin − 'one taken' (defeats). Corwin's loyalty 50 (+10 if all four saved, −15 on a failed recruit after cruelty). Tips use the new `tip` outcome. The world-map lesson is scripted road scenes (the map still works). Engine: `rest` outcome (short = auto Hit Dice while ≥ one die's average missing + pact slots; long = HP, dice, slots, resources, −1 exhaustion; a stable 0-HP character wakes at 1 HP first); ending `next` chains adventures (the session logs '— <name> —', starts the next adventure, autosaves). The old demo stays for tests.
@@ -285,6 +287,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - client: `ui/game/mapArt.ts` (region outlines, glyphs, label placement), `ui/SaveBrowser.tsx` (load/save with thumbnails), `ui/game/CharacterScreen.tsx` (3D model + scars + sheet), `three/BattleMap3D.tsx` (3D battle map) + `three/LazyBattleMap3D.tsx` + `three/battle3d.ts` (pure helpers), `main.tsx`, `index.html`, `styles.css`, `data.ts` (db); `net/gameSocket.ts` (ws + signals + applyEvent); `ui/App.tsx`, `ui/state.ts` (screens; `#creator`, `#quickbuild-<class>`, `#play-<class>`, `#play-<class>+map`), `ui/settingsState.ts` (+applyAccessibility), `ui/SettingsPanel.tsx`, `ui/text.ts`, `ui/StatusIndicator.tsx`, `ui/creator/*` (creator steps), `ui/game/LevelUpPanel.tsx`, `ui/game/{GameScreen,PartyPanel,StoryLog,ActionInput,DiceTray,JournalPanel,WorldMap,InventoryPanel,ShopPanel}.tsx`; `ui/combat/{BattleMap,CombatScreen}.tsx` + `combatDemo.ts` + `dice.ts`; `three/{loader,characterModel,CharacterPreview}`; `audio/AudioManager.ts` (music crossfade, ambience, SFX pools, unlock on first gesture) + `audio/audioLogic.ts` (pickVariant, channelVolume, sfxForEvent)
 
 ## Gotchas & Lessons
+- Fights started by onEnter or beats fire once: if they can be lost (Heroic defeat → goto elsewhere), add a rematch action or the scene soft-locks (smoke test caught this in the barrow).
+- The session log is capped at 200 entries: long tests can't search early lines.
 - fightMap only runs when a real fight starts: perform/resolveEncounter don't reveal an encounter's room (tests call fightMap). Items given with quantity > 1 may land as separate inventory entries — sum quantities.
 - solveAdventure's state key ignores the clock: repeatable time-only actions (waiting) look like no-ops and get pruned — make them `once`. Legs: build the leg adventure from the raw JSON (push the stand-in beat/ending, set `start.scene`, preset flags) and validate it, or schema defaults are missing.
 - Keyword intents ignore words that only name POIs present ("examine the well" won't match the well action); use other keywords.
