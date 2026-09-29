@@ -17,6 +17,10 @@ import { intentContext, keywordIntent, validateIntent, type Intent, type IntentC
 import { narrateInto, type Narrator } from './narration';
 import { currentObjective } from './quests';
 import { resolveIntent } from './resolve';
+import { acceptOffer, activeSideQuest, finishActive, offerSources, offersAt, refreshOffers, roadOffer, sideQuestState, type SideQuestDeps } from './sideQuests';
+import type { SideQuestTables } from './sidequestTables';
+import type { SuggestedAction } from '../../shared/protocol';
+import { MINUTES_PER_DAY } from '../world/clock';
 import { dataSuggestions, mergeSuggestions, type SuggestionIdea } from './suggestions';
 import { updateSummary, type Summarizer } from './summary';
 
@@ -37,6 +41,8 @@ export interface AdventurePortOptions {
   travelEvents?: TravelEventTable;
   /** Shops (data/world/shops.json). */
   shops?: ShopTable;
+  /** Side-quest generator tables (data/tables/sidequests.json); enables quest boards etc. */
+  sideQuests?: SideQuestTables;
 }
 
 /** The ActionPort plus a hook for tests to wait for background suggestion/summary work. */
@@ -49,8 +55,10 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
   let pendingIdeas: Promise<void> = Promise.resolve();
   let pendingSummary: Promise<void> = Promise.resolve();
   const ctxFor = (session: GameSession): RunContext => {
-    const id = getProgress(session.current)?.adventureId ?? defaultId;
-    const adventure = adventures.get(id);
+    // A just-accepted side quest has no progress yet; otherwise progress names the adventure.
+    const pending = (session.current.extensions.sideQuests as { active?: { adventure: Adventure } } | undefined)?.active?.adventure.id;
+    const id = getProgress(session.current)?.adventureId ?? pending ?? defaultId;
+    const adventure = adventures.get(id) ?? activeSideQuest(session.current, id);
     if (!adventure) throw new Error(`Adventure "${id}" is not installed`);
     return { state: session.current, adventure, rng: session.rng, ...(db && { db }), ...(opts.flags && { flags: opts.flags }), ...(opts.lore && { lore: opts.lore }) };
   };
@@ -97,22 +105,43 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
 
   // Data-driven buttons at once; LLM ideas replace them when they arrive, unless the player has
   // acted in the meantime (the log moved on). Never awaited, so it never slows a turn down.
+  const sqDeps = (): SideQuestDeps | undefined =>
+    opts.sideQuests && opts.lore && db ? { tables: opts.sideQuests, lore: opts.lore, db, ...(opts.flags && { flags: opts.flags }) } : undefined;
+
+  /** Job buttons: look for work where quests are offered, or take an offered job. */
+  const jobButtons = (session: GameSession): SuggestedAction[] => {
+    const deps = sqDeps();
+    const here = getMap(session.current)?.current;
+    if (!deps || !here || sideQuestState(session.current).active) return [];
+    const day = Math.floor(session.current.time / MINUTES_PER_DAY);
+    const out: SuggestedAction[] = offersAt(session.current, here).map((o) => ({ id: `sq:take:${o.id}`, label: `Take a job from ${o.sourceLabel}: ${o.adventure.name}` }));
+    if (offerSources(session.current, deps, here).length && !sideQuestState(session.current).checked.includes(`${here}:${day}`)) out.push({ id: 'sq:look', label: 'Look for work' });
+    return out;
+  };
+
   const offer = (session: GameSession, ctx: RunContext) => {
     session.emit({ type: 'objective', text: currentObjective(ctx) ?? null });
     const offered = availableActions(ctx);
-    session.suggest(dataSuggestions(offered));
+    const jobs = jobButtons(session);
+    session.suggest([...dataSuggestions(offered), ...jobs]);
     if (!opts.suggester || offered.length === 0) return;
     const stamp = session.current.nextId;
     pendingIdeas = opts
       .suggester(ctx, offered)
       .then((ideas) => {
-        if (ideas.length && session.running && session.current.nextId === stamp) session.suggest(mergeSuggestions(offered, ideas));
+        if (ideas.length && session.running && session.current.nextId === stamp) session.suggest([...mergeSuggestions(offered, ideas), ...jobs]);
       })
       .catch(() => undefined);
   };
 
   const finish = async (session: GameSession, ctx: RunContext, r: StepResult, playerAction?: string) => {
     await publish(session, ctx, r, playerAction);
+    // A finished side quest hands control back to the main adventure.
+    const done = finishActive(session.current);
+    if (done) {
+      session.addLog('system', `Job ${done.ending === 'done' ? 'complete' : 'over'}: ${done.name}.`);
+      ctx = ctxFor(session);
+    }
     offer(session, ctx);
     if (r.entered.length) {
       session.autosave();
@@ -120,6 +149,26 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       const state = session.current;
       pendingSummary = pendingSummary.then(() => updateSummary(state, opts.summarizer)).catch(() => undefined);
     }
+  };
+
+  const sideQuestChoice = async (session: GameSession, actionId: string) => {
+    const deps = sqDeps();
+    const here = getMap(session.current)?.current;
+    if (!deps || !here) throw new Error('No work is offered here.');
+    if (actionId === 'sq:look') {
+      const added = refreshOffers(session.current, deps, here);
+      const all = offersAt(session.current, here);
+      session.addLog('narration', all.length ? `You ask around for work. ${all.map((o) => `From ${o.sourceLabel}: "${o.adventure.summary}"`).join(' ')}` : 'You ask around, but nobody has work for you today.');
+      if (added.length === 0 && all.length === 0) session.addLog('system', 'Try again another day.');
+      offer(session, ctxFor(session));
+      return;
+    }
+    const offerId = actionId.slice('sq:take:'.length);
+    acceptOffer(session.current, offerId);
+    const ctx = ctxFor(session);
+    await publish(session, ctx, startAdventure(ctx));
+    offer(session, ctx);
+    session.autosave();
   };
 
   return {
@@ -148,6 +197,12 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       for (let guard = 0; ; guard++) {
         for (const roll of res.rolls) session.addRoll({ label: roll.label, dice: roll.d20.rolls, mode: roll.mode, modifier: roll.total - roll.d20.natural, total: roll.total, math: roll.text, ...(roll.success !== undefined && { success: roll.success }) });
         for (const l of res.log) session.addLog('narration', l.text);
+        const deps = sqDeps();
+        const met = res.log.find((l) => l.eventId && opts.travelEvents?.events.find((e) => e.id === l.eventId)?.kind === 'discovery');
+        if (deps && met && res.arrived) {
+          const o = roadOffer(ctx.state, deps, to);
+          if (o) session.addLog('system', `A traveler you met on the road asks for help: ${o.adventure.name}.`);
+        }
         if (!res.encounter || guard >= 3) break;
         session.addLog('system', 'Travel encounter! (Tactical combat arrives in a later build; you fight them off.)');
         res = travel({ state: ctx.state, lore, rng: session.rng, ...(opts.travelEvents && { events: opts.travelEvents }) }, to, pace);
@@ -198,6 +253,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       if (view) session.emit({ type: 'shop', shop: view });
     },
     async choose(session, actionId) {
+      if (actionId.startsWith('sq:')) return sideQuestChoice(session, actionId);
       const ctx = ctxFor(session);
       const label = availableActions(ctx).find((a) => a.id === actionId)?.label;
       const before = ctx.state.time;
