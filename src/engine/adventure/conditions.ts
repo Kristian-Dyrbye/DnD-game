@@ -25,6 +25,8 @@ export interface ConditionContext {
   visited: ReadonlySet<string>;
   /** Hero's coins (copper). */
   coins?: number;
+  /** Item ids the hero carries. */
+  items?: ReadonlySet<string>;
   /** Campaign minutes now, and when each flag was last set (for `since`). */
   now?: number;
   flagTimes?: Readonly<Record<string, number>>;
@@ -40,6 +42,7 @@ export function evalCondition(c: Condition | undefined, ctx: ConditionContext): 
   if ('visited' in c) return ctx.visited.has(c.visited);
   if ('hours' in c) return inHours(ctx.hour ?? 12, c.hours.from, c.hours.to);
   if ('coins' in c) return (ctx.coins ?? 0) >= c.coins.gte;
+  if ('item' in c) return ctx.items?.has(c.item) ?? false;
   if ('since' in c) {
     const at = ctx.flagTimes?.[c.since.flag];
     if (at === undefined || ctx.now === undefined) return false;

@@ -20,9 +20,9 @@ import { applyFlagWrites, evalCondition, inHours, timeOfDay, type ConditionConte
 import type { Action, Adventure, Check, Outcome, Scene } from './schema';
 import { allScenes } from './validate';
 import { SKILL_ABILITY } from '../rules/basics';
-import type { FlagRegistry } from '../world/flags';
+import { FlagRegistry } from '../world/flags';
 import { TIME_COSTS } from '../world/clock';
-import { addItem } from '../character/inventory';
+import { addItem, removeItem } from '../character/inventory';
 import { discover, getMap } from '../world/travel';
 import { changeReputation, type ReputationChange } from '../world/factions';
 import type { Lore } from '../world/lore';
@@ -81,6 +81,8 @@ export interface StepResult {
   xp: number;
   /** Reputation changes (including ripples to allies/enemies). */
   reputation?: ReputationChange[];
+  /** Items taken from the hero by `removeItems`. */
+  removed?: { itemId: string; quantity: number }[];
   /** Party changes already applied (RunContext.companions given): log lines in order. */
   partyLog?: string[];
   /** Companions to recruit / part with, when the runner had no roster (the caller applies them). */
@@ -116,6 +118,18 @@ export function findScene(adv: Adventure, id: string): Scene | undefined {
   return allScenes(adv).find((s) => s.id === id);
 }
 
+const merged = new WeakMap<Adventure, { base: FlagRegistry | undefined; reg: FlagRegistry }>();
+
+/** The flag registry with this adventure's own flag docs added (local number/string flags, defaults). */
+export function flagsFor(ctx: Pick<RunContext, 'adventure' | 'flags'>): FlagRegistry | undefined {
+  if (!ctx.adventure.flags.some((f) => f.type || f.default !== undefined)) return ctx.flags;
+  const hit = merged.get(ctx.adventure);
+  if (hit && hit.base === ctx.flags) return hit.reg;
+  const reg = (ctx.flags ? ctx.flags.clone() : new FlagRegistry()).addDocs(ctx.adventure.flags.filter((f) => f.type || f.default !== undefined));
+  merged.set(ctx.adventure, { base: ctx.flags, reg });
+  return reg;
+}
+
 export function conditionContext(state: GameState, progress?: AdventureProgress, registry?: FlagRegistry): ConditionContext {
   const weather = (state.extensions.weather as { kind?: string } | undefined)?.kind;
   return {
@@ -128,6 +142,7 @@ export function conditionContext(state: GameState, progress?: AdventureProgress,
     level: totalLevel(state.hero),
     visited: new Set(progress?.visited ?? []),
     coins: state.hero.coins,
+    items: new Set(state.hero.inventory.filter((i) => i.quantity > 0).map((i) => i.itemId)),
     now: state.time,
     flagTimes: (state.extensions.flagTimes as Record<string, number> | undefined) ?? {},
   };
@@ -144,7 +159,7 @@ export function startAdventure(ctx: RunContext): StepResult {
 /** Scene text for the narrator: the seed plus any variants whose conditions hold, and visible POIs. */
 export function describeScene(ctx: Pick<RunContext, 'state' | 'adventure' | 'flags'>): { name: string; seed: string; pois: { name: string; seed: string }[]; npcs: string[] } {
   const s = currentScene(ctx);
-  const cc = conditionContext(ctx.state, getProgress(ctx.state), ctx.flags);
+  const cc = conditionContext(ctx.state, getProgress(ctx.state), flagsFor(ctx));
   return {
     name: s.name,
     seed: [s.seed, ...s.variants.filter((v) => evalCondition(v.if, cc)).map((v) => v.seed)].join(' '),
@@ -159,7 +174,7 @@ export function describeScene(ctx: Pick<RunContext, 'state' | 'adventure' | 'fla
  */
 export function npcsHere(ctx: Pick<RunContext, 'state' | 'adventure' | 'flags'>): string[] {
   const s = currentScene(ctx);
-  const cc = conditionContext(ctx.state, getProgress(ctx.state), ctx.flags);
+  const cc = conditionContext(ctx.state, getProgress(ctx.state), flagsFor(ctx));
   const hour = cc.hour ?? 12;
   const out: string[] = [];
   for (const id of s.npcs) {
@@ -177,7 +192,7 @@ export function availableActions(ctx: RunContext): AvailableAction[] {
   const p = getProgress(ctx.state);
   if (!p || p.ending || p.away) return [];
   const s = currentScene(ctx);
-  const cc = conditionContext(ctx.state, p, ctx.flags);
+  const cc = conditionContext(ctx.state, p, flagsFor(ctx));
   const open = (a: Action, id: string) => evalCondition(a.if, cc) && !(a.once && p.done.includes(`${s.id}/${id}`));
   const out: AvailableAction[] = [];
   for (const a of s.actions) if (open(a, a.id)) out.push({ id: a.id, label: a.label, kind: 'action', ...(a.check && { check: checkLabel(a.check) }) });
@@ -280,7 +295,7 @@ function cap(s: string): string {
 }
 
 function resolveCheck(ctx: RunContext, c: Check): D20TestResult {
-  const cc = conditionContext(ctx.state, getProgress(ctx.state), ctx.flags);
+  const cc = conditionContext(ctx.state, getProgress(ctx.state), flagsFor(ctx));
   const advantage = c.advantageIf.filter((x) => evalCondition(x.if, cc)).map((x) => x.source);
   const disadvantage = c.disadvantageIf.filter((x) => evalCondition(x.if, cc)).map((x) => x.source);
   const opts = { rng: ctx.rng, dc: c.dc, advantage, disadvantage };
@@ -324,7 +339,7 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
     result.coins -= o.cost;
   }
   if (o.text) result.facts.push(o.text);
-  applyFlagWrites(state.flags, o.flags, ctx.flags);
+  applyFlagWrites(state.flags, o.flags, flagsFor(ctx));
   if (o.flags.length) {
     const times = { ...((state.extensions.flagTimes as Record<string, number> | undefined) ?? {}) };
     for (const w of o.flags) times['set' in w ? w.set : 'inc' in w ? w.inc : w.clear] = state.time;
@@ -336,6 +351,7 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
     result.facts.push(o.exhaustion > 0 ? `Exhaustion +${o.exhaustion}.` : `Exhaustion ${o.exhaustion}.`);
   }
   for (const it of o.items) giveItem(state.hero, it.itemId, it.quantity, ctx.db, result);
+  for (const it of o.removeItems) takeItem(state.hero, it.itemId, it.quantity, result);
   if (o.coins) giveCoins(state.hero, o.coins, result);
   if (o.loot) rollLoot(ctx, o.loot, result);
   if (o.xp) {
@@ -417,7 +433,7 @@ function applyParty(ctx: RunContext, roster: CompanionRoster, o: Outcome, result
 export function checkDeadlines(ctx: RunContext, result: StepResult, depth = 0): void {
   const p = getProgress(ctx.state);
   if (!p) return;
-  const cc = conditionContext(ctx.state, p, ctx.flags);
+  const cc = conditionContext(ctx.state, p, flagsFor(ctx));
   p.deadlines ??= {};
   for (const d of ctx.adventure.deadlines) {
     let rec = p.deadlines[d.id];
@@ -451,15 +467,23 @@ export function activeDeadlines(ctx: Pick<RunContext, 'state' | 'adventure'>): {
     .map((d) => ({ id: d.id, text: d.text, minutesLeft: recs[d.id]!.startedAt + d.within - ctx.state.time }));
 }
 
+/** Passes over the beat list per step: a beat set up by a later beat still fires in the same step. */
+const BEAT_PASSES = 5;
+
 function fireBeats(ctx: RunContext, result: StepResult, depth = 0): void {
   const p = getProgress(ctx.state)!;
-  for (const b of ctx.adventure.beats) {
-    if (p.beats.includes(b.id)) continue;
-    if (b.scenes.length && !b.scenes.includes(p.sceneId)) continue;
-    if (!evalCondition(b.trigger, conditionContext(ctx.state, p, ctx.flags))) continue;
-    p.beats.push(b.id);
-    result.facts.push(b.text);
-    applyOutcome(ctx, b.outcome, result, depth + 1);
+  for (let pass = 0; pass < BEAT_PASSES; pass++) {
+    let fired = false;
+    for (const b of ctx.adventure.beats) {
+      if (p.beats.includes(b.id)) continue;
+      if (b.scenes.length && !b.scenes.includes(getProgress(ctx.state)!.sceneId)) continue;
+      if (!evalCondition(b.trigger, conditionContext(ctx.state, p, flagsFor(ctx)))) continue;
+      p.beats.push(b.id);
+      result.facts.push(b.text);
+      applyOutcome(ctx, b.outcome, result, depth + 1);
+      fired = true;
+    }
+    if (!fired) break;
   }
   checkDeadlines(ctx, result, depth);
   trackQuests(ctx);
@@ -470,6 +494,19 @@ function giveItem(hero: Character, itemId: string, quantity: number, db: SrdData
   const r = result.items.find((i) => i.itemId === itemId);
   if (r) r.quantity += quantity;
   else result.items.push({ itemId, quantity });
+}
+
+/** Takes up to `quantity` of an item from the hero (across stacks); records what was taken. */
+function takeItem(hero: Character, itemId: string, quantity: number, result: StepResult): void {
+  let left = quantity;
+  for (const entry of [...hero.inventory].filter((i) => i.itemId === itemId)) {
+    if (left <= 0) break;
+    const n = Math.min(left, entry.quantity);
+    removeItem(hero, entry.uid, n);
+    left -= n;
+  }
+  const taken = quantity - left;
+  if (taken > 0) (result.removed ??= []).push({ itemId, quantity: taken });
 }
 
 function giveCoins(hero: Character, cp: number, result: StepResult): void {

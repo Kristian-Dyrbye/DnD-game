@@ -5,7 +5,7 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 4 (Phase 3 Character Creation done)
-- **Last completed assignment:** A089
+- **Last completed assignment:** A068d
 - **Notes for next session:** Continue the queue: A098/A099 (starter arc; companions/recruit/approval now exist), A088–A093 (3D equipment/wounds/scars), A070 (3D battle map), A076 (dungeon maps + fog), A075b, then A114–A116. A010 still blocked until Ollama is installed (Ollama/Piper not installed on this PC yet). Playable test URLs: `#play-<class>`, `#play-<class>+map`, `#combat-<class>`.
 
 ## Assignment Queue
@@ -35,7 +35,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A065c — Player access to the new combat actions (encounter PlayerAction, protocol, CombatScreen second action row, zone overlay, auto-fired readied actions, companion Spiritual Weapon)
 - [done] A068b — Fight/adventure engine follow-ups (bosses kept when scaling, party outcomes applied in the runner step, validator/solver know companions)
 - [done] A068c — Adventure outcomes cost/damage/exhaustion, conditions coins/since, encounter allies, deadline docs
-- [todo] A068d — More authoring features | Spec: §6, §7.2 | Done: outcome `removeItems` (take/return items), adventure-local number flags (declared in the adventure's `flags` with type), beats re-evaluated until stable within a step (max passes) so beat order doesn't matter; validator + ADVENTURE_FORMAT.md; tests | Dep: A068c
+- [done] A068d — More authoring features (typed local flags, removeItems, item condition, multi-pass beats)
 - [todo] A101c — Retrofit chapters 1–3 with the new outcomes | Spec: §7.2 | Done: bribes/fines/restitution use `cost` (+ `coins` gates), falls/traps use `damage` (with saves), races use `since` where cleaner, allied guards use encounter `allies`, bosses marked with `bosses`, scars via the A091 outcome once it exists; chapter tests still green | Dep: A068c, A103
 - [done] A064a — Zone spell hooks (combat/zones.ts)
 - [done] A069 — Async combat narration
@@ -82,6 +82,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ## Completed Log
 <!-- One line per assignment: A<id> — what was built — key files. Compress into per-phase summaries when long. -->
+- A068d — typed adventure-local flags (type/default/values/min/max in the adventure's `flags`; per-adventure registry flagsFor(ctx) used for conditions and writes; validator checks writes), outcome `removeItems` + condition `item`, beats re-checked up to 5 passes per step — world/flags.ts, adventure/{schema,conditions,runner,validate,sessionActions}.ts, ADVENTURE_FORMAT.md
 - A089 — monster/NPC models: stat block → Quaternius/KayKit model with tint (name rules) or KayKit adventurer outfit for humanoid NPCs, creature-type fallbacks; idle clip picker; 3D map loads them (budget maxNpcModels: PCs first, then monsters) — engine/appearance/monsterVisuals.ts, client/three/{monsterModel,BattleMap3D,battle3d}.ts(x)
 - A088 — equipment on the 3D model: SRD item → visual part map (explicit ids + fallbacks by properties/damage type, magic items via baseItem), equipmentLook (main/off hand/shield, two-handed fills both, spellbook for casters), KayKit/Quaternius parts attached to hand slots; hero preview and 3D battle map rebuild on gear change — engine/appearance/equipmentVisuals.ts, client/three/{equipmentModels,characterModel,CharacterPreview,BattleMap3D}.ts(x)
 - A076 — dungeon/building maps: adventure `maps` (rooms, doors, pillars, rubble) → combat grid (rock outside rooms, walls between rooms, doors, locked = closed), scenes `map: {id, room}` reveal rooms (extensions.dungeon + dungeonAt), `dungeon` ws event + DungeonPanel with fog beside the story, fights in mapped scenes use the same grid (party by the entry door, foes far side) with fog; fog on 2D/3D battle maps; demo Old Mill map — engine/world/dungeon.ts, adventure/{schema,validate,runner,fights,sessionActions}.ts, combat/encounter.ts (spawns, fog), client DungeonPanel/BattleMap/BattleMap3D
@@ -123,6 +124,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A068d: Local flag docs merge into a cloned registry per adventure (WeakMap cache keyed by adventure, rebuilt if the base registry changes); registry entries with more info still win. Beats loop up to 5 passes until none fires (order-independent within a step). removeItems takes up to the quantity across stacks; nothing happens if the hero has none (authors gate with `item`).
 - A103 (helper): Clue thresholds without counters: beats set `~ch3_clues_2`/`~ch3_clues_3` from any 2/3 of 7 clue conditions (local flags must be boolean; flags.json count is pinned at 65 by src/engine/world/flags.test.ts). Public accusation: automatic with 3 clues incl. one physical, DC 15 with 2 (or 3 without physical), else fails. Liesel's locket = `arc.main.ch3_locket` (chapter 5 should read it). Vosk race: 4 days from the audience, met by starting the climb or Vosk's fate settled; missed → Sky Tooth + Dawnbreaker to the Choir. Dawnbreaker (`dragon_slayer`) only granted when kept. Entrusting a Tooth to Seraphine sends the first carried Tooth (Want → Abbey → Wick → Parrot → Reef) to the Choir; the chase (2 of 3 checks) retakes Sky Tooth first. Pursuing sets `world.queen_alive` false (chapter 4 can retry). Masque jail: Aurek frees the hero at loyalty ≥ 50; waiting 3 days sets `~ch3_late`. XP milestones +7500 (L6), +9000 (L7).
 - A089: Monster models by id patterns first, then humanoid NPC outfits (guard→knight, cultist/priest→mage, bandit/spy→rogue, berserker→barbarian), then creature type (fallback). Quaternius rigs are scaled ×100: skinned meshes need frustumCulled=false and matrices updated before measuring. Gaps (type fallback, 77/330): beast 28 (→ wolf), monstrosity 26 (→ dino), elemental 5, fey 4, fiend 4, aberration 3, celestial 3, plant 2, undead 1, construct 1 — more model packs would help (CC0 only; Quaternius QAL packs excluded).
 - A088: Weapon parts are the KayKit standalone glTFs (same geometry as the rig's built-in meshes) attached to handslot bones rotated 180° around Y like the built-ins; Quaternius bow/hammer/spear are scaled to 1.1/0.9/1.7 × the KayKit one-handed sword length. Rig built-in weapon meshes stay hidden. Armor has no visual yet (A092 wear).

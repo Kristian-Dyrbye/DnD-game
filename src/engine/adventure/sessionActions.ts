@@ -110,6 +110,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     }
     if (r.items.length || r.coins > 0) session.addLog('system', `Received: ${[...r.items.map((i) => `${i.quantity}× ${i.itemId.replace(/_/g, ' ')}`), ...(r.coins > 0 ? [formatCoins(r.coins)] : [])].join(', ')}`);
     if (r.coins < 0) session.addLog('system', `Paid ${formatCoins(-r.coins)}.`);
+    if (r.removed?.length) session.addLog('system', `Handed over: ${r.removed.map((i) => `${i.quantity}× ${i.itemId.replace(/_/g, ' ')}`).join(', ')}`);
     if (r.xp) session.addLog('system', `+${r.xp} XP`);
     for (const line of r.partyLog ?? []) session.addLog('system', line);
     for (const id of r.recruits ?? []) {

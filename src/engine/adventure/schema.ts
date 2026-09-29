@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { ABILITIES, DamageTypeSchema, SKILLS } from '../rules/basics';
 import { TIERS } from '../world/factions';
 import { DungeonMapSchema } from '../world/dungeon';
+import { AdventureFlagDocSchema } from '../world/flags';
 
 export const ADVENTURE_FORMAT_VERSION = 1;
 
@@ -33,6 +34,7 @@ export type Condition =
   | { visited: string }
   | { hours: { from: number; to: number } }
   | { coins: { gte: number } }
+  | { item: string }
   | { since: { flag: string; gteHours?: number; lteHours?: number } };
 
 export const ConditionSchema: z.ZodType<Condition> = z.lazy(() =>
@@ -51,6 +53,8 @@ export const ConditionSchema: z.ZodType<Condition> = z.lazy(() =>
     z.object({ hours: z.object({ from: z.number().int().min(0).max(23), to: z.number().int().min(0).max(24) }) }).strict(),
     // The hero carries at least this many copper pieces (gate a bribe or a purchase).
     z.object({ coins: z.object({ gte: z.number().int().min(0) }).strict() }).strict(),
+    // The hero carries this item.
+    z.object({ item: z.string() }).strict(),
     // Hours of game time since `flag` was last set by an outcome (false if never set).
     z.object({ since: z.object({ flag: z.string(), gteHours: z.number().min(0).optional(), lteHours: z.number().min(0).optional() }).strict() }).strict(),
   ]),
@@ -77,6 +81,8 @@ export const OutcomeSchema = z
     loot: Id.optional(),
     items: z.array(z.object({ itemId: z.string(), quantity: z.number().int().min(1).default(1) })).default([]),
     coins: z.number().int().min(0).default(0),
+    /** Items taken from the hero (as many as they carry, up to `quantity`). */
+    removeItems: z.array(z.object({ itemId: z.string(), quantity: z.number().int().min(1).default(1) })).default([]),
     /** Coins (copper) paid. If the hero can't pay, nothing else in this outcome happens. */
     cost: z.number().int().min(0).default(0),
     /** Damage to the hero (or the whole party), optionally halved by a save. Heroic mode never drops below 1 HP. */
@@ -357,7 +363,8 @@ export const AdventureSchema = z
     /** Dungeon/building maps (rooms, doors) for scenes and fights (engine/world/dungeon.ts). */
     maps: z.array(DungeonMapSchema).default([]),
     /** Documented flags this adventure reads/writes (for editors and validation). */
-    flags: z.array(z.object({ id: z.string(), description: z.string() })).default([]),
+    /** Flags this adventure reads/writes; local ones may declare `type` (number/string), `default`, `values`, `min`/`max`. */
+    flags: z.array(AdventureFlagDocSchema).default([]),
     endings: z.array(z.object({ id: Id, name: z.string(), text: z.string() })).default([]),
     improvisedDifficulty: z.enum(DIFFICULTIES).default('medium'),
   })

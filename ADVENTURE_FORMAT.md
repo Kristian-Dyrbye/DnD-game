@@ -24,7 +24,7 @@ This is how to write adventures for Solo D&D. Authored arcs and generated side q
 | `start` | `{ chapter, scene }` | Where a new playthrough begins. |
 | `chapters` | Chapter[] | At least one. |
 | `npcs`, `encounters`, `beats`, `lootTables` | arrays | Scenes and outcomes refer to these by id. |
-| `flags` | `{ id, description }[]` | Lists the flags this adventure reads or writes, for editors and reviewers. |
+| `flags` | `{ id, description, type?, default?, values?, min?, max? }[]` | Lists the flags this adventure reads or writes. A local flag may declare a `type` (`number`, `string` or `boolean`), a `default`, allowed `values` and `min`/`max` bounds; the runner uses them (defaults, clamping) and the validator checks writes against them. |
 | `endings` | `{ id, name, text }[]` | An outcome with `ending` finishes the adventure. |
 | `improvisedDifficulty` | `very_easy` … `nearly_impossible` | The DC tier for checks the player improvises in free text (SRD table). Defaults to `medium` (DC 15). A scene can override it. |
 
@@ -105,6 +105,7 @@ Every field is optional:
 | `approval` | `[{ "companion": "nettle", "delta": 10 }]`: ±5 for minor choices, ±10 significant, ±20 defining. Only companions in the party react. Loyalty is kept in `world.<id>_loyalty` (0–100). Author leave or betray points as actions or beats with `{ "flag": "world.<id>_loyalty", "lte": 20 }`. |
 | `goto` | Moves to a scene. This is applied last. |
 | `ending` | Finishes the adventure. |
+| `removeItems` | `[{ "itemId": "lance", "quantity": 1 }]`: takes items from the hero (as many as they carry). Pair it with an `item` condition. |
 | `cost` | Copper paid (`500` = 5 gp). If the hero can't pay, the player is told so and nothing else in the outcome happens. Gate the action with a `coins` condition to hide it instead. |
 | `damage` | `{ "dice": "2d6", "type": "fire", "target": "hero" \| "party", "save"?: { "ability": "dex", "dc": 13, "half": true } }`. One roll is shared by all targets; a successful save halves it (or negates it with `half: false`). Heroic mode never drops a character below 1 HP; in Hardcore a character can drop to 0 HP (unconscious and stable). |
 | `exhaustion` | Exhaustion levels gained by the whole party (negative values remove levels). |
@@ -129,6 +130,7 @@ Conditions can be nested freely:
 { "visited": "scene_id" }
 { "hours": { "from": 6, "to": 14 } }                   // hour window [from, to); 18 → 2 wraps midnight
 { "coins": { "gte": 500 } }                          // the hero carries at least 5 gp
+{ "item": "dragon_slayer" }                          // the hero carries this item
 { "since": { "flag": "~bribed", "gteHours": 2 } }       // 2+ hours since the flag was last set by an outcome (false if never)
 ```
 
@@ -210,7 +212,7 @@ Rooms, doors and fog of war on the same grid as combat (spec §11.1):
 
 - A beat fires **once**, the first time its trigger holds while the hero is in one of its `scenes`.
 - An empty `scenes` list means anywhere.
-- Beats are checked after every action and every scene entry.
+- Beats are checked after every action and every scene entry. The list is re-checked (up to 5 passes) until no more beats fire, so a beat triggered by another beat's outcome fires in the same step, whatever the order.
 
 ## Deadlines
 

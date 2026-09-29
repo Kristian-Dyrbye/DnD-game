@@ -27,6 +27,18 @@ export const FlagDefSchema = z.object({
 });
 export type FlagDef = z.infer<typeof FlagDefSchema>;
 
+/** A flag as documented inside an adventure (`flags`): description, plus optional type/default/bounds. */
+export const AdventureFlagDocSchema = z.object({
+  id: z.string(),
+  description: z.string(),
+  type: z.enum(['boolean', 'string', 'number']).optional(),
+  default: z.union([z.boolean(), z.number(), z.string()]).optional(),
+  values: z.array(z.string()).optional(),
+  min: z.number().optional(),
+  max: z.number().optional(),
+});
+export type AdventureFlagDoc = z.infer<typeof AdventureFlagDocSchema>;
+
 /** Local namespace prefix for an adventure (arc → arc.<arcId>., side quest → side.<id>., else adv.<id>.). */
 export function localNamespace(adv: { id: string; arcId?: string | undefined; kind?: string | undefined }): string {
   if (adv.arcId) return `arc.${adv.arcId}.`;
@@ -80,10 +92,20 @@ export class FlagRegistry {
     return this;
   }
 
-  /** Adds an adventure's documented flags (boolean unless already known). */
-  addDocs(docs: { id: string; description: string }[]): this {
-    for (const d of docs) if (!this.defs.has(d.id)) this.defs.set(d.id, FlagDefSchema.parse({ id: d.id, description: d.description }));
+  /**
+   * Adds an adventure's documented flags. Docs may declare a type, default and bounds (local number
+   * or string flags); registry entries with more information still win (see `add`).
+   */
+  addDocs(docs: readonly AdventureFlagDoc[]): this {
+    for (const d of docs) this.add(FlagDefSchema.parse(d));
     return this;
+  }
+
+  /** A copy (e.g. to add one adventure's docs without touching the shared registry). */
+  clone(): FlagRegistry {
+    const reg = new FlagRegistry();
+    for (const d of this.defs.values()) reg.defs.set(d.id, d);
+    return reg;
   }
 
   get(id: string): FlagDef | undefined {

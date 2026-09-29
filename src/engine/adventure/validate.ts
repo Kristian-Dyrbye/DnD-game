@@ -123,8 +123,10 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
     if (!isNamespaced(id)) warnings.push(`flag "${id}" is not namespaced (use arc.<arc>., world., side.<quest>. or ~name)`);
     else if (!documented.has(id) && !registry?.has(id)) warnings.push(`flag "${id}" is not documented`);
   }
+  // Local docs may declare types (number/string flags): check writes against registry + docs.
+  const typed = adv.flags.some((f) => f.type) ? (registry ? registry.clone() : new FlagRegistry()).addDocs(adv.flags.filter((f) => f.type)) : registry;
   for (const w of writes) {
-    const problem = w.value !== undefined ? registry?.checkValue(w.id, w.value) : undefined;
+    const problem = w.value !== undefined ? typed?.checkValue(w.id, w.value) : undefined;
     if (problem) errors.push(problem);
   }
 
