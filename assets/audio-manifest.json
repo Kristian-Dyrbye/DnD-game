@@ -1,0 +1,1945 @@
+{
+  "version": 1,
+  "description": "CC0 music, ambience and sound effects. Fetch with `node scripts/audio-fetch.mjs` (downloads into assets/_audio_packs/, copies into assets/audio/). Both folders are gitignored; this manifest is committed.",
+  "researchedOn": "2026-09-29",
+  "notes": [
+    "Every pack is CC0 1.0 (several OpenGameArt pages are dual/multi-licensed; we always take the CC0 option). No attribution is legally required, but assets/CREDITS-audio.md credits every author anyway.",
+    "Targets are paths under assets/audio/. Music is MP3/OGG as published (no re-encoding); a few short SFX are WAV. All three formats play in Chromium/Firefox via the Web Audio API or <audio>.",
+    "moods: mood -> tracks; the music player picks one (shuffle, avoid immediate repeat) and crossfades on mood change. loop:false tracks (victory fanfares) play once then fall back to the previous exploration mood.",
+    "ambience: optional looping beds layered under music at low volume (forest for Aurelmark wilds, swamp for the Gloamfen, dungeon drips underground).",
+    "sfx: event -> variants; the player picks a random variant (avoid immediate repeat) and may apply +/-5% playback-rate jitter.",
+    "Kenney zip URLs contain a content hash; if Kenney republishes a pack the URL changes and the sha256 check fails. Re-check the pack page (url) and update download.url + hashes with --write-hashes."
+  ],
+  "totals": {
+    "packs": 32,
+    "files": 151,
+    "downloadBytes": 49387217,
+    "installedBytes": 44162395
+  },
+  "packs": [
+    {
+      "id": "kenney-casino-audio",
+      "name": "Casino Audio (1.1)",
+      "author": "Kenney Vleugels (Kenney.nl)",
+      "url": "https://kenney.nl/assets/casino-audio",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "Casino Audio (1.1) by Kenney Vleugels (Kenney.nl). \"License (Creative Commons Zero, CC0) http://creativecommons.org/publicdomain/zero/1.0/ — You may use these assets in personal and commercial projects. Credit (Kenney or www.kenney.nl) would be nice but is not mandatory.\" (License.txt inside the official zip; kenney.nl asset page lists \"License: Creative Commons CC0\")",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Dice shake, throw and single-die rolls.",
+      "download": {
+        "archive": "zip",
+        "url": "https://kenney.nl/media/pages/assets/casino-audio/2472606a04-1721639069/kenney_casino-audio.zip",
+        "sha256": "f36250766ac5bc378c13708ddf12a23a8e54a3251f8d482c7536e51b5dbafa18",
+        "bytes": 876839
+      },
+      "files": [
+        {
+          "from": "Audio/dice-shake-1.ogg",
+          "target": "sfx/dice_shake_1.ogg",
+          "sha256": "ba603441c857204dbe3ff3345902c7e1c3f523bf1bd314acf088609bc6c1e4e5",
+          "bytes": 19388
+        },
+        {
+          "from": "Audio/dice-shake-2.ogg",
+          "target": "sfx/dice_shake_2.ogg",
+          "sha256": "47e8e2cb0adb95bcd7348b58db8dc2bbfe3c553e50a4e9ef007e67891ed51ca2",
+          "bytes": 19976
+        },
+        {
+          "from": "Audio/dice-shake-3.ogg",
+          "target": "sfx/dice_shake_3.ogg",
+          "sha256": "aecd1dd0de6e42ebb510d1f9bfe91a580a8af238dd73bdfda368b90b894b5c09",
+          "bytes": 19722
+        },
+        {
+          "from": "Audio/dice-throw-1.ogg",
+          "target": "sfx/dice_roll_1.ogg",
+          "sha256": "4e6581c73465cdd7ec32e86a709b4ea5c682e819c9bdb7989d1df1880ba67886",
+          "bytes": 9523
+        },
+        {
+          "from": "Audio/dice-throw-2.ogg",
+          "target": "sfx/dice_roll_2.ogg",
+          "sha256": "e0b8c370503b2c5c2a72d311cccae30fe63a6afd48f2be32e771fcf1a98585d6",
+          "bytes": 7545
+        },
+        {
+          "from": "Audio/dice-throw-3.ogg",
+          "target": "sfx/dice_roll_3.ogg",
+          "sha256": "09c13d35a9a30bfce31a5e9bca94adc5be189ddecd0b4500237d54c7fd05227c",
+          "bytes": 9231
+        },
+        {
+          "from": "Audio/die-throw-1.ogg",
+          "target": "sfx/dice_land_1.ogg",
+          "sha256": "b31d716165be60e442da3c1ca25a3968aad1e0851a7f0859f495aecc02fd9e13",
+          "bytes": 8410
+        },
+        {
+          "from": "Audio/die-throw-2.ogg",
+          "target": "sfx/dice_land_2.ogg",
+          "sha256": "a2702cfe14d24aab302483a1499daa88474a4af4acd794b58d97f4af16333b3d",
+          "bytes": 9824
+        },
+        {
+          "from": "Audio/die-throw-3.ogg",
+          "target": "sfx/dice_land_3.ogg",
+          "sha256": "52fc44c7bb89328a147738574c925508c34abf4c19a014575b37ffb8c6b02437",
+          "bytes": 10018
+        },
+        {
+          "from": "Audio/die-throw-4.ogg",
+          "target": "sfx/dice_land_4.ogg",
+          "sha256": "6253cabcb10c4152548cbc9d3ea87c1bf1bd484f0bd8d6b73c542e690509c0fd",
+          "bytes": 8159
+        }
+      ]
+    },
+    {
+      "id": "kenney-rpg-audio",
+      "name": "RPG Audio",
+      "author": "Kenney Vleugels (Kenney.nl)",
+      "url": "https://kenney.nl/assets/rpg-audio",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "RPG Audio by Kenney Vleugels (Kenney.nl). \"License (Creative Commons Zero, CC0) http://creativecommons.org/publicdomain/zero/1.0/ — You may use these assets in personal and commercial projects. Credit (Kenney or www.kenney.nl) would be nice but is not mandatory.\" (License.txt inside the official zip; kenney.nl asset page lists \"License: Creative Commons CC0\")",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Doors, creaks, books/pages, coins, cloth/leather handling, knife draw, latches.",
+      "download": {
+        "archive": "zip",
+        "url": "https://kenney.nl/media/pages/assets/rpg-audio/8e99002d76-1677590336/kenney_rpg-audio.zip",
+        "sha256": "6dbeaf8544da958d8f2adcb4a4a4b76c1ade34a05f8ab9edccd327da7375f38b",
+        "bytes": 964837
+      },
+      "files": [
+        {
+          "from": "Audio/doorOpen_1.ogg",
+          "target": "sfx/door_open_1.ogg",
+          "sha256": "4ab93bab96522d8eb109ff96dc57cb6765deb02448fe14c10472084be5bb2a0b",
+          "bytes": 22848
+        },
+        {
+          "from": "Audio/doorOpen_2.ogg",
+          "target": "sfx/door_open_2.ogg",
+          "sha256": "68962fb0458c9bac59dec3adefa9849703c7c89d34712de03dd0075d095e79e9",
+          "bytes": 30280
+        },
+        {
+          "from": "Audio/doorClose_1.ogg",
+          "target": "sfx/door_close_1.ogg",
+          "sha256": "834d29c60a8a8bfb50b158cdb6b7dfa8f02812a408a1ee9703d038dfab0b1aeb",
+          "bytes": 18564
+        },
+        {
+          "from": "Audio/doorClose_2.ogg",
+          "target": "sfx/door_close_2.ogg",
+          "sha256": "4aa4fe79836c53cd6d0cb0b22ddc33b9901429463ae1bb75131f072683f63f21",
+          "bytes": 17598
+        },
+        {
+          "from": "Audio/doorClose_3.ogg",
+          "target": "sfx/door_close_3.ogg",
+          "sha256": "d0a2540e5e1639bc2fbeef34e76f28e9f9cb8a151736a0ac4c13859994328d0e",
+          "bytes": 20889
+        },
+        {
+          "from": "Audio/doorClose_4.ogg",
+          "target": "sfx/door_close_4.ogg",
+          "sha256": "fd21c0e7a9d0317375d2561590f0770dd3380ee35507d064862cb44d6f71595b",
+          "bytes": 16902
+        },
+        {
+          "from": "Audio/creak1.ogg",
+          "target": "sfx/door_creak_1.ogg",
+          "sha256": "8a346186fd297254248cab8e8117060a52a5cf2a84f603153a762108550ea95e",
+          "bytes": 15761
+        },
+        {
+          "from": "Audio/creak2.ogg",
+          "target": "sfx/door_creak_2.ogg",
+          "sha256": "8a990afdc03aebb91d528f5385e2f95582dbfa8e2c12c71098ab01be9142294a",
+          "bytes": 19012
+        },
+        {
+          "from": "Audio/creak3.ogg",
+          "target": "sfx/door_creak_3.ogg",
+          "sha256": "f9638787f95004b9d2d06f8eff8e99d4e594c21b51947daf562856fbcec905d1",
+          "bytes": 10408
+        },
+        {
+          "from": "Audio/bookFlip1.ogg",
+          "target": "sfx/page_turn_1.ogg",
+          "sha256": "fa81ac2fedc8c641661b87e349630a36c9800e795e0c800e029214efdbe26a7d",
+          "bytes": 18248
+        },
+        {
+          "from": "Audio/bookFlip2.ogg",
+          "target": "sfx/page_turn_2.ogg",
+          "sha256": "3409042acbfaebc24c1a6327dc073e36f9250841712e96c5040da566a97df73c",
+          "bytes": 12393
+        },
+        {
+          "from": "Audio/bookFlip3.ogg",
+          "target": "sfx/page_turn_3.ogg",
+          "sha256": "c85db5dceb3f1df073e960630277eaa88a5afda0477c1ddd68dad707621767be",
+          "bytes": 9077
+        },
+        {
+          "from": "Audio/bookOpen.ogg",
+          "target": "sfx/book_open_1.ogg",
+          "sha256": "953390534377222bee89ac8cd9e60a58fdc037c71a4d7c18c43cd647c7f34ba8",
+          "bytes": 8273
+        },
+        {
+          "from": "Audio/bookClose.ogg",
+          "target": "sfx/book_close_1.ogg",
+          "sha256": "81e976532565f4372abd14e83d2684195fa548d0a28d345de221e56052454f32",
+          "bytes": 9292
+        },
+        {
+          "from": "Audio/handleCoins.ogg",
+          "target": "sfx/coin_1.ogg",
+          "sha256": "8a91f969e932df709df80ee124d86a51389eed9b67f22e5e716bc2bbf60d8dab",
+          "bytes": 25394
+        },
+        {
+          "from": "Audio/handleCoins2.ogg",
+          "target": "sfx/coin_2.ogg",
+          "sha256": "4b857968d64f9ac9336a10ffac6694d7547e1f01566ad6857b30bc8db3ee6c32",
+          "bytes": 13094
+        },
+        {
+          "from": "Audio/cloth1.ogg",
+          "target": "sfx/equip_1.ogg",
+          "sha256": "ddb93a3671233f95da0e0b10367f082f7eb42fa6caaddcf776410aa8833c747d",
+          "bytes": 16508
+        },
+        {
+          "from": "Audio/cloth2.ogg",
+          "target": "sfx/equip_2.ogg",
+          "sha256": "8a7451193c38bc05483aec25dd193e163a15d44cf7fff04ac7912573231b0201",
+          "bytes": 11787
+        },
+        {
+          "from": "Audio/beltHandle1.ogg",
+          "target": "sfx/equip_3.ogg",
+          "sha256": "2ef665bd8b65dbe669f4560be38a6d8f04a162e618b15a49e3e71b58e558aab0",
+          "bytes": 10820
+        },
+        {
+          "from": "Audio/drawKnife1.ogg",
+          "target": "sfx/weapon_draw_1.ogg",
+          "sha256": "276403e72c3b71c47bc24db3083970c23f8e5551ffa78f436f83483c56f3f0bb",
+          "bytes": 11134
+        },
+        {
+          "from": "Audio/drawKnife2.ogg",
+          "target": "sfx/weapon_draw_2.ogg",
+          "sha256": "d5df6a4130cbb016f97b4883769a418917b9629cb4c21717030b186e0c73281a",
+          "bytes": 12395
+        },
+        {
+          "from": "Audio/drawKnife3.ogg",
+          "target": "sfx/weapon_draw_3.ogg",
+          "sha256": "a11ae62fb1a628425769d11a9de394980ad8909c31f4c9a4316f226963e21caf",
+          "bytes": 12726
+        },
+        {
+          "from": "Audio/metalLatch.ogg",
+          "target": "sfx/lock_1.ogg",
+          "sha256": "ba9ba60b172b3ebc131a940f25793cd2e207aca7af73dc80d637277f060f1708",
+          "bytes": 10208
+        },
+        {
+          "from": "Audio/metalClick.ogg",
+          "target": "sfx/lock_2.ogg",
+          "sha256": "9851a69d0c613e13bceef08060ecc4148f098ef487927cbebe270d642398a3b3",
+          "bytes": 13615
+        },
+        {
+          "from": "Audio/footstep00.ogg",
+          "target": "sfx/footstep_dirt_1.ogg",
+          "sha256": "6fe61ef1fc3bcf0e253bf2eb64759db6cb69e2fe452f4d88cc597ecf78a3d601",
+          "bytes": 9475
+        },
+        {
+          "from": "Audio/footstep01.ogg",
+          "target": "sfx/footstep_dirt_2.ogg",
+          "sha256": "313472dba31fd0c855376069fa368bb5a198c27251cc8398ef464578b7047a4c",
+          "bytes": 9900
+        },
+        {
+          "from": "Audio/footstep02.ogg",
+          "target": "sfx/footstep_dirt_3.ogg",
+          "sha256": "2d9575b7dead6e1217ca113991fc5229e9b6d998ea0726ebbb277e7398ab888f",
+          "bytes": 9528
+        },
+        {
+          "from": "Audio/footstep03.ogg",
+          "target": "sfx/footstep_dirt_4.ogg",
+          "sha256": "a86756b9af9f370455ab47844239bb07fd1bee7a113068c91f0fcd9b72703fae",
+          "bytes": 10559
+        },
+        {
+          "from": "Audio/footstep04.ogg",
+          "target": "sfx/footstep_dirt_5.ogg",
+          "sha256": "fd264d72a7cd622b82abde202f4ed09fa7de95d34c36473ee938ce66cdf39830",
+          "bytes": 11303
+        }
+      ]
+    },
+    {
+      "id": "kenney-impact-sounds",
+      "name": "Impact Sounds",
+      "author": "Kenney Vleugels (Kenney.nl)",
+      "url": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "Impact Sounds by Kenney Vleugels (Kenney.nl). \"License (Creative Commons Zero, CC0) http://creativecommons.org/publicdomain/zero/1.0/ — You may use these assets in personal and commercial projects. Credit (Kenney or www.kenney.nl) would be nice but is not mandatory.\" (License.txt inside the official zip; kenney.nl asset page lists \"License: Creative Commons CC0\")",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Weapon/armour impacts, punches, soft hits, footsteps on stone, grass, wood, snow.",
+      "download": {
+        "archive": "zip",
+        "url": "https://kenney.nl/media/pages/assets/impact-sounds/87b4ddecda-1677589768/kenney_impact-sounds.zip",
+        "sha256": "029d734af1582474edf3a694d1b0cebc97c1c152f2f39fa34d4c2bafc5de77f8",
+        "bytes": 800850
+      },
+      "files": [
+        {
+          "from": "Audio/impactMetal_medium_000.ogg",
+          "target": "sfx/sword_hit_1.ogg",
+          "sha256": "a96f879fec0864a8938e0c745b6996a6c5679c16a234ce31a01cc995e8401003",
+          "bytes": 7117
+        },
+        {
+          "from": "Audio/impactMetal_medium_001.ogg",
+          "target": "sfx/sword_hit_2.ogg",
+          "sha256": "e8a9eaba7c4d27422e4eeb3e6c7100d5d7dc0f83e005efc98c960adcc5265337",
+          "bytes": 6151
+        },
+        {
+          "from": "Audio/impactMetal_medium_002.ogg",
+          "target": "sfx/sword_hit_3.ogg",
+          "sha256": "7e89ce2ca0dbda95ea2b78d4b50791cab35c10d20e9f5ccd45dd0b00e99ff548",
+          "bytes": 5857
+        },
+        {
+          "from": "Audio/impactPlate_medium_000.ogg",
+          "target": "sfx/sword_hit_4.ogg",
+          "sha256": "b670d30452983369771081319c268475edaaafe782bf4e8d70bd7eef09d8823c",
+          "bytes": 10921
+        },
+        {
+          "from": "Audio/impactPunch_heavy_000.ogg",
+          "target": "sfx/blunt_hit_1.ogg",
+          "sha256": "b33a8f14068aec24ec69ba85e5e87fdc41228975f6a1a3e44a6e7d6fc3d9f8d8",
+          "bytes": 11617
+        },
+        {
+          "from": "Audio/impactPunch_heavy_001.ogg",
+          "target": "sfx/blunt_hit_2.ogg",
+          "sha256": "f92f5cb6ba4ff2766497292ffd90865654317eeca976f5652e0708dbdcdc0dd9",
+          "bytes": 10861
+        },
+        {
+          "from": "Audio/impactPunch_heavy_002.ogg",
+          "target": "sfx/blunt_hit_3.ogg",
+          "sha256": "7993dd4c156b9979ad69f17be5ebe31850b16039a3857f8477141be54dfee1b3",
+          "bytes": 9025
+        },
+        {
+          "from": "Audio/impactWood_heavy_000.ogg",
+          "target": "sfx/blunt_hit_4.ogg",
+          "sha256": "15ff82332f342c30e469215539e1cc57e11b221aa2cf7e11e811d313a9927f3d",
+          "bytes": 6233
+        },
+        {
+          "from": "Audio/impactSoft_medium_000.ogg",
+          "target": "sfx/arrow_hit_1.ogg",
+          "sha256": "7d3ba0bb5e60a11b5d3e558c141303dcf494256675fbf753c0d252d2cf0481e3",
+          "bytes": 5351
+        },
+        {
+          "from": "Audio/impactSoft_medium_001.ogg",
+          "target": "sfx/arrow_hit_2.ogg",
+          "sha256": "7642a4fd43e547afe4f7adfadb3dabb681c0ff512f52c1674bae30a726841faf",
+          "bytes": 5506
+        },
+        {
+          "from": "Audio/impactWood_light_000.ogg",
+          "target": "sfx/arrow_hit_3.ogg",
+          "sha256": "eb45e35b4bed784d3f120de4afec4b0d6ac09d9e143cce8cfcb7d739e1b1f3c3",
+          "bytes": 6343
+        },
+        {
+          "from": "Audio/impactPlate_heavy_000.ogg",
+          "target": "sfx/shield_block_1.ogg",
+          "sha256": "112d4f93ddcc370b410630f971c0f5d991856102da9c76bc5c5540d388e75aaa",
+          "bytes": 10032
+        },
+        {
+          "from": "Audio/impactPlate_heavy_001.ogg",
+          "target": "sfx/shield_block_2.ogg",
+          "sha256": "142fd6c77f13d25f318265901163f70f8dfe12f87829169a570025be43de7011",
+          "bytes": 8713
+        },
+        {
+          "from": "Audio/footstep_concrete_000.ogg",
+          "target": "sfx/footstep_stone_1.ogg",
+          "sha256": "d7267e183067757c92c169de2a379abea592cfca6b39bb2e8feea15221ad79fe",
+          "bytes": 5808
+        },
+        {
+          "from": "Audio/footstep_concrete_001.ogg",
+          "target": "sfx/footstep_stone_2.ogg",
+          "sha256": "507a75eb19b897087855a3be3cf11a12d7fa37d143ad535eeebe0b8031c7325d",
+          "bytes": 6308
+        },
+        {
+          "from": "Audio/footstep_concrete_002.ogg",
+          "target": "sfx/footstep_stone_3.ogg",
+          "sha256": "b21fa546d74941196b25da8a20b7010abd8c05c4fcf93545d1f344e66a664e13",
+          "bytes": 6255
+        },
+        {
+          "from": "Audio/footstep_concrete_003.ogg",
+          "target": "sfx/footstep_stone_4.ogg",
+          "sha256": "8b513c2f0316324060b9174b8f28df6c2147418c506e6a53b77f18e149a5547b",
+          "bytes": 5805
+        },
+        {
+          "from": "Audio/footstep_concrete_004.ogg",
+          "target": "sfx/footstep_stone_5.ogg",
+          "sha256": "24dd8db2413e5b81ad181e1205c12a1c7801da5f85715d471b92a4b2f632e45e",
+          "bytes": 5912
+        },
+        {
+          "from": "Audio/footstep_grass_000.ogg",
+          "target": "sfx/footstep_grass_1.ogg",
+          "sha256": "9d49497777405d78d7cf7f2888e28277f3a23192300cfd1d79d54876b20f479f",
+          "bytes": 8290
+        },
+        {
+          "from": "Audio/footstep_grass_001.ogg",
+          "target": "sfx/footstep_grass_2.ogg",
+          "sha256": "fb28781bd22b2eefdc14077f1adf5c94d7fe9c3a130194633b55f3e0d39d9f04",
+          "bytes": 8313
+        },
+        {
+          "from": "Audio/footstep_grass_002.ogg",
+          "target": "sfx/footstep_grass_3.ogg",
+          "sha256": "73a520139f5be716a403bfe9c80e0e94d1e61d8e9de04a354b336392164b53dc",
+          "bytes": 8278
+        },
+        {
+          "from": "Audio/footstep_grass_003.ogg",
+          "target": "sfx/footstep_grass_4.ogg",
+          "sha256": "0546e1d8ab2def714425701a18bd34c5ee2794b12e858e5b595aabcf38a34137",
+          "bytes": 8129
+        },
+        {
+          "from": "Audio/footstep_grass_004.ogg",
+          "target": "sfx/footstep_grass_5.ogg",
+          "sha256": "086fd4ab3546a507ea5f5c759a9a10e535c95ade13705c238bc0eeffd7d4e8ba",
+          "bytes": 7800
+        },
+        {
+          "from": "Audio/footstep_wood_000.ogg",
+          "target": "sfx/footstep_wood_1.ogg",
+          "sha256": "5f1c252942a220d658121bd9417448cd19649ded9fff2ff15f6e50899373ce8e",
+          "bytes": 5949
+        },
+        {
+          "from": "Audio/footstep_wood_001.ogg",
+          "target": "sfx/footstep_wood_2.ogg",
+          "sha256": "e4f68e1c9fd55b4dc8ca89ed2bbab6f200171bc54bdc18aa96b80d8e7336f462",
+          "bytes": 5929
+        },
+        {
+          "from": "Audio/footstep_wood_002.ogg",
+          "target": "sfx/footstep_wood_3.ogg",
+          "sha256": "9ff095b05cee5eec40b081defe3f0eef7232bb16d4865ce03b9f6dbab875cfdd",
+          "bytes": 5895
+        },
+        {
+          "from": "Audio/footstep_wood_003.ogg",
+          "target": "sfx/footstep_wood_4.ogg",
+          "sha256": "2a68a083daa9eda08fed0ea5da5280dfbe0de226196c576be02f95259dd139d9",
+          "bytes": 6207
+        },
+        {
+          "from": "Audio/footstep_snow_000.ogg",
+          "target": "sfx/footstep_snow_1.ogg",
+          "sha256": "c05fa4a9dc9a7aabc04996466fb589537e49af76de9998d8f9e6270ec92dcef7",
+          "bytes": 7880
+        },
+        {
+          "from": "Audio/footstep_snow_001.ogg",
+          "target": "sfx/footstep_snow_2.ogg",
+          "sha256": "980fb9a1c9227aed7995067b0357f373053337f2416316db8ea0438418542fb4",
+          "bytes": 7794
+        },
+        {
+          "from": "Audio/footstep_snow_002.ogg",
+          "target": "sfx/footstep_snow_3.ogg",
+          "sha256": "db52bafdc66304f3b999f2c29227826c65993916e630ac2ffbca17d07b263178",
+          "bytes": 7694
+        }
+      ]
+    },
+    {
+      "id": "kenney-interface-sounds",
+      "name": "Interface Sounds",
+      "author": "Kenney Vleugels (Kenney.nl)",
+      "url": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "Interface Sounds by Kenney Vleugels (Kenney.nl). \"License (Creative Commons Zero, CC0) http://creativecommons.org/publicdomain/zero/1.0/ — You may use these assets in personal and commercial projects. Credit (Kenney or www.kenney.nl) would be nice but is not mandatory.\" (License.txt inside the official zip; kenney.nl asset page lists \"License: Creative Commons CC0\")",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "UI clicks, confirm, error, back, open/close panel, toggles, scroll ticks.",
+      "download": {
+        "archive": "zip",
+        "url": "https://kenney.nl/media/pages/assets/interface-sounds/fa43c1dd4d-1677589452/kenney_interface-sounds.zip",
+        "sha256": "f2193d072726d6758a5f7871b2dcc54dcce0d5c35c6f0a62f92549b327c81232",
+        "bytes": 834536
+      },
+      "files": [
+        {
+          "from": "Audio/click_001.ogg",
+          "target": "sfx/ui_click_1.ogg",
+          "sha256": "ccfb7fa0cccdd9faec0eb16033c732b1e308d139d80f799161495d58f7adcdb9",
+          "bytes": 4876
+        },
+        {
+          "from": "Audio/click_002.ogg",
+          "target": "sfx/ui_click_2.ogg",
+          "sha256": "adcd1f4adc35f1b41bc1b5bbefeff7aa44f2f3f0d96d3199b544140c7c1e761c",
+          "bytes": 4275
+        },
+        {
+          "from": "Audio/click_003.ogg",
+          "target": "sfx/ui_click_3.ogg",
+          "sha256": "2fa929138bc3a0f432696588f66eac94b8f6d463905ec8808c6461ce4b054292",
+          "bytes": 4371
+        },
+        {
+          "from": "Audio/confirmation_001.ogg",
+          "target": "sfx/ui_confirm_1.ogg",
+          "sha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+          "bytes": 8968
+        },
+        {
+          "from": "Audio/confirmation_002.ogg",
+          "target": "sfx/ui_confirm_2.ogg",
+          "sha256": "33b17a9a9a2397c62b285c52c33a907fdffb476909c99e42dde603f6a7a8b12c",
+          "bytes": 14169
+        },
+        {
+          "from": "Audio/error_001.ogg",
+          "target": "sfx/ui_error_1.ogg",
+          "sha256": "46e67425d16339772e8d328fb36a49426c9467418686e11beeb71ff84b0f6433",
+          "bytes": 7373
+        },
+        {
+          "from": "Audio/error_002.ogg",
+          "target": "sfx/ui_error_2.ogg",
+          "sha256": "76810ec365f41078fd0507101da5bb7b8730fe011dde43908329fdabd8575e79",
+          "bytes": 7369
+        },
+        {
+          "from": "Audio/back_001.ogg",
+          "target": "sfx/ui_back_1.ogg",
+          "sha256": "07db973f79f6ae0f2edc34561e7592e24d0577455919fb602cb8ecc0da991dcf",
+          "bytes": 6997
+        },
+        {
+          "from": "Audio/back_002.ogg",
+          "target": "sfx/ui_back_2.ogg",
+          "sha256": "61581c58194e3f19f531072edabbc344204c7e0a2887b8ededce4357bcf09195",
+          "bytes": 7029
+        },
+        {
+          "from": "Audio/open_001.ogg",
+          "target": "sfx/ui_open_1.ogg",
+          "sha256": "a27c6bb0df7da1e6af5dd5937593c98bc58b6e513f42fe6a3254cd6a6949c648",
+          "bytes": 9834
+        },
+        {
+          "from": "Audio/maximize_001.ogg",
+          "target": "sfx/ui_open_2.ogg",
+          "sha256": "fd3e75e1de2f2fda90aceeacaeb0427ac8bddd3b07a6ce2a8f9ba923df3771f9",
+          "bytes": 12111
+        },
+        {
+          "from": "Audio/close_001.ogg",
+          "target": "sfx/ui_close_1.ogg",
+          "sha256": "44af8249b933e0fd35ec957a638bb1a0b01f85b53fbe9674bf77bd3ca3168ef4",
+          "bytes": 9915
+        },
+        {
+          "from": "Audio/minimize_001.ogg",
+          "target": "sfx/ui_close_2.ogg",
+          "sha256": "8481912bc7fa5828924a00ef15b6cd613b994956e0817bd3122065c9b2896d2d",
+          "bytes": 11924
+        },
+        {
+          "from": "Audio/toggle_001.ogg",
+          "target": "sfx/ui_toggle_1.ogg",
+          "sha256": "ca1d2dde5f0b286abac4f070e23edab8f30927c8a533665cdf2ac6492a415e49",
+          "bytes": 7369
+        },
+        {
+          "from": "Audio/toggle_002.ogg",
+          "target": "sfx/ui_toggle_2.ogg",
+          "sha256": "1f564f5520cfa0764028ce245ad97599d3ece8f0ab504554c403af92ac72b900",
+          "bytes": 8056
+        },
+        {
+          "from": "Audio/tick_001.ogg",
+          "target": "sfx/ui_tick_1.ogg",
+          "sha256": "9d057b918024c787bbe6c00beed13a7ef72a3fa0c259add3cef36582792f4230",
+          "bytes": 4497
+        },
+        {
+          "from": "Audio/tick_002.ogg",
+          "target": "sfx/ui_tick_2.ogg",
+          "sha256": "869442f54214be902ec7437f79e400dc91c1bfd90d18a6dd2d5b7e41ffbf457b",
+          "bytes": 4514
+        }
+      ]
+    },
+    {
+      "id": "kenney-ui-audio",
+      "name": "UI Audio",
+      "author": "Kenney Vleugels (Kenney.nl)",
+      "url": "https://kenney.nl/assets/ui-audio",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "UI Audio by Kenney Vleugels (Kenney.nl). \"License (Creative Commons Zero, CC0) http://creativecommons.org/publicdomain/zero/1.0/ — You may use these assets in personal and commercial projects. Credit (Kenney or www.kenney.nl) would be nice but is not mandatory.\" (License.txt inside the official zip; kenney.nl asset page lists \"License: Creative Commons CC0\")",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Soft rollover (hover) blips.",
+      "download": {
+        "archive": "zip",
+        "url": "https://kenney.nl/media/pages/assets/ui-audio/490d233f68-1677590494/kenney_ui-audio.zip",
+        "sha256": "946fc23a63d535d693eb31b2eabb80c8c28d6351e2186b344ceb71b2cb1d5eb6",
+        "bytes": 411949
+      },
+      "files": [
+        {
+          "from": "Audio/rollover1.ogg",
+          "target": "sfx/ui_hover_1.ogg",
+          "sha256": "4eb47e2e1540c44847b47a89825e21335c820a4e54cacf8c4c1eb5100e36af42",
+          "bytes": 5932
+        },
+        {
+          "from": "Audio/rollover2.ogg",
+          "target": "sfx/ui_hover_2.ogg",
+          "sha256": "d0bc0fcba496d73df1da8c145e5330df75f87ab5a4f33a9b71461b006b5c338e",
+          "bytes": 4701
+        },
+        {
+          "from": "Audio/rollover3.ogg",
+          "target": "sfx/ui_hover_3.ogg",
+          "sha256": "641df2c95468f1f035ff0ae964129da10543b4ea8ff6c13f66bcbd899dcfc113",
+          "bytes": 4778
+        }
+      ]
+    },
+    {
+      "id": "kenney-music-jingles",
+      "name": "Music Jingles",
+      "author": "Kenney Vleugels (Kenney.nl)",
+      "url": "https://kenney.nl/assets/music-jingles",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "Music Jingles by Kenney Vleugels (Kenney.nl). \"License (Creative Commons Zero, CC0) http://creativecommons.org/publicdomain/zero/1.0/ — You may use these assets in personal and commercial projects. Credit (Kenney or www.kenney.nl) would be nice but is not mandatory.\" (License.txt inside the official zip; kenney.nl asset page lists \"License: Creative Commons CC0\")",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Short stingers: level-up and quest-complete jingles.",
+      "download": {
+        "archive": "zip",
+        "url": "https://kenney.nl/media/pages/assets/music-jingles/f37e530b9e-1677590399/kenney_music-jingles.zip",
+        "sha256": "b729ba57959bd58793d2c5cafa348aaf2655d354f3da35ec4729e03ec77197b8",
+        "bytes": 1239525
+      },
+      "files": [
+        {
+          "from": "Audio/Pizzicato jingles/jingles_PIZZI00.ogg",
+          "target": "sfx/level_up_1.ogg",
+          "sha256": "b442ade3308a2bbda4b8c572c86f9f1071c7bdbcfb1e6f915d35c605b61bd475",
+          "bytes": 10382
+        },
+        {
+          "from": "Audio/Pizzicato jingles/jingles_PIZZI04.ogg",
+          "target": "sfx/level_up_2.ogg",
+          "sha256": "f98fa4af012d443da636a2d90f2926adc2384ec833851918f88426be9a25acf9",
+          "bytes": 11052
+        },
+        {
+          "from": "Audio/Steel jingles/jingles_STEEL00.ogg",
+          "target": "sfx/quest_complete_1.ogg",
+          "sha256": "8799eb726d784ae0aa1a9df80648a873ac60015bc00aea12c8e2dd1431a2bd7d",
+          "bytes": 15691
+        },
+        {
+          "from": "Audio/Steel jingles/jingles_STEEL04.ogg",
+          "target": "sfx/quest_complete_2.ogg",
+          "sha256": "65be5fe4af66574f4725602e454b7ea8d2613ab536a4a719fcb3810a240fdecf",
+          "bytes": 14951
+        }
+      ]
+    },
+    {
+      "id": "rubberduck-80-rpg-sfx",
+      "name": "80 CC0 RPG SFX",
+      "author": "rubberduck",
+      "url": "https://opengameart.org/content/80-cc0-rpg-sfx",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). Title: \"80 CC0 RPG SFX\"; description: \"I created 80 sound effects for fantasy / rpg games\".",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Spells (generic, fire), blades, coins, gems, locks, creature hurt/die/roar.",
+      "download": {
+        "archive": "zip",
+        "url": "https://opengameart.org/sites/default/files/80-CC0-RPG-SFX_0.zip",
+        "sha256": "1c2f06ff4e8563b5b8b745b23cf213c1474142a69bb82bd8f5e10d9b3f7a7bbd",
+        "bytes": 1845114
+      },
+      "files": [
+        {
+          "from": "spell_01.ogg",
+          "target": "sfx/spell_generic_1.ogg",
+          "sha256": "09821a53c418c5eeeac4fa25bada9d245e822fed302eeeae9ae4151522a45ae5",
+          "bytes": 29121
+        },
+        {
+          "from": "spell_02.ogg",
+          "target": "sfx/spell_generic_2.ogg",
+          "sha256": "bf9c48b76921e56aa266172d969a2c08215d6ce0ffae7c3584f23fa05d3f8bd4",
+          "bytes": 25118
+        },
+        {
+          "from": "spell_fire_01.ogg",
+          "target": "sfx/spell_fire_1.ogg",
+          "sha256": "02fa3a2c6e79e868e546802f45127c5cdda69aba6d5a24ac997ea66f81a816cb",
+          "bytes": 39482
+        },
+        {
+          "from": "spell_fire_02.ogg",
+          "target": "sfx/spell_fire_2.ogg",
+          "sha256": "bf1eef4993f0adb4bd3a1c1ec91f8f6e4ddeb32d922671a14561846d5b7cab98",
+          "bytes": 33115
+        },
+        {
+          "from": "spell_fire_03.ogg",
+          "target": "sfx/spell_fire_3.ogg",
+          "sha256": "2e4edee4ff8d7898198f1ab5213e086965e14a665cb947d53759505e28ddd3e4",
+          "bytes": 71801
+        },
+        {
+          "from": "spell_fire_04.ogg",
+          "target": "sfx/spell_fire_4.ogg",
+          "sha256": "64d653cd0cc6eb71bb45a1dfbba29eaa769ed5b663cce275082d6971e4f2ca8e",
+          "bytes": 59036
+        },
+        {
+          "from": "blade_01.ogg",
+          "target": "sfx/sword_hit_5.ogg",
+          "sha256": "caf7a7cb9b25cda4bd487c1d12d18b74a34bb18c816fd67277cf3c8d7ef32a3a",
+          "bytes": 15142
+        },
+        {
+          "from": "blade_02.ogg",
+          "target": "sfx/sword_hit_6.ogg",
+          "sha256": "c770afec8f62f14d3d082d5437c5cec28e2751d393df645ddd938eabc2588abd",
+          "bytes": 17776
+        },
+        {
+          "from": "item_coins_01.ogg",
+          "target": "sfx/coin_3.ogg",
+          "sha256": "4e701b281a4f88768beccbe87af4574d13ac5a4bc5cab6c522f0e79823d6e428",
+          "bytes": 18985
+        },
+        {
+          "from": "item_coins_02.ogg",
+          "target": "sfx/coin_4.ogg",
+          "sha256": "c1124868c928ef06e9b95fd9bd314eb3aa9a2869cbfde7f5aadcc341fe3edca0",
+          "bytes": 31942
+        },
+        {
+          "from": "item_gem_01.ogg",
+          "target": "sfx/gem_1.ogg",
+          "sha256": "8a5d2964febb0c69cc4df2ee5257d173f2cae6960d9534df0001dbf356f27028",
+          "bytes": 14690
+        },
+        {
+          "from": "item_gem_02.ogg",
+          "target": "sfx/gem_2.ogg",
+          "sha256": "a5f4b0b3ae0e272765619289ef6709513e0dfa0785d7559e8a223176a8bcf181",
+          "bytes": 9058
+        },
+        {
+          "from": "lock_01.ogg",
+          "target": "sfx/unlock_1.ogg",
+          "sha256": "e828ad2a936e34a0212f3309c5ac706c0ded412b9b383a87f10bcfa1d1445271",
+          "bytes": 17452
+        },
+        {
+          "from": "lock_02.ogg",
+          "target": "sfx/unlock_2.ogg",
+          "sha256": "e183464a4e28c1764c70e980465faaf6ea8c33c8ea4a2b636a3ae2c58e8740f5",
+          "bytes": 15553
+        },
+        {
+          "from": "creature_hurt_01.ogg",
+          "target": "sfx/creature_hurt_1.ogg",
+          "sha256": "9948f9ce067e1aae7bd780e974d51ceae03f2611a52afffb0e092ba47e9dc8e1",
+          "bytes": 17185
+        },
+        {
+          "from": "creature_hurt_02.ogg",
+          "target": "sfx/creature_hurt_2.ogg",
+          "sha256": "a4ea983e62ace874754c51d78239bd8b6532227119bd511c38fa827b2ccbca70",
+          "bytes": 20959
+        },
+        {
+          "from": "creature_die_01.ogg",
+          "target": "sfx/creature_die_1.ogg",
+          "sha256": "b34a816a401c5d80c77a61dabbedef7d1918a01320bbb67286c70f22db4acd43",
+          "bytes": 15883
+        },
+        {
+          "from": "creature_roar_01.ogg",
+          "target": "sfx/creature_roar_1.ogg",
+          "sha256": "ca1b9198490f29037e6e6487dd6db6165ca8b2583a445c0edd6b9f474d2d1f5f",
+          "bytes": 15061
+        },
+        {
+          "from": "creature_roar_02.ogg",
+          "target": "sfx/creature_roar_2.ogg",
+          "sha256": "4da0cf77a3506e1b573ec40e3688dc66400d1734853510db357fb3f843cde242",
+          "bytes": 22480
+        },
+        {
+          "from": "creature_roar_03.ogg",
+          "target": "sfx/creature_roar_3.ogg",
+          "sha256": "3571f6372012fdebb2a38ef89e18a6137b3f17d519f1259aafeb166dbdd94195",
+          "bytes": 23375
+        },
+        {
+          "from": "creature_slime_01.ogg",
+          "target": "sfx/slime_1.ogg",
+          "sha256": "746d6ef073abfadd43fe184c50c6a2528350d4f566f2c0f54cd51ff0eb665118",
+          "bytes": 35353
+        },
+        {
+          "from": "creature_slime_02.ogg",
+          "target": "sfx/slime_2.ogg",
+          "sha256": "8c26b66076752b712dad7be704a3e4e11d3a49847fbd804ba7f858024ff33c8d",
+          "bytes": 35232
+        }
+      ]
+    },
+    {
+      "id": "artisticdude-swishes",
+      "name": "Swishes Sound Pack",
+      "author": "artisticdude",
+      "url": "https://opengameart.org/content/swishes-sound-pack",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). Description: \"13 'swish' sound effects ... created for the FOSS RPG Summoning Wars.\"",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Weapon swings / misses (whoosh).",
+      "download": {
+        "archive": "zip",
+        "url": "https://opengameart.org/sites/default/files/swishes.zip",
+        "sha256": "7980215241b739a787dcf26f660ce510bb237900968789395a86911619795693",
+        "bytes": 385150
+      },
+      "files": [
+        {
+          "from": "swishes/swish-1.wav",
+          "target": "sfx/miss_whoosh_1.wav",
+          "sha256": "9a15c881345c1ce1c39cc31f52f081c8c4dc81fa41111e0079400f39d3ba0e45",
+          "bytes": 34138
+        },
+        {
+          "from": "swishes/swish-2.wav",
+          "target": "sfx/miss_whoosh_2.wav",
+          "sha256": "1ce7752cce3d43f16fc222ad7f7ffb69d9a5fc01e64b93d205765fc37b8e9b0d",
+          "bytes": 26136
+        },
+        {
+          "from": "swishes/swish-3.wav",
+          "target": "sfx/miss_whoosh_3.wav",
+          "sha256": "55b100e2c67fa43dad8510e31e85bbd51a68d5ce84a6e0259e21e19030083e24",
+          "bytes": 39390
+        },
+        {
+          "from": "swishes/swish-4.wav",
+          "target": "sfx/miss_whoosh_4.wav",
+          "sha256": "0060f4a7040edce4cc50d1daa10a9cb76764128a942e4688339e69cd1d5d784c",
+          "bytes": 39384
+        },
+        {
+          "from": "swishes/swish-7.wav",
+          "target": "sfx/swing_heavy_1.wav",
+          "sha256": "e6de737a34de16afed094d6170d7679149022f149e0a8356d2f029b0e8f4a4d7",
+          "bytes": 50420
+        },
+        {
+          "from": "swishes/swish-9.wav",
+          "target": "sfx/swing_heavy_2.wav",
+          "sha256": "123883f006ce55feecbff11eea5f87c4493df4399989983037144570a23723c1",
+          "bytes": 52906
+        }
+      ]
+    },
+    {
+      "id": "artisticdude-battle-sfx",
+      "name": "Battle Sound Effects",
+      "author": "Ogrebane / artisticdude",
+      "url": "https://opengameart.org/content/battle-sound-effects",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). The page is multi-licensed \"CC-BY 3.0 / CC-BY-SA 3.0 / GPL 3.0 / GPL 2.0 / CC0\"; we use it under the CC0 option.",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Bow shot plus extra swishes.",
+      "download": {
+        "archive": "zip",
+        "url": "https://opengameart.org/sites/default/files/battle_sound_effects_0.zip",
+        "sha256": "44e3d26b2378d2eb3a4f28b4c5cbc71908ad13c7389038348dbe9b8cde4f4c05",
+        "bytes": 220956
+      },
+      "files": [
+        {
+          "from": "battle_sound_effects/Bow.wav",
+          "target": "sfx/arrow_shot_1.wav",
+          "sha256": "0dc8cf132cf583563936ac3a4d776e196210d5f6703b4ebdd7c68e8f35b9f3e3",
+          "bytes": 96814
+        },
+        {
+          "from": "battle_sound_effects/swish_2.wav",
+          "target": "sfx/miss_whoosh_5.wav",
+          "sha256": "690725fd44a99a4abd32d59c0efe8e28486afb564d3f5710cca75a2c786cf0f1",
+          "bytes": 66114
+        }
+      ]
+    },
+    {
+      "id": "bart-ice-spells",
+      "name": "Ice spells",
+      "author": "bart",
+      "url": "https://opengameart.org/content/ice-spells",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). Description: \"Here are some ice spell sounds I put together from this sound by Stephan at pdsounds\" (pdsounds = public domain source).",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Ice / cold spell casts.",
+      "download": {
+        "archive": "zip",
+        "url": "https://opengameart.org/sites/default/files/icespells.zip",
+        "sha256": "45f02a204fc7cc896a17487080376c521ac2e564fe3da4d24cffa0086f8d6a54",
+        "bytes": 269661
+      },
+      "files": [
+        {
+          "from": "ice.wav",
+          "target": "sfx/spell_ice_1.wav",
+          "sha256": "c3039c864d056d0e4951b84b96a7bb0044ca8cb58aeae514fc256145872b6a94",
+          "bytes": 205356
+        },
+        {
+          "from": "coldsnap.wav",
+          "target": "sfx/spell_ice_2.wav",
+          "sha256": "090977264d65d90a50b04e9f0c1c4e02fb194e5b50d9fe244f0079a4da54158c",
+          "bytes": 467244
+        }
+      ]
+    },
+    {
+      "id": "haeldb-spell-sounds",
+      "name": "Spell sounds",
+      "author": "HaelDB",
+      "url": "https://opengameart.org/content/spell-sounds",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). The page is dual-licensed \"OGA-BY 3.0 / CC0\"; we use it under the CC0 option.",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Healing and electric spell casts.",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/healing.ogg",
+        "bytes": 648719
+      },
+      "files": [
+        {
+          "from": "healing.ogg",
+          "url": "https://opengameart.org/sites/default/files/healing.ogg",
+          "target": "sfx/spell_heal_1.ogg",
+          "sha256": "4600822379d18992e9f526b718395dc752821b6218ca5728fb2d5ea9cf774c6d",
+          "bytes": 91152
+        },
+        {
+          "from": "electricspell.ogg",
+          "url": "https://opengameart.org/sites/default/files/electricspell.ogg",
+          "target": "sfx/spell_lightning_1.ogg",
+          "sha256": "c1c3fa48c7c209f8b8abc7423b3bd3f17dc489af3c4a92eb1fa20fe2adc447dc",
+          "bytes": 341572
+        },
+        {
+          "from": "electricspell2.ogg",
+          "url": "https://opengameart.org/sites/default/files/electricspell2.ogg",
+          "target": "sfx/spell_lightning_2.ogg",
+          "sha256": "5fcb8824064d9dba2e3880d439a44b798ecdc2a58041cd028f094d774302a9a1",
+          "bytes": 215995
+        }
+      ]
+    },
+    {
+      "id": "artisticdude-freeze-spell",
+      "name": "Freeze Spell",
+      "author": "artisticdude",
+      "url": "https://opengameart.org/content/freeze-spell-0",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). Description: \"An experimental freeze/ice spell ... created for the FOSS RPG Summoning Wars\".",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Freeze / ice spell.",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/freeze.wav",
+        "bytes": 613544
+      },
+      "files": [
+        {
+          "from": "freeze.wav",
+          "url": "https://opengameart.org/sites/default/files/freeze.wav",
+          "target": "sfx/spell_ice_3.wav",
+          "sha256": "dc16da845f18f88885db4584205a4ad9b84a8da6e377b79d4511b366cc8631f1",
+          "bytes": 613544
+        }
+      ]
+    },
+    {
+      "id": "jaggedstone-magic-spell-sfx",
+      "name": "Magic Spell SFX",
+      "author": "JaggedStone",
+      "url": "https://opengameart.org/content/magic-spell-sfx",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/).",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Short spellcasting shimmers (generic casts, buffs).",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/magical_1_0.ogg",
+        "bytes": 176428
+      },
+      "files": [
+        {
+          "from": "magical_1_0.ogg",
+          "url": "https://opengameart.org/sites/default/files/magical_1_0.ogg",
+          "target": "sfx/spell_generic_3.ogg",
+          "sha256": "119f9061a566c72c1c58444b03f8685b833079ef268dda02fe742eb34d3bc68f",
+          "bytes": 59071
+        },
+        {
+          "from": "magical_4.ogg",
+          "url": "https://opengameart.org/sites/default/files/magical_4.ogg",
+          "target": "sfx/spell_generic_4.ogg",
+          "sha256": "b7862d109b4013dfb2a389a10f8917203beb0efc458444bc5a1b8ada605cc118",
+          "bytes": 79091
+        },
+        {
+          "from": "magical_3.ogg",
+          "url": "https://opengameart.org/sites/default/files/magical_3.ogg",
+          "target": "sfx/spell_buff_1.ogg",
+          "sha256": "9fac648a1de869cf9ca2f4b3f1cd47f1766a3ee9d2fdec45831234401d7b2392",
+          "bytes": 38266
+        }
+      ]
+    },
+    {
+      "id": "codemanu-legend-will-rise",
+      "name": "A Legend Will Rise (Orchestral)",
+      "author": "CodeManu",
+      "url": "https://opengameart.org/content/a-legend-will-rise-orchestral",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). Description: \"No attribution required but always appreciated.\"",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Main-menu / title theme.",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/A%20Legend%20Will%20Rise.mp3",
+        "bytes": 2785768
+      },
+      "files": [
+        {
+          "from": "A Legend Will Rise.mp3",
+          "url": "https://opengameart.org/sites/default/files/A%20Legend%20Will%20Rise.mp3",
+          "target": "music/menu_1.mp3",
+          "sha256": "6c38472a541777c3ac2826e8623f1424a1d2ccc3757e16cafb270b004e64a65b",
+          "bytes": 2785768
+        }
+      ]
+    },
+    {
+      "id": "cynicmusic-town-theme",
+      "name": "Town Theme RPG",
+      "author": "cynicmusic",
+      "url": "https://opengameart.org/content/town-theme-rpg",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). Description: \"Now CC0 Public Domain License!\"",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Town theme (harps and recorders).",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/TownTheme.mp3",
+        "bytes": 1316581
+      },
+      "files": [
+        {
+          "from": "TownTheme.mp3",
+          "url": "https://opengameart.org/sites/default/files/TownTheme.mp3",
+          "target": "music/town_1.mp3",
+          "sha256": "2657861d5107d4a3c01ef81cb6a4d61ddd5e7a054b6da57e658373d79d0c3466",
+          "bytes": 1316581
+        }
+      ]
+    },
+    {
+      "id": "randommind-old-tower-inn",
+      "name": "Medieval: The Old Tower Inn",
+      "author": "RandomMind",
+      "url": "https://opengameart.org/content/medieval-the-old-tower-inn",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). Description: \"My CC0 track available in full and loop version, you can freely use for any purpose!\"",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Tavern / inn music.",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/The_Old_Tower_Inn.mp3",
+        "bytes": 2535801
+      },
+      "files": [
+        {
+          "from": "The_Old_Tower_Inn.mp3",
+          "url": "https://opengameart.org/sites/default/files/The_Old_Tower_Inn.mp3",
+          "target": "music/tavern_1.mp3",
+          "sha256": "3fe4070015b880b591c79a7fca31156a0083a8768d88a39da39ab6c54f2f014d",
+          "bytes": 2535801
+        }
+      ]
+    },
+    {
+      "id": "bojingles-unexplored-expansion",
+      "name": "Unexplored Expansion",
+      "author": "Bo Jingles (from TAD's \"Unexplored\")",
+      "url": "https://opengameart.org/content/unexplored-expansion",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/).",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Aurelmark overworld / exploration (orchestral).",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/tad_-_unexplored_-_expanded_1_by_bo_jingles_0.mp3",
+        "bytes": 1765271
+      },
+      "files": [
+        {
+          "from": "tad_-_unexplored_-_expanded_1_by_bo_jingles_0.mp3",
+          "url": "https://opengameart.org/sites/default/files/tad_-_unexplored_-_expanded_1_by_bo_jingles_0.mp3",
+          "target": "music/wilderness_aurelmark_1.mp3",
+          "sha256": "a39323b0cbc83dea018fb693fb5b89f5cce6f06761b05407a489f9ace6cc094e",
+          "bytes": 1765271
+        }
+      ]
+    },
+    {
+      "id": "tad-treasure-hunter",
+      "name": "Treasure Hunter",
+      "author": "TAD",
+      "url": "https://opengameart.org/content/treasure-hunter",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). Description: \"Simple orchestral loop.\"",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Aurelmark exploration, second track (orchestral loop).",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/treasure_hunter_0.mp3",
+        "bytes": 2086369
+      },
+      "files": [
+        {
+          "from": "treasure_hunter_0.mp3",
+          "url": "https://opengameart.org/sites/default/files/treasure_hunter_0.mp3",
+          "target": "music/wilderness_aurelmark_2.mp3",
+          "sha256": "379f3f2c6f967afaf4f2bd95027cf123cf6770b8d1f35acea0eb32fbeb6798c2",
+          "bytes": 2086369
+        }
+      ]
+    },
+    {
+      "id": "cynicmusic-dark-forest",
+      "name": "Dark Forest Theme",
+      "author": "cynicmusic",
+      "url": "https://opengameart.org/content/dark-forest-theme",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/).",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Gloamfen exploration (dark brooding guitar and strings).",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/GameMusic_ForestTheme_24_0.mp3",
+        "bytes": 1942315
+      },
+      "files": [
+        {
+          "from": "GameMusic_ForestTheme_24_0.mp3",
+          "url": "https://opengameart.org/sites/default/files/GameMusic_ForestTheme_24_0.mp3",
+          "target": "music/wilderness_gloamfen_1.mp3",
+          "sha256": "c9e83d01741e97a462c44963aff81645a9c2aa3a7a33e5849114a1399d1b0914",
+          "bytes": 1942315
+        }
+      ]
+    },
+    {
+      "id": "polygondan-mystery",
+      "name": "CC0 - Mystery",
+      "author": "PolygonDan",
+      "url": "https://opengameart.org/content/cc0-mystery",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). Description: \"Mystery theme music. Free to use for any purpose.\"",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Gloamfen exploration, second track (mystery theme).",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/mystery%20exploration.mp3",
+        "bytes": 1526733
+      },
+      "files": [
+        {
+          "from": "mystery exploration.mp3",
+          "url": "https://opengameart.org/sites/default/files/mystery%20exploration.mp3",
+          "target": "music/wilderness_gloamfen_2.mp3",
+          "sha256": "05bbd043f614fd8a945f0a902fa348843f6b13e4d330aa72dd4c44fa7ee48618",
+          "bytes": 1526733
+        }
+      ]
+    },
+    {
+      "id": "tozan-pirate-game-tune",
+      "name": "Pirate Game Tune",
+      "author": "Tozan",
+      "url": "https://opengameart.org/content/pirate-game-tune",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/).",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Brinescatter Isles exploration (pirate tune).",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/pirate1uf_0.ogg",
+        "bytes": 1532091
+      },
+      "files": [
+        {
+          "from": "pirate1uf_0.ogg",
+          "url": "https://opengameart.org/sites/default/files/pirate1uf_0.ogg",
+          "target": "music/wilderness_brinescatter_1.ogg",
+          "sha256": "56fd318c5e70faad1438416f4e111ae3c09600da0218a25f12e0eda2f0a1bd22",
+          "bytes": 1532091
+        }
+      ]
+    },
+    {
+      "id": "yd-enemy-ship-approaching",
+      "name": "Enemy Ship Approaching",
+      "author": "yd",
+      "url": "https://opengameart.org/content/enemy-ship-approaching",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). Description: \"The ocean waves sound was borrowed from Freesound and is CC0.\"",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Brinescatter tension / naval encounter (short loop with ocean waves).",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/esa_0.ogg",
+        "bytes": 274608
+      },
+      "files": [
+        {
+          "from": "esa_0.ogg",
+          "url": "https://opengameart.org/sites/default/files/esa_0.ogg",
+          "target": "music/wilderness_brinescatter_2.ogg",
+          "sha256": "96fffaa2b55ad4167fe64ed13cc099d776c62b4465b91b2f7caf8877375ff621",
+          "bytes": 274608
+        }
+      ]
+    },
+    {
+      "id": "haeldb-cave-theme",
+      "name": "Cave Theme",
+      "author": "HaelDB",
+      "url": "https://opengameart.org/content/cave-theme",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). The page is dual-licensed \"OGA-BY 3.0 / CC0\"; we use it under the CC0 option.",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Dungeon / cave exploration.",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/cave%20themeb4.ogg",
+        "bytes": 3203408
+      },
+      "files": [
+        {
+          "from": "cave themeb4.ogg",
+          "url": "https://opengameart.org/sites/default/files/cave%20themeb4.ogg",
+          "target": "music/dungeon_1.ogg",
+          "sha256": "1ddf7a0845c808136edfda7ea829e48fa2b7c57793e008d706dadbb5917dff9c",
+          "bytes": 3203408
+        }
+      ]
+    },
+    {
+      "id": "kindland-forgotten-tombs",
+      "name": "Forgoten tomb ambience",
+      "author": "kindland",
+      "url": "https://opengameart.org/content/forgoten-tomb-ambience",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/).",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Dungeon / crypt ambient music.",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/Forgoten_tombs_1.mp3",
+        "bytes": 5140968
+      },
+      "files": [
+        {
+          "from": "Forgoten_tombs_1.mp3",
+          "url": "https://opengameart.org/sites/default/files/Forgoten_tombs_1.mp3",
+          "target": "music/dungeon_2.mp3",
+          "sha256": "989b26d4c6ec9fb90da2c9c892a396920e1b2e14a426052574310e275ebd01d0",
+          "bytes": 5140968
+        }
+      ]
+    },
+    {
+      "id": "cynicmusic-battle-theme-a",
+      "name": "Battle Theme A",
+      "author": "cynicmusic",
+      "url": "https://opengameart.org/content/battle-theme-a",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). Description: \"CC0 Public Domain license is the best!\"",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Standard combat music.",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/battleThemeA.mp3",
+        "bytes": 3289143
+      },
+      "files": [
+        {
+          "from": "battleThemeA.mp3",
+          "url": "https://opengameart.org/sites/default/files/battleThemeA.mp3",
+          "target": "music/battle_1.mp3",
+          "sha256": "6042399782e581d753d616bc703e66483d5eccb5fb687a20c9a552d68c49e620",
+          "bytes": 3289143
+        }
+      ]
+    },
+    {
+      "id": "wolfgang-battle-theme",
+      "name": "Battle Theme",
+      "author": "Wolfgang_",
+      "url": "https://opengameart.org/content/battle-theme-0",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/).",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Combat music, second track (orchestral).",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/Battle.mp3",
+        "bytes": 4646747
+      },
+      "files": [
+        {
+          "from": "Battle.mp3",
+          "url": "https://opengameart.org/sites/default/files/Battle.mp3",
+          "target": "music/battle_2.mp3",
+          "sha256": "dde7bd4f10bde031800ba8e22151fad591b7c13e1c9ae51920341b4e4ae37be5",
+          "bytes": 4646747
+        }
+      ]
+    },
+    {
+      "id": "lisboa-boss-fight",
+      "name": "Boss Fight",
+      "author": "Lisboa",
+      "url": "https://opengameart.org/content/boss-fight-0",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). Description: \"Feel free to use in your project.\"",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Boss combat music.",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/bosstheme_WO_low_0.mp3",
+        "bytes": 2068550
+      },
+      "files": [
+        {
+          "from": "bosstheme_WO_low_0.mp3",
+          "url": "https://opengameart.org/sites/default/files/bosstheme_WO_low_0.mp3",
+          "target": "music/boss_1.mp3",
+          "sha256": "274387eec24462e2685f2814cb57cefe4a98af198ceff3b089ccc2ddff443d92",
+          "bytes": 2068550
+        }
+      ]
+    },
+    {
+      "id": "springspring-random-fanfare",
+      "name": "Just a random fanfare",
+      "author": "Spring Spring",
+      "url": "https://opengameart.org/content/just-a-random-fanfare",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/).",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Victory fanfare (one-shot).",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/fanfare_0.ogg",
+        "bytes": 295834
+      },
+      "files": [
+        {
+          "from": "fanfare_0.ogg",
+          "url": "https://opengameart.org/sites/default/files/fanfare_0.ogg",
+          "target": "music/victory_1.ogg",
+          "sha256": "952e2492abd4376d2034f4b546cadd077236e350a05b1bd05f8cec81936680a2",
+          "bytes": 295834
+        }
+      ]
+    },
+    {
+      "id": "cynicmusic-victory-fanfare",
+      "name": "Victory Fanfare Short",
+      "author": "cynicmusic",
+      "url": "https://opengameart.org/content/victory-fanfare-short",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/).",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Victory fanfare, several bars (one-shot).",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/Heavy_ConceptB.wav",
+        "bytes": 2092996
+      },
+      "files": [
+        {
+          "from": "Heavy_ConceptB.wav",
+          "url": "https://opengameart.org/sites/default/files/Heavy_ConceptB.wav",
+          "target": "music/victory_2.wav",
+          "sha256": "cf7aca1193530c804f41a22cfd9a2813c25d3c244fa96ad88c88c6206daa033d",
+          "bytes": 2092996
+        }
+      ]
+    },
+    {
+      "id": "tinyworlds-forest-ambience",
+      "name": "Forest Ambience",
+      "author": "TinyWorlds",
+      "url": "https://opengameart.org/content/forest-ambience",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/). Description: \"It loops seamlessly and is ready to be used in your projects!\"",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Forest ambience bed (loops seamlessly).",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/Forest_Ambience.mp3",
+        "bytes": 716670
+      },
+      "files": [
+        {
+          "from": "Forest_Ambience.mp3",
+          "url": "https://opengameart.org/sites/default/files/Forest_Ambience.mp3",
+          "target": "ambience/forest_1.mp3",
+          "sha256": "9850aa1d0d5d66bd9c5daf8bb77c6d852e01f2f4de22f283bd5621e8bed13b75",
+          "bytes": 716670
+        }
+      ]
+    },
+    {
+      "id": "lokif-swamp-environment",
+      "name": "Swamp Environment Audio",
+      "author": "LokiF",
+      "url": "https://opengameart.org/content/swamp-environment-audio",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/).",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Gloamfen swamp ambience bed (bugs, bubbling).",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/swamp.ogg",
+        "bytes": 1252904
+      },
+      "files": [
+        {
+          "from": "swamp.ogg",
+          "url": "https://opengameart.org/sites/default/files/swamp.ogg",
+          "target": "ambience/swamp_1.ogg",
+          "sha256": "243eecd2437d57b6d5ea4ea3e0c74986d5ba88e3c9f4d0946d895ae8f6eeffdd",
+          "bytes": 1252904
+        }
+      ]
+    },
+    {
+      "id": "jaggedstone-dungeon-ambience",
+      "name": "Loopable Dungeon Ambience",
+      "author": "JaggedStone",
+      "url": "https://opengameart.org/content/loopable-dungeon-ambience",
+      "license": "CC0-1.0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseQuote": "OpenGameArt.org asset page, \"License(s): CC0\" (links to http://creativecommons.org/publicdomain/zero/1.0/).",
+      "licenseCheckedOn": "2026-09-29",
+      "attributionRequired": false,
+      "covers": "Dungeon ambience bed (wind, water drips).",
+      "download": {
+        "archive": "none",
+        "url": "https://opengameart.org/sites/default/files/dungeon_ambient_1_0.ogg",
+        "bytes": 1626352
+      },
+      "files": [
+        {
+          "from": "dungeon_ambient_1_0.ogg",
+          "url": "https://opengameart.org/sites/default/files/dungeon_ambient_1_0.ogg",
+          "target": "ambience/dungeon_3.ogg",
+          "sha256": "df491823e4877371c34dbda4e9321cd83a4a14fa7573cee0ebca1ae423b70e6e",
+          "bytes": 1626352
+        }
+      ]
+    }
+  ],
+  "moods": {
+    "menu": [
+      {
+        "file": "music/menu_1.mp3",
+        "loop": true,
+        "title": "A Legend Will Rise",
+        "pack": "codemanu-legend-will-rise"
+      }
+    ],
+    "town": [
+      {
+        "file": "music/town_1.mp3",
+        "loop": true,
+        "title": "Town Theme RPG",
+        "pack": "cynicmusic-town-theme"
+      }
+    ],
+    "tavern": [
+      {
+        "file": "music/tavern_1.mp3",
+        "loop": true,
+        "title": "The Old Tower Inn",
+        "pack": "randommind-old-tower-inn"
+      }
+    ],
+    "wilderness_aurelmark": [
+      {
+        "file": "music/wilderness_aurelmark_1.mp3",
+        "loop": true,
+        "title": "Unexplored Expansion",
+        "pack": "bojingles-unexplored-expansion"
+      },
+      {
+        "file": "music/wilderness_aurelmark_2.mp3",
+        "loop": true,
+        "title": "Treasure Hunter",
+        "pack": "tad-treasure-hunter"
+      }
+    ],
+    "wilderness_gloamfen": [
+      {
+        "file": "music/wilderness_gloamfen_1.mp3",
+        "loop": true,
+        "title": "Dark Forest Theme",
+        "pack": "cynicmusic-dark-forest"
+      },
+      {
+        "file": "music/wilderness_gloamfen_2.mp3",
+        "loop": true,
+        "title": "Mystery Exploration",
+        "pack": "polygondan-mystery"
+      }
+    ],
+    "wilderness_brinescatter": [
+      {
+        "file": "music/wilderness_brinescatter_1.ogg",
+        "loop": true,
+        "title": "Pirate Game Tune",
+        "pack": "tozan-pirate-game-tune"
+      },
+      {
+        "file": "music/wilderness_brinescatter_2.ogg",
+        "loop": true,
+        "title": "Enemy Ship Approaching",
+        "pack": "yd-enemy-ship-approaching"
+      }
+    ],
+    "dungeon": [
+      {
+        "file": "music/dungeon_1.ogg",
+        "loop": true,
+        "title": "Cave Theme",
+        "pack": "haeldb-cave-theme"
+      },
+      {
+        "file": "music/dungeon_2.mp3",
+        "loop": true,
+        "title": "Forgotten Tombs",
+        "pack": "kindland-forgotten-tombs"
+      }
+    ],
+    "battle": [
+      {
+        "file": "music/battle_1.mp3",
+        "loop": true,
+        "title": "Battle Theme A",
+        "pack": "cynicmusic-battle-theme-a"
+      },
+      {
+        "file": "music/battle_2.mp3",
+        "loop": true,
+        "title": "Battle Theme",
+        "pack": "wolfgang-battle-theme"
+      }
+    ],
+    "boss": [
+      {
+        "file": "music/boss_1.mp3",
+        "loop": true,
+        "title": "Boss Fight",
+        "pack": "lisboa-boss-fight"
+      }
+    ],
+    "victory": [
+      {
+        "file": "music/victory_1.ogg",
+        "loop": false,
+        "title": "Just a Random Fanfare",
+        "pack": "springspring-random-fanfare"
+      },
+      {
+        "file": "music/victory_2.wav",
+        "loop": false,
+        "title": "Victory Fanfare Short",
+        "pack": "cynicmusic-victory-fanfare"
+      }
+    ]
+  },
+  "ambience": {
+    "forest": [
+      {
+        "file": "ambience/forest_1.mp3",
+        "loop": true,
+        "title": "Forest Ambience",
+        "pack": "tinyworlds-forest-ambience"
+      }
+    ],
+    "swamp": [
+      {
+        "file": "ambience/swamp_1.ogg",
+        "loop": true,
+        "title": "Swamp",
+        "pack": "lokif-swamp-environment"
+      }
+    ],
+    "dungeon": [
+      {
+        "file": "ambience/dungeon_3.ogg",
+        "loop": true,
+        "title": "Dungeon Ambience",
+        "pack": "jaggedstone-dungeon-ambience"
+      }
+    ]
+  },
+  "sfx": {
+    "dice_shake": [
+      "sfx/dice_shake_1.ogg",
+      "sfx/dice_shake_2.ogg",
+      "sfx/dice_shake_3.ogg"
+    ],
+    "dice_roll": [
+      "sfx/dice_roll_1.ogg",
+      "sfx/dice_roll_2.ogg",
+      "sfx/dice_roll_3.ogg"
+    ],
+    "dice_land": [
+      "sfx/dice_land_1.ogg",
+      "sfx/dice_land_2.ogg",
+      "sfx/dice_land_3.ogg",
+      "sfx/dice_land_4.ogg"
+    ],
+    "door_open": [
+      "sfx/door_open_1.ogg",
+      "sfx/door_open_2.ogg"
+    ],
+    "door_close": [
+      "sfx/door_close_1.ogg",
+      "sfx/door_close_2.ogg",
+      "sfx/door_close_3.ogg",
+      "sfx/door_close_4.ogg"
+    ],
+    "door_creak": [
+      "sfx/door_creak_1.ogg",
+      "sfx/door_creak_2.ogg",
+      "sfx/door_creak_3.ogg"
+    ],
+    "page_turn": [
+      "sfx/page_turn_1.ogg",
+      "sfx/page_turn_2.ogg",
+      "sfx/page_turn_3.ogg"
+    ],
+    "book_open": [
+      "sfx/book_open_1.ogg"
+    ],
+    "book_close": [
+      "sfx/book_close_1.ogg"
+    ],
+    "coin": [
+      "sfx/coin_1.ogg",
+      "sfx/coin_2.ogg",
+      "sfx/coin_3.ogg",
+      "sfx/coin_4.ogg"
+    ],
+    "equip": [
+      "sfx/equip_1.ogg",
+      "sfx/equip_2.ogg",
+      "sfx/equip_3.ogg"
+    ],
+    "weapon_draw": [
+      "sfx/weapon_draw_1.ogg",
+      "sfx/weapon_draw_2.ogg",
+      "sfx/weapon_draw_3.ogg"
+    ],
+    "lock": [
+      "sfx/lock_1.ogg",
+      "sfx/lock_2.ogg"
+    ],
+    "footstep_dirt": [
+      "sfx/footstep_dirt_1.ogg",
+      "sfx/footstep_dirt_2.ogg",
+      "sfx/footstep_dirt_3.ogg",
+      "sfx/footstep_dirt_4.ogg",
+      "sfx/footstep_dirt_5.ogg"
+    ],
+    "sword_hit": [
+      "sfx/sword_hit_1.ogg",
+      "sfx/sword_hit_2.ogg",
+      "sfx/sword_hit_3.ogg",
+      "sfx/sword_hit_4.ogg",
+      "sfx/sword_hit_5.ogg",
+      "sfx/sword_hit_6.ogg"
+    ],
+    "blunt_hit": [
+      "sfx/blunt_hit_1.ogg",
+      "sfx/blunt_hit_2.ogg",
+      "sfx/blunt_hit_3.ogg",
+      "sfx/blunt_hit_4.ogg"
+    ],
+    "arrow_hit": [
+      "sfx/arrow_hit_1.ogg",
+      "sfx/arrow_hit_2.ogg",
+      "sfx/arrow_hit_3.ogg"
+    ],
+    "shield_block": [
+      "sfx/shield_block_1.ogg",
+      "sfx/shield_block_2.ogg"
+    ],
+    "footstep_stone": [
+      "sfx/footstep_stone_1.ogg",
+      "sfx/footstep_stone_2.ogg",
+      "sfx/footstep_stone_3.ogg",
+      "sfx/footstep_stone_4.ogg",
+      "sfx/footstep_stone_5.ogg"
+    ],
+    "footstep_grass": [
+      "sfx/footstep_grass_1.ogg",
+      "sfx/footstep_grass_2.ogg",
+      "sfx/footstep_grass_3.ogg",
+      "sfx/footstep_grass_4.ogg",
+      "sfx/footstep_grass_5.ogg"
+    ],
+    "footstep_wood": [
+      "sfx/footstep_wood_1.ogg",
+      "sfx/footstep_wood_2.ogg",
+      "sfx/footstep_wood_3.ogg",
+      "sfx/footstep_wood_4.ogg"
+    ],
+    "footstep_snow": [
+      "sfx/footstep_snow_1.ogg",
+      "sfx/footstep_snow_2.ogg",
+      "sfx/footstep_snow_3.ogg"
+    ],
+    "ui_click": [
+      "sfx/ui_click_1.ogg",
+      "sfx/ui_click_2.ogg",
+      "sfx/ui_click_3.ogg"
+    ],
+    "ui_confirm": [
+      "sfx/ui_confirm_1.ogg",
+      "sfx/ui_confirm_2.ogg"
+    ],
+    "ui_error": [
+      "sfx/ui_error_1.ogg",
+      "sfx/ui_error_2.ogg"
+    ],
+    "ui_back": [
+      "sfx/ui_back_1.ogg",
+      "sfx/ui_back_2.ogg"
+    ],
+    "ui_open": [
+      "sfx/ui_open_1.ogg",
+      "sfx/ui_open_2.ogg"
+    ],
+    "ui_close": [
+      "sfx/ui_close_1.ogg",
+      "sfx/ui_close_2.ogg"
+    ],
+    "ui_toggle": [
+      "sfx/ui_toggle_1.ogg",
+      "sfx/ui_toggle_2.ogg"
+    ],
+    "ui_tick": [
+      "sfx/ui_tick_1.ogg",
+      "sfx/ui_tick_2.ogg"
+    ],
+    "ui_hover": [
+      "sfx/ui_hover_1.ogg",
+      "sfx/ui_hover_2.ogg",
+      "sfx/ui_hover_3.ogg"
+    ],
+    "level_up": [
+      "sfx/level_up_1.ogg",
+      "sfx/level_up_2.ogg"
+    ],
+    "quest_complete": [
+      "sfx/quest_complete_1.ogg",
+      "sfx/quest_complete_2.ogg"
+    ],
+    "spell_generic": [
+      "sfx/spell_generic_1.ogg",
+      "sfx/spell_generic_2.ogg",
+      "sfx/spell_generic_3.ogg",
+      "sfx/spell_generic_4.ogg"
+    ],
+    "spell_fire": [
+      "sfx/spell_fire_1.ogg",
+      "sfx/spell_fire_2.ogg",
+      "sfx/spell_fire_3.ogg",
+      "sfx/spell_fire_4.ogg"
+    ],
+    "gem": [
+      "sfx/gem_1.ogg",
+      "sfx/gem_2.ogg"
+    ],
+    "unlock": [
+      "sfx/unlock_1.ogg",
+      "sfx/unlock_2.ogg"
+    ],
+    "creature_hurt": [
+      "sfx/creature_hurt_1.ogg",
+      "sfx/creature_hurt_2.ogg"
+    ],
+    "creature_die": [
+      "sfx/creature_die_1.ogg"
+    ],
+    "creature_roar": [
+      "sfx/creature_roar_1.ogg",
+      "sfx/creature_roar_2.ogg",
+      "sfx/creature_roar_3.ogg"
+    ],
+    "slime": [
+      "sfx/slime_1.ogg",
+      "sfx/slime_2.ogg"
+    ],
+    "miss_whoosh": [
+      "sfx/miss_whoosh_1.wav",
+      "sfx/miss_whoosh_2.wav",
+      "sfx/miss_whoosh_3.wav",
+      "sfx/miss_whoosh_4.wav",
+      "sfx/miss_whoosh_5.wav"
+    ],
+    "swing_heavy": [
+      "sfx/swing_heavy_1.wav",
+      "sfx/swing_heavy_2.wav"
+    ],
+    "arrow_shot": [
+      "sfx/arrow_shot_1.wav"
+    ],
+    "spell_ice": [
+      "sfx/spell_ice_1.wav",
+      "sfx/spell_ice_2.wav",
+      "sfx/spell_ice_3.wav"
+    ],
+    "spell_heal": [
+      "sfx/spell_heal_1.ogg"
+    ],
+    "spell_lightning": [
+      "sfx/spell_lightning_1.ogg",
+      "sfx/spell_lightning_2.ogg"
+    ],
+    "spell_buff": [
+      "sfx/spell_buff_1.ogg"
+    ]
+  }
+}
