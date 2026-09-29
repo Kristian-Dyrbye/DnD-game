@@ -77,6 +77,34 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   const services = new Services(settings, opts.rootDir ?? process.cwd(), opts.services);
   app.decorate('services', services);
   app.get('/api/status', async () => services.status());
+  // Settings panel helpers: model/voice lists and a quick connection test.
+  app.get('/api/llm/models', async () => {
+    try {
+      return { models: await services.llm.listModels() };
+    } catch {
+      return { models: [] };
+    }
+  });
+  app.get('/api/tts/voices', async () => {
+    try {
+      return { voices: await services.tts.listVoices() };
+    } catch {
+      return { voices: [] };
+    }
+  });
+  app.post('/api/llm/test', async () => {
+    const llm = services.llm;
+    const start = Date.now();
+    const status = await llm.status();
+    if (!status.reachable) return { ok: false, provider: llm.name, error: status.error ?? 'Ollama is not running.' };
+    if (!status.modelAvailable) return { ok: false, provider: llm.name, error: `Model "${status.model}" is not installed. Run: ollama pull ${status.model}` };
+    try {
+      const reply = await llm.chat([{ role: 'user', content: 'Reply with the single word: ready' }], { task: 'generic', maxTokens: 8, timeoutMs: 60_000 });
+      return { ok: true, provider: llm.name, model: status.model, latencyMs: Date.now() - start, reply: reply.trim().slice(0, 40) };
+    } catch (err) {
+      return { ok: false, provider: llm.name, error: err instanceof Error ? err.message : String(err) };
+    }
+  });
 
   // Backstory suggestion for the creator: LLM text, or a template when the LLM is unavailable/mocked.
   app.post<{ Body: BackstorySummary }>('/api/llm/backstory', async (req, reply) => {

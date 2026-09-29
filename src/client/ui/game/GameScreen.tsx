@@ -9,7 +9,7 @@ import { CharacterPreview } from '../../three/CharacterPreview';
 import { useEffect, useState } from 'preact/hooks';
 import { connection, gameState, lastError, objective, send } from '../../net/gameSocket';
 import { loadSettings, settings, updateSettings } from '../settingsState';
-import { hero, screen } from '../state';
+import { hero, screen, settingsOpen } from '../state';
 import { formatClock } from '../text';
 import { ActionInput } from './ActionInput';
 import { DiceTray } from './DiceTray';
@@ -80,6 +80,9 @@ export function GameScreen() {
           )}
           <button type="button" disabled={!state || connection.value !== 'open'} onClick={() => send({ type: 'save', slot: 'quicksave', name: 'Quick save' })}>
             Quick save
+          </button>
+          <button type="button" onClick={() => (settingsOpen.value = true)}>
+            Settings
           </button>
           <button type="button" onClick={() => (screen.value = 'title')}>
             Menu

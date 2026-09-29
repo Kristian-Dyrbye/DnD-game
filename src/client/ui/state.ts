@@ -20,6 +20,8 @@ export const creator = signal<CreatorState>(quick && db.classes.has(quick) ? qui
 /** The finished hero (set when the player begins the adventure). */
 export const hero = signal<Character | null>(null);
 export const heroMode = signal<'heroic' | 'hardcore'>('heroic');
+/** The settings panel can be opened from the title screen and the game menu. */
+export const settingsOpen = signal(false);
 
 export function beginAdventure(): void {
   const s = creator.value;

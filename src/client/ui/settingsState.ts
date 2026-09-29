@@ -10,6 +10,15 @@ function applyAudioSettings(s: Settings): void {
   audio.setVolumes(s.audio);
   ttsPlayer.setVolume(s.audio.master * s.audio.narration);
   ttsPlayer.setEnabled(s.tts.enabled);
+  applyAccessibility(s);
+}
+
+/** Text size, readable font and colour-blind helpers are applied to the whole page. */
+export function applyAccessibility(s: Settings): void {
+  if (typeof document === 'undefined') return;
+  document.documentElement.style.setProperty('--text-scale', String(s.accessibility.textScale));
+  document.body.classList.toggle('readable-font', s.accessibility.dyslexiaFont);
+  document.body.classList.toggle('cb-helpers', s.accessibility.colorblindOverlays);
 }
 
 let loading: Promise<void> | null = null;

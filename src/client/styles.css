@@ -337,3 +337,18 @@ input[type='color'] { width: 2.2rem; height: 1.8rem; border: 1px solid #4a3f30; 
 .tag-equipped { background: #4a3b1f; color: #f0d7a0; margin-left: 0.4rem; }
 .price { color: #d8c08a; font: 0.9rem system-ui, sans-serif; min-width: 5rem; text-align: right; }
 .shop-button { border-color: #6a5530; }
+
+/* ---------- settings + accessibility (A111) ---------- */
+html { font-size: calc(16px * var(--text-scale, 1)); }
+body.readable-font, body.readable-font button, body.readable-font input, body.readable-font textarea, body.readable-font select { font-family: Verdana, Tahoma, 'Segoe UI', sans-serif !important; letter-spacing: 0.04em; word-spacing: 0.12em; line-height: 1.6; }
+body.cb-helpers .roll-outcome.success::before, body.cb-helpers .roll-history .success strong::before { content: '✓ '; }
+body.cb-helpers .roll-outcome.failure::before, body.cb-helpers .roll-history .failure strong::before { content: '✗ '; }
+body.cb-helpers .hp-bar.hp-low div { background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.35) 0 4px, transparent 4px 8px); }
+body.cb-helpers .hp-bar.hp-mid div { background-image: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.25) 0 2px, transparent 2px 8px); }
+.settings { width: min(720px, 100%); }
+.settings-tabs { padding: 0.5rem 1rem 0; margin: 0; }
+.settings-body { flex: 1; overflow-y: auto; padding: 0.5rem 1rem 1rem; display: flex; flex-direction: column; gap: 0.35rem; }
+.setting-row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 0.75rem; padding: 0.4rem 0; border-bottom: 1px solid #2e271e; }
+.setting-row input[type='range'] { width: 180px; }
+.setting-row select, .setting-row input[type='text'] { font: inherit; background: #211c16; color: var(--fg); border: 1px solid #4a3f30; border-radius: 4px; padding: 0.2rem 0.5rem; }
+.setting-value { min-width: 4rem; text-align: right; color: #d8c08a; font: 0.85rem system-ui, sans-serif; }

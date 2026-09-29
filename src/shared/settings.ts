@@ -73,6 +73,23 @@ export type Settings = z.infer<typeof SettingsSchema>;
 /** A partial settings patch: any section, any subset of fields. */
 export type SettingsPatch = { [K in keyof Settings]?: Partial<Settings[K]> };
 
+type PerformanceSettings = z.infer<typeof PerformanceSettingsSchema>;
+
+/**
+ * Performance presets (spec §14). "low" suits 8 GB machines with integrated graphics: 2D tokens,
+ * no shadows, low textures, few NPC models, 30 fps.
+ */
+export const PERFORMANCE_PRESETS: Record<'low' | 'medium' | 'high', Omit<PerformanceSettings, 'preset'>> = {
+  low: { gridMode: '2d', shadows: 'off', textureQuality: 'low', maxNpcModels: 4, fpsCap: 30 },
+  medium: { gridMode: '3d', shadows: 'low', textureQuality: 'medium', maxNpcModels: 12, fpsCap: 60 },
+  high: { gridMode: '3d', shadows: 'high', textureQuality: 'high', maxNpcModels: 30, fpsCap: 120 },
+};
+
+/** The performance settings for a preset (custom keeps the current values). */
+export function applyPreset(current: PerformanceSettings, preset: PerformanceSettings['preset']): PerformanceSettings {
+  return preset === 'custom' ? { ...current, preset } : { preset, ...PERFORMANCE_PRESETS[preset] };
+}
+
 export function defaultSettings(): Settings {
   return SettingsSchema.parse({});
 }

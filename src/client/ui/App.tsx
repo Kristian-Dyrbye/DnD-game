@@ -2,10 +2,11 @@
 import { GAME_TITLE } from '../../shared/version';
 import { StatusIndicator } from './StatusIndicator';
 import { Creator } from './creator/Creator';
-import { screen, startNewCharacter } from './state';
+import { screen, settingsOpen, startNewCharacter } from './state';
 import { useEffect } from 'preact/hooks';
 import { audio } from '../audio/AudioManager';
 import { loadSettings } from './settingsState';
+import { SettingsPanel } from './SettingsPanel';
 import { GameScreen } from './game/GameScreen';
 
 function TitleScreen() {
@@ -16,6 +17,9 @@ function TitleScreen() {
       <div class="title-actions">
         <button type="button" class="primary" onClick={startNewCharacter}>
           New Game
+        </button>
+        <button type="button" onClick={() => (settingsOpen.value = true)}>
+          Settings
         </button>
       </div>
     </main>
@@ -32,6 +36,7 @@ export function App() {
     <>
       {screen.value === 'creator' ? <Creator /> : screen.value === 'game' ? <GameScreen /> : <TitleScreen />}
       <StatusIndicator />
+      {settingsOpen.value && <SettingsPanel onClose={() => (settingsOpen.value = false)} />}
     </>
   );
 }
