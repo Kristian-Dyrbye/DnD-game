@@ -246,6 +246,10 @@ export const ClassSchema = z.object({
     proficienciesGained: z.array(z.string()),
   }),
   features: z.array(ClassFeatureSchema),
+  /** Choosable option lists (Metamagic Options, Eldritch Invocation Options) by list id. */
+  options: z
+    .record(z.string(), z.array(z.object({ id: IdSchema, name: z.string(), prerequisite: z.string().optional(), text: TextSchema })))
+    .default({}),
   subclassLevel: z.number().int().min(1).max(3),
   beginnerFriendly: z.boolean().default(false),
 });

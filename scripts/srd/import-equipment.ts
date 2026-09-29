@@ -212,6 +212,16 @@ for (const [label, weight, cost] of tableAfterCaption(md, 'Tack, Harness, and Dr
   push({ id: toId(name), name, category: vehicle ? 'vehicle' : 'tack', cost: costToCp(cost), weightLb: weightLb(weight) });
 }
 
+// The Wizard's Spellbook has no gear-table row in the SRD; values follow the classic SRD book (50 GP, 3 lb.).
+push({
+  id: 'spellbook',
+  name: 'Spellbook',
+  category: 'adventuring_gear',
+  cost: 5000,
+  weightLb: 3,
+  text: "A wizard's book of spells. See the Wizard's Spellcasting feature.",
+});
+
 // ---------------------------------------------------------------- pack contents
 
 const ids = new Set([...gear.map((g) => g.id), ...weapons.map((w) => w.id), ...armor.map((a) => a.id)]);

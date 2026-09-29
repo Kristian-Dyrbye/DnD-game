@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A017
-- **Notes for next session:** Start with A018. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A020
+- **Notes for next session:** Start with A021. A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -37,9 +37,9 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A015 — SRD data: equipment | Spec: §4, §11.5 | Done: weapons (with mastery), armor, gear, tools, packs, prices; validated | Dep: A013
 - [done] A016 — SRD data: species + backgrounds | Spec: §4, §5 | Done: all SRD species and backgrounds (ASI options, origin feat, skills, tools, equipment); validated | Dep: A013
 - [done] A017 — SRD data: feats + epic boons | Spec: §4 | Done: origin, general, fighting style, epic boon feats with prereqs and effect refs; validated | Dep: A013
-- [todo] A018 — SRD data: classes part 1 (Barbarian, Bard, Cleric, Druid) | Spec: §4 | Done: class tables 1–20, features, SRD subclass each; validated | Dep: A013
-- [todo] A019 — SRD data: classes part 2 (Fighter, Monk, Paladin, Ranger) | Spec: §4 | Done: as A018 | Dep: A018
-- [todo] A020 — SRD data: classes part 3 (Rogue, Sorcerer, Warlock, Wizard) | Spec: §4 | Done: as A018 | Dep: A018
+- [done] A018 — SRD data: classes part 1 (Barbarian, Bard, Cleric, Druid) | Spec: §4 | Done: class tables 1–20, features, SRD subclass each; validated | Dep: A013
+- [done] A019 — SRD data: classes part 2 (Fighter, Monk, Paladin, Ranger) | Spec: §4 | Done: as A018 | Dep: A018
+- [done] A020 — SRD data: classes part 3 (Rogue, Sorcerer, Warlock, Wizard) | Spec: §4 | Done: as A018 | Dep: A018
 - [todo] A021 — SRD data: spells cantrip–2 | Spec: §4 | Done: all SRD spells of these levels with effect data (damage, save, area, duration, conc, ritual, upcast); validated | Dep: A013
 - [todo] A022 — SRD data: spells 3–5 | Spec: §4 | Done: as A021 | Dep: A021
 - [todo] A023 — SRD data: spells 6–9 | Spec: §4 | Done: as A021 | Dep: A021
@@ -178,6 +178,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A015 — Equipment: 38 weapons (mastery, ranges, ammo ids, versatile), 13 armor, 149 gear (adventuring gear w/ text, ammo bundles, focuses, tools w/ ability/utilize/craft + gaming/instrument variants, packs with resolved contents, mounts, tack, drawn vehicles) — `scripts/srd/import-equipment.ts`, `data/srd/{weapons,armor,gear}.json`
 - A016 — Origins: 9 species (sizes, speed, darkvision, traits, lineages incl. dragon damage types + lineage spell ids by level) and 4 backgrounds (ability options, feat + option, skills, tool or choice, equipment A/B resolved to item ids) — `scripts/srd/import-origins.ts`
 - A017 — 17 feats (4 origin, 2 general, 4 fighting style, 7 epic boons) with prerequisites (level, abilities, feature id), repeatable, abilityIncrease — `scripts/srd/import-feats.ts`
+- A018–A020 — One generic importer for all 12 classes + 12 SRD subclasses: core traits, features 1–20, table columns (rages, sneak_attack...), cantrips/prepared arrays, starting equipment A/B(/C), multiclass prereqs + gains, Metamagic/Invocation option lists, subclass always-prepared spells (Circle of the Land keyed `arid:3`); added Spellbook gear item — `scripts/srd/import-classes.ts`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -220,6 +221,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A014: rules-tables.json is an object (not in SRD_FILES); SrdDatabase(files, rulesTables) → `db.rules` (throws if missing), `db.tables` optional.
 - A015: Gear ids: focuses prefixed (`arcane_focus_orb`, `holy_symbol_amulet`), gaming sets `<variant>_set` tagged gaming_set, instruments by name tagged musical_instrument, comma names flattened (`lantern_hooded`, `clothes_fine`, `case_map_or_scroll`). Ammo ids: arrows, bolts, needles, bullets_sling, bullets_firearm (weapon.ammunition). Large ships skipped (not needed yet). Tools keep `craft` lists for future crafting.
 - A016: Background equipment: generic items (Holy Symbol, Gaming Set, focuses, instruments) become `choices` tags; quantities are units ("20 Arrows" → [arrows, 20]). Tool field is an item id or `choice:<tag>`. Species traits keep text; mechanics come later via hooks/effects (A035/A039+). Lineage spells referenced by spell id (validated once spells exist, A021–A023).
+- A018: Classes done with ONE generic importer, so A019/A020 were completed in the same session (all 12 classes tested). Beginner-friendly classes = fighter, barbarian, rogue (game decision). Weapon proficiency tokens: simple, martial, martial:light, martial:finesse. Class `columns` keyed by snake_case header; numbers where numeric, strings for dice ('1d6'), 0 for '—'. Multiclass gains kept as text strings (parse in A037).
+- A018: Spellbook added as gear (50 GP, 3 lb., classic SRD values) because the 2024 SRD has no gear row for it.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -252,6 +255,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `scripts/srd/import-equipment.ts` — weapons/armor/gear (in `npm run srd:import`)
 - `scripts/srd/import-origins.ts` — species + backgrounds (needs equipment JSON first)
 - `scripts/srd/import-feats.ts` — feats
+- `scripts/srd/import-classes.ts` — classes + subclasses (needs equipment JSON)
 - `data/srd/overrides/` — hand fixes/mechanics merged by id into importer output
 - `data/srd/rules-tables.json` — core numeric tables
 - `data/srd/*.json` — SRD data (arrays; empty until A014–A028 fill them)

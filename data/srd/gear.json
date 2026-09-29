@@ -1788,5 +1788,14 @@
   "category": "vehicle",
   "cost": 3500,
   "weightLb": 400
+ },
+ {
+  "tags": [],
+  "id": "spellbook",
+  "name": "Spellbook",
+  "category": "adventuring_gear",
+  "cost": 5000,
+  "weightLb": 3,
+  "text": "A wizard's book of spells. See the Wizard's Spellcasting feature."
  }
 ]
