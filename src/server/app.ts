@@ -22,6 +22,7 @@ import { LoreSchema } from '../engine/world/lore';
 import loreJson from '../../data/world/lore.json';
 import { llmNarrator } from './narrator';
 import { TtsQueue } from '../tts/queue';
+import { Notices } from './notices';
 import { TravelEventTableSchema } from '../engine/world/travel';
 import travelEventsJson from '../../data/tables/travel-events.json';
 import { ShopTableSchema } from '../engine/world/shops';
@@ -144,6 +145,8 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   // reloaded page can reconnect and ask for a snapshot. Commands run one at a time, in order.
   // Adventures: the default one starts on new_game (the demo until the starter arc exists, A099).
   const srd = loadSrd();
+  // Assigned once the session exists (the ports below report failures through it).
+  let notices: Notices | undefined;
   const lore = LoreSchema.parse(loreJson);
   const adventuresDir = opts.adventuresDir ?? path.join(opts.rootDir ?? process.cwd(), 'data', 'adventures');
   const flagRegistry = loadFlagRegistry(adventuresDir);
@@ -154,7 +157,7 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
     systems: createDefaultRegistry({ lore, regionOf: (state) => regionOfState(state, adventures, lore) }),
     ...(defaultAdventure && { actions: adventureActionPort(adventures, defaultAdventure, srd, {
         parseIntent: async (text, ictx) => (await parseIntent(services.llm, text, ictx)).intent,
-        narrator: llmNarrator(() => services.llm, lore, srd),
+        narrator: llmNarrator(() => services.llm, lore, srd, (err) => notices?.report('llm', err)),
         summarizer: llmSummarizer(() => services.llm),
         flags: flagRegistry,
         lore,
@@ -173,7 +176,8 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   app.decorate('session', session);
 
   // Spoken narration: narration/dialogue lines are voiced in the background (never blocking play).
-  const tts = new TtsQueue({ getProvider: () => services.tts, onReady: (entryId) => session.emit({ type: 'tts', entryId }) });
+  notices = new Notices(session);
+  const tts = new TtsQueue({ getProvider: () => services.tts, onReady: (entryId) => session.emit({ type: 'tts', entryId }), onError: (err) => notices?.report('tts', err) });
   app.decorate('tts', tts);
   session.on((e) => {
     if (e.type !== 'log' || (e.entry.kind !== 'narration' && e.entry.kind !== 'dialogue')) return;

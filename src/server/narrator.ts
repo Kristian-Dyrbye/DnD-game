@@ -10,12 +10,18 @@ import { gatherNarrationContext } from '../llm/context/gather';
 import { buildNarrationPrompt } from '../llm/context/narration';
 import type { LlmProvider } from '../llm/types';
 
-export function llmNarrator(getLlm: () => LlmProvider, lore: Lore, db?: SrdDatabase): Narrator {
+export function llmNarrator(getLlm: () => LlmProvider, lore: Lore, db?: SrdDatabase, onError?: (err: unknown) => void): Narrator {
   return async function* narrate(job: NarrationJob, signal?: AbortSignal) {
     const llm = getLlm();
     if (llm.name === 'mock') return;
     const context = gatherNarrationContext(job.ctx.state, lore, job.ctx.adventure, db);
     const prompt = buildNarrationPrompt(context, { kind: job.kind, facts: job.facts, ...(job.playerAction && { playerAction: job.playerAction }) });
-    yield* llm.stream(prompt.messages, { task: 'narrate', temperature: 0.8, maxTokens: 450, timeoutMs: 90_000, ...(signal && { signal }) });
+    try {
+      yield* llm.stream(prompt.messages, { task: 'narrate', temperature: 0.8, maxTokens: 450, timeoutMs: 90_000, ...(signal && { signal }) });
+    } catch (err) {
+      // The engine falls back to template narration; the notice tells the player why.
+      onError?.(err);
+      throw err;
+    }
   };
 }

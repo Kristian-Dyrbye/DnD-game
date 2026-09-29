@@ -22,6 +22,8 @@ export interface TtsQueueOptions {
   cacheSize?: number;
   /** Per-line synthesis timeout. */
   timeoutMs?: number;
+  /** Called when a line could not be voiced (for a friendly notice). */
+  onError?: (err: unknown) => void;
 }
 
 /** Strips markdown/stage directions that sound odd when read aloud. */
@@ -88,8 +90,9 @@ export class TtsQueue {
           const max = this.opts.cacheSize ?? 24;
           while (this.cache.size > max) this.cache.delete(this.cache.keys().next().value!);
           this.opts.onReady(job.id);
-        } catch {
+        } catch (err) {
           // No audio for this line.
+          this.opts.onError?.(err);
         }
       }
     } finally {
