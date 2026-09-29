@@ -34,6 +34,8 @@ const SPOTS: Record<ScarLocation, Spot> = {
 
 const material = new THREE.MeshStandardMaterial({ color: 0x5a1c1c, roughness: 0.9 });
 const geometry = new THREE.BoxGeometry(0.2, 0.03, 0.012);
+const hitGeometry = new THREE.BoxGeometry(0.3, 0.2, 0.2);
+const hitMaterial = new THREE.MeshBasicMaterial();
 
 /** Add one mark per scar location (call on the unscaled, bind-posed model root). */
 export function attachScarMarks(root: THREE.Object3D, locations: readonly ScarLocation[]): void {
@@ -50,6 +52,12 @@ export function attachScarMarks(root: THREE.Object3D, locations: readonly ScarLo
     mark.position.set(...spot.at).addScaledVector(normal, 0.01);
     mark.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal);
     mark.rotateZ(spot.tilt);
+    // A bigger invisible box makes the mark easy to click (raycasts ignore visibility).
+    const hit = new THREE.Mesh(hitGeometry, hitMaterial);
+    hit.visible = false;
+    hit.name = `scar-hit:${loc}`;
+    hit.userData.scar = loc;
+    mark.add(hit);
     root.add(mark);
     mark.updateMatrixWorld(true);
     bone.attach(mark); // keep the world transform, follow the bone from now on

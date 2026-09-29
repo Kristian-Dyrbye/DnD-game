@@ -26,7 +26,7 @@ function frame(camera: THREE.PerspectiveCamera, controls: OrbitControls, obj: TH
   controls.update();
 }
 
-export function CharacterPreview({ appearance, size = 'medium', height = 260, look, wounds = 0, seed = 'hero', scars = [], wear = 0 }: { appearance: Appearance; size?: string; height?: number; look?: EquipmentLook; wounds?: WoundLevel; seed?: string; scars?: readonly ScarLocation[]; wear?: number }) {
+export function CharacterPreview({ appearance, size = 'medium', height = 260, look, wounds = 0, seed = 'hero', scars = [], wear = 0, onSnapshot, onPickScar }: { appearance: Appearance; size?: string; height?: number; look?: EquipmentLook; wounds?: WoundLevel; seed?: string; scars?: readonly ScarLocation[]; wear?: number; onSnapshot?: (dataUrl: string) => void; onPickScar?: (loc: ScarLocation | null) => void }) {
   const host = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<{ scene: THREE.Scene; camera: THREE.PerspectiveCamera; controls: OrbitControls; model?: CharacterModel } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -71,6 +71,22 @@ export function CharacterPreview({ appearance, size = 'medium', height = 260, lo
     controls.update();
 
     sceneRef.current = { scene, camera, controls };
+
+    // Click a scar mark to inspect it (drags rotate the model instead).
+    const raycaster = new THREE.Raycaster();
+    let downAt: { x: number; y: number } | null = null;
+    const onDown = (e: PointerEvent) => (downAt = { x: e.clientX, y: e.clientY });
+    const onUp = (e: PointerEvent) => {
+      const pick = onPickRef.current;
+      const model = sceneRef.current?.model;
+      if (!pick || !model || !downAt || Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) > 5) return;
+      const r = renderer.domElement.getBoundingClientRect();
+      raycaster.setFromCamera(new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1), camera);
+      const hit = raycaster.intersectObject(model.root, true).find((h) => h.object.userData.scar);
+      pick((hit?.object.userData.scar as ScarLocation | undefined) ?? null);
+    };
+    renderer.domElement.addEventListener('pointerdown', onDown);
+    renderer.domElement.addEventListener('pointerup', onUp);
     const clock = new THREE.Clock();
     let raf = 0;
     let last = 0;
@@ -80,6 +96,22 @@ export function CharacterPreview({ appearance, size = 'medium', height = 260, lo
       last = now;
       sceneRef.current?.model?.update(clock.getDelta());
       renderer.render(scene, camera);
+      // Save-browser thumbnail: copy the frame right after rendering (no preserveDrawingBuffer needed).
+      if (snapRef.current && sceneRef.current?.model && onSnapshotRef.current) {
+        snapRef.current = false;
+        const small = document.createElement('canvas');
+        small.width = 128;
+        small.height = 128;
+        const g = small.getContext('2d');
+        const src = renderer.domElement;
+        const side = Math.min(src.width, src.height);
+        g?.drawImage(src, (src.width - side) / 2, (src.height - side) / 2, side, side, 0, 0, 128, 128);
+        try {
+          onSnapshotRef.current(small.toDataURL('image/jpeg', 0.75));
+        } catch {
+          /* tainted canvas or unsupported: skip */
+        }
+      }
     };
     raf = requestAnimationFrame(tick);
 
@@ -99,6 +131,12 @@ export function CharacterPreview({ appearance, size = 'medium', height = 260, lo
       renderer.domElement.remove();
     };
   }, [height]);
+
+  const snapRef = useRef(false);
+  const onSnapshotRef = useRef(onSnapshot);
+  onSnapshotRef.current = onSnapshot;
+  const onPickRef = useRef(onPickScar);
+  onPickRef.current = onPickScar;
 
   // Wounds follow HP (overlays fade in/out inside the model).
   const woundsRef = useRef(wounds);
@@ -127,6 +165,7 @@ export function CharacterPreview({ appearance, size = 'medium', height = 260, lo
         model.setWear?.(wearRef.current, seed);
         holder.scene.add(model.root);
         frame(holder.camera, holder.controls, model.root);
+        snapRef.current = true;
         setError(null);
       })
       .catch(() => {

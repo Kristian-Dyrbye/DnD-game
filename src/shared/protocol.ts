@@ -76,6 +76,8 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
   /** A suggested action button. */
   z.object({ ...base, type: z.literal('choose'), actionId: z.string().min(1).max(80) }),
   z.object({ ...base, type: z.literal('save'), slot: z.string().regex(SLOT_ID_PATTERN), name: z.string().max(80).optional() }),
+  /** A small picture of the hero (gear + scars) the client rendered; used as the save thumbnail. */
+  z.object({ ...base, type: z.literal('thumbnail'), data: z.string().max(120_000).regex(/^data:image\/(png|jpeg|webp);base64,/) }),
   z.object({ ...base, type: z.literal('load'), slot: z.string().regex(SLOT_ID_PATTERN) }),
   /** Travel on the world map to a known location. */
   z.object({ ...base, type: z.literal('travel'), to: z.string().max(60), pace: z.enum(['slow', 'normal', 'fast']).default('normal') }),

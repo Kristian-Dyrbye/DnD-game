@@ -5,13 +5,16 @@ import { Creator } from './creator/Creator';
 import { combatDemoClass, screen, settingsOpen, startNewCharacter } from './state';
 import { CombatScreen } from './combat/CombatScreen';
 import { demoAct, demoCombat, startDemoCombat } from './combat/combatDemo';
-import { useEffect } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
+import { SaveBrowser } from './SaveBrowser';
 import { audio } from '../audio/AudioManager';
 import { loadSettings } from './settingsState';
 import { SettingsPanel } from './SettingsPanel';
 import { GameScreen } from './game/GameScreen';
 
 function TitleScreen() {
+  // `#load` opens the save browser straight away (test shortcut).
+  const [loading, setLoading] = useState(() => typeof location !== 'undefined' && location.hash === '#load');
   return (
     <main class="title-screen">
       <h1>{GAME_TITLE}</h1>
@@ -20,10 +23,14 @@ function TitleScreen() {
         <button type="button" class="primary" onClick={startNewCharacter}>
           New Game
         </button>
+        <button type="button" onClick={() => setLoading(true)}>
+          Load Game
+        </button>
         <button type="button" onClick={() => (settingsOpen.value = true)}>
           Settings
         </button>
       </div>
+      {loading && <SaveBrowser mode="load" onClose={() => setLoading(false)} />}
     </main>
   );
 }

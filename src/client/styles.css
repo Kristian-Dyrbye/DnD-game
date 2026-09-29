@@ -371,6 +371,25 @@ body.cb-helpers .hp-bar.hp-mid div { background-image: repeating-linear-gradient
 .tag-wear { background: #2e2e33; color: #c9c9d4; }
 .member-scars { display: flex; flex-wrap: wrap; gap: 0.25rem; margin: 0.3rem 0 0; }
 .tag-scar { background: #3a1e1e; color: #e8c8b8; cursor: help; }
+.character-screen { width: min(980px, 96vw); }
+.character-body { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr); gap: 1rem; padding: 0.75rem 1rem 1rem; }
+.character-model .character-preview { height: 420px; }
+.scar-detail { background: #2a1a18; border-left: 3px solid #a0503c; padding: 0.4rem 0.6rem; }
+.ability-table { border-collapse: collapse; margin: 0.5rem 0; }
+.ability-table th, .ability-table td { padding: 0.2rem 0.45rem; text-align: center; }
+.plain-list { list-style: none; padding: 0; margin: 0.2rem 0 0.6rem; }
+.plain-list li { padding: 0.15rem 0; }
+.save-browser { width: min(760px, 96vw); }
+.save-new { display: flex; gap: 0.5rem; padding: 0.5rem 1rem; }
+.save-new input { flex: 1; }
+.save-list { list-style: none; margin: 0; padding: 0.5rem 1rem 1rem; display: grid; gap: 0.5rem; max-height: 60vh; overflow: auto; }
+.save-card { display: grid; grid-template-columns: 96px 1fr auto; gap: 0.75rem; align-items: center; background: #221d16; border: 1px solid #3a3226; border-radius: 6px; padding: 0.4rem; }
+.save-card.auto { opacity: 0.9; }
+.save-thumb { width: 96px; height: 96px; border-radius: 4px; background: #15130f; object-fit: cover; }
+.save-info { display: grid; gap: 0.15rem; text-align: left; }
+.save-browser, .character-screen { text-align: left; }
+.save-actions { display: flex; gap: 0.35rem; }
+@media (max-width: 700px) { .character-body { grid-template-columns: 1fr; } .save-card { grid-template-columns: 64px 1fr; } .save-thumb { width: 64px; height: 64px; } .save-actions { grid-column: 1 / -1; } }
 .combat-narration { margin: 0; padding: 0.4rem 1rem; font-style: italic; color: var(--muted, #c9bfa8); border-top: 1px solid #3a3226; }
 .action-row-more { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; width: 100%; padding-top: 0.4rem; border-top: 1px dashed #3a3226; }
 .action-row-more .skill-pick, .action-row-more .item-use { display: inline-flex; gap: 0.2rem; }

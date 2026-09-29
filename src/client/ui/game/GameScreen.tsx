@@ -3,6 +3,8 @@
  * left, story log + actions in the centre, 3D hero view and dice tray on the right. Collapses to a
  * single column on narrow windows.
  */
+import { CharacterScreen } from './CharacterScreen';
+import { SaveBrowser } from '../SaveBrowser';
 import { armorWear } from '../../../engine/character/armorWear';
 import { woundLevel } from '../../../engine/appearance/wounds';
 import { equipmentLook } from '../../../engine/appearance/equipmentVisuals';
@@ -47,6 +49,8 @@ export function GameScreen() {
   const [journalOpen, setJournalOpen] = useState(false);
   const [inventoryOpen, setInventoryOpen] = useState(false);
   const [levelUpOpen, setLevelUpOpen] = useState(false);
+  const [characterOpen, setCharacterOpen] = useState(false);
+  const [savesOpen, setSavesOpen] = useState(false);
   const [shopId, setShopId] = useState<string | null>(null);
   const here = state ? getMap(state)?.current : undefined;
   const localShops = here ? shopsAt(shops, here) : [];
@@ -105,6 +109,9 @@ export function GameScreen() {
           <button type="button" disabled={!state} onClick={() => setJournalOpen(true)}>
             Journal
           </button>
+          <button type="button" disabled={!state} onClick={() => setCharacterOpen(true)}>
+            Character
+          </button>
           <button type="button" disabled={!state} onClick={() => setInventoryOpen(true)}>
             Inventory
           </button>
@@ -131,6 +138,9 @@ export function GameScreen() {
           )}
           <button type="button" disabled={!state || connection.value !== 'open'} onClick={() => send({ type: 'save', slot: 'quicksave', name: 'Quick save' })}>
             Quick save
+          </button>
+          <button type="button" disabled={!state || connection.value !== 'open'} onClick={() => setSavesOpen(true)}>
+            Save / Load
           </button>
           <button type="button" onClick={() => (settingsOpen.value = true)}>
             Settings
@@ -161,12 +171,14 @@ export function GameScreen() {
         <ActionInput />
       </main>
       {journalOpen && <JournalPanel onClose={() => setJournalOpen(false)} />}
+      {characterOpen && h && <CharacterScreen c={h} onClose={() => setCharacterOpen(false)} />}
+      {savesOpen && <SaveBrowser mode="save" onClose={() => setSavesOpen(false)} />}
       {mapOpen && <WorldMap onClose={() => setMapOpen(false)} />}
       {inventoryOpen && <InventoryPanel onClose={() => setInventoryOpen(false)} />}
       {shopId && <ShopPanel shopId={shopId} onClose={() => setShopId(null)} />}
       <aside class="game-side">
         {dungeon.value && h && <DungeonPanel view={dungeon.value} hero={h} />}
-        <div class="hero-view">{h && <CharacterPreview appearance={h.appearance} size={h.size} height={240} look={equipmentLook(h, db)} wounds={woundLevel(h.hp, h.maxHp)} seed={h.id} scars={h.scars.map((s) => s.location)} wear={armorWear(h)} />}</div>
+        <div class="hero-view">{h && <CharacterPreview appearance={h.appearance} size={h.size} height={240} look={equipmentLook(h, db)} wounds={woundLevel(h.hp, h.maxHp)} seed={h.id} scars={h.scars.map((s) => s.location)} wear={armorWear(h)} onSnapshot={(data) => send({ type: 'thumbnail', data })} />}</div>
         <DiceTray />
       </aside>
     </div>

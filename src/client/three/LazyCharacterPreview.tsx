@@ -9,7 +9,7 @@ import { useEffect, useState } from 'preact/hooks';
 import type { Appearance } from '../../engine/appearance/appearance';
 import type { EquipmentLook } from '../../engine/appearance/equipmentVisuals';
 
-type PreviewProps = { appearance: Appearance; size?: string; height?: number; look?: EquipmentLook; wounds?: WoundLevel; seed?: string; scars?: readonly ScarLocation[]; wear?: number };
+type PreviewProps = { appearance: Appearance; size?: string; height?: number; look?: EquipmentLook; wounds?: WoundLevel; seed?: string; scars?: readonly ScarLocation[]; wear?: number; onSnapshot?: (dataUrl: string) => void; onPickScar?: (loc: ScarLocation | null) => void };
 let loaded: ComponentType<PreviewProps> | null = null;
 
 export function CharacterPreview(props: PreviewProps) {

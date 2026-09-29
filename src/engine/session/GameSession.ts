@@ -21,6 +21,8 @@ export interface SessionSaveMeta {
   location: string;
   mode: GameState['mode'];
   playTimeMinutes: number;
+  /** Data URL of the hero picture (save browser). */
+  thumbnail?: string;
 }
 
 export interface SavePort {
@@ -89,6 +91,8 @@ const fallbackActions: ActionPort = {
 
 export class GameSession {
   private state: GameState | null = null;
+  /** Latest picture of the hero from the client (save browser thumbnail, spec §9/§12). */
+  private thumbnail: string | undefined;
   private rngInstance: Rng | null = null;
   private listeners = new Set<(e: ServerEvent) => void>();
 
@@ -178,6 +182,7 @@ export class GameSession {
       location: s.location.name,
       mode: s.mode,
       playTimeMinutes: Math.round(s.playTimeMinutes),
+      ...(this.thumbnail && { thumbnail: this.thumbnail }),
     };
   }
 
@@ -197,7 +202,11 @@ export class GameSession {
         case 'ping':
           this.emit({ type: 'pong', ...(reqId && { reqId }) });
           return;
+        case 'thumbnail':
+          this.thumbnail = cmd.data;
+          return;
         case 'new_game': {
+          this.thumbnail = undefined;
           const seed = cmd.seed ?? this.ports.newSeed?.() ?? `${Date.now()}-${Math.random()}`;
           const fresh = newGameState(cmd.hero, cmd.mode, seed);
           this.start(cmd.continueWorld && this.state ? continueWorld(this.current, fresh) : fresh);

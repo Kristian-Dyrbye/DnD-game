@@ -142,4 +142,17 @@ describe('GameSession', () => {
     expect(r.id).toBeGreaterThan(0);
     expect(events.at(-1)).toEqual({ type: 'roll', roll: r });
   });
+
+  it("the client's hero picture becomes the save thumbnail (A093); a new game forgets it", async () => {
+    const saves = memorySaves();
+    const { session } = setup({ saves: saves.port });
+    await session.handle({ type: 'new_game', hero, mode: 'heroic' });
+    expect(saves.files.get('auto-1')?.meta.thumbnail).toBeUndefined();
+    const pic = 'data:image/jpeg;base64,AAAA';
+    await session.handle({ type: 'thumbnail', data: pic });
+    await session.handle({ type: 'save', slot: 'slot-1', name: 'Mine' });
+    expect(saves.files.get('slot-1')?.meta.thumbnail).toBe(pic);
+    await session.handle({ type: 'new_game', hero, mode: 'heroic' });
+    expect(saves.files.get('auto-1')?.meta.thumbnail).toBeUndefined();
+  });
 });
