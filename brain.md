@@ -5,7 +5,7 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 4 (Phase 3 Character Creation done)
-- **Last completed assignment:** A099
+- **Last completed assignment:** A068e
 - **Notes for next session:** Continue the queue: A098/A099 (starter arc; companions/recruit/approval now exist), A088–A093 (3D equipment/wounds/scars), A070 (3D battle map), A076 (dungeon maps + fog), A075b, then A114–A116. A010 still blocked until Ollama is installed (Ollama/Piper not installed on this PC yet). Playable test URLs: `#play-<class>`, `#play-<class>+map`, `#combat-<class>`.
 
 ## Assignment Queue
@@ -37,7 +37,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A068c — Adventure outcomes cost/damage/exhaustion, conditions coins/since, encounter allies, deadline docs
 - [done] A068d — More authoring features (typed local flags, removeItems, item condition, multi-pass beats)
 - [todo] A101c — Retrofit chapters 1–3 with the new outcomes | Spec: §7.2 | Done: bribes/fines/restitution use `cost` (+ `coins` gates), falls/traps use `damage` (with saves), races use `since` where cleaner, allied guards use encounter `allies`, bosses marked with `bosses`, scars via the A091 outcome once it exists; chapter tests still green | Dep: A068c, A103
-- [todo] A068e — Encounter authoring extras (from A104) | Spec: §6, §10 | Done: encounter `statOverrides` (HP %, AC, extra/legendary actions) applied in setupEncounter; conditional monsters/allies inside one encounter (`if` per group); outcome `revealRoom` {map, room}; fights reveal their room even when resolved without the map (solver); tests | Dep: A076
+- [done] A068e — Encounter authoring extras (statOverrides, conditional groups, revealRoom)
 - [done] A064a — Zone spell hooks (combat/zones.ts)
 - [done] A069 — Async combat narration
 - [done] A070 — 3D battle map (client/three/BattleMap3D.tsx)
@@ -83,6 +83,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ## Completed Log
 <!-- One line per assignment: A<id> — what was built — key files. Compress into per-phase summaries when long. -->
+- A068e — encounter `statOverrides` (name, hp / hpPercent, ac per monster id), conditional monster/ally groups (`if` per group, activeGroups at fight start), outcome `revealRoom`, resolveEncounter reveals the encounter's room; validator checks override ids and revealRoom targets — adventure/{schema,runner,fights,validate}.ts, combat/encounter.ts, ADVENTURE_FORMAT.md
 - A098+A099 — starter arc "The Millbrook Disappearances" (11 scenes: green, tavern, Gallows Hill, 3-room barrow on the `barrow` fog map, shrine, shop/chapel, road south, Ravensgate/Brightwater roads; 5 NPCs, 10 encounters, tips on first use of each system, 2 endings → ch1) + engine: outcomes `rest` (short/long), `tip`, ending `next` (session starts the next adventure, extensions.completedAdventures), STARTING_ADVENTURE = millbrook_disappearances — data/adventures/starter/millbrook_disappearances.json, tests/starterArc.test.ts, adventure/{schema,runner,sessionActions}.ts
 - A075b — world map art: seeded organic region coastlines (superellipse + low-frequency waves, Catmull-Rom Béziers), terrain glyphs by region tone (trees/hills, reeds, waves) kept clear of places, SVG icons per location kind (city, town, fortress, port, temple, dungeon/ruin, wilderness), greedy non-overlapping label placement, blurred fog mask lifting around known/visited places, region names only once a place there is known — client/ui/game/{WorldMap.tsx,mapArt.ts}
 - A093 — character screen (game menu → Character: big rotatable model with gear/wounds/wear/scars, click a scar mark or hover the list to read its origin, abilities/AC/HP/equipment), save browser (title Load Game, in-game Save / Load: thumbnails, save as new, overwrite/delete manual saves), hero preview snapshots a 128px JPEG after each model rebuild → `thumbnail` command → every save's meta.thumbnail — client/ui/{SaveBrowser.tsx,game/CharacterScreen.tsx}, client/three/{CharacterPreview,scarMarks}.ts(x), engine/session/GameSession.ts, shared/protocol.ts; test URL #load
@@ -132,6 +133,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A068e: Legendary/extra actions in statOverrides were left out (would need monster-runtime support); overrides cover name/HP/AC. If every conditional monster group is off, the fight falls back to the unfiltered groups rather than starting empty.
 - A104 (helper): Millbrook burns if the hero arrives > 24 h after first seeing the dragon (`since`). A 'wavering Millbrook' middle branch (Persuasion DC 15) was added. Near-miss allies via Persuasion DC 16 (adv. if Pip carries messages). Artillery drives off the brood-guardian and removes one fanatic (no per-round damage). Pyrraxis: freeing = skill challenge with number flags (3 failures close it), bargain pays a chosen Tooth, retreat/loss → raging + Ember Tooth to the Choir. Vey and Vosk hold their own palace rooms. Throne-hall allies = one chosen war-council contingent (4 encounter variants). A still-sick Queen gets a DC 20 retry with a 2-day deadline. Isolde's letter = `arc.main.ch4_isolde_letter` (ch5 reads it). Corwin at loyalty ≤ 20 leaves at the muster and reappears as NPC `ser_corwin`. XP +11,000 (L8) and +14,000 (L9).
 - A098/A099: Starter arc follows DESIGN §4 with simplifications: no group checks (single Stealth DC 13), the altar's per-round feeding is one timed Athletics/Dex check after the fight (fail → Tobin dies), Ashby's flight is a post-fight choice (chase DC 13 / cut down (sets `~cruel`) / let go), level 2 comes from fight XP + 250 XP at the altar, the Tooth/ring/key are flags (no SRD items). Captives saved = 4 − Tobin − 'one taken' (defeats). Corwin's loyalty 50 (+10 if all four saved, −15 on a failed recruit after cruelty). Tips use the new `tip` outcome. The world-map lesson is scripted road scenes (the map still works). Engine: `rest` outcome (short = auto Hit Dice while ≥ one die's average missing + pact slots; long = HP, dice, slots, resources, −1 exhaustion; a stable 0-HP character wakes at 1 HP first); ending `next` chains adventures (the session logs '— <name> —', starts the next adventure, autosaves). The old demo stays for tests.
 - A075b: Map art is procedural and deterministic (seeded by region id) instead of a painted image — no asset licensing, scales to any lore. Fog: 0.9-opacity dark rect with a blurred mask (radius 150 around visited, 100 around heard-of places).

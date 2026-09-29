@@ -105,6 +105,7 @@ Every field is optional:
 | `approval` | `[{ "companion": "nettle", "delta": 10 }]`: ±5 for minor choices, ±10 significant, ±20 defining. Only companions in the party react. Loyalty is kept in `world.<id>_loyalty` (0–100). Author leave or betray points as actions or beats with `{ "flag": "world.<id>_loyalty", "lte": 20 }`. |
 | `goto` | Moves to a scene. This is applied last. |
 | `ending` | Finishes the adventure. |
+| `revealRoom` | `{ "map": "keep", "room": "vault" }`: lifts the fog from a room (a map found, a view from a balcony). Fights also reveal their room. |
 | `rest` | `"short"` or `"long"`: the party rests here (use it only in safe places). A short rest spends Hit Dice automatically (1 hour); a long rest restores HP, Hit Dice, spell slots and daily resources (8 hours). |
 | `tip` | A one-line tutorial tip, shown as a system line the first time this outcome happens in a campaign (the starter arc teaches with these). |
 | `removeItems` | `[{ "itemId": "lance", "quantity": 1 }]`: takes items from the hero (as many as they carry). Pair it with an `item` condition. |
@@ -185,6 +186,8 @@ The loader resolves `~name` to the full id, so saves and later arcs only ever se
 
 - Author the group for a party of four. The game scales it to the real party: the cheapest non-boss monsters are removed while the fight is above the High XP budget, and `scaling.pool` monsters are added while it is below Low.
 - `allies`: `[{ "id": "guard", "count": 2 }]` — friendly stat blocks that fight on the party's side, run by the companion AI.
+- Any monster or ally group may carry an `if` condition: it only joins when the condition holds, so one encounter can cover several situations instead of variants.
+- `statOverrides`: `{ "young_red_dragon": { "name": "Pyrraxis", "hpPercent": 60, "ac": 19 } }` — per monster id, a new name, HP (absolute `hp` or `hpPercent` of the stat block) and AC.
 - `bosses` lists monster ids that are never removed. When it is empty, the single most expensive monster type counts as the boss.
 - In Heroic mode, `lose` is the **defeat outcome** (captured, robbed, rescued...).
 

@@ -19,7 +19,7 @@ import type { Grid, Point } from '../combat/grid';
 import { rollScars } from '../character/scars';
 import { buildDungeonGrid, dungeonProgress, fogSquares, revealRoom, roomSpawns } from '../world/dungeon';
 import { applyDefeat, pickDefeatOutcome, recordFallen, type DefeatResult, type DefeatTable } from './defeat';
-import { getProgress, resolveEncounter, type RunContext, type StepResult } from './runner';
+import { activeGroups, getProgress, resolveEncounter, type RunContext, type StepResult } from './runner';
 import { scaleMonsters } from './encounters';
 import { playerControlled } from '../party/companions';
 
@@ -65,10 +65,20 @@ export function startFight(ctx: RunContext, encounterId: string, rng: Rng, db: S
   const cctx: CombatContext = { rng, db };
   // Scale to the real party with SRD budgets (authored lists assume a party of four).
   const party = [ctx.state.hero, ...ctx.state.companions].filter((c) => !c.dead);
-  const monsters = db.tables ? scaleMonsters(def.monsters, party.map((c) => c.classes.reduce((s, x) => s + x.level, 0)), db, db.tables, { pool: def.scaling?.pool ?? [], bossIds: bossesOf(def, db) }) : def.monsters;
+  const groups = activeGroups(ctx, def.monsters);
+  const monsters = db.tables ? scaleMonsters(groups, party.map((c) => c.classes.reduce((s, x) => s + x.level, 0)), db, db.tables, { pool: def.scaling?.pool ?? [], bossIds: bossesOf(def, db) }) : groups;
   const place = fightMap(ctx, def);
   const enc = setupEncounter(
-    { hero: ctx.state.hero, companions: ctx.state.companions, playerControlled: playerControlled(ctx.state), monsters, allies: def.allies, db, ...(place && { grid: place.grid, spawns: place.spawns, fog: place.fog }) },
+    {
+      hero: ctx.state.hero,
+      companions: ctx.state.companions,
+      playerControlled: playerControlled(ctx.state),
+      monsters: monsters.length ? monsters : groups,
+      allies: activeGroups(ctx, def.allies),
+      overrides: def.statOverrides,
+      db,
+      ...(place && { grid: place.grid, spawns: place.spawns, fog: place.fog }),
+    },
     cctx,
   );
   const fight: ActiveFight = { adventureId: ctx.adventure.id, encounterId, enc };

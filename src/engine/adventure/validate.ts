@@ -92,6 +92,7 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
     for (const m of e.monsters) if (db && !db.monsters.has(m.id)) errors.push(`encounter ${e.id}: unknown monster "${m.id}"`);
     for (const m of e.scaling?.pool ?? []) if (db && !db.monsters.has(m)) errors.push(`encounter ${e.id}: unknown scaling monster "${m}"`);
     for (const m of e.allies) if (db && !db.monsters.has(m.id)) errors.push(`encounter ${e.id}: unknown ally "${m.id}"`);
+    for (const id of Object.keys(e.statOverrides)) if (!e.monsters.some((m) => m.id === id)) errors.push(`encounter ${e.id}: statOverrides for "${id}", which is not one of its monsters`);
     for (const b of e.bosses) if (!e.monsters.some((m) => m.id === b)) errors.push(`encounter ${e.id}: boss "${b}" is not one of its monsters`);
     outcome(e.win, `encounter ${e.id}.win`);
     outcome(e.lose, `encounter ${e.id}.lose`);
@@ -110,6 +111,17 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
     else if (roomId && !m.rooms.some((r) => r.id === roomId)) errors.push(`${where}: map ${mapId} has no room "${roomId}"`);
   };
   for (const s of scenes) room(s.map?.id, s.map?.room, `scene ${s.id}`);
+  const walkReveal = (x: unknown, where: string): void => {
+    if (Array.isArray(x)) return x.forEach((v) => walkReveal(v, where));
+    if (!x || typeof x !== 'object') return;
+    const o = x as Record<string, unknown>;
+    const rr = o.revealRoom as { map?: string; room?: string } | undefined;
+    if (rr && typeof rr === 'object') room(rr.map, rr.room, where);
+    for (const v of Object.values(o)) walkReveal(v, where);
+  };
+  walkReveal(adv.chapters, 'revealRoom');
+  walkReveal(adv.beats, 'revealRoom');
+  walkReveal(adv.encounters, 'revealRoom');
   for (const e of adv.encounters) if (e.map && adv.maps.length) room(e.map, e.room, `encounter ${e.id}`);
   for (const n of adv.npcs) if (db && !db.monsters.has(n.statBlock)) errors.push(`npc ${n.id}: unknown stat block "${n.statBlock}"`);
   for (const n of adv.npcs) for (const e of n.schedule) if (!sceneIds.has(e.scene)) errors.push(`npc ${n.id}: schedule names unknown scene "${e.scene}"`);

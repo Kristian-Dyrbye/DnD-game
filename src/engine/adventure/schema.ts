@@ -119,6 +119,8 @@ export const OutcomeSchema = z
      * 'long' restores HP, Hit Dice, spell slots and daily resources (8 hours).
      */
     rest: z.enum(['short', 'long']).optional(),
+    /** Reveal a room of a dungeon map (a map found, a door opened, a view from a balcony). */
+    revealRoom: z.object({ map: Id, room: Id }).strict().optional(),
     /** A one-line tutorial tip shown the first time this outcome happens (spec §4 starter arc: "the UI shows a one-line tip"). */
     tip: z.string().optional(),
     /** Ends the adventure with this ending id. */
@@ -249,7 +251,12 @@ export const EncounterSchema = z
   .object({
     id: Id,
     name: z.string(),
-    monsters: z.array(z.object({ id: z.string(), count: z.number().int().min(1).default(1) })).min(1),
+    /** Monster groups; a group with `if` only joins when the condition holds (one encounter instead of variants). */
+    monsters: z.array(z.object({ id: z.string(), count: z.number().int().min(1).default(1), if: ConditionSchema.optional() })).min(1),
+    /** Per monster id: tougher/weaker/renamed foes (a wounded dragon at 60% HP, a named lieutenant). */
+    statOverrides: z
+      .record(z.string(), z.object({ name: z.string().optional(), hpPercent: z.number().int().min(1).max(500).optional(), hp: z.number().int().min(1).optional(), ac: z.number().int().min(1).max(30).optional() }).strict())
+      .default({}),
     /** Grid map reference (A064) and terrain notes. */
     map: z.string().optional(),
     /** Room of `map` where the fight happens (default: the current scene's room). */
@@ -260,7 +267,7 @@ export const EncounterSchema = z
     /** Monster ids never trimmed when scaling to a small party (default: the most expensive monster). */
     bosses: z.array(z.string()).default([]),
     /** Friendly stat blocks that fight on the party's side (AI-controlled), e.g. town guards. */
-    allies: z.array(z.object({ id: z.string(), count: z.number().int().min(1).default(1) })).default([]),
+    allies: z.array(z.object({ id: z.string(), count: z.number().int().min(1).default(1), if: ConditionSchema.optional() })).default([]),
     canFlee: z.boolean().default(true),
     win: OutcomeSchema.prefault({}),
     lose: OutcomeSchema.prefault({}),

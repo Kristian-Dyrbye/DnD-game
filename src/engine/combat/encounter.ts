@@ -107,6 +107,8 @@ export interface EncounterSetup {
   monsters: { id: string; count: number }[];
   /** Friendly stat blocks on the party's side (AI-controlled with the companion AI). */
   allies?: { id: string; count: number }[];
+  /** Per monster id: name / HP (absolute or % of the stat block) / AC changes. */
+  overrides?: Record<string, { name?: string; hpPercent?: number; hp?: number; ac?: number }>;
   db: SrdDatabase;
   grid?: Grid;
   /** Preferred starting squares (dungeon rooms): party first, foes second; random edges otherwise. */
@@ -121,7 +123,13 @@ export function setupEncounter(setup: EncounterSetup, ctx: CombatContext): Encou
     list.flatMap((m) => {
       const data = setup.db.monsters.get(m.id);
       if (!data) throw new Error(`Unknown monster ${m.id}`);
-      return Array.from({ length: m.count }, (_, i) => monsterToCreature(data, `${prefix}${m.id}_${i + 1}`, `${label}${data.name}${m.count > 1 ? ` ${i + 1}` : ''}`));
+      const o = setup.overrides?.[m.id];
+      return Array.from({ length: m.count }, (_, i) => {
+        const c = monsterToCreature(data, `${prefix}${m.id}_${i + 1}`, `${label}${o?.name ?? data.name}${m.count > 1 ? ` ${i + 1}` : ''}`);
+        if (!o) return c;
+        const maxHp = o.hp ?? (o.hpPercent ? Math.max(1, Math.round((c.maxHp * o.hpPercent) / 100)) : c.maxHp);
+        return { ...c, maxHp, hp: maxHp, ...(o.ac && { ac: o.ac }) };
+      });
     });
   const allies = spawn(setup.allies ?? [], 'ally_', 'Allied ');
   const party: Creature[] = [setup.hero, ...(setup.companions ?? []), ...allies];

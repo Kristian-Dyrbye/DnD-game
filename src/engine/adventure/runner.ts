@@ -19,7 +19,7 @@ import type { SrdDatabase } from '../data/srd';
 import { abilityCheck, savingThrow, type D20TestResult } from '../rules/checks';
 import type { GameState } from '../session/gameState';
 import { applyFlagWrites, evalCondition, inHours, timeOfDay, type ConditionContext } from './conditions';
-import type { Action, Adventure, Check, Outcome, Scene } from './schema';
+import type { Action, Adventure, Check, Condition, Outcome, Scene } from './schema';
 import { allScenes } from './validate';
 import { SKILL_ABILITY } from '../rules/basics';
 import { FlagRegistry } from '../world/flags';
@@ -284,9 +284,17 @@ export function resolveEncounter(ctx: RunContext, encounterId: string, how: 'win
   const enc = ctx.adventure.encounters.find((e) => e.id === encounterId);
   if (!enc) throw new AdventureError(`Unknown encounter "${encounterId}"`);
   const result = emptyResult();
+  // The fight's room counts as explored even when it was resolved without the map (solver, auto-resolve).
+  if (enc.map && enc.room) revealRoom(ctx.state.extensions, enc.map, enc.room);
   applyOutcome(ctx, enc[how], result);
   fireBeats(ctx, result);
   return result;
+}
+
+/** The monster/ally groups of an encounter whose `if` holds now. */
+export function activeGroups<T extends { id: string; count: number; if?: Condition | undefined }>(ctx: RunContext, groups: readonly T[]): { id: string; count: number }[] {
+  const cc = conditionContext(ctx.state, getProgress(ctx.state), flagsFor(ctx));
+  return groups.filter((g) => evalCondition(g.if, cc)).map((g) => ({ id: g.id, count: g.count }));
 }
 
 export function checkLabel(c: Check): string {
@@ -352,6 +360,7 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
   }
   if (o.damage) storyDamage(ctx, o.damage, result);
   if (o.rest) storyRest(ctx, o.rest, result);
+  if (o.revealRoom) revealRoom(state.extensions, o.revealRoom.map, o.revealRoom.room);
   if (o.scar) {
     const scene = findScene(ctx.adventure, getProgress(state)?.sceneId ?? '');
     state.hero = giveScar(state.hero, { description: o.scar.description, ...(o.scar.location && { location: o.scar.location }), ...(o.scar.damageType && { damageType: o.scar.damageType }), origin: `${scene?.name ?? state.location.name}, ${ctx.adventure.name}`, at: state.time }, ctx.rng);
