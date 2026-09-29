@@ -14,6 +14,7 @@ import { savingThrow, type D20TestResult } from './checks';
 import { createEffectContext, executeEffects, type EffectContext, type HookFn } from './effects';
 import { SPELL_HOOKS, revertExpiredEffects } from './spellHooks';
 import { SPELL_HOOKS_2 } from './spellHooks2';
+import { SPELL_HOOKS_3 } from './spellHooks3';
 
 // ---------------------------------------------------------------- slot tables
 
@@ -257,7 +258,7 @@ export function castSpell(o: CastOptions): CastResult {
     ...(o.potentCantrip && o.spell.level === 0 && { potentCantrip: true }),
     ...(o.sculptTargetIds?.length && { sculptIds: new Set(o.sculptTargetIds) }),
     ...(o.distances && { distances: o.distances }),
-    hooks: { ...SPELL_HOOKS, ...SPELL_HOOKS_2, ...(o.hooks ?? {}) },
+    hooks: { ...SPELL_HOOKS, ...SPELL_HOOKS_2, ...SPELL_HOOKS_3, ...(o.hooks ?? {}) },
     onDamaged: (c, id, amount) => concentrationCheck(c, id, amount, o.rng),
   });
 
