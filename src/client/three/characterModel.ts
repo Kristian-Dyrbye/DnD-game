@@ -2,8 +2,11 @@
  * Builds a character model from Appearance data using the KayKit modular adventurers:
  * body/arms/legs from the outfit file, a head from any outfit (re-bound to the same skeleton),
  * optional headgear and cape, a primary-colour tint on cape/headgear, skin recolouring of the
- * texture atlas, build width and size scale. Weapons and shields are hidden until A088.
+ * texture atlas, build width and size scale. The built-in weapon meshes stay hidden; the equipped
+ * gear is attached to the hand slots instead (equipmentModels.ts).
  */
+import type { EquipmentLook } from '../../engine/appearance/equipmentVisuals';
+import { attachEquipment } from './equipmentModels';
 import * as THREE from 'three';
 import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { buildWidth, sizeScale, type Appearance } from '../../engine/appearance/appearance';
@@ -87,7 +90,7 @@ function applySkin(mesh: THREE.Mesh, tone: string): void {
 
 // ---------------------------------------------------------------- build
 
-export async function buildCharacterModel(a: Appearance, size = 'medium'): Promise<CharacterModel> {
+export async function buildCharacterModel(a: Appearance, size = 'medium', look?: EquipmentLook): Promise<CharacterModel> {
   const base = await loadGltf(OUTFIT_FILES[a.outfit]);
   const root = cloneSkinned(base.scene);
   const prefix = OUTFIT_PREFIX[a.outfit];
@@ -137,6 +140,9 @@ export async function buildCharacterModel(a: Appearance, size = 'medium'): Promi
     if (/_Cape$/.test(mesh.name) || mesh.name === headgear) withMaterial(mesh, (m) => m.color.copy(tint));
     else if (/_(Head|Head_Hooded|ArmLeft|ArmRight)$/.test(mesh.name)) applySkin(mesh, a.skinTone);
   });
+
+  // Weapons and shields in the hands (A088).
+  await attachEquipment(root, look);
 
   const scale = sizeScale(size);
   const width = buildWidth(a.build);

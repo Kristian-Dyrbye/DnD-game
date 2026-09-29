@@ -3,6 +3,7 @@
  * the appearance changes; renders only while mounted; shows a friendly message if the models
  * haven't been downloaded yet (Setup.bat runs scripts/assets-fetch.mjs).
  */
+import { lookKey, type EquipmentLook } from '../../engine/appearance/equipmentVisuals';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -23,7 +24,7 @@ function frame(camera: THREE.PerspectiveCamera, controls: OrbitControls, obj: TH
   controls.update();
 }
 
-export function CharacterPreview({ appearance, size = 'medium', height = 260 }: { appearance: Appearance; size?: string; height?: number }) {
+export function CharacterPreview({ appearance, size = 'medium', height = 260, look }: { appearance: Appearance; size?: string; height?: number; look?: EquipmentLook }) {
   const host = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<{ scene: THREE.Scene; camera: THREE.PerspectiveCamera; controls: OrbitControls; model?: CharacterModel } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -98,10 +99,10 @@ export function CharacterPreview({ appearance, size = 'medium', height = 260 }: 
   }, [height]);
 
   // (Re)build the model when the look changes.
-  const key = JSON.stringify(appearance) + size;
+  const key = JSON.stringify(appearance) + size + lookKey(look);
   useEffect(() => {
     let cancelled = false;
-    buildCharacterModel(appearance, size)
+    buildCharacterModel(appearance, size, look)
       .then((model) => {
         const holder = sceneRef.current;
         if (cancelled || !holder) return model.dispose();

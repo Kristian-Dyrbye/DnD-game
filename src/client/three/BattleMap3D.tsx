@@ -6,6 +6,9 @@
  * Each token has an HP ring; the active creature and valid targets get rings too. Orbit (drag),
  * zoom (wheel) and pan (right drag) the camera; click a square to act. Rendering follows the fps cap.
  */
+import { equipmentLook, lookKey } from '../../engine/appearance/equipmentVisuals';
+import type { Character } from '../../engine/core/creature';
+import { db } from '../data';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -21,7 +24,7 @@ interface Holder {
   controls: OrbitControls;
   board: THREE.Group;
   tokens: THREE.Group;
-  models: Map<string, { model?: CharacterModel; loading: boolean; failed: boolean }>;
+  models: Map<string, { model?: CharacterModel; loading: boolean; failed: boolean; look: string }>;
   dirty: boolean;
 }
 
@@ -284,7 +287,14 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
         r.position.set(at.x, 0.04, at.z);
         h.tokens.add(r);
       }
-      const entry = h.models.get(t.id);
+      const look = c.kind === 'character' ? equipmentLook(c as Character, db) : undefined;
+      let entry = h.models.get(t.id);
+      if (entry && entry.look !== lookKey(look)) {
+        // Gear changed (e.g. a new weapon): rebuild this model.
+        entry.model?.dispose();
+        h.models.delete(t.id);
+        entry = undefined;
+      }
       if (withModels.has(t.id) && entry?.model) {
         const root = entry.model.root;
         root.position.set(at.x, 0, at.z);
@@ -294,10 +304,10 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
         continue;
       }
       if (withModels.has(t.id) && !entry) {
-        const slot = { loading: true, failed: false } as { model?: CharacterModel; loading: boolean; failed: boolean };
+        const slot = { loading: true, failed: false, look: lookKey(look) } as { model?: CharacterModel; loading: boolean; failed: boolean; look: string };
         h.models.set(t.id, slot);
         const appearance = (c as { appearance?: Parameters<typeof buildCharacterModel>[0] }).appearance!;
-        buildCharacterModel(appearance, c.size)
+        buildCharacterModel(appearance, c.size, look)
           .then((model) => {
             const live = holder.current;
             if (!live || live.models.get(t.id) !== slot) return model.dispose();
