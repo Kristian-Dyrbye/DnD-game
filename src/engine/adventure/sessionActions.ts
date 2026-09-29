@@ -20,6 +20,7 @@ import { resolveIntent } from './resolve';
 import { activeFight, fightAct, finishFight, startFight, type FightEnd } from './fights';
 import type { DefeatTable } from './defeat';
 import { canLevelUp, levelUp } from '../character/leveling';
+import { banterDue, speakBanter, type BanterGenerator } from '../party/banter';
 import { changeApproval, levelCompanionsWithHero, partWithCompanion, recruitCompanion, setControl, type CompanionRoster } from '../party/companions';
 import { totalLevel } from '../core/creature';
 import type { Ability, Skill } from '../rules/basics';
@@ -54,6 +55,8 @@ export interface AdventurePortOptions {
   defeats?: DefeatTable;
   /** Recruitable companions (data/companions.json). */
   companions?: CompanionRoster;
+  /** Companion banter lines (the LLM); without it the roster's written lines are used. */
+  banter?: BanterGenerator;
 }
 
 /** The ActionPort plus a hook for tests to wait for background suggestion/summary work. */
@@ -195,8 +198,25 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       .catch(() => undefined);
   };
 
+  // Occasional companion banter, in the background so it never delays a turn.
+  let pendingBanter: Promise<void> = Promise.resolve();
+  const maybeBanter = (session: GameSession) => {
+    if (!opts.companions || activeFight(session.current)) return;
+    const who = banterDue(session.current, opts.companions);
+    if (!who) return;
+    const state = session.current;
+    const context = state.log.slice(-4).map((e) => e.text).join('\n');
+    pendingBanter = pendingBanter
+      .then(async () => {
+        const line = await speakBanter(state, who, context, opts.banter);
+        if (line && session.running && session.current === state) session.addLog('dialogue', line, who.name);
+      })
+      .catch(() => undefined);
+  };
+
   const finish = async (session: GameSession, ctx: RunContext, r: StepResult, playerAction?: string) => {
     await publish(session, ctx, r, playerAction);
+    maybeBanter(session);
     // A finished side quest hands control back to the main adventure.
     const done = finishActive(session.current);
     if (done) {
@@ -236,6 +256,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     idle: async () => {
       await pendingIdeas;
       await pendingSummary;
+      await pendingBanter;
     },
     async begin(session) {
       const ctx = ctxFor(session);

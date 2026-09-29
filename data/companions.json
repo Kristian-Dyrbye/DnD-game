@@ -12,10 +12,31 @@
       "personality": "Earnest, stubborn and dry-humoured; ashamed of his dismissal but never mopes.",
       "goal": "Prove that the Dawn Lance's creed matters more than its orders, and be reinstated.",
       "voice": "Clipped and formal, softening as trust grows.",
-      "factions": ["order_of_the_dawn_lance", "crown_of_aurelmark"],
-      "appearance": { "outfit": "knight", "head": "knight", "build": "broad", "skinTone": "#c68a62", "primaryColor": "#c8a15a", "showHeadgear": false, "showCape": true },
+      "factions": [
+        "order_of_the_dawn_lance",
+        "crown_of_aurelmark"
+      ],
+      "appearance": {
+        "outfit": "knight",
+        "head": "knight",
+        "build": "broad",
+        "skinTone": "#c68a62",
+        "primaryColor": "#c8a15a",
+        "showHeadgear": false,
+        "showCape": true
+      },
       "statusFlag": "world.corwin_status",
-      "loyaltyFlag": "world.corwin_loyalty"
+      "loyaltyFlag": "world.corwin_loyalty",
+      "banter": [
+        "A knight keeps his word even when no one is watching. Especially then.",
+        "Stay behind me when the steel comes out.",
+        "My mentor used to say an oath is a promise to your future self.",
+        "I have slept in worse places. Not many, but some."
+      ],
+      "grumbles": [
+        "I follow you because I said I would. Do not make me regret it.",
+        "This is not what the Lance would do."
+      ]
     },
     {
       "id": "nettle",
@@ -28,10 +49,30 @@
       "personality": "Blunt, funny and fearless around the sick; sharp around authority. Hums while healing.",
       "goal": "Find a true cure for the Whispering Sickness.",
       "voice": "Quick fen-dialect; swears by roots and rot.",
-      "factions": ["briarkin"],
-      "appearance": { "outfit": "mage", "head": "rogue_hooded", "build": "slim", "skinTone": "#e0ac8a", "primaryColor": "#4f7a3a", "showHeadgear": false, "showCape": true },
+      "factions": [
+        "briarkin"
+      ],
+      "appearance": {
+        "outfit": "mage",
+        "head": "rogue_hooded",
+        "build": "slim",
+        "skinTone": "#e0ac8a",
+        "primaryColor": "#4f7a3a",
+        "showHeadgear": false,
+        "showCape": true
+      },
       "statusFlag": "world.nettle_status",
-      "loyaltyFlag": "world.nettle_loyalty"
+      "loyaltyFlag": "world.nettle_loyalty",
+      "banter": [
+        "Rot and roots, that smell is either supper or a corpse.",
+        "Sit still, I'm not done patching you.",
+        "Grandmother Wick says the fen remembers everyone who walks it.",
+        "You breathe too loud for sneaking, you know."
+      ],
+      "grumbles": [
+        "Keep this up and I'm walking back to the stilts.",
+        "I've met leeches with better manners."
+      ]
     },
     {
       "id": "rook",
@@ -45,10 +86,30 @@
       "personality": "Charming, evasive, loyal only once it costs him something.",
       "goal": "Stay free and stay rich — or so he says.",
       "voice": "Easy drawl, jokes when nervous.",
-      "factions": ["red_gull_brotherhood"],
-      "appearance": { "outfit": "rogue_hooded", "head": "rogue_hooded", "build": "average", "skinTone": "#9a4a3a", "primaryColor": "#6a2a2a", "showHeadgear": false, "showCape": true },
+      "factions": [
+        "red_gull_brotherhood"
+      ],
+      "appearance": {
+        "outfit": "rogue_hooded",
+        "head": "rogue_hooded",
+        "build": "average",
+        "skinTone": "#9a4a3a",
+        "primaryColor": "#6a2a2a",
+        "showHeadgear": false,
+        "showCape": true
+      },
       "statusFlag": "world.rook_status",
-      "loyaltyFlag": "world.rook_loyalty"
+      "loyaltyFlag": "world.rook_loyalty",
+      "banter": [
+        "Relax. If this were a trap, I'd be standing somewhere else.",
+        "Everything has a price. Most people just don't know theirs yet.",
+        "Nice purse. Kidding. Mostly.",
+        "Gullhaven had better food. And worse company. Well — different company."
+      ],
+      "grumbles": [
+        "You're making this very easy to walk away from.",
+        "Remind me why I'm still here?"
+      ]
     },
     {
       "id": "aurek",
@@ -61,10 +122,30 @@
       "personality": "Precise, courteous, haunted by what his family has done.",
       "goal": "Understand his aunt — and stop her.",
       "voice": "Measured Highcrown diction; long pauses.",
-      "factions": ["crown_of_aurelmark"],
-      "appearance": { "outfit": "mage", "head": "mage", "build": "slim", "skinTone": "#f1c9a5", "primaryColor": "#3a4f8a", "showHeadgear": true, "showCape": true },
+      "factions": [
+        "crown_of_aurelmark"
+      ],
+      "appearance": {
+        "outfit": "mage",
+        "head": "mage",
+        "build": "slim",
+        "skinTone": "#f1c9a5",
+        "primaryColor": "#3a4f8a",
+        "showHeadgear": true,
+        "showCape": true
+      },
       "statusFlag": "world.aurek_status",
-      "loyaltyFlag": "world.aurek_loyalty"
+      "loyaltyFlag": "world.aurek_loyalty",
+      "banter": [
+        "Fascinating. Terrible, but fascinating.",
+        "My aunt would call this 'an inefficient use of mercy'. I call it the point.",
+        "There is a pattern here. Give me a moment.",
+        "I read about places like this. The books were kinder."
+      ],
+      "grumbles": [
+        "I did not leave my family to follow someone who acts like them.",
+        "We are drifting from the reason I came."
+      ]
     }
   ]
 }

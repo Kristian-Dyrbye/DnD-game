@@ -36,6 +36,9 @@ export const CompanionDefSchema = z.object({
   appearance: AppearanceSchema.prefault({}),
   statusFlag: z.string(),
   loyaltyFlag: z.string(),
+  /** Fallback banter (when the LLM is unavailable) and lines for low loyalty. */
+  banter: z.array(z.string()).default([]),
+  grumbles: z.array(z.string()).default([]),
 });
 export type CompanionDef = z.infer<typeof CompanionDefSchema>;
 export const CompanionRosterSchema = z.object({ companions: z.array(CompanionDefSchema) });
