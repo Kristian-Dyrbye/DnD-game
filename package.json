@@ -4,7 +4,9 @@
   "description": "Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master",
   "scripts": {
     "dev": "vite",
+    "dev:server": "tsx watch src/server/main.ts",
     "build": "vite build",
+    "start": "tsx src/server/main.ts",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -14,15 +16,21 @@
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
+    "@fastify/static": "^10.1.5",
+    "@fastify/websocket": "^11.3.1",
     "@preact/signals": "^2.11.2",
+    "fastify": "^5.12.5",
     "preact": "^10.29.8"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.10.6",
     "@types/node": "^26.6.3",
+    "@types/ws": "^8.18.2",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^8.3.1",
-    "vitest": "^5.0.2"
+    "vitest": "^5.0.2",
+    "ws": "^8.22.0"
   },
   "private": true,
   "engines": {

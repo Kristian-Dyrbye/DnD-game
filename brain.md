@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 1 (Foundation)
-- **Last completed assignment:** A001
-- **Notes for next session:** Start with A002. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. A010 needs Ollama: if `ollama` is still missing, mark it blocked and skip it.
+- **Last completed assignment:** A002
+- **Notes for next session:** Start with A003. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. A010 needs Ollama: if `ollama` is still missing, mark it blocked and skip it.
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -19,7 +19,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ### Phase 1 — Foundation
 - [done] A001 — Project scaffold | Spec: §2, §17 | Done: package.json (scripts dev/build/test/typecheck), tsconfig strict, Vite+Preact client "hello" page, Vitest with 1 passing test, folder skeleton per ARCHITECTURE.md; build passes | Dep: A000
-- [todo] A002 — Fastify server | Spec: §1, §2 | Done: serves built client, GET /api/health, WebSocket /ws echo, Vite dev proxy; route tests via fastify.inject | Dep: A001
+- [done] A002 — Fastify server | Spec: §1, §2 | Done: serves built client, GET /api/health, WebSocket /ws echo, Vite dev proxy; route tests via fastify.inject | Dep: A001
 - [todo] A003 — Settings/config system | Spec: §14, §2 | Done: zod settings schema (model name, LLM params, volumes, perf preset, accessibility, objectiveHint=false), defaults + userdata/settings.json load/save, GET/PUT /api/settings; tests | Dep: A002
 - [todo] A004 — LLM provider + Ollama client + mock | Spec: §2, §3, §17 | Done: LlmProvider interface (chat, stream, json, listModels, status); Ollama client over fetch; deterministic MockLlm (scripted responses); tests with mocked fetch | Dep: A001
 - [todo] A005 — Structured JSON helper | Spec: §3 | Done: llm/structured.ts: schema→Ollama format, zod validate, 1 retry, typed fallback, never throws; tests for bad JSON/timeouts | Dep: A004
@@ -163,6 +163,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 <!-- One line per assignment: A<id> — what was built — key files. Compress into per-phase summaries when long. -->
 - A000 — Build plan, repo, architecture — `.gitignore`, `.gitattributes`, `ARCHITECTURE.md`, `brain.md`
 - A001 — Scaffold: Vite+Preact client, strict TS, Vitest, folder skeleton — `package.json`, `tsconfig.json`, `vite.config.ts`, `src/client/*`, `src/shared/version.ts`
+- A002 — Fastify server: /api/health, /ws JSON echo, static client + SPA fallback, Vite dev proxy — `src/server/app.ts`, `src/server/main.ts`, `src/server/app.test.ts`
 
 ## Decisions Log
 <!-- Choice — alternatives considered — why. Never delete; summarize if long. -->
@@ -181,6 +182,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A000: §16 readiness = System Registry (hooks: initState, migrate, onTimeAdvance, onRest, downtimeActivities, commands, promptCards); namespaced flags (arc.<id>.*, world.*); standalone validateAdventure().
 - A001: Tooling versions installed: TypeScript 7.0 (native `tsc`), Vite 8, Vitest 5, Preact 10, @preact/signals 2. Vite root = src/client, build → dist/client.
 - A001: tsconfig: strict + noUncheckedIndexedAccess + verbatimModuleSyntax (use `import type` for types); moduleResolution Bundler, so no .js suffixes in imports. Server will run through tsx/bundling, not plain tsc emit.
+- A002: Server listens on 127.0.0.1:3210 (env PORT overrides); run via tsx (`npm start`, `npm run dev:server`) instead of a compiled bundle — simplest, no build step for the server.
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -196,12 +198,16 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `tsconfig.json` — strict TS config for all of src/tests/scripts
 - `vite.config.ts` — Vite (client) + Vitest config (tests: src/**/*.test.ts(x), tests/**/*.test.ts)
 - `src/client/` — index.html, main.tsx, styles.css, ui/App.tsx
+- `src/server/app.ts` — buildApp(opts): Fastify app factory (REST, /ws, static). Tests use inject()/injectWS()
+- `src/server/main.ts` — entry; serves dist/client on 127.0.0.1:3210
 - `src/shared/version.ts` — GAME_TITLE, GAME_VERSION, SAVE_SCHEMA_VERSION
 - `.gitattributes` — *.bat forced to CRLF
 - Planned folders (created with .gitkeep; see ARCHITECTURE.md §2): `src/engine`, `src/llm`, `src/tts`, `src/server`, `src/shared`, `src/client`, `data/srd`, `data/world`, `data/adventures`, `data/tables`, `scripts/`, `tests/`
 
 ## Gotchas & Lessons
 - git core.autocrlf=true on this machine. The .bat launchers must stay CRLF; `.gitattributes` forces `*.bat` to CRLF (done). LF→CRLF warnings on `git add` are harmless.
+- npm 11 blocks install scripts by default (`allow-scripts` warning for esbuild). Ignore it: tsx/vite work via esbuild's optional platform package. Don't run approve-scripts unless something breaks.
+- To smoke-test the server: `PORT=3299 npx tsx src/server/main.ts &`, curl, then kill the PID from `netstat -ano | grep :3299` with `taskkill //PID <pid> //F` (Git Bash needs `//`).
 - Node v26.3.0, npm 11.16.0, git 2.53 are installed. Ollama is not installed yet (2026-09-29).
 
 ## Blockers / Owner Review

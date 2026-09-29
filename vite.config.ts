@@ -6,6 +6,13 @@ export default defineConfig({
   root: 'src/client',
   publicDir: false,
   plugins: [preact()],
+  server: {
+    // During `npm run dev`, forward API and game-channel traffic to the Fastify server (npm run dev:server).
+    proxy: {
+      '/api': 'http://127.0.0.1:3210',
+      '/ws': { target: 'ws://127.0.0.1:3210', ws: true },
+    },
+  },
   build: {
     outDir: '../../dist/client',
     emptyOutDir: true,
