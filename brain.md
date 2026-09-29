@@ -5,8 +5,8 @@
 ## Status
 - **State:** IN PROGRESS
 - **Current phase:** 2 (Rules Engine)
-- **Last completed assignment:** A034
-- **Notes for next session:** Start with A035. A034a is with a helper (merge its branch when it reports). A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
+- **Last completed assignment:** A035
+- **Notes for next session:** Start with A036. A034a is with a helper (merge its branch when it reports). A010 is blocked on Ollama: if `ollama --version` works now, set A010 to todo and do it first. Ollama is NOT installed yet (the owner is installing it); use the mock LLM. 
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -55,7 +55,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A033 — Effect system
 - [done] A034 — Spellcasting engine
 - [in-progress (helper)] A034a — Spell effects pass | Spec: §4 | Done: hand-written effects/hooks in data/srd/overrides/spells.json for the ~40 most-used combat spells that have no auto effects (magic_missile, bless, shield, ice_storm, counterspell, guiding_bolt, spiritual_weapon, etc.); tests (cantrip scaling moved into A034) | Dep: A033
-- [todo] A035 — Character builder + derived stats | Spec: §4, §5 | Done: build from class/species/background/scores; AC (armor, shield, unarmored), HP, speed, proficiencies, attacks; tests | Dep: A015, A016, A018
+- [done] A035 — Character builder + derived stats
 - [todo] A036 — Leveling + feats | Spec: §4 | Done: XP thresholds, level-up (HP, features, subclass, ASI/feat, epic boon), feat effects via hooks; tests | Dep: A035, A017, A020
 - [todo] A037 — Multiclassing | Spec: §4 | Done: prereqs, proficiencies gained, multiclass slot table, pact magic separate; tests | Dep: A036
 - [todo] A038 — Weapon mastery | Spec: §4, §10 | Done: cleave, graze, nick, push, sap, slow, topple, vex; tests | Dep: A030, A015
@@ -170,6 +170,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A032 — Death & rest: resolveDamageAtZero (monster death, unconscious, massive damage, failures at 0 HP incl. crit = 2), rollDeathSave (10+, nat 1/20, stable, dead, exhaustion applies), stabilize, healFromZero; shortRest (hit dice die+Con min 1), longRest (all HP + all hit dice, temp HP gone, −1 exhaustion), rechargeResources, hitDicePool; `dead` flag on Creature — `src/engine/rules/death.ts`, `src/engine/rules/rest.ts`
 - A033 — Effect executor: createEffectContext + executeEffects for damage (shared roll per effect, half on save), save (per target, condition-aware modes), attack (spell attack, crit doubles), heal (+spell mod, upcast), temp HP, condition (duration → rounds, source id), area, hooks (unknown = logged); upcastDice, durationRounds; onDamaged callback for concentration — `src/engine/rules/effects.ts`
 - A034 — Spellcasting: SpellcastingState on characters (slots/maxSlots, pact, cantrips, prepared, concentration); spellSlots (single class table, multiclass full + ceil(half)), pactSlots, save DC/attack bonus, cantrip scaling ×1/2/3/4 at 1/5/11/17, slotProblem/expendSlot/recoverSlots, castSpell (slot/pact/ritual/cantrip, upcast, effects, concentration start/replace), concentrationCheck (DC max(10, dmg/2) ≤ 30; incapacitated/dead ends it), endConcentration removes stamped conditions — `src/engine/rules/spellcasting.ts`
+- A035 — Character builder + derived stats: Character gets inventory (uid, itemId, qty, equipped slot, magicItemId, attuned), coins (CP), lineageId, weaponMasteries, proficiencies {weapons, armor, tools}, choices, personality; validateBuild (lists all problems) + buildCharacter (bg bonus, skills, species skills/feat, lineage resistances/darkvision, equipment A/B + auto-equip, HP, AC, speed, slots); derived: armorClass (armor/dex cap, Unarmored Defense barb/monk, shield, Defense, magic, worn items), baseSpeed, weaponAttack (finesse/ranged ability, proficiency tokens, magic, Archery, mastery), unarmedStrike, maxHitPoints (avg after L1, Dwarven Toughness), initiativeModifiers (Alert) — `src/engine/character/builder.ts`, `src/engine/character/derived.ts`
 - A071 (helper) — World lore: continent Orrimar; regions Aurelmark (high fantasy), the Gloamfen (dark), Brinescatter Isles (swashbuckling) with narrator tone profiles + climate; 9 history events, 8 gods, 9 factions (symmetric relationships; villain cult = Hollow Choir, leader 'The Cantor', seeks 7 Tooth relics to unseal the Maw), 21 locations with mapPos (1000×700), 27 routes, calendar (12 months, 7 weekdays, 30-day months, year 1247 AR); helpers regionById/locationById/factionById/regionOfLocation/routesFrom/factionRelation — `src/engine/world/lore.ts`, `data/world/lore.json`
 
 ## Decisions Log
@@ -227,6 +228,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A033: EffectContext keeps a Map of creatures updated in place + a text log; targets are pre-selected (AoE geometry lives in combat/aoe). Condition sourceId convention for spells: `<casterId>:<spellId>` so ending concentration removes them. Durations: 1 minute = 10 rounds.
 - A071: Starting location = Millbrook (tag `starting_location`, Aurelmark). Routes stored once (undirected). Faction defaultReputation 0 except Hollow Choir −60, Lantern Wardens −10. region.mapBounds boxes contain their locations.
 - A034: Spell condition source id = `<casterId>:<spellId>`. castSpell hooks concentrationCheck into EffectContext.onDamaged. Third-casters supported in math (floor(level/3)) though no SRD class uses it.
+- A035: Weapons/armor are stored one inventory entry per item (so each can be equipped); other items stack. Generic choice tags resolve via input.choiceItems or DEFAULT_CHOICE_ITEM (holy_symbol→amulet, gaming_set→dice_set, instrument→lute). Fighting style feats go into featIds. Level > 1 builds use fixed average HP (no ASIs/features; leveling = A036).
 - A000: Queue uses a compact one-line format so ~116 assignments fit under the 400-line limit.
 
 ## File Map
@@ -258,6 +260,8 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - `src/engine/rules/effects.ts` — createEffectContext, executeEffects, upcastDice, durationRounds (HookFn registry)
 - `src/engine/world/lore.ts` + `data/world/lore.json` — world lore schema/data + lookup helpers (MAP_WIDTH/HEIGHT, WEATHER_KINDS, SEASONS...)
 - `src/engine/rules/spellcasting.ts` — spellSlots, pactSlots, spellSaveDc, spellAttackBonus, cantripMultiplier, scaleCantripEffects, slotProblem, expendSlot, recoverSlots, castSpell, concentrationCheck, endConcentration
+- `src/engine/character/builder.ts` — CharacterBuildInput, validateBuild, buildCharacter, autoEquip
+- `src/engine/character/derived.ts` — armorClass, baseSpeed, isProficientWith, weaponAttack, unarmedStrike, maxHitPoints, initiativeModifiers, classLevel, equipped
 - `src/engine/data/common.ts` — IdSchema, DiceSchema, CostSchema(CP), DamageSchema, AreaSchema, DurationSchema, EffectSchema/Effect, toId
 - `src/engine/data/schemas.ts` — schemas for every data/srd file + RulesTablesSchema; SRD_FILES registry; record types
 - `src/engine/data/srd.ts` — validateSrdFile, SrdDatabase (maps by id, item(), spellsForClass)

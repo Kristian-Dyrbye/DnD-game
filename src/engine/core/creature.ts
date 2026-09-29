@@ -122,6 +122,20 @@ export const SpellcastingStateSchema = z.object({
 });
 export type SpellcastingState = z.infer<typeof SpellcastingStateSchema>;
 
+/** One stack of items a character carries. Equipped weapons/armor drive AC and attacks. */
+export const InventoryItemSchema = z.object({
+  /** Unique within the inventory (so two identical daggers can be equipped separately). */
+  uid: z.string(),
+  /** Id in weapons/armor/gear/magic items. */
+  itemId: z.string(),
+  quantity: z.number().int().min(0),
+  equipped: z.enum(['armor', 'shield', 'main_hand', 'off_hand', 'worn']).optional(),
+  /** Magic item id layered on a base item (weapon_1 on a longsword). */
+  magicItemId: z.string().optional(),
+  attuned: z.boolean().optional(),
+});
+export type InventoryItem = z.infer<typeof InventoryItemSchema>;
+
 /** Player characters and companions: a creature plus class, species, background and progression. */
 export const CharacterSchema = CreatureSchema.extend({
   kind: z.literal('character'),
@@ -135,6 +149,24 @@ export const CharacterSchema = CreatureSchema.extend({
   deathSaves: DeathSavesSchema.default({ successes: 0, failures: 0, stable: false }),
   heroicInspiration: z.boolean().default(false),
   spellcasting: SpellcastingStateSchema.optional(),
+  inventory: z.array(InventoryItemSchema).default([]),
+  /** Coins in copper pieces. */
+  coins: z.number().int().min(0).default(0),
+  /** Chosen lineage/ancestry (dragon colour, elven lineage...). */
+  lineageId: z.string().optional(),
+  /** Weapon ids whose mastery property the character can use. */
+  weaponMasteries: z.array(z.string()).default([]),
+  /** Proficiency tokens: weapons ('simple', 'martial', 'martial:light', weapon ids), armor ('light'...'shield'), tools (item ids). */
+  proficiencies: z
+    .object({
+      weapons: z.array(z.string()).default([]),
+      armor: z.array(z.string()).default([]),
+      tools: z.array(z.string()).default([]),
+    })
+    .prefault({}),
+  /** Chosen class options (fighting style feat id, metamagic, invocations...). */
+  choices: z.record(z.string(), z.array(z.string())).default({}),
+  personality: z.object({ traits: z.string(), ideals: z.string(), bonds: z.string(), flaws: z.string(), backstory: z.string() }).partial().default({}),
 });
 export type Character = z.infer<typeof CharacterSchema>;
 
