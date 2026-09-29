@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "description": "Offline TTS: the Piper Windows binary and the voices the game uses. Fetch with `node scripts/voices-fetch.mjs` (zip cached in tools/_downloads/, extracted to tools/piper/, voices into assets/voices/). All of those are gitignored; this manifest is committed.",
+  "researchedOn": "2026-09-29",
+  "notes": [
+    "Binary: rhasspy/piper 2023.11.14-2 (last release of the original MIT repo, archived). The successor OHF-Voice/piper1-gpl v1.8.0 ships only Python wheels (no standalone .exe) and is GPL-3.0, so the MIT binary release is used.",
+    "The Windows zip also bundles espeak-ng (espeak-ng.dll + espeak-ng-data), which is GPL-3.0. We never modify or redistribute it: Setup.bat downloads the official zip on the player's machine and the game only runs piper.exe as a separate process.",
+    "Voices: every voice is trained on public-domain LibriVox audio by Bryce Beattie (trained from scratch, except john which is fine-tuned from kristin). en_US-lessac-* was rejected: its dataset (Lessac Blizzard 2013) is licensed for research purposes only. Voices fine-tuned from lessac (joe, amy, alan, alba, northern_english_male, hfc_*) were rejected for the same inheritance; ryan and hfc_* also have CC BY-NC-SA datasets.",
+    "URLs are pinned to the piper-voices v1.0.0 tag on Hugging Face; bytes + sha256 are verified after every download."
+  ],
+  "piper": {
+    "version": "2023.11.14-2",
+    "url": "https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_windows_amd64.zip",
+    "releasePage": "https://github.com/rhasspy/piper/releases/tag/2023.11.14-2",
+    "bytes": 22477236,
+    "sha256": "f3c58906402b24f3a96d92145f58acba6d86c9b5db896d207f78dc80811efcea",
+    "exe": "piper/piper.exe",
+    "license": "MIT",
+    "licenseUrl": "https://github.com/rhasspy/piper/blob/master/LICENSE.md",
+    "licenseQuote": "MIT License. Copyright (c) 2022 Michael Hansen. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software.",
+    "bundled": "espeak-ng (GPL-3.0) and onnxruntime (MIT) ship inside the zip"
+  },
+  "voices": [
+    {
+      "id": "en_GB-cori-medium",
+      "role": "narrator",
+      "language": "en_GB",
+      "gender": "female",
+      "quality": "medium",
+      "url": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/cori/medium/en_GB-cori-medium.onnx",
+      "bytes": 63531379,
+      "sha256": "1899f98e5fb8310154f3c2973f4b8a929ba7245e722b3d3a85680b833d95f10d",
+      "configUrl": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/cori/medium/en_GB-cori-medium.onnx.json",
+      "configBytes": 4966,
+      "configSha256": "e262c16d7f192f69d4edd6b4ef8a5915379e67495fcc402f1ab15eeb33da3d36",
+      "modelCard": "https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/en/en_GB/cori/medium/MODEL_CARD",
+      "license": "public-domain",
+      "licenseQuote": "MODEL_CARD: \"Dataset URL: https://librivox.org — License: public domain\". Author (brycebeattie.com/files/tts): \"License: public domain\" ... \"Feel free to use these for any legal and ethical purpose.\"",
+      "datasetCredit": "Cori voice by Bryce Beattie, trained from scratch on ~24 h of public-domain LibriVox recordings (UK English female)."
+    },
+    {
+      "id": "en_US-norman-medium",
+      "role": "npc_male",
+      "language": "en_US",
+      "gender": "male",
+      "quality": "medium",
+      "url": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/norman/medium/en_US-norman-medium.onnx",
+      "bytes": 63531379,
+      "sha256": "b9739443232a80a59c7d18810dd856899bf16a7964725f5ab81ea49b1351cb71",
+      "configUrl": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/norman/medium/en_US-norman-medium.onnx.json",
+      "configBytes": 4968,
+      "configSha256": "6c2db7f558a4a8deb9fe822583c1c5105f6c4e834dd0f9de8ad17a888ee9fe1d",
+      "modelCard": "https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/en/en_US/norman/medium/MODEL_CARD",
+      "license": "public-domain",
+      "licenseQuote": "MODEL_CARD: \"Dataset URL: https://librivox.org — License: public domain\". Author (brycebeattie.com/files/tts): \"License: public domain\" ... \"Feel free to use these for any legal and ethical purpose.\"",
+      "datasetCredit": "Norman voice by Bryce Beattie, trained from scratch on ~15.5 h of public-domain LibriVox recordings (US English male)."
+    },
+    {
+      "id": "en_US-kristin-medium",
+      "role": "npc_female",
+      "language": "en_US",
+      "gender": "female",
+      "quality": "medium",
+      "url": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/kristin/medium/en_US-kristin-medium.onnx",
+      "bytes": 63531379,
+      "sha256": "5849957f929cbf720c258f8458692d6103fff2f0e3d3b19c8259474bb06a18d4",
+      "configUrl": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/kristin/medium/en_US-kristin-medium.onnx.json",
+      "configBytes": 4968,
+      "configSha256": "5681426d4aead22195de70531eeeeddb46493cfaffc5764b2ea3db73428b651c",
+      "modelCard": "https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/en/en_US/kristin/medium/MODEL_CARD",
+      "license": "public-domain",
+      "licenseQuote": "MODEL_CARD: \"Dataset URL: https://librivox.org — License: public domain\". Author (brycebeattie.com/files/tts): \"License: public domain\" ... \"Feel free to use these for any legal and ethical purpose.\"",
+      "datasetCredit": "Kristin voice by Bryce Beattie, trained from scratch on ~11.5 h of public-domain LibriVox recordings (US English female)."
+    },
+    {
+      "id": "en_US-john-medium",
+      "role": "extra",
+      "language": "en_US",
+      "gender": "male",
+      "quality": "medium",
+      "url": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/john/medium/en_US-john-medium.onnx",
+      "bytes": 63531379,
+      "sha256": "789c6c875726e627ddee93d51d8727859abe9c091c3d141591f4b83c2072e988",
+      "configUrl": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/john/medium/en_US-john-medium.onnx.json",
+      "configBytes": 4965,
+      "configSha256": "af60f177b6b550f3d7a302720c0fb89e7f94a82b5dca464775ef63b1c69ba09a",
+      "modelCard": "https://huggingface.co/rhasspy/piper-voices/blob/v1.0.0/en/en_US/john/medium/MODEL_CARD",
+      "license": "public-domain",
+      "licenseQuote": "MODEL_CARD: \"Dataset URL: https://librivox.org — License: public domain\". Author (brycebeattie.com/files/tts): \"License: public domain\" ... \"Feel free to use these for any legal and ethical purpose.\"",
+      "datasetCredit": "John voice by Bryce Beattie, fine-tuned from Kristin on ~12.5 h of public-domain LibriVox recordings (US English male)."
+    }
+  ]
+}
