@@ -96,7 +96,8 @@ describe('starter arc: The Millbrook Disappearances', () => {
   it('the solver can finish every leg of the arc (in legs: optional actions explode the search)', () => {
     const a = 'arc.starter.';
     const legs = [
-      leg('millbrook_arrival', {}, { flag: `${a}altar_won` }, 'leg'),
+      leg('millbrook_arrival', {}, { all: [{ flag: `${a}approached` }, { flag: `${a}barrow_key` }] }, 'leg'),
+      leg('gallows_hill_trail', { [`${a}approached`]: true, [`${a}barrow_key`]: true, [`${a}tracked`]: true, [`${a}crossed`]: true }, { flag: `${a}altar_won` }, 'leg'),
       leg('barrow_tithe_altar', { [`${a}altar_won`]: true, [`${a}crypt_cleared`]: true, [`${a}has_ring`]: true, 'world.corwin_status': 'met', 'arc.main.tooth_want_holder': 'player' }, { flag: `${a}slept` }, 'leg'),
       leg('millbrook_arrival', { [`${a}altar_won`]: true, [`${a}captives_freed`]: true, [`${a}slept`]: true, [`${a}has_ring`]: true, 'world.corwin_status': 'met' }, { flag: `${a}oath_done` }, 'leg'),
       leg('road_south', { [`${a}oath_done`]: true, 'arc.main.tooth_want_holder': 'player' }, undefined, 'starter_ravensgate'),
@@ -144,6 +145,137 @@ describe('starter arc: The Millbrook Disappearances', () => {
     const end = play(c, ['hand_over']).at(-1)!;
     expect(end.ending).toBe('starter_brightwater');
     expect(c.state.flags['arc.main.tooth_want_holder']).toBe('choir');
+  });
+
+  describe('A131: conversations, approaches and consequences', () => {
+    const S = 'arc.starter.';
+    /** Always rolls 1 (every check fails). */
+    class UnluckyRng extends Rng {
+      constructor() {
+        super([1, 2, 3, 4]);
+      }
+      override int(min: number, max: number): number {
+        return max === 20 ? 1 : super.int(min, max);
+      }
+    }
+    const at = (c: RunContext, scene: string, flags: Record<string, string | number | boolean> = {}) => {
+      startAdventure(c);
+      getProgress(c.state)!.sceneId = scene;
+      Object.assign(c.state.flags, flags);
+      return c;
+    };
+    const offered = (c: RunContext) => availableActions(c).map((a) => a.id);
+
+    it('every key NPC has a conversation with at least 3 approaches that do something', () => {
+      for (const id of ['reeve_tamsin', 'maud_fennick', 'agna_marrow', 'corwin_npc', 'choir_lookouts', 'brother_ashby']) {
+        const npc = ADV.npcs.find((n) => n.id === id)!;
+        const approaches = new Set<string>();
+        for (const conv of npc.conversations) {
+          for (const node of conv.nodes) {
+            for (const o of node.options) {
+              const out = [o.outcome, o.check?.success, o.check?.failure];
+              if (o.check || out.some((x) => x && (x.flags.length || x.coins || x.cost || x.encounter || x.approval.length || x.reputation.length || x.items.length))) approaches.add(o.id);
+            }
+          }
+        }
+        expect(approaches.size, id).toBeGreaterThanOrEqual(3);
+      }
+      const scenes = ADV.chapters.flatMap((ch) => ch.scenes);
+      for (const id of ['millbrook_arrival', 'plough_tavern_talk', 'gallows_hill_trail', 'barrow_of_the_first_sheaf', 'barrow_sheaf_crypt', 'barrow_tithe_altar']) {
+        expect(scenes.find((s) => s.id === id)!.revisitSeed, id).toBeDefined();
+      }
+    });
+
+    it('shaming the Reeve brings his men to the ford; turning Wat opens the gate and steadies the chains', () => {
+      const c = ctx({ lucky: true });
+      startAdventure(c);
+      play(c, ['exit.tavern', 'talk.reeve_tamsin.missing', 'dlg.greet.read', 'dlg.well.shame']);
+      expect(c.state.flags[`${S}reeve_brave`]).toBe(true);
+      expect(c.state.flags[`${S}barrow_key`]).toBe(true);
+      expect(c.state.flags[`${S}reeve_attitude`]).toBe('friendly');
+      play(c, ['exit.out', 'exit.hill', 'track', 'ford_athletics']);
+      expect(offered(c)).toContain('reeve_men');
+      expect(offered(c)).toContain('talk.choir_lookouts.hail');
+      play(c, ['reeve_men']);
+      expect(c.state.flags[`${S}ambush_avoided`]).toBe(true);
+      expect(offered(c)).not.toContain('talk.choir_lookouts.hail'); // they ran off to the ford
+
+      const w = ctx({ lucky: true });
+      startAdventure(w);
+      play(w, ['well.footprints', 'exit.hill', 'track', 'ford_athletics', 'talk.choir_lookouts.hail', 'dlg.challenge.watch', 'dlg.wait.turn']);
+      expect(w.state.flags[`${S}wat_turned`]).toBe(true);
+      expect(w.state.flags[`${S}barrow_key`]).toBe(true);
+      expect(offered(w)).toContain('exit.barrow');
+      play(w, ['exit.barrow', 'exit.crypt', 'free_corwin', 'exit.altar']);
+      const r = play(w, ['free_fast'])[0]!;
+      expect(r.rolls[0]!.mode).toBe('advantage');
+      expect(w.state.extensions.reputation).toMatchObject({ crown_of_aurelmark: expect.any(Number) });
+    });
+
+    it('posing as a believer lets you bluff Ashby, whose confession exposes the Almonry clerk at Brightwater', () => {
+      const c = ctx({ lucky: true });
+      startAdventure(c);
+      play(c, ['exit.tavern', 'persuade_reeve', 'exit.out', 'exit.hill', 'track', 'ford_athletics', 'talk.choir_lookouts.hail', 'dlg.challenge.believer']);
+      expect(c.state.flags[`${S}posed_as_choir`]).toBe(true);
+      play(c, ['exit.barrow', 'exit.crypt', 'free_corwin', 'exit.altar', 'talk.brother_ashby.parley', 'dlg.hymn.who', 'dlg.she.bluff']);
+      expect(c.state.flags[`${S}ashby_fate`]).toBe('captured');
+      expect(c.state.flags[`${S}ashby_confessed`]).toBe(true);
+      expect(offered(c)).not.toContain('chase');
+      play(c, ['free_fast', 'exit.shrine', 'rekindle', 'rest_safe', 'exit.home', 'exit.tavern', 'talk.reeve_tamsin.homecoming', 'dlg.report.ashby']);
+      expect(c.state.flags[`${S}ashby_handed`]).toBe(true);
+      play(c, ['dlg.jail.bye', 'sleep_free', 'exit.out', 'exit.shop']);
+      const coins = c.state.hero.coins;
+      play(c, ['talk.agna_marrow.shop_talk', 'dlg.greet.extort']);
+      expect(c.state.hero.coins).toBe(coins + 2000);
+      expect(c.state.flags[`${S}ring_ransomed`]).toBe(true);
+      expect(offered(c)).not.toContain('return_ring');
+      play(c, ['recruit']);
+      const party = [...c.state.companions];
+      expect(party.map((x) => x.id)).toEqual(['corwin']);
+      const loyalty = c.state.flags['world.corwin_loyalty'];
+      play(c, ['talk.corwin_npc.chapel_talk', 'dlg.start.oath']);
+      expect(c.state.flags['world.corwin_loyalty']).toBe((loyalty as number) + 5);
+      play(c, ['dlg.oath.bye', 'exit.green', 'exit.road', 'to_brightwater', 'pay']);
+      const end = play(c, ['expose_clerk']).at(-1)!;
+      expect(end.ending).toBe('starter_brightwater');
+      expect(c.state.flags['arc.main.tooth_want_holder']).toBe('player');
+      expect(c.state.flags[`${S}clerk_exposed`]).toBe(true);
+    });
+
+    it('selling Widow Marrow her own ring costs Corwin\'s approval; giving it back earns supplies', () => {
+      const base = { [`${S}altar_won`]: true, [`${S}has_ring`]: true, [`${S}slept`]: true, 'world.corwin_status': 'in_party', 'world.corwin_loyalty': 60 };
+      const c = at(ctx({ lucky: true }), 'marrows_goods_and_oath', base);
+      play(c, ['talk.agna_marrow.shop_talk', 'dlg.greet.sell']);
+      expect(c.state.flags['world.corwin_loyalty']).toBe(50);
+      expect(offered(c)).not.toContain('talk.agna_marrow.shop_talk');
+
+      const g = at(ctx({ lucky: true }), 'marrows_goods_and_oath', base);
+      play(g, ['talk.agna_marrow.shop_talk', 'dlg.greet.give', 'dlg.grateful.supplies']);
+      expect(g.state.flags[`${S}marrow_ring_returned`]).toBe(true);
+      expect(g.state.hero.inventory.some((i) => i.itemId === 'healers_kit')).toBe(true);
+    });
+
+    it('failed approaches have costs: an alerted barrow, a hostile Reeve, a barred room', () => {
+      const c = ctx();
+      c.rng = new UnluckyRng();
+      at(c, 'gallows_hill_trail', { [`${S}tracked`]: true, [`${S}crossed`]: true, [`${S}barrow_key`]: true });
+      play(c, ['talk.choir_lookouts.hail', 'dlg.challenge.scare']);
+      expect(c.state.flags[`${S}barrow_alerted`]).toBe(true);
+      expect(offered(c)).toContain('exit.barrow');
+
+      const r = ctx();
+      r.rng = new UnluckyRng();
+      at(r, 'plough_tavern_talk');
+      play(r, ['talk.reeve_tamsin.missing', 'dlg.greet.lie']);
+      expect(r.state.flags[`${S}reeve_attitude`]).toBe('hostile');
+      expect(offered(r)).toContain('deposit');
+      play(r, ['talk.maud_fennick.rumours', 'dlg.bar.lean']);
+      expect(r.state.flags[`${S}barred`]).toBe(true);
+      expect(offered(r)).not.toContain('talk.maud_fennick.rumours');
+      r.state.flags[`${S}altar_won`] = true;
+      expect(offered(r)).toContain('sleep_barred');
+      expect(offered(r)).not.toContain('sleep_paid');
+    });
   });
 
   it('the session starts chapter 1 right after the starter ending', async () => {

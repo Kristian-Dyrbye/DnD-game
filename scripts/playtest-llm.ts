@@ -71,7 +71,7 @@ function nextChoice(scene: string, flags: Flags, offered: string[]): string | un
       if (!f('oath_done')) return first('wait_evening', 'wait_night', 'exit.shop');
       return first('exit.road');
     case 'plough_tavern_talk':
-      if (f('altar_won')) return f('slept') ? first('exit.out') : first('sleep_free', 'sleep_paid', 'exit.out');
+      if (f('altar_won')) return f('slept') ? first('exit.out') : first('sleep_free', 'sleep_paid', 'sleep_barred', 'exit.out');
       return first('persuade_reeve', 'intimidate_reeve', 'deposit', 'exit.out');
     case 'gallows_hill_trail':
       return first('track', 'ford_athletics', 'ford_acrobatics', 'sneak', 'exit.barrow', 'exit.force', 'exit.back');

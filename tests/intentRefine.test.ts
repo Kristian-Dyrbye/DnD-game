@@ -90,8 +90,8 @@ describe('refineIntent with recorded llama3.2:3b replies', () => {
     expect(v.actionId).toBe('persuade_reeve');
   });
 
-  it('leaves open-ended talk and songs alone', () => {
-    expect(refined(at('plough_tavern_talk'), { action: 'talk', target: 'barkeep' }, 'I ask the barkeep what rumours she has heard lately').intent.action).toBe('talk');
+  it('asking the barkeep for rumours opens her conversation (A131); songs stay open-ended', () => {
+    expect(refined(at('plough_tavern_talk'), { action: 'talk', target: 'barkeep' }, 'I ask the barkeep what rumours she has heard lately').actionId).toBe('talk.maud_fennick.rumours');
     expect(refined(at('millbrook_arrival'), { action: 'talk', target: 'village' }, 'I sing a loud song to cheer up the villagers').actionId).toBeUndefined();
   });
 

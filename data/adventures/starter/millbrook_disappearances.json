@@ -50,6 +50,25 @@
                 "eq": "in_party"
               },
               "seed": "Ser Corwin walks beside you, still stiff from the chains, greeting every child by name."
+            },
+            {
+              "if": {
+                "flag": "~ring_ransomed"
+              },
+              "seed": "Widow Marrow turns her back whenever you pass her shop."
+            },
+            {
+              "if": {
+                "all": [
+                  {
+                    "flag": "~altar_won"
+                  },
+                  {
+                    "flag": "~wat_turned"
+                  }
+                ]
+              },
+              "seed": "Wat, the lookout you turned, splits the Reeve's firewood in penance and cannot meet your eye."
             }
           ],
           "onEnter": {
@@ -307,6 +326,10 @@
               },
               "minutes": 10
             }
+          ],
+          "revisitSeed": [
+            "Millbrook's green again: the old well, the chapel of Solenne, Marrow's crooked sign.",
+            "Back on the green. The dog by the well lifts its head, then lets it fall."
           ]
         },
         {
@@ -329,11 +352,18 @@
                 "flag": "~altar_won"
               },
               "seed": "The taproom is loud with relief. Somebody has pinned the barrow key above the bar like a trophy."
+            },
+            {
+              "if": {
+                "flag": "~barred"
+              },
+              "seed": "Maud Fennick watches you over the taps with open dislike."
             }
           ],
           "npcs": [
             "reeve_tamsin",
-            "oda_hallard"
+            "oda_hallard",
+            "maud_fennick"
           ],
           "onEnter": {
             "text": "The knight — Ser Corwin Ashvale — slams a coin on the bar and storms out into the night, toward the hill.",
@@ -471,6 +501,11 @@
                   "text": "A mother crying for her son. Nothing more to see."
                 },
                 "skill": "insight"
+              },
+              "if": {
+                "not": {
+                  "flag": "~oda_guilty"
+                }
               }
             },
             {
@@ -574,6 +609,11 @@
                       "flag": "arc.starter.reeve_attitude",
                       "eq": "friendly"
                     }
+                  },
+                  {
+                    "not": {
+                      "flag": "~barred"
+                    }
                   }
                 ]
               },
@@ -607,6 +647,56 @@
                 },
                 "save": "wis"
               }
+            },
+            {
+              "id": "sleep_barred",
+              "label": "Pay Maud 2 gp for a room and sleep (long rest)",
+              "if": {
+                "all": [
+                  {
+                    "flag": "~altar_won"
+                  },
+                  {
+                    "not": {
+                      "flag": "arc.starter.reeve_attitude",
+                      "eq": "friendly"
+                    }
+                  },
+                  {
+                    "flag": "~barred"
+                  }
+                ]
+              },
+              "check": {
+                "dc": 10,
+                "success": {
+                  "cost": 200,
+                  "rest": "long",
+                  "text": "In the night the black Tooth whispers. A woman's voice, cultured and sad, sings: 'you will never want again.' You remember every note.",
+                  "flags": [
+                    {
+                      "set": "arc.starter.dream_heard",
+                      "value": true
+                    },
+                    {
+                      "set": "~slept",
+                      "value": true
+                    }
+                  ]
+                },
+                "failure": {
+                  "cost": 200,
+                  "rest": "long",
+                  "text": "You wake before dawn, shaking, the words 'never want again' still in your ears.",
+                  "flags": [
+                    {
+                      "set": "~slept",
+                      "value": true
+                    }
+                  ]
+                },
+                "save": "wis"
+              }
             }
           ],
           "exits": [
@@ -616,6 +706,10 @@
               "to": "millbrook_arrival",
               "minutes": 2
             }
+          ],
+          "revisitSeed": [
+            "The Plough and Lantern again: smoke, low voices, the Reeve at his hearth.",
+            "Back in the low taproom, where every head turns when the door opens."
           ]
         },
         {
@@ -630,6 +724,21 @@
                 "flag": "~barrow_alerted"
               },
               "seed": "A bone chime rattles on the mound. The lookouts are gone — inside, and waiting."
+            },
+            {
+              "if": {
+                "all": [
+                  {
+                    "flag": "~reeve_brave"
+                  },
+                  {
+                    "not": {
+                      "flag": "~approached"
+                    }
+                  }
+                ]
+              },
+              "seed": "Lantern-light by the ford: the Reeve and three of his lads, cudgels in hand, waiting for your signal."
             }
           ],
           "actions": [
@@ -798,7 +907,48 @@
                     }
                   ]
                 },
-                "skill": "stealth"
+                "skill": "stealth",
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~lookout_hours"
+                    },
+                    "source": "you came at moonrise, as the drover said"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "reeve_men",
+              "label": "Signal the Reeve's men to draw the lookouts off",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~reeve_brave"
+                  },
+                  {
+                    "flag": "~crossed"
+                  },
+                  {
+                    "not": {
+                      "flag": "~approached"
+                    }
+                  }
+                ]
+              },
+              "outcome": {
+                "text": "Lantern-light and shouting down by the ford: the lookouts run to see, and you walk up to the barrow door unseen.",
+                "flags": [
+                  {
+                    "set": "~approached",
+                    "value": true
+                  },
+                  {
+                    "set": "arc.starter.ambush_avoided",
+                    "value": true
+                  }
+                ]
               }
             }
           ],
@@ -853,6 +1003,10 @@
               "to": "millbrook_arrival",
               "minutes": 20
             }
+          ],
+          "revisitSeed": [
+            "The muddy track up Gallows Hill once more, the gibbet black against the sky.",
+            "Back on the hill track by the millrace, bramble snagging at your sleeves."
           ]
         },
         {
@@ -888,7 +1042,8 @@
               },
               "minutes": 5
             }
-          ]
+          ],
+          "revisitSeed": "The Root Hall again: roots like pillars, rat bones, the smell of old earth."
         },
         {
           "id": "barrow_sheaf_crypt",
@@ -1036,7 +1191,8 @@
               },
               "minutes": 2
             }
-          ]
+          ],
+          "revisitSeed": "The Sheaf Crypt again, old grain spilled across the flagstones."
         },
         {
           "id": "barrow_tithe_altar",
@@ -1125,7 +1281,15 @@
                     }
                   ]
                 },
-                "skill": "athletics"
+                "skill": "athletics",
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~wat_turned"
+                    },
+                    "source": "Wat warned you which links are rotten"
+                  }
+                ]
               }
             },
             {
@@ -1291,7 +1455,8 @@
               "to": "barrow_sheaf_crypt",
               "minutes": 2
             }
-          ]
+          ],
+          "revisitSeed": "The round chamber again, and its altar carved like a jaw."
         },
         {
           "id": "barrow_shrine_rest",
@@ -1315,7 +1480,14 @@
             {
               "id": "rekindle",
               "label": "Rekindle the antler-brazier (Religion DC 10)",
-              "keywords": ["relight", "rekindle", "flame", "brazier", "shrine", "light"],
+              "keywords": [
+                "relight",
+                "rekindle",
+                "flame",
+                "brazier",
+                "shrine",
+                "light"
+              ],
               "if": {
                 "not": {
                   "flag": "arc.starter.shrine_rekindled"
@@ -1342,7 +1514,13 @@
             {
               "id": "rekindle_nature",
               "label": "Coax a fire from the old tinder (Nature DC 12)",
-              "keywords": ["tinder", "coax", "kindle", "spark", "fire"],
+              "keywords": [
+                "tinder",
+                "coax",
+                "kindle",
+                "spark",
+                "fire"
+              ],
               "if": {
                 "not": {
                   "flag": "arc.starter.shrine_rekindled"
@@ -1530,31 +1708,6 @@
               }
             },
             {
-              "id": "corwin_story",
-              "label": "Ask why the Lance dismissed him (Insight DC 12)",
-              "if": {
-                "flag": "world.corwin_status",
-                "eq": "in_party"
-              },
-              "once": true,
-              "check": {
-                "dc": 12,
-                "success": {
-                  "text": "He struck a captain who ordered a plague village abandoned to the fen. He would do it again.",
-                  "approval": [
-                    {
-                      "companion": "corwin",
-                      "delta": 5
-                    }
-                  ]
-                },
-                "failure": {
-                  "text": "'A disagreement over orders,' he says, and changes the subject."
-                },
-                "skill": "insight"
-              }
-            },
-            {
               "id": "go_alone",
               "label": "Set out alone",
               "if": {
@@ -1606,6 +1759,26 @@
                 "eq": "hostile"
               },
               "seed": "The Reeve won't come. It is Corwin who walks you to the milestone and says the words."
+            },
+            {
+              "if": {
+                "flag": "~cantor_named"
+              },
+              "seed": "Ashby's words keep coming back to you: a woman's voice in the dark, the Cantor."
+            },
+            {
+              "if": {
+                "all": [
+                  {
+                    "flag": "~sworn"
+                  },
+                  {
+                    "flag": "world.corwin_status",
+                    "eq": "in_party"
+                  }
+                ]
+              },
+              "seed": "Corwin touches the pack that holds the Tooth and nods to you: whatever it costs."
             }
           ],
           "onEnter": {
@@ -1741,6 +1914,66 @@
               }
             },
             {
+              "id": "expose_clerk",
+              "label": "Say \"the Cantor\" and watch the clerk's face (Insight DC 12)",
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~bridge_done"
+                  },
+                  {
+                    "flag": "~ashby_confessed"
+                  },
+                  {
+                    "flag": "arc.main.tooth_want_holder",
+                    "eq": "player"
+                  }
+                ]
+              },
+              "keywords": [
+                "cantor",
+                "clerk",
+                "accuse",
+                "expose"
+              ],
+              "check": {
+                "skill": "insight",
+                "dc": 12,
+                "success": {
+                  "text": "At the word \"Cantor\" the clerk goes white and bolts for the back door; the magistrate's guards drag him down. The magistrate signs your crown writ himself, and the black Tooth stays with you.",
+                  "flags": [
+                    {
+                      "set": "~writ",
+                      "value": true
+                    },
+                    {
+                      "set": "~clerk_exposed",
+                      "value": true
+                    }
+                  ],
+                  "xp": 100,
+                  "reputation": [
+                    {
+                      "faction": "crown_of_aurelmark",
+                      "delta": 3
+                    }
+                  ],
+                  "ending": "starter_brightwater"
+                },
+                "failure": {
+                  "text": "The clerk only smiles. The magistrate calls it slander and signs your writ just to be rid of you. The black Tooth stays with you.",
+                  "flags": [
+                    {
+                      "set": "~writ",
+                      "value": true
+                    }
+                  ],
+                  "ending": "starter_brightwater"
+                }
+              }
+            },
+            {
               "id": "hand_over",
               "label": "Hand the Tooth to the magistrate's clerk",
               "if": {
@@ -1787,6 +2020,14 @@
                 ],
                 "ending": "starter_brightwater"
               }
+            }
+          ],
+          "variants": [
+            {
+              "if": {
+                "flag": "~ashby_confessed"
+              },
+              "seed": "Ashby swore the Choir's Teeth travel under the Royal Almonry's seal. The magistrate's clerk wears its wheat-and-crown on his sleeve."
             }
           ]
         }
@@ -1912,6 +2153,1089 @@
       "attitude": "indifferent",
       "secrets": [
         "He keeps the only key to the old barrow gate."
+      ],
+      "conversations": [
+        {
+          "id": "missing",
+          "label": "Sit down with Reeve Tamsin",
+          "if": {
+            "not": {
+              "flag": "~barrow_key"
+            }
+          },
+          "keywords": [
+            "reeve",
+            "sit",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "If you've come to gawk at our grief, the door's behind you. If not, say your piece.",
+              "options": [
+                {
+                  "id": "names",
+                  "label": "\"Who has gone missing?\"",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~names_seen"
+                    }
+                  },
+                  "keywords": [
+                    "missing",
+                    "who",
+                    "names"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~names_seen",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "names"
+                },
+                {
+                  "id": "read",
+                  "label": "Watch him: what is he really afraid of? (Insight DC 11)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~reeve_shamed"
+                    }
+                  },
+                  "keywords": [
+                    "watch",
+                    "afraid",
+                    "read"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 11,
+                    "success": {
+                      "text": "It is not you he is angry with. His boots are caked with the grey clay of Gallows Hill: he went up there alone, and he came back.",
+                      "flags": [
+                        {
+                          "set": "~reeve_shamed",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "A tired, stubborn man. You can read nothing more in him."
+                    }
+                  },
+                  "next": "well"
+                },
+                {
+                  "id": "shame",
+                  "label": "\"You went up that hill yourself. Come with me this time, and bring your men.\"",
+                  "if": {
+                    "flag": "~reeve_shamed"
+                  },
+                  "keywords": [
+                    "hill",
+                    "yourself",
+                    "men",
+                    "come"
+                  ],
+                  "outcome": {
+                    "text": "The Reeve hands over the list of the missing and the iron key to the barrow gate.",
+                    "flags": [
+                      {
+                        "set": "~reeve_brave",
+                        "value": true
+                      },
+                      {
+                        "set": "~barrow_key",
+                        "value": true
+                      },
+                      {
+                        "set": "arc.starter.missing_list",
+                        "value": true
+                      },
+                      {
+                        "set": "arc.starter.reeve_attitude",
+                        "value": "friendly"
+                      }
+                    ]
+                  },
+                  "next": "brave"
+                },
+                {
+                  "id": "lie",
+                  "label": "\"I'm here on the Crown's business. The key, Reeve.\" (Deception DC 13)",
+                  "if": {
+                    "not": {
+                      "flag": "~reeve_tried_lie"
+                    }
+                  },
+                  "keywords": [
+                    "crown",
+                    "lie",
+                    "business",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 13,
+                    "success": {
+                      "text": "The Reeve believes you. He hands over the barrow key without another word.",
+                      "flags": [
+                        {
+                          "set": "~reeve_tried_lie",
+                          "value": true
+                        },
+                        {
+                          "set": "~reeve_lied",
+                          "value": true
+                        },
+                        {
+                          "set": "~barrow_key",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The Reeve sees straight through the lie.",
+                      "flags": [
+                        {
+                          "set": "~reeve_tried_lie",
+                          "value": true
+                        },
+                        {
+                          "set": "~reeve_refused",
+                          "value": true
+                        },
+                        {
+                          "set": "arc.starter.reeve_attitude",
+                          "value": "hostile"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "lied",
+                  "nextOnFail": "scorn"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"I'll manage on my own.\""
+                }
+              ]
+            },
+            {
+              "id": "names",
+              "text": "Pip Hallard, the miller's boy. Tobin the shepherd. The Cobb twins, Maddy and Moll. Two weeks, four souls, and not a drop of blood anywhere.",
+              "options": [
+                {
+                  "id": "names",
+                  "label": "\"Who has gone missing?\"",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~names_seen"
+                    }
+                  },
+                  "keywords": [
+                    "missing",
+                    "who",
+                    "names"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~names_seen",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "names"
+                },
+                {
+                  "id": "read",
+                  "label": "Watch him: what is he really afraid of? (Insight DC 11)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~reeve_shamed"
+                    }
+                  },
+                  "keywords": [
+                    "watch",
+                    "afraid",
+                    "read"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 11,
+                    "success": {
+                      "text": "It is not you he is angry with. His boots are caked with the grey clay of Gallows Hill: he went up there alone, and he came back.",
+                      "flags": [
+                        {
+                          "set": "~reeve_shamed",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "A tired, stubborn man. You can read nothing more in him."
+                    }
+                  },
+                  "next": "well"
+                },
+                {
+                  "id": "shame",
+                  "label": "\"You went up that hill yourself. Come with me this time, and bring your men.\"",
+                  "if": {
+                    "flag": "~reeve_shamed"
+                  },
+                  "keywords": [
+                    "hill",
+                    "yourself",
+                    "men",
+                    "come"
+                  ],
+                  "outcome": {
+                    "text": "The Reeve hands over the list of the missing and the iron key to the barrow gate.",
+                    "flags": [
+                      {
+                        "set": "~reeve_brave",
+                        "value": true
+                      },
+                      {
+                        "set": "~barrow_key",
+                        "value": true
+                      },
+                      {
+                        "set": "arc.starter.missing_list",
+                        "value": true
+                      },
+                      {
+                        "set": "arc.starter.reeve_attitude",
+                        "value": "friendly"
+                      }
+                    ]
+                  },
+                  "next": "brave"
+                },
+                {
+                  "id": "lie",
+                  "label": "\"I'm here on the Crown's business. The key, Reeve.\" (Deception DC 13)",
+                  "if": {
+                    "not": {
+                      "flag": "~reeve_tried_lie"
+                    }
+                  },
+                  "keywords": [
+                    "crown",
+                    "lie",
+                    "business",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 13,
+                    "success": {
+                      "text": "The Reeve believes you. He hands over the barrow key without another word.",
+                      "flags": [
+                        {
+                          "set": "~reeve_tried_lie",
+                          "value": true
+                        },
+                        {
+                          "set": "~reeve_lied",
+                          "value": true
+                        },
+                        {
+                          "set": "~barrow_key",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The Reeve sees straight through the lie.",
+                      "flags": [
+                        {
+                          "set": "~reeve_tried_lie",
+                          "value": true
+                        },
+                        {
+                          "set": "~reeve_refused",
+                          "value": true
+                        },
+                        {
+                          "set": "arc.starter.reeve_attitude",
+                          "value": "hostile"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "lied",
+                  "nextOnFail": "scorn"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"I'll manage on my own.\""
+                }
+              ]
+            },
+            {
+              "id": "well",
+              "text": "Well? I haven't got all night.",
+              "options": [
+                {
+                  "id": "names",
+                  "label": "\"Who has gone missing?\"",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~names_seen"
+                    }
+                  },
+                  "keywords": [
+                    "missing",
+                    "who",
+                    "names"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~names_seen",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "names"
+                },
+                {
+                  "id": "read",
+                  "label": "Watch him: what is he really afraid of? (Insight DC 11)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~reeve_shamed"
+                    }
+                  },
+                  "keywords": [
+                    "watch",
+                    "afraid",
+                    "read"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 11,
+                    "success": {
+                      "text": "It is not you he is angry with. His boots are caked with the grey clay of Gallows Hill: he went up there alone, and he came back.",
+                      "flags": [
+                        {
+                          "set": "~reeve_shamed",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "A tired, stubborn man. You can read nothing more in him."
+                    }
+                  },
+                  "next": "well"
+                },
+                {
+                  "id": "shame",
+                  "label": "\"You went up that hill yourself. Come with me this time, and bring your men.\"",
+                  "if": {
+                    "flag": "~reeve_shamed"
+                  },
+                  "keywords": [
+                    "hill",
+                    "yourself",
+                    "men",
+                    "come"
+                  ],
+                  "outcome": {
+                    "text": "The Reeve hands over the list of the missing and the iron key to the barrow gate.",
+                    "flags": [
+                      {
+                        "set": "~reeve_brave",
+                        "value": true
+                      },
+                      {
+                        "set": "~barrow_key",
+                        "value": true
+                      },
+                      {
+                        "set": "arc.starter.missing_list",
+                        "value": true
+                      },
+                      {
+                        "set": "arc.starter.reeve_attitude",
+                        "value": "friendly"
+                      }
+                    ]
+                  },
+                  "next": "brave"
+                },
+                {
+                  "id": "lie",
+                  "label": "\"I'm here on the Crown's business. The key, Reeve.\" (Deception DC 13)",
+                  "if": {
+                    "not": {
+                      "flag": "~reeve_tried_lie"
+                    }
+                  },
+                  "keywords": [
+                    "crown",
+                    "lie",
+                    "business",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 13,
+                    "success": {
+                      "text": "The Reeve believes you. He hands over the barrow key without another word.",
+                      "flags": [
+                        {
+                          "set": "~reeve_tried_lie",
+                          "value": true
+                        },
+                        {
+                          "set": "~reeve_lied",
+                          "value": true
+                        },
+                        {
+                          "set": "~barrow_key",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The Reeve sees straight through the lie.",
+                      "flags": [
+                        {
+                          "set": "~reeve_tried_lie",
+                          "value": true
+                        },
+                        {
+                          "set": "~reeve_refused",
+                          "value": true
+                        },
+                        {
+                          "set": "arc.starter.reeve_attitude",
+                          "value": "hostile"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "lied",
+                  "nextOnFail": "scorn"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"I'll manage on my own.\""
+                }
+              ]
+            },
+            {
+              "id": "brave",
+              "text": "...Aye. I went up there, and I ran. Not twice. My lads and I will be at the ford by moonrise. Give us a signal and we'll draw them off."
+            },
+            {
+              "id": "lied",
+              "text": "The Crown. Finally. Take it, then, and God help you."
+            },
+            {
+              "id": "scorn",
+              "text": "The Crown? The Crown hasn't answered my letters in a month. Get out of my sight."
+            }
+          ]
+        },
+        {
+          "id": "homecoming",
+          "label": "Tell Reeve Tamsin what you found under the hill",
+          "once": true,
+          "if": {
+            "flag": "~altar_won"
+          },
+          "keywords": [
+            "reeve",
+            "tell",
+            "report"
+          ],
+          "start": "report",
+          "nodes": [
+            {
+              "id": "report",
+              "text": "So you came back out of that hill. Sit. Tell me what you found.",
+              "options": [
+                {
+                  "id": "truth",
+                  "label": "Tell him everything, the black Tooth and the singing voice too",
+                  "once": true,
+                  "keywords": [
+                    "everything",
+                    "truth",
+                    "tooth"
+                  ],
+                  "outcome": {
+                    "reputation": [
+                      {
+                        "faction": "crown_of_aurelmark",
+                        "delta": 2
+                      }
+                    ]
+                  },
+                  "next": "told"
+                },
+                {
+                  "id": "apologise",
+                  "label": "\"I was hard on you before. I'm sorry.\" (Persuasion DC 12)",
+                  "once": true,
+                  "if": {
+                    "flag": "arc.starter.reeve_attitude",
+                    "eq": "hostile"
+                  },
+                  "keywords": [
+                    "sorry",
+                    "apologise",
+                    "apologize"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 12,
+                    "success": {
+                      "flags": [
+                        {
+                          "set": "arc.starter.reeve_attitude",
+                          "value": "friendly"
+                        }
+                      ]
+                    },
+                    "failure": {}
+                  },
+                  "next": "forgiven",
+                  "nextOnFail": "grudge"
+                },
+                {
+                  "id": "ashby",
+                  "label": "Hand Brother Ashby over for the Crown's justice",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "arc.starter.ashby_fate",
+                        "eq": "captured"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_handed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "ashby",
+                    "prisoner",
+                    "justice"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_handed",
+                        "value": true
+                      }
+                    ],
+                    "reputation": [
+                      {
+                        "faction": "crown_of_aurelmark",
+                        "delta": 3
+                      }
+                    ],
+                    "xp": 50,
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "jail"
+                },
+                {
+                  "id": "reward",
+                  "label": "\"The village owes me. I'll take that reward now.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "arc.starter.reeve_attitude",
+                          "eq": "hostile"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~reward_taken"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "reward",
+                    "owe",
+                    "pay"
+                  ],
+                  "outcome": {
+                    "coins": 1000,
+                    "flags": [
+                      {
+                        "set": "~reward_taken",
+                        "value": true
+                      },
+                      {
+                        "set": "arc.starter.reeve_attitude",
+                        "value": "neutral"
+                      }
+                    ]
+                  },
+                  "next": "paid"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Later. I need sleep.\""
+                }
+              ]
+            },
+            {
+              "id": "told",
+              "text": "Seven teeth... I'll write to the Crown tonight. They'll listen now.",
+              "options": [
+                {
+                  "id": "truth",
+                  "label": "Tell him everything, the black Tooth and the singing voice too",
+                  "once": true,
+                  "keywords": [
+                    "everything",
+                    "truth",
+                    "tooth"
+                  ],
+                  "outcome": {
+                    "reputation": [
+                      {
+                        "faction": "crown_of_aurelmark",
+                        "delta": 2
+                      }
+                    ]
+                  },
+                  "next": "told"
+                },
+                {
+                  "id": "apologise",
+                  "label": "\"I was hard on you before. I'm sorry.\" (Persuasion DC 12)",
+                  "once": true,
+                  "if": {
+                    "flag": "arc.starter.reeve_attitude",
+                    "eq": "hostile"
+                  },
+                  "keywords": [
+                    "sorry",
+                    "apologise",
+                    "apologize"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 12,
+                    "success": {
+                      "flags": [
+                        {
+                          "set": "arc.starter.reeve_attitude",
+                          "value": "friendly"
+                        }
+                      ]
+                    },
+                    "failure": {}
+                  },
+                  "next": "forgiven",
+                  "nextOnFail": "grudge"
+                },
+                {
+                  "id": "ashby",
+                  "label": "Hand Brother Ashby over for the Crown's justice",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "arc.starter.ashby_fate",
+                        "eq": "captured"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_handed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "ashby",
+                    "prisoner",
+                    "justice"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_handed",
+                        "value": true
+                      }
+                    ],
+                    "reputation": [
+                      {
+                        "faction": "crown_of_aurelmark",
+                        "delta": 3
+                      }
+                    ],
+                    "xp": 50,
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "jail"
+                },
+                {
+                  "id": "reward",
+                  "label": "\"The village owes me. I'll take that reward now.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "arc.starter.reeve_attitude",
+                          "eq": "hostile"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~reward_taken"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "reward",
+                    "owe",
+                    "pay"
+                  ],
+                  "outcome": {
+                    "coins": 1000,
+                    "flags": [
+                      {
+                        "set": "~reward_taken",
+                        "value": true
+                      },
+                      {
+                        "set": "arc.starter.reeve_attitude",
+                        "value": "neutral"
+                      }
+                    ]
+                  },
+                  "next": "paid"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Later. I need sleep.\""
+                }
+              ]
+            },
+            {
+              "id": "forgiven",
+              "text": "...Aye. We were all frightened. The room upstairs is yours, and the village pays.",
+              "options": [
+                {
+                  "id": "truth",
+                  "label": "Tell him everything, the black Tooth and the singing voice too",
+                  "once": true,
+                  "keywords": [
+                    "everything",
+                    "truth",
+                    "tooth"
+                  ],
+                  "outcome": {
+                    "reputation": [
+                      {
+                        "faction": "crown_of_aurelmark",
+                        "delta": 2
+                      }
+                    ]
+                  },
+                  "next": "told"
+                },
+                {
+                  "id": "apologise",
+                  "label": "\"I was hard on you before. I'm sorry.\" (Persuasion DC 12)",
+                  "once": true,
+                  "if": {
+                    "flag": "arc.starter.reeve_attitude",
+                    "eq": "hostile"
+                  },
+                  "keywords": [
+                    "sorry",
+                    "apologise",
+                    "apologize"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 12,
+                    "success": {
+                      "flags": [
+                        {
+                          "set": "arc.starter.reeve_attitude",
+                          "value": "friendly"
+                        }
+                      ]
+                    },
+                    "failure": {}
+                  },
+                  "next": "forgiven",
+                  "nextOnFail": "grudge"
+                },
+                {
+                  "id": "ashby",
+                  "label": "Hand Brother Ashby over for the Crown's justice",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "arc.starter.ashby_fate",
+                        "eq": "captured"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_handed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "ashby",
+                    "prisoner",
+                    "justice"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_handed",
+                        "value": true
+                      }
+                    ],
+                    "reputation": [
+                      {
+                        "faction": "crown_of_aurelmark",
+                        "delta": 3
+                      }
+                    ],
+                    "xp": 50,
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "jail"
+                },
+                {
+                  "id": "reward",
+                  "label": "\"The village owes me. I'll take that reward now.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "arc.starter.reeve_attitude",
+                          "eq": "hostile"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~reward_taken"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "reward",
+                    "owe",
+                    "pay"
+                  ],
+                  "outcome": {
+                    "coins": 1000,
+                    "flags": [
+                      {
+                        "set": "~reward_taken",
+                        "value": true
+                      },
+                      {
+                        "set": "arc.starter.reeve_attitude",
+                        "value": "neutral"
+                      }
+                    ]
+                  },
+                  "next": "paid"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Later. I need sleep.\""
+                }
+              ]
+            },
+            {
+              "id": "grudge",
+              "text": "Words are cheap. Your room is on your own purse."
+            },
+            {
+              "id": "jail",
+              "text": "Brother Ashby. Our own sexton. He'll stand trial in Brightwater, God help him.",
+              "options": [
+                {
+                  "id": "truth",
+                  "label": "Tell him everything, the black Tooth and the singing voice too",
+                  "once": true,
+                  "keywords": [
+                    "everything",
+                    "truth",
+                    "tooth"
+                  ],
+                  "outcome": {
+                    "reputation": [
+                      {
+                        "faction": "crown_of_aurelmark",
+                        "delta": 2
+                      }
+                    ]
+                  },
+                  "next": "told"
+                },
+                {
+                  "id": "apologise",
+                  "label": "\"I was hard on you before. I'm sorry.\" (Persuasion DC 12)",
+                  "once": true,
+                  "if": {
+                    "flag": "arc.starter.reeve_attitude",
+                    "eq": "hostile"
+                  },
+                  "keywords": [
+                    "sorry",
+                    "apologise",
+                    "apologize"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 12,
+                    "success": {
+                      "flags": [
+                        {
+                          "set": "arc.starter.reeve_attitude",
+                          "value": "friendly"
+                        }
+                      ]
+                    },
+                    "failure": {}
+                  },
+                  "next": "forgiven",
+                  "nextOnFail": "grudge"
+                },
+                {
+                  "id": "ashby",
+                  "label": "Hand Brother Ashby over for the Crown's justice",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "arc.starter.ashby_fate",
+                        "eq": "captured"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_handed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "ashby",
+                    "prisoner",
+                    "justice"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_handed",
+                        "value": true
+                      }
+                    ],
+                    "reputation": [
+                      {
+                        "faction": "crown_of_aurelmark",
+                        "delta": 3
+                      }
+                    ],
+                    "xp": 50,
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "jail"
+                },
+                {
+                  "id": "reward",
+                  "label": "\"The village owes me. I'll take that reward now.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "arc.starter.reeve_attitude",
+                          "eq": "hostile"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~reward_taken"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "reward",
+                    "owe",
+                    "pay"
+                  ],
+                  "outcome": {
+                    "coins": 1000,
+                    "flags": [
+                      {
+                        "set": "~reward_taken",
+                        "value": true
+                      },
+                      {
+                        "set": "arc.starter.reeve_attitude",
+                        "value": "neutral"
+                      }
+                    ]
+                  },
+                  "next": "paid"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Later. I need sleep.\""
+                }
+              ]
+            },
+            {
+              "id": "paid",
+              "text": "...Of course. The whole village chipped in. He counts it out and doesn't mention the room upstairs."
+            }
+          ]
+        }
       ]
     },
     {
@@ -1934,6 +3258,780 @@
       "attitude": "indifferent",
       "secrets": [
         "The cultists stole her dead husband's ring from the shop."
+      ],
+      "conversations": [
+        {
+          "id": "shop_talk",
+          "label": "Talk to Widow Marrow",
+          "if": {
+            "not": {
+              "flag": "~ring_ransomed"
+            }
+          },
+          "keywords": [
+            "marrow",
+            "widow",
+            "agna"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Well, if it isn't the hero of Gallows Hill! Come in, dearie, mind the rope. What can old Agna do for you?",
+              "options": [
+                {
+                  "id": "give",
+                  "label": "Hand her the ring engraved 'A. & H.'",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~has_ring"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.starter.marrow_ring_returned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ring_ransomed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "give",
+                    "return",
+                    "ring"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "arc.starter.marrow_ring_returned",
+                        "value": true
+                      }
+                    ],
+                    "items": [
+                      {
+                        "itemId": "potion_of_healing",
+                        "quantity": 1
+                      }
+                    ],
+                    "reputation": [
+                      {
+                        "faction": "crown_of_aurelmark",
+                        "delta": 3
+                      }
+                    ]
+                  },
+                  "next": "grateful"
+                },
+                {
+                  "id": "read",
+                  "label": "Watch her: does she know the ring is gone? (Insight DC 10)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~has_ring"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.starter.marrow_ring_returned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ring_ransomed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "watch",
+                    "know"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 10,
+                    "success": {
+                      "text": "She keeps touching her bare ring finger. Whatever that ring is worth in gold, it is worth everything to her."
+                    },
+                    "failure": {
+                      "text": "She is all smiles and sharp eyes; you can read nothing more."
+                    }
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "sell",
+                  "label": "\"I found something of yours. Fifteen gold and it's back on your finger.\" (Persuasion DC 12)",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~has_ring"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.starter.marrow_ring_returned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ring_ransomed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "sell",
+                    "fifteen",
+                    "price"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 12,
+                    "success": {
+                      "text": "She counts out fifteen gold with shaking hands and takes back her husband's ring.",
+                      "coins": 1500,
+                      "flags": [
+                        {
+                          "set": "~ring_ransomed",
+                          "value": true
+                        },
+                        {
+                          "clear": "~has_ring"
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "She pays five gold, all she has in the till, and spits on the floor at your feet.",
+                      "coins": 500,
+                      "flags": [
+                        {
+                          "set": "~ring_ransomed",
+                          "value": true
+                        },
+                        {
+                          "clear": "~has_ring"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "sour"
+                },
+                {
+                  "id": "extort",
+                  "label": "\"Your ring came from a cult's altar. Twenty gold, or it goes to a pawnbroker in Brightwater.\" (Intimidation DC 11)",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~has_ring"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.starter.marrow_ring_returned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ring_ransomed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "twenty",
+                    "pawn",
+                    "threaten",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 11,
+                    "success": {
+                      "text": "White-faced, she empties her strongbox: twenty gold for her own husband's ring.",
+                      "coins": 2000,
+                      "flags": [
+                        {
+                          "set": "~ring_ransomed",
+                          "value": true
+                        },
+                        {
+                          "clear": "~has_ring"
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "She snatches the ring out of your hand and shrieks for the Reeve. You leave before he comes, but the whole village hears of it.",
+                      "flags": [
+                        {
+                          "set": "~ring_ransomed",
+                          "value": true
+                        },
+                        {
+                          "clear": "~has_ring"
+                        },
+                        {
+                          "set": "arc.starter.reeve_attitude",
+                          "value": "hostile"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "sour"
+                },
+                {
+                  "id": "gossip",
+                  "label": "\"What do folk say about Ser Corwin?\"",
+                  "once": true,
+                  "keywords": [
+                    "corwin",
+                    "knight",
+                    "folk"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~corwin_heard",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "gossip"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Just browsing.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "Anything else, dearie?",
+              "options": [
+                {
+                  "id": "give",
+                  "label": "Hand her the ring engraved 'A. & H.'",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~has_ring"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.starter.marrow_ring_returned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ring_ransomed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "give",
+                    "return",
+                    "ring"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "arc.starter.marrow_ring_returned",
+                        "value": true
+                      }
+                    ],
+                    "items": [
+                      {
+                        "itemId": "potion_of_healing",
+                        "quantity": 1
+                      }
+                    ],
+                    "reputation": [
+                      {
+                        "faction": "crown_of_aurelmark",
+                        "delta": 3
+                      }
+                    ]
+                  },
+                  "next": "grateful"
+                },
+                {
+                  "id": "read",
+                  "label": "Watch her: does she know the ring is gone? (Insight DC 10)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~has_ring"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.starter.marrow_ring_returned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ring_ransomed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "watch",
+                    "know"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 10,
+                    "success": {
+                      "text": "She keeps touching her bare ring finger. Whatever that ring is worth in gold, it is worth everything to her."
+                    },
+                    "failure": {
+                      "text": "She is all smiles and sharp eyes; you can read nothing more."
+                    }
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "sell",
+                  "label": "\"I found something of yours. Fifteen gold and it's back on your finger.\" (Persuasion DC 12)",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~has_ring"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.starter.marrow_ring_returned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ring_ransomed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "sell",
+                    "fifteen",
+                    "price"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 12,
+                    "success": {
+                      "text": "She counts out fifteen gold with shaking hands and takes back her husband's ring.",
+                      "coins": 1500,
+                      "flags": [
+                        {
+                          "set": "~ring_ransomed",
+                          "value": true
+                        },
+                        {
+                          "clear": "~has_ring"
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "She pays five gold, all she has in the till, and spits on the floor at your feet.",
+                      "coins": 500,
+                      "flags": [
+                        {
+                          "set": "~ring_ransomed",
+                          "value": true
+                        },
+                        {
+                          "clear": "~has_ring"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "sour"
+                },
+                {
+                  "id": "extort",
+                  "label": "\"Your ring came from a cult's altar. Twenty gold, or it goes to a pawnbroker in Brightwater.\" (Intimidation DC 11)",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~has_ring"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.starter.marrow_ring_returned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ring_ransomed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "twenty",
+                    "pawn",
+                    "threaten",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 11,
+                    "success": {
+                      "text": "White-faced, she empties her strongbox: twenty gold for her own husband's ring.",
+                      "coins": 2000,
+                      "flags": [
+                        {
+                          "set": "~ring_ransomed",
+                          "value": true
+                        },
+                        {
+                          "clear": "~has_ring"
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "She snatches the ring out of your hand and shrieks for the Reeve. You leave before he comes, but the whole village hears of it.",
+                      "flags": [
+                        {
+                          "set": "~ring_ransomed",
+                          "value": true
+                        },
+                        {
+                          "clear": "~has_ring"
+                        },
+                        {
+                          "set": "arc.starter.reeve_attitude",
+                          "value": "hostile"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "sour"
+                },
+                {
+                  "id": "gossip",
+                  "label": "\"What do folk say about Ser Corwin?\"",
+                  "once": true,
+                  "keywords": [
+                    "corwin",
+                    "knight",
+                    "folk"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~corwin_heard",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "gossip"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Just browsing.\""
+                }
+              ]
+            },
+            {
+              "id": "gossip",
+              "text": "Struck a captain, they say. Over a plague village. A good man, if you ask me, and nobody ever does.",
+              "options": [
+                {
+                  "id": "give",
+                  "label": "Hand her the ring engraved 'A. & H.'",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~has_ring"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.starter.marrow_ring_returned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ring_ransomed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "give",
+                    "return",
+                    "ring"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "arc.starter.marrow_ring_returned",
+                        "value": true
+                      }
+                    ],
+                    "items": [
+                      {
+                        "itemId": "potion_of_healing",
+                        "quantity": 1
+                      }
+                    ],
+                    "reputation": [
+                      {
+                        "faction": "crown_of_aurelmark",
+                        "delta": 3
+                      }
+                    ]
+                  },
+                  "next": "grateful"
+                },
+                {
+                  "id": "read",
+                  "label": "Watch her: does she know the ring is gone? (Insight DC 10)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~has_ring"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.starter.marrow_ring_returned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ring_ransomed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "watch",
+                    "know"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 10,
+                    "success": {
+                      "text": "She keeps touching her bare ring finger. Whatever that ring is worth in gold, it is worth everything to her."
+                    },
+                    "failure": {
+                      "text": "She is all smiles and sharp eyes; you can read nothing more."
+                    }
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "sell",
+                  "label": "\"I found something of yours. Fifteen gold and it's back on your finger.\" (Persuasion DC 12)",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~has_ring"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.starter.marrow_ring_returned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ring_ransomed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "sell",
+                    "fifteen",
+                    "price"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 12,
+                    "success": {
+                      "text": "She counts out fifteen gold with shaking hands and takes back her husband's ring.",
+                      "coins": 1500,
+                      "flags": [
+                        {
+                          "set": "~ring_ransomed",
+                          "value": true
+                        },
+                        {
+                          "clear": "~has_ring"
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "She pays five gold, all she has in the till, and spits on the floor at your feet.",
+                      "coins": 500,
+                      "flags": [
+                        {
+                          "set": "~ring_ransomed",
+                          "value": true
+                        },
+                        {
+                          "clear": "~has_ring"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "sour"
+                },
+                {
+                  "id": "extort",
+                  "label": "\"Your ring came from a cult's altar. Twenty gold, or it goes to a pawnbroker in Brightwater.\" (Intimidation DC 11)",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~has_ring"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.starter.marrow_ring_returned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ring_ransomed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "twenty",
+                    "pawn",
+                    "threaten",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 11,
+                    "success": {
+                      "text": "White-faced, she empties her strongbox: twenty gold for her own husband's ring.",
+                      "coins": 2000,
+                      "flags": [
+                        {
+                          "set": "~ring_ransomed",
+                          "value": true
+                        },
+                        {
+                          "clear": "~has_ring"
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "She snatches the ring out of your hand and shrieks for the Reeve. You leave before he comes, but the whole village hears of it.",
+                      "flags": [
+                        {
+                          "set": "~ring_ransomed",
+                          "value": true
+                        },
+                        {
+                          "clear": "~has_ring"
+                        },
+                        {
+                          "set": "arc.starter.reeve_attitude",
+                          "value": "hostile"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "sour"
+                },
+                {
+                  "id": "gossip",
+                  "label": "\"What do folk say about Ser Corwin?\"",
+                  "once": true,
+                  "keywords": [
+                    "corwin",
+                    "knight",
+                    "folk"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~corwin_heard",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "gossip"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Just browsing.\""
+                }
+              ]
+            },
+            {
+              "id": "sour",
+              "text": "Get out of my shop."
+            },
+            {
+              "id": "grateful",
+              "text": "My Harl's ring... Anything you need, dearie, you ask me first.",
+              "options": [
+                {
+                  "id": "supplies",
+                  "label": "\"Something for the road would help.\"",
+                  "keywords": [
+                    "supplies",
+                    "road"
+                  ],
+                  "outcome": {
+                    "items": [
+                      {
+                        "itemId": "healers_kit",
+                        "quantity": 1
+                      },
+                      {
+                        "itemId": "rations",
+                        "quantity": 3
+                      }
+                    ]
+                  },
+                  "next": "packed"
+                },
+                {
+                  "id": "nothing",
+                  "label": "\"Keep your stock. Millbrook needs it more than I do.\"",
+                  "keywords": [
+                    "keep",
+                    "nothing"
+                  ],
+                  "outcome": {
+                    "reputation": [
+                      {
+                        "faction": "crown_of_aurelmark",
+                        "delta": 1
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "touched"
+                }
+              ]
+            },
+            {
+              "id": "packed",
+              "text": "There. A healer's kit and bread for three days. You come back in one piece, hear?"
+            },
+            {
+              "id": "touched",
+              "text": "Well. Aren't you a rare one."
+            }
+          ]
+        }
       ]
     },
     {
@@ -1945,6 +4043,1558 @@
       "attitude": "friendly",
       "secrets": [
         "He was dismissed from the Dawn Lance for striking a captain who ordered a plague village abandoned."
+      ],
+      "conversations": [
+        {
+          "id": "chapel_talk",
+          "label": "Sit with Ser Corwin in the chapel",
+          "once": true,
+          "if": {
+            "flag": "world.corwin_status",
+            "eq": "in_party"
+          },
+          "keywords": [
+            "corwin",
+            "sit",
+            "chapel",
+            "talk"
+          ],
+          "start": "start",
+          "nodes": [
+            {
+              "id": "start",
+              "text": "Speak your mind. Better here than on the road.",
+              "options": [
+                {
+                  "id": "lance",
+                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "once": true,
+                  "keywords": [
+                    "lance",
+                    "dismissed",
+                    "why"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 12,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~corwin_heard"
+                        },
+                        "source": "you already heard the village gossip"
+                      }
+                    ],
+                    "success": {
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {}
+                  },
+                  "next": "lance",
+                  "nextOnFail": "dodge"
+                },
+                {
+                  "id": "oath",
+                  "label": "\"We keep that Tooth out of their hands, whatever it costs.\"",
+                  "once": true,
+                  "keywords": [
+                    "oath",
+                    "swear",
+                    "tooth"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~sworn",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "oath"
+                },
+                {
+                  "id": "trial",
+                  "label": "\"Ashby will face the Crown's justice.\"",
+                  "once": true,
+                  "if": {
+                    "flag": "arc.starter.ashby_fate",
+                    "eq": "captured"
+                  },
+                  "keywords": [
+                    "ashby",
+                    "trial",
+                    "justice"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "trial"
+                },
+                {
+                  "id": "regret",
+                  "label": "\"Killing Ashby... I was wrong.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "wrong",
+                    "regret",
+                    "sorry"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 10
+                      }
+                    ]
+                  },
+                  "next": "regret"
+                },
+                {
+                  "id": "proud",
+                  "label": "\"Ashby got what he deserved.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "deserved"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "proud"
+                },
+                {
+                  "id": "tooth",
+                  "label": "\"Where should the Tooth go?\"",
+                  "once": true,
+                  "keywords": [
+                    "where",
+                    "go",
+                    "ravensgate",
+                    "brightwater"
+                  ],
+                  "next": "advice"
+                },
+                {
+                  "id": "mock",
+                  "label": "\"A knight who can't follow orders. Wonderful.\"",
+                  "once": true,
+                  "keywords": [
+                    "mock",
+                    "orders"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -10
+                      }
+                    ]
+                  },
+                  "next": "stung"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Let's get moving.\""
+                }
+              ]
+            },
+            {
+              "id": "lance",
+              "text": "I struck a captain who ordered a plague village left to the fen. I'd do it again.",
+              "options": [
+                {
+                  "id": "lance",
+                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "once": true,
+                  "keywords": [
+                    "lance",
+                    "dismissed",
+                    "why"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 12,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~corwin_heard"
+                        },
+                        "source": "you already heard the village gossip"
+                      }
+                    ],
+                    "success": {
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {}
+                  },
+                  "next": "lance",
+                  "nextOnFail": "dodge"
+                },
+                {
+                  "id": "oath",
+                  "label": "\"We keep that Tooth out of their hands, whatever it costs.\"",
+                  "once": true,
+                  "keywords": [
+                    "oath",
+                    "swear",
+                    "tooth"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~sworn",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "oath"
+                },
+                {
+                  "id": "trial",
+                  "label": "\"Ashby will face the Crown's justice.\"",
+                  "once": true,
+                  "if": {
+                    "flag": "arc.starter.ashby_fate",
+                    "eq": "captured"
+                  },
+                  "keywords": [
+                    "ashby",
+                    "trial",
+                    "justice"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "trial"
+                },
+                {
+                  "id": "regret",
+                  "label": "\"Killing Ashby... I was wrong.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "wrong",
+                    "regret",
+                    "sorry"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 10
+                      }
+                    ]
+                  },
+                  "next": "regret"
+                },
+                {
+                  "id": "proud",
+                  "label": "\"Ashby got what he deserved.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "deserved"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "proud"
+                },
+                {
+                  "id": "tooth",
+                  "label": "\"Where should the Tooth go?\"",
+                  "once": true,
+                  "keywords": [
+                    "where",
+                    "go",
+                    "ravensgate",
+                    "brightwater"
+                  ],
+                  "next": "advice"
+                },
+                {
+                  "id": "mock",
+                  "label": "\"A knight who can't follow orders. Wonderful.\"",
+                  "once": true,
+                  "keywords": [
+                    "mock",
+                    "orders"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -10
+                      }
+                    ]
+                  },
+                  "next": "stung"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Let's get moving.\""
+                }
+              ]
+            },
+            {
+              "id": "dodge",
+              "text": "A disagreement over orders. He changes the subject.",
+              "options": [
+                {
+                  "id": "lance",
+                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "once": true,
+                  "keywords": [
+                    "lance",
+                    "dismissed",
+                    "why"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 12,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~corwin_heard"
+                        },
+                        "source": "you already heard the village gossip"
+                      }
+                    ],
+                    "success": {
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {}
+                  },
+                  "next": "lance",
+                  "nextOnFail": "dodge"
+                },
+                {
+                  "id": "oath",
+                  "label": "\"We keep that Tooth out of their hands, whatever it costs.\"",
+                  "once": true,
+                  "keywords": [
+                    "oath",
+                    "swear",
+                    "tooth"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~sworn",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "oath"
+                },
+                {
+                  "id": "trial",
+                  "label": "\"Ashby will face the Crown's justice.\"",
+                  "once": true,
+                  "if": {
+                    "flag": "arc.starter.ashby_fate",
+                    "eq": "captured"
+                  },
+                  "keywords": [
+                    "ashby",
+                    "trial",
+                    "justice"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "trial"
+                },
+                {
+                  "id": "regret",
+                  "label": "\"Killing Ashby... I was wrong.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "wrong",
+                    "regret",
+                    "sorry"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 10
+                      }
+                    ]
+                  },
+                  "next": "regret"
+                },
+                {
+                  "id": "proud",
+                  "label": "\"Ashby got what he deserved.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "deserved"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "proud"
+                },
+                {
+                  "id": "tooth",
+                  "label": "\"Where should the Tooth go?\"",
+                  "once": true,
+                  "keywords": [
+                    "where",
+                    "go",
+                    "ravensgate",
+                    "brightwater"
+                  ],
+                  "next": "advice"
+                },
+                {
+                  "id": "mock",
+                  "label": "\"A knight who can't follow orders. Wonderful.\"",
+                  "once": true,
+                  "keywords": [
+                    "mock",
+                    "orders"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -10
+                      }
+                    ]
+                  },
+                  "next": "stung"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Let's get moving.\""
+                }
+              ]
+            },
+            {
+              "id": "oath",
+              "text": "Then we understand each other. He clasps your forearm.",
+              "options": [
+                {
+                  "id": "lance",
+                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "once": true,
+                  "keywords": [
+                    "lance",
+                    "dismissed",
+                    "why"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 12,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~corwin_heard"
+                        },
+                        "source": "you already heard the village gossip"
+                      }
+                    ],
+                    "success": {
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {}
+                  },
+                  "next": "lance",
+                  "nextOnFail": "dodge"
+                },
+                {
+                  "id": "oath",
+                  "label": "\"We keep that Tooth out of their hands, whatever it costs.\"",
+                  "once": true,
+                  "keywords": [
+                    "oath",
+                    "swear",
+                    "tooth"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~sworn",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "oath"
+                },
+                {
+                  "id": "trial",
+                  "label": "\"Ashby will face the Crown's justice.\"",
+                  "once": true,
+                  "if": {
+                    "flag": "arc.starter.ashby_fate",
+                    "eq": "captured"
+                  },
+                  "keywords": [
+                    "ashby",
+                    "trial",
+                    "justice"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "trial"
+                },
+                {
+                  "id": "regret",
+                  "label": "\"Killing Ashby... I was wrong.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "wrong",
+                    "regret",
+                    "sorry"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 10
+                      }
+                    ]
+                  },
+                  "next": "regret"
+                },
+                {
+                  "id": "proud",
+                  "label": "\"Ashby got what he deserved.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "deserved"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "proud"
+                },
+                {
+                  "id": "tooth",
+                  "label": "\"Where should the Tooth go?\"",
+                  "once": true,
+                  "keywords": [
+                    "where",
+                    "go",
+                    "ravensgate",
+                    "brightwater"
+                  ],
+                  "next": "advice"
+                },
+                {
+                  "id": "mock",
+                  "label": "\"A knight who can't follow orders. Wonderful.\"",
+                  "once": true,
+                  "keywords": [
+                    "mock",
+                    "orders"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -10
+                      }
+                    ]
+                  },
+                  "next": "stung"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Let's get moving.\""
+                }
+              ]
+            },
+            {
+              "id": "trial",
+              "text": "Good. Let the law be better than he was.",
+              "options": [
+                {
+                  "id": "lance",
+                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "once": true,
+                  "keywords": [
+                    "lance",
+                    "dismissed",
+                    "why"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 12,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~corwin_heard"
+                        },
+                        "source": "you already heard the village gossip"
+                      }
+                    ],
+                    "success": {
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {}
+                  },
+                  "next": "lance",
+                  "nextOnFail": "dodge"
+                },
+                {
+                  "id": "oath",
+                  "label": "\"We keep that Tooth out of their hands, whatever it costs.\"",
+                  "once": true,
+                  "keywords": [
+                    "oath",
+                    "swear",
+                    "tooth"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~sworn",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "oath"
+                },
+                {
+                  "id": "trial",
+                  "label": "\"Ashby will face the Crown's justice.\"",
+                  "once": true,
+                  "if": {
+                    "flag": "arc.starter.ashby_fate",
+                    "eq": "captured"
+                  },
+                  "keywords": [
+                    "ashby",
+                    "trial",
+                    "justice"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "trial"
+                },
+                {
+                  "id": "regret",
+                  "label": "\"Killing Ashby... I was wrong.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "wrong",
+                    "regret",
+                    "sorry"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 10
+                      }
+                    ]
+                  },
+                  "next": "regret"
+                },
+                {
+                  "id": "proud",
+                  "label": "\"Ashby got what he deserved.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "deserved"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "proud"
+                },
+                {
+                  "id": "tooth",
+                  "label": "\"Where should the Tooth go?\"",
+                  "once": true,
+                  "keywords": [
+                    "where",
+                    "go",
+                    "ravensgate",
+                    "brightwater"
+                  ],
+                  "next": "advice"
+                },
+                {
+                  "id": "mock",
+                  "label": "\"A knight who can't follow orders. Wonderful.\"",
+                  "once": true,
+                  "keywords": [
+                    "mock",
+                    "orders"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -10
+                      }
+                    ]
+                  },
+                  "next": "stung"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Let's get moving.\""
+                }
+              ]
+            },
+            {
+              "id": "regret",
+              "text": "It takes more to say that than to swing a blade. Thank you.",
+              "options": [
+                {
+                  "id": "lance",
+                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "once": true,
+                  "keywords": [
+                    "lance",
+                    "dismissed",
+                    "why"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 12,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~corwin_heard"
+                        },
+                        "source": "you already heard the village gossip"
+                      }
+                    ],
+                    "success": {
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {}
+                  },
+                  "next": "lance",
+                  "nextOnFail": "dodge"
+                },
+                {
+                  "id": "oath",
+                  "label": "\"We keep that Tooth out of their hands, whatever it costs.\"",
+                  "once": true,
+                  "keywords": [
+                    "oath",
+                    "swear",
+                    "tooth"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~sworn",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "oath"
+                },
+                {
+                  "id": "trial",
+                  "label": "\"Ashby will face the Crown's justice.\"",
+                  "once": true,
+                  "if": {
+                    "flag": "arc.starter.ashby_fate",
+                    "eq": "captured"
+                  },
+                  "keywords": [
+                    "ashby",
+                    "trial",
+                    "justice"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "trial"
+                },
+                {
+                  "id": "regret",
+                  "label": "\"Killing Ashby... I was wrong.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "wrong",
+                    "regret",
+                    "sorry"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 10
+                      }
+                    ]
+                  },
+                  "next": "regret"
+                },
+                {
+                  "id": "proud",
+                  "label": "\"Ashby got what he deserved.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "deserved"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "proud"
+                },
+                {
+                  "id": "tooth",
+                  "label": "\"Where should the Tooth go?\"",
+                  "once": true,
+                  "keywords": [
+                    "where",
+                    "go",
+                    "ravensgate",
+                    "brightwater"
+                  ],
+                  "next": "advice"
+                },
+                {
+                  "id": "mock",
+                  "label": "\"A knight who can't follow orders. Wonderful.\"",
+                  "once": true,
+                  "keywords": [
+                    "mock",
+                    "orders"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -10
+                      }
+                    ]
+                  },
+                  "next": "stung"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Let's get moving.\""
+                }
+              ]
+            },
+            {
+              "id": "proud",
+              "text": "Maybe. But it wasn't yours to decide.",
+              "options": [
+                {
+                  "id": "lance",
+                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "once": true,
+                  "keywords": [
+                    "lance",
+                    "dismissed",
+                    "why"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 12,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~corwin_heard"
+                        },
+                        "source": "you already heard the village gossip"
+                      }
+                    ],
+                    "success": {
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {}
+                  },
+                  "next": "lance",
+                  "nextOnFail": "dodge"
+                },
+                {
+                  "id": "oath",
+                  "label": "\"We keep that Tooth out of their hands, whatever it costs.\"",
+                  "once": true,
+                  "keywords": [
+                    "oath",
+                    "swear",
+                    "tooth"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~sworn",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "oath"
+                },
+                {
+                  "id": "trial",
+                  "label": "\"Ashby will face the Crown's justice.\"",
+                  "once": true,
+                  "if": {
+                    "flag": "arc.starter.ashby_fate",
+                    "eq": "captured"
+                  },
+                  "keywords": [
+                    "ashby",
+                    "trial",
+                    "justice"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "trial"
+                },
+                {
+                  "id": "regret",
+                  "label": "\"Killing Ashby... I was wrong.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "wrong",
+                    "regret",
+                    "sorry"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 10
+                      }
+                    ]
+                  },
+                  "next": "regret"
+                },
+                {
+                  "id": "proud",
+                  "label": "\"Ashby got what he deserved.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "deserved"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "proud"
+                },
+                {
+                  "id": "tooth",
+                  "label": "\"Where should the Tooth go?\"",
+                  "once": true,
+                  "keywords": [
+                    "where",
+                    "go",
+                    "ravensgate",
+                    "brightwater"
+                  ],
+                  "next": "advice"
+                },
+                {
+                  "id": "mock",
+                  "label": "\"A knight who can't follow orders. Wonderful.\"",
+                  "once": true,
+                  "keywords": [
+                    "mock",
+                    "orders"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -10
+                      }
+                    ]
+                  },
+                  "next": "stung"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Let's get moving.\""
+                }
+              ]
+            },
+            {
+              "id": "advice",
+              "text": "The Wardens at Ravensgate know fen-evil. The magistrate at Brightwater knows forms and seals. I know which I'd trust.",
+              "options": [
+                {
+                  "id": "lance",
+                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "once": true,
+                  "keywords": [
+                    "lance",
+                    "dismissed",
+                    "why"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 12,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~corwin_heard"
+                        },
+                        "source": "you already heard the village gossip"
+                      }
+                    ],
+                    "success": {
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {}
+                  },
+                  "next": "lance",
+                  "nextOnFail": "dodge"
+                },
+                {
+                  "id": "oath",
+                  "label": "\"We keep that Tooth out of their hands, whatever it costs.\"",
+                  "once": true,
+                  "keywords": [
+                    "oath",
+                    "swear",
+                    "tooth"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~sworn",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "oath"
+                },
+                {
+                  "id": "trial",
+                  "label": "\"Ashby will face the Crown's justice.\"",
+                  "once": true,
+                  "if": {
+                    "flag": "arc.starter.ashby_fate",
+                    "eq": "captured"
+                  },
+                  "keywords": [
+                    "ashby",
+                    "trial",
+                    "justice"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "trial"
+                },
+                {
+                  "id": "regret",
+                  "label": "\"Killing Ashby... I was wrong.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "wrong",
+                    "regret",
+                    "sorry"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 10
+                      }
+                    ]
+                  },
+                  "next": "regret"
+                },
+                {
+                  "id": "proud",
+                  "label": "\"Ashby got what he deserved.\"",
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~cruel"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ashby_spoke"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "deserved"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~ashby_spoke",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "proud"
+                },
+                {
+                  "id": "tooth",
+                  "label": "\"Where should the Tooth go?\"",
+                  "once": true,
+                  "keywords": [
+                    "where",
+                    "go",
+                    "ravensgate",
+                    "brightwater"
+                  ],
+                  "next": "advice"
+                },
+                {
+                  "id": "mock",
+                  "label": "\"A knight who can't follow orders. Wonderful.\"",
+                  "once": true,
+                  "keywords": [
+                    "mock",
+                    "orders"
+                  ],
+                  "outcome": {
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -10
+                      }
+                    ]
+                  },
+                  "next": "stung"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Let's get moving.\""
+                }
+              ]
+            },
+            {
+              "id": "stung",
+              "text": "...Noted."
+            }
+          ]
+        }
       ]
     },
     {
@@ -1956,6 +5606,1517 @@
       "attitude": "hostile",
       "factions": [
         "hollow_choir"
+      ],
+      "schedule": [
+        {
+          "scene": "barrow_tithe_altar",
+          "from": 0,
+          "to": 24,
+          "if": {
+            "all": [
+              {
+                "flag": "~altar_won"
+              },
+              {
+                "flag": "arc.starter.ashby_fate",
+                "eq": "unknown"
+              }
+            ]
+          }
+        }
+      ],
+      "conversations": [
+        {
+          "id": "parley",
+          "label": "Speak to Brother Ashby before he reaches the tunnel",
+          "once": true,
+          "keywords": [
+            "ashby",
+            "speak",
+            "parley",
+            "talk"
+          ],
+          "start": "hymn",
+          "nodes": [
+            {
+              "id": "hymn",
+              "text": "Hunger ends, friend. She promised. Seven Teeth, and no child in Aurelmark will ever starve again.",
+              "options": [
+                {
+                  "id": "who",
+                  "label": "\"Who promised you that?\"",
+                  "once": true,
+                  "keywords": [
+                    "who",
+                    "promised",
+                    "she"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~cantor_named",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "she"
+                },
+                {
+                  "id": "surrender",
+                  "label": "\"It's over, Ashby. Come quietly and you will get a fair trial.\" (Persuasion DC 13)",
+                  "keywords": [
+                    "surrender",
+                    "trial",
+                    "quietly",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~names_seen"
+                        },
+                        "source": "you name the children he took"
+                      }
+                    ],
+                    "success": {
+                      "text": "Ashby drops his sickle and kneels on the altar steps. He is your prisoner.",
+                      "flags": [
+                        {
+                          "set": "arc.starter.ashby_fate",
+                          "value": "captured"
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Ashby laughs softly and slips into the collapsing tunnel. Earth pours down behind him.",
+                      "flags": [
+                        {
+                          "set": "arc.starter.ashby_fate",
+                          "value": "escaped"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "yield",
+                  "nextOnFail": "gone"
+                },
+                {
+                  "id": "threaten",
+                  "label": "Level your weapon at him: \"One more step and you die.\" (Intimidation DC 12)",
+                  "keywords": [
+                    "threaten",
+                    "step",
+                    "die",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 12,
+                    "success": {
+                      "text": "Ashby freezes, then lets you bind his hands. He is your prisoner.",
+                      "flags": [
+                        {
+                          "set": "arc.starter.ashby_fate",
+                          "value": "captured"
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Ashby laughs softly and slips into the collapsing tunnel. Earth pours down behind him.",
+                      "flags": [
+                        {
+                          "set": "arc.starter.ashby_fate",
+                          "value": "escaped"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "yield",
+                  "nextOnFail": "gone"
+                },
+                {
+                  "id": "bluff",
+                  "label": "\"The Cantor sent me to take the Tooth, Brother.\" (Deception DC 12)",
+                  "if": {
+                    "flag": "~posed_as_choir"
+                  },
+                  "keywords": [
+                    "cantor",
+                    "sent",
+                    "bluff",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 12,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~cantor_named"
+                        },
+                        "source": "you use the name he gave you"
+                      }
+                    ],
+                    "success": {
+                      "text": "Ashby believes you are one of them. He kneels and whispers that the Teeth travel under the Royal Almonry's seal. Then you bind his hands.",
+                      "flags": [
+                        {
+                          "set": "arc.starter.ashby_fate",
+                          "value": "captured"
+                        },
+                        {
+                          "set": "~ashby_confessed",
+                          "value": true
+                        },
+                        {
+                          "set": "~cantor_named",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Ashby laughs softly and slips into the collapsing tunnel. Earth pours down behind him.",
+                      "flags": [
+                        {
+                          "set": "arc.starter.ashby_fate",
+                          "value": "escaped"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "confess",
+                  "nextOnFail": "gone"
+                },
+                {
+                  "id": "silence",
+                  "label": "Say nothing and watch him"
+                }
+              ]
+            },
+            {
+              "id": "she",
+              "text": "The Cantor. You've heard her already, haven't you? In the dark, singing.",
+              "options": [
+                {
+                  "id": "who",
+                  "label": "\"Who promised you that?\"",
+                  "once": true,
+                  "keywords": [
+                    "who",
+                    "promised",
+                    "she"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~cantor_named",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "she"
+                },
+                {
+                  "id": "surrender",
+                  "label": "\"It's over, Ashby. Come quietly and you will get a fair trial.\" (Persuasion DC 13)",
+                  "keywords": [
+                    "surrender",
+                    "trial",
+                    "quietly",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~names_seen"
+                        },
+                        "source": "you name the children he took"
+                      }
+                    ],
+                    "success": {
+                      "text": "Ashby drops his sickle and kneels on the altar steps. He is your prisoner.",
+                      "flags": [
+                        {
+                          "set": "arc.starter.ashby_fate",
+                          "value": "captured"
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Ashby laughs softly and slips into the collapsing tunnel. Earth pours down behind him.",
+                      "flags": [
+                        {
+                          "set": "arc.starter.ashby_fate",
+                          "value": "escaped"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "yield",
+                  "nextOnFail": "gone"
+                },
+                {
+                  "id": "threaten",
+                  "label": "Level your weapon at him: \"One more step and you die.\" (Intimidation DC 12)",
+                  "keywords": [
+                    "threaten",
+                    "step",
+                    "die",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 12,
+                    "success": {
+                      "text": "Ashby freezes, then lets you bind his hands. He is your prisoner.",
+                      "flags": [
+                        {
+                          "set": "arc.starter.ashby_fate",
+                          "value": "captured"
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Ashby laughs softly and slips into the collapsing tunnel. Earth pours down behind him.",
+                      "flags": [
+                        {
+                          "set": "arc.starter.ashby_fate",
+                          "value": "escaped"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "yield",
+                  "nextOnFail": "gone"
+                },
+                {
+                  "id": "bluff",
+                  "label": "\"The Cantor sent me to take the Tooth, Brother.\" (Deception DC 12)",
+                  "if": {
+                    "flag": "~posed_as_choir"
+                  },
+                  "keywords": [
+                    "cantor",
+                    "sent",
+                    "bluff",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 12,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~cantor_named"
+                        },
+                        "source": "you use the name he gave you"
+                      }
+                    ],
+                    "success": {
+                      "text": "Ashby believes you are one of them. He kneels and whispers that the Teeth travel under the Royal Almonry's seal. Then you bind his hands.",
+                      "flags": [
+                        {
+                          "set": "arc.starter.ashby_fate",
+                          "value": "captured"
+                        },
+                        {
+                          "set": "~ashby_confessed",
+                          "value": true
+                        },
+                        {
+                          "set": "~cantor_named",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Ashby laughs softly and slips into the collapsing tunnel. Earth pours down behind him.",
+                      "flags": [
+                        {
+                          "set": "arc.starter.ashby_fate",
+                          "value": "escaped"
+                        }
+                      ]
+                    }
+                  },
+                  "next": "confess",
+                  "nextOnFail": "gone"
+                },
+                {
+                  "id": "silence",
+                  "label": "Say nothing and watch him"
+                }
+              ]
+            },
+            {
+              "id": "yield",
+              "text": "You think this ends anything? She is already singing in Brightwater."
+            },
+            {
+              "id": "confess",
+              "text": "Forgive me, servant of the Choir. I only wanted to hold it a little longer. The Almonry will keep it safe for her."
+            },
+            {
+              "id": "gone",
+              "text": "Never want again!"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "maud_fennick",
+      "name": "Maud Fennick",
+      "statBlock": "commoner",
+      "personality": "Keeper of the Plough and Lantern: brisk, watchful, fond of the Reeve, hears everything and repeats little.",
+      "voice": "Low and dry; answers questions with questions.",
+      "factions": [],
+      "attitude": "indifferent",
+      "secrets": [
+        "She has seen Oda Hallard pay for drinks in cult silver."
+      ],
+      "conversations": [
+        {
+          "id": "rumours",
+          "label": "Talk to Maud behind the bar",
+          "if": {
+            "all": [
+              {
+                "not": {
+                  "flag": "~altar_won"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~barred"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "maud",
+            "barkeep",
+            "bar",
+            "rumours",
+            "rumors"
+          ],
+          "start": "bar",
+          "nodes": [
+            {
+              "id": "bar",
+              "text": "What'll it be? The ale's weak, the stew's weaker, and nobody's talking tonight.",
+              "options": [
+                {
+                  "id": "round",
+                  "label": "Buy a round for the room (1 gp)",
+                  "if": {
+                    "all": [
+                      {
+                        "coins": {
+                          "gte": 100
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~maud_told"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "round",
+                    "buy",
+                    "drinks"
+                  ],
+                  "outcome": {
+                    "cost": 100,
+                    "text": "Tongues loosen. A drover swears the hooded ones on the hill change watch at moonrise, when the lookouts go down to eat.",
+                    "flags": [
+                      {
+                        "set": "~lookout_hours",
+                        "value": true
+                      },
+                      {
+                        "set": "~maud_told",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "warm"
+                },
+                {
+                  "id": "charm",
+                  "label": "Trade stories with her until she warms up (Persuasion DC 11)",
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~maud_told"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~maud_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "stories",
+                    "charm",
+                    "chat"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 11,
+                    "success": {
+                      "text": "Maud leans in: the hooded ones on the hill change watch at moonrise, when the lookouts go down to eat.",
+                      "flags": [
+                        {
+                          "set": "~lookout_hours",
+                          "value": true
+                        },
+                        {
+                          "set": "~maud_told",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "flags": [
+                        {
+                          "set": "~maud_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "warm",
+                  "nextOnFail": "busy"
+                },
+                {
+                  "id": "lean",
+                  "label": "\"Somebody in this room is feeding that hill. Who?\" (Intimidation DC 12)",
+                  "if": {
+                    "not": {
+                      "flag": "~maud_told"
+                    }
+                  },
+                  "keywords": [
+                    "who",
+                    "feeding",
+                    "threaten",
+                    "lean"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 12,
+                    "success": {
+                      "flags": [
+                        {
+                          "set": "~oda_guilty",
+                          "value": true
+                        },
+                        {
+                          "set": "~maud_told",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "flags": [
+                        {
+                          "set": "~barred",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "oda",
+                  "nextOnFail": "barred"
+                },
+                {
+                  "id": "knight",
+                  "label": "\"Who was the knight who stormed out?\"",
+                  "once": true,
+                  "keywords": [
+                    "knight",
+                    "corwin"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~corwin_heard",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "knight"
+                },
+                {
+                  "id": "bye",
+                  "label": "Leave her to the taps"
+                }
+              ]
+            },
+            {
+              "id": "warm",
+              "text": "Anything else, while I have the patience?",
+              "options": [
+                {
+                  "id": "round",
+                  "label": "Buy a round for the room (1 gp)",
+                  "if": {
+                    "all": [
+                      {
+                        "coins": {
+                          "gte": 100
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~maud_told"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "round",
+                    "buy",
+                    "drinks"
+                  ],
+                  "outcome": {
+                    "cost": 100,
+                    "text": "Tongues loosen. A drover swears the hooded ones on the hill change watch at moonrise, when the lookouts go down to eat.",
+                    "flags": [
+                      {
+                        "set": "~lookout_hours",
+                        "value": true
+                      },
+                      {
+                        "set": "~maud_told",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "warm"
+                },
+                {
+                  "id": "charm",
+                  "label": "Trade stories with her until she warms up (Persuasion DC 11)",
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~maud_told"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~maud_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "stories",
+                    "charm",
+                    "chat"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 11,
+                    "success": {
+                      "text": "Maud leans in: the hooded ones on the hill change watch at moonrise, when the lookouts go down to eat.",
+                      "flags": [
+                        {
+                          "set": "~lookout_hours",
+                          "value": true
+                        },
+                        {
+                          "set": "~maud_told",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "flags": [
+                        {
+                          "set": "~maud_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "warm",
+                  "nextOnFail": "busy"
+                },
+                {
+                  "id": "lean",
+                  "label": "\"Somebody in this room is feeding that hill. Who?\" (Intimidation DC 12)",
+                  "if": {
+                    "not": {
+                      "flag": "~maud_told"
+                    }
+                  },
+                  "keywords": [
+                    "who",
+                    "feeding",
+                    "threaten",
+                    "lean"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 12,
+                    "success": {
+                      "flags": [
+                        {
+                          "set": "~oda_guilty",
+                          "value": true
+                        },
+                        {
+                          "set": "~maud_told",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "flags": [
+                        {
+                          "set": "~barred",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "oda",
+                  "nextOnFail": "barred"
+                },
+                {
+                  "id": "knight",
+                  "label": "\"Who was the knight who stormed out?\"",
+                  "once": true,
+                  "keywords": [
+                    "knight",
+                    "corwin"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~corwin_heard",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "knight"
+                },
+                {
+                  "id": "bye",
+                  "label": "Leave her to the taps"
+                }
+              ]
+            },
+            {
+              "id": "busy",
+              "text": "Busy night, stranger. She turns back to the taps."
+            },
+            {
+              "id": "oda",
+              "text": "...Oda Hallard. Paying for her drinks in silver lately, and that miller has never had silver in her life.",
+              "options": [
+                {
+                  "id": "round",
+                  "label": "Buy a round for the room (1 gp)",
+                  "if": {
+                    "all": [
+                      {
+                        "coins": {
+                          "gte": 100
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~maud_told"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "round",
+                    "buy",
+                    "drinks"
+                  ],
+                  "outcome": {
+                    "cost": 100,
+                    "text": "Tongues loosen. A drover swears the hooded ones on the hill change watch at moonrise, when the lookouts go down to eat.",
+                    "flags": [
+                      {
+                        "set": "~lookout_hours",
+                        "value": true
+                      },
+                      {
+                        "set": "~maud_told",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "warm"
+                },
+                {
+                  "id": "charm",
+                  "label": "Trade stories with her until she warms up (Persuasion DC 11)",
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~maud_told"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~maud_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "stories",
+                    "charm",
+                    "chat"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 11,
+                    "success": {
+                      "text": "Maud leans in: the hooded ones on the hill change watch at moonrise, when the lookouts go down to eat.",
+                      "flags": [
+                        {
+                          "set": "~lookout_hours",
+                          "value": true
+                        },
+                        {
+                          "set": "~maud_told",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "flags": [
+                        {
+                          "set": "~maud_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "warm",
+                  "nextOnFail": "busy"
+                },
+                {
+                  "id": "lean",
+                  "label": "\"Somebody in this room is feeding that hill. Who?\" (Intimidation DC 12)",
+                  "if": {
+                    "not": {
+                      "flag": "~maud_told"
+                    }
+                  },
+                  "keywords": [
+                    "who",
+                    "feeding",
+                    "threaten",
+                    "lean"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 12,
+                    "success": {
+                      "flags": [
+                        {
+                          "set": "~oda_guilty",
+                          "value": true
+                        },
+                        {
+                          "set": "~maud_told",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "flags": [
+                        {
+                          "set": "~barred",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "oda",
+                  "nextOnFail": "barred"
+                },
+                {
+                  "id": "knight",
+                  "label": "\"Who was the knight who stormed out?\"",
+                  "once": true,
+                  "keywords": [
+                    "knight",
+                    "corwin"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~corwin_heard",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "knight"
+                },
+                {
+                  "id": "bye",
+                  "label": "Leave her to the taps"
+                }
+              ]
+            },
+            {
+              "id": "barred",
+              "text": "Out. And if you want a bed under my roof, it'll cost you four times the rate."
+            },
+            {
+              "id": "knight",
+              "text": "Ser Corwin Ashvale. Drinks water, pays in coin, sleeps in my stable. Dismissed from the Dawn Lance, and he won't say why.",
+              "options": [
+                {
+                  "id": "round",
+                  "label": "Buy a round for the room (1 gp)",
+                  "if": {
+                    "all": [
+                      {
+                        "coins": {
+                          "gte": 100
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~maud_told"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "round",
+                    "buy",
+                    "drinks"
+                  ],
+                  "outcome": {
+                    "cost": 100,
+                    "text": "Tongues loosen. A drover swears the hooded ones on the hill change watch at moonrise, when the lookouts go down to eat.",
+                    "flags": [
+                      {
+                        "set": "~lookout_hours",
+                        "value": true
+                      },
+                      {
+                        "set": "~maud_told",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "warm"
+                },
+                {
+                  "id": "charm",
+                  "label": "Trade stories with her until she warms up (Persuasion DC 11)",
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~maud_told"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~maud_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "stories",
+                    "charm",
+                    "chat"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 11,
+                    "success": {
+                      "text": "Maud leans in: the hooded ones on the hill change watch at moonrise, when the lookouts go down to eat.",
+                      "flags": [
+                        {
+                          "set": "~lookout_hours",
+                          "value": true
+                        },
+                        {
+                          "set": "~maud_told",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "flags": [
+                        {
+                          "set": "~maud_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "warm",
+                  "nextOnFail": "busy"
+                },
+                {
+                  "id": "lean",
+                  "label": "\"Somebody in this room is feeding that hill. Who?\" (Intimidation DC 12)",
+                  "if": {
+                    "not": {
+                      "flag": "~maud_told"
+                    }
+                  },
+                  "keywords": [
+                    "who",
+                    "feeding",
+                    "threaten",
+                    "lean"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 12,
+                    "success": {
+                      "flags": [
+                        {
+                          "set": "~oda_guilty",
+                          "value": true
+                        },
+                        {
+                          "set": "~maud_told",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "flags": [
+                        {
+                          "set": "~barred",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "oda",
+                  "nextOnFail": "barred"
+                },
+                {
+                  "id": "knight",
+                  "label": "\"Who was the knight who stormed out?\"",
+                  "once": true,
+                  "keywords": [
+                    "knight",
+                    "corwin"
+                  ],
+                  "outcome": {
+                    "flags": [
+                      {
+                        "set": "~corwin_heard",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "knight"
+                },
+                {
+                  "id": "bye",
+                  "label": "Leave her to the taps"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "choir_lookouts",
+      "name": "The hooded lookouts",
+      "statBlock": "cultist",
+      "personality": "Two Hollow Choir lookouts: a tall, fervent zealot and a frightened village boy in a borrowed hood.",
+      "voice": "The tall one hisses scripture; the boy only stammers.",
+      "factions": [
+        "hollow_choir"
+      ],
+      "attitude": "hostile",
+      "secrets": [
+        "The boy is Wat, the cooper's son, lured by promises that the hunger would end."
+      ],
+      "schedule": [
+        {
+          "scene": "gallows_hill_trail",
+          "from": 0,
+          "to": 24,
+          "if": {
+            "all": [
+              {
+                "not": {
+                  "flag": "~approached"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~barrow_alerted"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "conversations": [
+        {
+          "id": "hail",
+          "label": "Walk up to the hooded lookouts",
+          "if": {
+            "flag": "~crossed"
+          },
+          "keywords": [
+            "lookouts",
+            "hooded",
+            "hail",
+            "walk"
+          ],
+          "start": "challenge",
+          "nodes": [
+            {
+              "id": "challenge",
+              "text": "Hold. The hill is closed to the hungry. The tall one grips a sickle; the smaller one is shaking.",
+              "options": [
+                {
+                  "id": "watch",
+                  "label": "Watch them: are they both true believers? (Insight DC 10)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~lookout_boy"
+                    }
+                  },
+                  "keywords": [
+                    "watch",
+                    "believers",
+                    "study"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 10,
+                    "success": {
+                      "text": "The smaller lookout is a boy in a borrowed hood, and he is trying hard not to cry.",
+                      "flags": [
+                        {
+                          "set": "~lookout_boy",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Two hoods, two sickles. You can tell nothing more."
+                    }
+                  },
+                  "next": "wait"
+                },
+                {
+                  "id": "believer",
+                  "label": "\"Hunger ends. The Brother is expecting me.\" (Deception DC 13)",
+                  "keywords": [
+                    "hunger",
+                    "brother",
+                    "pretend",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 13,
+                    "success": {
+                      "text": "The lookouts bow their hoods and let you pass to the barrow door.",
+                      "flags": [
+                        {
+                          "set": "~posed_as_choir",
+                          "value": true
+                        },
+                        {
+                          "set": "~approached",
+                          "value": true
+                        },
+                        {
+                          "set": "arc.starter.ambush_avoided",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The tall one shakes a bone chime, and both vanish into the barrow. They know you are coming.",
+                      "flags": [
+                        {
+                          "set": "~barrow_alerted",
+                          "value": true
+                        },
+                        {
+                          "set": "~approached",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "pass",
+                  "nextOnFail": "alarm"
+                },
+                {
+                  "id": "scare",
+                  "label": "\"Run. Now. And never come back to Millbrook.\" (Intimidation DC 13)",
+                  "keywords": [
+                    "run",
+                    "scare",
+                    "threaten",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 13,
+                    "success": {
+                      "text": "Both lookouts drop the chime and run for the dark. Nobody warns the barrow.",
+                      "flags": [
+                        {
+                          "set": "~approached",
+                          "value": true
+                        },
+                        {
+                          "set": "arc.starter.ambush_avoided",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The tall one shakes a bone chime, and both vanish into the barrow. They know you are coming.",
+                      "flags": [
+                        {
+                          "set": "~barrow_alerted",
+                          "value": true
+                        },
+                        {
+                          "set": "~approached",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "fled",
+                  "nextOnFail": "alarm"
+                },
+                {
+                  "id": "turn",
+                  "label": "\"There are children chained under that hill. Is that what your god wants?\" (Persuasion DC 14)",
+                  "keywords": [
+                    "children",
+                    "god",
+                    "persuade",
+                    "reason"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~lookout_boy"
+                        },
+                        "source": "you speak to the frightened boy"
+                      }
+                    ],
+                    "success": {
+                      "text": "The boy, Wat the cooper's son, tears off his hood and throws himself on the tall one. Together you bind the zealot to the gibbet, and Wat gives you his key to the barrow gate.",
+                      "flags": [
+                        {
+                          "set": "~wat_turned",
+                          "value": true
+                        },
+                        {
+                          "set": "~barrow_key",
+                          "value": true
+                        },
+                        {
+                          "set": "~approached",
+                          "value": true
+                        },
+                        {
+                          "set": "arc.starter.ambush_avoided",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The tall one shakes a bone chime, and both vanish into the barrow. They know you are coming.",
+                      "flags": [
+                        {
+                          "set": "~barrow_alerted",
+                          "value": true
+                        },
+                        {
+                          "set": "~approached",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "wat",
+                  "nextOnFail": "alarm"
+                },
+                {
+                  "id": "rush",
+                  "label": "Draw steel and rush them before they can ring the chime",
+                  "keywords": [
+                    "attack",
+                    "rush",
+                    "charge",
+                    "fight"
+                  ],
+                  "outcome": {
+                    "encounter": "lookout_fight"
+                  }
+                },
+                {
+                  "id": "back",
+                  "label": "Back away into the bramble"
+                }
+              ]
+            },
+            {
+              "id": "wait",
+              "text": "Well? Speak, or go back down the hill.",
+              "options": [
+                {
+                  "id": "watch",
+                  "label": "Watch them: are they both true believers? (Insight DC 10)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~lookout_boy"
+                    }
+                  },
+                  "keywords": [
+                    "watch",
+                    "believers",
+                    "study"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 10,
+                    "success": {
+                      "text": "The smaller lookout is a boy in a borrowed hood, and he is trying hard not to cry.",
+                      "flags": [
+                        {
+                          "set": "~lookout_boy",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Two hoods, two sickles. You can tell nothing more."
+                    }
+                  },
+                  "next": "wait"
+                },
+                {
+                  "id": "believer",
+                  "label": "\"Hunger ends. The Brother is expecting me.\" (Deception DC 13)",
+                  "keywords": [
+                    "hunger",
+                    "brother",
+                    "pretend",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 13,
+                    "success": {
+                      "text": "The lookouts bow their hoods and let you pass to the barrow door.",
+                      "flags": [
+                        {
+                          "set": "~posed_as_choir",
+                          "value": true
+                        },
+                        {
+                          "set": "~approached",
+                          "value": true
+                        },
+                        {
+                          "set": "arc.starter.ambush_avoided",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The tall one shakes a bone chime, and both vanish into the barrow. They know you are coming.",
+                      "flags": [
+                        {
+                          "set": "~barrow_alerted",
+                          "value": true
+                        },
+                        {
+                          "set": "~approached",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "pass",
+                  "nextOnFail": "alarm"
+                },
+                {
+                  "id": "scare",
+                  "label": "\"Run. Now. And never come back to Millbrook.\" (Intimidation DC 13)",
+                  "keywords": [
+                    "run",
+                    "scare",
+                    "threaten",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 13,
+                    "success": {
+                      "text": "Both lookouts drop the chime and run for the dark. Nobody warns the barrow.",
+                      "flags": [
+                        {
+                          "set": "~approached",
+                          "value": true
+                        },
+                        {
+                          "set": "arc.starter.ambush_avoided",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The tall one shakes a bone chime, and both vanish into the barrow. They know you are coming.",
+                      "flags": [
+                        {
+                          "set": "~barrow_alerted",
+                          "value": true
+                        },
+                        {
+                          "set": "~approached",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "fled",
+                  "nextOnFail": "alarm"
+                },
+                {
+                  "id": "turn",
+                  "label": "\"There are children chained under that hill. Is that what your god wants?\" (Persuasion DC 14)",
+                  "keywords": [
+                    "children",
+                    "god",
+                    "persuade",
+                    "reason"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~lookout_boy"
+                        },
+                        "source": "you speak to the frightened boy"
+                      }
+                    ],
+                    "success": {
+                      "text": "The boy, Wat the cooper's son, tears off his hood and throws himself on the tall one. Together you bind the zealot to the gibbet, and Wat gives you his key to the barrow gate.",
+                      "flags": [
+                        {
+                          "set": "~wat_turned",
+                          "value": true
+                        },
+                        {
+                          "set": "~barrow_key",
+                          "value": true
+                        },
+                        {
+                          "set": "~approached",
+                          "value": true
+                        },
+                        {
+                          "set": "arc.starter.ambush_avoided",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The tall one shakes a bone chime, and both vanish into the barrow. They know you are coming.",
+                      "flags": [
+                        {
+                          "set": "~barrow_alerted",
+                          "value": true
+                        },
+                        {
+                          "set": "~approached",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "wat",
+                  "nextOnFail": "alarm"
+                },
+                {
+                  "id": "rush",
+                  "label": "Draw steel and rush them before they can ring the chime",
+                  "keywords": [
+                    "attack",
+                    "rush",
+                    "charge",
+                    "fight"
+                  ],
+                  "outcome": {
+                    "encounter": "lookout_fight"
+                  }
+                },
+                {
+                  "id": "back",
+                  "label": "Back away into the bramble"
+                }
+              ]
+            },
+            {
+              "id": "pass",
+              "text": "Go down, then. The altar is hungry tonight."
+            },
+            {
+              "id": "fled",
+              "text": "Not for this! Not for her! Their footsteps crash away through the bramble."
+            },
+            {
+              "id": "wat",
+              "text": "They said nobody would get hurt. They said she'd make the hunger stop."
+            },
+            {
+              "id": "alarm",
+              "text": "Liar! Brothers, to the door!"
+            }
+          ]
+        }
       ]
     }
   ],
@@ -2336,6 +7497,50 @@
         ],
         "minutes": 480
       }
+    },
+    {
+      "id": "lookout_fight",
+      "name": "Lookouts on Gallows Hill",
+      "monsters": [
+        {
+          "id": "cultist",
+          "count": 2
+        }
+      ],
+      "scaling": {
+        "target": "low",
+        "pool": [
+          "cultist"
+        ]
+      },
+      "win": {
+        "text": "The last lookout falls in the bramble. Nobody rang the chime.",
+        "flags": [
+          {
+            "set": "~approached",
+            "value": true
+          },
+          {
+            "set": "arc.starter.ambush_avoided",
+            "value": true
+          }
+        ],
+        "coins": 300
+      },
+      "lose": {
+        "text": "You come round in the bramble. The lookouts have gone below to warn the barrow.",
+        "flags": [
+          {
+            "set": "~approached",
+            "value": true
+          },
+          {
+            "set": "~barrow_alerted",
+            "value": true
+          }
+        ],
+        "minutes": 60
+      }
     }
   ],
   "beats": [
@@ -2525,6 +7730,74 @@
           {
             "companion": "corwin",
             "delta": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "corwin_ransom",
+      "text": "Corwin heard how you sold a widow her own ring. He is very quiet.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "world.corwin_status",
+            "eq": "in_party"
+          },
+          {
+            "flag": "~ring_ransomed"
+          }
+        ]
+      },
+      "outcome": {
+        "approval": [
+          {
+            "companion": "corwin",
+            "delta": -10
+          }
+        ]
+      }
+    },
+    {
+      "id": "corwin_lie",
+      "text": "Corwin hears how you got the barrow key \"on the Crown's business\". He does not laugh.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "world.corwin_status",
+            "eq": "in_party"
+          },
+          {
+            "flag": "~reeve_lied"
+          }
+        ]
+      },
+      "outcome": {
+        "approval": [
+          {
+            "companion": "corwin",
+            "delta": -5
+          }
+        ]
+      }
+    },
+    {
+      "id": "wat_penance",
+      "text": "Wat, the lookout you turned, tells the whole village who brought the children home.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~altar_won"
+          },
+          {
+            "flag": "~wat_turned"
+          }
+        ]
+      },
+      "outcome": {
+        "reputation": [
+          {
+            "faction": "crown_of_aurelmark",
+            "delta": 2
           }
         ]
       }
@@ -2727,6 +8000,86 @@
     {
       "id": "~writ",
       "description": "Carries the crown writ from Brightwater."
+    },
+    {
+      "id": "~reeve_shamed",
+      "description": "Saw that the Reeve went up the hill alone and ran."
+    },
+    {
+      "id": "~reeve_brave",
+      "description": "Shamed the Reeve into bringing his men to the ford."
+    },
+    {
+      "id": "~reeve_lied",
+      "description": "Got the barrow key by claiming to be on Crown business."
+    },
+    {
+      "id": "~reeve_tried_lie",
+      "description": "Tried the Crown-business lie on the Reeve."
+    },
+    {
+      "id": "~lookout_hours",
+      "description": "Knows the lookouts change watch at moonrise."
+    },
+    {
+      "id": "~maud_told",
+      "description": "Maud the barkeep shared what she knows."
+    },
+    {
+      "id": "~maud_tried",
+      "description": "Failed to charm Maud."
+    },
+    {
+      "id": "~barred",
+      "description": "Maud charges four times the rate for a room."
+    },
+    {
+      "id": "~corwin_heard",
+      "description": "Heard village gossip about why Corwin was dismissed."
+    },
+    {
+      "id": "~lookout_boy",
+      "description": "Noticed the frightened boy among the lookouts."
+    },
+    {
+      "id": "~posed_as_choir",
+      "description": "Passed the lookouts by posing as a Choir believer."
+    },
+    {
+      "id": "~wat_turned",
+      "description": "Turned Wat the lookout against the Choir."
+    },
+    {
+      "id": "~cantor_named",
+      "description": "Heard the name \"the Cantor\" from Ashby."
+    },
+    {
+      "id": "~ashby_confessed",
+      "description": "Ashby confessed the Teeth travel under the Almonry seal."
+    },
+    {
+      "id": "~ashby_handed",
+      "description": "Handed Ashby over to the Reeve."
+    },
+    {
+      "id": "~reward_taken",
+      "description": "Took the village's reward from the Reeve."
+    },
+    {
+      "id": "~ring_ransomed",
+      "description": "Made Widow Marrow pay for her own ring."
+    },
+    {
+      "id": "~sworn",
+      "description": "Swore to Corwin to keep the Tooth from the Choir."
+    },
+    {
+      "id": "~ashby_spoke",
+      "description": "Told Corwin how you feel about killing Ashby."
+    },
+    {
+      "id": "~clerk_exposed",
+      "description": "Exposed the Choir clerk at Brightwater."
     }
   ],
   "endings": [
