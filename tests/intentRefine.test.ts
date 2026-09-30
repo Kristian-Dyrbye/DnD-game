@@ -46,6 +46,13 @@ function at(sceneId: string, actionId?: string): RunContext {
   return c;
 }
 
+/** At Widow Marrow's with Corwin met (so his recruit action is offered). */
+function corwinMet(): RunContext {
+  const c = at('marrows_goods_and_oath');
+  c.state.flags['world.corwin_status'] = 'met';
+  return c;
+}
+
 function refined(c: RunContext, llm: Intent, text: string) {
   const ictx = intentContext(c);
   return validateIntent(refineIntent(llm, text, ictx), ictx);
@@ -91,6 +98,20 @@ describe('refineIntent with recorded llama3.2:3b replies', () => {
   it('a confident keyword match beats a generic look', () => {
     const v = refined(at('millbrook_arrival'), { action: 'look' }, 'I study the wet footprints in the mud');
     expect(v.actionId).toBe('well.footprints');
+  });
+
+  it('"ask Sir Corwin to come with me" (the model said talk corwin_npc) → recruit (A123)', () => {
+    const c = corwinMet();
+    expect(intentContext(c).actions.find((a) => a.id === 'recruit')).toMatchObject({ recruits: 'corwin' });
+    const v = refined(c, { action: 'talk', target: 'corwin_npc' }, 'I ask Sir Corwin to come with me on the road south');
+    expect(v.actionId).toBe('recruit');
+    expect(refined(c, { action: 'talk' }, 'Will you join me?').actionId).toBe('recruit');
+  });
+
+  it('plain talk with a recruitable NPC stays talk', () => {
+    const v = refined(corwinMet(), { action: 'talk', target: 'corwin_npc' }, 'I ask Sir Corwin how he slept');
+    expect(v.intent.action).toBe('talk');
+    expect(v.actionId).toBeUndefined();
   });
 
   it('never turns an attack into another action', () => {

@@ -34,6 +34,8 @@ export interface IntentOption {
   /** The authored check's skill / plain ability, if the action rolls one. */
   skill?: Skill;
   ability?: Ability;
+  /** Companion id this action recruits (its outcome, or its check's success outcome). */
+  recruits?: string;
 }
 
 /** What the player can refer to right now. Sent (compactly) to the intent prompt. */
@@ -52,7 +54,8 @@ export function intentContext(ctx: RunContext): IntentContext {
       return { id, label, keywords: [], ...checkFields(check) };
     }
     const def = sub ? scene.pois.find((p) => p.id === poi)?.actions.find((a) => a.id === sub) : scene.actions.find((a) => a.id === id);
-    return { id, label, keywords: def?.keywords ?? [], ...(sub && { poi }), ...checkFields(def?.check) };
+    const recruits = def?.outcome?.recruit ?? def?.check?.success?.recruit;
+    return { id, label, keywords: def?.keywords ?? [], ...(sub && { poi }), ...checkFields(def?.check), ...(recruits && { recruits }) };
   };
   return {
     actions: availableActions(ctx).map((a) => option(a.id, a.label)),
@@ -173,6 +176,8 @@ export function keywordIntent(text: string, ictx: IntentContext): Intent {
 // ---------------------------------------------------------------- mapping onto offered actions
 
 const LOOK_LABEL = /^(examine|look|inspect|search|study|investigate|peer|check)\b/i;
+/** Asking someone to come along (A123): "join me", "come with me", "ride with us", "travel together"... */
+const JOIN_TEXT = /\b(join|joins|joining|recruit|accompany|come (with|along)|ride (with|along)|travel (with|together)|walk with|follow me|with (me|us) on)\b/i;
 /** Generic readings a better-matching offered action should replace. */
 const GENERIC: ReadonlySet<Intent['action']> = new Set(['look', 'talk', 'move', 'rest', 'use_item', 'other', 'skill_check', 'choose_action']);
 
@@ -183,6 +188,8 @@ const GENERIC: ReadonlySet<Intent['action']> = new Set(['look', 'talk', 'move', 
  *  2. a confident keyword match on an offered action wins over a generic reading;
  *  3. a target point of interest: its action with the intent's skill, or for a look its
  *     examine-type action (or its only plain action);
+ *  3b. a talk/other intent whose text asks someone to join ("come with me") → the offered recruit
+ *     action for that companion (A123);
  *  4. a skill (the intent's, else a skill verb in the text): the offered action rolling that skill,
  *     or a plain check of the skill's ability whose label shares a word with the text.
  * Anything else is returned unchanged; validateIntent/resolveIntent handle it as before.
@@ -194,6 +201,9 @@ export function refineIntent(intent: Intent, text: string, ictx: IntentContext):
 
   const sure = confidentAction(text, ictx);
   if (sure) return choose(sure);
+
+  const join = intent.action === 'talk' || intent.action === 'other' ? recruitAction(intent.target, text, ictx) : undefined;
+  if (join) return choose(join.id);
 
   const skill = intent.action === 'skill_check' ? intent.skill : undefined;
   const poi = poiOf(intent.target, ictx) ?? poiOf(findTarget(text, ictx), ictx);
@@ -212,6 +222,23 @@ export function refineIntent(intent: Intent, text: string, ictx: IntentContext):
     if (pick) return choose(pick.id);
   }
   return intent;
+}
+
+/**
+ * The offered recruit action a "come with me" line means: only when the text asks someone to join.
+ * Picks the action whose companion id matches the target or the text, else the only companion on offer.
+ * Several offered actions for one companion (a plain and a check version) → the first offered.
+ */
+function recruitAction(target: string | undefined, text: string, ictx: IntentContext): IntentOption | undefined {
+  if (!JOIN_TEXT.test(text)) return undefined;
+  const offers = ictx.actions.filter((a) => a.recruits);
+  if (!offers.length) return undefined;
+  const npcName = ictx.npcs.find((n) => n.id === target)?.name ?? '';
+  // Companion ids are short names ("corwin"); NPC ids add a suffix ("corwin_npc").
+  const said = new Set(words(`${target ?? ''} ${npcName} ${text}`.replace(/_/g, ' ')));
+  const named = offers.find((a) => said.has(a.recruits!.toLowerCase()));
+  if (named) return named;
+  return new Set(offers.map((a) => a.recruits)).size === 1 ? offers[0] : undefined;
 }
 
 function poiOf(target: string | undefined, ictx: IntentContext): string | undefined {
