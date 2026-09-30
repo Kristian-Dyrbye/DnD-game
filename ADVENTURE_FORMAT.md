@@ -38,6 +38,7 @@ A scene has these fields:
 - `locationId`: optional. A location id from `data/world/lore.json`.
 - `seed`: the description seed for the narrator.
 - `variants`: `[{ if, seed }]`. Extra seed text used when the condition holds. This is how earlier choices visibly change a place.
+- `revisitSeed`: optional, a string or a list of strings. Replaces `seed` when the party comes back to a scene it has seen (one entry is picked per return), so the no-AI template narration doesn't repeat the first-arrival text. Variants still apply.
 - `npcs`: NPC ids present in the scene.
 - `pois`: points of interest, `{ id, name, seed, if?, actions[] }`.
 - `actions`: things to do in the scene (see below).
@@ -72,6 +73,7 @@ The runner and the suggested-action buttons use these ids:
   - `save`.
 - `dc` is always set in the data (1–30).
 - `advantageIf` / `disadvantageIf`: `[{ if, source }]`.
+- `group: true` makes it a **group check** (SRD): the hero and every conscious companion roll, and the check succeeds if at least half of them succeed (sneaking past as a party, crossing a rope bridge). The button reads "Group Stealth DC 13".
 - `outcome` is applied after the check. On an action without a check, it is the whole result.
 - `keywords` let free text match the action until intent parsing lands.
 
@@ -93,6 +95,9 @@ Every field is optional:
 | Field | Effect |
 |---|---|
 | `text` | A **fixed fact** that the narrator must convey. |
+| `texts` | `["…", "…"]`: variants of a fact; one is picked (seeded by campaign and time, the dice are not touched) and told after `text`. Use it on outcomes the player can see more than once. |
+| `conditions` | `[{ "condition": "poisoned", "target": "hero" \| "party", "minutes"?: 60, "remove"?: false }]`: SRD conditions from the story (bad ale, a terrifying vision). With `minutes` they end on their own when that much game time passes (a system line says so); without, they last until an outcome with `"remove": true` ends them. They count in checks and fights like any condition. |
+| `companionReturns` | `{ "id": "rook", "loyalty"?: 40 }`: a companion who waited, left or betrayed the party comes back (never the dead). Their kept sheet rejoins, levelled to the hero; loyalty rises to at least `loyalty`. If the party is full they wait. |
 | `flags` | `[{ "set": "f", "value": true }, { "inc": "f", "by": 1 }, { "clear": "f" }]` |
 | `items` | `[{ "itemId": "rope", "quantity": 1 }]`. Item ids are SRD gear, weapon, armor or magic item ids. |
 | `coins` | Copper pieces (`1000` = 10 gp). |
@@ -115,7 +120,7 @@ Every field is optional:
 | `scar` | `{ "description": "rope burn from the gallows", "location"?: "neck", "damageType"?: "fire" }`: a permanent scar on the hero, logged with the scene and adventure as its origin. Without `location`, a plausible spot for the damage type is picked. Locations: left/right_cheek, brow, jaw, neck, chest, back, left/right_shoulder, left/right_arm, left/right_hand, left/right_leg. Fights also leave scars on their own (critical hits taken, dropping to 0 HP). |
 | `exhaustion` | Exhaustion levels gained by the whole party (negative values remove levels). |
 
-Recruit, approval and companionLeaves take effect in the same step, so a beat triggered by the new status or loyalty fires straight away.
+Recruit, approval, companionLeaves and companionReturns take effect in the same step, so a beat triggered by the new status or loyalty fires straight away.
 
 ## Conditions
 
@@ -137,6 +142,7 @@ Conditions can be nested freely:
 { "coins": { "gte": 500 } }                          // the hero carries at least 5 gp
 { "item": "dragon_slayer" }                          // the hero carries this item
 { "since": { "flag": "~bribed", "gteHours": 2 } }       // 2+ hours since the flag was last set by an outcome (false if never)
+{ "count": { "flags": ["~clue_a", "~clue_b", "~clue_c"], "min": 2 } }   // at least 2 of these are truthy ("max" too)
 ```
 
 A flag that has never been set is simply unset, so later arcs can safely read flags from arcs the player never finished.

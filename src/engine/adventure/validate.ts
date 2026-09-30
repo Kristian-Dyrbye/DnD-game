@@ -67,7 +67,10 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
       if (o.recruit && !known(o.recruit)) errors.push(`${where}: recruit names unknown companion "${o.recruit}"`);
       for (const a of o.approval) if (!known(a.companion)) errors.push(`${where}: approval names unknown companion "${a.companion}"`);
       if (o.companionLeaves && !known(o.companionLeaves.id)) errors.push(`${where}: companionLeaves names unknown companion "${o.companionLeaves.id}"`);
+      if (o.companionReturns && !known(o.companionReturns.id)) errors.push(`${where}: companionReturns names unknown companion "${o.companionReturns.id}"`);
     }
+    if (o.texts && o.texts.some((t) => !t.trim())) errors.push(`${where}: empty entry in texts`);
+    for (const c of o.conditions) if (c.remove && c.minutes) warnings.push(`${where}: condition ${c.condition} has minutes but removes it`);
   };
   const action = (a: Action, where: string) => {
     if (!a.check && !a.outcome) warnings.push(`${where}: action "${a.id}" has no check or outcome`);
@@ -226,6 +229,8 @@ export function flagRefs(adv: Adventure): { reads: Set<string>; writes: { id: st
     if (!v || typeof v !== 'object') return;
     const o = v as Record<string, unknown>;
     if (typeof o.flag === 'string') reads.add(o.flag);
+    const count = o.count as { flags?: unknown } | undefined;
+    if (count && typeof count === 'object' && Array.isArray(count.flags)) for (const f of count.flags) if (typeof f === 'string') reads.add(f);
     if (typeof o.set === 'string') writes.push({ id: o.set, value: o.value as FlagValue });
     if (typeof o.inc === 'string') writes.push({ id: o.inc, value: 0 });
     if (typeof o.clear === 'string') writes.push({ id: o.clear });

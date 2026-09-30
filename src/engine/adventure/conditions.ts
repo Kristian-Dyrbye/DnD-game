@@ -48,6 +48,10 @@ export function evalCondition(c: Condition | undefined, ctx: ConditionContext): 
     if (at === undefined || ctx.now === undefined) return false;
     return inRange((ctx.now - at) / 60, c.since.gteHours, c.since.lteHours);
   }
+  if ('count' in c) {
+    const n = c.count.flags.filter((f) => Boolean(ctx.flags[f] ?? ctx.defaults?.[f])).length;
+    return inRange(n, c.count.min, c.count.max);
+  }
   if ('level' in c) return inRange(ctx.level, c.level.gte, c.level.lte);
   if ('reputation' in c) {
     const score = ctx.reputation[c.reputation.faction] ?? 0;
@@ -95,5 +99,6 @@ export function flagsRead(c: Condition | undefined, out = new Set<string>()): Se
   else if ('any' in c) c.any.forEach((x) => flagsRead(x, out));
   else if ('not' in c) flagsRead(c.not, out);
   else if ('flag' in c) out.add(c.flag);
+  else if ('count' in c) c.count.flags.forEach((f) => out.add(f));
   return out;
 }

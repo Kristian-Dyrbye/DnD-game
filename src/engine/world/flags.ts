@@ -61,7 +61,8 @@ export function isNamespaced(id: string): boolean {
  */
 export function resolveAdventureFlags<T extends { id: string; arcId?: string | undefined; kind?: string | undefined }>(adv: T): T {
   const fix = (v: unknown, key?: string): unknown => {
-    if (Array.isArray(v)) return v.map((x) => fix(x, key));
+    // Plain strings in a `flags` list are flag names (the `count` condition).
+    if (Array.isArray(v)) return v.map((x) => (typeof x === 'string' && key === 'flags' ? resolveFlagName(x, adv) : fix(x, key)));
     if (v && typeof v === 'object') {
       const out: Record<string, unknown> = {};
       for (const [k, x] of Object.entries(v)) {

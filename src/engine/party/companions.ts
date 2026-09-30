@@ -146,6 +146,30 @@ export function recruitFlagsOnly(state: GameState, def: CompanionDef, roster: Co
   return { joined: true, waiting: false, message: `${def.name} joins your party.` };
 }
 
+/**
+ * A companion who waited, left or betrayed the party comes back (A130): their kept sheet rejoins
+ * (levelled to the hero; built fresh if none was kept), loyalty rises to at least `loyalty`. The
+ * dead never return. Without `db` (the solver) only the flags change. Party full → they wait.
+ */
+export function returnCompanion(state: GameState, def: CompanionDef, roster: CompanionRoster, loyalty: number, db?: SrdDatabase): RecruitResult {
+  const status = companionStatus(state, def);
+  if (status === 'in_party') return { joined: false, waiting: false, message: `${def.name} is already with you.` };
+  if (status === 'dead') return { joined: false, waiting: false, message: `${def.name} cannot come back.` };
+  const inParty = db ? state.companions.length : roster.companions.filter((d) => companionStatus(state, d) === 'in_party').length;
+  state.flags[def.loyaltyFlag] = Math.max(loyaltyOf(state, def), loyalty);
+  if (inParty >= MAX_COMPANIONS) {
+    state.flags[def.statusFlag] = 'waiting';
+    return { joined: false, waiting: true, message: `${def.name} is back on your side and will wait for you at the nearest safe house (your party is full).` };
+  }
+  if (db) {
+    const kept = (state.extensions.companionSheets as Record<string, Character> | undefined)?.[def.id];
+    const sheet = kept ?? buildCompanion(def, totalLevel(state.hero), db);
+    state.companions = [...state.companions, totalLevel(sheet) < totalLevel(state.hero) ? autoLevelTo(sheet, totalLevel(state.hero), db, def.subclassId) : sheet];
+  }
+  state.flags[def.statusFlag] = 'in_party';
+  return { joined: true, waiting: false, message: status === 'betrayed' || status === 'left' ? `${def.name} returns to your side.` : `${def.name} rejoins your party.` };
+}
+
 /** Log line for a companion parting with the given status. */
 export function partingLine(def: CompanionDef, status: Exclude<CompanionStatus, 'in_party' | 'unmet' | 'met'>): string {
   return status === 'waiting' ? `${def.name} will wait for you.` : status === 'left' ? `${def.name} leaves the party.` : status === 'betrayed' ? `${def.name} has betrayed you!` : `${def.name} is dead.`;

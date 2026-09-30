@@ -30,7 +30,7 @@ export type Narrator = (job: NarrationJob, signal?: AbortSignal) => AsyncIterabl
 /** Deterministic narration from data: facts on the way, the scene description, then arrival facts. */
 export function templateNarration(job: NarrationJob): string {
   if (job.kind === 'outcome' || job.kind === 'combat') return job.facts.join(' ') || 'Nothing much happens.';
-  const d = describeScene(job.ctx);
+  const d = describeScene(job.ctx, job.visit);
   const scene = [d.seed, ...d.pois.map((p) => p.seed), ...(d.npcs.length ? [`Here: ${d.npcs.join(', ')}.`] : [])].join(' ');
   const cut = job.arrivalIndex ?? 0;
   return [...job.facts.slice(0, cut), scene, ...job.facts.slice(cut)].join(' ');

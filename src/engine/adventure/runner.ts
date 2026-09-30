@@ -11,10 +11,11 @@ import { hitDicePool, longRest, shortRest } from '../rules/rest';
 import { giveScar, scarText } from '../character/scars';
 import { revealRoom } from '../world/dungeon';
 import { applyDamage, rollDamage } from '../rules/damage';
-import { changeApproval, partingLine, partWithCompanion, recruitCompanion, recruitFlagsOnly, type CompanionRoster } from '../party/companions';
+import { changeApproval, partingLine, partWithCompanion, recruitCompanion, recruitFlagsOnly, returnCompanion, type CompanionRoster } from '../party/companions';
+import { applyStoryCondition } from './storyConditions';
 import { roll } from '../core/dice';
 import { totalLevel, type Character } from '../core/creature';
-import type { Rng } from '../core/rng';
+import { Rng } from '../core/rng';
 import type { SrdDatabase } from '../data/srd';
 import { abilityCheck, savingThrow, type D20TestResult } from '../rules/checks';
 import type { GameState } from '../session/gameState';
@@ -98,6 +99,7 @@ export interface StepResult {
   recruits?: string[];
   partings?: { id: string; status: 'waiting' | 'left' | 'betrayed' | 'dead' }[];
   approvals?: { companion: string; delta: number }[];
+  returns?: { id: string; loyalty: number }[];
   /** Conversation lines to log verbatim as dialogue, after the narrated facts. */
   dialogue?: { speaker: string; text: string }[];
 }
@@ -183,13 +185,19 @@ export function startAdventure(ctx: RunContext): StepResult {
   return result;
 }
 
-/** Scene text for the narrator: the seed plus any variants whose conditions hold, and visible POIs. */
-export function describeScene(ctx: Pick<RunContext, 'state' | 'adventure' | 'flags'>): { name: string; seed: string; pois: { name: string; seed: string }[]; npcs: string[] } {
+/**
+ * Scene text for the narrator: the seed plus any variants whose conditions hold, and visible POIs.
+ * On a return visit (`visit: 'return'`) a `revisitSeed` replaces the seed (one picked per entry).
+ */
+export function describeScene(ctx: Pick<RunContext, 'state' | 'adventure' | 'flags'>, visit?: 'first' | 'return' | 'resume'): { name: string; seed: string; pois: { name: string; seed: string }[]; npcs: string[] } {
   const s = currentScene(ctx);
-  const cc = conditionContext(ctx.state, getProgress(ctx.state), flagsFor(ctx));
+  const p = getProgress(ctx.state);
+  const cc = conditionContext(ctx.state, p, flagsFor(ctx));
+  const again = typeof s.revisitSeed === 'string' ? [s.revisitSeed] : s.revisitSeed;
+  const seed = visit === 'return' && again ? pickText(again, `${ctx.state.campaignId}:${s.id}:${p?.entries ?? 0}`) : s.seed;
   return {
     name: s.name,
-    seed: [s.seed, ...s.variants.filter((v) => evalCondition(v.if, cc)).map((v) => v.seed)].join(' '),
+    seed: [seed, ...s.variants.filter((v) => evalCondition(v.if, cc)).map((v) => v.seed)].join(' '),
     pois: s.pois.filter((p) => evalCondition(p.if, cc)).map((p) => ({ name: p.name, seed: p.seed })),
     npcs: npcsHere(ctx).map((id) => ctx.adventure.npcs.find((n) => n.id === id)?.name ?? id),
   };
@@ -275,7 +283,7 @@ export function perform(ctx: RunContext, actionId: string): StepResult {
     const exit = s.exits.find((e) => `exit.${e.id}` === actionId)!;
     if (exit.check) {
       const r = resolveCheck(ctx, exit.check);
-      result.rolls.push(r);
+      result.rolls.push(...r.rolls);
       if (!r.success) {
         applyOutcome(ctx, exit.check.failure, result);
         fireBeats(ctx, result);
@@ -295,7 +303,7 @@ export function perform(ctx: RunContext, actionId: string): StepResult {
   ctx.state.time += TIME_COSTS.explore_action;
   if (action.check) {
     const r = resolveCheck(ctx, action.check);
-    result.rolls.push(r);
+    result.rolls.push(...r.rolls);
     applyOutcome(ctx, r.success ? action.check.success : action.check.failure, result);
   }
   if (action.outcome) applyOutcome(ctx, action.outcome, result);
@@ -337,7 +345,7 @@ function converse(ctx: RunContext, p: AdventureProgress, actionId: string, resul
   let next = option.next;
   if (option.check) {
     const r = resolveCheck(ctx, option.check);
-    result.rolls.push(r);
+    result.rolls.push(...r.rolls);
     applyOutcome(ctx, r.success ? option.check.success : option.check.failure, result);
     if (!r.success && option.nextOnFail) next = option.nextOnFail;
   }
@@ -400,22 +408,44 @@ export function activeGroups<T extends { id: string; count: number; if?: Conditi
 
 export function checkLabel(c: Check): string {
   const name = c.save ? `${cap(c.save)} save` : c.skill ? cap(c.skill.replace(/_/g, ' ')) : `${cap(c.ability ?? 'str')} check`;
-  return `${name} DC ${c.dc}`;
+  return `${c.group ? 'Group ' : ''}${name} DC ${c.dc}`;
 }
 
 function cap(s: string): string {
   return s.replace(/\b\w/g, (m) => m.toUpperCase());
 }
 
-function resolveCheck(ctx: RunContext, c: Check): D20TestResult {
+/**
+ * Rolls an authored check for the hero, or for the hero and every conscious companion when it is a
+ * group check (SRD: the group succeeds if at least half its members succeed).
+ */
+function resolveCheck(ctx: RunContext, c: Check): { success: boolean; rolls: D20TestResult[] } {
   const cc = conditionContext(ctx.state, getProgress(ctx.state), flagsFor(ctx));
   const advantage = c.advantageIf.filter((x) => evalCondition(x.if, cc)).map((x) => x.source);
   const disadvantage = c.disadvantageIf.filter((x) => evalCondition(x.if, cc)).map((x) => x.source);
   const opts = { rng: ctx.rng, dc: c.dc, advantage, disadvantage };
+  const one = (who: Character): D20TestResult => {
+    if (c.save) return savingThrow(who, c.save, opts);
+    const ability = c.ability ?? (c.skill ? SKILL_ABILITY[c.skill] : 'str');
+    return abilityCheck(who, ability, c.skill, opts);
+  };
   const hero = ctx.state.hero;
-  if (c.save) return savingThrow(hero, c.save, opts);
-  const ability = c.ability ?? (c.skill ? SKILL_ABILITY[c.skill] : 'str');
-  return abilityCheck(hero, ability, c.skill, opts);
+  if (!c.group) {
+    const r = one(hero);
+    return { success: !!r.success, rolls: [r] };
+  }
+  const members = [hero, ...ctx.state.companions.filter((m) => !m.dead && m.hp > 0)];
+  const rolls = members.map((m) => {
+    const r = one(m);
+    return m === hero ? r : { ...r, label: `${m.name}: ${r.label}`, text: `${m.name}: ${r.text}` };
+  });
+  const passed = rolls.filter((r) => r.success).length;
+  return { success: passed * 2 >= rolls.length, rolls };
+}
+
+/** One entry of a text list, picked deterministically by a seed (does not touch the dice Rng). */
+export function pickText(options: readonly string[], seed: string): string {
+  return options.length === 1 ? options[0]! : options[Rng.fromSeed(seed).int(0, options.length - 1)]!;
 }
 
 function enterScene(ctx: RunContext, sceneId: string, result: StepResult, depth = 0): void {
@@ -454,6 +484,7 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
     result.coins -= o.cost;
   }
   if (o.text) result.facts.push(o.text);
+  if (o.texts) result.facts.push(pickText(o.texts, `${state.campaignId}:${state.time}:${state.nextId}:${o.texts[0]}`));
   if (o.tip) (result.tips ??= []).push(o.tip);
   applyFlagWrites(state.flags, o.flags, flagsFor(ctx));
   if (o.flags.some((w) => 'set' in w && TOOTH_HOLDER.test(w.set))) recountTeeth(state.flags);
@@ -470,6 +501,7 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
     state.hero = giveScar(state.hero, { description: o.scar.description, ...(o.scar.location && { location: o.scar.location }), ...(o.scar.damageType && { damageType: o.scar.damageType }), origin: `${scene?.name ?? state.location.name}, ${ctx.adventure.name}`, at: state.time }, ctx.rng);
     result.facts.push(`${state.hero.name} will carry a scar: ${scarText(state.hero.scars.at(-1)!)}.`);
   }
+  for (const c of o.conditions) result.facts.push(...applyStoryCondition(state, c));
   if (o.exhaustion) {
     for (const c of [state.hero, ...state.companions]) c.exhaustion = Math.max(0, Math.min(6, c.exhaustion + o.exhaustion));
     result.facts.push(o.exhaustion > 0 ? `Exhaustion +${o.exhaustion}.` : `Exhaustion ${o.exhaustion}.`);
@@ -491,6 +523,7 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
     if (o.recruit) (result.recruits ??= []).push(o.recruit);
     if (o.approval.length) (result.approvals ??= []).push(...o.approval);
     if (o.companionLeaves) (result.partings ??= []).push(o.companionLeaves);
+    if (o.companionReturns) (result.returns ??= []).push(o.companionReturns);
   }
   if (o.encounter) result.encounter = o.encounter;
   if (o.ending) {
@@ -602,6 +635,10 @@ function applyParty(ctx: RunContext, roster: CompanionRoster, o: Outcome, result
       partWithCompanion(ctx.state, d, o.companionLeaves.status);
       log(partingLine(d, o.companionLeaves.status));
     }
+  }
+  if (o.companionReturns) {
+    const d = def(o.companionReturns.id);
+    if (d) log(returnCompanion(ctx.state, d, roster, o.companionReturns.loyalty, ctx.db).message);
   }
 }
 

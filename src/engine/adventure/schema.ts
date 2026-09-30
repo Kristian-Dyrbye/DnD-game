@@ -4,7 +4,7 @@
  * DCs and the consequences. The LLM only narrates it.
  */
 import { z } from 'zod';
-import { ABILITIES, DamageTypeSchema, SKILLS } from '../rules/basics';
+import { ABILITIES, ConditionSchema as RulesConditionSchema, DamageTypeSchema, SKILLS } from '../rules/basics';
 import { TIERS } from '../world/factions';
 import { DungeonMapSchema } from '../world/dungeon';
 import { AdventureFlagDocSchema } from '../world/flags';
@@ -36,7 +36,8 @@ export type Condition =
   | { hours: { from: number; to: number } }
   | { coins: { gte: number } }
   | { item: string }
-  | { since: { flag: string; gteHours?: number; lteHours?: number } };
+  | { since: { flag: string; gteHours?: number; lteHours?: number } }
+  | { count: { flags: string[]; min?: number; max?: number } };
 
 export const ConditionSchema: z.ZodType<Condition> = z.lazy(() =>
   z.union([
@@ -58,6 +59,8 @@ export const ConditionSchema: z.ZodType<Condition> = z.lazy(() =>
     z.object({ item: z.string() }).strict(),
     // Hours of game time since `flag` was last set by an outcome (false if never set).
     z.object({ since: z.object({ flag: z.string(), gteHours: z.number().min(0).optional(), lteHours: z.number().min(0).optional() }).strict() }).strict(),
+    // How many of these flags are truthy, at least `min` / at most `max` ("two of the three clues").
+    z.object({ count: z.object({ flags: z.array(z.string()).min(1), min: z.number().int().min(0).optional(), max: z.number().int().min(0).optional() }).strict() }).strict(),
   ]),
 );
 
@@ -75,6 +78,8 @@ export const OutcomeSchema = z
   .object({
     /** Fixed facts the narrator must describe (never contradicted, never embellished mechanically). */
     text: z.string().optional(),
+    /** Variants of the text: one is picked (seeded by campaign and time) and told after `text`, so repeats read differently. */
+    texts: z.array(z.string()).min(1).optional(),
     flags: z.array(FlagWriteSchema).default([]),
     /** Move to another scene (same adventure). */
     goto: Id.optional(),
@@ -114,6 +119,15 @@ export const OutcomeSchema = z
     approval: z.array(z.object({ companion: z.string(), delta: z.number().int().min(-50).max(50) })).default([]),
     /** A companion leaves the party: to wait, or for good (left / betrayed / dead). */
     companionLeaves: z.object({ id: z.string(), status: z.enum(['waiting', 'left', 'betrayed', 'dead']) }).optional(),
+    /** A companion who waited, left or betrayed the party comes back (not the dead); loyalty rises to at least `loyalty`. */
+    companionReturns: z.object({ id: z.string(), loyalty: z.number().int().min(0).max(100).default(40) }).strict().optional(),
+    /**
+     * Conditions from the story (poison in the ale, a terrifying vision): on the hero or the whole
+     * party, for `minutes` of game time (default: until removed). `remove: true` ends it instead.
+     */
+    conditions: z
+      .array(z.object({ condition: RulesConditionSchema, target: z.enum(['hero', 'party']).default('hero'), minutes: z.number().int().min(1).optional(), remove: z.boolean().default(false) }).strict())
+      .default([]),
     /**
      * The party rests here (safe places only): 'short' spends Hit Dice automatically (1 hour),
      * 'long' restores HP, Hit Dice, spell slots and daily resources (8 hours).
@@ -140,6 +154,8 @@ export const CheckSchema = z
     /** Saving throw instead of a check. */
     save: z.enum(ABILITIES).optional(),
     dc: z.number().int().min(1).max(30),
+    /** Group check (SRD): the hero and every conscious companion roll; it succeeds if at least half succeed. */
+    group: z.boolean().default(false),
     /** Source names that grant advantage / disadvantage when the condition holds. */
     advantageIf: z.array(z.object({ if: ConditionSchema, source: z.string() })).default([]),
     disadvantageIf: z.array(z.object({ if: ConditionSchema, source: z.string() })).default([]),
@@ -200,6 +216,8 @@ export const SceneSchema = z
     seed: z.string(),
     /** Extra seed text that only applies when the condition holds (flags change the scene). */
     variants: z.array(z.object({ if: ConditionSchema, seed: z.string() })).default([]),
+    /** Replaces `seed` when the party comes back (one picked per return), so template narration repeats less. */
+    revisitSeed: z.union([z.string(), z.array(z.string()).min(1)]).optional(),
     npcs: z.array(Id).default([]),
     pois: z.array(PoiSchema).default([]),
     actions: z.array(ActionSchema).default([]),

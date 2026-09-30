@@ -144,6 +144,7 @@ Implemented so far:
 
 - `src/engine/systems/registry.ts`: `SystemRegistry` with `init` (initState plus migrate, with versions kept in `extensions._systemVersions`), `advanceTime`, `timeAdvanced` and `rest`.
 - `clockSystem.ts`: reports day and night changes and new days.
+- `storyConditionSystem.ts`: ends timed story conditions (an outcome's `conditions` with `minutes`, kept in `extensions.storyConditions`) when the clock passes them.
 - `index.ts`: `createDefaultRegistry(calendar)`.
 
 `GameSession` receives the registry as `ports.systems`. It initialises the registry on new game and on load. It calls `session.timePassed(from)` after every action and logs what the systems report.

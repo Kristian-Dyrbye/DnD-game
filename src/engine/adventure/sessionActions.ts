@@ -26,7 +26,7 @@ import { activeFight, fightAct, finishFight, startFight, type FightEnd } from '.
 import type { DefeatTable } from './defeat';
 import { canLevelUp, levelUp } from '../character/leveling';
 import { banterDue, speakBanter, type BanterGenerator } from '../party/banter';
-import { changeApproval, levelCompanionsWithHero, partWithCompanion, recruitCompanion, setControl, type CompanionRoster } from '../party/companions';
+import { changeApproval, levelCompanionsWithHero, partWithCompanion, recruitCompanion, returnCompanion, setControl, type CompanionRoster } from '../party/companions';
 import { totalLevel } from '../core/creature';
 import type { Ability, Skill } from '../rules/basics';
 import { acceptOffer, activeSideQuest, finishActive, offerSources, offersAt, refreshOffers, roadOffer, sideQuestState, type SideQuestDeps } from './sideQuests';
@@ -133,6 +133,10 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       if (!def) continue;
       partWithCompanion(session.current, def, p.status);
       session.addLog('system', p.status === 'waiting' ? `${def.name} will wait for you.` : p.status === 'left' ? `${def.name} leaves the party.` : p.status === 'betrayed' ? `${def.name} has betrayed you!` : `${def.name} is dead.`);
+    }
+    for (const back of r.returns ?? []) {
+      const def = opts.companions?.companions.find((c) => c.id === back.id);
+      if (def) session.addLog('system', returnCompanion(session.current, def, opts.companions!, back.loyalty, db).message);
     }
     for (const c of r.reputation ?? []) if (!c.ripple || c.newTier) session.addLog('system', describeChange(c, opts.lore));
     for (const tip of r.tips ?? []) {
