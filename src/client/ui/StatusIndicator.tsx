@@ -8,6 +8,8 @@ import {
   type Indicator,
   type SystemStatus,
 } from '../../shared/status';
+import { ENGLISH, type Translator } from '../../shared/i18n';
+import { currentTranslator } from './i18n';
 
 const POLL_MS = 10_000;
 
@@ -25,7 +27,7 @@ function WebStatus() {
   if (mb === undefined) return null;
   return (
     <div class="status-indicator">
-      <Light ind={tabIndicator(mb)} />
+      <Light ind={tabIndicator(mb, currentTranslator())} />
     </div>
   );
 }
@@ -59,10 +61,11 @@ function ServerStatus() {
     };
   }, []);
 
+  const tr = currentTranslator();
   if (serverDown) {
     return (
       <div class="status-indicator">
-        <Light ind={{ light: 'error', label: 'Server offline', detail: 'The game server is not responding.' }} />
+        <Light ind={{ light: 'error', label: tr.t('status.serverOffline'), detail: tr.t('status.serverOfflineDetail') }} />
       </div>
     );
   }
@@ -70,10 +73,10 @@ function ServerStatus() {
 
   return (
     <div class="status-indicator">
-      <Light ind={llmIndicator(status.llm)} />
-      <Light ind={ttsIndicator(status.tts, ttsEnabled)} />
-      <Light ind={memoryIndicator(status.memory)} />
-      {tabHeapMB() !== undefined && <Light ind={tabIndicator(tabHeapMB()!)} />}
+      <Light ind={llmIndicator(status.llm, tr)} />
+      <Light ind={ttsIndicator(status.tts, ttsEnabled, tr)} />
+      <Light ind={memoryIndicator(status.memory, tr)} />
+      {tabHeapMB() !== undefined && <Light ind={tabIndicator(tabHeapMB()!, tr)} />}
     </div>
   );
 }
@@ -84,9 +87,9 @@ function tabHeapMB(): number | undefined {
   return mem ? Math.round(mem.usedJSHeapSize / 1048576) : undefined;
 }
 
-export function tabIndicator(mb: number): Indicator {
+export function tabIndicator(mb: number, tr: Translator = ENGLISH): Indicator {
   const light = mb > 1000 ? 'error' : mb > 600 ? 'warn' : 'ok';
-  return { light, label: `Game ${mb} MB`, detail: `Browser tab memory (JavaScript heap). Budget: under 1 GB.${light !== 'ok' ? ' Try the Low performance preset or 2D battle map.' : ''}` };
+  return { light, label: tr.t('status.tab', { mb }), detail: light === 'ok' ? tr.t('status.tabDetail') : `${tr.t('status.tabDetail')} ${tr.t('status.tabAdvice')}` };
 }
 
 function Light({ ind }: { ind: Indicator }) {

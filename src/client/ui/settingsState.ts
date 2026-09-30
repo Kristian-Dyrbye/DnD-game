@@ -6,6 +6,8 @@ import { signal } from '@preact/signals';
 import { defaultSettings, patchSettings, salvageSettings, type Settings } from '../../shared/settings';
 import { audio } from '../audio/AudioManager';
 import { ttsPlayer } from '../audio/ttsPlayer';
+import { applyLanguage } from './i18n';
+import type { Language } from '../../shared/i18n';
 
 export const settings = signal<Settings | null>(null);
 
@@ -74,6 +76,7 @@ function applyAudioSettings(s: Settings): void {
   ttsPlayer.setEnabled(s.tts.enabled);
   ttsPlayer.setVoice(s.tts.browserVoice);
   applyAccessibility(s);
+  applyLanguage(s.gameplay.language);
 }
 
 /** Text size, readable font and colour-blind helpers are applied to the whole page. */
@@ -97,6 +100,12 @@ export function loadSettings(): Promise<void> {
       loading = null; // retry next time
     });
   return loading;
+}
+
+/** Switches the UI language at once (no reload) and stores the choice. */
+export async function setLanguage(lang: Language): Promise<void> {
+  applyLanguage(lang);
+  await updateSettings({ gameplay: { language: lang } });
 }
 
 /** Sends a partial settings patch (deep-merged by the backend) and stores the result. */

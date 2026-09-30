@@ -80,6 +80,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .link-button { background: none; border: none; padding: 0.25rem 0; color: var(--accent); }
 .hint { color: #b9ad98; margin-top: 0; }
 .title-actions { display: flex; gap: 1rem; margin-top: 1.5rem; }
+.title-language { display: flex; gap: 0.5rem; align-items: center; margin-top: 1rem; }
 
 /* ---------- creator ---------- */
 .creator {

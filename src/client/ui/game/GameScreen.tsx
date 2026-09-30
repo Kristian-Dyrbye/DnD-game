@@ -37,6 +37,7 @@ import { shopsAt } from '../../../engine/world/shops';
 import { shops } from '../../data';
 import { PartyPanel } from './PartyPanel';
 import { StoryLog } from './StoryLog';
+import { currentTranslator, t } from '../i18n';
 
 export function GameScreen() {
   const state = gameState.value;
@@ -67,15 +68,15 @@ export function GameScreen() {
           send({ type: 'combat_act', action: a });
           return undefined;
         }}
-        {...(f.canFlee && f.encounter.status === 'ongoing' && { onLeave: () => send({ type: 'combat_flee' }), leaveLabel: 'Flee' })}
+        {...(f.canFlee && f.encounter.status === 'ongoing' && { onLeave: () => send({ type: 'combat_flee' }), leaveLabel: t('game.flee') })}
       />
     );
   }
   if (heroFallen.value) {
     return (
       <main class="title-screen fallen">
-        <h1>{heroFallen.value} has fallen</h1>
-        <p>In Hardcore mode, death is final. But the world remembers what you did — its choices, its scars, its debts.</p>
+        <h1>{t('fallen.title', { name: heroFallen.value })}</h1>
+        <p>{t('fallen.text')}</p>
         <div class="title-actions">
           <button
             type="button"
@@ -86,10 +87,10 @@ export function GameScreen() {
               startNewCharacter();
             }}
           >
-            Create a new hero in this world
+            {t('fallen.newHero')}
           </button>
           <button type="button" onClick={() => ((heroFallen.value = null), (screen.value = 'title'))}>
-            Back to title
+            {t('fallen.back')}
           </button>
         </div>
       </main>
@@ -100,21 +101,21 @@ export function GameScreen() {
       <header class="game-bar">
         <div class="game-where">
           <strong>{state?.location.name ?? '…'}</strong>
-          {state && <span class="muted">{formatClock(state.time, timeOfDay(state.time))}</span>}
+          {state && <span class="muted">{formatClock(state.time, timeOfDay(state.time), currentTranslator())}</span>}
           {weather && <span class="muted weather">{weatherEffects(weather).description}</span>}
         </div>
-        <nav class="game-menu" aria-label="Game menu">
+        <nav class="game-menu" aria-label={t('game.menuAria')}>
           <button type="button" disabled={!state} onClick={() => setMapOpen(true)}>
-            Map
+            {t('game.map')}
           </button>
           <button type="button" disabled={!state} onClick={() => setJournalOpen(true)}>
-            Journal
+            {t('game.journal')}
           </button>
           <button type="button" disabled={!state} onClick={() => setCharacterOpen(true)}>
-            Character
+            {t('game.character')}
           </button>
           <button type="button" disabled={!state} onClick={() => setInventoryOpen(true)}>
-            Inventory
+            {t('game.inventory')}
           </button>
           {localShops.map((s) => (
             <button key={s.id} type="button" class="shop-button" onClick={() => setShopId(s.id)}>
@@ -124,48 +125,48 @@ export function GameScreen() {
           <button
             type="button"
             aria-pressed={hintOn}
-            title="Show a small hint about your current objective"
+            title={t('game.hintTitle')}
             onClick={() => void updateSettings({ gameplay: { objectiveHint: !hintOn } })}
           >
-            Hint: {hintOn ? 'on' : 'off'}
+            {t('game.hint', { state: t(hintOn ? 'common.on' : 'common.off') })}
           </button>
-          <button type="button" aria-pressed={voiceOn} title={WEB_EDITION ? "Read the story aloud (your browser's voice)" : 'Read the story aloud (Piper voice)'} onClick={() => void updateSettings({ tts: { enabled: !voiceOn } })}>
-            Voice: {voiceOn ? 'on' : 'off'}
+          <button type="button" aria-pressed={voiceOn} title={t(WEB_EDITION ? 'game.voiceTitleWeb' : 'game.voiceTitleLocal')} onClick={() => void updateSettings({ tts: { enabled: !voiceOn } })}>
+            {t('game.voice', { state: t(voiceOn ? 'common.on' : 'common.off') })}
           </button>
           {speaking.value && (
-            <button type="button" onClick={() => ttsPlayer.skip()} title="Stop the narration voice">
-              Skip voice
+            <button type="button" onClick={() => ttsPlayer.skip()} title={t('game.skipVoiceTitle')}>
+              {t('game.skipVoice')}
             </button>
           )}
-          <button type="button" disabled={!state || connection.value !== 'open'} onClick={() => send({ type: 'save', slot: 'quicksave', name: 'Quick save' })}>
-            Quick save
+          <button type="button" disabled={!state || connection.value !== 'open'} onClick={() => send({ type: 'save', slot: 'quicksave', name: t('game.quickSave') })}>
+            {t('game.quickSave')}
           </button>
           <button type="button" disabled={!state || connection.value !== 'open'} onClick={() => setSavesOpen(true)}>
-            Save / Load
+            {t('game.saveLoad')}
           </button>
           <button type="button" onClick={() => (settingsOpen.value = true)}>
-            Settings
+            {t('game.settings')}
           </button>
           <button type="button" onClick={() => (screen.value = 'title')}>
-            Menu
+            {t('game.menu')}
           </button>
         </nav>
       </header>
       {hintOn && objective.value && (
         <p class="objective-hint" role="note">
-          <span class="muted">Objective:</span> {objective.value}
+          <span class="muted">{t('game.objective')}</span> {objective.value}
         </p>
       )}
       {h && <PartyPanel hero={h} companions={state?.companions ?? []} onLevelUp={() => setLevelUpOpen(true)} loyalty={Object.fromEntries((state?.companions ?? []).map((c) => [c.id, Number(state?.flags[`world.${c.id}_loyalty`] ?? 50)]))} controls={(state?.extensions.party as { control?: Record<string, 'ai' | 'player'> } | undefined)?.control ?? {}} />}
       {levelUpOpen && h && <LevelUpPanel hero={h} onClose={() => setLevelUpOpen(false)} />}
       <main class="game-main">
-        {connection.value !== 'open' && <p class="connection-note">{connection.value === 'connecting' ? WEB_EDITION ? 'Starting the game…' : 'Connecting to the game server…' : 'Disconnected — retrying…'}</p>}
+        {connection.value !== 'open' && <p class="connection-note">{t(connection.value === 'connecting' ? (WEB_EDITION ? 'game.startingWeb' : 'game.connecting') : 'game.disconnected')}</p>}
         <StoryLog />
         {lastError.value && (
           <p class="game-error" role="alert">
             {lastError.value}{' '}
             <button type="button" class="link-button" onClick={() => (lastError.value = null)}>
-              Dismiss
+              {t('common.dismiss')}
             </button>
           </p>
         )}

@@ -13,6 +13,8 @@ import { audio } from '../audio/AudioManager';
 import { loadSettings } from './settingsState';
 import { SettingsPanel } from './SettingsPanel';
 import { lazyScreen } from './lazyScreen';
+import { t } from './i18n';
+import { LanguagePicker } from './LanguagePicker';
 
 const Creator = lazyScreen(async () => (await import('./creator/Creator')).Creator, 'character creator');
 const GameScreen = lazyScreen(async () => (await import('./game/GameScreen')).GameScreen, 'game');
@@ -25,21 +27,22 @@ function TitleScreen() {
   return (
     <main class="title-screen">
       <h1>{GAME_TITLE}</h1>
-      <p>{WEB_EDITION ? 'A solo adventure in your browser.' : 'A solo adventure with a local AI Dungeon Master.'}</p>
+      <p>{t(WEB_EDITION ? 'title.taglineWeb' : 'title.taglineLocal')}</p>
       <div class="title-actions">
         <button type="button" class="primary" onClick={startNewCharacter}>
-          New Game
+          {t('title.newGame')}
         </button>
         <button type="button" onClick={() => setLoading(true)}>
-          Load Game
+          {t('title.loadGame')}
         </button>
         <button type="button" onClick={() => (settingsOpen.value = true)}>
-          Settings
+          {t('title.settings')}
         </button>
         <button type="button" onClick={() => setAbout(true)}>
-          About
+          {t('title.about')}
         </button>
       </div>
+      <LanguagePicker class="title-language" />
       {loading && <SaveBrowser mode="load" onClose={() => setLoading(false)} />}
       {about && <AboutPanel onClose={() => setAbout(false)} />}
     </main>

@@ -60,7 +60,7 @@ Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master. Runs fully of
 │  │                              bundled adventures (bundled.ts), in-memory saves + in-browser host for the web edition (memorySaves.ts, inPage.ts),
 │  │                              IndexedDB save backend with a memory-only fallback (indexedDbSaves.ts)
 │  ├─ server/                     Fastify app: static client, REST (saves, settings, status), WebSocket game channel; runs the host with the AI ports
-│  ├─ shared/                     Client⇄server protocol types (commands, events), settings schema
+│  ├─ shared/                     Client⇄server protocol types (commands, events), settings schema, i18n.ts + i18n/<lang>.ts (UI text catalogs; client language signal in client/ui/i18n.ts)
 │  └─ client/                     Preact UI, three.js scenes, 2D grid canvas, audio manager
 │     ├─ ui/                      screens: title, creator, main game, combat, map, journal, settings, save browser
 │     ├─ three/                   model loader, character/monster models, equipment attach, wound/wear overlays, scar marks, 3D battle map, preview

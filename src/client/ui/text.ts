@@ -1,4 +1,5 @@
 /** Small text helpers for showing SRD Markdown snippets in the UI. */
+import { ENGLISH, type Translator } from '../../shared/i18n';
 
 /** Strips Markdown emphasis markers (_x_, **x**). */
 export function plain(md: string): string {
@@ -38,9 +39,9 @@ export function groupNames(entries: { name: string; quantity: number; note?: str
 }
 
 /** "Day 2, 14:05 (day)" from minutes since the campaign began (day 1, 00:00). */
-export function formatClock(minutes: number, timeOfDay: string): string {
+export function formatClock(minutes: number, timeOfDay: 'dawn' | 'day' | 'dusk' | 'night', tr: Translator = ENGLISH): string {
   const day = Math.floor(minutes / 1440) + 1;
   const h = Math.floor((minutes % 1440) / 60);
   const m = minutes % 60;
-  return `Day ${day}, ${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')} (${timeOfDay})`;
+  return tr.t('game.clock', { day, time: `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`, phase: tr.t(`time.${timeOfDay}`) });
 }

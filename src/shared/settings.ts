@@ -3,6 +3,7 @@
  * `parseSettings({})` returns a complete settings object. Stored in userdata/settings.json.
  */
 import { z } from 'zod';
+import { LANGUAGES } from './i18n';
 
 const volume = z.number().min(0).max(1);
 
@@ -59,6 +60,8 @@ export const AccessibilitySettingsSchema = z.object({
 export const GameplaySettingsSchema = z.object({
   /** Owner decision: small "current objective" hint, default off (spec §15). */
   objectiveHint: z.boolean().default(false),
+  /** UI language (owner request 2026-09-30). Older settings files get 'en' from the default. */
+  language: z.enum(LANGUAGES).default('en'),
 });
 
 export const SettingsSchema = z.object({
