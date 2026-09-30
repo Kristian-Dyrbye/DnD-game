@@ -5,7 +5,8 @@
 import type { ComponentType } from 'preact';
 import { STEP_LABELS, canAdvance, goToStep, nextStep, prevStep, stepProblems, stepsFor, type CreatorStep } from '../../../engine/character/creator';
 import { db } from '../../data';
-import { beginAdventure, creator, screen } from '../state';
+import { screen } from '../state';
+import { beginAdventure, creator } from './creatorState';
 import { AbilitiesStep } from './AbilitiesStep';
 import { BackgroundStep } from './BackgroundStep';
 import { ClassStep } from './ClassStep';

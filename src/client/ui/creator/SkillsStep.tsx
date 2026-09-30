@@ -2,7 +2,7 @@
 import { choiceValues, creationChoices, setChoiceValues } from '../../../engine/character/creator';
 import { SKILLS, SKILL_ABILITY, SKILL_NAMES, ABILITY_NAMES, type Skill } from '../../../engine/rules/basics';
 import { db } from '../../data';
-import { creator } from '../state';
+import { creator } from './creatorState';
 import { PickList } from './PickList';
 
 const skillLabel = (k: Skill) => `${SKILL_NAMES[k]} (${ABILITY_NAMES[SKILL_ABILITY[k]].slice(0, 3)})`;

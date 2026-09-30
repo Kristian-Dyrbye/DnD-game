@@ -3,7 +3,7 @@ import { useState } from 'preact/hooks';
 import { spellCounts } from '../../../engine/character/creator';
 import type { Spell } from '../../../engine/data/schemas';
 import { db } from '../../data';
-import { creator } from '../state';
+import { creator } from './creatorState';
 import { firstSentence } from '../text';
 
 function castTime(sp: Spell): string {

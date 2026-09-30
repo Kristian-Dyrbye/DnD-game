@@ -6,7 +6,7 @@ import { Rng } from '../../../engine/core/rng';
 import { templateBackstory } from '../../../llm/prompts/backstory';
 import { db } from '../../data';
 import { WEB_EDITION } from '../../edition';
-import { creator } from '../state';
+import { creator } from './creatorState';
 
 const FIELDS: { key: keyof CreatorState['personality']; label: string; placeholder: string }[] = [
   { key: 'traits', label: 'Personality traits', placeholder: 'e.g. Blunt but kind; hums while working' },

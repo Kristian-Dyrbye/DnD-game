@@ -1,6 +1,6 @@
 /** Creator step 6: appearance — outfit, head, build, skin tone, colour and headgear/cape (live 3D preview). */
 import { OUTFITS, OUTFIT_LABELS, SKIN_TONES, defaultAppearanceFor, type Appearance } from '../../../engine/appearance/appearance';
-import { creator } from '../state';
+import { creator } from './creatorState';
 
 function set(patch: Partial<Appearance>) {
   const cur = creator.value.appearance ?? defaultAppearanceFor(creator.value.classId);

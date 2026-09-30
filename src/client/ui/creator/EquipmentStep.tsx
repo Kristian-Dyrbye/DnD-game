@@ -2,7 +2,7 @@
 import type { CreatorState } from '../../../engine/character/creator';
 import type { ClassData } from '../../../engine/data/schemas';
 import { db } from '../../data';
-import { creator } from '../state';
+import { creator } from './creatorState';
 import { formatCoins, itemDisplayName } from '../text';
 
 type Pkg = ClassData['startingEquipment'][number];

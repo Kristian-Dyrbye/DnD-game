@@ -8,7 +8,7 @@
     "build": "vite build",
     "start": "tsx src/server/main.ts",
     "preview": "vite preview",
-    "build:web": "vite build --mode web",
+    "build:web": "vite build --mode web && node scripts/site-size.mjs",
     "preview:web": "vite preview --mode web",
     "site:size": "node scripts/site-size.mjs",
     "test": "vitest run",

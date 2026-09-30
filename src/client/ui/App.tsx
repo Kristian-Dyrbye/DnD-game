@@ -1,18 +1,22 @@
-/** Root UI component: switches between the title screen, the character creator and the game. */
+/**
+ * Root UI component: switches between the title screen, the character creator and the game.
+ * The creator, game and combat sandbox are separate chunks (they carry the SRD data), loaded when first shown.
+ */
 import { GAME_TITLE } from '../../shared/version';
 import { StatusIndicator } from './StatusIndicator';
 import { WEB_EDITION } from '../edition';
-import { Creator } from './creator/Creator';
-import { combatDemoClass, screen, settingsOpen, startNewCharacter } from './state';
-import { CombatScreen } from './combat/CombatScreen';
-import { demoAct, demoCombat, startDemoCombat } from './combat/combatDemo';
+import { screen, settingsOpen, startNewCharacter } from './state';
 import { useEffect, useState } from 'preact/hooks';
 import { SaveBrowser } from './SaveBrowser';
 import { AboutPanel } from './AboutPanel';
 import { audio } from '../audio/AudioManager';
 import { loadSettings } from './settingsState';
 import { SettingsPanel } from './SettingsPanel';
-import { GameScreen } from './game/GameScreen';
+import { lazyScreen } from './lazyScreen';
+
+const Creator = lazyScreen(async () => (await import('./creator/Creator')).Creator, 'character creator');
+const GameScreen = lazyScreen(async () => (await import('./game/GameScreen')).GameScreen, 'game');
+const DemoCombat = lazyScreen(async () => (await import('./combat/DemoCombat')).DemoCombat, 'combat sandbox');
 
 function TitleScreen() {
   // `#load` opens the save browser straight away (test shortcut).
@@ -40,14 +44,6 @@ function TitleScreen() {
       {about && <AboutPanel onClose={() => setAbout(false)} />}
     </main>
   );
-}
-
-/** The local combat sandbox (`#combat-<class>`). */
-function DemoCombat() {
-  if (!demoCombat.value && combatDemoClass) startDemoCombat(combatDemoClass);
-  const cur = demoCombat.value;
-  if (!cur) return null;
-  return <CombatScreen enc={cur.enc} ctx={cur.ctx} act={demoAct} onLeave={() => (screen.value = 'title')} leaveLabel="Leave sandbox" />;
 }
 
 export function App() {

@@ -57,8 +57,9 @@ export default defineConfig(({ mode }) => {
       outDir: web ? WEB_OUT : '../../dist/client',
       emptyOutDir: true,
       // Keep Vite's own chunks apart from the copied game assets (assets/models, assets/audio).
-      ...(web ? { assetsDir: 'app' } : {}),
-      // The SRD data (~1.2 MB of JSON) is bundled; splitting it out is part of the performance pass (A112).
+      // The manifest lets scripts/site-size.mjs report the title screen's code size (A128).
+      ...(web ? { assetsDir: 'app', manifest: true } : {}),
+      // The SRD data (~1.4 MB of JSON) is one lazy chunk, loaded with the creator/game screens (A128).
       chunkSizeWarningLimit: 2000,
     },
     test: {

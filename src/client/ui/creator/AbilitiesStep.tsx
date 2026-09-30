@@ -17,7 +17,7 @@ import type { AbilityMethod, CreatorState } from '../../../engine/character/crea
 import { Rng } from '../../../engine/core/rng';
 import { ABILITIES, ABILITY_NAMES, abilityModifier, formatModifier, type Ability } from '../../../engine/rules/basics';
 import { db } from '../../data';
-import { creator } from '../state';
+import { creator } from './creatorState';
 
 const METHODS: { id: AbilityMethod; label: string; hint: string }[] = [
   { id: 'standard_array', label: 'Standard Array', hint: 'Assign 15, 14, 13, 12, 10 and 8. Balanced and quick.' },

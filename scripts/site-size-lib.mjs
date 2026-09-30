@@ -53,6 +53,78 @@ export function checkSite(report, limits = {}) {
 }
 
 export const mb = (n) => `${(n / 1048576).toFixed(1)} MB`;
+const kb = (n) => `${(n / 1024).toFixed(0)} KB`;
+
+/** Budget for the JS + CSS the title screen needs (gzip), A128. */
+export const FIRST_LOAD_LIMIT_GZ = 1024 ** 2;
+/** Vite manifest keys main.tsx loads before the title screen shows (entry, web start-up, App shell). */
+export const START_MODULES = ['index.html', 'webEdition.ts', 'ui/App.tsx'];
+/** Chunks loaded later, on demand: what each screen adds on top of the first load. */
+export const LAZY_GROUPS = {
+  creator: ['ui/creator/Creator.tsx'],
+  game: ['ui/game/GameScreen.tsx'],
+  'game host': ['../host/inPage.ts'],
+  '3D': ['three/CharacterPreview.tsx', 'three/BattleMap3D.tsx'],
+};
+
+/** Output files (JS + CSS) of the given manifest keys and everything they import statically. */
+export function manifestClosure(manifest, keys) {
+  const files = new Set();
+  const seen = new Set();
+  const visit = (key) => {
+    const m = manifest[key];
+    if (!m || seen.has(key)) return;
+    seen.add(key);
+    files.add(m.file);
+    for (const css of m.css ?? []) files.add(css);
+    for (const imp of m.imports ?? []) visit(imp);
+  };
+  for (const k of keys) visit(k);
+  return files;
+}
+
+/**
+ * First-load and per-screen code sizes of a web build (raw + gzip), from Vite's manifest
+ * (dist-web/.vite/manifest.json). `gzipSize(file)` measures one output file (injectable for tests).
+ */
+export function loadReport(manifest, gzipSize) {
+  const size = (files) => {
+    let bytes = 0;
+    let gzip = 0;
+    for (const f of files) {
+      const s = gzipSize(f);
+      bytes += s.bytes;
+      gzip += s.gzip;
+    }
+    return { files: files.size, bytes, gzip };
+  };
+  const first = manifestClosure(manifest, START_MODULES);
+  const lazy = {};
+  for (const [name, keys] of Object.entries(LAZY_GROUPS)) {
+    const extra = new Set([...manifestClosure(manifest, keys)].filter((f) => !first.has(f)));
+    lazy[name] = size(extra);
+  }
+  return { firstLoad: size(first), lazy };
+}
+
+/** Problems with the load budget (empty = fine). */
+export function checkLoad(report, limitGz = FIRST_LOAD_LIMIT_GZ) {
+  const problems = [];
+  if (report.firstLoad.files === 0) problems.push('no start-up chunks found in the Vite manifest');
+  if (report.firstLoad.gzip > limitGz) problems.push(`title screen loads ${kb(report.firstLoad.gzip)} gzip of code, over the ${kb(limitGz)} budget`);
+  return problems;
+}
+
+/** Build-log lines for the load report. */
+export function formatLoad(report) {
+  const f = report.firstLoad;
+  return [
+    `Title screen code: ${kb(f.gzip)} gzip (${kb(f.bytes)} raw, ${f.files} files; budget ${kb(FIRST_LOAD_LIMIT_GZ)} gzip)`,
+    `  loaded later: ${Object.entries(report.lazy)
+      .map(([name, s]) => `${name} +${kb(s.gzip)} gzip`)
+      .join(', ')}`,
+  ];
+}
 
 /** Human-readable report lines for the build log. */
 export function formatReport(report) {

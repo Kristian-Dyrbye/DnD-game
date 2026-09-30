@@ -1,5 +1,5 @@
 /** Creator step 8: Heroic (defeat, not death) or Hardcore (real death, world continues). */
-import { creator } from '../state';
+import { creator } from './creatorState';
 
 const MODES = [
   {

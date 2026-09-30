@@ -1,7 +1,7 @@
 /** Creator step 3: choose a species, then its lineage/ancestry and size where the species offers a choice. */
 import { chooseSpecies } from '../../../engine/character/creator';
 import { db } from '../../data';
-import { creator } from '../state';
+import { creator } from './creatorState';
 import { firstSentence } from '../text';
 
 const cap = (s: string) => s[0]!.toUpperCase() + s.slice(1);

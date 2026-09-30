@@ -3,7 +3,7 @@ import { chooseBackground } from '../../../engine/character/creator';
 import { ABILITY_NAMES, SKILL_NAMES } from '../../../engine/rules/basics';
 import type { Background } from '../../../engine/data/schemas';
 import { db } from '../../data';
-import { creator } from '../state';
+import { creator } from './creatorState';
 import { firstSentence, formatCoins, itemDisplayName } from '../text';
 
 const CHOICE_LABEL: Record<string, string> = {

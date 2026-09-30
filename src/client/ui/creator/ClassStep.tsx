@@ -4,7 +4,7 @@ import { quickBuild } from '../../../engine/character/quickBuild';
 import { Rng } from '../../../engine/core/rng';
 import { ABILITY_NAMES } from '../../../engine/rules/basics';
 import { db } from '../../data';
-import { creator } from '../state';
+import { creator } from './creatorState';
 import { CLASS_INFO } from './classInfo';
 
 const ARMOR_LABEL: Record<string, string> = { light: 'Light', medium: 'Medium', heavy: 'Heavy', shield: 'Shields' };

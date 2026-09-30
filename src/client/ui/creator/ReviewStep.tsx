@@ -4,7 +4,7 @@ import { toBuildInput } from '../../../engine/character/creator';
 import { armorClass, initiativeModifiers, weaponAttack } from '../../../engine/character/derived';
 import { ABILITIES, ABILITY_NAMES, SKILL_NAMES, abilityModifier, formatModifier, type Skill } from '../../../engine/rules/basics';
 import { db } from '../../data';
-import { creator } from '../state';
+import { creator } from './creatorState';
 import { formatCoins, groupNames, itemDisplayName } from '../text';
 
 export function ReviewStep() {
