@@ -75,12 +75,12 @@ describe('story module messages in Danish', () => {
     const r = perform(c, 'recruit');
     expect(r.partyLog).toEqual(['Nettle slutter sig til din gruppe.', 'Nettle bifalder varmt. (+25)']);
     const d = perform(c, 'drink');
-    expect(d.facts).toContain(`${c.state.hero.name} er poisoned i 1 time 30 minutter.`);
+    expect(d.facts).toContain(`${c.state.hero.name} er forgiftet i 1 time 30 minutter.`);
     expect(d.facts).toContain('Udmattelse +1.');
-    expect(perform(c, 'fall').facts[0]).toMatch(/ tager \d bludgeoning-skade\.$/);
+    expect(perform(c, 'fall').facts[0]).toMatch(/ tager \d skade \(knusende\)\.$/);
     expect(perform(c, 'sleep').facts).toContain('Gruppen holder et langt hvil (8 timer) og vågner udhvilet.');
     c.state.time += 200;
-    expect(expireStoryConditions(c.state, da)).toEqual([`${c.state.hero.name} er ikke længere poisoned.`]);
+    expect(expireStoryConditions(c.state, da)).toEqual([`${c.state.hero.name} er ikke længere forgiftet.`]);
   });
 
   it('keeps English as the default', () => {

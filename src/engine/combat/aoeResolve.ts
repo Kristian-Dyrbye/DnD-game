@@ -14,7 +14,8 @@
  * Not modelled yet: Evasion-style "no damage on success", per-target overrides.
  */
 import type { Creature } from '../core/creature';
-import { formatD20Test, type Modifier } from '../core/dice';
+import type { Modifier } from '../core/dice';
+import { conditionWord, mathLine, srdLabel } from '../i18n/srdLabels';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { Damage } from '../data/common';
 import type { Ability, Condition } from '../rules/basics';
@@ -69,13 +70,13 @@ export function addSaveBonus(r: D20TestResult, mod: Modifier, msgs: Messages = E
   const modifiers = [...r.modifiers, mod];
   const total = r.total + mod.value;
   const success = r.autoFail ? false : r.target ? total >= r.target.value : undefined;
-  const outcome = r.autoFail ? msgs.m('roll.autoFail', { reason: r.autoFail }) : success === undefined ? undefined : msgs.m(success ? 'roll.success' : 'roll.failure');
+  const outcome = r.autoFail ? msgs.m('roll.autoFail', { reason: srdLabel(msgs, r.autoFail) }) : success === undefined ? undefined : msgs.m(success ? 'roll.success' : 'roll.failure');
   return {
     ...r,
     modifiers,
     total,
     ...(success !== undefined && { success }),
-    text: formatD20Test({ d20: r.d20, modifiers, total, ...(r.target && { target: r.target }), ...(outcome && { outcome }) }, msgs),
+    text: mathLine({ d20: r.d20, modifiers, total, ...(r.target && { target: r.target }), ...(outcome && { outcome }) }, msgs),
   };
 }
 
@@ -120,7 +121,7 @@ export function resolveAreaEffect(state: CombatState, ctx: CombatContext, o: Are
         if (cr.cover === 'half' || cr.cover === 'three_quarters') cover = cr.cover;
       }
       save = combatSave(next, ctx, id, o.save.ability, o.save.dc);
-      if (cover !== 'none') save = addSaveBonus(save, { value: cover === 'half' ? 2 : 5, label: cover === 'half' ? 'Half Cover' : 'Three-Quarters Cover' }, ctx.msgs);
+      if (cover !== 'none') save = addSaveBonus(save, { value: cover === 'half' ? 2 : 5, label: (ctx.msgs ?? ENGLISH_MESSAGES).m(cover === 'half' ? 'lbl.halfCover' : 'lbl.threeQuartersCover') }, ctx.msgs);
       events.push({ kind: 'save', targetId: id, text: m('eff.save', { name: c.name, ability: abilityName(msgs.lang, o.save.ability), roll: save.text }) });
     }
     const failed = !save || !save.success;
@@ -148,7 +149,7 @@ export function resolveAreaEffect(state: CombatState, ctx: CombatContext, o: Are
           ctx.table,
         );
         next = withCreature(next, res.creature);
-        events.push({ kind: 'condition', targetId: id, text: res.applied ? m('cond.hasFrom', { name: target.name, condition: cf.condition, label }) : m('cond.immune', { name: target.name, condition: cf.condition }) });
+        events.push({ kind: 'condition', targetId: id, text: res.applied ? m('cond.hasFrom', { name: target.name, condition: conditionWord(msgs.lang, cf.condition), label }) : m('cond.immune', { name: target.name, condition: conditionWord(msgs.lang, cf.condition) }) });
       }
     }
     targets.push({ id, ...(save && { save }), cover, damage: dealt });

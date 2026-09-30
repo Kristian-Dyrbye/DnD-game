@@ -36,7 +36,7 @@ function MemberCard({ c, lead, onLevelUp, loyalty, control, onToggle }: { c: Cha
       </dl>
       {(c.conditions.length > 0 || c.exhaustion > 0) && (
         <p class="member-conditions">
-          {[...c.conditions.map((x) => x.condition), ...(c.exhaustion ? [t('party.exhaustion', { n: c.exhaustion })] : [])].map((x) => (
+          {[...c.conditions.map((x) => srdText('conditions', x.condition, x.condition)),...(c.exhaustion ? [t('party.exhaustion', { n: c.exhaustion })] : [])].map((x) => (
             <span key={x} class="tag tag-condition">
               {x}
             </span>

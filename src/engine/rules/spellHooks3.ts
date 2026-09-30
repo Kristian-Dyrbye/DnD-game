@@ -24,6 +24,7 @@ import { attackRoll, rollDamage, type DamageRollResult } from './damage';
 import { dealDamage, type EffectContext, type HookFn } from './effects';
 import { cantripMultiplier, levelTableValue } from './spellcasting';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
+import { creatureTypeWord } from '../i18n/srdLabels';
 
 type Params = Record<string, unknown> | undefined;
 const num = (p: Params, key: string, fallback = 0) => (typeof p?.[key] === 'number' ? (p[key] as number) : fallback);
@@ -91,7 +92,7 @@ function typeAllowed(ctx: EffectContext, id: string, p: Params, cond: Condition)
   const types = strs(p?.creatureTypes);
   if (!c || types.length === 0 || types.includes(c.creatureType)) return true;
   ctx.creatures.set(id, { ...c, conditions: c.conditions.filter((x) => !(x.condition === cond && x.sourceId === src(ctx))) });
-  ctx.log.push({ targetId: id, kind: 'hook', text: msg(ctx).m('hook.unaffected', { name: c.name, type: c.creatureType }) });
+  ctx.log.push({ targetId: id, kind: 'hook', text: msg(ctx).m('hook.unaffected', { name: c.name, type: creatureTypeWord(msg(ctx).lang, c.creatureType) }) });
   return false;
 }
 
@@ -260,7 +261,7 @@ export const SPELL_HOOKS_3: Record<string, HookFn> = {
     const save = p?.unwillingSave as Ability | undefined;
     if (save && id !== ctx.source.id && c.kind === 'monster') {
       const res = savingThrow(c, save, { rng: ctx.rng, dc: ctx.saveDc ?? 10, ...saveModes(c, save), ...lang(ctx) });
-      ctx.log.push({ targetId: id, kind: 'save', text: msg(ctx).m('turn.saveVs', { name: c.name, condition: mode, roll: res.text }) });
+      ctx.log.push({ targetId: id, kind: 'save', text: msg(ctx).m('turn.saveVs', { name: c.name, condition: msg(ctx).lang === 'en' ? mode : msg(ctx).m(mode === 'reduce' ? 'lbl.reduce' : 'lbl.enlarge').toLocaleLowerCase(), roll: res.text }) });
       if (res.success) return;
     }
     const opt = ((p?.options as Record<string, Record<string, unknown>> | undefined)?.[mode] ?? {}) as Record<string, unknown>;

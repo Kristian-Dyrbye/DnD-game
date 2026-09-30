@@ -14,6 +14,7 @@ import type { Rng } from '../core/rng';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { Damage, Duration, Effect } from '../data/common';
 import { abilityName } from '../i18n/srdNames';
+import { conditionWord } from '../i18n/srdLabels';
 import { applyCondition, attackModes, canAct, resistsAllDamage, saveModes } from './conditions';
 import { applyDamage, attackRoll, grantTempHp, rollDamage, type DamageRollResult } from './damage';
 import { healFromZero, resolveDamageAtZero } from './death';
@@ -208,7 +209,7 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
           ...(rounds !== undefined && { roundsLeft: rounds }),
         });
         ctx.creatures.set(id, res.creature);
-        ctx.log.push({ targetId: id, kind: 'condition', text: m(res.applied ? 'cond.has' : 'cond.immune', { name: target.name, condition: effect.condition }) });
+        ctx.log.push({ targetId: id, kind: 'condition', text: m(res.applied ? 'cond.has' : 'cond.immune', { name: target.name, condition: conditionWord((ctx.msgs ?? ENGLISH_MESSAGES).lang, effect.condition) }) });
       }
       return;
     }

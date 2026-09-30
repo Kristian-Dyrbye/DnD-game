@@ -18,6 +18,7 @@ import { applyDamage, attackRoll, rollDamage, type DamageRollResult } from './da
 import { healFromZero } from './death';
 import { dealDamage, upcastDice, type EffectContext, type HookFn } from './effects';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
+import { conditionWord } from '../i18n/srdLabels';
 
 type Params = Record<string, unknown> | undefined;
 const num = (p: Params, key: string, fallback = 0) => (typeof p?.[key] === 'number' ? (p[key] as number) : fallback);
@@ -119,7 +120,7 @@ export const SPELL_HOOKS_2: Record<string, HookFn> = {
     const pick = options.find((o) => o === ctx.choice && c.conditions.some((x) => x.condition === o)) ?? options.find((o) => c.conditions.some((x) => x.condition === o));
     if (pick) {
       ctx.creatures.set(id, removeCondition(c, pick));
-      ctx.log.push({ targetId: id, kind: 'hook', text: msg(ctx).m('turn.noLonger', { name: c.name, condition: pick }) });
+      ctx.log.push({ targetId: id, kind: 'hook', text: msg(ctx).m('turn.noLonger', { name: c.name, condition: conditionWord(msg(ctx).lang, pick) }) });
     }
   },
   revivify: (ctx, id, p) => {

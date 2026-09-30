@@ -11,6 +11,7 @@
 import type { Character, Creature } from '../core/creature';
 import { addEffect } from '../rules/activeEffects';
 import { SIZES, type Ability, type Skill } from '../rules/basics';
+import { abilityName, srdName } from '../i18n/srdNames';
 import { abilityCheck, savingThrow, type D20TestResult } from '../rules/checks';
 import { applyCondition, checkModes, saveModes } from '../rules/conditions';
 import type { ActionRider } from '../rules/monsters';
@@ -22,7 +23,6 @@ import { dbOf, msgsOf, withCreature, type CombatContext, type CombatEvent, type 
 
 const isCharacter = (c: Creature): c is Character => c.kind === 'character' && 'classes' in c;
 
-const ABILITY_NAME: Record<Ability, string> = { str: 'Strength', dex: 'Dexterity', con: 'Constitution', int: 'Intelligence', wis: 'Wisdom', cha: 'Charisma' };
 
 /** A saving throw with condition, effect, feature and Dodge modes (Grapple/Shove saves, monster actions). */
 export function combatSave(state: CombatState, ctx: CombatContext, id: string, ability: Ability, dc: number): D20TestResult {
@@ -112,7 +112,7 @@ export function applyActionRiders(
       if (!saved.has(key)) {
         const s = combatSave(next, ctx, targetId, r.save.ability, r.save.dc);
         saved.set(key, s.success === true);
-        events.push({ kind: 'save', actorId: sourceId, targetId, text: m('rider.save', { name: target.name, ability: ABILITY_NAME[r.save.ability], label, roll: s.text }) });
+        events.push({ kind: 'save', actorId: sourceId, targetId, text: m('rider.save', { name: target.name, ability: abilityName(msgsOf(ctx).lang, r.save.ability), label, roll: s.text }) });
       }
       if (saved.get(key)) continue;
     }
@@ -134,7 +134,7 @@ export function applyActionRiders(
       ctx.table,
     );
     next = withCreature(next, res.creature);
-    const name = r.condition[0]!.toUpperCase() + r.condition.slice(1);
+    const name = srdName(msgsOf(ctx).lang, 'conditions', r.condition, r.condition[0]!.toUpperCase() + r.condition.slice(1));
     events.push({ kind: 'condition', actorId: sourceId, targetId, text: `${res.applied ? m('cond.hasFrom', { name: target.name, condition: name, label }) : m('cond.immune', { name: target.name, condition: name })}.` });
   }
   return { state: next, events };

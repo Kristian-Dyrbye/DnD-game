@@ -122,7 +122,7 @@ describe('combat actions (A141f)', () => {
     expect(checkAttack(setup(8), ctx(da), 'hero', 'g1', sword).error).toBe('Goblin er uden for rækkevidde (30 fod > 5 fod)');
     expect(checkAttack(setup(3), ctx(da), 'hero', 'g1', profile).disadvantage).toContain('Fjende inden for 5 fod (Goblin)');
     expect(checkAttack(setup(3), ctx(), 'hero', 'g1', profile).disadvantage).toContain('Enemy within 5 ft (Goblin)');
-    expect(rollDamage(fixed(3, 4), [{ dice: '1d8', type: 'slashing' }], { crit: true, msgs: da }).text).toMatch(/^Kritisk! 2d8 slashing/);
+    expect(rollDamage(fixed(3, 4), [{ dice: '1d8', type: 'slashing' }], { crit: true, msgs: da }).text).toMatch(/^Kritisk! 2d8 huggende/);
     expect(rollDamage(fixed(3, 4), [{ dice: '1d8', type: 'slashing' }], { crit: true }).text).toMatch(/^Critical! 2d8 slashing/);
   });
 

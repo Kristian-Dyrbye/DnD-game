@@ -92,10 +92,10 @@ describe('class feature texts (A141h)', () => {
     const f = hero('fighter', 3);
     const failed = savingThrow(orc, 'wis', { rng: fixed(2), dc: 20, msgs: da });
     const tm = tacticalMind(f, failed, fixed(1), da)!;
-    expect(tm.result.text).toMatch(/\(Tactical Mind\) = \d+ — Fiasko \(anvendelsen refunderes\)$/);
+    expect(tm.result.text).toMatch(/\(Taktisk sans\) = \d+ — Fiasko \(anvendelsen refunderes\)$/);
     expect(reliableTalent(r, failed, true, da).text).toContain('(Reliable Talent: d20 tæller som 10 → ');
     const inspired = { ...orc, effects: [{ id: 'bi-1', key: 'bardic_inspiration', sourceId: 'b', data: { die: 'd6' } }] } as Creature;
-    expect(useInspiration(inspired, failed, fixed(1), da)!.result.text).toMatch(/\(Bardic Inspiration\) = \d+ — Fiasko$/);
+    expect(useInspiration(inspired, failed, fixed(1), da)!.result.text).toMatch(/\(Bardisk inspiration\) = \d+ — Fiasko$/);
   });
 
   it('featureInCombat passes the session language', () => {

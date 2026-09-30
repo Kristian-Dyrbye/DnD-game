@@ -6,13 +6,14 @@
  * Temporary HP absorb damage first and don't stack (keep the higher).
  * All creature functions are pure: they return a new creature plus a report.
  */
-import { formatD20Test, parseDice, roll, type DiceExpr, type Modifier, type RollResult } from '../core/dice';
+import { parseDice, roll, type DiceExpr, type Modifier, type RollResult } from '../core/dice';
 import type { Rng } from '../core/rng';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { Creature } from '../core/creature';
 import type { Damage } from '../data/common';
 import type { DamageType } from './basics';
 import { d20Test, type D20TestInput, type D20TestResult } from './checks';
+import { damageWord, mathLine, srdLabel } from '../i18n/srdLabels';
 
 // ---------------------------------------------------------------- attack rolls
 
@@ -41,14 +42,15 @@ export function attackRoll(input: AttackRollInput): AttackRollResult {
     crit = true;
   } else hit = base.total >= input.targetAc;
   if (hit && input.autoCrit) crit = true;
-  const { m } = input.msgs ?? ENGLISH_MESSAGES;
-  const outcome = !hit ? m(natural === 1 ? 'roll.missNat1' : 'roll.miss') : crit ? (natural >= critOn ? m('roll.crit') : m('roll.critBecause', { reason: input.autoCrit ?? '' })) : m('roll.hit');
+  const msgs = input.msgs ?? ENGLISH_MESSAGES;
+  const { m } = msgs;
+  const outcome = !hit ? m(natural === 1 ? 'roll.missNat1' : 'roll.miss') : crit ? (natural >= critOn ? m('roll.crit') : m('roll.critBecause', { reason: srdLabel(msgs, input.autoCrit ?? '') })) : m('roll.hit');
   return {
     ...base,
     hit,
     crit,
     success: hit,
-    text: formatD20Test({ d20: base.d20, modifiers: base.modifiers, total: base.total, target: { kind: 'AC', value: input.targetAc }, outcome }, input.msgs),
+    text: mathLine({ d20: base.d20, modifiers: base.modifiers, total: base.total, target: { kind: 'AC', value: input.targetAc }, outcome }, msgs),
   };
 }
 
@@ -85,16 +87,17 @@ export function rollDamage(rng: Rng, damage: Damage[], opts: { crit?: boolean; m
     return { type: d.type, roll: r, total: Math.max(0, r.total + (i === 0 ? flat : 0)) };
   });
   const total = parts.reduce((s, p) => s + p.total, 0);
+  const msgs = opts.msgs ?? ENGLISH_MESSAGES;
   const text = parts
     .map((p, i) => {
       const dice = p.roll.terms
         .map((t) => (t.kind === 'dice' ? `[${t.rolls.join(', ')}]` : `${t.sign < 0 ? '−' : '+'} ${t.value}`))
         .join(' ');
-      const mods = i === 0 ? (opts.modifiers ?? []).filter((m) => m.value !== 0).map((m) => ` ${m.value < 0 ? '−' : '+'} ${Math.abs(m.value)} (${m.label})`).join('') : '';
-      return `${p.roll.notation} ${p.type}: ${dice}${mods} = ${p.total}`;
+      const mods = i === 0 ? (opts.modifiers ?? []).filter((m) => m.value !== 0).map((m) => ` ${m.value < 0 ? '−' : '+'} ${Math.abs(m.value)} (${srdLabel(msgs, m.label)})`).join('') : '';
+      return `${p.roll.notation} ${damageWord(msgs.lang, p.type)}: ${dice}${mods} = ${p.total}`;
     })
     .join('; ');
-  return { parts, total, crit, text: `${crit ? (opts.msgs ?? ENGLISH_MESSAGES).m('roll.critPrefix') : ''}${text}` };
+  return { parts, total, crit, text: `${crit ? msgs.m('roll.critPrefix') : ''}${text}` };
 }
 
 // ---------------------------------------------------------------- applying damage

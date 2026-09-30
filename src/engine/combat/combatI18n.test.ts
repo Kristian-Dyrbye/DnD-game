@@ -41,7 +41,7 @@ describe('roll math lines (A141c)', () => {
     expect(skillCheck(h, 'athletics', { rng: faces(20), dc: 5 }).text).toMatch(/vs DC 5 — Success$/);
     expect(skillCheck(h, 'athletics', { rng: faces(20), dc: 5, msgs: da }).text).toMatch(/mod SG 5 — Succes$/);
     expect(savingThrow(h, 'wis', { rng: faces(1), dc: 30, msgs: da }).text).toMatch(/mod SG 30 — Fiasko$/);
-    expect(savingThrow(h, 'str', { rng: faces(1), dc: 10, autoFail: 'Paralyzed', msgs: da }).text).toMatch(/Automatisk fiasko \(Paralyzed\)$/);
+    expect(savingThrow(h, 'str', { rng: faces(1), dc: 10, autoFail: 'Paralyzed', msgs: da }).text).toMatch(/Automatisk fiasko \(Lammet\)$/);
     const atk = (face: number, msgs = messages('en')) => attackRoll({ rng: faces(face), label: 'Longsword', modifiers: [{ value: 5, label: 'Strength' }], targetAc: 15, msgs }).text;
     expect(atk(20)).toMatch(/vs AC 15 — Critical Hit!$/);
     expect(atk(20, da)).toMatch(/mod RK 15 — Kritisk træffer!$/);

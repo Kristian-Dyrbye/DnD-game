@@ -67,7 +67,8 @@ import { distanceFt, footprintSize, moveToken, type Grid } from './grid';
 import { computeCover, hasLineOfSight } from './los';
 import { planMove } from './movement';
 import { budgetOf, currentId, setAttacksLeft, spend, type TurnState } from './turns';
-import { spellName, srdName } from '../i18n/srdNames';
+import { abilityShort, spellName, srdName } from '../i18n/srdNames';
+import { damageWord, srdLabels } from '../i18n/srdLabels';
 
 // ---------------------------------------------------------------- attack profiles
 
@@ -324,7 +325,7 @@ export function checkAttack(state: CombatState, ctx: CombatContext, attackerId: 
     disadvantage.push(...f.disadvantage);
     if (profile.properties.includes('heavy')) {
       const score = profile.melee ? attacker.abilities.str : attacker.abilities.dex;
-      if (score < 13) disadvantage.push(m('atk.heavy', { ability: profile.melee ? 'Str' : 'Dex' }));
+      if (score < 13) disadvantage.push(m('atk.heavy', { ability: abilityShort(msgsOf(ctx).lang, profile.melee ? 'str' : 'dex') }));
     }
   }
   if (isCharacter(target)) {
@@ -472,7 +473,7 @@ export function dealCombatDamage(
     const r = resistanceCantripReduction(target, inst.type, ctx.rng);
     target = r.creature;
     reduced.push(r.reduction > 0 ? { ...inst, amount: Math.max(0, inst.amount - r.reduction) } : inst);
-    if (r.reduction > 0) events.push({ kind: 'effect', targetId, text: msgsOf(ctx).m('atk.resistance', { type: inst.type, n: r.reduction }) });
+    if (r.reduction > 0) events.push({ kind: 'effect', targetId, text: msgsOf(ctx).m('atk.resistance', { type: damageWord(msgsOf(ctx).lang, inst.type), n: r.reduction }) });
   }
   const before = target;
   const extra = [...effectResistances(target), ...(isCharacter(target) ? featureResistances(target, db) : [])];
@@ -480,8 +481,8 @@ export function dealCombatDamage(
   const zero = resolveDamageAtZero(before, creature, report, { ...(opts.crit && { crit: true }) });
   const warded = applyDeathWard(before, zero.creature);
   let after = warded.creature;
-  const notes = report.adjusted.filter((a) => a.note).map((a) => `${a.type} ${a.note}`);
-  const { m } = msgsOf(ctx);
+  const { m, lang } = msgsOf(ctx);
+  const notes = report.adjusted.filter((a) => a.note).map((a) => m(`dmg.note.${a.note!}`, { type: damageWord(lang, a.type) }));
   const fate = warded.triggered ? ` — ${m('combat.deathWard')}` : zero.event === 'died' ? ` — ${m('combat.dies')}` : zero.event === 'unconscious' ? ` — ${m('combat.fallsUnconscious')}` : '';
   events.push({
     kind: 'damage',
@@ -656,7 +657,7 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
     ...(check.autoCrit && { autoCrit: check.autoCrit }),
     ...(ctx.msgs && { msgs: ctx.msgs }),
   });
-  const modeNote = [advantage.length ? m('combat.advantage', { list: advantage.join(', ') }) : '', disadvantage.length ? m('combat.disadvantage', { list: disadvantage.join(', ') }) : ''].filter(Boolean).join('; ');
+  const modeNote = [advantage.length ? m('combat.advantage', { list: srdLabels(msgsOf(ctx), advantage).join(', ') }) : '', disadvantage.length ? m('combat.disadvantage', { list: srdLabels(msgsOf(ctx), disadvantage).join(', ') }) : ''].filter(Boolean).join('; ');
   const coverNote = check.coverBonus ? ` (${m(check.cover === 'half' ? 'combat.cover.half' : 'combat.cover.three_quarters', { n: check.coverBonus })})` : '';
   events.push({
     kind: 'attack',

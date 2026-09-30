@@ -32,6 +32,7 @@ import type { Lore } from '../world/lore';
 import { trackQuests } from './quests';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import { abilityShort, srdName } from '../i18n/srdNames';
+import { damageWord } from '../i18n/srdLabels';
 import { conversationFor, conversationOffers, LEAVE_TALK, openOptions, optionFor, speakerOf, talkDoneKey, talkNode, DIALOGUE_PREFIX, TALK_PREFIX, type TalkProgress } from './conversation';
 
 export interface AdventureProgress {
@@ -568,7 +569,7 @@ function storyDamage(ctx: RunContext, d: NonNullable<Outcome['damage']>, result:
     const next: Character = { ...hit, hp, dead: false, deathSaves: hp === 0 ? { successes: 0, failures: 0, stable: true } : hit.deathSaves };
     if (c === state.hero) state.hero = next;
     else state.companions = state.companions.map((x) => (x.id === c.id ? next : x));
-    result.facts.push((ctx.msgs ?? ENGLISH_MESSAGES).m(hp === 0 ? 'story.damageDown' : 'story.damage', { name: c.name, amount: c.hp - hp, type: d.type }));
+    result.facts.push((ctx.msgs ?? ENGLISH_MESSAGES).m(hp === 0 ? 'story.damageDown' : 'story.damage', { name: c.name, amount: c.hp - hp, type: damageWord((ctx.msgs ?? ENGLISH_MESSAGES).lang, d.type) }));
   }
 }
 

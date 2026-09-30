@@ -11,6 +11,7 @@
 import type { Character, Scar, ScarLocation } from '../core/creature';
 import type { Rng } from '../core/rng';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
+import { damageWord } from '../i18n/srdLabels';
 
 export const SCAR_LABEL: Record<ScarLocation, string> = {
   left_cheek: 'Left cheek',
@@ -61,10 +62,10 @@ export function scarLocation(damageType: string | undefined, rng: Rng, taken: re
 }
 
 /** "Scimitar of the Goblin Boss" / "fire from the Young Red Dragon" (stored in the save as written). */
-export function scarDescription(mark: Pick<ScarMark, 'sourceName' | 'weapon' | 'damageType'>, { m }: Messages = ENGLISH_MESSAGES): string {
+export function scarDescription(mark: Pick<ScarMark, 'sourceName' | 'weapon' | 'damageType'>, { m, lang }: Messages = ENGLISH_MESSAGES): string {
   const burn = ['fire', 'acid', 'cold', 'lightning', 'necrotic', 'radiant', 'thunder', 'poison', 'psychic', 'force'];
   const source = mark.sourceName;
-  if (mark.damageType && burn.includes(mark.damageType) && !mark.weapon) return m('scar.element', { type: mark.damageType, source });
+  if (mark.damageType && burn.includes(mark.damageType) && !mark.weapon) return m('scar.element', { type: damageWord(lang, mark.damageType), source });
   return mark.weapon ? m('scar.weapon', { weapon: mark.weapon, source }) : m('scar.blow', { source });
 }
 

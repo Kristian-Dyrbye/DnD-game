@@ -38,7 +38,8 @@ import { footprintSize, type Grid } from './grid';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import { movementBudget, standUpCost, type MoveMode } from './movement';
 import { compareInitiative, type InitiativeEntry } from './initiative';
-import { spellIdName } from '../i18n/srdNames';
+import { ruleWord, spellIdName } from '../i18n/srdNames';
+import { conditionWord } from '../i18n/srdLabels';
 
 // ---------------------------------------------------------------- schema
 
@@ -381,15 +382,15 @@ export function endTurn(state: TurnState, creatures: Creatures, ctx: TurnContext
     const saves = endOfTurnSaves(c, ctx.rng, ctx.table, msgs);
     c = saves.creature;
     for (const r of saves.results) {
-      events.push({ kind: 'save', creatureId: id, text: `${m('turn.saveVs', { name: c.name, condition: r.condition, roll: r.roll.text })}${r.roll.success ? ` — ${m('turn.conditionEnds', { condition: r.condition })}` : ''}` });
+      events.push({ kind: 'save', creatureId: id, text: `${m('turn.saveVs', { name: c.name, condition: conditionWord(msgs.lang, r.condition), roll: r.roll.text })}${r.roll.success ? ` — ${m('turn.conditionEnds', { condition: conditionWord(msgs.lang, r.condition) })}` : ''}` });
     }
 
     const tc = tickConditions(c);
     c = tc.creature;
-    for (const cond of tc.expired) events.push({ kind: 'condition_expired', creatureId: id, text: m('turn.noLonger', { name: c.name, condition: cond }) });
+    for (const cond of tc.expired) events.push({ kind: 'condition_expired', creatureId: id, text: m('turn.noLonger', { name: c.name, condition: conditionWord(msgs.lang, cond) }) });
     const te = tickEffects(c);
     c = revertExpiredEffects(te.creature, te.expired);
-    for (const e of te.expired) events.push({ kind: 'effect_expired', creatureId: id, text: m('turn.effectEnds', { effect: e.key, name: c.name }) });
+    for (const e of te.expired) events.push({ kind: 'effect_expired', creatureId: id, text: m('turn.effectEnds', { effect: msgs.lang === 'en' ? e.key : ruleWord(msgs.lang, 'mastery', e.key, spellIdName(msgs.lang, e.key)), name: c.name }) });
 
     c = settleZeroHp(c, events, msgs);
     all[id] = c;

@@ -9,6 +9,7 @@ import type { Character } from '../core/creature';
 import type { Condition } from '../rules/basics';
 import type { GameState } from '../session/gameState';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
+import { conditionWord } from '../i18n/srdLabels';
 
 export const STORY_SOURCE = 'story';
 
@@ -40,7 +41,7 @@ const without = (condition: Condition) => (c: Character): Character => ({ ...c, 
 /** Applies one outcome condition change. Returns fact lines ("Mara is poisoned for 1 hour."). */
 export function applyStoryCondition(state: GameState, change: StoryConditionChange, msgs: Messages = ENGLISH_MESSAGES): string[] {
   const { m } = msgs;
-  const condition = change.condition;
+  const condition = conditionWord(msgs.lang, change.condition);
   const targets = change.target === 'party' ? [state.hero, ...state.companions] : [state.hero];
   const lines: string[] = [];
   let list = entries(state);
@@ -80,7 +81,7 @@ export function expireStoryConditions(state: GameState, msgs: Messages = ENGLISH
     const who = state.hero.id === e.creatureId ? state.hero : state.companions.find((c) => c.id === e.creatureId);
     if (who?.conditions.some((x) => x.condition === e.condition && x.sourceId === STORY_SOURCE)) {
       update(state, e.creatureId, without(e.condition));
-      lines.push(msgs.m('condition.off', { name: who.name, condition: e.condition }));
+      lines.push(msgs.m('condition.off', { name: who.name, condition: conditionWord(msgs.lang, e.condition) }));
     }
   }
   state.extensions.storyConditions = keep;

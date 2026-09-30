@@ -276,3 +276,18 @@ All 330 in data/i18n/da/srd/monsters.json. Patterns to reuse:
 | Spell Scroll / Spellbook | Besværgelsesrulle / Besværgelsesbog |
 | Bag of Holding / Handy Haversack / Portable Hole | Rummelig pose / Praktisk skulderpose / Bærbart hul |
 | kept: Net, Horn, Pony, Mastiff, Kamel … (same word) | same |
+
+## SRD words in engine lines (A149e)
+
+| English | Danish |
+|---|---|
+| condition in a sentence ("is poisoned", "has the restrained condition") | overlay name in lower case ("er forgiftet", "får tilstanden fastholdt") |
+| N fire damage | N skade (ild) — damage type in brackets, lower case (no "ild-skade" compounds) |
+| fire resisted / immune / vulnerable | ild: modstået / immun / sårbar |
+| (attacker) / (target) / (target, within 5 ft) / (target, beyond 5 ft) | (angriber) / (mål) / (mål, inden for 5 fod) / (mål, mere end 5 fod væk) |
+| Half Cover / Three-Quarters Cover | Halvt dække / Trekvart dække |
+| Spellcasting / Spell attack / Magic armor / Unarmored (Defense) | Besværgelsesevne / Besværgelsesangreb / Magisk rustning / (Forsvar) uden rustning |
+| Rage / Reckless Attack / Danger Sense / Feral Instinct | Raseri / Hensynsløst angreb / Faresans / Vildt instinkt |
+| Bardic Inspiration / Jack of All Trades / Tactical Mind / Indomitable / Remarkable Athlete | Bardisk inspiration / Tusindkunstner / Taktisk sans / Ukuelig / Bemærkelsesværdig atlet |
+| Sacred Weapon / Steady Aim / Surprised / Sapped / Enlarge / Reduce | Helligt våben / Roligt sigte / Overrumplet / Svækket / Forstør / Formindsk |
+| masteries in lines: Cleave/Graze/Nick/Push/Sap/Slow/Topple/Vex | Kløv/Strejf/Snit/Skub/Svæk/Sænk/Vælt/Drille (rules overlay) |

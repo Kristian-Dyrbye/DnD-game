@@ -86,7 +86,7 @@ describe('spells and zones (A141g)', () => {
     expect(log).toMatch(/^Goblin bevæger sig ind i Spind\.$/m);
     expect(log).toMatch(/^Brenna: Spind \(terning på 20 fod\) — 1 skabning i området$/m);
     expect(log).toMatch(/^Goblin Behændighed-redningsslag: d20: 1 .* mod SG \d+ — Fiasko$/m);
-    expect(log).toMatch(/^Goblin får tilstanden restrained \(Spind\)$/m);
+    expect(log).toMatch(/^Goblin får tilstanden fastholdt \(Spind\)$/m);
     expect(log).toMatch(/^Goblin kæmper mod Spind — /m);
     expect(log).toMatch(/^Brenna kaster Ildkugle \(niveau 3\)$/m);
     expect(log).toMatch(/^Hobgoblin tager \d+ skade/m);
@@ -121,8 +121,8 @@ describe('spells and zones (A141g)', () => {
     const hero = caster('fighter', 3, []);
     const target = goblin('g1');
     const base = { attacker: hero, target, abilityMod: 3, damageDealt: 5, rng: fixed(1), msgs: da } as const;
-    expect(applyMasteryOnHit({ ...base, mastery: 'sap' }).text).toBe('Sap: Goblin har ulempe på sit næste angreb');
-    expect(applyMasteryOnHit({ ...base, mastery: 'topple' }).text).toMatch(/^Topple: Goblin falder omkuld \(d20: 1 .* — Fiasko\)$/);
+    expect(applyMasteryOnHit({ ...base, mastery: 'sap' }).text).toBe('Svæk: Goblin har ulempe på sit næste angreb');
+    expect(applyMasteryOnHit({ ...base, mastery: 'topple' }).text).toMatch(/^Vælt: Goblin falder omkuld \(d20: 1 .* — Fiasko\)$/);
     expect(applyMasteryOnHit({ ...base, mastery: 'sap', msgs: undefined }).text).toBe('Sap: Goblin has Disadvantage on its next attack');
     const sleepy = addEffect(target, { key: 'sleep_pending', sourceId: 'me:sleep', data: { dc: 30 } });
     expect(endOfTurnSpellEffects(sleepy, fixed(1), da).log[0]).toMatch(/^Goblin falder i søvn \(d20: 1/);

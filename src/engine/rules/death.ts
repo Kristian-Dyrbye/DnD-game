@@ -3,7 +3,8 @@
  * Monsters die at 0 HP; characters fall Unconscious and make death saves. Heroic-mode "defeat
  * instead of death" is decided by the game session (A068), not here.
  */
-import { formatD20Test, rollD20, type Modifier, type RollMode } from '../core/dice';
+import { rollD20, type Modifier, type RollMode } from '../core/dice';
+import { mathLine } from '../i18n/srdLabels';
 import type { Character, Creature } from '../core/creature';
 import type { Rng } from '../core/rng';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
@@ -65,7 +66,7 @@ export interface DeathSaveResult {
 export function rollDeathSave(c: Character, rng: Rng, bonuses: Modifier[] = [], mode: RollMode = 'normal', msgs: Messages = ENGLISH_MESSAGES): DeathSaveResult {
   const d20 = rollD20(rng, mode);
   const modifiers = [...bonuses];
-  if (c.exhaustion > 0) modifiers.push({ value: -2 * c.exhaustion, label: 'Exhaustion' });
+  if (c.exhaustion > 0) modifiers.push({ value: -2 * c.exhaustion, label: msgs.m('mod.exhaustion') });
   const total = d20.natural + modifiers.reduce((s, m) => s + m.value, 0);
   let saves = { ...c.deathSaves };
   let outcome: DeathSaveResult['outcome'];
@@ -73,7 +74,7 @@ export function rollDeathSave(c: Character, rng: Rng, bonuses: Modifier[] = [], 
 
   if (d20.natural === 20) {
     const revived = reviveAt(c, 1);
-    return { character: revived, natural: 20, total, outcome: 'revived', text: `${formatD20Test({ d20, modifiers, total, target: { kind: 'DC', value: 10 } }, msgs)} — ${msgs.m('roll.death.revived')}` };
+    return { character: revived, natural: 20, total, outcome: 'revived', text: `${mathLine({ d20, modifiers, total, target: { kind: 'DC', value: 10 } }, msgs)} — ${msgs.m('roll.death.revived')}` };
   }
   if (d20.natural === 1) {
     saves.failures += 2;
@@ -108,7 +109,7 @@ export function rollDeathSave(c: Character, rng: Rng, bonuses: Modifier[] = [], 
     natural: d20.natural,
     total,
     outcome,
-    text: `${formatD20Test({ d20, modifiers, total, target: { kind: 'DC', value: 10 }, outcome: label[outcome] }, msgs)} (${saves.successes}✓ ${Math.min(3, saves.failures)}✗)`,
+    text: `${mathLine({ d20, modifiers, total, target: { kind: 'DC', value: 10 }, outcome: label[outcome] }, msgs)} (${saves.successes}✓ ${Math.min(3, saves.failures)}✗)`,
   };
 }
 

@@ -5,10 +5,11 @@
  * Rules (SRD 5.2): advantage/disadvantage cancel; exhaustion subtracts 2 × level from every
  * D20 Test; natural 20/1 have no special effect on checks or saves.
  */
-import { formatD20Test, resolveRollMode, rollD20, type D20Roll, type Modifier, type RollMode } from '../core/dice';
+import { resolveRollMode, rollD20, type D20Roll, type Modifier, type RollMode } from '../core/dice';
 import type { Rng } from '../core/rng';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import { abilityName, skillName } from '../i18n/srdNames';
+import { mathLine, srdLabel } from '../i18n/srdLabels';
 import type { Creature } from '../core/creature';
 import {
   SKILL_ABILITY,
@@ -64,7 +65,7 @@ export function d20Test(input: D20TestInput): D20TestResult {
   let success: boolean | undefined;
   if (input.autoFail) success = false;
   else if (input.target) success = total >= input.target.value;
-  const outcome = input.autoFail ? msgs.m('roll.autoFail', { reason: input.autoFail }) : success === undefined ? undefined : msgs.m(success ? 'roll.success' : 'roll.failure');
+  const outcome = input.autoFail ? msgs.m('roll.autoFail', { reason: srdLabel(msgs, input.autoFail) }) : success === undefined ? undefined : msgs.m(success ? 'roll.success' : 'roll.failure');
   return {
     label: input.label,
     d20,
@@ -76,7 +77,7 @@ export function d20Test(input: D20TestInput): D20TestResult {
     ...(input.autoFail && { autoFail: input.autoFail }),
     advantage,
     disadvantage,
-    text: formatD20Test({ d20, modifiers, total, ...(input.target && { target: input.target }), ...(outcome && { outcome }) }, msgs),
+    text: mathLine({ d20, modifiers, total, ...(input.target && { target: input.target }), ...(outcome && { outcome }) }, msgs),
   };
 }
 

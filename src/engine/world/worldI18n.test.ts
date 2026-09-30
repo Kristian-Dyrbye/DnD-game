@@ -104,7 +104,7 @@ describe('world messages (A141e)', () => {
     expect(scarText({ ...scar, origin: undefined } as unknown as Scar, da)).toBe('Venstre kind: Scimitar of the Goblin');
     expect(scarDescription({ sourceName: 'Goblin', weapon: 'Scimitar' })).toBe('Scimitar of the Goblin');
     expect(scarDescription({ sourceName: 'Goblin', weapon: 'Scimitar' }, da)).toBe('Scimitar fra Goblin');
-    expect(scarDescription({ sourceName: 'Young Red Dragon', damageType: 'fire' }, da)).toBe('fire fra Young Red Dragon');
+    expect(scarDescription({ sourceName: 'Young Red Dragon', damageType: 'fire' }, da)).toBe('ild fra Young Red Dragon');
     expect(scarDescription({ sourceName: 'Ogre' }, da)).toBe('slag fra Ogre');
     const hero = game().hero;
     const { party, lines } = rollScars([hero], [{ targetId: hero.id, cause: 'down', sourceName: 'Ogre', weapon: 'Greatclub' }], { next: () => 0, pick: <T>(a: readonly T[]) => a[0]! } as unknown as Rng, 'Barrow', 5, da);
