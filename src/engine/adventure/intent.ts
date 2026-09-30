@@ -5,7 +5,7 @@
  * what exists or whether something works.
  */
 import { z } from 'zod';
-import { SKILLS, type Skill } from '../rules/basics';
+import { SKILL_ABILITY, SKILLS, type Ability, type Skill } from '../rules/basics';
 import { availableActions, currentScene, npcsHere, type RunContext } from './runner';
 
 export const INTENT_ACTIONS = ['choose_action', 'skill_check', 'talk', 'move', 'look', 'attack', 'use_item', 'cast_spell', 'rest', 'other'] as const;
@@ -29,6 +29,11 @@ export interface IntentOption {
   id: string;
   label: string;
   keywords: string[];
+  /** The point of interest the action belongs to (`<poi>.<action>` ids). */
+  poi?: string;
+  /** The authored check's skill / plain ability, if the action rolls one. */
+  skill?: Skill;
+  ability?: Ability;
 }
 
 /** What the player can refer to right now. Sent (compactly) to the intent prompt. */
@@ -40,16 +45,24 @@ export interface IntentContext {
 
 export function intentContext(ctx: RunContext): IntentContext {
   const scene = currentScene(ctx);
-  const keywordsOf = (id: string): string[] => {
+  const option = (id: string, label: string): IntentOption => {
     const [poi, sub] = id.split('.', 2);
-    const def = sub && poi !== 'exit' ? scene.pois.find((p) => p.id === poi)?.actions.find((a) => a.id === sub) : scene.actions.find((a) => a.id === id);
-    return def?.keywords ?? [];
+    if (poi === 'exit') {
+      const check = scene.exits.find((e) => e.id === sub)?.check;
+      return { id, label, keywords: [], ...checkFields(check) };
+    }
+    const def = sub ? scene.pois.find((p) => p.id === poi)?.actions.find((a) => a.id === sub) : scene.actions.find((a) => a.id === id);
+    return { id, label, keywords: def?.keywords ?? [], ...(sub && { poi }), ...checkFields(def?.check) };
   };
   return {
-    actions: availableActions(ctx).map((a) => ({ id: a.id, label: a.label, keywords: keywordsOf(a.id) })),
+    actions: availableActions(ctx).map((a) => option(a.id, a.label)),
     npcs: npcsHere(ctx).map((id) => ({ id, name: ctx.adventure.npcs.find((n) => n.id === id)?.name ?? id })),
     pois: scene.pois.map((p) => ({ id: p.id, name: p.name })),
   };
+}
+
+function checkFields(check: { skill?: Skill; ability?: Ability } | undefined): Pick<IntentOption, 'skill' | 'ability'> {
+  return { ...(check?.skill && { skill: check.skill }), ...(check?.ability && { ability: check.ability }) };
 }
 
 // ---------------------------------------------------------------- keyword fallback parser
@@ -114,27 +127,113 @@ function findTarget(text: string, ictx: IntentContext): string | undefined {
   return undefined;
 }
 
+function namesOf(ictx: IntentContext): Set<string> {
+  return new Set([...ictx.npcs, ...ictx.pois].flatMap((x) => words(x.name)));
+}
+
+function skillVerb(text: string): { word: string; skill: Skill } | undefined {
+  const lower = text.toLowerCase();
+  for (const [re, skill] of SKILL_WORDS) {
+    const m = re.exec(lower)?.[0];
+    if (m) return { word: m.trim(), skill };
+  }
+  return undefined;
+}
+
+/**
+ * The offered action the text names with confidence: a strong match ("talk to the mayor" →
+ * talk_mayor) — unless the text uses a skill verb the action doesn't ("persuade Hobb about the
+ * reward" is a Persuasion attempt, not the plain talk action).
+ */
+function confidentAction(text: string, ictx: IntentContext): string | undefined {
+  const match = bestAction(text, ictx.actions, namesOf(ictx));
+  if (!match || match.score < 2) return undefined;
+  const opt = ictx.actions.find((a) => a.id === match.id)!;
+  const verb = skillVerb(text);
+  const vocab = `${opt.label} ${opt.keywords.join(' ')}`.toLowerCase();
+  return !verb || vocab.includes(verb.word) ? match.id : undefined;
+}
+
 /** Deterministic fallback when the LLM is unavailable or its reply is unusable. */
 export function keywordIntent(text: string, ictx: IntentContext): Intent {
   const lower = text.toLowerCase();
-  const names = new Set([...ictx.npcs, ...ictx.pois].flatMap((x) => words(x.name)));
-  const match = bestAction(text, ictx.actions, names);
+  const match = bestAction(text, ictx.actions, namesOf(ictx));
   const target = findTarget(text, ictx);
-  const skillHit = SKILL_WORDS.map(([re, sk]) => [re.exec(lower)?.[0], sk] as const).find(([m]) => m);
-  const skill = skillHit?.[1];
-  // A strong match on an offered action wins ("talk to the mayor" → talk_mayor) — unless the text
-  // uses a skill verb the action doesn't ("persuade Hobb about the reward" is a Persuasion attempt).
-  if (match && match.score >= 2) {
-    const opt = ictx.actions.find((a) => a.id === match.id)!;
-    const vocab = `${opt.label} ${opt.keywords.join(' ')}`.toLowerCase();
-    if (!skillHit || vocab.includes(skillHit[0]!.trim())) return { action: 'choose_action', actionId: match.id, ...(target && { target }) };
-  }
+  const skill = skillVerb(text)?.skill;
+  const sure = confidentAction(text, ictx);
+  if (sure) return { action: 'choose_action', actionId: sure, ...(target && { target }) };
   const verb = VERB_ACTIONS.find(([re]) => re.test(lower))?.[1];
   if (verb === 'attack') return { action: 'attack', ...(target && { target }) };
   if (skill) return { action: 'skill_check', skill, ...(target && { target }), approach: text.slice(0, 160) };
   if (match) return { action: 'choose_action', actionId: match.id, ...(target && { target }) };
   if (verb) return { action: verb, ...(target && { target }), approach: text.slice(0, 160) };
   return { action: 'other', approach: text.slice(0, 160) };
+}
+
+// ---------------------------------------------------------------- mapping onto offered actions
+
+const LOOK_LABEL = /^(examine|look|inspect|search|study|investigate|peer|check)\b/i;
+/** Generic readings a better-matching offered action should replace. */
+const GENERIC: ReadonlySet<Intent['action']> = new Set(['look', 'talk', 'move', 'rest', 'use_item', 'other', 'skill_check', 'choose_action']);
+
+/**
+ * Maps an intent (usually the LLM's) onto an offered action when the words clearly mean one, so
+ * "look down the well" runs the well's Examine action instead of a generic look (A120). In order:
+ *  1. a valid choose_action stays;
+ *  2. a confident keyword match on an offered action wins over a generic reading;
+ *  3. a target point of interest: its action with the intent's skill, or for a look its
+ *     examine-type action (or its only plain action);
+ *  4. a skill (the intent's, else a skill verb in the text): the offered action rolling that skill,
+ *     or a plain check of the skill's ability whose label shares a word with the text.
+ * Anything else is returned unchanged; validateIntent/resolveIntent handle it as before.
+ */
+export function refineIntent(intent: Intent, text: string, ictx: IntentContext): Intent {
+  if (intent.action === 'choose_action' && ictx.actions.some((a) => a.id === intent.actionId)) return intent;
+  if (!GENERIC.has(intent.action)) return intent;
+  const choose = (id: string): Intent => ({ action: 'choose_action', actionId: id, ...(intent.target && { target: intent.target }) });
+
+  const sure = confidentAction(text, ictx);
+  if (sure) return choose(sure);
+
+  const skill = intent.action === 'skill_check' ? intent.skill : undefined;
+  const poi = poiOf(intent.target, ictx) ?? poiOf(findTarget(text, ictx), ictx);
+  const atPoi = poi ? ictx.actions.filter((a) => a.poi === poi) : [];
+  if (atPoi.length) {
+    const hit = skill ? atPoi.find((a) => a.skill === skill) : intent.action === 'look' || intent.action === 'other' ? lookAction(atPoi) : undefined;
+    if (hit) return choose(hit.id);
+  }
+
+  const textWords = new Set(words(text).filter((w) => w.length > 3 && !namesOf(ictx).has(w)));
+  const overlap = (o: IntentOption) => words(o.label).filter((w) => textWords.has(w)).length;
+  for (const s of [...new Set([skill, skillVerb(text)?.skill].filter((x): x is Skill => !!x))]) {
+    const exact = ictx.actions.filter((a) => a.skill === s);
+    if (exact.length === 1) return choose(exact[0]!.id);
+    const pick = best(exact, overlap) ?? best(ictx.actions.filter((a) => !a.skill && a.ability === SKILL_ABILITY[s]), overlap);
+    if (pick) return choose(pick.id);
+  }
+  return intent;
+}
+
+function poiOf(target: string | undefined, ictx: IntentContext): string | undefined {
+  if (!target) return undefined;
+  const t = target.toLowerCase();
+  return ictx.pois.find((p) => p.id === target || p.name.toLowerCase() === t || p.name.toLowerCase().includes(t) || t.includes(p.name.toLowerCase()))?.id;
+}
+
+function lookAction(options: IntentOption[]): IntentOption | undefined {
+  const plain = options.filter((a) => !a.skill && !a.ability);
+  return plain.find((a) => LOOK_LABEL.test(a.label)) ?? (plain.length === 1 ? plain[0] : undefined) ?? (options.length === 1 ? options[0] : undefined);
+}
+
+/** The option with the most shared words (at least one; ties → first). */
+function best(options: IntentOption[], score: (o: IntentOption) => number): IntentOption | undefined {
+  let top: IntentOption | undefined;
+  let topScore = 0;
+  for (const o of options) {
+    const s = score(o);
+    if (s > topScore) [top, topScore] = [o, s];
+  }
+  return top;
 }
 
 // ---------------------------------------------------------------- engine validation

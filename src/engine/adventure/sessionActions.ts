@@ -17,7 +17,7 @@ import type { Lore } from '../world/lore';
 import type { ActionPort, GameSession } from '../session/GameSession';
 import { arriveInScene, availableActions, findScene, formatCoins, getProgress, leaveScenes, sceneForLocation, type AvailableAction, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
 import type { Adventure } from './schema';
-import { intentContext, keywordIntent, validateIntent, type Intent, type IntentContext } from './intent';
+import { intentContext, keywordIntent, refineIntent, validateIntent, type Intent, type IntentContext } from './intent';
 import { narrateInto, type Narrator } from './narration';
 import { currentObjective } from './quests';
 import { resolveIntent } from './resolve';
@@ -458,7 +458,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       session.addLog('player', text);
       const ctx = ctxFor(session);
       const ictx = intentContext(ctx);
-      const v = validateIntent(await parse(text, ictx), ictx);
+      const v = validateIntent(refineIntent(await parse(text, ictx), text, ictx), ictx);
       const before = ctx.state.time;
       const r = resolveIntent(ctx, v, text);
       await finish(session, ctx, r.result, r.playerAction);

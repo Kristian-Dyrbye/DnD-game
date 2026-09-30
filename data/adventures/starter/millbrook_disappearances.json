@@ -1315,6 +1315,7 @@
             {
               "id": "rekindle",
               "label": "Rekindle the antler-brazier (Religion DC 10)",
+              "keywords": ["relight", "rekindle", "flame", "brazier", "shrine", "light"],
               "if": {
                 "not": {
                   "flag": "arc.starter.shrine_rekindled"
@@ -1341,6 +1342,7 @@
             {
               "id": "rekindle_nature",
               "label": "Coax a fire from the old tinder (Nature DC 12)",
+              "keywords": ["tinder", "coax", "kindle", "spark", "fire"],
               "if": {
                 "not": {
                   "flag": "arc.starter.shrine_rekindled"
