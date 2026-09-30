@@ -262,7 +262,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     const context = state.log.slice(-4).map((e) => e.text).join('\n');
     pendingBanter = pendingBanter
       .then(async () => {
-        const line = await speakBanter(state, who, context, opts.banter);
+        const line = await speakBanter(state, who, context, opts.banter, session.msgs.lang);
         if (line && session.running && session.current === state) session.addLog('dialogue', line, who.name);
       })
       .catch(() => undefined);

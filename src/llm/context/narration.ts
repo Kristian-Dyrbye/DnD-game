@@ -5,6 +5,8 @@
  * scene notes and a FIXED FACTS block the model must narrate without adding mechanics.
  * Everything is trimmed to a token budget in a fixed priority order.
  */
+import type { Language } from '../../shared/i18nCore';
+import { LANGUAGE_NAMES, replyLanguageRule } from '../prompts/language';
 import type { ChatMessage } from '../types';
 import { estimateTokens, type PromptCard } from './cards';
 
@@ -38,6 +40,8 @@ export interface NarrationRequest {
   facts: string[];
   /** Scene narration: first arrival (default), a return to a visited place, or resuming a loaded game. */
   visit?: 'first' | 'return' | 'resume';
+  /** Reply language (the session's); English when unset. */
+  language?: Language;
 }
 
 export interface BuiltPrompt {
@@ -67,7 +71,9 @@ export const NARRATION_RULES = [
 export const DEFAULT_PROMPT_BUDGET = 1400;
 
 export function buildNarrationPrompt(ctx: NarrationContext, req: NarrationRequest, budget = DEFAULT_PROMPT_BUDGET): BuiltPrompt {
-  const system = [DM_PERSONA, ...(ctx.tone ? [ctx.tone] : []), 'Rules:', ...NARRATION_RULES.map((r) => `- ${r}`)].join('\n');
+  const langRule = replyLanguageRule(req.language);
+  const rules = [...NARRATION_RULES, ...(langRule ? [langRule] : [])];
+  const system = [DM_PERSONA, ...(ctx.tone ? [ctx.tone] : []), 'Rules:', ...rules.map((r) => `- ${r}`)].join('\n');
   const dropped: string[] = [];
 
   // Mandatory parts: state, scene, facts, task. Optional (trimmed in this order): recent exchanges
@@ -129,7 +135,13 @@ function section(title: string, lines: string[]): string {
   return `${title}:\n${lines.join('\n')}`;
 }
 
+/** The task line, plus a closing reminder of the reply language (small models forget the system rule). */
 function task(req: NarrationRequest): string {
+  const text = taskText(req);
+  return req.language && req.language !== 'en' ? `${text} Write it in ${LANGUAGE_NAMES[req.language]}.` : text;
+}
+
+function taskText(req: NarrationRequest): string {
   if (req.kind === 'scene') {
     if (req.visit === 'return')
       return 'The hero RETURNS to a place they have already been (see STORY SO FAR). In 3 to 5 sentences, show what is familiar or has changed and weave in the fixed facts. Do not describe it as a first arrival.';

@@ -35,6 +35,7 @@ export const en = {
   'settings.tts.browserDefault': 'Browser default',
   'settings.tts.unloadIdle': 'Unload the voice when idle',
   'settings.ai.model': 'Model',
+  'settings.ai.modelLang': 'Model ({language})',
   'settings.ai.responseLength': 'Response length',
   'settings.ai.length.short': 'Short',
   'settings.ai.length.medium': 'Medium',

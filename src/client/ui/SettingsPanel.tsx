@@ -5,7 +5,8 @@
  * edition stores them in localStorage, has no AI tab and picks a browser voice instead of Piper).
  */
 import { useEffect, useState } from 'preact/hooks';
-import { applyPreset, type Settings } from '../../shared/settings';
+import { LANGUAGE_NAMES } from '../../shared/i18n';
+import { applyPreset, modelFor, type Settings } from '../../shared/settings';
 import { ttsPlayer } from '../audio/ttsPlayer';
 import { WEB_EDITION } from '../edition';
 import { loadSettings, settings, updateSettings } from './settingsState';
@@ -76,6 +77,11 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
   }, []);
   const s = settings.value;
   const set = <K extends Section>(section: K, patch: Partial<Settings[K]>) => void updateSettings({ [section]: patch });
+  // The model picker edits the model of the current game language (settings.llm.modelByLanguage, A150).
+  const lang = s?.gameplay.language ?? 'en';
+  const model = s ? modelFor(s.llm, lang) : '';
+  const modelLabel = lang === 'en' ? t('settings.ai.model') : t('settings.ai.modelLang', { language: LANGUAGE_NAMES[lang] });
+  const setModel = (v: string) => s && set('llm', lang === 'en' ? { model: v } : { modelByLanguage: { ...s.llm.modelByLanguage, [lang]: v } });
 
   const runTest = async () => {
     setTest(t('settings.ai.testing'));
@@ -134,11 +140,11 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
             {tab === 'ai' && (
               <>
                 {models.length > 0 ? (
-                  <Choice label={t('settings.ai.model')} value={s.llm.model} options={models.includes(s.llm.model) ? models : [s.llm.model, ...models]} onChange={(v) => set('llm', { model: v })} />
+                  <Choice label={modelLabel} value={model} options={models.includes(model) ? models : [model, ...models]} onChange={setModel} />
                 ) : (
                   <label class="setting-row">
-                    <span>{t('settings.ai.model')}</span>
-                    <input type="text" value={s.llm.model} onChange={(e) => set('llm', { model: (e.target as HTMLInputElement).value })} />
+                    <span>{modelLabel}</span>
+                    <input type="text" value={model} onChange={(e) => setModel((e.target as HTMLInputElement).value)} />
                   </label>
                 )}
                 <Choice label={t('settings.ai.responseLength')} value={s.llm.responseLength} options={(['short', 'medium', 'long'] as const).map((id) => ({ id, label: t(`settings.ai.length.${id}`) }))} onChange={(v) => set('llm', { responseLength: v })} />

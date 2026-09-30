@@ -4,15 +4,19 @@
  * temperature; the engine validates length and falls back to a template (engine/adventure/summary.ts).
  */
 import type { Summarizer } from '../../engine/adventure/summary';
+import type { Language } from '../../shared/i18nCore';
 import type { ChatMessage, LlmProvider } from '../types';
+import { replyLanguageRule } from './language';
 
-export function summaryMessages(previous: string, lines: string[]): ChatMessage[] {
+export function summaryMessages(previous: string, lines: string[], lang?: Language): ChatMessage[] {
+  const langRule = replyLanguageRule(lang);
   return [
     {
       role: 'system',
       content:
         'You keep a running summary of a solo fantasy adventure. Rewrite the story so far in at most 8 short sentences, past tense, third person. ' +
-        'Keep names, promises, debts, enemies made, items gained, choices and unresolved threads; drop scenery and small talk. Invent nothing. Plain text only.',
+        'Keep names, promises, debts, enemies made, items gained, choices and unresolved threads; drop scenery and small talk. Invent nothing. Plain text only.' +
+        (langRule ? ` ${langRule}` : ''),
     },
     { role: 'user', content: `STORY SO FAR:\n${previous || '(the adventure has just begun)'}\n\nNEW EVENTS:\n${lines.join('\n')}` },
   ];
@@ -20,9 +24,9 @@ export function summaryMessages(previous: string, lines: string[]): ChatMessage[
 
 /** A Summarizer backed by the LLM; throws for the mock so the engine uses its template. */
 export function llmSummarizer(getLlm: () => LlmProvider): Summarizer {
-  return async (previous, lines) => {
+  return async (previous, lines, lang) => {
     const llm = getLlm();
     if (llm.name === 'mock') throw new Error('mock provider: use template summary');
-    return llm.chat(summaryMessages(previous, lines), { task: 'summarize', temperature: 0.3, maxTokens: 320, timeoutMs: 120_000 });
+    return llm.chat(summaryMessages(previous, lines, lang), { task: 'summarize', temperature: 0.3, maxTokens: 320, timeoutMs: 120_000 });
   };
 }

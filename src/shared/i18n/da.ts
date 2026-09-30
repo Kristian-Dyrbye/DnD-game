@@ -37,6 +37,7 @@ export const da: Partial<Record<MessageKey, string>> = {
   'settings.tts.browserDefault': 'Browserens standard',
   'settings.tts.unloadIdle': 'Frigiv stemmen, når den ikke bruges',
   'settings.ai.model': 'Model',
+  'settings.ai.modelLang': 'Model ({language})',
   'settings.ai.responseLength': 'Svarlængde',
   'settings.ai.length.short': 'Kort',
   'settings.ai.length.medium': 'Mellem',

@@ -6,9 +6,10 @@
  */
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { GameState, LogEntry } from '../session/gameState';
+import type { Language } from '../../shared/i18nCore';
 
-/** (previous summary, new story lines) → new summary. */
-export type Summarizer = (previous: string, lines: string[]) => Promise<string>;
+/** (previous summary, new story lines, session language) → new summary in that language. */
+export type Summarizer = (previous: string, lines: string[], lang?: Language) => Promise<string>;
 
 export const SUMMARY_MAX_CHARS = 1500;
 
@@ -50,7 +51,7 @@ export async function updateSummary(state: GameState, summarizer?: Summarizer, m
   let next = '';
   if (summarizer) {
     try {
-      next = (await summarizer(previous, lines)).trim();
+      next = (await summarizer(previous, lines, msgs.lang)).trim();
     } catch {
       next = '';
     }

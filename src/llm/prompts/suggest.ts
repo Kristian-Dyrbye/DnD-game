@@ -8,7 +8,9 @@ import type { AvailableAction } from '../../engine/adventure/runner';
 import type { SuggestionIdea } from '../../engine/adventure/suggestions';
 import type { NarrationContext } from '../context/narration';
 import { callStructured } from '../structured';
+import type { Language } from '../../shared/i18nCore';
 import type { ChatMessage, LlmProvider } from '../types';
+import { jsonLanguageRule } from './language';
 
 export const SuggestionsSchema = z.object({
   suggestions: z
@@ -17,7 +19,8 @@ export const SuggestionsSchema = z.object({
     .max(5),
 });
 
-export function suggestMessages(c: NarrationContext, offered: AvailableAction[]): ChatMessage[] {
+export function suggestMessages(c: NarrationContext, offered: AvailableAction[], lang?: Language): ChatMessage[] {
+  const langRule = jsonLanguageRule(lang, 'every "label"');
   return [
     {
       role: 'system',
@@ -25,7 +28,9 @@ export function suggestMessages(c: NarrationContext, offered: AvailableAction[])
         'You suggest what a player might do next in a fantasy adventure. Reply with JSON only: {"suggestions":[{"label":"...","actionId":"..."}]}.\n' +
         '- Give 3 to 5 suggestions, each a short imperative phrase under 60 characters ("Ask the baker about the miller").\n' +
         '- When a suggestion is one of the OFFERED ACTIONS, copy its id into "actionId". Otherwise omit actionId.\n' +
-        '- Only suggest things that fit the scene and the people present. Never promise rewards or outcomes.',
+        '- Only suggest things that fit the scene and the people present. Never promise rewards or outcomes.' +
+        (langRule ? `
+- ${langRule}` : ''),
     },
     {
       role: 'user',
@@ -39,11 +44,11 @@ export function suggestMessages(c: NarrationContext, offered: AvailableAction[])
   ];
 }
 
-export async function suggestIdeas(provider: LlmProvider, c: NarrationContext, offered: AvailableAction[]): Promise<SuggestionIdea[]> {
+export async function suggestIdeas(provider: LlmProvider, c: NarrationContext, offered: AvailableAction[], lang?: Language): Promise<SuggestionIdea[]> {
   if (provider.name === 'mock') return [];
   const res = await callStructured({
     provider,
-    messages: suggestMessages(c, offered),
+    messages: suggestMessages(c, offered, lang),
     schema: SuggestionsSchema,
     fallback: { suggestions: [] as { label: string; actionId?: string }[] } as z.infer<typeof SuggestionsSchema>,
     task: 'suggest',

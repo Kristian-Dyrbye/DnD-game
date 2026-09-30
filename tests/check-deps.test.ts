@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   DEFAULT_MODEL,
+  DEFAULT_LANGUAGE_MODELS,
   GAME_PORT,
   configuredModel,
   modelInstalled,
@@ -26,6 +27,7 @@ const ready: StartChecks = {
 describe('check-deps helpers', () => {
   it('stays in sync with the game defaults', () => {
     expect(DEFAULT_MODEL).toBe(defaultSettings().llm.model);
+    expect(DEFAULT_LANGUAGE_MODELS).toEqual(defaultSettings().llm.modelByLanguage);
     expect(GAME_PORT).toBe(DEFAULT_PORT);
   });
 
@@ -40,6 +42,10 @@ describe('check-deps helpers', () => {
     expect(configuredModel('{"llm":{"model":"llama3.2:3b"}}')).toBe('llama3.2:3b');
     expect(configuredModel('{"llm":{}}')).toBe(DEFAULT_MODEL);
     expect(configuredModel('{broken')).toBe(DEFAULT_MODEL);
+    // A150: a Danish game uses its own model (default or the player's pick).
+    expect(configuredModel('{"gameplay":{"language":"da"},"llm":{"model":"llama3.2:3b"}}')).toBe('qwen3:4b-instruct');
+    expect(configuredModel('{"gameplay":{"language":"da"},"llm":{"modelByLanguage":{"da":"gemma3:4b"}}}')).toBe('gemma3:4b');
+    expect(configuredModel('{"gameplay":{"language":"da"},"llm":{"model":"x:1b","modelByLanguage":{"da":""}}}')).toBe('x:1b');
   });
 
   it('matches installed models, including :latest', () => {

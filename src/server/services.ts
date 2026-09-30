@@ -33,9 +33,10 @@ export class Services {
       this.overrideScheduler ??= new LlmScheduler(this.overrides.llm);
       return this.overrideScheduler;
     }
-    const cfg = this.settings.get().llm;
-    const key = JSON.stringify(cfg);
-    if (this.llmCache?.key !== key) this.llmCache = { key, provider: new LlmScheduler(createLlmProvider(cfg)) };
+    // The game language picks the model too (settings.llm.modelByLanguage).
+    const { llm: cfg, gameplay } = this.settings.get();
+    const key = JSON.stringify([cfg, gameplay.language]);
+    if (this.llmCache?.key !== key) this.llmCache = { key, provider: new LlmScheduler(createLlmProvider(cfg, undefined, gameplay.language)) };
     return this.llmCache.provider;
   }
 

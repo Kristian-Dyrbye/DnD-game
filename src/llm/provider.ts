@@ -1,5 +1,6 @@
 /** Chooses the LLM provider from settings: the mock if `useMock` is on, otherwise Ollama. */
-import type { Settings } from '../shared/settings';
+import type { Language } from '../shared/i18nCore';
+import { modelFor, type Settings } from '../shared/settings';
 import { MockLlm } from './mock';
 import { OllamaClient } from './ollama';
 import type { LlmProvider } from './types';
@@ -7,11 +8,11 @@ import type { LlmProvider } from './types';
 /** Context window for Ollama; the narration prompt budget (2200) + reply fit inside it. */
 export const LLM_CONTEXT_TOKENS = 4096;
 
-export function createLlmProvider(llm: Settings['llm'], fetchFn?: typeof fetch): LlmProvider {
+export function createLlmProvider(llm: Settings['llm'], fetchFn?: typeof fetch, language?: Language): LlmProvider {
   if (llm.useMock) return new MockLlm();
   return new OllamaClient({
     baseUrl: llm.baseUrl,
-    model: llm.model,
+    model: modelFor(llm, language),
     temperature: llm.temperature,
     // Idle unload frees RAM quickly; otherwise keep the model warm for an hour (not forever, so a closed game doesn't hold RAM).
     keepAlive: llm.unloadWhenIdle ? `${llm.idleMinutes}m` : '60m',

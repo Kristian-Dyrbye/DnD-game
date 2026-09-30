@@ -7,8 +7,10 @@ import { IntentSchema, keywordIntent, type Intent, type IntentContext, type Inte
 import { ABILITY_NAMES, SKILL_NAMES } from '../../engine/rules/basics';
 import { callStructured } from '../structured';
 import type { ChatMessage, LlmProvider } from '../types';
+import { inputLanguageNote } from './language';
 
 export function intentMessages(text: string, ictx: IntentContext): ChatMessage[] {
+  const note = inputLanguageNote(ictx.lang);
   const options = ictx.actions.map((a) => `${a.id}: ${a.label}${checkNote(a)}`).join('\n') || '(none)';
   const people = ictx.npcs.map((n) => `${n.id}: ${n.name}`).join(', ') || '(nobody)';
   const things = ictx.pois.map((p) => `${p.id}: ${p.name}`).join(', ') || '(nothing notable)';
@@ -20,7 +22,9 @@ export function intentMessages(text: string, ictx: IntentContext): ChatMessage[]
         '- If the words clearly mean one of the OFFERED ACTIONS, use {"action":"choose_action","actionId":"<id>"}. Match by meaning, not exact words ("relight the flame" = "Rekindle the brazier"; "search for tracks" = an action with skill survival).\n' +
         '- Otherwise pick the closest action type: skill_check (set "skill" to a D&D skill in snake_case), talk, move, look, attack, use_item, cast_spell, rest, other.\n' +
         '- "target" is the id of a person or thing below, if one is meant. "approach" is a few words on how.\n' +
-        '- Never invent ids. Do not decide whether it works.',
+        '- Never invent ids. Do not decide whether it works.' +
+        (note ? `
+- ${note}` : ''),
     },
     {
       role: 'user',

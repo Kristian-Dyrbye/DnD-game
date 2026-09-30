@@ -61,7 +61,8 @@ describe('fallback templates in the session language (A141d)', () => {
     const [look] = dataSuggestions([], da);
     expect(look).toEqual({ id: 'say:look', label: 'Se dig omkring', say: 'Jeg ser mig grundigt omkring.' });
     expect(dataSuggestions([])[0]?.label).toBe('Look around');
-    expect(keywordIntent(look!.say!, { actions: [], npcs: [], pois: [] } as never).action).toBe('look');
+    // A Danish session's intent context carries lang 'da' (A150), which enables the Danish verbs.
+    expect(keywordIntent(look!.say!, { actions: [], npcs: [], pois: [], lang: 'da' }).action).toBe('look');
   });
 
   it('summary labels', () => {

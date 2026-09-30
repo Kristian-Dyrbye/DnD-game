@@ -7,6 +7,7 @@
  */
 import { Rng } from '../core/rng';
 import type { GameState } from '../session/gameState';
+import type { Language } from '../../shared/i18nCore';
 import { companionStatus, loyaltyOf, LOYALTY_LOW, type CompanionDef, type CompanionRoster } from './companions';
 
 export interface BanterState {
@@ -20,8 +21,8 @@ export const BANTER_MIN_ACTIONS = 4;
 export const BANTER_MIN_MINUTES = 30;
 export const BANTER_CHANCE = 0.35;
 
-/** Generates a line for a companion (LLM). Throw or return '' to use the written fallback. */
-export type BanterGenerator = (def: CompanionDef, mood: 'content' | 'resentful', context: string) => Promise<string>;
+/** Generates a line for a companion (LLM) in the session language. Throw or return '' to use the written fallback. */
+export type BanterGenerator = (def: CompanionDef, mood: 'content' | 'resentful', context: string, lang?: Language) => Promise<string>;
 
 function banterState(state: GameState): BanterState {
   return (state.extensions.banter as BanterState | undefined) ?? { actions: 0, lastAt: -1e9 }; // finite so it survives JSON saves
@@ -42,12 +43,12 @@ export function banterDue(state: GameState, roster: CompanionRoster): CompanionD
 }
 
 /** Produces and records a banter line (LLM or fallback). */
-export async function speakBanter(state: GameState, def: CompanionDef, context: string, gen?: BanterGenerator): Promise<string> {
+export async function speakBanter(state: GameState, def: CompanionDef, context: string, gen?: BanterGenerator, lang?: Language): Promise<string> {
   const mood = loyaltyOf(state, def) <= LOYALTY_LOW ? 'resentful' : 'content';
   let line = '';
   if (gen) {
     try {
-      line = (await gen(def, mood, context)).trim().replace(/^["“]|["”]$/g, '');
+      line = (await gen(def, mood, context, lang)).trim().replace(/^["“]|["”]$/g, '');
     } catch {
       line = '';
     }

@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { SKILL_ABILITY, SKILLS, type Ability, type Skill } from '../rules/basics';
 import { availableActions, currentScene, getProgress, npcsHere, type RunContext } from './runner';
 import { conversationFor, DIALOGUE_PREFIX, optionFor, TALK_PREFIX } from './conversation';
+import type { Language } from '../../shared/i18nCore';
 
 export const INTENT_ACTIONS = ['choose_action', 'skill_check', 'talk', 'move', 'look', 'attack', 'use_item', 'cast_spell', 'rest', 'other'] as const;
 
@@ -44,6 +45,8 @@ export interface IntentContext {
   actions: IntentOption[];
   npcs: { id: string; name: string }[];
   pois: { id: string; name: string }[];
+  /** Session language: the player's words and the labels are in it; picks the keyword lists. Default English. */
+  lang?: Language;
 }
 
 export function intentContext(ctx: RunContext): IntentContext {
@@ -68,6 +71,7 @@ export function intentContext(ctx: RunContext): IntentContext {
     actions: availableActions(ctx).map((a) => option(a.id, a.label)),
     npcs: npcsHere(ctx).map((id) => ({ id, name: ctx.adventure.npcs.find((n) => n.id === id)?.name ?? id })),
     pois: scene.pois.map((p) => ({ id: p.id, name: p.name })),
+    ...(ctx.msgs && ctx.msgs.lang !== 'en' && { lang: ctx.msgs.lang }),
   };
 }
 
@@ -104,28 +108,87 @@ const VERB_ACTIONS: [RegExp, Intent['action']][] = [
   [/\b(attack|hit|stab|strike|slash|shoot|fight|kill|punch)\b/, 'attack'],
   [/\b(talk|speak|ask|say|tell|greet|chat|question)\b/, 'talk'],
   [/\b(go|walk|head|leave|enter|return|travel|move|run)\b/, 'move'],
-  // "ser mig omkring": the Danish Look around button (A141d); full Danish keywords come with A150.
-  [/\b(look|glance|observe|survey)\b|\bser mig\b/, 'look'],
+  [/\b(look|glance|observe|survey)\b/, 'look'],
   [/\b(rest|sleep|camp|nap)\b/, 'rest'],
   [/\b(cast)\b/, 'cast_spell'],
   [/\b(drink|use|eat|light|apply|read the scroll)\b/, 'use_item'],
 ];
 
+// Danish lists (A150). JS `\b` only knows a–z, so Danish patterns use letter lookarounds (æ/ø/å).
+/** A word starting with one of the stems (like the English `\b(...)\w*`). */
+const daStem = (src: string) => new RegExp(`(?<!\\p{L})(?:${src})\\p{L}*`, 'u');
+/** One of the whole words/phrases. */
+const daWord = (src: string) => new RegExp(`(?<!\\p{L})(?:${src})(?!\\p{L})`, 'u');
+
+const STOP_DA = ['den', 'det', 'de', 'en', 'et', 'til', 'på', 'af', 'og', 'med', 'min', 'mit', 'mine', 'jeg', 'mig', 'om', 'op', 'ud', 'ind', 'hen', 'nogle', 'denne', 'dette', 'der', 'som', 'at', 'ved', 'efter', 'lidt', 'så', 'prøver', 'forsøger'];
+
+/** Checked before the English list in a Danish session (insight first: "lyver han?" is not a lie). */
+const SKILL_WORDS_DA: [RegExp, Skill][] = [
+  [daStem('aflæs|gennemskue|lyver (?:han|hun|de)|bedøm(?:mer)? (?:hans|hendes|deres)|læs(?:er)? (?:hans|hendes|deres) (?:ansigt|hensigt)'), 'insight'],
+  [daStem('overtal|overbevis|charm|bønfald|forhandl|prut|købslå|appeller'), 'persuasion'],
+  [daStem('lyv|lyve|løgn|bluff|bedrag|narr|snyd|foregiv|lade(?:r)? som om|forklæd'), 'deception'],
+  [daStem('tru(?:er|e|ende)|trussel|skræm|intimider|glo(?:r|er)'), 'intimidation'],
+  [daStem('snig|skjul|gem(?:mer)? mig|list(?:er)? mig|smyg'), 'stealth'],
+  [daStem('klatr|spring|hop|svøm|skub|bryd|løft|brække|tving'), 'athletics'],
+  [daStem('balancer|rul(?:ler|le)|undvig|klem(?:mer)? mig'), 'acrobatics'],
+  [daStem('lommetyv|stjæl|stjal|dirk|snup'), 'sleight_of_hand'],
+  [daStem('undersøg|gransk|efterforsk|inspic|studer|analyser|gennemsøg|ransag'), 'investigation'],
+  [daStem('lyt|spejd|hold(?:er)? (?:vagt|udkig)|bemærk|opdag|kig(?:ger)? efter'), 'perception'],
+  [daStem('spor|fødesøg|jag|naviger|orienter'), 'survival'],
+  [daStem('helbred|behandl|plej|førstehjælp|forbind(?:er|e)? (?:sår|såret|ham|hende)|læg(?:ger)? (?:en )?forbinding'), 'medicine'],
+  [daStem('(?:berolig(?:er|e)?|tæm(?:mer|me)?) (?:hesten|hunden|dyret|udyret)'), 'animal_handling'],
+  [daStem('optræd|syng|dans(?:er|e)?(?!\\p{L})|spil(?:ler)? (?:en|på) (?:sang|lut|melodi)'), 'performance'],
+  [daStem('husk|genkald|legende|historie'), 'history'],
+  [daStem('magi|magisk|rune|sigil|arkan|glyf'), 'arcana'],
+  // Not "beder": "jeg beder ham om…" means "I ask him to…"; a prayer is "bøn".
+  [daStem('bøn|hellig|gud|tempel|ritual'), 'religion'],
+];
+
+/** Checked before the English list in a Danish session ("slår lejr" is camping, not an attack). */
+const VERB_ACTIONS_DA: [RegExp, Intent['action']][] = [
+  [daWord('angrib|angriber|slå(?! lejr)|slår(?! lejr)|stik|stikker|hug|hugger|skyd|skyder|kæmp|kæmper|dræb|dræber|overfald|overfalder'), 'attack'],
+  [daWord('tal|taler|snak|snakker|spørg|spørger|siger|fortæl|fortæller|hils|hilser|udspørg|udspørger'), 'talk'],
+  [daWord('gå|går|forlad|forlader|rejs|rejser|bevæg|bevæger|løb|løber|vend(?:er)? tilbage|tag(?:er)? hen'), 'move'],
+  [daWord('kig|kigger|se|ser|betragt|betragter|iagttag|iagttager|overskue|overskuer'), 'look'],
+  [daWord('hvil|hviler|hvile|sov|sover|sove|slå lejr|slår lejr|lur'), 'rest'],
+  [daStem('besværg|kast(?:er)? (?:en |min )?besværg'), 'cast_spell'],
+  [daWord('drik|drikker|brug|bruger|spis|spiser|tænd|tænder|påfør|påfører|læs(?:er)? skriftrullen'), 'use_item'],
+];
+
+/** Keyword lists for a session language: its own words first, then English (players mix). */
+interface Vocab {
+  stop: ReadonlySet<string>;
+  skills: [RegExp, Skill][];
+  verbs: [RegExp, Intent['action']][];
+  join: RegExp[];
+  look: RegExp[];
+}
+const EN_VOCAB: Vocab = { stop: STOP, skills: SKILL_WORDS, verbs: VERB_ACTIONS, join: [], look: [] };
+const DA_VOCAB: Vocab = {
+  stop: new Set([...STOP, ...STOP_DA]),
+  skills: [...SKILL_WORDS_DA, ...SKILL_WORDS],
+  verbs: [...VERB_ACTIONS_DA, ...VERB_ACTIONS],
+  join: [daWord('slut(?:ter)? dig til|slutte dig til|kom(?:mer)? med|følg(?:er)? med|følg mig|tag(?:er)? med|rejs(?:er)? med|rid(?:er)? med|drag(?:er|e)? med|gå(?:r)? med (?:mig|os)|ledsag(?:er|e)?|rekrutter(?:er)?|med (?:mig|os) på')],
+  look: [/^(?:undersøg|kig|se|gennemsøg|studér|studer|inspicér|inspicer|efterse|tjek|betragt|ransag)(?!\p{L})/iu],
+};
+const vocab = (lang?: Language): Vocab => (lang === 'da' ? DA_VOCAB : EN_VOCAB);
+
 /** Any letters (not only a–z), so translated keywords like "brønd" match whole words (A143). */
-function words(text: string): string[] {
-  return (text.toLowerCase().match(/[\p{L}']+/gu) ?? []).filter((w) => !STOP.has(w));
+function words(text: string, lang?: Language): string[] {
+  const stop = vocab(lang).stop;
+  return (text.toLowerCase().match(/[\p{L}']+/gu) ?? []).filter((w) => !stop.has(w));
 }
 
 /**
  * Score of the best-matching offered action (keywords count double). Words that only name a
  * person or thing present are ignored: they say *who*, not *what* ("persuade Hobb" ≠ "talk to Hobb").
  */
-function bestAction(text: string, options: IntentOption[], names: ReadonlySet<string>): { id: string; score: number } | undefined {
-  const ws = new Set(words(text).filter((w) => !names.has(w)));
+function bestAction(text: string, options: IntentOption[], names: ReadonlySet<string>, lang?: Language): { id: string; score: number } | undefined {
+  const ws = new Set(words(text, lang).filter((w) => !names.has(w)));
   let best: { id: string; score: number } | undefined;
   for (const o of options) {
     const kw = o.keywords.filter((k) => ws.has(k.toLowerCase())).length * 2;
-    const label = words(o.label).filter((w) => w.length > 3 && ws.has(w)).length;
+    const label = words(o.label, lang).filter((w) => w.length > 3 && ws.has(w)).length;
     const score = kw + label;
     if (score > 0 && (!best || score > best.score)) best = { id: o.id, score };
   }
@@ -140,12 +203,12 @@ function findTarget(text: string, ictx: IntentContext): string | undefined {
 }
 
 function namesOf(ictx: IntentContext): Set<string> {
-  return new Set([...ictx.npcs, ...ictx.pois].flatMap((x) => words(x.name)));
+  return new Set([...ictx.npcs, ...ictx.pois].flatMap((x) => words(x.name, ictx.lang)));
 }
 
-function skillVerb(text: string): { word: string; skill: Skill } | undefined {
+function skillVerb(text: string, lang?: Language): { word: string; skill: Skill } | undefined {
   const lower = text.toLowerCase();
-  for (const [re, skill] of SKILL_WORDS) {
+  for (const [re, skill] of vocab(lang).skills) {
     const m = re.exec(lower)?.[0];
     if (m) return { word: m.trim(), skill };
   }
@@ -158,23 +221,23 @@ function skillVerb(text: string): { word: string; skill: Skill } | undefined {
  * reward" is a Persuasion attempt, not the plain talk action).
  */
 function confidentAction(text: string, ictx: IntentContext): string | undefined {
-  const match = bestAction(text, ictx.actions, namesOf(ictx));
+  const match = bestAction(text, ictx.actions, namesOf(ictx), ictx.lang);
   if (!match || match.score < 2) return undefined;
   const opt = ictx.actions.find((a) => a.id === match.id)!;
-  const verb = skillVerb(text);
-  const vocab = `${opt.label} ${opt.keywords.join(' ')}`.toLowerCase();
-  return !verb || vocab.includes(verb.word) ? match.id : undefined;
+  const verb = skillVerb(text, ictx.lang);
+  const said = `${opt.label} ${opt.keywords.join(' ')}`.toLowerCase();
+  return !verb || said.includes(verb.word) ? match.id : undefined;
 }
 
 /** Deterministic fallback when the LLM is unavailable or its reply is unusable. */
 export function keywordIntent(text: string, ictx: IntentContext): Intent {
   const lower = text.toLowerCase();
-  const match = bestAction(text, ictx.actions, namesOf(ictx));
+  const match = bestAction(text, ictx.actions, namesOf(ictx), ictx.lang);
   const target = findTarget(text, ictx);
-  const skill = skillVerb(text)?.skill;
+  const skill = skillVerb(text, ictx.lang)?.skill;
   const sure = confidentAction(text, ictx);
   if (sure) return { action: 'choose_action', actionId: sure, ...(target && { target }) };
-  const verb = VERB_ACTIONS.find(([re]) => re.test(lower))?.[1];
+  const verb = vocab(ictx.lang).verbs.find(([re]) => re.test(lower))?.[1];
   if (verb === 'attack') return { action: 'attack', ...(target && { target }) };
   if (skill) return { action: 'skill_check', skill, ...(target && { target }), approach: text.slice(0, 160) };
   if (match) return { action: 'choose_action', actionId: match.id, ...(target && { target }) };
@@ -218,13 +281,13 @@ export function refineIntent(intent: Intent, text: string, ictx: IntentContext):
   const poi = poiOf(intent.target, ictx) ?? poiOf(findTarget(text, ictx), ictx);
   const atPoi = poi ? ictx.actions.filter((a) => a.poi === poi) : [];
   if (atPoi.length) {
-    const hit = skill ? atPoi.find((a) => a.skill === skill) : intent.action === 'look' || intent.action === 'other' ? lookAction(atPoi) : undefined;
+    const hit = skill ? atPoi.find((a) => a.skill === skill) : intent.action === 'look' || intent.action === 'other' ? lookAction(atPoi, ictx.lang) : undefined;
     if (hit) return choose(hit.id);
   }
 
-  const textWords = new Set(words(text).filter((w) => w.length > 3 && !namesOf(ictx).has(w)));
-  const overlap = (o: IntentOption) => words(o.label).filter((w) => textWords.has(w)).length;
-  for (const s of [...new Set([skill, skillVerb(text)?.skill].filter((x): x is Skill => !!x))]) {
+  const textWords = new Set(words(text, ictx.lang).filter((w) => w.length > 3 && !namesOf(ictx).has(w)));
+  const overlap = (o: IntentOption) => words(o.label, ictx.lang).filter((w) => textWords.has(w)).length;
+  for (const s of [...new Set([skill, skillVerb(text, ictx.lang)?.skill].filter((x): x is Skill => !!x))]) {
     const exact = ictx.actions.filter((a) => a.skill === s);
     if (exact.length === 1) return choose(exact[0]!.id);
     const pick = best(exact, overlap) ?? best(ictx.actions.filter((a) => !a.skill && a.ability === SKILL_ABILITY[s]), overlap);
@@ -239,12 +302,12 @@ export function refineIntent(intent: Intent, text: string, ictx: IntentContext):
  * Several offered actions for one companion (a plain and a check version) → the first offered.
  */
 function recruitAction(target: string | undefined, text: string, ictx: IntentContext): IntentOption | undefined {
-  if (!JOIN_TEXT.test(text)) return undefined;
+  if (!JOIN_TEXT.test(text) && !vocab(ictx.lang).join.some((re) => re.test(text.toLowerCase()))) return undefined;
   const offers = ictx.actions.filter((a) => a.recruits);
   if (!offers.length) return undefined;
   const npcName = ictx.npcs.find((n) => n.id === target)?.name ?? '';
   // Companion ids are short names ("corwin"); NPC ids add a suffix ("corwin_npc").
-  const said = new Set(words(`${target ?? ''} ${npcName} ${text}`.replace(/_/g, ' ')));
+  const said = new Set(words(`${target ?? ''} ${npcName} ${text}`.replace(/_/g, ' '), ictx.lang));
   const named = offers.find((a) => said.has(a.recruits!.toLowerCase()));
   if (named) return named;
   return new Set(offers.map((a) => a.recruits)).size === 1 ? offers[0] : undefined;
@@ -256,9 +319,10 @@ function poiOf(target: string | undefined, ictx: IntentContext): string | undefi
   return ictx.pois.find((p) => p.id === target || p.name.toLowerCase() === t || p.name.toLowerCase().includes(t) || t.includes(p.name.toLowerCase()))?.id;
 }
 
-function lookAction(options: IntentOption[]): IntentOption | undefined {
+function lookAction(options: IntentOption[], lang?: Language): IntentOption | undefined {
   const plain = options.filter((a) => !a.skill && !a.ability);
-  return plain.find((a) => LOOK_LABEL.test(a.label)) ?? (plain.length === 1 ? plain[0] : undefined) ?? (options.length === 1 ? options[0] : undefined);
+  const looks = [LOOK_LABEL, ...vocab(lang).look];
+  return plain.find((a) => looks.some((re) => re.test(a.label))) ?? (plain.length === 1 ? plain[0] : undefined) ?? (options.length === 1 ? options[0] : undefined);
 }
 
 /** The option with the most shared words (at least one; ties → first). */

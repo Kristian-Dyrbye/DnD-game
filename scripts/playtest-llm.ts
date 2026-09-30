@@ -6,9 +6,11 @@
  * call is recorded (RecordingLlm) and the run waits for background calls (suggestions, summary,
  * banter) before the next command, like a player reading the text.
  *
- *   npx tsx scripts/playtest-llm.ts [model] [--ch1-steps=10]
+ *   npx tsx scripts/playtest-llm.ts [model] [--ch1-steps=10] [--lang=da]
  *
- * Writes userdata/playtest-llm.json (summary + every call) and userdata/playtest-llm.md (transcript).
+ * Writes userdata/playtest-llm.json (summary + every call) and userdata/playtest-llm.md (transcript);
+ * with --lang=da (A150) the session plays in Danish (Danish probes, the language's default model) and
+ * writes userdata/playtest-llm-da.{json,md}.
  * Needs Ollama on http://127.0.0.1:11434. Takes 30–60 minutes on a laptop CPU.
  */
 import fs from 'node:fs';
@@ -17,7 +19,10 @@ import path from 'node:path';
 import type { FastifyInstance } from 'fastify';
 import { buildApp } from '../src/server/app';
 import type { ServerEvent } from '../src/shared/protocol';
-import { SettingsSchema } from '../src/shared/settings';
+import { modelFor, SettingsSchema } from '../src/shared/settings';
+import { isLanguage, type Language } from '../src/shared/i18nCore';
+import { applyOverlay } from '../src/shared/contentI18n';
+import { messages } from '../src/engine/i18n';
 import { createLlmProvider } from '../src/llm/provider';
 import { RecordingLlm, summarizeCalls } from '../src/llm/recording';
 import { MockTts } from '../src/tts/mock';
@@ -30,7 +35,7 @@ import { activeFight } from '../src/engine/adventure/fights';
 import { wholeSentences } from '../src/engine/adventure/narration';
 import { intentContext } from '../src/engine/adventure/intent';
 import { getProgress, type RunContext } from '../src/engine/adventure/runner';
-import { loadAdventures, loadFlagRegistry } from '../src/server/adventures';
+import { loadAdventures, loadFlagRegistry, loadTranslations } from '../src/server/adventures';
 import { CompanionRosterSchema } from '../src/engine/party/companions';
 import companionsJson from '../data/companions.json';
 import { scoreProbe } from './playtest-score';
@@ -41,6 +46,10 @@ import { combatStep } from '../tests/helpers/combatPolicy';
 const args = process.argv.slice(2);
 const model = args.find((a) => !a.startsWith('--'));
 const ch1Steps = Number(args.find((a) => a.startsWith('--ch1-steps='))?.split('=')[1] ?? 10);
+const langArg = args.find((a) => a.startsWith('--lang='))?.split('=')[1] ?? 'en';
+if (!isLanguage(langArg)) throw new Error(`Unknown --lang=${langArg}`);
+const lang: Language = langArg;
+const suffix = lang === 'en' ? '' : `-${lang}`;
 const db = loadSrd();
 const S = 'arc.starter.';
 
@@ -58,6 +67,22 @@ const PROBES: Record<string, { text: string; expect: string[] }[]> = {
   barrow_sheaf_crypt: [{ text: 'I try to break the chains that hold the prisoners', expect: ['free_corwin', 'slip_chains', 'free_fast', 'free_tools'] }],
   barrow_shrine_rest: [{ text: 'I relight the flame in the little shrine', expect: ['rekindle', 'rekindle_nature'] }],
   marrows_goods_and_oath: [{ text: 'I ask Sir Corwin to come with me on the road south', expect: ['recruit', 'recruit_cruel'] }],
+};
+
+/** Danish probes (A150): same scenes and expected actions, written the way a Danish player would. */
+const PROBES_DA: typeof PROBES = {
+  millbrook_arrival: [
+    { text: 'Jeg går hen til den gamle brønd og kigger forsigtigt ned i den', expect: ['well.examine'] },
+    { text: 'Jeg synger en høj sang for at muntre landsbyboerne op', expect: [] },
+  ],
+  plough_tavern_talk: [
+    { text: 'Jeg prøver at overbevise fogeden om, at han må hjælpe mig med at finde de forsvundne', expect: ['persuade_reeve'] },
+    { text: 'Jeg spørger værtinden, hvilke rygter hun har hørt på det seneste', expect: [] },
+  ],
+  gallows_hill_trail: [{ text: 'Jeg knæler og leder efter fodspor i den mudrede jord', expect: ['track'] }],
+  barrow_sheaf_crypt: [{ text: 'Jeg prøver at bryde lænkerne, der holder fangerne', expect: ['free_corwin', 'slip_chains', 'free_fast', 'free_tools'] }],
+  barrow_shrine_rest: [{ text: 'Jeg tænder flammen i det lille alter igen', expect: ['rekindle', 'rekindle_nature'] }],
+  marrows_goods_and_oath: [{ text: 'Jeg spørger Ser Corwin, om han vil drage med mig mod syd', expect: ['recruit', 'recruit_cruel'] }],
 };
 
 /** Same story policy as tests/starterSmoke.test.ts. */
@@ -100,7 +125,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 async function main(): Promise<void> {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'dnd-llm-playtest-'));
   const cfg = SettingsSchema.parse({}).llm;
-  const llm = new RecordingLlm(createLlmProvider({ ...cfg, ...(model && { model }), useMock: false }));
+  const llm = new RecordingLlm(createLlmProvider({ ...cfg, model: model ?? modelFor(cfg, lang), useMock: false }));
   const status = await llm.status();
   if (!status.reachable || !status.modelAvailable) throw new Error(`Ollama not ready: ${JSON.stringify(status)}`);
   console.log(`Playtest with ${status.model}`);
@@ -126,10 +151,13 @@ async function main(): Promise<void> {
   const flagRegistry = loadFlagRegistry(advDir);
   const roster = CompanionRosterSchema.parse(companionsJson);
   const { adventures } = loadAdventures(advDir, db, flagRegistry, roster);
+  const overlays = loadTranslations(path.join('data', 'i18n')).translations[lang] ?? {};
   const probeContext = () => {
-    const adventure = adventures.get(getProgress(session.current)!.adventureId);
-    if (!adventure) return undefined;
-    const ctx: RunContext = { state: structuredClone(session.current), adventure, rng: Rng.fromSeed('probe'), db, flags: flagRegistry, companions: roster };
+    const english = adventures.get(getProgress(session.current)!.adventureId);
+    if (!english) return undefined;
+    // The session's own view: the adventure in the session language, and its messages.
+    const adventure = lang === 'en' ? english : applyOverlay(english, overlays[english.id]);
+    const ctx: RunContext = { state: structuredClone(session.current), adventure, rng: Rng.fromSeed('probe'), db, flags: flagRegistry, companions: roster, msgs: messages(lang) };
     return intentContext(ctx);
   };
   const suggestionSets: { scene: string; ideas: string[] }[] = [];
@@ -154,6 +182,7 @@ async function main(): Promise<void> {
   };
 
   const hero = buildCharacter(toBuildInput(quickBuild('fighter', db, Rng.fromSeed('smoke'))), db);
+  if (lang !== 'en') await session.handle({ type: 'set_language', language: lang });
   await run({ type: 'new_game', hero, mode: 'heroic' }, 'new_game');
   await settle('start');
 
@@ -169,7 +198,8 @@ async function main(): Promise<void> {
     const scene = p.sceneId;
     if (!probed.has(scene)) {
       probed.add(scene);
-      for (const probe of PROBES[scene] ?? (p.adventureId !== 'millbrook_disappearances' ? [{ text: 'I look around carefully and ask whoever is here what is going on', expect: [] }] : [])) {
+      const generic = lang === 'da' ? 'Jeg ser mig grundigt omkring og spørger dem, der er her, hvad der foregår' : 'I look around carefully and ask whoever is here what is going on';
+      for (const probe of (lang === 'da' ? PROBES_DA : PROBES)[scene] ?? (p.adventureId !== 'millbrook_disappearances' ? [{ text: generic, expect: [] }] : [])) {
         const before = llm.calls.length;
         const ictx = probeContext();
         const ms = await run({ type: 'say', text: probe.text }, `say: ${probe.text}`);
@@ -185,7 +215,8 @@ async function main(): Promise<void> {
     }
     const offered = ([...events].reverse().find((e): e is Extract<ServerEvent, { type: 'suggestions' }> => e.type === 'suggestions')?.actions ?? []).filter((a) => !a.say).map((a) => a.id!);
     let choice: string | undefined;
-    if (p.adventureId === 'millbrook_disappearances') choice = nextChoice(scene, session.current.flags, offered);
+    // A probe may open a conversation (A131): leave it when the policy has nothing to pick there.
+    if (p.adventureId === 'millbrook_disappearances') choice = nextChoice(scene, session.current.flags, offered) ?? offered.find((id) => id === 'dlg.bye');
     else {
       if (ch1Taken >= ch1Steps) break;
       ch1Taken++;
@@ -210,6 +241,7 @@ async function main(): Promise<void> {
   };
   const report = {
     model: status.model,
+    lang,
     minutes: Math.round((performance.now() - t0) / 600) / 100,
     reachedAdventure: getProgress(session.current)?.adventureId,
     errors: events.filter((e) => e.type === 'error'),
@@ -225,9 +257,9 @@ async function main(): Promise<void> {
     calls: llm.calls.map((c) => ({ ...c, prompt: c.prompt.slice(-300) })),
   };
   fs.mkdirSync('userdata', { recursive: true });
-  fs.writeFileSync(path.join('userdata', 'playtest-llm.json'), JSON.stringify(report, null, 2));
+  fs.writeFileSync(path.join('userdata', `playtest-llm${suffix}.json`), JSON.stringify(report, null, 2));
   const md = [...entries.values()].map((e) => (e.kind === 'narration' ? e.text : `*[${e.kind}${e.speaker ? ` ${e.speaker}` : ''}]* ${e.text}`)).join('\n\n');
-  fs.writeFileSync(path.join('userdata', 'playtest-llm.md'), `# Playtest transcript (${status.model})\n\n${md}\n`);
+  fs.writeFileSync(path.join('userdata', `playtest-llm${suffix}.md`), `# Playtest transcript (${status.model}, ${lang})\n\n${md}\n`);
   console.log(JSON.stringify({ ...report, calls: undefined, suggestionSets: suggestionSets.length }, null, 2));
   await app.close();
   fs.rmSync(dir, { recursive: true, force: true });

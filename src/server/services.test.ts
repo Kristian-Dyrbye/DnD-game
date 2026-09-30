@@ -5,6 +5,8 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { buildApp } from './app';
 import { MockLlm } from '../llm/mock';
 import { LlmScheduler } from '../llm/scheduler';
+import type { OllamaClient } from '../llm/ollama';
+import { defaultSettings, modelFor } from '../shared/settings';
 import { MockTts } from '../tts/mock';
 import { Services } from './services';
 import { SettingsStore } from './settingsStore';
@@ -44,6 +46,19 @@ describe('Services', () => {
     store.update({ llm: { useMock: true } });
     expect(services.llm).not.toBe(first);
     expect(services.llm.name).toBe('mock');
+  });
+
+  it('uses the game language\'s own model (A150: Danish → qwen3:4b-instruct by default)', () => {
+    const store = new SettingsStore(dir);
+    const services = new Services(store, dir);
+    const model = () => ((services.llm as LlmScheduler).inner as OllamaClient).model;
+    expect(model()).toBe('llama3.2:3b');
+    store.update({ gameplay: { language: 'da' } });
+    expect(model()).toBe('qwen3:4b-instruct');
+    store.update({ llm: { modelByLanguage: { da: '' } } });
+    expect(model()).toBe('llama3.2:3b');
+    expect(modelFor(defaultSettings().llm, 'da')).toBe('qwen3:4b-instruct');
+    expect(modelFor(defaultSettings().llm)).toBe('llama3.2:3b');
   });
 
   it('hands out the LLM behind one scheduler (injected providers too)', () => {

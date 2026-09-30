@@ -55,7 +55,7 @@ Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master. Runs fully of
 │  │  ├─ character/ (also)        scars.ts (permanent scars), armorWear.ts (wear + repair)
 │  │  ├─ session/                 GameSession: owns GameState, applies commands, emits events
 │  │  └─ systems/                 System registry (plugin hooks) — the extension point for §16
-│  ├─ llm/                        Provider interface, Ollama client, mock provider, prompt builders, JSON schemas, fallbacks
+│  ├─ llm/                        Provider interface, Ollama client, mock provider, prompt builders, JSON schemas, fallbacks; prompts keep English instructions and ask for the reply in the session language (llm/prompts/language.ts), and settings.llm.modelByLanguage picks a model per game language (Danish: qwen3:4b-instruct)
 │  ├─ tts/                        TTS provider interface, Piper adapter, mock
 │  ├─ host/                       Game host (no Node imports): GameSession + adventure port + systems + tables (gameHost.ts), shared adventure loader (content.ts),
 │  │                              bundled adventures (bundled.ts), in-memory saves + in-browser host for the web edition (memorySaves.ts, inPage.ts),

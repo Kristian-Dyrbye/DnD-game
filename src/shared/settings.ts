@@ -10,6 +10,11 @@ const volume = z.number().min(0).max(1);
 export const LlmSettingsSchema = z.object({
   /** Ollama model tag used for narration and JSON calls. */
   model: z.string().min(1).default('llama3.2:3b'),
+  /**
+   * Model per game language, used instead of `model` in that language ('' = `model`). A150 bench:
+   * llama3.2:3b writes broken Danish, qwen3:4b-instruct correct Danish at similar speed.
+   */
+  modelByLanguage: z.record(z.string(), z.string()).default({ da: 'qwen3:4b-instruct' }),
   /** Used if the main model isn't pulled. */
   fallbackModel: z.string().min(1).default('qwen3:4b-instruct'),
   baseUrl: z.string().url().default('http://127.0.0.1:11434'),
@@ -77,6 +82,11 @@ export type Settings = z.infer<typeof SettingsSchema>;
 
 /** A partial settings patch: any section, any subset of fields. */
 export type SettingsPatch = { [K in keyof Settings]?: Partial<Settings[K]> };
+
+/** The model for games in `language`: its own pick (llm.modelByLanguage), else the main model. */
+export function modelFor(llm: Settings['llm'], language: string = 'en'): string {
+  return llm.modelByLanguage[language]?.trim() || llm.model;
+}
 
 type PerformanceSettings = z.infer<typeof PerformanceSettingsSchema>;
 

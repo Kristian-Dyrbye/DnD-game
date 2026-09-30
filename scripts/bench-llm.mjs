@@ -7,18 +7,22 @@
  *   node scripts/bench-llm.mjs                      # default candidates (pulled ones only)
  *   node scripts/bench-llm.mjs llama3.2:3b phi4-mini # specific models
  *   node scripts/bench-llm.mjs --pull               # pull missing candidates first
+ *   node scripts/bench-llm.mjs --lang=da            # Danish tasks (A150) → userdata/bench-llm-da.json
  *
  * Needs Ollama running on http://127.0.0.1:11434 (Start Game.bat starts it).
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { INTENT_SCHEMA, INTENT_TASKS, NARRATION_TASKS, parseIntentReply, pickBest, scoreModel } from './bench-llm-lib.mjs';
+import { DA_INTENT_TASKS, DA_NARRATION_TASKS, INTENT_SCHEMA, INTENT_TASKS, NARRATION_TASKS, looksDanish, parseIntentReply, pickBest, scoreModel } from './bench-llm-lib.mjs';
 
 const BASE = process.env.OLLAMA_HOST ?? 'http://127.0.0.1:11434';
 const DEFAULT_CANDIDATES = ['llama3.2:3b', 'qwen3:4b-instruct', 'gemma3:4b', 'phi4-mini'];
 const args = process.argv.slice(2);
 const pull = args.includes('--pull');
 const wanted = args.filter((a) => !a.startsWith('--'));
+const lang = args.find((a) => a.startsWith('--lang='))?.slice(7) ?? 'en';
+if (lang !== 'en' && lang !== 'da') throw new Error(`Unknown --lang=${lang} (en or da)`);
+const TASKS = lang === 'da' ? { narration: DA_NARRATION_TASKS, intent: DA_INTENT_TASKS } : { narration: NARRATION_TASKS, intent: INTENT_TASKS };
 
 async function api(p, body) {
   const res = await fetch(`${BASE}${p}`, body ? { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : undefined);
@@ -82,11 +86,16 @@ async function benchModel(model) {
   try {
     await chatStream(model, [{ role: 'user', content: 'Say ready.' }]); // load the model (not timed)
     const narr = [];
-    for (const t of NARRATION_TASKS) narr.push(await chatStream(model, t.messages));
+    for (const t of TASKS.narration) narr.push(await chatStream(model, t.messages));
     r.tokensPerSecond = Math.round((narr.reduce((s, n) => s + n.tokensPerSecond, 0) / narr.length) * 10) / 10;
     r.firstTokenMs = Math.round(narr.reduce((s, n) => s + n.firstMs, 0) / narr.length);
     r.sample = narr[0].text.slice(0, 300);
-    for (const t of INTENT_TASKS) {
+    if (lang === 'da') {
+      r.langTotal = narr.length;
+      r.langOk = narr.filter((n) => looksDanish(n.text)).length;
+      r.samples = narr.map((n) => n.text); // read these: the check only counts function words
+    }
+    for (const t of TASKS.intent) {
       r.jsonTotal++;
       const action = parseIntentReply(await chatJson(model, t.messages));
       if (action) r.jsonValid++;
@@ -126,13 +135,13 @@ async function main() {
     results.push(r);
     console.log(r.error ? `error: ${r.error}` : `score ${r.score}`);
   }
-  console.log('\nmodel               score  json   sensible  tok/s  first-token  memory');
-  for (const r of results) console.log(`${r.model.padEnd(20)}${String(r.score).padStart(5)}  ${r.jsonValid}/${r.jsonTotal}    ${String(r.intentSensible).padStart(2)}/${r.jsonTotal}    ${String(r.tokensPerSecond).padStart(5)}  ${String(r.firstTokenMs).padStart(8)} ms  ${r.memoryMB ?? '?'} MB`);
+  console.log(`\nmodel               score  json   sensible  tok/s  first-token  memory${lang === 'da' ? '  danish' : ''}`);
+  for (const r of results) console.log(`${r.model.padEnd(20)}${String(r.score).padStart(5)}  ${r.jsonValid}/${r.jsonTotal}    ${String(r.intentSensible).padStart(2)}/${r.jsonTotal}    ${String(r.tokensPerSecond).padStart(5)}  ${String(r.firstTokenMs).padStart(8)} ms  ${r.memoryMB ?? '?'} MB${r.langTotal ? `  ${r.langOk}/${r.langTotal}` : ''}`);
   const best = pickBest(results);
   if (best) console.log(`\nRecommended default: ${best.model}. Set it in Settings → AI (or keep the current one if it's close).`);
-  const out = path.join(process.cwd(), 'userdata', 'bench-llm.json');
+  const out = path.join(process.cwd(), 'userdata', lang === 'en' ? 'bench-llm.json' : `bench-llm-${lang}.json`);
   fs.mkdirSync(path.dirname(out), { recursive: true });
-  fs.writeFileSync(out, JSON.stringify({ at: new Date().toISOString(), results, recommended: best?.model }, null, 2));
+  fs.writeFileSync(out, JSON.stringify({ at: new Date().toISOString(), lang, results, recommended: best?.model }, null, 2));
   console.log(`Results written to ${out}`);
 }
 

@@ -6,6 +6,7 @@
 import { messages, type EngineKey } from '../../engine/i18n';
 import { isLanguage, type Language } from '../../shared/i18nCore';
 import type { ChatMessage } from '../types';
+import { replyLanguageRule } from './language';
 
 export interface BackstorySummary {
   name: string;
@@ -18,11 +19,12 @@ export interface BackstorySummary {
   flaws?: string;
   /** Region/tone hint from the world lore (optional). */
   homeland?: string;
-  /** Language of the template story (the player's setting); the LLM prompt stays English until A150. */
+  /** Language of the story (the player's setting): the LLM reply and the template. */
   language?: Language;
 }
 
 export function backstoryMessages(s: BackstorySummary): ChatMessage[] {
+  const langRule = replyLanguageRule(isLanguage(s.language) ? s.language : undefined);
   const details = [
     `Name: ${s.name || 'unnamed'}`,
     `Species: ${s.species}`,
@@ -40,7 +42,8 @@ export function backstoryMessages(s: BackstorySummary): ChatMessage[] {
       content:
         'You write short, vivid backstories for heroes in an original fantasy world. Write 3 to 5 sentences in second person ("You..."). ' +
         'Mention where they grew up, one formative event, and why they now seek adventure. Do not invent game statistics, magic items or ' +
-        'named places from other published settings. No lists, no headings — just the story.',
+        'named places from other published settings. No lists, no headings — just the story.' +
+        (langRule ? ` ${langRule}` : ''),
     },
     { role: 'user', content: details.join('\n') },
   ];

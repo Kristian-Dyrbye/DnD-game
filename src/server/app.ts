@@ -169,7 +169,7 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
       combatNarration: () => settings.get().llm.combatNarration,
       summarizer: llmSummarizer(() => services.llm),
       banter: llmBanter(() => services.llm),
-      suggester: (ctx, offered) => suggestIdeas(services.llm, gatherNarrationContext(ctx.state, lore, ctx.adventure, srd), offered),
+      suggester: (ctx, offered) => suggestIdeas(services.llm, gatherNarrationContext(ctx.state, lore, ctx.adventure, srd, ctx.msgs?.lang), offered, ctx.msgs?.lang),
     },
     saves: {
       save: (slot, meta, state) => saves.save(slot, meta, state).meta,

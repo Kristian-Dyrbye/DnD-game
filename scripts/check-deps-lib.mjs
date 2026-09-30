@@ -8,6 +8,8 @@ export const GAME_PORT = 3210;
 export const OLLAMA_URL = 'http://127.0.0.1:11434';
 /** Keep in sync with src/shared/settings.ts (a test checks this). */
 export const DEFAULT_MODEL = 'llama3.2:3b';
+/** Per game language (settings llm.modelByLanguage default; keep in sync, a test checks this). */
+export const DEFAULT_LANGUAGE_MODELS = { da: 'qwen3:4b-instruct' };
 
 /** "v22.4.1" → 22 */
 export function nodeMajor(version) {
@@ -19,10 +21,15 @@ export function nodeIsSupported(version) {
   return nodeMajor(version) >= MIN_NODE_MAJOR;
 }
 
-/** Model from userdata/settings.json text, or the default if missing/invalid. */
+/** Model from userdata/settings.json text (the game language's own model first), or the default if missing/invalid. */
 export function configuredModel(settingsText) {
   try {
-    const model = JSON.parse(settingsText)?.llm?.model;
+    const s = JSON.parse(settingsText);
+    const lang = s?.gameplay?.language;
+    const byLang = { ...DEFAULT_LANGUAGE_MODELS, ...(s?.llm?.modelByLanguage ?? {}) };
+    const own = typeof lang === 'string' && lang !== 'en' ? byLang[lang] : undefined;
+    if (typeof own === 'string' && own.trim()) return own.trim();
+    const model = s?.llm?.model;
     return typeof model === 'string' && model.trim() ? model.trim() : DEFAULT_MODEL;
   } catch {
     return DEFAULT_MODEL;

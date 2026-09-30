@@ -3,6 +3,7 @@ export declare const MIN_NODE_MAJOR: number;
 export declare const GAME_PORT: number;
 export declare const OLLAMA_URL: string;
 export declare const DEFAULT_MODEL: string;
+export declare const DEFAULT_LANGUAGE_MODELS: Record<string, string>;
 export declare function nodeMajor(version: string): number;
 export declare function nodeIsSupported(version: string): boolean;
 export declare function configuredModel(settingsText: string): string;

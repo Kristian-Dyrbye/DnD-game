@@ -23,8 +23,15 @@ export function llmNarrator(getLlm: () => LlmProvider, lore: Lore, db?: SrdDatab
   return async function* narrate(job: NarrationJob, signal?: AbortSignal) {
     const llm = getLlm();
     if (llm.name === 'mock') return;
-    const context = gatherNarrationContext(job.ctx.state, lore, job.ctx.adventure, db);
-    const prompt = buildNarrationPrompt(context, { kind: job.kind, facts: job.facts, ...(job.playerAction && { playerAction: job.playerAction }), ...(job.visit && { visit: job.visit }) });
+    const language = job.ctx.msgs?.lang;
+    const context = gatherNarrationContext(job.ctx.state, lore, job.ctx.adventure, db, language);
+    const prompt = buildNarrationPrompt(context, {
+      kind: job.kind,
+      facts: job.facts,
+      ...(job.playerAction && { playerAction: job.playerAction }),
+      ...(job.visit && { visit: job.visit }),
+      ...(language && { language }),
+    });
     let text = '';
     try {
       const opts = job.kind === 'combat' ? NARRATION_OPTIONS.combat : NARRATION_OPTIONS.story;
