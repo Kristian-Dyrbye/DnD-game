@@ -54,9 +54,10 @@ type Node = { state: GameState; path: string[] };
 
 /**
  * Searches for a path to `endingId` (or any ending when omitted). `base` is the starting game state
- * (hero, flags); it is not modified.
+ * (hero, flags); it is not modified. `goal` narrows the target further: the ending state must also
+ * pass it (e.g. "ended 'done' with this outcome flag set").
  */
-export function solveAdventure(base: Omit<RunContext, 'rng'>, endingId?: string, limits = { depth: 30, nodes: 2000 }): SolveResult {
+export function solveAdventure(base: Omit<RunContext, 'rng'>, endingId?: string, limits = { depth: 30, nodes: 2000 }, goal?: (s: GameState) => boolean): SolveResult {
   const rng = new LuckyRng();
   const start = clonePlain(base.state);
   const ctx0: RunContext = { ...base, state: start, rng };
@@ -74,7 +75,7 @@ export function solveAdventure(base: Omit<RunContext, 'rng'>, endingId?: string,
   let explored = 0;
   const done = (s: GameState) => {
     const e = getProgress(s)?.ending;
-    return e !== undefined && (endingId === undefined || e === endingId);
+    return e !== undefined && (endingId === undefined || e === endingId) && (!goal || goal(s));
   };
   if (done(start)) return { ok: true, path: [], explored };
   while (head < queue.length) {

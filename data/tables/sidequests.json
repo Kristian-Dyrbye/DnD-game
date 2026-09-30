@@ -1,14 +1,103 @@
 {
-  "$comment": "Side-quest generator tables (spec §7.4). The generator (A108) combines a quest type, a site, an antagonist, a complication, a twist and a reward into a normal adventure (ADVENTURE_FORMAT.md). `threads` are woven-in hooks from data/adventures/DESIGN.md §14: when their condition holds, the generator prefers them. {placeholders} are filled by the generator. Monster ids are SRD 5.2.1; location ids and regions come from data/world/lore.json.",
+  "$comment": "Side-quest generator tables (spec §7.4). The generator (A108) combines a quest type, a site, an antagonist, a complication, a twist and a reward into a normal adventure (ADVENTURE_FORMAT.md). `threads` are woven-in hooks from data/adventures/DESIGN.md §14: when their condition holds, the generator prefers them. {placeholders} are filled by the generator. Monster ids are SRD 5.2.1; location ids and regions come from data/world/lore.json. Each quest type lists its `approaches` (fight/sneak/talk/trick/bribe/skill; success tags from approachTags in the generator) and `outcomes` (the choice once the job is resolved: reward multipliers, whether the thread write-back applies, and `tags` → companion approval via `approvalTags`). Bribes cost rewards.bribePerLevel gp × level.",
   "questTypes": [
-    { "id": "hunt_fugitive", "name": "Hunt a fugitive", "weight": 3, "goal": "Track down {antagonist} and bring them to justice", "siteKinds": ["hideout", "wilds", "ruin"], "antagonistKinds": ["outlaw", "cultist", "pirate"], "skills": ["survival", "investigation", "insight"], "fight": true },
-    { "id": "clear_lair", "name": "Clear a lair", "weight": 3, "goal": "Clear {antagonist} out of {site}", "siteKinds": ["lair", "ruin", "cave"], "antagonistKinds": ["beast", "monster", "undead"], "skills": ["stealth", "perception", "athletics"], "fight": true },
-    { "id": "rescue", "name": "Rescue a captive", "weight": 2, "goal": "Rescue {patron}'s {relative} from {antagonist}", "siteKinds": ["hideout", "cave", "ruin"], "antagonistKinds": ["outlaw", "cultist", "monster"], "skills": ["stealth", "athletics", "persuasion"], "fight": true },
-    { "id": "fetch", "name": "Recover an item", "weight": 2, "goal": "Recover {patron}'s {heirloom} from {site}", "siteKinds": ["ruin", "cave", "wilds"], "antagonistKinds": ["beast", "undead", "monster"], "skills": ["investigation", "athletics", "acrobatics"], "fight": false },
-    { "id": "escort", "name": "Escort", "weight": 2, "goal": "Escort {patron} safely to {destination}", "siteKinds": ["road"], "antagonistKinds": ["outlaw", "beast", "pirate"], "skills": ["perception", "survival", "insight"], "fight": true },
-    { "id": "investigate", "name": "Investigate a mystery", "weight": 2, "goal": "Find out who is behind {mystery}", "siteKinds": ["town", "hideout"], "antagonistKinds": ["cultist", "outlaw"], "skills": ["investigation", "insight", "persuasion"], "fight": false },
-    { "id": "deliver", "name": "Deliver in time", "weight": 1, "goal": "Deliver {parcel} to {destination} before {deadline}", "siteKinds": ["road"], "antagonistKinds": ["outlaw", "beast", "pirate"], "skills": ["survival", "athletics"], "fight": false },
-    { "id": "negotiate", "name": "Settle a dispute", "weight": 1, "goal": "Settle the quarrel between {patron} and {rival}", "siteKinds": ["town"], "antagonistKinds": ["rival"], "skills": ["persuasion", "insight", "deception"], "fight": false }
+    { "id": "hunt_fugitive", "name": "Hunt a fugitive", "weight": 3, "goal": "Track down {antagonist} and bring them to justice", "siteKinds": ["hideout", "wilds", "ruin"], "antagonistKinds": ["outlaw", "cultist", "pirate"], "skills": ["survival", "investigation", "insight"], "fight": true,
+      "approaches": [
+        { "kind": "fight", "label": "Confront {antagonist}", "keywords": ["fight", "attack", "confront"] },
+        { "kind": "sneak", "label": "Take {antagonist} by surprise while they rest", "skill": "stealth", "success": "You are on {antagonist} before a hand reaches for a weapon.", "keywords": ["sneak", "surprise", "creep"] },
+        { "kind": "talk", "label": "Talk {antagonist} into giving up", "skill": "persuasion", "success": "{antagonist} hears you out and lays down their arms.", "keywords": ["talk", "surrender", "persuade"] },
+        { "kind": "trick", "label": "Lure {antagonist} out with a forged message", "skill": "deception", "success": "{antagonist} walks straight into your hands.", "keywords": ["trick", "lure", "forge", "bluff"] },
+        { "kind": "bribe", "label": "Pay one of {antagonist}'s hangers-on to hand them over", "success": "Coin changes hands; that night {antagonist} is delivered bound and gagged.", "keywords": ["bribe", "pay"] }
+      ],
+      "outcomes": [
+        { "id": "turn_in", "label": "Take {antagonist} back in chains", "claim": "Hand {antagonist} over to {patron}", "text": "{antagonist} is bound for the road back.", "tags": ["honest"] },
+        { "id": "kill", "label": "Put an end to {antagonist} here", "claim": "Tell {patron} that {antagonist} is dead", "text": "It is over quickly. {antagonist} will run no more.", "tags": ["ruthless"] },
+        { "id": "let_go", "label": "Let {antagonist} go, on their word to leave for good", "claim": "Tell {patron} that {antagonist} got away", "text": "{antagonist} stares, then vanishes into the dark without a word.", "tags": ["mercy"], "goldMul": 0, "repMul": -0.5, "writeBack": false }
+      ]
+    },
+    { "id": "clear_lair", "name": "Clear a lair", "weight": 3, "goal": "Clear {antagonist} out of {site}", "siteKinds": ["lair", "ruin", "cave"], "antagonistKinds": ["beast", "monster", "undead"], "skills": ["stealth", "perception", "athletics"], "fight": true,
+      "approaches": [
+        { "kind": "fight", "label": "Storm {site}", "keywords": ["fight", "attack", "storm", "charge"] },
+        { "kind": "sneak", "label": "Creep in and strike the leader first", "skill": "stealth", "success": "The leader falls before it wakes; the rest scatter in panic.", "keywords": ["sneak", "creep", "surprise"] },
+        { "kind": "trick", "label": "Smoke them out into a trap at the entrance", "skill": "survival", "success": "Smoke and a snare do the work of a dozen blades.", "keywords": ["smoke", "trap", "lure", "bait"] }
+      ],
+      "outcomes": [
+        { "id": "destroy", "label": "Collapse the entrance so nothing nests here again", "claim": "Tell {patron} the place is cleared for good", "text": "Stone and timber come down with a roar. Nothing will nest here again.", "tags": [] },
+        { "id": "drive_off", "label": "Let the survivors scatter into the wilds", "claim": "Tell {patron} the lair is empty now", "text": "The last of them slink off into the wilds, far from any farm.", "tags": ["nature"], "goldMul": 0.75, "repMul": 0.5 }
+      ]
+    },
+    { "id": "rescue", "name": "Rescue a captive", "weight": 2, "goal": "Rescue {patron}'s {relative} from {antagonist}", "siteKinds": ["hideout", "cave", "ruin"], "antagonistKinds": ["outlaw", "cultist", "monster"], "skills": ["stealth", "athletics", "persuasion"], "fight": true,
+      "approaches": [
+        { "kind": "fight", "label": "Storm in and free the captive", "keywords": ["fight", "attack", "storm"] },
+        { "kind": "sneak", "label": "Slip in and free the captive quietly", "skill": "stealth", "success": "Ropes cut, a hand over a mouth, and you are both out before anyone looks up.", "keywords": ["sneak", "quietly", "slip"] },
+        { "kind": "talk", "label": "Negotiate the {relative}'s release", "skill": "persuasion", "success": "After a long, tense talk the captors let the {relative} walk free.", "keywords": ["talk", "negotiate", "release"] },
+        { "kind": "bribe", "label": "Pay the ransom", "success": "The captors count the coin twice and shove the {relative} towards you.", "keywords": ["ransom", "pay", "bribe"] }
+      ],
+      "outcomes": [
+        { "id": "bring_home", "label": "Bring the {relative} home", "claim": "Return the {relative} to {patron}", "text": "The {relative} clings to you the whole way back.", "tags": ["honest"] },
+        { "id": "help_flee", "label": "The {relative} begs not to go back: help them start over elsewhere", "claim": "Tell {patron} you could not find the {relative}", "text": "You point the {relative} to a safer road. They thank you in a whisper and are gone.", "tags": ["mercy"], "goldMul": 0, "repMul": -0.5, "writeBack": false }
+      ]
+    },
+    { "id": "fetch", "name": "Recover an item", "weight": 2, "goal": "Recover {patron}'s {heirloom} from {site}", "siteKinds": ["ruin", "cave", "wilds"], "antagonistKinds": ["beast", "undead", "monster"], "skills": ["investigation", "athletics", "acrobatics"], "fight": false,
+      "approaches": [
+        { "kind": "skill", "label": "Search {site} for the {heirloom}", "skill": "investigation", "success": "Under rubble and rot you find the {heirloom}.", "keywords": ["search", "look", "find"] },
+        { "kind": "sneak", "label": "Sneak past whatever lairs there", "skill": "stealth", "success": "You slip past the lair unheard and take the {heirloom}.", "keywords": ["sneak", "creep", "past"] },
+        { "kind": "trick", "label": "Draw the guardians off with a decoy", "skill": "sleight_of_hand", "success": "A rattle of stones and a scrap of meat draw them away; the {heirloom} is yours.", "keywords": ["decoy", "distract", "trick"] }
+      ],
+      "outcomes": [
+        { "id": "return", "label": "Keep the {heirloom} safe for {patron}", "claim": "Give {patron} back the {heirloom}", "text": "You wrap the {heirloom} carefully for the road.", "tags": ["honest"] },
+        { "id": "keep", "label": "Keep the {heirloom} and sell it on the quiet", "claim": "Tell {patron} the {heirloom} was lost", "text": "A fence in the next town will pay well and ask nothing.", "tags": ["greedy"], "goldMul": 1.4, "repMul": -1, "writeBack": false }
+      ]
+    },
+    { "id": "escort", "name": "Escort", "weight": 2, "goal": "Escort {patron} safely to {destination}", "siteKinds": ["road"], "antagonistKinds": ["outlaw", "beast", "pirate"], "skills": ["perception", "survival", "insight"], "fight": true,
+      "approaches": [
+        { "kind": "fight", "label": "Stand and fight the ambushers", "keywords": ["fight", "attack", "stand"] },
+        { "kind": "sneak", "label": "Take a hidden trail around the danger", "skill": "survival", "success": "The old trail is overgrown but empty; {destination} comes into view unmolested.", "keywords": ["trail", "hidden", "around", "sneak"] },
+        { "kind": "talk", "label": "Talk your way past the men blocking the road", "skill": "persuasion", "success": "A few calm words and a steady look, and they step aside.", "keywords": ["talk", "persuade", "past"] },
+        { "kind": "bribe", "label": "Pay the road toll they demand", "success": "They pocket the toll and wave you through.", "keywords": ["toll", "pay", "bribe"] }
+      ],
+      "outcomes": [
+        { "id": "deliver", "label": "See {patron} safely through the gate", "claim": "Collect your fee from {patron}", "text": "{patron} is safe at {destination}.", "tags": ["honest"] },
+        { "id": "extort", "label": "Demand double pay before the last mile", "claim": "Collect double pay from {patron}", "text": "{patron} pays with shaking hands and a bitter look.", "tags": ["greedy"], "goldMul": 1.6, "repMul": -1 }
+      ]
+    },
+    { "id": "investigate", "name": "Investigate a mystery", "weight": 2, "goal": "Find out who is behind {mystery}", "siteKinds": ["town", "hideout"], "antagonistKinds": ["cultist", "outlaw"], "skills": ["investigation", "insight", "persuasion"], "fight": false,
+      "approaches": [
+        { "kind": "skill", "label": "Search for clues", "skill": "investigation", "success": "A torn receipt and a muddy boot print point to {antagonist}.", "keywords": ["search", "clues", "investigate"] },
+        { "kind": "talk", "label": "Question the locals", "skill": "insight", "success": "One nervous answer too many, and the trail leads to {antagonist}.", "keywords": ["question", "ask", "locals"] },
+        { "kind": "sneak", "label": "Shadow the likeliest suspect", "skill": "stealth", "success": "You follow them to a back room and hear {antagonist} give the orders.", "keywords": ["follow", "shadow", "tail"] },
+        { "kind": "trick", "label": "Set a trap with false gossip", "skill": "deception", "success": "Your rumour flushes out {antagonist}, caught in the act.", "keywords": ["trap", "gossip", "rumour", "bluff"] }
+      ],
+      "outcomes": [
+        { "id": "expose", "label": "Expose {antagonist} in front of everyone", "claim": "Tell {patron} who is behind it", "text": "The whole street hears what {antagonist} did.", "tags": ["honest"], "repMul": 1.5 },
+        { "id": "blackmail", "label": "Keep quiet, for a price paid by {antagonist}", "claim": "Tell {patron} the trail went cold", "text": "{antagonist} pays for your silence, and will pay again.", "tags": ["greedy"], "goldMul": 2, "repMul": -1, "writeBack": false }
+      ]
+    },
+    { "id": "deliver", "name": "Deliver in time", "weight": 1, "goal": "Deliver {parcel} to {destination} before {deadline}", "siteKinds": ["road"], "antagonistKinds": ["outlaw", "beast", "pirate"], "skills": ["survival", "athletics"], "fight": false,
+      "approaches": [
+        { "kind": "skill", "label": "Take the fast road", "skill": "survival", "success": "You find the quickest way and keep to it.", "keywords": ["fast", "road", "hurry"] },
+        { "kind": "skill", "label": "Ride through the night", "skill": "athletics", "success": "Bone-tired, you make it before dawn.", "keywords": ["night", "ride", "push"] },
+        { "kind": "sneak", "label": "Slip past the watchers of {antagonist}", "skill": "stealth", "success": "The watchers never see you pass.", "keywords": ["sneak", "slip", "watchers"] },
+        { "kind": "bribe", "label": "Hire a fresh horse at every inn", "success": "Fresh horses and good roads: you arrive with time to spare.", "keywords": ["horse", "hire", "pay"] }
+      ],
+      "outcomes": [
+        { "id": "deliver", "label": "Hand over {parcel}, seal unbroken", "claim": "Tell {patron} {parcel} arrived", "text": "{parcel} is in the right hands.", "tags": ["honest"] },
+        { "id": "sell", "label": "Sell {parcel} to {antagonist}, who pays far more", "claim": "Tell {patron} you were robbed on the road", "text": "{antagonist} pays well. Someone in {destination} will wait in vain.", "tags": ["greedy"], "goldMul": 2, "repMul": -1, "writeBack": false }
+      ]
+    },
+    { "id": "negotiate", "name": "Settle a dispute", "weight": 1, "goal": "Settle the quarrel between {patron} and {rival}", "siteKinds": ["town"], "antagonistKinds": ["rival"], "skills": ["persuasion", "insight", "deception"], "fight": false,
+      "approaches": [
+        { "kind": "talk", "label": "Broker a fair compromise", "skill": "persuasion", "success": "Grudgingly, both sides shake hands on it.", "keywords": ["compromise", "broker", "persuade"] },
+        { "kind": "skill", "label": "Find out what they both really want", "skill": "insight", "success": "Beneath the shouting it is about pride, and pride can be settled.", "keywords": ["want", "listen", "understand", "insight"] },
+        { "kind": "trick", "label": "Bluff them both into agreeing", "skill": "deception", "success": "Each thinks the other gave way first. Neither ever learns the truth.", "keywords": ["bluff", "trick", "lie"] },
+        { "kind": "bribe", "label": "Smooth things over with coin", "success": "A purse on each side of the table makes the words come easier.", "keywords": ["pay", "bribe", "coin"] }
+      ],
+      "outcomes": [
+        { "id": "fair", "label": "Put the settlement in writing, fair to both", "claim": "Tell {patron} the quarrel is settled", "text": "Both sides sign. It is fair, and both hate it a little.", "tags": ["honest"] },
+        { "id": "side_patron", "label": "Tilt the settlement in favour of {patron}", "claim": "Tell {patron} you won them the better deal", "text": "{rival} signs with a scowl.", "tags": [], "goldMul": 1.5, "repMul": 0.5 },
+        { "id": "side_rival", "label": "Take {rival}'s purse and tilt the deal their way", "claim": "Tell {patron} it was the best you could do", "text": "{rival} smiles; {patron} will not.", "tags": ["greedy"], "goldMul": 2, "repMul": -1, "writeBack": false }
+      ]
+    }
   ],
   "sites": [
     { "id": "bandit_camp", "kind": "hideout", "regions": ["aurelmark"], "name": "a bandit camp in the hills", "seed": "Tents and a smoky firepit behind a screen of thorn bushes; a lookout dozes on a boulder." },
@@ -29,20 +118,20 @@
     { "id": "market_town", "kind": "town", "regions": ["aurelmark", "gloamfen", "brinescatter_isles"], "name": "the market and its back alleys", "seed": "Stalls, gossip and narrow alleys where people speak in low voices." }
   ],
   "antagonists": [
-    { "id": "bandit_gang", "kind": "outlaw", "regions": ["aurelmark", "gloamfen"], "name": "a bandit gang", "leader": "bandit_captain", "minions": ["bandit"], "levels": [1, 6] },
-    { "id": "goblin_raiders", "kind": "monster", "regions": ["aurelmark"], "name": "goblin raiders", "leader": "goblin_boss", "minions": ["goblin_warrior"], "levels": [1, 4] },
-    { "id": "hobgoblin_warband", "kind": "monster", "regions": ["aurelmark"], "name": "a hobgoblin warband", "leader": "hobgoblin_captain", "minions": ["hobgoblin_warrior"], "levels": [3, 8] },
-    { "id": "wolf_pack", "kind": "beast", "regions": ["aurelmark"], "name": "a wolf pack", "leader": "dire_wolf", "minions": ["wolf"], "levels": [1, 4] },
-    { "id": "owlbear", "kind": "beast", "regions": ["aurelmark"], "name": "a maddened owlbear", "leader": "owlbear", "minions": [], "levels": [3, 7] },
-    { "id": "choir_cell", "kind": "cultist", "regions": ["aurelmark", "gloamfen", "brinescatter_isles"], "name": "a Hollow Choir cell", "leader": "cultist_fanatic", "minions": ["cultist"], "levels": [1, 7] },
-    { "id": "restless_dead", "kind": "undead", "regions": ["gloamfen", "aurelmark"], "name": "the restless dead", "leader": "ghoul", "minions": ["zombie", "skeleton"], "levels": [1, 5] },
-    { "id": "bog_horror", "kind": "monster", "regions": ["gloamfen"], "name": "something in the bog", "leader": "will_o_wisp", "minions": ["giant_frog"], "levels": [3, 6] },
-    { "id": "giant_spiders", "kind": "beast", "regions": ["gloamfen", "aurelmark"], "name": "a nest of giant spiders", "leader": "giant_spider", "minions": ["giant_wolf_spider"], "levels": [2, 6] },
-    { "id": "pirate_crew", "kind": "pirate", "regions": ["brinescatter_isles"], "name": "a pirate crew", "leader": "pirate_captain", "minions": ["pirate"], "levels": [3, 10] },
-    { "id": "sahuagin_raiders", "kind": "monster", "regions": ["brinescatter_isles"], "name": "sahuagin raiders", "leader": "sahuagin_warrior", "minions": ["sahuagin_warrior"], "levels": [2, 6] },
-    { "id": "merrow", "kind": "monster", "regions": ["brinescatter_isles"], "name": "a merrow", "leader": "merrow", "minions": [], "levels": [3, 6] },
-    { "id": "harpies", "kind": "monster", "regions": ["brinescatter_isles", "aurelmark"], "name": "a flock of harpies", "leader": "harpy", "minions": [], "levels": [2, 6] },
-    { "id": "rival_merchant", "kind": "rival", "regions": ["aurelmark", "gloamfen", "brinescatter_isles"], "name": "a scheming rival merchant", "leader": "noble", "minions": ["guard"], "levels": [1, 10] }
+    { "id": "bandit_gang", "kind": "outlaw", "regions": ["aurelmark", "gloamfen"], "name": "a bandit gang", "leader": "bandit_captain", "minions": ["bandit"], "levels": [1,6] },
+    { "id": "goblin_raiders", "kind": "monster", "regions": ["aurelmark"], "name": "goblin raiders", "leader": "goblin_boss", "minions": ["goblin_warrior"], "levels": [1,4] },
+    { "id": "hobgoblin_warband", "kind": "monster", "regions": ["aurelmark"], "name": "a hobgoblin warband", "leader": "hobgoblin_captain", "minions": ["hobgoblin_warrior"], "levels": [3,8] },
+    { "id": "wolf_pack", "kind": "beast", "regions": ["aurelmark"], "name": "a wolf pack", "leader": "dire_wolf", "minions": ["wolf"], "levels": [1,4] },
+    { "id": "owlbear", "kind": "beast", "regions": ["aurelmark"], "name": "a maddened owlbear", "leader": "owlbear", "minions": [], "levels": [3,7] },
+    { "id": "choir_cell", "kind": "cultist", "regions": ["aurelmark", "gloamfen", "brinescatter_isles"], "name": "a Hollow Choir cell", "leader": "cultist_fanatic", "minions": ["cultist"], "levels": [1,7] },
+    { "id": "restless_dead", "kind": "undead", "regions": ["gloamfen", "aurelmark"], "name": "the restless dead", "leader": "ghoul", "minions": ["zombie", "skeleton"], "levels": [1,5] },
+    { "id": "bog_horror", "kind": "monster", "regions": ["gloamfen"], "name": "something in the bog", "leader": "will_o_wisp", "minions": ["giant_frog"], "levels": [3,6] },
+    { "id": "giant_spiders", "kind": "beast", "regions": ["gloamfen", "aurelmark"], "name": "a nest of giant spiders", "leader": "giant_spider", "minions": ["giant_wolf_spider"], "levels": [2,6] },
+    { "id": "pirate_crew", "kind": "pirate", "regions": ["brinescatter_isles"], "name": "a pirate crew", "leader": "pirate_captain", "minions": ["pirate"], "levels": [3,10] },
+    { "id": "sahuagin_raiders", "kind": "monster", "regions": ["brinescatter_isles"], "name": "sahuagin raiders", "leader": "sahuagin_warrior", "minions": ["sahuagin_warrior"], "levels": [2,6] },
+    { "id": "merrow", "kind": "monster", "regions": ["brinescatter_isles"], "name": "a merrow", "leader": "merrow", "minions": [], "levels": [3,6] },
+    { "id": "harpies", "kind": "monster", "regions": ["brinescatter_isles", "aurelmark"], "name": "a flock of harpies", "leader": "harpy", "minions": [], "levels": [2,6] },
+    { "id": "rival_merchant", "kind": "rival", "regions": ["aurelmark", "gloamfen", "brinescatter_isles"], "name": "a scheming rival merchant", "leader": "noble", "minions": ["guard"], "levels": [1,10] }
   ],
   "complications": [
     { "id": "rain_of_arrows", "weight": 2, "text": "The {antagonist} expected company and set an ambush.", "effect": "ambush" },
@@ -60,15 +149,12 @@
     { "id": "no_twist", "weight": 3, "text": "", "effect": "none" }
   ],
   "rewards": {
-    "goldPerLevel": { "min": 15, "max": 40 },
+    "goldPerLevel": {"min": 15, "max": 40},
     "itemChance": 0.35,
-    "itemRarityByLevel": [
-      { "levels": [1, 4], "rarities": ["common"] },
-      { "levels": [5, 10], "rarities": ["common", "uncommon"] },
-      { "levels": [11, 20], "rarities": ["uncommon", "rare"] }
-    ],
-    "reputation": { "min": 3, "max": 10 },
-    "xpDifficulty": "moderate"
+    "itemRarityByLevel": [{"levels": [1,4], "rarities": ["common"]}, {"levels": [5,10], "rarities": ["common", "uncommon"]}, {"levels": [11,20], "rarities": ["uncommon", "rare"]}],
+    "reputation": {"min": 3, "max": 10},
+    "xpDifficulty": "moderate",
+    "bribePerLevel": 8
   },
   "patrons": {
     "names": ["Old Maudie", "Brother Aldo", "Captain Wren", "Sella the fishwife", "Master Corvin", "Widow Hask", "Tamsin the smith", "Deputy Brand"],
@@ -78,20 +164,29 @@
     "parcels": ["a sealed letter", "a crate of medicine", "a wedding ring", "a sick child's cure"]
   },
   "threads": [
-    { "id": "sextons_return", "name": "The Sexton's Return", "if": { "flag": "arc.starter.ashby_fate", "eq": "escaped" }, "questType": "hunt_fugitive", "locations": ["brightwater", "ravensgate"], "villain": "Brother Ashby", "antagonist": "choir_cell", "writeBack": { "flags": [{ "set": "arc.starter.ashby_fate", "value": "captured" }], "reputation": [{ "faction": "crown_of_aurelmark", "delta": 10 }] } },
-    { "id": "sallows_seed", "name": "Sallow's Seed", "if": { "flag": "arc.main.sallow_fate", "eq": "escaped" }, "questType": "investigate", "locations": ["hollowmere", "ravensgate"], "villain": "Sallow", "antagonist": "choir_cell", "writeBack": { "flags": [{ "set": "arc.main.sallow_fate", "value": "captured" }] } },
-    { "id": "veys_last_run", "name": "Vey's Last Run", "if": { "flag": "arc.main.harrow_vey_fate", "eq": "escaped" }, "questType": "hunt_fugitive", "locations": ["gullhaven", "wreckers_cove"], "villain": "Harrow Vey", "antagonist": "pirate_crew", "writeBack": { "flags": [{ "set": "arc.main.harrow_vey_fate", "value": "captured" }] } },
-    { "id": "hollow_library", "name": "The Hollow Library", "if": { "flag": "arc.main.vosk_fate", "eq": "escaped" }, "questType": "clear_lair", "locations": ["ruins_of_old_vaelthorn", "deepanvil_hold"], "villain": "Vosk", "antagonist": "restless_dead", "writeBack": { "flags": [{ "set": "arc.main.vosk_fate", "value": "killed" }] } },
-    { "id": "squires_errand", "name": "A Squire's Errand", "if": { "flag": "arc.starter.pip_rescued" }, "questType": "fetch", "locations": ["millbrook", "dawnspire_keep"], "villain": "", "antagonist": "wolf_pack", "writeBack": { "flags": [{ "inc": "world.corwin_loyalty", "by": 5 }] } },
-    { "id": "ashes_and_apologies", "name": "Ashes and Apologies", "if": { "any": [{ "flag": "arc.main.hollowmere_fate", "eq": "purged" }, { "flag": "arc.main.wick_fate", "eq": "burned" }] }, "questType": "negotiate", "locations": ["blightwood", "thornwife_hollow"], "villain": "", "antagonist": "rival_merchant", "writeBack": { "reputation": [{ "faction": "briarkin", "delta": 20 }], "flags": [] } },
-    { "id": "company_business", "name": "Company Business", "if": { "flag": "arc.main.isles_alliance", "eq": "red_gull" }, "questType": "hunt_fugitive", "locations": ["port_sorrel", "fennicks_rest"], "villain": "Saltwind bounty hunters", "antagonist": "pirate_crew", "writeBack": { "reputation": [{ "faction": "saltwind_trading_company", "delta": 15 }] } },
-    { "id": "gulls_grudge", "name": "Gull's Grudge", "if": { "flag": "arc.main.isles_alliance", "eq": "saltwind" }, "questType": "clear_lair", "locations": ["port_sorrel", "fennicks_rest"], "villain": "Red Gull raiders", "antagonist": "pirate_crew", "writeBack": { "reputation": [{ "faction": "red_gull_brotherhood", "delta": 15 }] } },
-    { "id": "governors_ledger", "name": "The Governor's Ledger", "if": { "any": [{ "flag": "arc.main.pell_fate", "eq": "fled" }, { "flag": "arc.main.pell_fate", "eq": "allied" }] }, "questType": "investigate", "locations": ["port_sorrel", "fort_kestrel"], "villain": "Governor Pell", "antagonist": "rival_merchant", "writeBack": { "flags": [{ "set": "arc.main.pell_fate", "value": "exposed" }] } },
-    { "id": "aunties_due", "name": "Auntie's Due", "if": { "flag": "arc.main.hag_bargain" }, "questType": "negotiate", "locations": ["singing_reef", "hollowmere"], "villain": "the sea hag's sisters", "antagonist": "bog_horror", "writeBack": { "flags": [{ "set": "arc.main.hag_bargain", "value": false }] } },
-    { "id": "unclaimed_parrot", "name": "The Unclaimed Parrot", "if": { "all": [{ "flag": "arc.main.parrot_treasure", "eq": "unclaimed" }, { "not": { "flag": "arc.main.isles_alliance", "eq": "neutral" } }] }, "questType": "fetch", "locations": ["isle_of_brass_parrots"], "villain": "", "antagonist": "harpies", "writeBack": { "flags": [{ "set": "arc.main.parrot_treasure", "value": "player" }] } },
-    { "id": "turncoats_debt", "name": "The Turncoat's Debt", "if": { "flag": "world.rook_status", "eq": "betrayed" }, "questType": "hunt_fugitive", "locations": ["fennicks_rest", "gullhaven"], "villain": "Rook Marrowby", "antagonist": "pirate_crew", "writeBack": { "flags": [{ "set": "world.rook_status", "value": "waiting" }] } },
-    { "id": "bells_of_mercy", "name": "Bells of Mercy", "if": { "all": [{ "flag": "arc.main.abbot_cendric_alive" }, { "not": { "flag": "arc.main.hollowmere_fate", "eq": "unresolved" } }] }, "questType": "escort", "locations": ["drowned_abbey", "lantern_hold"], "villain": "", "antagonist": "restless_dead", "writeBack": { "reputation": [{ "faction": "lantern_wardens", "delta": 10 }] } },
-    { "id": "debt_collectors", "name": "Debt Collectors", "if": { "flag": "world.red_gull_debt", "gte": 1 }, "questType": "deliver", "locations": ["fennicks_rest"], "villain": "Red Gull collectors", "antagonist": "pirate_crew", "writeBack": { "flags": [{ "set": "world.red_gull_debt", "value": 0 }] } },
-    { "id": "wanted", "name": "Wanted", "if": { "flag": "world.player_outlawed" }, "questType": "hunt_fugitive", "locations": ["brightwater", "highcrown", "ravensgate"], "villain": "bounty hunters", "antagonist": "bandit_gang", "writeBack": { "flags": [{ "set": "world.player_outlawed", "value": false }] } }
-  ]
+    { "id": "sextons_return", "name": "The Sexton's Return", "if": {"flag": "arc.starter.ashby_fate", "eq": "escaped"}, "questType": "hunt_fugitive", "locations": ["brightwater", "ravensgate"], "villain": "Brother Ashby", "antagonist": "choir_cell", "writeBack": {"flags": [{"set": "arc.starter.ashby_fate", "value": "captured"}], "reputation": [{"faction": "crown_of_aurelmark", "delta": 10}]} },
+    { "id": "sallows_seed", "name": "Sallow's Seed", "if": {"flag": "arc.main.sallow_fate", "eq": "escaped"}, "questType": "investigate", "locations": ["hollowmere", "ravensgate"], "villain": "Sallow", "antagonist": "choir_cell", "writeBack": {"flags": [{"set": "arc.main.sallow_fate", "value": "captured"}]} },
+    { "id": "veys_last_run", "name": "Vey's Last Run", "if": {"flag": "arc.main.harrow_vey_fate", "eq": "escaped"}, "questType": "hunt_fugitive", "locations": ["gullhaven", "wreckers_cove"], "villain": "Harrow Vey", "antagonist": "pirate_crew", "writeBack": {"flags": [{"set": "arc.main.harrow_vey_fate", "value": "captured"}]} },
+    { "id": "hollow_library", "name": "The Hollow Library", "if": {"flag": "arc.main.vosk_fate", "eq": "escaped"}, "questType": "clear_lair", "locations": ["ruins_of_old_vaelthorn", "deepanvil_hold"], "villain": "Vosk", "antagonist": "restless_dead", "writeBack": {"flags": [{"set": "arc.main.vosk_fate", "value": "killed"}]} },
+    { "id": "squires_errand", "name": "A Squire's Errand", "if": {"flag": "arc.starter.pip_rescued"}, "questType": "fetch", "locations": ["millbrook", "dawnspire_keep"], "villain": "", "antagonist": "wolf_pack", "writeBack": {"flags": [{"inc": "world.corwin_loyalty", "by": 5}]} },
+    { "id": "ashes_and_apologies", "name": "Ashes and Apologies", "if": {"any": [{"flag": "arc.main.hollowmere_fate", "eq": "purged"},{"flag": "arc.main.wick_fate", "eq": "burned"}]}, "questType": "negotiate", "locations": ["blightwood", "thornwife_hollow"], "villain": "", "antagonist": "rival_merchant", "writeBack": {"reputation": [{"faction": "briarkin", "delta": 20}], "flags": []} },
+    { "id": "company_business", "name": "Company Business", "if": {"flag": "arc.main.isles_alliance", "eq": "red_gull"}, "questType": "hunt_fugitive", "locations": ["port_sorrel", "fennicks_rest"], "villain": "Saltwind bounty hunters", "antagonist": "pirate_crew", "writeBack": {"reputation": [{"faction": "saltwind_trading_company", "delta": 15}]} },
+    { "id": "gulls_grudge", "name": "Gull's Grudge", "if": {"flag": "arc.main.isles_alliance", "eq": "saltwind"}, "questType": "clear_lair", "locations": ["port_sorrel", "fennicks_rest"], "villain": "Red Gull raiders", "antagonist": "pirate_crew", "writeBack": {"reputation": [{"faction": "red_gull_brotherhood", "delta": 15}]} },
+    { "id": "governors_ledger", "name": "The Governor's Ledger", "if": {"any": [{"flag": "arc.main.pell_fate", "eq": "fled"},{"flag": "arc.main.pell_fate", "eq": "allied"}]}, "questType": "investigate", "locations": ["port_sorrel", "fort_kestrel"], "villain": "Governor Pell", "antagonist": "rival_merchant", "writeBack": {"flags": [{"set": "arc.main.pell_fate", "value": "exposed"}]} },
+    { "id": "aunties_due", "name": "Auntie's Due", "if": {"flag": "arc.main.hag_bargain"}, "questType": "negotiate", "locations": ["singing_reef", "hollowmere"], "villain": "the sea hag's sisters", "antagonist": "bog_horror", "writeBack": {"flags": [{"set": "arc.main.hag_bargain", "value": false}]} },
+    { "id": "unclaimed_parrot", "name": "The Unclaimed Parrot", "if": {"all": [{"flag": "arc.main.parrot_treasure", "eq": "unclaimed"},{"not": {"flag": "arc.main.isles_alliance", "eq": "neutral"}}]}, "questType": "fetch", "locations": ["isle_of_brass_parrots"], "villain": "", "antagonist": "harpies", "writeBack": {"flags": [{"set": "arc.main.parrot_treasure", "value": "player"}]} },
+    { "id": "turncoats_debt", "name": "The Turncoat's Debt", "if": {"flag": "world.rook_status", "eq": "betrayed"}, "questType": "hunt_fugitive", "locations": ["fennicks_rest", "gullhaven"], "villain": "Rook Marrowby", "antagonist": "pirate_crew", "writeBack": {"flags": [{"set": "world.rook_status", "value": "waiting"}]} },
+    { "id": "bells_of_mercy", "name": "Bells of Mercy", "if": {"all": [{"flag": "arc.main.abbot_cendric_alive"},{"not": {"flag": "arc.main.hollowmere_fate", "eq": "unresolved"}}]}, "questType": "escort", "locations": ["drowned_abbey", "lantern_hold"], "villain": "", "antagonist": "restless_dead", "writeBack": {"reputation": [{"faction": "lantern_wardens", "delta": 10}]} },
+    { "id": "debt_collectors", "name": "Debt Collectors", "if": {"flag": "world.red_gull_debt", "gte": 1}, "questType": "deliver", "locations": ["fennicks_rest"], "villain": "Red Gull collectors", "antagonist": "pirate_crew", "writeBack": {"flags": [{"set": "world.red_gull_debt", "value": 0}]} },
+    { "id": "wanted", "name": "Wanted", "if": {"flag": "world.player_outlawed"}, "questType": "hunt_fugitive", "locations": ["brightwater", "highcrown", "ravensgate"], "villain": "bounty hunters", "antagonist": "bandit_gang", "writeBack": {"flags": [{"set": "world.player_outlawed", "value": false}]} }
+  ],
+  "approvalTags": {
+    "honest": [{"companion": "corwin", "delta": 3}, {"companion": "nettle", "delta": 2}],
+    "mercy": [{"companion": "corwin", "delta": 5}, {"companion": "nettle", "delta": 3}, {"companion": "aurek", "delta": 3}],
+    "ruthless": [{"companion": "corwin", "delta": -5}, {"companion": "aurek", "delta": -5}, {"companion": "nettle", "delta": -3}],
+    "greedy": [{"companion": "rook", "delta": 3}, {"companion": "corwin", "delta": -5}, {"companion": "aurek", "delta": -3}],
+    "nature": [{"companion": "nettle", "delta": 5}, {"companion": "corwin", "delta": 2}],
+    "clever": [{"companion": "rook", "delta": 3}],
+    "diplomacy": [{"companion": "aurek", "delta": 3}, {"companion": "rook", "delta": 2}]
+  }
 }

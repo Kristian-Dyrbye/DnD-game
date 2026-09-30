@@ -1,7 +1,8 @@
 /**
  * Side-quest quality gate (spec §7.4 / §17): a generated quest is rejected if it fails the
  * adventure validator, has a deadly or empty fight for the hero's level, needs a check the hero
- * cannot pass even on a natural 20, or cannot reach its "done" ending (solver). Rejected quests are
+ * cannot pass even on a natural 20, or cannot reach its "done" ending (solver), offers fewer than
+ * 3 approaches, or has an outcome variant that can't end the job (A137). Rejected quests are
  * regenerated with a fresh seed; after too many failures nothing is offered (the caller shows no quest).
  */
 import { totalLevel } from '../core/creature';
@@ -55,8 +56,21 @@ export function checkSideQuest(q: GeneratedQuest, o: Pick<SideQuestOptions, 'db'
   for (const f of reads) if (f.startsWith(`side.${adv.id}.`) && !written.has(f)) problems.push(`flag ${f} is read but never set`);
 
   // Winnable with perfect luck?
-  const solved = solveAdventure({ state: o.state, adventure: adv, db: o.db, ...(o.flags && { flags: o.flags }), ...(o.lore && { lore: o.lore }) }, 'done');
+  const base = { state: o.state, adventure: adv, db: o.db, ...(o.flags && { flags: o.flags }), ...(o.lore && { lore: o.lore }) };
+  const solved = solveAdventure(base, 'done');
   if (!solved.ok) problems.push(`unwinnable: ${solved.reason}`);
+
+  // Real choices (A137): ≥ 3 ways in, and every outcome variant can end the job 'done'.
+  const site = adv.chapters.flatMap((c) => c.scenes).find((s) => s.id === 'site');
+  const offered = q.approaches.filter((id) => site?.actions.some((a) => a.id === id));
+  if (offered.length < 3) problems.push(`only ${offered.length} approaches`);
+  if (q.outcomes.length < 2) problems.push(`only ${q.outcomes.length} outcome variants`);
+  if (solved.ok) {
+    for (const id of q.outcomes) {
+      const flag = `side.${adv.id}.o_${id}`;
+      if (!solveAdventure(base, 'done', undefined, (s) => s.flags[flag] === true).ok) problems.push(`outcome ${id} can't end the job`);
+    }
+  }
 
   return { ok: problems.length === 0, ...(problems.length === 0 && { adventure: adv }), problems };
 }

@@ -114,6 +114,10 @@ describe('side quests in the session', () => {
     await session.handle({ type: 'choose', actionId: 'accept' });
     await session.handle({ type: 'choose', actionId: 'exit.go' });
     session.current.flags[`side.${sqId}.resolved`] = true;
+    // Resolved → choose how it ends (the first outcome variant pairs with 'claim').
+    const job = sideQuestState(session.current).active!.adventure;
+    const decide = job.chapters[0]!.scenes.find((s) => s.id === 'site')!.actions.find((a) => a.id.startsWith('decide_'))!;
+    await session.handle({ type: 'choose', actionId: decide.id });
     await session.handle({ type: 'choose', actionId: 'exit.leave' });
     await session.handle({ type: 'choose', actionId: 'claim' });
     expect(events.some((e) => e.type === 'log' && e.entry.text.startsWith('Job complete:'))).toBe(true);

@@ -131,6 +131,21 @@ describe('checkSideQuest', () => {
   });
 });
 
+describe('checkSideQuest: real choices (A137)', () => {
+  it('rejects a quest with too few approaches or an outcome that cannot end the job', () => {
+    const q = generateSideQuest({ ...opts(3), rng: Rng.fromSeed(4), threadChance: 0 });
+    expect(checkSideQuest(q, opts(3)).ok).toBe(true);
+    const adv = q.adventure as { chapters: { scenes: { id: string; actions: { id: string }[] }[] }[] };
+    const report = adv.chapters[0]!.scenes.find((s) => s.id === 'report')!;
+    const second = q.outcomes[1]!;
+    report.actions = report.actions.filter((a) => a.id !== `claim_${second}`);
+    const site = adv.chapters[0]!.scenes.find((s) => s.id === 'site')!;
+    site.actions = site.actions.filter((a) => a.id === 'confront' || a.id === 'force' || !q.approaches.includes(a.id) || a.id === q.approaches[0]);
+    const c = checkSideQuest(q, opts(3));
+    expect(c.problems).toEqual(expect.arrayContaining([`outcome ${second} can't end the job`, expect.stringMatching(/^only [12] approaches$/)]));
+  });
+});
+
 describe('generateValidSideQuest', () => {
   it('regenerates until a quest passes, deterministically', () => {
     const a = generateValidSideQuest({ ...opts(3), rng: Rng.fromSeed(9) });

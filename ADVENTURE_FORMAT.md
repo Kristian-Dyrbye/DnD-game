@@ -318,6 +318,13 @@ Scenes that can't be reached from the start produce **warnings**.
 
 The side-quest generator (A108) regenerates any quest that fails validation.
 
+Generated side quests follow the same shape every time (A137). In `data/tables/sidequests.json`, each quest type lists its `approaches` and its `outcomes`:
+
+- **Approaches** are the ways to resolve the job at the site. The kinds are `fight`, `sneak`, `talk`, `trick`, `bribe` (costs `rewards.bribePerLevel` gp × level) and `skill`. In fight jobs a failed check starts the fight. In other jobs it sets `~setback`, which unlocks "Force the issue" and the give-up option.
+- **Outcomes** are the choices once the job is resolved: spare or kill, return or keep, expose or blackmail. Each one sets `~o_<id>` and has its own claim at the report scene. `goldMul`/`repMul` scale the pay and the patron's reputation. `writeBack: false` skips the thread's world-flag write-back. `tags` give companion approval through `approvalTags`.
+
+The quality gate rejects quests with fewer than 3 approaches, and quests where the solver can't end the job with every outcome variant.
+
 ## Versioning
 
 - `formatVersion` changes only on breaking changes.
