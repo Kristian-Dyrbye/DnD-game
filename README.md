@@ -8,6 +8,7 @@ A single-player Dungeons & Dragons game (SRD 5.2.1 rules) that runs entirely on 
 - **See the consequences**: wounds that fade as you heal, permanent scars logged with their origin, armor that dents and needs repair, and equipment shown on the 3D model.
 - **Listen**: music and sound effects by mood, and optional offline narration voices (Piper).
 - **Play on in any condition**: if the AI or the voice isn't available, the game says so once and continues with written narration.
+- **Play in English or Danish (Dansk)**: menus, rules words, the combat log, every adventure and the AI narrator switch language at once, without a reload.
 
 ## Requirements
 
@@ -43,10 +44,13 @@ There is also a **web edition** that runs entirely in your browser: no install, 
 - **AI**: model name, response length, combat narration (every action / key moments / off), a *Test connection* button, and *Play without the AI*.
 - **Performance**: presets (low = 2D map, no shadows), texture quality, frame cap, how many 3D models to show.
 - **Accessibility**: text size, a more readable font, colour-blind helpers.
+- **Language**: English or Dansk, on the title screen or in Settings. It is a player setting, not part of a save: a save loads in whatever language you play. Log lines already written keep their language. Both editions (Windows and web) have it.
 
 ## Swapping the AI model
 
 The default model is `llama3.2:3b`; the fallback is `qwen3:4b-instruct`. (Use the `-instruct` tag of Qwen3: plain `qwen3:4b` is now a thinking-only model that is far too slow for narration.) Any Ollama model works: pull it (`ollama pull <name>`) and set it in Settings → AI. Small 3–4B instruction models give the best balance on 8 GB machines; larger models narrate better but use more memory.
+
+Each game language has its own model: Danish games use `qwen3:4b-instruct` by default (it writes better Danish than `llama3.2:3b`). Settings → AI edits the model of the language you are playing in. Setup pulls the model of the current language; after switching to Danish, run `ollama pull qwen3:4b-instruct` (or Setup.bat again) if it isn't installed.
 
 To compare models on your own PC, run `node scripts/bench-llm.mjs` (add `--pull` to download the candidates first, or name models to test). It measures JSON reliability, speed and memory with the game's real prompt shapes and recommends a default; results go to `userdata/bench-llm.json`.
 

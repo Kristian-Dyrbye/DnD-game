@@ -41,12 +41,19 @@ async function openPage(idb: IDBFactory) {
   return { saves, persistent, events, send, of, host: () => host! };
 }
 
+/** Per language (A151): the ch1 name in the chapter separator line, and a line head that must not show. */
+const LANGS = [
+  { language: 'en', ch1: 'The Whispering Fen', foreign: /\bSG \d/ },
+  { language: 'da', ch1: 'Den Hviskende Sump', foreign: /\bDC \d|\b(Success|Failure)\b/ },
+] as const;
+
 describe('web edition smoke test (A128)', () => {
-  it('plays the starter arc into chapter 1 in the page, saves to IndexedDB and loads in a new page', async () => {
+  it.each(LANGS)('plays the starter arc into chapter 1 in the page ($language), saves to IndexedDB and loads in a new page', async ({ language, ch1, foreign }) => {
     const idb = new IDBFactory();
     const page = await openPage(idb);
     expect(page.persistent).toBe(true);
     const hero = buildCharacter(toBuildInput(quickBuild('fighter', db, Rng.fromSeed('smoke'))), db);
+    await page.send({ type: 'set_language', language });
     await page.send({ type: 'new_game', hero, mode: 'heroic' });
     const session = page.host().session;
 
@@ -76,6 +83,10 @@ describe('web edition smoke test (A128)', () => {
     // Without an AI every narration is the template and every button is authored data.
     expect(page.of('log').some((e) => e.entry.kind === 'narration')).toBe(true);
     expect(page.of('suggestions').at(-1)!.actions.every((a) => !a.say)).toBe(true);
+    // The whole run spoke the page's language: the chapter separator + no other language's roll words.
+    const lines = page.of('log').map((e) => e.entry.text);
+    expect(lines).toContain(`— ${ch1} —`);
+    expect(lines.filter((l) => foreign.test(l)).slice(0, 3)).toEqual([]);
 
     // Save in chapter 1, then reload the "page": a new host reads the same IndexedDB.
     await page.send({ type: 'save', slot: 'web-smoke', name: 'Fen' });
