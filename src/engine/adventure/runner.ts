@@ -30,6 +30,7 @@ import { discover, getMap } from '../world/travel';
 import { changeReputation, type ReputationChange } from '../world/factions';
 import type { Lore } from '../world/lore';
 import { trackQuests } from './quests';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import { conversationFor, conversationOffers, LEAVE_TALK, openOptions, optionFor, speakerOf, talkDoneKey, talkNode, DIALOGUE_PREFIX, TALK_PREFIX, type TalkProgress } from './conversation';
 
 export interface AdventureProgress {
@@ -70,6 +71,8 @@ export interface RunContext {
    * the same step see the new status/loyalty). Without it they are only collected in the result.
    */
   companions?: CompanionRoster;
+  /** Language for engine-written facts and lines (default English). */
+  msgs?: Messages;
 }
 
 export interface StepResult {
@@ -477,7 +480,8 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
   const { state } = ctx;
   if (o.cost > 0) {
     if (state.hero.coins < o.cost) {
-      result.facts.push(`You can't afford that (${formatCoins(o.cost)} needed).`);
+      const msgs = ctx.msgs ?? ENGLISH_MESSAGES;
+      result.facts.push(msgs.m('story.cantAfford', { coins: msgs.coins(o.cost) }));
       return;
     }
     state.hero.coins -= o.cost;
@@ -734,12 +738,9 @@ function giveCoins(hero: Character, cp: number, result: StepResult): void {
   result.coins += cp;
 }
 
-/** 1234 cp → "12 gp 3 sp 4 cp". */
-export function formatCoins(cp: number): string {
-  const gp = Math.floor(cp / 100);
-  const sp = Math.floor((cp % 100) / 10);
-  const c = cp % 10;
-  return [gp && `${gp} gp`, sp && `${sp} sp`, c && `${c} cp`].filter(Boolean).join(' ') || '0 cp';
+/** 1234 cp → "12 gp 3 sp 4 cp" (in the given language). */
+export function formatCoins(cp: number, msgs: Messages = ENGLISH_MESSAGES): string {
+  return msgs.coins(cp);
 }
 
 const COIN_CP = { cp: 1, sp: 10, gp: 100 } as const;

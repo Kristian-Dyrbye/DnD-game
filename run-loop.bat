@@ -14,6 +14,11 @@ REM Seconds to wait before retrying after a crash or usage limit
 set RETRY_WAIT=300
 REM Consecutive crashes allowed before giving up
 set MAX_CRASHES=3
+REM --- Usage-limit mode (starts after the normal retries fail on a usage limit) ---
+REM Seconds between usage-limit retries (600 = 10 min)
+set LIMIT_WAIT=600
+REM Number of usage-limit retries (12 x 10 min = 2 hours)
+set LIMIT_MAX_TRIES=12
 REM ==================================
 
 where claude >nul 2>nul
@@ -31,6 +36,7 @@ if not exist "logs" mkdir logs
 
 set RUN=0
 set CRASHES=0
+set LIMIT_TRIES=0
 
 :loop
 if exist "STOP.txt" (
@@ -69,6 +75,7 @@ echo Status: !STATUS!
 
 if /i "!STATUS!"=="CONTINUE" (
   set CRASHES=0
+  set LIMIT_TRIES=0
   goto loop
 )
 if /i "!STATUS!"=="DONE" (
@@ -83,15 +90,44 @@ if /i "!STATUS!"=="BLOCKED" (
   goto end
 )
 
-REM Anything else = crash, usage limit, or max-turns hit without a status write
+REM Anything else = crash, usage limit, or max-turns hit without a status write.
+REM Check this session's log(s) for a usage-limit message.
+set USAGE_LIMIT=0
+findstr /i /m /c:"hit your" /c:"session limit" /c:"weekly limit" /c:"usage limit" /c:"limit reached" /c:"rate_limit_error" "!LOG!*" >nul 2>nul && set USAGE_LIMIT=1
+if "!USAGE_LIMIT!"=="1" (
+  echo [INFO] Log shows a usage limit.
+)
+
+REM Already in usage-limit mode? Handle it there.
+if !LIMIT_TRIES! GTR 0 goto limit_mode
+
 set /a CRASHES+=1
 echo [WARN] Session ended without a valid status ^(crash !CRASHES!/%MAX_CRASHES%^). Last log: !LOG!.log
 if !CRASHES! GEQ %MAX_CRASHES% (
+  if "!USAGE_LIMIT!"=="1" goto limit_mode
   echo Too many consecutive failures. Check the latest logs, then run again.
   goto end
 )
 echo Waiting %RETRY_WAIT% seconds before retrying ^(may be a usage limit^)...
 timeout /t %RETRY_WAIT% /nobreak >nul
+set /a RUN-=1
+goto loop
+
+:limit_mode
+if not "!USAGE_LIMIT!"=="1" (
+  echo [ERROR] Session failed for a reason other than the usage limit. Stopping.
+  echo Check the latest log: !LOG!.log
+  goto end
+)
+if !LIMIT_TRIES! GEQ %LIMIT_MAX_TRIES% (
+  echo [ERROR] Still hitting the usage limit after %LIMIT_MAX_TRIES% slow retries. Stopping.
+  echo Run this script again once your usage has reset.
+  goto end
+)
+set /a LIMIT_TRIES+=1
+echo Usage-limit mode: retry !LIMIT_TRIES!/%LIMIT_MAX_TRIES% in %LIMIT_WAIT% seconds...
+echo Create STOP.txt to stop instead.
+timeout /t %LIMIT_WAIT% /nobreak >nul
 set /a RUN-=1
 goto loop
 

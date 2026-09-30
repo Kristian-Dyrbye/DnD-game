@@ -15,7 +15,7 @@ import { buy, haggle, sell, shopView, type ShopTable } from '../world/shops';
 import { equipItem, itemName, unequipItem } from '../character/inventory';
 import type { Lore } from '../world/lore';
 import type { ActionPort, GameSession } from '../session/GameSession';
-import { arriveInScene, availableActions, findScene, formatCoins, getProgress, leaveScenes, sceneForLocation, type AvailableAction, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
+import { arriveInScene, availableActions, findScene, getProgress, leaveScenes, sceneForLocation, type AvailableAction, perform, resolveEncounter, startAdventure, type RunContext, type StepResult } from './runner';
 import type { Adventure } from './schema';
 import { intentContext, keywordIntent, refineIntent, validateIntent, type Intent, type IntentContext } from './intent';
 import { narrateInto, type Narrator } from './narration';
@@ -81,7 +81,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     const id = getProgress(session.current)?.adventureId ?? pending ?? defaultId;
     const adventure = adventures.get(id) ?? activeSideQuest(session.current, id);
     if (!adventure) throw new Error(`Adventure "${id}" is not installed`);
-    return { state: session.current, adventure, rng: session.rng, ...(db && { db }), ...(opts.flags && { flags: opts.flags }), ...(opts.lore && { lore: opts.lore }), ...(opts.companions && { companions: opts.companions }) };
+    return { state: session.current, adventure, rng: session.rng, msgs: session.msgs, ...(db && { db }), ...(opts.flags && { flags: opts.flags }), ...(opts.lore && { lore: opts.lore }), ...(opts.companions && { companions: opts.companions }) };
   };
 
   const publish = async (session: GameSession, ctx: RunContext, r: StepResult, playerAction?: string): Promise<void> => {
@@ -113,10 +113,12 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     }
     // Authored conversation lines, verbatim (TTS voices them as dialogue).
     for (const d of r.dialogue ?? []) session.addLog('dialogue', d.text, d.speaker);
-    if (r.items.length || r.coins > 0) session.addLog('system', `Received: ${[...r.items.map((i) => `${i.quantity}× ${i.itemId.replace(/_/g, ' ')}`), ...(r.coins > 0 ? [formatCoins(r.coins)] : [])].join(', ')}`);
-    if (r.coins < 0) session.addLog('system', `Paid ${formatCoins(-r.coins)}.`);
-    if (r.removed?.length) session.addLog('system', `Handed over: ${r.removed.map((i) => `${i.quantity}× ${i.itemId.replace(/_/g, ' ')}`).join(', ')}`);
-    if (r.xp) session.addLog('system', `+${r.xp} XP`);
+    const { m, coins } = session.msgs;
+    const itemLine = (i: { quantity: number; itemId: string }) => m('story.item', { qty: i.quantity, item: i.itemId.replace(/_/g, ' ') });
+    if (r.items.length || r.coins > 0) session.addLog('system', m('story.received', { list: [...r.items.map(itemLine), ...(r.coins > 0 ? [coins(r.coins)] : [])].join(', ') }));
+    if (r.coins < 0) session.addLog('system', m('story.paid', { coins: coins(-r.coins) }));
+    if (r.removed?.length) session.addLog('system', m('story.handedOver', { list: r.removed.map(itemLine).join(', ') }));
+    if (r.xp) session.addLog('system', m('story.xp', { xp: r.xp }));
     for (const line of r.partyLog ?? []) session.addLog('system', line);
     for (const id of r.recruits ?? []) {
       const def = opts.companions?.companions.find((c) => c.id === id);
@@ -132,7 +134,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       const def = opts.companions?.companions.find((c) => c.id === p.id);
       if (!def) continue;
       partWithCompanion(session.current, def, p.status);
-      session.addLog('system', p.status === 'waiting' ? `${def.name} will wait for you.` : p.status === 'left' ? `${def.name} leaves the party.` : p.status === 'betrayed' ? `${def.name} has betrayed you!` : `${def.name} is dead.`);
+      session.addLog('system', m(p.status === 'waiting' ? 'companion.waits' : p.status === 'left' ? 'companion.leaves' : p.status === 'betrayed' ? 'companion.betrayed' : 'companion.dead', { name: def.name }));
     }
     for (const back of r.returns ?? []) {
       const def = opts.companions?.companions.find((c) => c.id === back.id);
@@ -143,11 +145,11 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       const seen = (session.current.extensions.tipsSeen as string[] | undefined) ?? [];
       if (seen.includes(tip)) continue;
       session.current.extensions.tipsSeen = [...seen, tip];
-      session.addLog('system', `Tip: ${tip}`);
+      session.addLog('system', m('story.tip', { tip }));
     }
     if (r.ending) {
       const end = ctx.adventure.endings.find((e) => e.id === r.ending);
-      session.addLog('narration', end?.text ?? 'The adventure ends.');
+      session.addLog('narration', end?.text ?? m('story.adventureEnds'));
       // The campaign goes on: the next chapter starts where this one ended (spec §7.2).
       const next = end?.next ? adventures.get(end.next) : undefined;
       if (next) {
@@ -169,7 +171,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       }
       session.autosave(); // before combat (spec §9)
       const fight = startFight(ctx, r.encounter, session.rng, db);
-      session.addLog('system', `Combat! ${def?.name ?? 'Enemies'} attack.`);
+      session.addLog('system', m('fight.start', { name: def?.name ?? m('fight.enemies') }));
       session.emit({ type: 'mood', mood: 'battle', ambience: null });
       narrateCombat(session, ctx, fight.enc.log);
       emitFight(session);
@@ -193,14 +195,15 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
   const endFight = async (session: GameSession, ctx: RunContext, how: FightEnd) => {
     const res = finishFight(ctx, how, { db: db!, rng: session.rng, ...(opts.lore && { lore: opts.lore }), ...(opts.flags && { flags: opts.flags }), ...(opts.defeats && { defeats: opts.defeats }) });
     emitFight(session);
+    const { m } = session.msgs;
     for (const line of res.scars ?? []) session.addLog('system', line);
     if (res.heroDied) {
-      session.addLog('narration', `${session.current.hero.name} has fallen. The world goes on without them…`);
+      session.addLog('narration', m('fight.heroFallen', { name: session.current.hero.name }));
       session.emit({ type: 'hero_fallen', name: session.current.hero.name });
       return;
     }
-    session.addLog('system', how === 'win' ? `Victory! +${res.xp} XP` : how === 'flee' ? 'You escape the fight.' : 'Defeat…');
-    if (how === 'win' && db && canLevelUp(session.current.hero, db)) session.addLog('system', 'You have enough experience to level up!');
+    session.addLog('system', how === 'win' ? m('fight.victory', { xp: res.xp }) : how === 'flee' ? m('fight.escaped') : m('fight.defeat'));
+    if (how === 'win' && db && canLevelUp(session.current.hero, db)) session.addLog('system', m('fight.canLevelUp'));
     await publish(session, ctx, res.step);
   };
 
@@ -215,8 +218,9 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     const here = getMap(session.current)?.current;
     if (!deps || !here || sideQuestState(session.current).active) return [];
     const day = Math.floor(session.current.time / MINUTES_PER_DAY);
-    const out: SuggestedAction[] = offersAt(session.current, here).map((o) => ({ id: `sq:take:${o.id}`, label: `Take a job from ${o.sourceLabel}: ${o.adventure.name}` }));
-    if (offerSources(session.current, deps, here).length && !sideQuestState(session.current).checked.includes(`${here}:${day}`)) out.push({ id: 'sq:look', label: 'Look for work' });
+    const { m } = session.msgs;
+    const out: SuggestedAction[] = offersAt(session.current, here).map((o) => ({ id: `sq:take:${o.id}`, label: m('job.take', { source: o.sourceLabel, name: o.adventure.name }) }));
+    if (offerSources(session.current, deps, here).length && !sideQuestState(session.current).checked.includes(`${here}:${day}`)) out.push({ id: 'sq:look', label: m('job.look') });
     return out;
   };
 
@@ -267,7 +271,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     maybeBanter(session);
     // A finished side quest hands control back to the main adventure.
     const done = finishActive(session.current);
-    if (done) session.addLog('system', `Job ${done.ending === 'done' ? 'complete' : 'over'}: ${done.name}.`);
+    if (done) session.addLog('system', session.msgs.m(done.ending === 'done' ? 'job.complete' : 'job.over', { name: done.name }));
     // A finished side quest or a chained next chapter changes the active adventure: re-read it.
     ctx = ctxFor(session);
     offer(session, ctx);
@@ -282,12 +286,13 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
   const sideQuestChoice = async (session: GameSession, actionId: string) => {
     const deps = sqDeps();
     const here = getMap(session.current)?.current;
-    if (!deps || !here) throw new Error('No work is offered here.');
+    const { m } = session.msgs;
+    if (!deps || !here) throw new Error(m('job.noneHere'));
     if (actionId === 'sq:look') {
       const added = refreshOffers(session.current, deps, here);
       const all = offersAt(session.current, here);
-      session.addLog('narration', all.length ? `You ask around for work. ${all.map((o) => `From ${o.sourceLabel}: "${o.adventure.summary}"`).join(' ')}` : 'You ask around, but nobody has work for you today.');
-      if (added.length === 0 && all.length === 0) session.addLog('system', 'Try again another day.');
+      session.addLog('narration', all.length ? m('job.askAround', { offers: all.map((o) => m('job.offer', { source: o.sourceLabel, summary: o.adventure.summary })).join(' ') }) : m('job.nobody'));
+      if (added.length === 0 && all.length === 0) session.addLog('system', m('job.tryLater'));
       offer(session, ctxFor(session));
       return;
     }
@@ -309,27 +314,28 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     async begin(session) {
       const ctx = ctxFor(session);
       if (activeFight(session.current)) {
-        session.addLog('system', 'The fight is still on!');
+        session.addLog('system', session.msgs.m('story.fightStillOn'));
         emitFight(session);
         return;
       }
       const p = getProgress(session.current);
       const awayAt = p?.away ? opts.lore?.locations.find((l) => l.id === p.away) : undefined;
       if (!p) await publish(session, ctx, startAdventure(ctx));
-      else if (awayAt) await narrateInto(session, { kind: 'outcome', facts: [`You are in ${awayAt.name}. ${awayAt.summary}`], ctx }, opts.narrator);
+      else if (awayAt) await narrateInto(session, { kind: 'outcome', facts: [session.msgs.m('story.youAreIn', { name: awayAt.name, summary: awayAt.summary })], ctx }, opts.narrator);
       else await narrateInto(session, { kind: 'scene', facts: [], ctx, visit: 'resume' }, opts.narrator);
       offer(session, ctx);
     },
     async travel(session, to, pace) {
-      if (activeFight(session.current)) throw new Error('You cannot travel in the middle of a fight!');
+      const { m, mn } = session.msgs;
+      if (activeFight(session.current)) throw new Error(m('travel.inFight'));
       const lore = opts.lore;
-      if (!lore) throw new Error('Travel needs the world map');
+      if (!lore) throw new Error(m('travel.noMap'));
       const ctx = ctxFor(session);
       const before = ctx.state.time;
       const dest = lore.locations.find((l) => l.id === to);
-      if (!dest) throw new Error('Unknown place');
+      if (!dest) throw new Error(m('travel.unknown'));
       let res = travel({ state: ctx.state, lore, rng: session.rng, ...(opts.travelEvents && { events: opts.travelEvents }) }, to, pace);
-      if (!res.ok) throw new Error(res.error ?? 'You cannot travel there.');
+      if (!res.ok) throw new Error(res.error ?? m('travel.cannot'));
       for (let guard = 0; ; guard++) {
         for (const roll of res.rolls) session.addRoll({ label: roll.label, dice: roll.d20.rolls, mode: roll.mode, modifier: roll.total - roll.d20.natural, total: roll.total, math: roll.text, ...(roll.success !== undefined && { success: roll.success }) });
         for (const l of res.log) session.addLog('narration', l.text);
@@ -337,37 +343,38 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
         const met = res.log.find((l) => l.eventId && opts.travelEvents?.events.find((e) => e.id === l.eventId)?.kind === 'discovery');
         if (deps && met && res.arrived) {
           const o = roadOffer(ctx.state, deps, to);
-          if (o) session.addLog('system', `A traveler you met on the road asks for help: ${o.adventure.name}.`);
+          if (o) session.addLog('system', m('job.roadOffer', { name: o.adventure.name }));
         }
         if (!res.encounter || guard >= 3) break;
-        session.addLog('system', 'Travel encounter! (Tactical combat arrives in a later build; you fight them off.)');
+        session.addLog('system', m('travel.encounter'));
         res = travel({ state: ctx.state, lore, rng: session.rng, ...(opts.travelEvents && { events: opts.travelEvents }) }, to, pace);
         if (!res.ok) break;
       }
       const days = Math.round((ctx.state.time - before) / 1440);
-      session.addLog('system', `You travel to ${dest.name}${days >= 1 ? ` (${days} day${days > 1 ? 's' : ''})` : ''}.`);
+      session.addLog('system', days >= 1 ? mn('travel.doneDays', days, { name: dest.name }) : m('travel.done', { name: dest.name }));
       const sceneId = sceneForLocation(ctx.adventure, to, getProgress(ctx.state)?.visited ?? []);
       if (sceneId) {
         await publish(session, ctx, arriveInScene(ctx, sceneId));
       } else {
         leaveScenes(ctx, to, dest.name);
-        await narrateInto(session, { kind: 'outcome', facts: [`You arrive at ${dest.name}. ${dest.summary}`], ctx }, opts.narrator);
+        await narrateInto(session, { kind: 'outcome', facts: [m('travel.arrive', { name: dest.name, summary: dest.summary })], ctx }, opts.narrator);
       }
       offer(session, ctx);
       session.timePassed(before);
       session.autosave();
     },
     async command(session, cmd) {
+      const { m, coins } = session.msgs;
       if (cmd.type === 'companion_control') {
-        if (activeFight(session.current)) throw new Error('Change control outside of combat.');
+        if (activeFight(session.current)) throw new Error(m('companion.controlOutsideCombat'));
         setControl(session.current, cmd.companionId, cmd.control);
         const c = session.current.companions.find((x) => x.id === cmd.companionId)!;
-        session.addLog('system', `${c.name} is now ${cmd.control === 'player' ? 'controlled by you' : 'controlled by the AI'} in combat.`);
+        session.addLog('system', m(cmd.control === 'player' ? 'companion.controlPlayer' : 'companion.controlAi', { name: c.name }));
         return;
       }
       if (cmd.type === 'level_up') {
-        if (!db) throw new Error('Leveling needs the SRD data');
-        if (activeFight(session.current)) throw new Error('Finish the fight first.');
+        if (!db) throw new Error(m('level.needsSrd'));
+        if (activeFight(session.current)) throw new Error(m('level.finishFight'));
         const before = totalLevel(session.current.hero);
         const res = levelUp(session.current.hero, db, {
           classId: cmd.classId,
@@ -381,18 +388,18 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
           ...(cmd.skills && { skills: cmd.skills as Skill[] }),
         });
         session.current.hero = res.character;
-        session.addLog('system', `Level ${before + 1}! +${res.hpGained} HP${res.features.length ? `. New: ${res.features.join(', ')}` : ''}.`);
+        session.addLog('system', res.features.length ? m('level.upNew', { level: before + 1, hp: res.hpGained, features: res.features.join(', ') }) : m('level.up', { level: before + 1, hp: res.hpGained }));
         if (opts.companions) for (const line of levelCompanionsWithHero(session.current, opts.companions, db)) session.addLog('system', line);
         return;
       }
       if (cmd.type === 'combat_act' || cmd.type === 'combat_flee') {
-        if (!db) throw new Error('Combat needs the SRD data');
+        if (!db) throw new Error(m('fight.needsSrd'));
         const f = activeFight(session.current);
-        if (!f) throw new Error('There is no fight going on.');
+        if (!f) throw new Error(m('fight.none'));
         const ctx = ctxFor(session);
         if (cmd.type === 'combat_flee') {
           const def = ctx.adventure.encounters.find((e) => e.id === f.encounterId);
-          if (def && !def.canFlee) throw new Error('There is no escape from this fight!');
+          if (def && !def.canFlee) throw new Error(m('fight.noEscape'));
           await endFight(session, ctx, 'flee');
         } else {
           const seq = f.enc.logSeq ?? f.enc.log.length;
@@ -409,54 +416,54 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       }
       const hero = session.current.hero;
       if (cmd.type === 'equip' || cmd.type === 'unequip') {
-        if (!db) throw new Error('Equipment needs the SRD data');
+        if (!db) throw new Error(m('equip.needsSrd'));
         const r = cmd.type === 'equip' ? equipItem(hero, cmd.uid, db, cmd.slot) : unequipItem(hero, cmd.uid, db);
         if (!r.ok) throw new Error(r.error);
         return;
       }
       if (cmd.type === 'repair') {
-        if (!db) throw new Error('Repairs need the SRD data');
-        if (activeFight(session.current)) throw new Error('Not in the middle of a fight!');
+        if (!db) throw new Error(m('repair.needsSrd'));
+        if (activeFight(session.current)) throw new Error(m('repair.inFight'));
         let r;
         if (cmd.how === 'smith') {
           const here = getMap(session.current)?.current;
           const smith = opts.shops?.shops.find((s) => s.id === cmd.shopId && s.kind === 'smith');
-          if (!smith || smith.locationId !== here) throw new Error('There is no smith here.');
+          if (!smith || smith.locationId !== here) throw new Error(m('repair.noSmith'));
           r = repairAtSmith(hero, cmd.uid, db);
         } else r = mendYourself(hero, cmd.uid);
         if (!r.ok) throw new Error(r.error);
         const before = session.current.time;
         session.current.hero = r.character;
         session.current.time += r.minutes;
-        session.addLog('system', `${r.text}${r.coins ? ` (${formatCoins(r.coins)})` : ''}`);
+        session.addLog('system', r.coins ? m('repair.done', { text: r.text, coins: coins(r.coins) }) : r.text);
         session.timePassed(before);
         return;
       }
-      if (!db || !opts.lore || !opts.shops) throw new Error('Shops are not available');
+      if (!db || !opts.lore || !opts.shops) throw new Error(m('shop.unavailable'));
       const here = getMap(session.current)?.current;
       const shop = opts.shops.shops.find((s) => s.id === cmd.shopId);
-      if (!shop || shop.locationId !== here) throw new Error('That shop is not here.');
+      if (!shop || shop.locationId !== here) throw new Error(m('shop.notHere'));
       const sctx = { state: session.current, db, lore: opts.lore, table: opts.shops };
       if (cmd.type === 'shop_buy') {
         const r = buy(sctx, cmd.shopId, cmd.itemId, cmd.qty);
         if (!r.ok) throw new Error(r.error);
-        session.addLog('system', `Bought ${cmd.qty}× ${itemName(cmd.itemId, db)} for ${formatCoins(-r.coins)}.`);
+        session.addLog('system', m('shop.bought', { qty: cmd.qty, item: itemName(cmd.itemId, db), coins: coins(-r.coins) }));
       } else if (cmd.type === 'shop_sell') {
         const entry = hero.inventory.find((i) => i.uid === cmd.uid);
         const r = sell(sctx, cmd.shopId, cmd.uid, cmd.qty);
         if (!r.ok) throw new Error(r.error);
-        session.addLog('system', `Sold ${cmd.qty}× ${entry ? itemName(entry.itemId, db) : 'item'} for ${formatCoins(r.coins)}.`);
+        session.addLog('system', m('shop.sold', { qty: cmd.qty, item: entry ? itemName(entry.itemId, db) : m('shop.item'), coins: coins(r.coins) }));
       } else if (cmd.type === 'shop_haggle') {
         const r = haggle({ ...sctx, rng: session.rng }, cmd.shopId);
         if (!r.ok) throw new Error(r.error);
         session.addRoll({ label: r.roll.label, dice: r.roll.d20.rolls, mode: r.roll.mode, modifier: r.roll.total - r.roll.d20.natural, total: r.roll.total, math: r.roll.text, ...(r.roll.success !== undefined && { success: r.roll.success }) });
-        session.addLog('system', r.success ? `${shop.name}: the shopkeeper grudgingly offers better prices today.` : `${shop.name}: the shopkeeper will not budge.`);
+        session.addLog('system', m(r.success ? 'shop.haggleWon' : 'shop.haggleLost', { shop: shop.name }));
       }
       const view = shopView(sctx, cmd.shopId);
       if (view) session.emit({ type: 'shop', shop: view });
     },
     async choose(session, actionId) {
-      if (activeFight(session.current)) throw new Error('You are in the middle of a fight!');
+      if (activeFight(session.current)) throw new Error(session.msgs.m('story.inFight'));
       if (actionId.startsWith('sq:')) return sideQuestChoice(session, actionId);
       const ctx = ctxFor(session);
       const label = availableActions(ctx).find((a) => a.id === actionId)?.label;
@@ -468,7 +475,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       session.timePassed(before);
     },
     async say(session, text) {
-      if (activeFight(session.current)) throw new Error('You are in the middle of a fight!');
+      if (activeFight(session.current)) throw new Error(session.msgs.m('story.inFight'));
       session.addLog('player', text);
       const ctx = ctxFor(session);
       const ictx = intentContext(ctx);

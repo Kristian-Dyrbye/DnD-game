@@ -4,7 +4,8 @@
  */
 import type { DungeonView } from '../../engine/world/dungeon';
 import type { DialogueView } from '../../engine/adventure/conversation';
-import { signal } from '@preact/signals';
+import { effect, signal } from '@preact/signals';
+import { language } from '../ui/i18n';
 import type { GameState, LogEntry, RollRecord } from '../../engine/session/gameState';
 import type { ClientCommand, ServerEvent, SuggestedAction } from '../../shared/protocol';
 import type { ShopView } from '../../engine/world/shops';
@@ -112,10 +113,16 @@ export function connect(): void {
   transport.connect({
     onEvent: applyEvent,
     onStatus: (s) => (connection.value = s),
-    // After a reconnect, ask for a fresh snapshot of the running game.
-    onOpen: () => (gameState.value ? [{ type: 'get_state' }] : []),
+    // The engine writes its lines in the player's language; after a reconnect, ask for a fresh snapshot.
+    onOpen: () => [{ type: 'set_language', language: language.peek() }, ...(gameState.value ? [{ type: 'get_state' } as const] : [])],
   });
 }
+
+// A language switch while connected reaches the engine at once (new lines only; old ones stay).
+effect(() => {
+  const lang = language.value;
+  if (connection.peek() === 'open') transport.send({ type: 'set_language', language: lang });
+});
 
 /** Sends a command, connecting first if needed (commands wait in the transport's outbox until open). */
 export function send(cmd: ClientCommand): void {

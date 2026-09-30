@@ -3,6 +3,17 @@
  * effective volumes, and which sound effect a server event or UI action triggers.
  */
 import type { ServerEvent } from '../../shared/protocol';
+import { ENGINE_CATALOGS, type EngineKey } from '../../engine/i18n';
+
+/** The fixed start of an engine line in every language ("Bought ", "Købt "…), so SFX work in any language. */
+function startsLike(keys: EngineKey[]): (text: string) => boolean {
+  const heads = Object.values(ENGINE_CATALOGS).flatMap((c) => keys.map((k) => c[k]?.split('{')[0] ?? '')).filter((h) => h.length > 1);
+  return (text) => heads.some((h) => text.startsWith(h));
+}
+
+const COIN_LINE = startsLike(['shop.bought', 'shop.sold', 'story.received']);
+const JOB_DONE_LINE = startsLike(['job.complete']);
+const TRAVEL_LINE = startsLike(['travel.done', 'travel.doneDays.one', 'travel.doneDays.other']);
 
 export interface Volumes {
   master: number;
@@ -38,11 +49,11 @@ export function sfxForEvent(e: ServerEvent): string | undefined {
     case 'log': {
       const t = e.entry.text;
       if (e.entry.kind !== 'system') return undefined;
-      if (/^(Bought|Sold|Received)/.test(t)) return 'coin';
-      if (/^Job complete/.test(t)) return 'quest_complete';
-      if (/^You travel to/.test(t)) return 'footstep_dirt';
+      if (COIN_LINE(t)) return 'coin';
+      if (JOB_DONE_LINE(t)) return 'quest_complete';
+      if (TRAVEL_LINE(t)) return 'footstep_dirt';
       if (/^\+\d+ XP/.test(t)) return 'gem';
-      if (/reputation/.test(t)) return 'ui_tick';
+      if (/reputation|omdømme/.test(t)) return 'ui_tick';
       return undefined;
     }
     default:

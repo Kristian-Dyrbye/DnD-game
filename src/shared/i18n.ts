@@ -7,11 +7,10 @@
  */
 import { en, type MessageKey } from './i18n/en';
 import { da } from './i18n/da';
+import { format, pluralForm, type Language, type Params } from './i18nCore';
 
 export type { MessageKey } from './i18n/en';
-
-export const LANGUAGES = ['en', 'da'] as const;
-export type Language = (typeof LANGUAGES)[number];
+export { LANGUAGES, isLanguage, format, pluralForm, type Language, type Params } from './i18nCore';
 
 /** Each language's name in itself (shown in the pickers). */
 export const LANGUAGE_NAMES: Record<Language, string> = { en: 'English', da: 'Dansk' };
@@ -19,33 +18,12 @@ export const LANGUAGE_NAMES: Record<Language, string> = { en: 'English', da: 'Da
 export type Catalog = Partial<Record<MessageKey, string>>;
 export const CATALOGS: Record<Language, Catalog> = { en, da };
 
-export type Params = Record<string, string | number>;
-
 /** Keys that come as a `.one` / `.other` pair, named by their base. */
 export type PluralKey = { [K in MessageKey]: K extends `${infer B}.one` ? (`${B}.other` extends MessageKey ? B : never) : never }[MessageKey];
-
-export function isLanguage(value: unknown): value is Language {
-  return typeof value === 'string' && (LANGUAGES as readonly string[]).includes(value);
-}
-
-/** Replaces `{name}` with params.name; unknown placeholders stay as written. */
-export function format(text: string, params?: Params): string {
-  if (!params) return text;
-  return text.replace(/\{(\w+)\}/g, (whole, name: string) => (name in params ? String(params[name]) : whole));
-}
 
 /** The text for a key in a language (falls back to English, then to the key itself). */
 export function translate(lang: Language, key: MessageKey, params?: Params): string {
   return format(CATALOGS[lang][key] ?? en[key] ?? key, params);
-}
-
-const rules = new Map<Language, Intl.PluralRules>();
-
-/** 'one' or 'other' for a count in a language (English and Danish only have these two). */
-export function pluralForm(lang: Language, count: number): 'one' | 'other' {
-  let r = rules.get(lang);
-  if (!r) rules.set(lang, (r = new Intl.PluralRules(lang)));
-  return r.select(count) === 'one' ? 'one' : 'other';
 }
 
 /** A plural text: `translatePlural('da', 'status.voices', 2)` → "2 stemmer installeret". `{count}` is filled in. */

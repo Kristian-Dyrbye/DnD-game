@@ -10,6 +10,8 @@ import type { SaveMeta } from '../../shared/save';
 import { totalLevel, type Character } from '../core/creature';
 import { Rng } from '../core/rng';
 import type { SystemRegistry } from '../systems/registry';
+import type { Language } from '../../shared/i18nCore';
+import { messages, type Messages } from '../i18n';
 import { deletePage, reorderPages, savePage } from './journal';
 import { GameStateSchema, LOG_LIMIT, ROLL_LIMIT, type GameState, type LogEntry, type RollRecord } from './gameState';
 
@@ -82,10 +84,10 @@ export function newGameState(hero: Character, mode: GameState['mode'], seed: str
 const fallbackActions: ActionPort = {
   async say(session, text) {
     session.addLog('player', text);
-    session.addLog('system', 'The story engine is not connected yet.');
+    session.addLog('system', session.msgs.m('session.noEngine'));
   },
   async choose(session, actionId) {
-    session.addLog('system', `Action "${actionId}" is not available yet.`);
+    session.addLog('system', session.msgs.m('session.noAction', { id: actionId }));
   },
 };
 
@@ -95,6 +97,8 @@ export class GameSession {
   private thumbnail: string | undefined;
   private rngInstance: Rng | null = null;
   private listeners = new Set<(e: ServerEvent) => void>();
+  /** Language of the lines the engine writes from now on (the player's setting; old lines stay as written). */
+  language: Language = 'en';
 
   constructor(private readonly ports: SessionPorts = {}) {}
 
@@ -106,6 +110,11 @@ export class GameSession {
 
   emit(e: ServerEvent): void {
     for (const l of this.listeners) l(e);
+  }
+
+  /** Engine texts in the session's language. */
+  get msgs(): Messages {
+    return messages(this.language);
   }
 
   get running(): boolean {
@@ -205,6 +214,9 @@ export class GameSession {
         case 'thumbnail':
           this.thumbnail = cmd.data;
           return;
+        case 'set_language':
+          this.language = cmd.language;
+          return;
         case 'new_game': {
           this.thumbnail = undefined;
           const seed = cmd.seed ?? this.ports.newSeed?.() ?? `${Date.now()}-${Math.random()}`;
@@ -217,19 +229,19 @@ export class GameSession {
           return;
         }
         case 'get_state':
-          if (!this.running) return this.fail('No game is running', reqId);
+          if (!this.running) return this.fail(this.msgs.m('session.noGame'), reqId);
           this.emit(this.snapshot());
           return;
         case 'load': {
-          if (!this.ports.saves) return this.fail('Saving is not available', reqId);
+          if (!this.ports.saves) return this.fail(this.msgs.m('session.noSaving'), reqId);
           this.start(this.ports.saves.load(cmd.slot));
           this.emit(this.snapshot());
           await this.ports.actions?.begin?.(this);
           return;
         }
         case 'travel':
-          if (!this.running) return this.fail('No game is running', reqId);
-          if (!this.ports.actions?.travel) return this.fail('Travel is not available', reqId);
+          if (!this.running) return this.fail(this.msgs.m('session.noGame'), reqId);
+          if (!this.ports.actions?.travel) return this.fail(this.msgs.m('session.noTravel'), reqId);
           await this.ports.actions.travel(this, cmd.to, cmd.pace);
           this.emit(this.snapshot());
           this.emit({ type: 'ack', command: cmd.type, ...(reqId && { reqId }) });
@@ -245,15 +257,15 @@ export class GameSession {
         case 'level_up':
         case 'companion_control':
         case 'repair':
-          if (!this.running) return this.fail('No game is running', reqId);
-          if (!this.ports.actions?.command) return this.fail('Not available', reqId);
+          if (!this.running) return this.fail(this.msgs.m('session.noGame'), reqId);
+          if (!this.ports.actions?.command) return this.fail(this.msgs.m('session.notAvailable'), reqId);
           await this.ports.actions.command(this, cmd);
           this.emit(this.snapshot());
           return;
         case 'journal_save':
         case 'journal_delete':
         case 'journal_reorder': {
-          if (!this.running) return this.fail('No game is running', reqId);
+          if (!this.running) return this.fail(this.msgs.m('session.noGame'), reqId);
           const j = this.current.journal;
           let savedId: string | undefined;
           if (cmd.type === 'journal_save') savedId = savePage(j, cmd.page, this.current.time);
@@ -263,27 +275,27 @@ export class GameSession {
           return;
         }
         case 'save': {
-          if (!this.running) return this.fail('No game is running', reqId);
-          if (!this.ports.saves) return this.fail('Saving is not available', reqId);
+          if (!this.running) return this.fail(this.msgs.m('session.noGame'), reqId);
+          if (!this.ports.saves) return this.fail(this.msgs.m('session.noSaving'), reqId);
           const meta = this.ports.saves.save(cmd.slot, this.saveMeta(cmd.name), this.current);
           this.emit({ type: 'saved', meta });
           return;
         }
         case 'say':
-          if (!this.running) return this.fail('No game is running', reqId);
+          if (!this.running) return this.fail(this.msgs.m('session.noGame'), reqId);
           await (this.ports.actions ?? fallbackActions).say(this, cmd.text);
           this.emit(this.snapshot());
           this.emit({ type: 'ack', command: cmd.type, ...(reqId && { reqId }) });
           return;
         case 'choose':
-          if (!this.running) return this.fail('No game is running', reqId);
+          if (!this.running) return this.fail(this.msgs.m('session.noGame'), reqId);
           await (this.ports.actions ?? fallbackActions).choose(this, cmd.actionId);
           this.emit(this.snapshot());
           this.emit({ type: 'ack', command: cmd.type, ...(reqId && { reqId }) });
           return;
       }
     } catch (err) {
-      this.fail(err instanceof Error ? err.message : 'Something went wrong', reqId);
+      this.fail(err instanceof Error ? err.message : this.msgs.m('session.failed'), reqId);
     }
   }
 

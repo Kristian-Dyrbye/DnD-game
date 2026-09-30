@@ -14,6 +14,7 @@ import type { Encounter } from '../engine/combat/encounter';
 import type { DungeonView } from '../engine/world/dungeon';
 import type { DialogueView } from '../engine/adventure/conversation';
 import { SLOT_ID_PATTERN, type SaveMeta } from './save';
+import { LANGUAGES } from './i18nCore';
 
 const base = { reqId: z.string().max(40).optional() };
 
@@ -81,6 +82,8 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
   /** A small picture of the hero (gear + scars) the client rendered; used as the save thumbnail. */
   z.object({ ...base, type: z.literal('thumbnail'), data: z.string().max(120_000).regex(/^data:image\/(png|jpeg|webp);base64,/) }),
   z.object({ ...base, type: z.literal('load'), slot: z.string().regex(SLOT_ID_PATTERN) }),
+  /** The player's language: engine-written lines from now on use it (A141). */
+  z.object({ ...base, type: z.literal('set_language'), language: z.enum(LANGUAGES) }),
   /** Travel on the world map to a known location. */
   z.object({ ...base, type: z.literal('travel'), to: z.string().max(60), pace: z.enum(['slow', 'normal', 'fast']).default('normal') }),
   /** Inventory. */
