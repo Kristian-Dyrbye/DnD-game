@@ -113,6 +113,30 @@ describe('buildNarrationPrompt', () => {
     expect(user).not.toContain('Player: I open the door.');
   });
 
+  it('forbids invented inscriptions, heraldry, mounts, gear and names', () => {
+    const system = buildNarrationPrompt(base(), { kind: 'scene', facts: [] }).messages[0]!.content;
+    expect(system).toMatch(/Never invent written words \(inscriptions/);
+    expect(system).toMatch(/heraldry/);
+    expect(system).toMatch(/mounts or animals/);
+    expect(system).toMatch(/named people, places and objects/);
+    expect(system).toMatch(/do not give them horses, keys, relics/);
+  });
+
+  it('tells the model whether the hero arrives, returns or resumes', () => {
+    const taskOf = (visit?: 'first' | 'return' | 'resume') =>
+      buildNarrationPrompt(base(), { kind: 'scene', facts: [], ...(visit && { visit }) }).messages[1]!.content.split('TASK:\n')[1]!;
+    expect(taskOf()).toMatch(/arriving in this scene for the first time/);
+    expect(taskOf('first')).toBe(taskOf());
+    expect(taskOf('return')).toMatch(/RETURNS to a place they have already been/);
+    expect(taskOf('return')).toMatch(/Do not describe it as a first arrival/);
+    expect(taskOf('resume')).toMatch(/Do not describe an arrival/);
+  });
+
+  it('keeps bystanders and prisoners out of combat narration', () => {
+    const user = buildNarrationPrompt(base(), { kind: 'combat', facts: ['Mira hits the cultist.'] }).messages[1]!.content;
+    expect(user).toMatch(/Only the fighters named in these moments act or get hurt; bystanders and prisoners/);
+  });
+
   it('omits empty sections', () => {
     const c = { ...base(), flags: [], summary: '', recent: [], cards: [], tone: undefined };
     delete c.tone;

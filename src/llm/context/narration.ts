@@ -36,6 +36,8 @@ export interface NarrationRequest {
   playerAction?: string;
   /** Engine-resolved facts, in order. The narrator must convey all of them and invent nothing mechanical. */
   facts: string[];
+  /** Scene narration: first arrival (default), a return to a visited place, or resuming a loaded game. */
+  visit?: 'first' | 'return' | 'resume';
 }
 
 export interface BuiltPrompt {
@@ -53,6 +55,8 @@ export const NARRATION_RULES = [
   'Describe ONLY what the FIXED FACTS and scene notes establish. Never invent items, gold, damage numbers, dice results, new exits or rewards.',
   'Never decide whether an action succeeds: the facts already say so.',
   'Do not list options or ask "what do you do?" — the game shows choices separately.',
+  'Never invent written words (inscriptions, signs, letters, runes), heraldry, emblems or symbols, mounts or animals, or named people, places and objects that the prompt does not mention.',
+  'The hero carries and rides only what STATE and the facts say; do not give them horses, keys, relics or other gear.',
   'Keep NPC secrets hidden unless a fact reveals them. No headings, no bullet lists, no game jargon like "DC".',
 ];
 
@@ -126,7 +130,13 @@ function section(title: string, lines: string[]): string {
 }
 
 function task(req: NarrationRequest): string {
-  if (req.kind === 'scene') return 'In 3 to 5 sentences, describe the hero arriving in this scene, weaving in the fixed facts.';
-  if (req.kind === 'combat') return 'In one or two short, vivid sentences, narrate these moments of the fight. No numbers or game terms; do not add new hits, deaths or effects.';
+  if (req.kind === 'scene') {
+    if (req.visit === 'return')
+      return 'The hero RETURNS to a place they have already been (see STORY SO FAR). In 3 to 5 sentences, show what is familiar or has changed and weave in the fixed facts. Do not describe it as a first arrival.';
+    if (req.visit === 'resume') return 'The story resumes where the hero already is. In 3 to 5 sentences, remind the player of the surroundings. Do not describe an arrival.';
+    return 'In 3 to 5 sentences, describe the hero arriving in this scene for the first time, weaving in the fixed facts.';
+  }
+  if (req.kind === 'combat')
+    return 'In one or two short, vivid sentences, narrate these moments of the fight. No numbers or game terms; do not add new hits, deaths or effects. Only the fighters named in these moments act or get hurt; bystanders and prisoners in the scene take no part.';
   return `The player: "${req.playerAction ?? 'acts'}". In 3 to 5 sentences, narrate what happens, following the fixed facts exactly.`;
 }

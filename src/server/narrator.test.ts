@@ -51,6 +51,13 @@ describe('llmNarrator', () => {
     expect(call.messages[1]!.content).toContain('"Study the notices"');
   });
 
+  it('passes a return visit on to the prompt', async () => {
+    const llm = new MockLlm({ script: ['Back again.'] });
+    const provider: LlmProvider = { ...wrap(llm), name: 'ollama' };
+    await collect(llmNarrator(() => provider, lore, db)({ kind: 'scene', facts: [], ctx: job().ctx, visit: 'return' }));
+    expect(llm.calls[0]!.messages[1]!.content).toMatch(/RETURNS to a place they have already been/);
+  });
+
   it('uses short replies with first-chunk and idle timeouts, and a prompt within the CPU budget', async () => {
     const llm = new MockLlm({ script: ['Fine.'] });
     const provider: LlmProvider = { ...wrap(llm), name: 'ollama' };

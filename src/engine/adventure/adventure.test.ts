@@ -161,6 +161,7 @@ describe('scene runner', () => {
     perform(c, 'exit.to_mill');
     const into = perform(c, 'exit.unlock');
     expect(into.facts).toContain('Two giant rats burst from the sacks!');
+    expect(into.returning).toBe(false);
     const win = resolveEncounter(c, 'cellar_rats', 'win');
     expect(win.xp).toBe(50);
     expect(c.state.flags['adv.millbrook_demo.rats_cleared']).toBe(true);
@@ -170,6 +171,7 @@ describe('scene runner', () => {
     perform(c, 'exit.up');
     const back = perform(c, 'exit.back');
     expect(back.facts).toContain('Walking back into the square, you hear children cheering about the rats.');
+    expect(back.returning).toBe(true);
     const end = perform(c, 'claim_reward');
     expect(end.ending).toBe('rats_cleared');
     expect(c.state.extensions.reputation).toEqual({ crown_of_aurelmark: 1 });

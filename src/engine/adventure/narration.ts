@@ -17,8 +17,12 @@ export interface NarrationJob {
   facts: string[];
   /** Index in `facts` where the scene arrival starts (scene jobs). */
   arrivalIndex?: number;
+  /** Scene jobs: first arrival, a return to a visited scene, or resuming a loaded game in place. */
+  visit?: NarrationVisit;
   ctx: RunContext;
 }
+
+export type NarrationVisit = 'first' | 'return' | 'resume';
 
 /** Streams narration text for a job. Throwing or yielding nothing triggers the template. */
 export type Narrator = (job: NarrationJob, signal?: AbortSignal) => AsyncIterable<string>;

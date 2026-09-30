@@ -76,6 +76,8 @@ export interface StepResult {
   entered: string[];
   /** Index in `facts` where the last scene arrival begins (facts before it happened on the way). */
   arrivalIndex?: number;
+  /** True when the last scene entered had been visited before (the narrator must not re-tell a first arrival). */
+  returning?: boolean;
   encounter?: string;
   ending?: string;
   items: { itemId: string; quantity: number }[];
@@ -367,6 +369,7 @@ function enterScene(ctx: RunContext, sceneId: string, result: StepResult, depth 
   ctx.state.location = { adventureId: ctx.adventure.id, sceneId, name: scene.name };
   result.entered.push(sceneId);
   result.arrivalIndex = result.facts.length;
+  result.returning = !firstVisit;
   if (scene.onEnter && firstVisit) applyOutcome(ctx, scene.onEnter, result, depth + 1);
   fireBeats(ctx, result, depth + 1);
 }

@@ -105,6 +105,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
           ctx,
           ...(playerAction && { playerAction }),
           ...(r.arrivalIndex !== undefined && { arrivalIndex: r.arrivalIndex }),
+          ...(r.entered.length > 0 && { visit: r.returning ? 'return' : 'first' }),
         },
         opts.narrator,
       );
@@ -305,7 +306,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       const awayAt = p?.away ? opts.lore?.locations.find((l) => l.id === p.away) : undefined;
       if (!p) await publish(session, ctx, startAdventure(ctx));
       else if (awayAt) await narrateInto(session, { kind: 'outcome', facts: [`You are in ${awayAt.name}. ${awayAt.summary}`], ctx }, opts.narrator);
-      else await narrateInto(session, { kind: 'scene', facts: [], ctx }, opts.narrator);
+      else await narrateInto(session, { kind: 'scene', facts: [], ctx, visit: 'resume' }, opts.narrator);
       offer(session, ctx);
     },
     async travel(session, to, pace) {

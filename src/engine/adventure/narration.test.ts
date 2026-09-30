@@ -117,6 +117,18 @@ describe('narrateInto', () => {
     expect(order).toEqual(['roll', 'narrate']);
   });
 
+  it('tells the narrator whether a scene is a first arrival or a return', async () => {
+    const visits: (string | undefined)[] = [];
+    const narrator: Narrator = async function* (job) {
+      if (job.kind === 'scene') visits.push(job.visit);
+      yield 'ok';
+    };
+    const { session } = await running(narrator);
+    await session.handle({ type: 'choose', actionId: 'exit.to_mill' });
+    await session.handle({ type: 'choose', actionId: 'exit.back' });
+    expect(visits).toEqual(['first', 'first', 'return']);
+  });
+
   it('works directly on a session with no narrator', async () => {
     const { session } = await running();
     const c: RunContext = { state: session.current, adventure, rng: session.rng, db };
