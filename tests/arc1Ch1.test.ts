@@ -147,7 +147,8 @@ describe('ch1_whispering_fen: companions and encounter scaling', () => {
   });
 
   it('encounters keep their authored groups and declare scaling pools of their own monsters', () => {
-    const counts = (id: string) => Object.fromEntries(ADV.encounters.find((e) => e.id === id)!.monsters.map((m) => [m.id, m.count]));
+    // Summed over groups: conditional groups (A132: one ghoul skipped if the landing is known) count at full strength.
+    const counts = (id: string) => ADV.encounters.find((e) => e.id === id)!.monsters.reduce<Record<string, number>>((o, m) => ({ ...o, [m.id]: (o[m.id] ?? 0) + m.count }), {});
     expect(counts('abbey_nave')).toEqual({ zombie: 4, ghoul: 1 });
     expect(counts('abbey_nave_midnight')).toEqual({ zombie: 4, ghoul: 1, specter: 1 });
     expect(counts('thornwife_raid')).toEqual({ scout: 2, giant_spider: 1 });
@@ -188,7 +189,8 @@ describe('ch1_whispering_fen: reachability', () => {
 
   it.each(['fen_cured', 'fen_purged', 'fen_abandoned'])('the solver reaches ending %s from the tribunal', (ending) => {
     const base = ctx({ 'arc.main.cure_recipe': true });
-    const res = solveAdventure({ state: base.state, adventure: startingAt('lantern_hold_tribunal'), db, flags: registry() }, ending, { depth: 20, nodes: 20000 });
+    // A132: Grell's conversation multiplies the states before the purge pledge (~21k nodes, < 1 s).
+    const res = solveAdventure({ state: base.state, adventure: startingAt('lantern_hold_tribunal'), db, flags: registry() }, ending, { depth: 20, nodes: 50000 });
     expect(res.ok, res.reason).toBe(true);
   });
 
@@ -264,6 +266,176 @@ describe('ch1_whispering_fen: reachability', () => {
     startAdventure(c);
     play(c, ['pledge_purge']);
     expect(c.state.flags).toMatchObject({ 'world.nettle_status': 'left', 'world.corwin_loyalty': 40, 'arc.main.hollowmere_fate': 'purged', 'arc.main.wick_fate': 'burned' });
+  });
+});
+
+describe('ch1_whispering_fen: A132 conversations, approaches and consequences', () => {
+  const L = 'arc.main.ch1_';
+  /** Always rolls 1 (every check fails). */
+  class UnluckyRng extends Rng {
+    constructor() {
+      super([1, 2, 3, 4]);
+    }
+    override int(min: number, max: number): number {
+      return max === 20 ? 1 : super.int(min, max);
+    }
+  }
+  const at = (scene: string, flags: Flags = {}, opts: { hour?: number; lucky?: boolean; unlucky?: boolean } = {}) => {
+    const c = ctx(flags, { ...opts, adventure: startingAt(scene) });
+    if (opts.unlucky) c.rng = new UnluckyRng();
+    startAdventure(c);
+    return c;
+  };
+  const beats = (c: RunContext) => getProgress(c.state)!.beats;
+
+  it('every key NPC has a conversation with at least 3 approaches that do something; hub scenes vary on return', () => {
+    for (const id of ['odo_brask', 'maud_grell', 'grandmother_wick', 'mother_sallow', 'brother_ashby', 'nettle', 'abbot_cendric']) {
+      const npc = ADV.npcs.find((n) => n.id === id)!;
+      const approaches = new Set<string>();
+      for (const conv of npc.conversations) {
+        for (const node of conv.nodes) {
+          for (const o of node.options) {
+            const out = [o.outcome, o.check?.success, o.check?.failure];
+            if (o.check || out.some((x) => x && (x.flags.length || x.cost || x.conditions.length || x.approval.length || x.reputation.length))) approaches.add(o.id);
+          }
+        }
+      }
+      expect(approaches.size, id).toBeGreaterThanOrEqual(3);
+    }
+    for (const s of ['ravensgate_gates', 'hollowmere_stilts', 'thornwife_moot', 'drowned_abbey_undercroft', 'lantern_hold_tribunal']) {
+      expect(allScenes(ADV).find((x) => x.id === s)!.revisitSeed, s).toBeDefined();
+    }
+  });
+
+  it('Brask: confiding opens the postern at night and brings him to the tribunal as a witness', () => {
+    const c = at('ravensgate_gates', {}, { hour: 22, lucky: true });
+    expect(ids(c)).not.toContain('talk_brask'); // replaced by the conversation
+    play(c, ['talk.odo_brask.gate', 'dlg.greet.order', 'dlg.confide.witness', 'dlg.witness.postern']);
+    expect(c.state.flags).toMatchObject({ [`${L}brask_confided`]: true, [`${L}brask_witness`]: true, [`${L}postern`]: true, [`${L}inside`]: true, [`${L}pass`]: true });
+    const t = at('lantern_hold_tribunal', { [`${L}brask_witness`]: true, [`${L}abbot_letter`]: true });
+    expect(ids(t)).not.toContain('talk.odo_brask.gate'); // on duty in the hall
+    const r = perform(t, 'argue_cure');
+    expect(r.rolls[0]!.advantage).toEqual(expect.arrayContaining(['Sergeant Brask speaks for Hollowmere', 'Abbot Cendric\'s letter to the Captain']));
+  });
+
+  it('Brask: a bribe gets you in but costs you at the tribunal; a failed threat turns him against you', () => {
+    const c = at('ravensgate_gates', { 'world.corwin_status': 'in_party' }, { hour: 10 });
+    c.state.hero.coins = 1000;
+    play(c, ['talk.odo_brask.gate', 'dlg.greet.bribe']);
+    expect(c.state.hero.coins).toBe(500);
+    expect(c.state.flags).toMatchObject({ [`${L}brask_bribed`]: true, [`${L}pass`]: true });
+    expect(beats(c)).toContain('corwin_bribe');
+    const t = at('lantern_hold_tribunal', { [`${L}brask_bribed`]: true });
+    expect(perform(t, 'argue_cure').rolls[0]!.disadvantage).toContain('Grell found five gold too many in Brask\'s ledger');
+
+    const u = at('ravensgate_gates', {}, { hour: 22, unlucky: true });
+    play(u, ['talk.odo_brask.gate', 'dlg.greet.lean']);
+    expect(u.state.flags[`${L}brask_cold`]).toBe(true);
+    expect(u.state.flags[`${L}inside`]).toBeUndefined();
+    expect(ids(u)).not.toContain('talk.odo_brask.gate');
+  });
+
+  it('Grell: the bread warning brings Warden lanterns to the landing; sparing the healthy softens a purge', () => {
+    const c = at('lantern_hold_tribunal', { [`${L}bread_spores`]: true }, { lucky: true });
+    play(c, ['talk.maud_grell.hearing', 'dlg.greet.spores', 'dlg.warned.healthy', 'dlg.spared.list', 'dlg.ledger.names', 'dlg.moved.bye']);
+    expect(c.state.flags).toMatchObject({ [`${L}grell_warned`]: true, [`${L}healthy_spared`]: true, [`${L}grell_moved`]: true });
+    expect(perform(c, 'argue_cure').rolls[0]!.advantage).toContain('Grell\'s own ledger weighs on her');
+    for (const id of ['bells_choir', 'bells_choir_ashby']) {
+      expect(ADV.encounters.find((e) => e.id === id)!.allies).toEqual([{ id: 'guard', count: 2, if: { flag: `${L}grell_warned` } }]);
+    }
+    const p = at('lantern_hold_tribunal', { [`${L}healthy_spared`]: true });
+    play(p, ['pledge_purge']);
+    expect(beats(p)).toContain('purge_spared');
+  });
+
+  it('Sallow: eating her bread poisons you but proves it; exposing her ends the bread and helps the cure', () => {
+    const c = at('hollowmere_stilts', {}, { hour: 10, lucky: true });
+    play(c, ['talk.mother_sallow.lamb', 'dlg.bread.eat']);
+    expect(c.state.hero.conditions.map((x) => x.condition)).toContain('poisoned');
+    expect(c.state.flags[`${L}bread_spores`]).toBe(true);
+    play(c, ['dlg.hums.accuse']);
+    expect(c.state.flags[`${L}sallow_exposed`]).toBe(true);
+    expect(npcsHere(c)).not.toContain('mother_sallow');
+    const n = at('night_of_bells', { [`${L}sallow_exposed`]: true, [`${L}cure_path`]: true, 'arc.main.cure_recipe': true });
+    expect(perform(n, 'cure_first').rolls[0]!.advantage).toContain('Nobody is eating the Choir bread any more');
+  });
+
+  it('Sallow: playing the convert reveals the landing (one ghoul fewer, easier spotting); failing makes her wary', () => {
+    const c = at('hollowmere_stilts', {}, { hour: 10, lucky: true });
+    play(c, ['talk.mother_sallow.lamb', 'dlg.bread.convert']);
+    expect(c.state.flags[`${L}landing_known`]).toBe(true);
+    const ghouls = ADV.encounters.find((e) => e.id === 'bells_choir')!.monsters.filter((m) => m.id === 'ghoul');
+    expect(ghouls).toEqual([{ id: 'ghoul', count: 1 }, { id: 'ghoul', count: 1, if: { not: { flag: `${L}landing_known` } } }]);
+    const n = at('night_of_bells', { [`${L}bells_won`]: true, [`${L}landing_known`]: true });
+    expect(perform(n, 'spot_escape').rolls[0]!.advantage).toContain('You know the eel-landing she will run for');
+
+    const u = at('hollowmere_stilts', {}, { hour: 10, unlucky: true });
+    play(u, ['talk.mother_sallow.lamb', 'dlg.bread.convert']);
+    expect(u.state.flags[`${L}sallow_wary`]).toBe(true);
+    const w = at('night_of_bells', { [`${L}bells_won`]: true, [`${L}sallow_wary`]: true });
+    expect(perform(w, 'spot_escape').rolls[0]!.disadvantage).toContain('Sallow knows your face and keeps to the dark');
+  });
+
+  it('Ashby: talked out of the Choir, he skips the night fight (Corwin approves); scared off, he warns Sallow', () => {
+    const esc = { 'arc.starter.ashby_fate': 'escaped', [`${L}child_saved`]: true, 'world.corwin_status': 'in_party', 'world.corwin_loyalty': 50 };
+    const c = at('hollowmere_stilts', esc, { hour: 10, lucky: true });
+    play(c, ['talk.brother_ashby.sexton', 'dlg.greet.watch', 'dlg.greet2.mercy']);
+    expect(c.state.flags[`${L}ashby_turned`]).toBe(true);
+    expect(beats(c)).toContain('corwin_ashby');
+    expect(c.state.flags['world.corwin_loyalty']).toBe(60);
+    const n = at('night_of_bells', { 'arc.starter.ashby_fate': 'escaped', [`${L}ashby_turned`]: true });
+    expect(ids(n)).toContain('meet_boats');
+    expect(ids(n)).not.toContain('meet_boats_ashby');
+    expect(npcsHere(n)).not.toContain('brother_ashby');
+
+    const s = at('hollowmere_stilts', esc, { hour: 10, lucky: true });
+    play(s, ['talk.brother_ashby.sexton', 'dlg.greet.taunt']);
+    expect(s.state.flags).toMatchObject({ [`${L}ashby_shaken`]: true, [`${L}sallow_wary`]: true });
+  });
+
+  it('Nettle: honesty about the pass lets her join (and she remembers it); helping her gives advantage', () => {
+    const c = at('hollowmere_stilts', { [`${L}pass`]: true }, { hour: 10, lucky: true });
+    expect(ids(c)).not.toContain('recruit_nettle'); // the pass is in plain sight
+    play(c, ['talk.nettle.healer', 'dlg.work.help', 'dlg.worked.truth', 'dlg.honest.bye']);
+    expect(c.state.flags[`${L}pass_hidden`]).toBe(true);
+    const r = perform(c, 'recruit_nettle');
+    expect(r.rolls[0]!.advantage).toContain('You worked beside her');
+    expect(c.state.flags['world.nettle_status']).toBe('in_party');
+    perform(c, 'bread.examine');
+    expect(beats(c)).toContain('nettle_honest');
+    expect(c.state.flags['world.nettle_loyalty']).toBe(60);
+  });
+
+  it('Wick: Nettle\'s true name can be asked for or stolen; a failed threat closes her bargains', () => {
+    const nettle = { 'world.nettle_status': 'in_party', 'world.nettle_loyalty': 50 };
+    const c = at('thornwife_moot', nettle, { lucky: true });
+    play(c, ['talk.grandmother_wick.fire', 'dlg.fire.name', 'dlg.jar.ask_name']);
+    expect(c.state.flags).toMatchObject({ [`${L}nettle_named`]: true, 'world.nettle_loyalty': 60 });
+    const s = at('thornwife_moot', nettle, { lucky: true });
+    play(s, ['talk.grandmother_wick.fire', 'dlg.fire.name', 'dlg.jar.steal_name']);
+    expect(s.state.flags).toMatchObject({ [`${L}name_stolen`]: true, 'world.nettle_loyalty': 55 });
+
+    const u = at('thornwife_moot', nettle, { unlucky: true });
+    play(u, ['talk.grandmother_wick.fire', 'dlg.fire.threaten']);
+    expect(u.state.flags[`${L}wick_threatened`]).toBe(true);
+    expect(u.state.flags['world.nettle_loyalty']).toBe(40);
+    expect(ids(u).filter((x) => ['talk_wick', 'trade_oath', 'ask_tooth_nettle', 'talk.grandmother_wick.fire'].includes(x))).toEqual([]);
+  });
+
+  it('Abbot Cendric: his blessing helps the swim and his letter helps at the tribunal', () => {
+    const c = at('drowned_abbey_undercroft', {}, { lucky: true });
+    expect(ids(c)).not.toContain('talk_abbot');
+    play(c, ['talk.abbot_cendric.litany', 'dlg.greet.what', 'dlg.what.bless', 'dlg.blessed.bye']);
+    expect(perform(c, 'swim').rolls[0]!.advantage).toContain('The Drowned Lady\'s blessing');
+    const l = at('drowned_abbey_undercroft', { [`${L}nave_cleared`]: true }, { lucky: true });
+    play(l, ['talk.abbot_cendric.litany', 'dlg.greet.letter']);
+    expect(l.state.flags[`${L}abbot_letter`]).toBe(true);
+    const d = at('drowned_abbey_undercroft', {}, { lucky: true });
+    play(d, ['talk.abbot_cendric.litany', 'dlg.greet.divers']);
+    expect(d.state.flags[`${L}divers_known`]).toBe(true);
+    Object.assign(d.state.flags, { [`${L}abbey_choice`]: true });
+    play(d, ['dlg.wrote.bye']);
+    expect(perform(d, 'spot_boat').rolls[0]!.advantage).toContain('You know the crypt-stair where the divers surface');
   });
 });
 
