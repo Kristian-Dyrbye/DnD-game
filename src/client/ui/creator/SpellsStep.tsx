@@ -3,18 +3,19 @@ import { useState } from 'preact/hooks';
 import { spellCounts } from '../../../engine/character/creator';
 import type { Spell } from '../../../engine/data/schemas';
 import { db } from '../../data';
+import { t } from '../i18n';
 import { creator } from './creatorState';
 import { firstSentence } from '../text';
 
 function castTime(sp: Spell): string {
   const c = sp.castingTime;
-  const unit = { action: 'Action', bonus_action: 'Bonus Action', reaction: 'Reaction', minute: 'min', hour: 'h' }[c.unit];
-  return `${c.unit === 'minute' || c.unit === 'hour' ? `${c.amount} ` : ''}${unit}${c.ritual ? ' (ritual)' : ''}`;
+  const unit = t(`creator.cast.${c.unit}`);
+  return `${c.unit === 'minute' || c.unit === 'hour' ? `${c.amount} ` : ''}${unit}${c.ritual ? ` ${t('creator.spells.ritual')}` : ''}`;
 }
 
 function range(sp: Spell): string {
   const r = sp.range;
-  return r.kind === 'feet' ? `${r.amount} ft` : r.kind === 'miles' ? `${r.amount} mi` : r.kind[0]!.toUpperCase() + r.kind.slice(1);
+  return r.kind === 'feet' || r.kind === 'miles' ? t(`creator.range.${r.kind}`, { n: r.amount ?? 0 }) : t(`creator.range.${r.kind}`);
 }
 
 function SpellGrid({ title, spells, count, selected, onChange }: { title: string; spells: Spell[]; count: number; selected: string[]; onChange: (ids: string[]) => void }) {
@@ -25,7 +26,7 @@ function SpellGrid({ title, spells, count, selected, onChange }: { title: string
       <legend>
         {title} <span class="pick-count">{selected.length}/{count}</span>
       </legend>
-      <input class="search" type="search" placeholder="Filter…" value={filter} onInput={(e) => setFilter((e.target as HTMLInputElement).value)} aria-label={`Filter ${title}`} />
+      <input class="search" type="search" placeholder={t('creator.spells.filter')} value={filter} onInput={(e) => setFilter((e.target as HTMLInputElement).value)} aria-label={t('creator.spells.filterAria', { title })} />
       <div class="spell-grid">
         {shown.map((sp) => {
           const on = selected.includes(sp.id);
@@ -36,7 +37,7 @@ function SpellGrid({ title, spells, count, selected, onChange }: { title: string
               <span class="spell-name">{sp.name}</span>
               <span class="spell-meta">
                 {sp.school[0]!.toUpperCase() + sp.school.slice(1)} · {castTime(sp)} · {range(sp)}
-                {sp.duration.concentration ? ' · Concentration' : ''}
+                {sp.duration.concentration ? ` · ${t('creator.spells.concentration')}` : ''}
               </span>
               <small>{firstSentence(sp.text, 150)}</small>
             </label>
@@ -50,18 +51,18 @@ function SpellGrid({ title, spells, count, selected, onChange }: { title: string
 export function SpellsStep() {
   const s = creator.value;
   const cls = s.classId ? db.classes.get(s.classId) : undefined;
-  if (!cls) return <p class="hint">Choose a class first.</p>;
+  if (!cls) return <p class="hint">{t('creator.needClass')}</p>;
   const need = spellCounts(s, db);
   const all = db.spellsForClass(cls.id, 1).sort((a, b) => a.name.localeCompare(b.name));
   return (
     <section>
-      <h2>Spells</h2>
-      <p class="hint">Choose the magic you start with. You can change prepared spells as you level up.</p>
+      <h2>{t('creator.spells.title')}</h2>
+      <p class="hint">{t('creator.spells.hint')}</p>
       {need.cantrips > 0 && (
-        <SpellGrid title="Cantrips" spells={all.filter((sp) => sp.level === 0)} count={need.cantrips} selected={s.cantrips} onChange={(ids) => (creator.value = { ...s, cantrips: ids })} />
+        <SpellGrid title={t('creator.spells.cantrips')} spells={all.filter((sp) => sp.level === 0)} count={need.cantrips} selected={s.cantrips} onChange={(ids) => (creator.value = { ...s, cantrips: ids })} />
       )}
       {need.spells > 0 && (
-        <SpellGrid title="Level 1 spells" spells={all.filter((sp) => sp.level === 1)} count={need.spells} selected={s.preparedSpells} onChange={(ids) => (creator.value = { ...s, preparedSpells: ids })} />
+        <SpellGrid title={t('creator.spells.level1')} spells={all.filter((sp) => sp.level === 1)} count={need.spells} selected={s.preparedSpells} onChange={(ids) => (creator.value = { ...s, preparedSpells: ids })} />
       )}
     </section>
   );

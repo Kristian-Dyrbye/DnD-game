@@ -2,6 +2,7 @@
 import { choiceValues, creationChoices, setChoiceValues } from '../../../engine/character/creator';
 import { SKILLS, SKILL_ABILITY, SKILL_NAMES, ABILITY_NAMES, type Skill } from '../../../engine/rules/basics';
 import { db } from '../../data';
+import { currentTranslator, t } from '../i18n';
 import { creator } from './creatorState';
 import { PickList } from './PickList';
 
@@ -11,7 +12,7 @@ export function SkillsStep() {
   const s = creator.value;
   const cls = s.classId ? db.classes.get(s.classId) : undefined;
   const bg = s.backgroundId ? db.backgrounds.get(s.backgroundId) : undefined;
-  if (!cls || !bg) return <p class="hint">Choose a class and background first.</p>;
+  if (!cls || !bg) return <p class="hint">{t('creator.needClassAndBackground')}</p>;
   const fromBackground = new Set(bg.skills);
   const classOptions = cls.skillChoices.from.map((k) => ({ id: k, label: skillLabel(k), locked: fromBackground.has(k) }));
   const taken = new Set<Skill>([...bg.skills, ...s.classSkills]);
@@ -19,12 +20,10 @@ export function SkillsStep() {
 
   return (
     <section>
-      <h2>Skills and training</h2>
-      <p class="hint">
-        Your background already grants {bg.skills.map((k) => SKILL_NAMES[k]).join(' and ')}. Pick the rest from your class list.
-      </p>
+      <h2>{t('creator.skills.title')}</h2>
+      <p class="hint">{t('creator.skills.hint', { skills: bg.skills.map((k) => SKILL_NAMES[k]).join(t('creator.and')) })}</p>
       <PickList
-        title={`${cls.name} skills`}
+        title={t('creator.skills.classSkills', { name: cls.name })}
         count={cls.skillChoices.count}
         options={classOptions}
         selected={s.classSkills}
@@ -33,7 +32,7 @@ export function SkillsStep() {
       />
       {speciesPool && (
         <PickList
-          title={s.speciesId === 'elf' ? 'Keen Senses' : 'Skillful'}
+          title={s.speciesId === 'elf' ? t('creator.skills.keenSenses') : t('creator.skills.skillful')}
           count={1}
           options={speciesPool.map((k) => ({ id: k, label: skillLabel(k), locked: taken.has(k) }))}
           selected={s.speciesSkills}
@@ -43,14 +42,14 @@ export function SkillsStep() {
       )}
       {s.speciesId === 'human' && (
         <PickList
-          title="Versatile (origin feat)"
+          title={t('creator.skills.versatile')}
           count={1}
           options={[...db.feats.values()].filter((f) => f.category === 'origin' && f.id !== bg.featId).map((f) => ({ id: f.id, label: f.name, detail: f.text }))}
           selected={s.speciesFeatId ? [s.speciesFeatId] : []}
           onChange={(ids) => (creator.value = { ...s, speciesFeatId: ids[0], choices: Object.fromEntries(Object.entries(s.choices).filter(([k]) => !k.startsWith('feat_sp_'))) })}
         />
       )}
-      {creationChoices(s, db).map((ch) => (
+      {creationChoices(s, db, currentTranslator()).map((ch) => (
         <PickList
           key={ch.key}
           title={ch.label[0]!.toUpperCase() + ch.label.slice(1)}

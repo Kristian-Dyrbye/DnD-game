@@ -4,6 +4,7 @@ import { toBuildInput } from '../../../engine/character/creator';
 import { armorClass, initiativeModifiers, weaponAttack } from '../../../engine/character/derived';
 import { ABILITIES, ABILITY_NAMES, SKILL_NAMES, abilityModifier, formatModifier, type Skill } from '../../../engine/rules/basics';
 import { db } from '../../data';
+import { t } from '../i18n';
 import { creator } from './creatorState';
 import { formatCoins, groupNames, itemDisplayName } from '../text';
 
@@ -14,8 +15,8 @@ export function ReviewStep() {
   if (problems.length) {
     return (
       <section>
-        <h2>Review</h2>
-        <p class="hint">A few things still need attention:</p>
+        <h2>{t('creator.review.title')}</h2>
+        <p class="hint">{t('creator.review.problems')}</p>
         <ul>
           {problems.map((p) => (
             <li key={p}>{p}</li>
@@ -32,28 +33,33 @@ export function ReviewStep() {
     <section class="review">
       <h2>{c.name}</h2>
       <p class="hint">
-        Level 1 {db.species.get(c.speciesId)?.name} {cls.name} · {db.backgrounds.get(c.backgroundId)?.name} · {s.difficulty === 'hardcore' ? 'Hardcore' : 'Heroic'}
+        {t('creator.review.line', {
+          species: db.species.get(c.speciesId)?.name ?? c.speciesId,
+          className: cls.name,
+          background: db.backgrounds.get(c.backgroundId)?.name ?? c.backgroundId,
+          mode: t(s.difficulty === 'hardcore' ? 'creator.difficulty.hardcore' : 'creator.difficulty.heroic'),
+        })}
       </p>
       <div class="sheet">
         <div class="sheet-block vitals">
           <div>
-            <span>HP</span>
+            <span>{t('creator.review.hp')}</span>
             <strong>{c.maxHp}</strong>
           </div>
           <div>
-            <span>AC</span>
+            <span>{t('creator.review.ac')}</span>
             <strong>{armorClass(c, db).ac}</strong>
           </div>
           <div>
-            <span>Speed</span>
-            <strong>{c.speed.walk} ft</strong>
+            <span>{t('creator.review.speed')}</span>
+            <strong>{t('creator.review.speedValue', { n: c.speed.walk })}</strong>
           </div>
           <div>
-            <span>Initiative</span>
+            <span>{t('creator.review.initiative')}</span>
             <strong>{formatModifier(init)}</strong>
           </div>
           <div>
-            <span>Prof.</span>
+            <span>{t('creator.review.prof')}</span>
             <strong>+{c.proficiencyBonus}</strong>
           </div>
         </div>
@@ -67,18 +73,18 @@ export function ReviewStep() {
           ))}
         </div>
         <div class="sheet-block">
-          <h3>Skills</h3>
+          <h3>{t('creator.review.skills')}</h3>
           <p>
             {(Object.entries(c.skills) as [Skill, string][])
               .filter(([, v]) => v === 'proficient' || v === 'expertise')
-              .map(([k, v]) => `${SKILL_NAMES[k]}${v === 'expertise' ? ' (expertise)' : ''}`)
+              .map(([k, v]) => `${SKILL_NAMES[k]}${v === 'expertise' ? ` ${t('creator.review.expertise')}` : ''}`)
               .join(', ')}
           </p>
-          <h3>Attacks</h3>
+          <h3>{t('creator.review.attacks')}</h3>
           <ul>
             {attacks.map((a) => (
               <li key={a!.uid}>
-                {a!.name}: {formatModifier(a!.toHit)} to hit, {a!.damage[0]!.dice}
+                {a!.name}: {t('creator.review.toHit', { bonus: formatModifier(a!.toHit) })}, {a!.damage[0]!.dice}
                 {(() => {
                   const mod = a!.damageModifiers.reduce((x, m) => x + m.value, 0);
                   return mod ? formatModifier(mod) : '';
@@ -90,20 +96,20 @@ export function ReviewStep() {
           </ul>
         </div>
         <div class="sheet-block">
-          <h3>Gear</h3>
+          <h3>{t('creator.review.gear')}</h3>
           <p>
-            {groupNames(c.inventory.map((i) => ({ name: itemDisplayName(db.item(i.itemId)?.name ?? i.itemId), quantity: i.quantity, ...(i.equipped && { note: 'equipped' }) }))).join(', ')}
+            {groupNames(c.inventory.map((i) => ({ name: itemDisplayName(db.item(i.itemId)?.name ?? i.itemId), quantity: i.quantity, ...(i.equipped && { note: t('creator.review.equipped') }) }))).join(', ')}
           </p>
-          <p>Coins: {formatCoins(c.coins)}</p>
+          <p>{t('creator.review.coins', { coins: formatCoins(c.coins) })}</p>
           {c.spellcasting && (
             <>
-              <h3>Spells</h3>
+              <h3>{t('creator.review.spells')}</h3>
               <p>
                 {[...c.spellcasting.cantrips, ...c.spellcasting.prepared.map((p) => p.spellId)].map((id) => db.spells.get(id)?.name ?? id).join(', ')}
               </p>
             </>
           )}
-          <h3>Feats</h3>
+          <h3>{t('creator.review.feats')}</h3>
           <p>{c.featIds.map((f) => db.feats.get(f)?.name ?? f).join(', ')}</p>
         </div>
       </div>

@@ -3,9 +3,10 @@
  * Steps not built yet show a placeholder (filled in by A044–A049).
  */
 import type { ComponentType } from 'preact';
-import { STEP_LABELS, canAdvance, goToStep, nextStep, prevStep, stepProblems, stepsFor, type CreatorStep } from '../../../engine/character/creator';
+import { canAdvance, goToStep, nextStep, prevStep, stepLabel, stepProblems, stepsFor, type CreatorStep } from '../../../engine/character/creator';
 import { db } from '../../data';
 import { screen } from '../state';
+import { currentTranslator, t } from '../i18n';
 import { beginAdventure, creator } from './creatorState';
 import { AbilitiesStep } from './AbilitiesStep';
 import { BackgroundStep } from './BackgroundStep';
@@ -38,8 +39,8 @@ const STEP_COMPONENTS: Partial<Record<CreatorStep, ComponentType>> = {
 function Placeholder({ step }: { step: CreatorStep }) {
   return (
     <section>
-      <h2>{STEP_LABELS[step]}</h2>
-      <p class="hint">This step is coming soon.</p>
+      <h2>{stepLabel(step, currentTranslator())}</h2>
+      <p class="hint">{t('creator.comingSoon')}</p>
     </section>
   );
 }
@@ -50,15 +51,15 @@ function Summary() {
   const bg = s.backgroundId ? db.backgrounds.get(s.backgroundId) : undefined;
   const sp = s.speciesId ? db.species.get(s.speciesId) : undefined;
   return (
-    <aside class="creator-summary" aria-label="Character summary">
+    <aside class="creator-summary" aria-label={t('creator.summaryAria')}>
       <CharacterPreview appearance={s.appearance ?? defaultAppearanceFor(s.classId)} size={s.size ?? sp?.sizes[0] ?? 'medium'} />
-      <h3>{s.name.trim() || 'Unnamed hero'}</h3>
+      <h3>{s.name.trim() || t('creator.unnamed')}</h3>
       <dl>
-        <dt>Class</dt>
+        <dt>{t('creator.step.class')}</dt>
         <dd>{cls?.name ?? '—'}</dd>
-        <dt>Background</dt>
+        <dt>{t('creator.step.background')}</dt>
         <dd>{bg?.name ?? '—'}</dd>
-        <dt>Species</dt>
+        <dt>{t('creator.step.species')}</dt>
         <dd>{sp?.name ?? '—'}</dd>
       </dl>
     </aside>
@@ -68,14 +69,15 @@ function Summary() {
 export function Creator() {
   const s = creator.value;
   const steps = stepsFor(s, db);
-  const problems = stepProblems(s, s.step, db);
+  const tr = currentTranslator();
+  const problems = stepProblems(s, s.step, db, tr);
   const Step = STEP_COMPONENTS[s.step];
   const isLast = steps.indexOf(s.step) === steps.length - 1;
   return (
     <div class="creator">
-      <nav class="step-rail" aria-label="Creation steps">
+      <nav class="step-rail" aria-label={t('creator.stepsAria')}>
         <button type="button" class="link-button" onClick={() => (screen.value = 'title')}>
-          ← Title
+          {t('creator.backToTitle')}
         </button>
         <ol>
           {steps.map((st, i) => {
@@ -83,7 +85,7 @@ export function Creator() {
             return (
               <li key={st} class={`${st === s.step ? 'current' : ''}${done ? ' done' : ''}`}>
                 <button type="button" onClick={() => (creator.value = goToStep(s, st, db))} aria-current={st === s.step ? 'step' : undefined}>
-                  <span class="step-num">{done ? '✓' : i + 1}</span> {STEP_LABELS[st]}
+                  <span class="step-num">{done ? '✓' : i + 1}</span> {stepLabel(st, tr)}
                 </button>
               </li>
             );
@@ -94,13 +96,13 @@ export function Creator() {
       <Summary />
       <footer class="step-nav">
         <button type="button" onClick={() => (creator.value = prevStep(s, db))} disabled={steps.indexOf(s.step) === 0}>
-          Back
+          {t('creator.back')}
         </button>
         <span class="step-problems" role="status">
           {problems[0] ?? ''}
         </span>
         <button type="button" class="primary" onClick={() => (isLast ? beginAdventure() : (creator.value = nextStep(s, db)))} disabled={!canAdvance(s, db)}>
-          {isLast ? 'Begin adventure' : 'Next'}
+          {isLast ? t('creator.begin') : t('creator.next')}
         </button>
       </footer>
     </div>

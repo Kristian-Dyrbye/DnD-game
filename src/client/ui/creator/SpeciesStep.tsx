@@ -1,18 +1,20 @@
 /** Creator step 3: choose a species, then its lineage/ancestry and size where the species offers a choice. */
 import { chooseSpecies } from '../../../engine/character/creator';
 import { db } from '../../data';
+import { t } from '../i18n';
 import { creator } from './creatorState';
 import { firstSentence } from '../text';
 
 const cap = (s: string) => s[0]!.toUpperCase() + s.slice(1);
+const sizeName = (z: string) => (z === 'small' ? t('creator.size.small') : z === 'medium' ? t('creator.size.medium') : cap(z));
 
 export function SpeciesStep() {
   const s = creator.value;
   const selected = s.speciesId ? db.species.get(s.speciesId) : undefined;
   return (
     <section>
-      <h2>Choose your species</h2>
-      <p class="hint">Your species gives you innate traits such as darkvision, resistances or a natural talent.</p>
+      <h2>{t('creator.species.title')}</h2>
+      <p class="hint">{t('creator.species.hint')}</p>
       <div class="card-grid">
         {[...db.species.values()].map((sp) => (
           <button
@@ -24,19 +26,19 @@ export function SpeciesStep() {
           >
             <h3>{sp.name}</h3>
             <dl class="card-stats">
-              <dt>Size</dt>
-              <dd>{sp.sizes.map(cap).join(' or ')}</dd>
-              <dt>Speed</dt>
-              <dd>{sp.speed} ft.</dd>
-              <dt>Darkvision</dt>
-              <dd>{sp.darkvision ? `${sp.darkvision} ft.` : 'None'}</dd>
+              <dt>{t('creator.species.size')}</dt>
+              <dd>{sp.sizes.map(sizeName).join(t('creator.or'))}</dd>
+              <dt>{t('creator.species.speed')}</dt>
+              <dd>{t('creator.feet', { n: sp.speed })}</dd>
+              <dt>{t('creator.species.darkvision')}</dt>
+              <dd>{sp.darkvision ? t('creator.feet', { n: sp.darkvision }) : t('creator.none')}</dd>
             </dl>
             <ul class="trait-list">
               {sp.traits
-                .filter((t) => t.name !== 'Darkvision')
-                .map((t) => (
-                  <li key={t.name}>
-                    <strong>{t.name}.</strong> {firstSentence(t.text, 110)}
+                .filter((tr) => tr.name !== 'Darkvision')
+                .map((tr) => (
+                  <li key={tr.name}>
+                    <strong>{tr.name}.</strong> {firstSentence(tr.text, 110)}
                   </li>
                 ))}
             </ul>
@@ -48,7 +50,7 @@ export function SpeciesStep() {
         <div class="sub-choice">
           {selected.lineages?.length ? (
             <fieldset>
-              <legend>{selected.lineageLabel ?? 'Lineage'}</legend>
+              <legend>{selected.lineageLabel ?? t('creator.species.lineage')}</legend>
               <div class="option-row">
                 {selected.lineages.map((l) => (
                   <label key={l.id} class={`option-pill${s.lineageId === l.id ? ' selected' : ''}`}>
@@ -66,12 +68,12 @@ export function SpeciesStep() {
           ) : null}
           {selected.sizes.length > 1 && (
             <fieldset>
-              <legend>Size</legend>
+              <legend>{t('creator.species.size')}</legend>
               <div class="option-row">
                 {selected.sizes.map((z) => (
                   <label key={z} class={`option-pill${s.size === z ? ' selected' : ''}`}>
                     <input type="radio" name="size" checked={s.size === z} onChange={() => (creator.value = { ...creator.value, size: z as 'small' | 'medium' })} />
-                    {cap(z)}
+                    {sizeName(z)}
                   </label>
                 ))}
               </div>

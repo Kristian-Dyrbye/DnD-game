@@ -17,13 +17,10 @@ import type { AbilityMethod, CreatorState } from '../../../engine/character/crea
 import { Rng } from '../../../engine/core/rng';
 import { ABILITIES, ABILITY_NAMES, abilityModifier, formatModifier, type Ability } from '../../../engine/rules/basics';
 import { db } from '../../data';
+import { t } from '../i18n';
 import { creator } from './creatorState';
 
-const METHODS: { id: AbilityMethod; label: string; hint: string }[] = [
-  { id: 'standard_array', label: 'Standard Array', hint: 'Assign 15, 14, 13, 12, 10 and 8. Balanced and quick.' },
-  { id: 'point_buy', label: 'Point Buy', hint: 'Spend 27 points; every score starts at 8 and can go up to 15.' },
-  { id: 'roll', label: 'Roll 4d6', hint: 'Roll four dice for each score and keep the highest three. Luck decides!' },
-];
+const METHODS: AbilityMethod[] = ['standard_array', 'point_buy', 'roll'];
 
 const update = (patch: Partial<CreatorState>) => (creator.value = { ...creator.value, ...patch });
 
@@ -52,7 +49,7 @@ function AssignSelect({ ability, pool }: { ability: Ability; pool: number[] }) {
   const value = s.baseScores[ability];
   return (
     <select
-      aria-label={`${ABILITY_NAMES[ability]} score`}
+      aria-label={t('creator.abilities.scoreAria', { ability: ABILITY_NAMES[ability] })}
       value={value ?? ''}
       onChange={(e) => {
         const v = (e.target as HTMLSelectElement).value;
@@ -98,7 +95,7 @@ function RollPanel() {
   return (
     <div class="roll-panel">
       <button type="button" class="primary" disabled={rolling} onClick={() => setRolling(true)}>
-        {s.rolledPool ? 'Roll again' : 'Roll the dice'}
+        {s.rolledPool ? t('creator.abilities.rollAgain') : t('creator.abilities.roll')}
       </button>
       <div class="dice-sets" aria-live="polite">
         {(rolling ? spin : (rolls?.map((r) => r.roll.terms[0]!.kind === 'dice' ? (r.roll.terms[0] as { rolls: number[] }).rolls : []) ?? [])).map((faces, i) => {
@@ -114,7 +111,7 @@ function RollPanel() {
             </div>
           );
         })}
-        {!rolling && !rolls && s.rolledPool && <p class="hint">Rolled: {s.rolledPool.join(', ')}</p>}
+        {!rolling && !rolls && s.rolledPool && <p class="hint">{t('creator.abilities.rolled', { values: s.rolledPool.join(', ') })}</p>}
       </div>
     </div>
   );
@@ -136,20 +133,20 @@ export function AbilitiesStep() {
 
   return (
     <section>
-      <h2>Ability scores</h2>
+      <h2>{t('creator.abilities.title')}</h2>
       <div class="method-tabs" role="tablist">
         {METHODS.map((m) => (
-          <button key={m.id} type="button" role="tab" aria-selected={s.abilityMethod === m.id} class={s.abilityMethod === m.id ? 'selected' : ''} onClick={() => setMethod(m.id)}>
-            {m.label}
+          <button key={m} type="button" role="tab" aria-selected={s.abilityMethod === m} class={s.abilityMethod === m ? 'selected' : ''} onClick={() => setMethod(m)}>
+            {t(`creator.method.${m}`)}
           </button>
         ))}
       </div>
-      {s.abilityMethod && <p class="hint">{METHODS.find((m) => m.id === s.abilityMethod)!.hint}</p>}
+      {s.abilityMethod && <p class="hint">{t(`creator.method.${s.abilityMethod}.hint`)}</p>}
 
       {s.abilityMethod === 'roll' && <RollPanel />}
       {s.abilityMethod === 'point_buy' && (
         <p class={`points-left${cost > POINT_BUY_BUDGET ? ' over' : ''}`}>
-          Points spent: {cost} / {POINT_BUY_BUDGET}
+          {t('creator.abilities.pointsSpent', { cost, budget: POINT_BUY_BUDGET })}
         </p>
       )}
 
@@ -157,11 +154,11 @@ export function AbilitiesStep() {
         <table class="ability-table">
           <thead>
             <tr>
-              <th>Ability</th>
-              <th>Base</th>
-              <th>Background</th>
-              <th>Score</th>
-              <th>Modifier</th>
+              <th>{t('creator.abilities.colAbility')}</th>
+              <th>{t('creator.abilities.colBase')}</th>
+              <th>{t('creator.abilities.colBackground')}</th>
+              <th>{t('creator.abilities.colScore')}</th>
+              <th>{t('creator.abilities.colModifier')}</th>
             </tr>
           </thead>
           <tbody>
@@ -174,16 +171,16 @@ export function AbilitiesStep() {
                 <tr key={a} class={cls?.primaryAbilities.includes(a) ? 'primary-ability' : ''}>
                   <th scope="row">
                     {ABILITY_NAMES[a]}
-                    {cls?.primaryAbilities.includes(a) && <span class="tag tag-primary">Primary</span>}
+                    {cls?.primaryAbilities.includes(a) && <span class="tag tag-primary">{t('creator.abilities.primary')}</span>}
                   </th>
                   <td>
                     {s.abilityMethod === 'point_buy' ? (
                       <span class="stepper">
-                        <button type="button" aria-label={`Lower ${ABILITY_NAMES[a]}`} disabled={!canAdjustPointBuy(s.baseScores, a, -1)} onClick={() => update({ baseScores: { ...s.baseScores, [a]: (base ?? 8) - 1 } })}>
+                        <button type="button" aria-label={t('creator.abilities.lowerAria', { ability: ABILITY_NAMES[a] })} disabled={!canAdjustPointBuy(s.baseScores, a, -1)} onClick={() => update({ baseScores: { ...s.baseScores, [a]: (base ?? 8) - 1 } })}>
                           −
                         </button>
                         <span class="stepper-value">{base ?? 8}</span>
-                        <button type="button" aria-label={`Raise ${ABILITY_NAMES[a]}`} disabled={!canAdjustPointBuy(s.baseScores, a, 1)} onClick={() => update({ baseScores: { ...s.baseScores, [a]: (base ?? 8) + 1 } })}>
+                        <button type="button" aria-label={t('creator.abilities.raiseAria', { ability: ABILITY_NAMES[a] })} disabled={!canAdjustPointBuy(s.baseScores, a, 1)} onClick={() => update({ baseScores: { ...s.baseScores, [a]: (base ?? 8) + 1 } })}>
                           +
                         </button>
                       </span>
@@ -193,7 +190,7 @@ export function AbilitiesStep() {
                   </td>
                   <td>
                     {allowed ? (
-                      <span class="bonus-buttons" role="group" aria-label={`${ABILITY_NAMES[a]} background increase`}>
+                      <span class="bonus-buttons" role="group" aria-label={t('creator.abilities.bonusAria', { ability: ABILITY_NAMES[a] })}>
                         {[0, 1, 2].map((v) => (
                           <button key={v} type="button" class={bonus === v ? 'selected' : ''} aria-pressed={bonus === v} onClick={() => setBonus(a, v)} disabled={v > 0 && bonus !== v && bonusTotal - bonus + v > 3}>
                             {v ? `+${v}` : '0'}
@@ -217,17 +214,17 @@ export function AbilitiesStep() {
         <div class="quick-actions">
           {s.abilityMethod !== 'point_buy' && pool.length === 6 && (
             <button type="button" onClick={() => update({ baseScores: suggestAssignment(pool, cls.primaryAbilities) })}>
-              Suggest for {cls.name}
+              {t('creator.abilities.suggest', { name: cls.name })}
             </button>
           )}
           {s.abilityMethod === 'point_buy' && (
             <button type="button" onClick={() => update({ baseScores: suggestAssignment([15, 15, 15, 8, 8, 8], cls.primaryAbilities) })}>
-              Suggest for {cls.name}
+              {t('creator.abilities.suggest', { name: cls.name })}
             </button>
           )}
           {bg && (
             <button type="button" onClick={() => update({ backgroundBonus: suggestBackgroundBonus(bg.abilityScores, cls.primaryAbilities, s.baseScores) })}>
-              Suggest background increase
+              {t('creator.abilities.suggestBonus')}
             </button>
           )}
         </div>

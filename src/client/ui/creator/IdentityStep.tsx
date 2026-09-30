@@ -6,14 +6,10 @@ import { Rng } from '../../../engine/core/rng';
 import { templateBackstory } from '../../../llm/prompts/backstory';
 import { db } from '../../data';
 import { WEB_EDITION } from '../../edition';
+import { t } from '../i18n';
 import { creator } from './creatorState';
 
-const FIELDS: { key: keyof CreatorState['personality']; label: string; placeholder: string }[] = [
-  { key: 'traits', label: 'Personality traits', placeholder: 'e.g. Blunt but kind; hums while working' },
-  { key: 'ideals', label: 'Ideals', placeholder: 'e.g. Loyalty to those who stand beside me' },
-  { key: 'bonds', label: 'Bonds', placeholder: 'e.g. My sister is missing somewhere in the Gloamfen' },
-  { key: 'flaws', label: 'Flaws', placeholder: 'e.g. I never back down from a dare' },
-];
+const FIELDS = ['traits', 'ideals', 'bonds', 'flaws'] as const;
 
 export function IdentityStep() {
   const s = creator.value;
@@ -33,7 +29,7 @@ export function IdentityStep() {
     if (WEB_EDITION) {
       // No AI in the web edition: the same template story the server falls back to.
       setPersonality('backstory', templateBackstory(summary));
-      setNote('A starting point: edit it freely.');
+      setNote(t('creator.identity.noteTemplate'));
       return;
     }
     setBusy(true);
@@ -46,9 +42,9 @@ export function IdentityStep() {
       });
       const data = (await res.json()) as { text: string; source: string };
       setPersonality('backstory', data.text);
-      if (data.source === 'template') setNote('The AI Dungeon Master is offline, so this is a template story. Edit it freely.');
+      if (data.source === 'template') setNote(t('creator.identity.noteOffline'));
     } catch {
-      setNote('Could not reach the game server.');
+      setNote(t('creator.identity.noteNoServer'));
     } finally {
       setBusy(false);
     }
@@ -56,29 +52,29 @@ export function IdentityStep() {
 
   return (
     <section>
-      <h2>Name and story</h2>
+      <h2>{t('creator.identity.title')}</h2>
       <label class="field">
-        <span>Name</span>
+        <span>{t('creator.identity.name')}</span>
         <span class="field-row">
           <input type="text" maxLength={40} value={s.name} onInput={(e) => (creator.value = { ...creator.value, name: (e.target as HTMLInputElement).value })} />
           <button type="button" onClick={() => (creator.value = { ...creator.value, name: randomName(s.speciesId, Rng.fromSeed(`${Date.now()}`)) })}>
-            Random name
+            {t('creator.identity.randomName')}
           </button>
         </span>
       </label>
       {FIELDS.map((f) => (
-        <label key={f.key} class="field">
-          <span>{f.label}</span>
-          <input type="text" maxLength={200} placeholder={f.placeholder} value={s.personality[f.key] ?? ''} onInput={(e) => setPersonality(f.key, (e.target as HTMLInputElement).value)} />
+        <label key={f} class="field">
+          <span>{t(`creator.identity.${f}`)}</span>
+          <input type="text" maxLength={200} placeholder={t(`creator.identity.${f}Placeholder`)} value={s.personality[f] ?? ''} onInput={(e) => setPersonality(f, (e.target as HTMLInputElement).value)} />
         </label>
       ))}
       <label class="field">
-        <span>Backstory</span>
+        <span>{t('creator.identity.backstory')}</span>
         <textarea rows={6} maxLength={2000} value={s.personality.backstory ?? ''} onInput={(e) => setPersonality('backstory', (e.target as HTMLTextAreaElement).value)} />
       </label>
       <div class="quick-actions">
         <button type="button" onClick={suggest} disabled={busy}>
-          {busy ? 'Writing…' : 'Suggest a backstory'}
+          {busy ? t('creator.identity.writing') : t('creator.identity.suggest')}
         </button>
         {note && <span class="hint">{note}</span>}
       </div>

@@ -7,6 +7,7 @@ import { roll, type RollResult } from '../core/dice';
 import type { Rng } from '../core/rng';
 import { ABILITIES, type Ability, type AbilityScores } from '../rules/basics';
 import type { AbilityMethod } from './creator';
+import { ENGLISH, type Translator } from '../../shared/i18n';
 
 export const STANDARD_ARRAY = [15, 14, 13, 12, 10, 8] as const;
 export const POINT_BUY_BUDGET = 27;
@@ -44,22 +45,22 @@ export function rollAbilitySet(rng: Rng): AbilityRoll[] {
 const sameMultiset = (a: number[], b: number[]) => a.length === b.length && [...a].sort().join(',') === [...b].sort().join(',');
 
 /** Problems with an assignment for a method (empty = valid and complete). */
-export function scoreProblems(method: AbilityMethod | undefined, scores: Partial<AbilityScores>, rolledPool?: number[]): string[] {
-  if (!method) return ['Choose a method'];
+export function scoreProblems(method: AbilityMethod | undefined, scores: Partial<AbilityScores>, rolledPool?: number[], tr: Translator = ENGLISH): string[] {
+  if (!method) return [tr.t('creator.problem.method')];
   const values = ABILITIES.map((a) => scores[a]);
-  if (values.some((v) => v === undefined)) return ['Assign all six scores'];
+  if (values.some((v) => v === undefined)) return [tr.t('creator.problem.assignAll')];
   const nums = values as number[];
   switch (method) {
     case 'standard_array':
-      return sameMultiset(nums, [...STANDARD_ARRAY]) ? [] : ['Use each Standard Array value once'];
+      return sameMultiset(nums, [...STANDARD_ARRAY]) ? [] : [tr.t('creator.problem.useArray')];
     case 'point_buy': {
-      if (nums.some((v) => v < POINT_BUY_MIN || v > POINT_BUY_MAX)) return ['Point buy scores must be 8–15'];
+      if (nums.some((v) => v < POINT_BUY_MIN || v > POINT_BUY_MAX)) return [tr.t('creator.problem.pointRange')];
       const cost = pointBuyCost(scores);
-      return cost > POINT_BUY_BUDGET ? [`Point buy costs ${cost}/${POINT_BUY_BUDGET}`] : [];
+      return cost > POINT_BUY_BUDGET ? [tr.t('creator.problem.pointCost', { cost, budget: POINT_BUY_BUDGET })] : [];
     }
     case 'roll':
-      if (!rolledPool || rolledPool.length !== 6) return ['Roll your scores'];
-      return sameMultiset(nums, rolledPool) ? [] : ['Use each rolled value once'];
+      if (!rolledPool || rolledPool.length !== 6) return [tr.t('creator.problem.roll')];
+      return sameMultiset(nums, rolledPool) ? [] : [tr.t('creator.problem.useRolled')];
   }
 }
 

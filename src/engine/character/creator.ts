@@ -10,23 +10,15 @@ import { validateBuild, type CharacterBuildInput, type OriginFeatChoice } from '
 import { scoreProblems } from './abilityScores';
 import { weaponMasteryCount } from './featureLevels';
 import { defaultAppearanceFor, type Appearance } from '../appearance/appearance';
+import { ENGLISH, type Translator } from '../../shared/i18n';
 
 export const CREATOR_STEPS = ['class', 'background', 'species', 'abilities', 'skills', 'equipment', 'spells', 'appearance', 'identity', 'difficulty', 'review'] as const;
 export type CreatorStep = (typeof CREATOR_STEPS)[number];
 
-export const STEP_LABELS: Record<CreatorStep, string> = {
-  class: 'Class',
-  background: 'Background',
-  species: 'Species',
-  abilities: 'Ability Scores',
-  skills: 'Skills',
-  equipment: 'Equipment',
-  spells: 'Spells',
-  appearance: 'Appearance',
-  identity: 'Name & Story',
-  difficulty: 'Difficulty',
-  review: 'Review',
-};
+/** A step's name in the rail and headings (English unless a translator is given). */
+export function stepLabel(step: CreatorStep, tr: Translator = ENGLISH): string {
+  return tr.t(`creator.step.${step}`);
+}
 
 export type AbilityMethod = 'standard_array' | 'point_buy' | 'roll';
 
@@ -112,50 +104,50 @@ function withoutKeys(choices: Record<string, string[]>, prefix: string): Record<
   return Object.fromEntries(Object.entries(choices).filter(([k]) => !k.startsWith(prefix)));
 }
 
-/** What still blocks leaving a step. Empty = the step is complete. */
-export function stepProblems(s: CreatorState, step: CreatorStep, db: SrdDatabase): string[] {
+/** What still blocks leaving a step. Empty = the step is complete. Texts in the translator's language. */
+export function stepProblems(s: CreatorState, step: CreatorStep, db: SrdDatabase, tr: Translator = ENGLISH): string[] {
   switch (step) {
     case 'class':
-      return s.classId && db.classes.has(s.classId) ? [] : ['Choose a class'];
+      return s.classId && db.classes.has(s.classId) ? [] : [tr.t('creator.problem.class')];
     case 'background':
-      return s.backgroundId && db.backgrounds.has(s.backgroundId) ? [] : ['Choose a background'];
+      return s.backgroundId && db.backgrounds.has(s.backgroundId) ? [] : [tr.t('creator.problem.background')];
     case 'species': {
       const sp = s.speciesId ? db.species.get(s.speciesId) : undefined;
-      if (!sp) return ['Choose a species'];
+      if (!sp) return [tr.t('creator.problem.species')];
       const out: string[] = [];
-      if (sp.lineages?.length && !sp.lineages.some((l) => l.id === s.lineageId)) out.push(`Choose a ${sp.lineageLabel ?? 'lineage'}`);
-      if (sp.sizes.length > 1 && !s.size) out.push('Choose a size');
+      if (sp.lineages?.length && !sp.lineages.some((l) => l.id === s.lineageId)) out.push(tr.t('creator.problem.lineage', { label: sp.lineageLabel ?? tr.t('creator.species.lineage').toLowerCase() }));
+      if (sp.sizes.length > 1 && !s.size) out.push(tr.t('creator.problem.size'));
       return out;
     }
     case 'abilities': {
-      const out = scoreProblems(s.abilityMethod, s.baseScores, s.rolledPool);
+      const out = scoreProblems(s.abilityMethod, s.baseScores, s.rolledPool, tr);
       const bonus = Object.values(s.backgroundBonus).filter(Boolean).sort().join(',');
-      if (bonus !== '1,2' && bonus !== '1,1,1') out.push('Apply your background increase (+2/+1 or +1/+1/+1)');
+      if (bonus !== '1,2' && bonus !== '1,1,1') out.push(tr.t('creator.problem.backgroundIncrease'));
       return out;
     }
     case 'skills': {
       const cls = s.classId ? db.classes.get(s.classId) : undefined;
       const out: string[] = [];
-      if (cls && s.classSkills.length !== cls.skillChoices.count) out.push(`Choose ${cls.skillChoices.count} class skills`);
-      if (s.speciesId === 'human' && s.speciesSkills.length !== 1) out.push('Choose your Skillful skill');
-      if (s.speciesId === 'elf' && s.speciesSkills.length !== 1) out.push('Choose your Keen Senses skill');
-      if (s.speciesId === 'human' && !s.speciesFeatId) out.push('Choose your Versatile origin feat');
-      for (const ch of creationChoices(s, db)) if (choiceValues(s, ch.key).length !== ch.count) out.push(`Choose ${ch.label} (${ch.count})`);
+      if (cls && s.classSkills.length !== cls.skillChoices.count) out.push(tr.tn('creator.problem.classSkills', cls.skillChoices.count));
+      if (s.speciesId === 'human' && s.speciesSkills.length !== 1) out.push(tr.t('creator.problem.skillful'));
+      if (s.speciesId === 'elf' && s.speciesSkills.length !== 1) out.push(tr.t('creator.problem.keenSenses'));
+      if (s.speciesId === 'human' && !s.speciesFeatId) out.push(tr.t('creator.problem.versatile'));
+      for (const ch of creationChoices(s, db, tr)) if (choiceValues(s, ch.key).length !== ch.count) out.push(tr.t('creator.problem.choice', { label: ch.label, count: ch.count }));
       return out;
     }
     case 'equipment':
-      return s.classEquipment === undefined || !s.backgroundEquipment ? ['Choose your starting equipment'] : [];
+      return s.classEquipment === undefined || !s.backgroundEquipment ? [tr.t('creator.problem.equipment')] : [];
     case 'appearance':
-      return s.appearance ? [] : ['Customize your appearance'];
+      return s.appearance ? [] : [tr.t('creator.problem.appearance')];
     case 'identity':
-      return s.name.trim() ? [] : ['Enter a name'];
+      return s.name.trim() ? [] : [tr.t('creator.problem.name')];
     case 'difficulty':
-      return s.difficulty ? [] : ['Choose Heroic or Hardcore'];
+      return s.difficulty ? [] : [tr.t('creator.problem.difficulty')];
     case 'spells': {
       const need = spellCounts(s, db);
       const out: string[] = [];
-      if (s.cantrips.length !== need.cantrips) out.push(`Choose ${need.cantrips} cantrips`);
-      if (s.preparedSpells.length !== need.spells) out.push(`Choose ${need.spells} level 1 spells`);
+      if (s.cantrips.length !== need.cantrips) out.push(tr.tn('creator.problem.cantrips', need.cantrips));
+      if (s.preparedSpells.length !== need.spells) out.push(tr.tn('creator.problem.spells', need.spells));
       return out;
     }
     case 'review':
@@ -214,7 +206,7 @@ export function setChoiceValues(s: CreatorState, key: string, values: string[]):
 }
 
 /** Class options the player must pick at level 1 (besides skills, spells and equipment). */
-export function creationChoices(s: CreatorState, db: SrdDatabase): CreationChoice[] {
+export function creationChoices(s: CreatorState, db: SrdDatabase, tr: Translator = ENGLISH): CreationChoice[] {
   const cls = s.classId ? db.classes.get(s.classId) : undefined;
   if (!cls) return [];
   const out: CreationChoice[] = [];
@@ -226,32 +218,32 @@ export function creationChoices(s: CreatorState, db: SrdDatabase): CreationChoic
       const t = cls.weaponProficiencies;
       return t.includes(w.category) || (w.category === 'martial' && ((t.includes('martial:light') && w.properties.includes('light')) || (t.includes('martial:finesse') && w.properties.includes('finesse'))));
     });
-    out.push({ key: 'weapon_mastery', label: 'weapon masteries', count: masteries, options: weapons.map((w) => ({ id: w.id, label: w.name, detail: cap(w.mastery) })) });
+    out.push({ key: 'weapon_mastery', label: tr.t('creator.choice.weaponMastery'), count: masteries, options: weapons.map((w) => ({ id: w.id, label: w.name, detail: cap(w.mastery) })) });
   }
   if (cls.id === 'fighter') {
     const styles = [...db.feats.values()].filter((f) => f.category === 'fighting_style');
-    out.push({ key: 'fighting_style', label: 'a Fighting Style', count: 1, options: styles.map((f) => ({ id: f.id, label: f.name, detail: f.text })) });
+    out.push({ key: 'fighting_style', label: tr.t('creator.choice.fightingStyle'), count: 1, options: styles.map((f) => ({ id: f.id, label: f.name, detail: f.text })) });
   }
   if (cls.id === 'rogue') {
     const bg = s.backgroundId ? db.backgrounds.get(s.backgroundId) : undefined;
     const prof = [...new Set([...(bg?.skills ?? []), ...s.classSkills, ...s.speciesSkills])];
-    out.push({ key: 'expertise', label: 'Expertise skills', count: 2, options: prof.map((k) => ({ id: k, label: cap(k) })) });
+    out.push({ key: 'expertise', label: tr.t('creator.choice.expertise'), count: 2, options: prof.map((k) => ({ id: k, label: cap(k) })) });
   }
   if (cls.id === 'cleric') {
-    out.push({ key: 'divine_order', label: 'a Divine Order', count: 1, options: [
-      { id: 'protector', label: 'Protector', detail: 'Martial weapons and Heavy armor training.' },
-      { id: 'thaumaturge', label: 'Thaumaturge', detail: 'One extra cantrip; add Wisdom to Arcana and Religion checks.' },
+    out.push({ key: 'divine_order', label: tr.t('creator.choice.divineOrder'), count: 1, options: [
+      { id: 'protector', label: tr.t('creator.order.protector'), detail: tr.t('creator.order.protectorDetail') },
+      { id: 'thaumaturge', label: tr.t('creator.order.thaumaturge'), detail: tr.t('creator.order.thaumaturgeDetail') },
     ] });
   }
   if (cls.id === 'druid') {
-    out.push({ key: 'primal_order', label: 'a Primal Order', count: 1, options: [
-      { id: 'magician', label: 'Magician', detail: 'One extra cantrip; add Wisdom to Arcana and Nature checks.' },
-      { id: 'warden', label: 'Warden', detail: 'Martial weapons and Medium armor training.' },
+    out.push({ key: 'primal_order', label: tr.t('creator.choice.primalOrder'), count: 1, options: [
+      { id: 'magician', label: tr.t('creator.order.magician'), detail: tr.t('creator.order.magicianDetail') },
+      { id: 'warden', label: tr.t('creator.order.warden'), detail: tr.t('creator.order.wardenDetail') },
     ] });
   }
   if (cls.id === 'warlock') {
     const invocations = (cls.options.eldritch_invocation ?? []).filter((o) => !o.prerequisite || !/Level \d+\+/.test(o.prerequisite));
-    out.push({ key: 'eldritch_invocation', label: 'an Eldritch Invocation', count: 1, options: invocations.map((o) => ({ id: o.id, label: o.name, detail: o.text })) });
+    out.push({ key: 'eldritch_invocation', label: tr.t('creator.choice.invocation'), count: 1, options: invocations.map((o) => ({ id: o.id, label: o.name, detail: o.text })) });
   }
   // Origin feat picks: background feat and Human Versatile feat.
   const bg = s.backgroundId ? db.backgrounds.get(s.backgroundId) : undefined;
@@ -263,27 +255,27 @@ export function creationChoices(s: CreatorState, db: SrdDatabase): CreationChoic
   ];
   const addMagicInitiate = (slot: 'bg' | 'sp', fixedList?: string) => {
     const list = fixedList ?? s.choices[`feat_${slot}_list`]?.[0];
-    const title = slot === 'bg' ? 'Magic Initiate' : 'Versatile: Magic Initiate';
+    const title = tr.t(slot === 'bg' ? 'creator.choice.magicInitiate' : 'creator.choice.versatileMagicInitiate');
     if (!fixedList) {
-      out.push({ key: `feat_${slot}_list`, label: `${title} spell list`, count: 1, options: ['cleric', 'druid', 'wizard'].map((l) => ({ id: l, label: cap(l) })) });
+      out.push({ key: `feat_${slot}_list`, label: tr.t('creator.choice.spellList', { title }), count: 1, options: ['cleric', 'druid', 'wizard'].map((l) => ({ id: l, label: cap(l) })) });
     }
     if (!list) return;
-    out.push({ key: `feat_${slot}_cantrips`, label: `${title} cantrips (${cap(list)})`, count: 2, options: spellOpts(list, 0) });
-    out.push({ key: `feat_${slot}_spell`, label: `${title} level 1 spell (${cap(list)})`, count: 1, options: spellOpts(list, 1) });
-    out.push({ key: `feat_${slot}_ability`, label: `${title} spellcasting ability`, count: 1, options: abilityOpts });
+    out.push({ key: `feat_${slot}_cantrips`, label: tr.t('creator.choice.featCantrips', { title, list: cap(list) }), count: 2, options: spellOpts(list, 0) });
+    out.push({ key: `feat_${slot}_spell`, label: tr.t('creator.choice.featSpell', { title, list: cap(list) }), count: 1, options: spellOpts(list, 1) });
+    out.push({ key: `feat_${slot}_ability`, label: tr.t('creator.choice.featAbility', { title }), count: 1, options: abilityOpts });
   };
   if (bg?.featId === 'magic_initiate') addMagicInitiate('bg', bg.featOption);
   if (s.speciesFeatId === 'magic_initiate') addMagicInitiate('sp');
   if (s.speciesFeatId === 'skilled') {
     const have = new Set<string>([...(bg?.skills ?? []), ...s.classSkills, ...s.speciesSkills]);
-    out.push({ key: 'feat_sp_skilled', label: 'Skilled proficiencies', count: 3, options: SKILLS.filter((k) => !have.has(k)).map((k) => ({ id: k, label: cap(k) })) });
+    out.push({ key: 'feat_sp_skilled', label: tr.t('creator.choice.skilled'), count: 3, options: SKILLS.filter((k) => !have.has(k)).map((k) => ({ id: k, label: cap(k) })) });
   }
 
   const instruments = [...db.gear.values()].filter((g) => g.tags.includes('musical_instrument'));
-  if (cls.id === 'bard') out.push({ key: 'tool_proficiencies', label: 'Musical Instruments', count: 3, options: instruments.map((g) => ({ id: g.id, label: g.name })) });
+  if (cls.id === 'bard') out.push({ key: 'tool_proficiencies', label: tr.t('creator.choice.instruments'), count: 3, options: instruments.map((g) => ({ id: g.id, label: g.name })) });
   if (cls.id === 'monk') {
     const artisan = [...db.gear.values()].filter((g) => g.category === 'tool' && /(Supplies|Tools|Utensils)$/.test(g.name) && !["Thieves' Tools", "Navigator's Tools"].includes(g.name));
-    out.push({ key: 'tool_proficiencies', label: "an Artisan's Tool or Musical Instrument", count: 1, options: [...artisan, ...instruments].map((g) => ({ id: g.id, label: g.name })) });
+    out.push({ key: 'tool_proficiencies', label: tr.t('creator.choice.toolOrInstrument'), count: 1, options: [...artisan, ...instruments].map((g) => ({ id: g.id, label: g.name })) });
   }
   return out;
 }
