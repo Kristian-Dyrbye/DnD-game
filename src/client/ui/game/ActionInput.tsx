@@ -1,10 +1,10 @@
 /**
- * Input area: suggested action buttons plus a free-text box (free text goes through intent parsing;
+ * Input area: suggested action buttons (in a conversation: the NPC's line above its reply options) plus a free-text box (free text goes through intent parsing;
  * in the web edition keyword matching only, so the box says the buttons work best).
  */
 import { useState } from 'preact/hooks';
 import { WEB_EDITION } from '../../edition';
-import { connection, send, suggestions } from '../../net/gameSocket';
+import { connection, dialogue, send, suggestions } from '../../net/gameSocket';
 
 export function ActionInput() {
   const [text, setText] = useState('');
@@ -16,9 +16,17 @@ export function ActionInput() {
     send({ type: 'say', text: t.slice(0, 500) });
     setText('');
   };
+  const talk = dialogue.value;
   return (
     <section class="action-input" aria-label="Your actions">
-      <div class="suggestions">
+      {talk && (
+        <div class="dialogue-panel" role="group" aria-label={`Conversation with ${talk.npc}`}>
+          <p class="dialogue-line">
+            <strong>{talk.speaker}:</strong> “{talk.text}”
+          </p>
+        </div>
+      )}
+      <div class={talk ? 'suggestions dialogue-options' : 'suggestions'}>
         {suggestions.value.map((a) => (
           <button key={a.id} type="button" disabled={offline} class={a.say ? 'idea' : undefined} onClick={() => send(a.say ? { type: 'say', text: a.say } : { type: 'choose', actionId: a.id })}>
             {a.label}

@@ -12,6 +12,7 @@ import type { ShopView } from '../engine/world/shops';
 import type { Ambience, Mood } from '../engine/world/mood';
 import type { Encounter } from '../engine/combat/encounter';
 import type { DungeonView } from '../engine/world/dungeon';
+import type { DialogueView } from '../engine/adventure/conversation';
 import { SLOT_ID_PATTERN, type SaveMeta } from './save';
 
 const base = { reqId: z.string().max(40).optional() };
@@ -118,6 +119,8 @@ export type ServerEvent =
   | { type: 'narration'; phase: 'start' | 'chunk' | 'end'; entryId: number; text: string }
   | { type: 'roll'; roll: RollRecord }
   | { type: 'suggestions'; actions: SuggestedAction[] }
+  /** The open conversation's current line (null when nobody is being talked to); its options arrive as suggestions. */
+  | { type: 'dialogue'; view: DialogueView | null }
   | { type: 'saved'; meta: SaveMeta }
   /** Current objective for the optional hint (the client shows it only if the setting is on). */
   | { type: 'objective'; text: string | null }

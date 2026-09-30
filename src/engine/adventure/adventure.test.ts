@@ -97,7 +97,7 @@ describe('scene runner', () => {
     const r = startAdventure(c);
     expect(r.entered).toEqual(['millbrook_square']);
     expect(c.state.location).toEqual({ adventureId: 'millbrook_demo', sceneId: 'millbrook_square', name: 'Millbrook Square' });
-    expect(availableActions(c).map((a) => a.id)).toEqual(['talk_mayor', 'notice_board.read', 'exit.to_mill']);
+    expect(availableActions(c).map((a) => a.id)).toEqual(['talk_mayor', 'notice_board.read', 'talk.mayor_hobb.mill_talk', 'exit.to_mill']);
     expect(availableActions(c).find((a) => a.id === 'notice_board.read')?.check).toBe('Investigation DC 10');
     expect(describeScene(c).npcs).toEqual(['Mayor Hobb']);
   });
@@ -190,7 +190,7 @@ describe('adventure action port', () => {
     await session.handle({ type: 'new_game', hero: hero(), mode: 'heroic' });
     expect(events.some((e) => e.type === 'log' && e.entry.text.includes('mossy well'))).toBe(true);
     const sugg = events.filter((e) => e.type === 'suggestions').at(-1);
-    expect(sugg?.type === 'suggestions' && sugg.actions.map((a) => a.id)).toEqual(['talk_mayor', 'notice_board.read', 'exit.to_mill']);
+    expect(sugg?.type === 'suggestions' && sugg.actions.map((a) => a.id)).toEqual(['talk_mayor', 'notice_board.read', 'talk.mayor_hobb.mill_talk', 'exit.to_mill']);
 
     await session.handle({ type: 'choose', actionId: 'notice_board.read' });
     expect(events.some((e) => e.type === 'roll' && e.roll.label === 'Investigation')).toBe(true);

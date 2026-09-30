@@ -267,7 +267,128 @@
       "factions": [
         "crown_of_aurelmark"
       ],
-      "attitude": "friendly"
+      "attitude": "friendly",
+      "conversations": [
+        {
+          "id": "mill_talk",
+          "label": "Ask Mayor Hobb about the old mill",
+          "keywords": [
+            "ask",
+            "miller",
+            "question"
+          ],
+          "if": {
+            "not": {
+              "flag": "~rats_cleared"
+            }
+          },
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Friend! You've seen the notice, then? Dreadful business at the old mill. What can I tell you?",
+              "options": [
+                {
+                  "id": "miller",
+                  "label": "\"What happened to the miller?\"",
+                  "once": true,
+                  "keywords": [
+                    "miller",
+                    "happened"
+                  ],
+                  "next": "miller"
+                },
+                {
+                  "id": "sense",
+                  "label": "Watch his face as he talks about the mill",
+                  "once": true,
+                  "keywords": [
+                    "watch",
+                    "face",
+                    "lying"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 12,
+                    "success": {
+                      "text": "His eyes dart to the granary whenever the mill comes up: he is hiding something about the grain.",
+                      "flags": [
+                        {
+                          "set": "~hobb_nervous"
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "He seems nothing more than a worried, fussy man."
+                    }
+                  },
+                  "next": "greet"
+                },
+                {
+                  "id": "press",
+                  "label": "\"Your grain drew those rats, didn't it?\"",
+                  "if": {
+                    "flag": "~hobb_nervous"
+                  },
+                  "once": true,
+                  "keywords": [
+                    "grain",
+                    "threaten",
+                    "blame"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 13,
+                    "success": {
+                      "flags": [
+                        {
+                          "set": "~hobb_confessed"
+                        }
+                      ],
+                      "coins": 500
+                    },
+                    "failure": {
+                      "text": "The mayor puffs himself up and turns red."
+                    }
+                  },
+                  "next": "confess",
+                  "nextOnFail": "bluster"
+                },
+                {
+                  "id": "leave",
+                  "label": "\"I'll see what I can do.\""
+                }
+              ]
+            },
+            {
+              "id": "miller",
+              "text": "Aldo? Gone a week now. Left his cellar key behind, they say. Or lost it. Odd fellow, always muttering about the dark under the mill.",
+              "options": [
+                {
+                  "id": "back",
+                  "label": "\"Tell me more about the mill.\"",
+                  "next": "greet"
+                }
+              ]
+            },
+            {
+              "id": "confess",
+              "text": "All right, all right! The grain was bad and I sold it to him cheap. Here, five gold more for your trouble, and keep it quiet, friend.",
+              "options": [
+                {
+                  "id": "back",
+                  "label": "\"Anything else I should know?\"",
+                  "next": "greet"
+                }
+              ]
+            },
+            {
+              "id": "bluster",
+              "text": "How dare you! I am the mayor of this town, and I'll thank you to remember it!"
+            }
+          ]
+        }
+      ]
     }
   ],
   "encounters": [
@@ -347,6 +468,14 @@
     {
       "id": "~reward_claimed",
       "description": "Claimed the mayor's reward."
+    },
+    {
+      "id": "~hobb_nervous",
+      "description": "Saw through Mayor Hobb's nerves about the grain (conversation)."
+    },
+    {
+      "id": "~hobb_confessed",
+      "description": "Mayor Hobb admitted selling the miller bad grain (conversation)."
     }
   ],
   "endings": [

@@ -122,9 +122,40 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
   walkReveal(adv.chapters, 'revealRoom');
   walkReveal(adv.beats, 'revealRoom');
   walkReveal(adv.encounters, 'revealRoom');
+  walkReveal(adv.npcs, 'revealRoom');
   for (const e of adv.encounters) if (e.map && adv.maps.length) room(e.map, e.room, `encounter ${e.id}`);
   for (const n of adv.npcs) if (db && !db.monsters.has(n.statBlock)) errors.push(`npc ${n.id}: unknown stat block "${n.statBlock}"`);
   for (const n of adv.npcs) for (const e of n.schedule) if (!sceneIds.has(e.scene)) errors.push(`npc ${n.id}: schedule names unknown scene "${e.scene}"`);
+  // Conversations: node/option refs, speakers, outcomes; nodes unreachable from the start are warned.
+  for (const n of adv.npcs) {
+    dupes(`conversation of npc ${n.id}`, n.conversations.map((c) => c.id));
+    for (const c of n.conversations) {
+      const where = `npc ${n.id} conversation ${c.id}`;
+      const nodeIds = dupes(`node in ${where}`, c.nodes.map((x) => x.id));
+      if (!nodeIds.has(c.start)) errors.push(`${where}: start node "${c.start}" does not exist`);
+      for (const node of c.nodes) {
+        dupes(`option in ${where} node ${node.id}`, node.options.map((o) => o.id));
+        if (node.speaker && !npcIds.has(node.speaker)) errors.push(`${where} node ${node.id}: unknown speaker "${node.speaker}"`);
+        for (const o of node.options) {
+          const at = `${where} node ${node.id} option ${o.id}`;
+          for (const target of [o.next, o.nextOnFail]) if (target && !nodeIds.has(target)) errors.push(`${at}: next node "${target}" does not exist`);
+          if (o.nextOnFail && !o.check) warnings.push(`${at}: nextOnFail without a check`);
+          outcome(o.outcome, at);
+          outcome(o.check?.success, `${at}.success`);
+          outcome(o.check?.failure, `${at}.failure`);
+        }
+      }
+      const seen = new Set<string>();
+      const todo = [c.start];
+      while (todo.length) {
+        const id = todo.pop()!;
+        if (seen.has(id)) continue;
+        seen.add(id);
+        for (const o of c.nodes.find((x) => x.id === id)?.options ?? []) todo.push(...[o.next, o.nextOnFail].filter((t): t is string => !!t));
+      }
+      for (const node of c.nodes) if (!seen.has(node.id)) warnings.push(`${where}: node "${node.id}" is unreachable from the start`);
+    }
+  }
   for (const d of adv.deadlines) outcome(d.missed, `deadline ${d.id}.missed`);
   for (const l of adv.lootTables) for (const e of l.entries) if (e.itemId) item(e.itemId, `loot ${l.id}`);
 
@@ -155,7 +186,7 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
     for (const t of sceneTargets(s, adv)) queue.push(t);
   }
   for (const s of scenes) if (!reach.has(s.id)) warnings.push(`scene "${s.id}" is unreachable from the start`);
-  if (adv.endings.length && !scenes.some((s) => reach.has(s.id) && sceneOutcomes(s).some((o) => o.ending)) && !adv.encounters.some((e) => [e.win, e.lose, e.flee].some((o) => o.ending)) && !adv.beats.some((b) => b.outcome.ending)) {
+  if (adv.endings.length && !scenes.some((s) => reach.has(s.id) && sceneOutcomes(s, adv).some((o) => o.ending)) && !adv.encounters.some((e) => [e.win, e.lose, e.flee].some((o) => o.ending)) && !adv.beats.some((b) => b.outcome.ending)) {
     errors.push('no reachable ending');
   }
 
@@ -166,14 +197,17 @@ export function allScenes(adv: Adventure): Scene[] {
   return adv.chapters.flatMap((c) => c.scenes);
 }
 
-function sceneOutcomes(s: Scene): Outcome[] {
-  const fromAction = (a: Action) => [a.outcome, a.check?.success, a.check?.failure].filter((o): o is Outcome => !!o);
-  return [...(s.onEnter ? [s.onEnter] : []), ...s.actions.flatMap(fromAction), ...s.pois.flatMap((p) => p.actions.flatMap(fromAction)), ...s.exits.flatMap((e) => (e.check ? [e.check.failure] : []))];
+/** Outcomes that can happen in a scene: its actions, POIs, exits, onEnter and the conversations of NPCs who can be there. */
+function sceneOutcomes(s: Scene, adv: Adventure): Outcome[] {
+  const fromAction = (a: { outcome?: Outcome | undefined; check?: { success: Outcome; failure: Outcome } | undefined }) => [a.outcome, a.check?.success, a.check?.failure].filter((o): o is Outcome => !!o);
+  const npcs = adv.npcs.filter((n) => (n.schedule.length ? n.schedule.some((e) => e.scene === s.id) : s.npcs.includes(n.id)));
+  const talk = npcs.flatMap((n) => n.conversations.flatMap((c) => c.nodes.flatMap((node) => node.options.flatMap(fromAction))));
+  return [...(s.onEnter ? [s.onEnter] : []), ...s.actions.flatMap(fromAction), ...s.pois.flatMap((p) => p.actions.flatMap(fromAction)), ...s.exits.flatMap((e) => (e.check ? [e.check.failure] : [])), ...talk];
 }
 
 function sceneTargets(s: Scene, adv: Adventure): string[] {
   const out = s.exits.map((e) => e.to);
-  const outcomes = sceneOutcomes(s);
+  const outcomes = sceneOutcomes(s, adv);
   for (const o of outcomes) {
     if (o.goto) out.push(o.goto);
     const enc = o.encounter ? adv.encounters.find((e) => e.id === o.encounter) : undefined;

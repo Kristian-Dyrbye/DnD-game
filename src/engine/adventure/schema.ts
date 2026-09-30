@@ -225,6 +225,58 @@ export const ChapterSchema = z
   })
   .strict();
 
+// ---------------------------------------------------------------- conversations
+
+/** A reply the player can pick in a conversation (a button; free text can match it via `keywords`). */
+export const ConversationOptionSchema = z
+  .object({
+    id: Id,
+    /** What the hero says or does ("Ask about the miller", "[Intimidation] Lean on him"). */
+    label: z.string(),
+    /** Hidden unless this holds. */
+    if: ConditionSchema.optional(),
+    /** Offered once per talk (hidden after it was picked, until the conversation starts again). */
+    once: z.boolean().default(false),
+    check: CheckSchema.optional(),
+    /** Applied after the check's outcome (or alone when there is no check). */
+    outcome: OutcomeSchema.optional(),
+    /** Node to continue with; none = the conversation ends. */
+    next: Id.optional(),
+    /** Node to continue with when the check fails (default: `next`). */
+    nextOnFail: Id.optional(),
+    keywords: z.array(z.string()).default([]),
+  })
+  .strict();
+export type ConversationOption = z.infer<typeof ConversationOptionSchema>;
+
+export const ConversationNodeSchema = z
+  .object({
+    id: Id,
+    /** The line spoken (verbatim in the log; the AI edition may voice it). */
+    text: z.string(),
+    /** Who speaks it: an NPC id of this adventure (default: the conversation's NPC). */
+    speaker: Id.optional(),
+    options: z.array(ConversationOptionSchema).default([]),
+  })
+  .strict();
+export type ConversationNode = z.infer<typeof ConversationNodeSchema>;
+
+/** A dialogue tree with an NPC, started by a "talk" button while the NPC is present. */
+export const ConversationSchema = z
+  .object({
+    id: Id,
+    /** Button that starts it (default "Talk to <name>"). */
+    label: z.string().optional(),
+    if: ConditionSchema.optional(),
+    /** Can only be had once per adventure (after it ends). */
+    once: z.boolean().default(false),
+    start: Id,
+    nodes: z.array(ConversationNodeSchema).min(1),
+    keywords: z.array(z.string()).default([]),
+  })
+  .strict();
+export type Conversation = z.infer<typeof ConversationSchema>;
+
 export const NpcSchema = z
   .object({
     id: Id,
@@ -243,6 +295,8 @@ export const NpcSchema = z
      * (scene `npcs` lists are ignored for them). Hours as in the `hours` condition.
      */
     schedule: z.array(z.object({ scene: Id, from: z.number().int().min(0).max(23), to: z.number().int().min(0).max(24), if: ConditionSchema.optional() })).default([]),
+    /** Dialogue trees (A129): offered as "talk" actions wherever the NPC is present. */
+    conversations: z.array(ConversationSchema).default([]),
   })
   .strict();
 export type Npc = z.infer<typeof NpcSchema>;

@@ -105,9 +105,15 @@ describe('resolveIntent', () => {
   it('handles look, talk, move, attack, rest and nonsense without inventing mechanics', () => {
     const ctx = playing();
     expect(resolve(ctx, { action: 'look' }).via).toBe('look');
+    // The mayor has an authored conversation: talking opens it (generic talk otherwise).
     const talk = resolve(ctx, { action: 'talk' });
-    expect(talk.via).toBe('talk');
-    expect(talk.result.facts[0]).toMatch(/Mayor Hobb, who seems friendly/);
+    expect(talk.actionId).toBe('talk.mayor_hobb.mill_talk');
+    expect(talk.result.dialogue?.[0]).toMatchObject({ speaker: 'Mayor Hobb', text: expect.stringMatching(/^Friend!/) });
+    perform(ctx, 'dlg.bye');
+    ctx.adventure = { ...ctx.adventure, npcs: ctx.adventure.npcs.map((n) => ({ ...n, conversations: [] })) };
+    const plain = resolve(ctx, { action: 'talk' });
+    expect(plain.via).toBe('talk');
+    expect(plain.result.facts[0]).toMatch(/Mayor Hobb, who seems friendly/);
     expect(resolve(ctx, { action: 'move' }).result.facts[0]).toBe('From here you can go: walk to the old mill.');
     const attack = resolve(ctx, { action: 'attack', target: 'mayor_hobb' });
     expect(attack.via).toBe('refused');

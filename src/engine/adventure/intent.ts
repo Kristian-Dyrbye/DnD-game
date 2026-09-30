@@ -6,7 +6,8 @@
  */
 import { z } from 'zod';
 import { SKILL_ABILITY, SKILLS, type Ability, type Skill } from '../rules/basics';
-import { availableActions, currentScene, npcsHere, type RunContext } from './runner';
+import { availableActions, currentScene, getProgress, npcsHere, type RunContext } from './runner';
+import { conversationFor, DIALOGUE_PREFIX, optionFor, TALK_PREFIX } from './conversation';
 
 export const INTENT_ACTIONS = ['choose_action', 'skill_check', 'talk', 'move', 'look', 'attack', 'use_item', 'cast_spell', 'rest', 'other'] as const;
 
@@ -47,7 +48,13 @@ export interface IntentContext {
 
 export function intentContext(ctx: RunContext): IntentContext {
   const scene = currentScene(ctx);
+  const talk = getProgress(ctx.state)?.talk;
   const option = (id: string, label: string): IntentOption => {
+    if (id.startsWith(TALK_PREFIX)) return { id, label, keywords: conversationFor(ctx.adventure, id)?.conv.keywords ?? [] };
+    if (id.startsWith(DIALOGUE_PREFIX)) {
+      const o = talk && optionFor(ctx.adventure, talk, id);
+      return { id, label, keywords: o?.keywords ?? [], ...checkFields(o?.check) };
+    }
     const [poi, sub] = id.split('.', 2);
     if (poi === 'exit') {
       const check = scene.exits.find((e) => e.id === sub)?.check;

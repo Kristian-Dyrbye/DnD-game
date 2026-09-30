@@ -61,7 +61,12 @@ export function solveAdventure(base: Omit<RunContext, 'rng'>, endingId?: string,
   const start = clonePlain(base.state);
   const ctx0: RunContext = { ...base, state: start, rng };
   startAdventure(ctx0);
-  const key = (s: GameState) => `${getProgress(s)?.sceneId}|${flagsKey(s.flags)}|${getProgress(s)?.done.length}`;
+  const key = (s: GameState) => {
+    const p = getProgress(s);
+    // An open conversation is part of the position (its node and used once-per-talk options).
+    const talk = p?.talk ? `${p.talk.npc}.${p.talk.conversation}.${p.talk.node}.${p.talk.chosen.join(',')}` : '';
+    return `${p?.sceneId}|${flagsKey(s.flags)}|${p?.done.length}|${talk}`;
+  };
   // FIFO queue; a cursor instead of shift() (O(n) on big queues).
   const queue: Node[] = [{ state: start, path: [] }];
   let head = 0;

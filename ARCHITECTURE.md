@@ -47,7 +47,8 @@ Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master. Runs fully of
 │  │  │                           companion AI (companionAi.ts), the fight controller used by UI and server (encounter.ts)
 │  │  ├─ world/                   clock, weather, travel, map discovery, factions, shops, flags (+ per-adventure typed docs), dungeon maps + fog of war (dungeon.ts)
 │  │  ├─ adventure/               adventure schema, scene runner (outcomes incl. rest/damage/cost/scar/tip), fights ↔ story (fights.ts), defeat outcomes,
-│  │  │                           combat narration queue, suggestions, summary, encounter scaling, side-quest generator + solver/validator, the session port (sessionActions.ts)
+│  │  │                           combat narration queue, suggestions, summary, encounter scaling, side-quest generator + solver/validator, the session port (sessionActions.ts),
+│  │  │                           NPC conversation trees (conversation.ts: talk./dlg. actions, dialogue view; the runner applies option checks/outcomes)
 │  │  ├─ party/                   companions, loyalty, control mode
 │  │  ├─ appearance/              appearance, equipment → model parts, monster → model, wound levels (data only; rendering lives in the client)
 │  │  ├─ character/ (also)        scars.ts (permanent scars), armorWear.ts (wear + repair)

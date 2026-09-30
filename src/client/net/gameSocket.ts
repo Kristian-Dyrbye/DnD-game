@@ -3,6 +3,7 @@
  * (game state, story log, rolls, suggested actions), and re-requests a snapshot after a reconnect.
  */
 import type { DungeonView } from '../../engine/world/dungeon';
+import type { DialogueView } from '../../engine/adventure/conversation';
 import { signal } from '@preact/signals';
 import type { GameState, LogEntry, RollRecord } from '../../engine/session/gameState';
 import type { ClientCommand, ServerEvent, SuggestedAction } from '../../shared/protocol';
@@ -20,6 +21,8 @@ export const gameState = signal<GameState | null>(null);
 export const storyLog = signal<LogEntry[]>([]);
 export const rollHistory = signal<RollRecord[]>([]);
 export const suggestions = signal<SuggestedAction[]>([]);
+/** The open conversation (its line; the options are the suggestions meanwhile). */
+export const dialogue = signal<DialogueView | null>(null);
 /** Text of the narration currently streaming in, keyed by log entry id. */
 export const streaming = signal<{ entryId: number; text: string } | null>(null);
 export const lastError = signal<string | null>(null);
@@ -73,6 +76,9 @@ export function applyEvent(e: ServerEvent): void {
       return;
     case 'suggestions':
       suggestions.value = e.actions;
+      return;
+    case 'dialogue':
+      dialogue.value = e.view;
       return;
     case 'error':
       lastError.value = e.message;

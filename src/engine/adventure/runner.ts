@@ -29,6 +29,7 @@ import { discover, getMap } from '../world/travel';
 import { changeReputation, type ReputationChange } from '../world/factions';
 import type { Lore } from '../world/lore';
 import { trackQuests } from './quests';
+import { conversationFor, conversationOffers, LEAVE_TALK, openOptions, optionFor, speakerOf, talkDoneKey, talkNode, DIALOGUE_PREFIX, TALK_PREFIX, type TalkProgress } from './conversation';
 
 export interface AdventureProgress {
   adventureId: string;
@@ -44,6 +45,8 @@ export interface AdventureProgress {
   deadlines?: Record<string, DeadlineProgress>;
   /** Lore location id when the party travelled somewhere this adventure has no scene for. */
   away?: string;
+  /** The open conversation, if any (only its options are offered meanwhile). */
+  talk?: TalkProgress;
 }
 
 export interface DeadlineProgress {
@@ -95,12 +98,15 @@ export interface StepResult {
   recruits?: string[];
   partings?: { id: string; status: 'waiting' | 'left' | 'betrayed' | 'dead' }[];
   approvals?: { companion: string; delta: number }[];
+  /** Conversation lines to log verbatim as dialogue, after the narrated facts. */
+  dialogue?: { speaker: string; text: string }[];
 }
 
 export interface AvailableAction {
   id: string;
   label: string;
-  kind: 'action' | 'poi' | 'exit';
+  /** `talk` starts a conversation; `dialogue` is an option (or leaving) inside one. */
+  kind: 'action' | 'poi' | 'exit' | 'talk' | 'dialogue';
   /** Shown before rolling ("Athletics DC 12"). */
   check?: string;
 }
@@ -214,6 +220,11 @@ export function availableActions(ctx: RunContext): AvailableAction[] {
   if (!p || p.ending || p.away) return [];
   const s = currentScene(ctx);
   const cc = conditionContext(ctx.state, p, flagsFor(ctx));
+  if (p.talk) {
+    // In a conversation: its options, plus a way out.
+    const opts = openOptions(ctx.adventure, p.talk, cc).map(({ id, option }): AvailableAction => ({ id, label: option.label, kind: 'dialogue', ...(option.check && { check: checkLabel(option.check) }) }));
+    return [...opts, { id: LEAVE_TALK, label: 'End the conversation', kind: 'dialogue' }];
+  }
   const open = (a: Action, id: string) => evalCondition(a.if, cc) && !(a.once && p.done.includes(`${s.id}/${id}`));
   const out: AvailableAction[] = [];
   for (const a of s.actions) if (open(a, a.id)) out.push({ id: a.id, label: a.label, kind: 'action', ...(a.check && { check: checkLabel(a.check) }) });
@@ -224,6 +235,7 @@ export function availableActions(ctx: RunContext): AvailableAction[] {
       if (open(a, id)) out.push({ id, label: a.label, kind: 'poi', ...(a.check && { check: checkLabel(a.check) }) });
     }
   }
+  for (const t of conversationOffers(ctx.adventure, npcsHere(ctx), cc, p.done)) out.push({ id: t.id, label: t.label, kind: 'talk' });
   for (const e of s.exits) if (evalCondition(e.if, cc)) out.push({ id: `exit.${e.id}`, label: e.label, kind: 'exit', ...(e.check && { check: checkLabel(e.check) }) });
   return out;
 }
@@ -232,6 +244,7 @@ export function availableActions(ctx: RunContext): AvailableAction[] {
 function isAvailable(ctx: RunContext, actionId: string): boolean {
   const p = getProgress(ctx.state);
   if (!p || p.ending || p.away) return false;
+  if (p.talk || actionId.startsWith(TALK_PREFIX) || actionId.startsWith(DIALOGUE_PREFIX)) return availableActions(ctx).some((a) => a.id === actionId);
   const s = currentScene(ctx);
   const cc = () => conditionContext(ctx.state, p, flagsFor(ctx));
   if (actionId.startsWith('exit.')) {
@@ -253,6 +266,10 @@ export function perform(ctx: RunContext, actionId: string): StepResult {
   if (!isAvailable(ctx, actionId)) throw new AdventureError(`"${actionId}" is not possible here`);
   const s = currentScene(ctx);
   const result = emptyResult();
+  if (actionId.startsWith(TALK_PREFIX) || actionId.startsWith(DIALOGUE_PREFIX)) {
+    converse(ctx, p, actionId, result);
+    return result;
+  }
 
   if (actionId.startsWith('exit.')) {
     const exit = s.exits.find((e) => `exit.${e.id}` === actionId)!;
@@ -287,6 +304,54 @@ export function perform(ctx: RunContext, actionId: string): StepResult {
 }
 
 /**
+ * Conversation steps: `talk.<npc>.<conv>` opens a talk at its start node; `dlg.<node>.<option>`
+ * resolves the option (check, outcome) and moves to its next node; `dlg.bye` or an option without
+ * `next` ends it. A step that moves the story on (scene change, fight, ending) also ends it.
+ */
+function converse(ctx: RunContext, p: AdventureProgress, actionId: string, result: StepResult): void {
+  const say = () => {
+    const at = p.talk && talkNode(ctx.adventure, p.talk);
+    if (!at) return void delete p.talk;
+    (result.dialogue ??= []).push({ speaker: speakerOf(ctx.adventure, at.npc, at.node), text: at.node.text });
+    // A node nobody can answer ends the talk (its line still stands).
+    if (openOptions(ctx.adventure, p.talk!, conditionContext(ctx.state, p, flagsFor(ctx))).length === 0) delete p.talk;
+  };
+  if (actionId === LEAVE_TALK) {
+    delete p.talk;
+    return;
+  }
+  const start = conversationFor(ctx.adventure, actionId);
+  if (start) {
+    if (start.conv.once) p.done.push(talkDoneKey(start.npc.id, start.conv.id));
+    ctx.state.time += TIME_COSTS.explore_action;
+    p.talk = { npc: start.npc.id, conversation: start.conv.id, node: start.conv.start, chosen: [] };
+    say();
+    fireBeats(ctx, result);
+    return;
+  }
+  const talk = p.talk!;
+  const option = optionFor(ctx.adventure, talk, actionId);
+  if (!option) throw new AdventureError(`Unknown conversation option "${actionId}"`);
+  if (option.once) talk.chosen.push(actionId);
+  ctx.state.time += TIME_COSTS.quick_action;
+  let next = option.next;
+  if (option.check) {
+    const r = resolveCheck(ctx, option.check);
+    result.rolls.push(r);
+    applyOutcome(ctx, r.success ? option.check.success : option.check.failure, result);
+    if (!r.success && option.nextOnFail) next = option.nextOnFail;
+  }
+  if (option.outcome) applyOutcome(ctx, option.outcome, result);
+  fireBeats(ctx, result);
+  if (p.talk !== talk || !next || result.entered.length || result.encounter || result.ending) {
+    if (p.talk === talk) delete p.talk;
+    return;
+  }
+  talk.node = next;
+  say();
+}
+
+/**
  * The scene to enter when the party arrives at a lore location: a chapter's start scene there,
  * else a visited scene there, else the first scene there. Undefined when the adventure has none.
  */
@@ -311,6 +376,7 @@ export function leaveScenes(ctx: RunContext, locationId: string, locationName: s
   const p = getProgress(ctx.state);
   if (!p) return;
   p.away = locationId;
+  delete p.talk;
   ctx.state.location = { adventureId: ctx.adventure.id, name: locationName };
 }
 
@@ -357,6 +423,7 @@ function enterScene(ctx: RunContext, sceneId: string, result: StepResult, depth 
   if (!scene) throw new AdventureError(`Unknown scene "${sceneId}"`);
   const p = getProgress(ctx.state)!;
   const fromRoom = findScene(ctx.adventure, p.sceneId)?.map;
+  delete p.talk;
   p.sceneId = sceneId;
   p.entries = (p.entries ?? 0) + 1;
   if (scene.map) {

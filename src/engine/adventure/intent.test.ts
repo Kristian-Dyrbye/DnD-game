@@ -26,7 +26,8 @@ function squareContext(): IntentContext {
 describe('intent context', () => {
   it('lists offered actions with keywords, NPCs and POIs', () => {
     const ictx = squareContext();
-    expect(ictx.actions.map((a) => a.id)).toEqual(['talk_mayor', 'notice_board.read', 'exit.to_mill']);
+    expect(ictx.actions.map((a) => a.id)).toEqual(['talk_mayor', 'notice_board.read', 'talk.mayor_hobb.mill_talk', 'exit.to_mill']);
+    expect(ictx.actions.find((a) => a.id === 'talk.mayor_hobb.mill_talk')?.keywords).toEqual(['ask', 'miller', 'question']);
     expect(ictx.actions.find((a) => a.id === 'notice_board.read')?.keywords).toEqual(['notice', 'board', 'read']);
     expect(ictx.npcs).toEqual([{ id: 'mayor_hobb', name: 'Mayor Hobb' }]);
     expect(ictx.pois).toEqual([{ id: 'notice_board', name: 'Notice board' }]);

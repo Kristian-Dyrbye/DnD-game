@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyEvent, rollHistory, storyLog, streaming, suggestions } from './gameSocket';
+import { applyEvent, dialogue, rollHistory, storyLog, streaming, suggestions } from './gameSocket';
 
 describe('client event reducer', () => {
   it('builds up the story log, streaming text, rolls and suggestions', () => {
@@ -14,5 +14,13 @@ describe('client event reducer', () => {
     expect(rollHistory.value).toHaveLength(1);
     applyEvent({ type: 'suggestions', actions: [{ id: 'look', label: 'Look around' }] });
     expect(suggestions.value[0]?.label).toBe('Look around');
+  });
+
+  it('tracks the open conversation', () => {
+    const view = { npcId: 'mayor_hobb', npc: 'Mayor Hobb', speaker: 'Mayor Hobb', text: 'Friend!' };
+    applyEvent({ type: 'dialogue', view });
+    expect(dialogue.value).toEqual(view);
+    applyEvent({ type: 'dialogue', view: null });
+    expect(dialogue.value).toBeNull();
   });
 });

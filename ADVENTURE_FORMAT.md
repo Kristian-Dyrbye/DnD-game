@@ -53,6 +53,7 @@ The runner and the suggested-action buttons use these ids:
 - Scene action: `<actionId>`.
 - POI action: `<poiId>.<actionId>`.
 - Exit: `exit.<exitId>`.
+- Conversations: `talk.<npcId>.<conversationId>`, `dlg.<nodeId>.<optionId>`, `dlg.bye` (see Conversations).
 
 ## Actions
 
@@ -174,6 +175,38 @@ The loader resolves `~name` to the full id, so saves and later arcs only ever se
 - `statBlock` is an SRD monster id.
 - `schedule` is optional: `[{ "scene": "market", "from": 6, "to": 14, "if"?: condition }]`. An NPC with a schedule appears only where and when an entry matches, and scene `npcs` lists are ignored for them. Use it for shopkeepers and night-only visitors.
 - Secrets are passed to the LLM only as guidance, never as mechanics.
+- `conversations` is optional: dialogue trees with this NPC (see below).
+
+### Conversations
+
+A conversation is a small tree of NPC lines and player replies. It works the same with and without the AI: every reply is an authored button, and the NPC lines are logged word for word as dialogue (the local edition voices them with TTS).
+
+```json
+"conversations": [{
+  "id": "mill_talk", "label": "Ask Mayor Hobb about the old mill",
+  "if": { "not": { "flag": "~rats_cleared" } }, "once": false, "keywords": ["ask", "miller"],
+  "start": "greet",
+  "nodes": [
+    { "id": "greet", "text": "Friend! What can I tell you?", "options": [
+      { "id": "miller", "label": "\"What happened to the miller?\"", "once": true, "next": "miller" },
+      { "id": "press", "label": "\"Your grain drew those rats, didn't it?\"", "if": { "flag": "~hobb_nervous" },
+        "check": { "skill": "intimidation", "dc": 13, "success": { "coins": 500 }, "failure": { "text": "He turns red." } },
+        "next": "confess", "nextOnFail": "bluster" },
+      { "id": "leave", "label": "\"I'll see what I can do.\"" } ] },
+    { "id": "miller", "text": "Aldo? Gone a week now.", "options": [ { "id": "back", "label": "\"Tell me more.\"", "next": "greet" } ] },
+    { "id": "confess", "speaker": "mayor_hobb", "text": "All right, all right!", "options": [] },
+    { "id": "bluster", "text": "How dare you!" } ]
+}]
+```
+
+- The conversation is offered as a button (`label`, default "Talk to <name>") wherever the NPC is present (scene `npcs` or `schedule`) and its `if` holds. `once: true` offers it only until it has been started once in this adventure. Free text such as "I talk to the mayor" also opens it.
+- While a conversation is open, the only buttons are the current node's options plus "End the conversation". Other scene actions and exits come back when it ends.
+- Option fields: `label` (what the hero says or does, logged as the hero's line), `if`, `once` (hidden after it was picked, until the conversation starts again), `check` (with `success`/`failure` outcomes, as for actions), `outcome` (applied after the check), `next` (the node that follows; none = the conversation ends), `nextOnFail` (the node after a failed check; default `next`), `keywords` (free-text matching).
+- Node fields: `text` (the line), `speaker` (an NPC id of this adventure; default the conversation's NPC), `options`. A node with no open options ends the conversation after its line.
+- An option whose outcome changes scene (`goto`), starts a fight or ends the adventure also ends the conversation.
+- Time: starting a conversation takes 10 minutes, each reply 5.
+- Action ids: `talk.<npcId>.<conversationId>` starts it; `dlg.<nodeId>.<optionId>` picks a reply; `dlg.bye` leaves.
+- The validator checks the start node, every `next`/`nextOnFail`, speakers and the outcomes inside options, and warns about nodes that can't be reached from the start. Conversation gotos and endings count for scene reachability, and the solver can play through conversations.
 
 ## Encounters
 

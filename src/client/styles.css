@@ -290,6 +290,11 @@ input[type='color'] { width: 2.2rem; height: 1.8rem; border: 1px solid #4a3f30; 
 @keyframes die-land { from { transform: scale(1.25); } to { transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) { .die.d20.tumbling, .last-roll .die.d20.kept { animation: none; } }
 .suggestions button.idea { border-style: dashed; font-style: italic; }
+/* conversation (A129): the NPC's line above the reply options */
+.dialogue-panel { background: #211c16; border: 1px solid #5a4a30; border-left: 3px solid #c9a45c; border-radius: 6px; padding: 0.5rem 0.8rem; margin-bottom: 0.5rem; }
+.dialogue-line { margin: 0; font-style: italic; }
+.dialogue-line strong { font-style: normal; color: #d8c08a; }
+.dialogue-options { flex-direction: column; align-items: stretch; }
 .objective-hint { grid-area: hint; margin: 0; padding: 0.3rem 1rem; font: 0.85rem system-ui, sans-serif; color: #d8c08a; background: #211c16; border-bottom: 1px solid #3a3226; }
 
 /* ---------- journal (A083) ---------- */

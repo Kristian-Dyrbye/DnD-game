@@ -56,6 +56,9 @@ export function resolveIntent(ctx: RunContext, v: ValidatedIntent, text: string)
       const who = (v.targetId && here.includes(v.targetId) ? npcName(v.targetId) : undefined) ?? (here.length === 1 ? npcName(here[0]) : undefined);
       if (!who) return facts('nothing', here.length ? 'You need to say who you are talking to.' : 'There is nobody here to talk to.');
       const npc = ctx.adventure.npcs.find((n) => n.name === who)!;
+      // An authored conversation with them opens the dialogue.
+      const talk = offered.find((a) => a.kind === 'talk' && a.id.startsWith(`talk.${npc.id}.`));
+      if (talk) return run(talk.id);
       ctx.state.time += TIME_COSTS.explore_action;
       return facts('talk', `You speak with ${who}, who seems ${npc.attitude}. They answer in character but reveal nothing new.`);
     }

@@ -19,6 +19,7 @@ import { arriveInScene, availableActions, findScene, formatCoins, getProgress, l
 import type { Adventure } from './schema';
 import { intentContext, keywordIntent, refineIntent, validateIntent, type Intent, type IntentContext } from './intent';
 import { narrateInto, type Narrator } from './narration';
+import { dialogueView, DIALOGUE_PREFIX, LEAVE_TALK } from './conversation';
 import { currentObjective } from './quests';
 import { resolveIntent } from './resolve';
 import { activeFight, fightAct, finishFight, startFight, type FightEnd } from './fights';
@@ -110,6 +111,8 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
         opts.narrator,
       );
     }
+    // Authored conversation lines, verbatim (TTS voices them as dialogue).
+    for (const d of r.dialogue ?? []) session.addLog('dialogue', d.text, d.speaker);
     if (r.items.length || r.coins > 0) session.addLog('system', `Received: ${[...r.items.map((i) => `${i.quantity}× ${i.itemId.replace(/_/g, ' ')}`), ...(r.coins > 0 ? [formatCoins(r.coins)] : [])].join(', ')}`);
     if (r.coins < 0) session.addLog('system', `Paid ${formatCoins(-r.coins)}.`);
     if (r.removed?.length) session.addLog('system', `Handed over: ${r.removed.map((i) => `${i.quantity}× ${i.itemId.replace(/_/g, ' ')}`).join(', ')}`);
@@ -222,7 +225,11 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       const place = scene?.locationId ?? getMap(ctx.state)?.current;
       session.emit({ type: 'mood', ...moodFor(opts.lore, { ...(scene?.mood && { sceneMood: scene.mood }), ...(place && { locationId: place }) }) });
     }
+    const talk = getProgress(ctx.state)?.talk;
+    session.emit({ type: 'dialogue', view: dialogueView(ctx.adventure, talk) });
     const offered = availableActions(ctx);
+    // In a conversation the options stay authored: no job buttons, no model ideas.
+    if (talk) return session.suggest(offered.map((a) => ({ id: a.id, label: a.check ? `${a.label} (${a.check})` : a.label })));
     const jobs = jobButtons(session);
     session.suggest([...dataSuggestions(offered), ...jobs]);
     if (!opts.suggester || offered.length === 0) return;
@@ -449,6 +456,8 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       if (actionId.startsWith('sq:')) return sideQuestChoice(session, actionId);
       const ctx = ctxFor(session);
       const label = availableActions(ctx).find((a) => a.id === actionId)?.label;
+      // A picked conversation reply shows as the hero's line.
+      if (label && actionId.startsWith(DIALOGUE_PREFIX) && actionId !== LEAVE_TALK) session.addLog('player', label);
       const before = ctx.state.time;
       const r = perform(ctx, actionId);
       await finish(session, ctx, r, label);
