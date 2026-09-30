@@ -55,6 +55,18 @@
                 "flag": "arc.main.cantor_unmasked_publicly"
               },
               "seed": "Someone has chalked \"THE ALMONER LIED\" on the milestone, over an older Almonry relief notice."
+            },
+            {
+              "if": {
+                "flag": "~ch4_moll_gone"
+              },
+              "seed": "Master Moll's empty barges are specks far down the river."
+            },
+            {
+              "if": {
+                "flag": "~ch4_barges_seized"
+              },
+              "seed": "Master Moll glares at you from the stern of her barge, loaded to the gunwales with refugees."
             }
           ],
           "npcs": [
@@ -214,18 +226,27 @@
               "if": {
                 "all": [
                   {
-                    "not": {
-                      "flag": "~ch4_refugees_led"
-                    }
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_refugees_led"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_left_refugees"
+                        }
+                      },
+                      {
+                        "coins": {
+                          "gte": 5000
+                        }
+                      }
+                    ]
                   },
                   {
                     "not": {
-                      "flag": "~ch4_left_refugees"
-                    }
-                  },
-                  {
-                    "coins": {
-                      "gte": 5000
+                      "flag": "~ch4_moll_gone"
                     }
                   }
                 ]
@@ -419,7 +440,8 @@
               "to": "dawnspire_muster",
               "minutes": 1440
             }
-          ]
+          ],
+          "revisitSeed": "The Ashfall road again, ash drifting over the ditches and the river beyond."
         },
         {
           "id": "millbrook_remembers",
@@ -576,6 +598,24 @@
                 "flag": "~ch4_wards_lit"
               },
               "seed": "A pale ring of green Thaloren fire circles the village."
+            },
+            {
+              "if": {
+                "flag": "~ch4_firebreak_built"
+              },
+              "seed": "The southern lane is a strip of wet mud and torn-down sheds: a firebreak."
+            },
+            {
+              "if": {
+                "flag": "~ch4_mb_evacuated"
+              },
+              "seed": "The children and the old folk are gone north. The village feels very quiet without them."
+            },
+            {
+              "if": {
+                "flag": "~ch4_mb_knights"
+              },
+              "seed": "Two knights of the Dawn Lance sit their horses on the green, sent by Thane."
             }
           ],
           "npcs": [
@@ -908,6 +948,18 @@
                       "gte": 2
                     },
                     "source": "The families you brought home from the barrow speak for you"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_fears_known"
+                    },
+                    "source": "You know what they are really afraid of"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_reeve_shamed"
+                    },
+                    "source": "Reeve Tamsin goes door to door beside you"
                   }
                 ],
                 "success": {
@@ -931,7 +983,15 @@
                       "value": true
                     }
                   ]
-                }
+                },
+                "disadvantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch4_reeve_cold"
+                    },
+                    "source": "Reeve Tamsin has told the village to ignore you"
+                  }
+                ]
               }
             },
             {
@@ -1164,6 +1224,18 @@
                       "flag": "arc.starter.dream_heard"
                     },
                     "source": "You know the voice they are hearing, and how to argue with it"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_hymn_known"
+                    },
+                    "source": "You know whose names to call, and in what order"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_reeve_shamed"
+                    },
+                    "source": "Reeve Tamsin calls the names beside you"
                   }
                 ],
                 "success": {
@@ -1193,7 +1265,15 @@
                       "by": 1
                     }
                   ]
-                }
+                },
+                "disadvantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch4_reeve_cold"
+                    },
+                    "source": "Reeve Tamsin has turned his back on you"
+                  }
+                ]
               }
             },
             {
@@ -1361,6 +1441,10 @@
               "to": "ashfall_road",
               "minutes": 480
             }
+          ],
+          "revisitSeed": [
+            "Millbrook again: the mill, the green, the smell of smoke on the wind.",
+            "Back in Millbrook, where every face turns to see who has come up the lane."
           ]
         },
         {
@@ -1430,6 +1514,24 @@
                 "eq": "in_party"
               },
               "seed": "Ser Corwin stands at your shoulder, and the knights at the table cannot decide whether to salute him."
+            },
+            {
+              "if": {
+                "flag": "~ch4_mb_evacuated"
+              },
+              "seed": "Millbrook's children play in the keep's yard, underfoot and delighted."
+            },
+            {
+              "if": {
+                "flag": "~ch4_hale_pardon"
+              },
+              "seed": "Chamberlain Hale nods to you stiffly. The wanted posters have come down from the gate."
+            },
+            {
+              "if": {
+                "flag": "~ch4_corwin_back"
+              },
+              "seed": "Corwin has the Order's badge in his pocket, not on his cloak."
             }
           ],
           "npcs": [
@@ -1560,6 +1662,12 @@
                       "eq": "in_party"
                     },
                     "source": "Ser Corwin speaks for you"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_captains_cheer"
+                    },
+                    "source": "The captains cheered your speech"
                   }
                 ],
                 "success": {
@@ -1587,7 +1695,15 @@
                       "value": true
                     }
                   ]
-                }
+                },
+                "disadvantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch4_captains_sour"
+                    },
+                    "source": "The captains were not impressed by your speech"
+                  }
+                ]
               }
             },
             {
@@ -1705,6 +1821,18 @@
                       "flag": "arc.starter.pip_rescued"
                     },
                     "source": "Pip carries your messages between the delegations"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_hale_won"
+                    },
+                    "source": "Chamberlain Hale speaks for you"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_hale_cowed"
+                    },
+                    "source": "Chamberlain Hale dares not refuse you"
                   }
                 ],
                 "success": {
@@ -1732,7 +1860,15 @@
                       "value": true
                     }
                   ]
-                }
+                },
+                "disadvantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch4_hale_enemy"
+                    },
+                    "source": "Chamberlain Hale speaks against you"
+                  }
+                ]
               }
             },
             {
@@ -1836,6 +1972,18 @@
                       "flag": "arc.starter.pip_rescued"
                     },
                     "source": "Pip carries your messages between the delegations"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_ashgrove_read"
+                    },
+                    "source": "You know the Consortium fears a dead debtor"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_ashgrove_scared"
+                    },
+                    "source": "Ashgrove is afraid of what the Choir will do"
                   }
                 ],
                 "success": {
@@ -1863,7 +2011,15 @@
                       "value": true
                     }
                   ]
-                }
+                },
+                "disadvantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch4_ashgrove_angry"
+                    },
+                    "source": "Ashgrove has not forgiven your threat"
+                  }
+                ]
               }
             },
             {
@@ -2199,6 +2355,44 @@
               }
             },
             {
+              "id": "hire_mercs_crown",
+              "label": "Hire the Deepanvil mercenaries on the Crown's draft",
+              "keywords": [
+                "mercenaries",
+                "hire",
+                "crown",
+                "draft",
+                "deepanvil",
+                "ally"
+              ],
+              "once": true,
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch4_crown_purse"
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch4_ally_mercs"
+                    }
+                  }
+                ]
+              },
+              "outcome": {
+                "text": "The Deepanvil captain reads Hale's draft twice, bites the seal, and swears the company to your banner until Highcrown is taken.",
+                "flags": [
+                  {
+                    "set": "~ch4_ally_mercs",
+                    "value": true
+                  },
+                  {
+                    "inc": "arc.main.war_council_allies",
+                    "by": 1
+                  }
+                ]
+              }
+            },
+            {
               "id": "buy_fire_tonic",
               "label": "Buy a fire-resistance tonic from the Keep’s quartermaster (300 gp)",
               "keywords": [
@@ -2277,7 +2471,8 @@
               "to": "ashfall_road",
               "minutes": 1440
             }
-          ]
+          ],
+          "revisitSeed": "Dawnspire Keep again, loud with smiths and horses and the arguments of the war council."
         },
         {
           "id": "emberpeak_ascent",
@@ -2627,7 +2822,15 @@
                 },
                 "failure": {
                   "text": "The enchantment is Vosk’s work, and it slides away from your understanding."
-                }
+                },
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch4_stone_known"
+                    },
+                    "source": "Vosk told you which note silences it"
+                  }
+                ]
               }
             },
             {
@@ -2854,7 +3057,8 @@
               "to": "dawnspire_muster",
               "minutes": 720
             }
-          ]
+          ],
+          "revisitSeed": "The glassy slopes of Emberpeak again, the summit smoking above you."
         },
         {
           "id": "pyrraxis_hoard",
@@ -3136,6 +3340,12 @@
                       "eq": "in_party"
                     },
                     "source": "Nettle steadies your hands"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_dragon_lore"
+                    },
+                    "source": "Thane showed you where the old wound lies"
                   }
                 ],
                 "success": {
@@ -3232,6 +3442,12 @@
                       "eq": "in_party"
                     },
                     "source": "Aurek knows the Choir’s hymn backwards"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_pyrraxis_lucid"
+                    },
+                    "source": "The dragon under the hunger is fighting with you"
                   }
                 ],
                 "success": {
@@ -3327,6 +3543,18 @@
                       "eq": "in_party"
                     },
                     "source": "Ser Corwin braces the wound with his shield"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_dragon_lore"
+                    },
+                    "source": "Thane showed you where the old wound lies"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_pyrraxis_cowed"
+                    },
+                    "source": "She holds still under Dawnbreaker's point"
                   }
                 ],
                 "success": {
@@ -3445,6 +3673,18 @@
                       "gte": 3
                     },
                     "source": "She hungers for the Teeth you carry"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_pyrraxis_lucid"
+                    },
+                    "source": "The dragon under the hunger wants the song to stop"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch4_pyrraxis_flattered"
+                    },
+                    "source": "She enjoyed your manners"
                   }
                 ],
                 "success": {
@@ -3464,7 +3704,15 @@
                       "value": true
                     }
                   ]
-                }
+                },
+                "disadvantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch4_pyrraxis_insulted"
+                    },
+                    "source": "You threatened her with the lance"
+                  }
+                ]
               }
             },
             {
@@ -4097,6 +4345,18 @@
                 "flag": "arc.main.cantor_unmasked_publicly"
               },
               "seed": "The crowds know who did this. \"The Almoner!\" they shout, and spit on the Almonry’s gilded doors."
+            },
+            {
+              "if": {
+                "flag": "~ch4_corwin_blessed"
+              },
+              "seed": "On the left of the knights' line you see Corwin's banner, as he promised."
+            },
+            {
+              "if": {
+                "flag": "~ch4_vey_turned"
+              },
+              "seed": "Harrow Vey's ship is a smudge on the river, heading for the sea."
             }
           ],
           "npcs": [
@@ -5122,7 +5382,588 @@
       ],
       "voice": "Loud river-town bellow, counts everything out loud, calls everyone \"duck\".",
       "factions": [],
-      "attitude": "indifferent"
+      "attitude": "indifferent",
+      "conversations": [
+        {
+          "id": "barges",
+          "label": "Talk to Master Moll about her barges",
+          "if": {
+            "all": [
+              {
+                "not": {
+                  "flag": "~ch4_left_refugees"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch4_moll_gone"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch4_road_done"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "moll",
+            "barge",
+            "barges",
+            "river",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "A broad woman in a tar-stained apron stands on the landing, counting sacks. \"If you are here to beg, the answer is fifty gold. If you are here to buy, the answer is also fifty gold.\"",
+              "options": [
+                {
+                  "id": "haggle",
+                  "label": "\"Fifty gold is robbery, Master Moll. Twenty, and my thanks.\" (Persuasion DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "all": [
+                          {
+                            "not": {
+                              "flag": "~ch4_refugees_led"
+                            }
+                          },
+                          {
+                            "not": {
+                              "flag": "~ch4_left_refugees"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_moll_haggle_tried"
+                        }
+                      },
+                      {
+                        "coins": {
+                          "gte": 2000
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "haggle",
+                    "twenty",
+                    "price",
+                    "cheaper",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "success": {
+                      "text": "Moll snorts. \"Twenty, and you carry the first sack yourself.\" She packs the refugees onto her grain barges and casts off for the north bank.",
+                      "cost": 2000,
+                      "flags": [
+                        {
+                          "set": "~ch4_refugees_led",
+                          "value": true
+                        }
+                      ],
+                      "minutes": 30
+                    },
+                    "failure": {
+                      "text": "\"Fifty,\" says Moll, \"or swim.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_moll_haggle_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "choir",
+                  "label": "\"You hate those singers as much as I do, don't you?\" (Insight DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_moll_ally"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_moll_choir_tried"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_singers_beaten"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "singers",
+                    "hate",
+                    "choir",
+                    "insight",
+                    "cultists"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 13,
+                    "success": {
+                      "text": "Moll spits over the side. The singers burned two of her barges at Brightwater. \"When you go up that ridge,\" she says, \"my bargemen will be in the reeds with poles and buckets, drawing off those little fire-imps.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_moll_ally",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"I hate waste,\" says Moll. \"And you are wasting my morning.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_moll_choir_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "commandeer",
+                  "label": "\"These barges are needed by the Crown. Load them.\" (Intimidation DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "all": [
+                          {
+                            "not": {
+                              "flag": "~ch4_refugees_led"
+                            }
+                          },
+                          {
+                            "not": {
+                              "flag": "~ch4_left_refugees"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "world.player_outlawed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "commandeer",
+                    "crown",
+                    "seize",
+                    "order",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Moll goes red to the ears, but she loads the refugees. \"The Crown will hear about this,\" she promises, and you do not doubt it.",
+                      "flags": [
+                        {
+                          "set": "~ch4_refugees_led",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch4_barges_seized",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "crown_of_aurelmark",
+                          "delta": -5
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": -5
+                        }
+                      ],
+                      "minutes": 30
+                    },
+                    "failure": {
+                      "text": "Moll laughs in your face, cuts her mooring rope and poles out into the current. Her barges are gone downriver, empty.",
+                      "flags": [
+                        {
+                          "set": "~ch4_moll_gone",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "gone"
+                },
+                {
+                  "id": "promise",
+                  "label": "\"Carry them now, and the Crown will pay you double when this is over.\" (Deception DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "all": [
+                          {
+                            "not": {
+                              "flag": "~ch4_refugees_led"
+                            }
+                          },
+                          {
+                            "not": {
+                              "flag": "~ch4_left_refugees"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_moll_promise_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "promise",
+                    "double",
+                    "later",
+                    "pay",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 14,
+                    "success": {
+                      "text": "Moll squints at you, then spits in her palm and shakes your hand. \"Double. I will send the bill to Highcrown.\" The refugees go down to the barges.",
+                      "flags": [
+                        {
+                          "set": "~ch4_refugees_led",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch4_moll_owed",
+                          "value": true
+                        }
+                      ],
+                      "minutes": 30
+                    },
+                    "failure": {
+                      "text": "\"Everybody's going to pay me double when this is over,\" says Moll. \"Nobody ever does.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_moll_promise_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Safe waters, Master Moll.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Anything else? The river will not wait, and neither will I.\"",
+              "options": [
+                {
+                  "id": "haggle",
+                  "label": "\"Fifty gold is robbery, Master Moll. Twenty, and my thanks.\" (Persuasion DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "all": [
+                          {
+                            "not": {
+                              "flag": "~ch4_refugees_led"
+                            }
+                          },
+                          {
+                            "not": {
+                              "flag": "~ch4_left_refugees"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_moll_haggle_tried"
+                        }
+                      },
+                      {
+                        "coins": {
+                          "gte": 2000
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "haggle",
+                    "twenty",
+                    "price",
+                    "cheaper",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "success": {
+                      "text": "Moll snorts. \"Twenty, and you carry the first sack yourself.\" She packs the refugees onto her grain barges and casts off for the north bank.",
+                      "cost": 2000,
+                      "flags": [
+                        {
+                          "set": "~ch4_refugees_led",
+                          "value": true
+                        }
+                      ],
+                      "minutes": 30
+                    },
+                    "failure": {
+                      "text": "\"Fifty,\" says Moll, \"or swim.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_moll_haggle_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "choir",
+                  "label": "\"You hate those singers as much as I do, don't you?\" (Insight DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_moll_ally"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_moll_choir_tried"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_singers_beaten"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "singers",
+                    "hate",
+                    "choir",
+                    "insight",
+                    "cultists"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 13,
+                    "success": {
+                      "text": "Moll spits over the side. The singers burned two of her barges at Brightwater. \"When you go up that ridge,\" she says, \"my bargemen will be in the reeds with poles and buckets, drawing off those little fire-imps.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_moll_ally",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"I hate waste,\" says Moll. \"And you are wasting my morning.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_moll_choir_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "commandeer",
+                  "label": "\"These barges are needed by the Crown. Load them.\" (Intimidation DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "all": [
+                          {
+                            "not": {
+                              "flag": "~ch4_refugees_led"
+                            }
+                          },
+                          {
+                            "not": {
+                              "flag": "~ch4_left_refugees"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "world.player_outlawed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "commandeer",
+                    "crown",
+                    "seize",
+                    "order",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Moll goes red to the ears, but she loads the refugees. \"The Crown will hear about this,\" she promises, and you do not doubt it.",
+                      "flags": [
+                        {
+                          "set": "~ch4_refugees_led",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch4_barges_seized",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "crown_of_aurelmark",
+                          "delta": -5
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": -5
+                        }
+                      ],
+                      "minutes": 30
+                    },
+                    "failure": {
+                      "text": "Moll laughs in your face, cuts her mooring rope and poles out into the current. Her barges are gone downriver, empty.",
+                      "flags": [
+                        {
+                          "set": "~ch4_moll_gone",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "gone"
+                },
+                {
+                  "id": "promise",
+                  "label": "\"Carry them now, and the Crown will pay you double when this is over.\" (Deception DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "all": [
+                          {
+                            "not": {
+                              "flag": "~ch4_refugees_led"
+                            }
+                          },
+                          {
+                            "not": {
+                              "flag": "~ch4_left_refugees"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_moll_promise_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "promise",
+                    "double",
+                    "later",
+                    "pay",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 14,
+                    "success": {
+                      "text": "Moll squints at you, then spits in her palm and shakes your hand. \"Double. I will send the bill to Highcrown.\" The refugees go down to the barges.",
+                      "flags": [
+                        {
+                          "set": "~ch4_refugees_led",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch4_moll_owed",
+                          "value": true
+                        }
+                      ],
+                      "minutes": 30
+                    },
+                    "failure": {
+                      "text": "\"Everybody's going to pay me double when this is over,\" says Moll. \"Nobody ever does.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_moll_promise_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Safe waters, Master Moll.\""
+                }
+              ]
+            },
+            {
+              "id": "gone",
+              "text": "Moll turns back to her mooring ropes."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "reeve_tamsin",
@@ -5134,7 +5975,758 @@
       ],
       "voice": "Slow farmer’s drawl; long pauses before anything important.",
       "factions": [],
-      "attitude": "indifferent"
+      "attitude": "indifferent",
+      "conversations": [
+        {
+          "id": "firebreak",
+          "label": "Talk to Reeve Tamsin about the defence",
+          "if": {
+            "all": [
+              {
+                "all": [
+                  {
+                    "not": {
+                      "flag": "~ch4_mb_burned"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch4_village_defended"
+                    }
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch4_mb_done"
+                    }
+                  }
+                ]
+              },
+              {
+                "not": {
+                  "flag": "~ch4_reeve_cold"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "reeve",
+            "tamsin",
+            "defence",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Reeve Tamsin looks older than when you last saw him. \"The dragon, the Choir, both at once. Tell me what to do, and I will try to do it.\"",
+              "options": [
+                {
+                  "id": "plan",
+                  "label": "\"Wet the thatch and pull down the sheds on the southern lane. A firebreak.\" (Survival DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "any": [
+                            {
+                              "flag": "arc.starter.captives_saved",
+                              "lte": 1
+                            },
+                            {
+                              "flag": "arc.starter.reeve_attitude",
+                              "eq": "hostile"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_firebreak_built"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_plan_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "firebreak",
+                    "thatch",
+                    "wet",
+                    "sheds",
+                    "survival",
+                    "plan"
+                  ],
+                  "check": {
+                    "skill": "survival",
+                    "dc": 13,
+                    "success": {
+                      "text": "Tamsin sets every bucket in Millbrook to work. By noon the southern lane is a strip of wet mud and torn-down sheds. Whatever comes up it will have less to burn, and one less way in.",
+                      "flags": [
+                        {
+                          "set": "~ch4_firebreak_built",
+                          "value": true
+                        }
+                      ],
+                      "minutes": 60
+                    },
+                    "failure": {
+                      "text": "You pick the wrong lane to clear. By the time you notice, half the buckets are empty.",
+                      "flags": [
+                        {
+                          "set": "~ch4_plan_tried",
+                          "value": true
+                        }
+                      ],
+                      "minutes": 60
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "fears",
+                  "label": "\"What are they really afraid of, Reeve?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "all": [
+                          {
+                            "not": {
+                              "all": [
+                                {
+                                  "flag": "arc.starter.captives_saved",
+                                  "gte": 3
+                                },
+                                {
+                                  "flag": "arc.starter.reeve_attitude",
+                                  "eq": "friendly"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "not": {
+                              "any": [
+                                {
+                                  "flag": "arc.starter.captives_saved",
+                                  "lte": 1
+                                },
+                                {
+                                  "flag": "arc.starter.reeve_attitude",
+                                  "eq": "hostile"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.main.millbrook_militia"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_rally_tried"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_fears_known"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_fears_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "afraid",
+                    "fear",
+                    "really",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Tamsin rubs his face. \"Not the dragon. Being left behind again, like the night the Choir took our children and nobody came.\" Now you know what to say to them.",
+                      "flags": [
+                        {
+                          "set": "~ch4_fears_known",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Dragons,\" says Tamsin flatly. \"What else?\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_fears_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "hymn",
+                  "label": "\"Who started the humming? Who did the Choir reach first?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "any": [
+                          {
+                            "flag": "arc.starter.captives_saved",
+                            "lte": 1
+                          },
+                          {
+                            "flag": "arc.starter.reeve_attitude",
+                            "eq": "hostile"
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_hymn_known"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_hymn_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "humming",
+                    "hymn",
+                    "first",
+                    "who",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Tamsin will not look at you, but he answers. The miller's wife heard the song first, then her neighbours, house by house. You know now whose names to call, and in what order.",
+                      "flags": [
+                        {
+                          "set": "~ch4_hymn_known",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Tamsin only shakes his head and walks away down the lane.",
+                      "flags": [
+                        {
+                          "set": "~ch4_hymn_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "shame",
+                  "label": "\"You failed them once, Reeve. Do not fail them again.\" (Intimidation DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "all": [
+                            {
+                              "flag": "arc.starter.captives_saved",
+                              "gte": 3
+                            },
+                            {
+                              "flag": "arc.starter.reeve_attitude",
+                              "eq": "friendly"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.main.millbrook_militia"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_reeve_shamed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "failed",
+                    "shame",
+                    "again",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 13,
+                    "success": {
+                      "text": "The words hit Tamsin like a slap. He straightens, takes up his old sword and goes from door to door beside you, shouting names.",
+                      "flags": [
+                        {
+                          "set": "~ch4_reeve_shamed",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Tamsin's face closes like a door. \"Get out of my village,\" he says, loud enough for the lane to hear.",
+                      "flags": [
+                        {
+                          "set": "~ch4_reeve_cold",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "evacuate",
+                  "label": "\"Send the children and the old folk north to Dawnspire, now.\"",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "any": [
+                            {
+                              "flag": "arc.starter.captives_saved",
+                              "lte": 1
+                            },
+                            {
+                              "flag": "arc.starter.reeve_attitude",
+                              "eq": "hostile"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_mb_evacuated"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "children",
+                    "old",
+                    "north",
+                    "evacuate",
+                    "send",
+                    "dawnspire"
+                  ],
+                  "outcome": {
+                    "text": "Tamsin nods slowly and sends two carts north with the children, the old and the sick. Whatever happens to Millbrook now, they will live.",
+                    "flags": [
+                      {
+                        "set": "~ch4_mb_evacuated",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "nettle",
+                        "delta": 5
+                      }
+                    ],
+                    "minutes": 30
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Hold the village, Reeve.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"What else?\"",
+              "options": [
+                {
+                  "id": "plan",
+                  "label": "\"Wet the thatch and pull down the sheds on the southern lane. A firebreak.\" (Survival DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "any": [
+                            {
+                              "flag": "arc.starter.captives_saved",
+                              "lte": 1
+                            },
+                            {
+                              "flag": "arc.starter.reeve_attitude",
+                              "eq": "hostile"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_firebreak_built"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_plan_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "firebreak",
+                    "thatch",
+                    "wet",
+                    "sheds",
+                    "survival",
+                    "plan"
+                  ],
+                  "check": {
+                    "skill": "survival",
+                    "dc": 13,
+                    "success": {
+                      "text": "Tamsin sets every bucket in Millbrook to work. By noon the southern lane is a strip of wet mud and torn-down sheds. Whatever comes up it will have less to burn, and one less way in.",
+                      "flags": [
+                        {
+                          "set": "~ch4_firebreak_built",
+                          "value": true
+                        }
+                      ],
+                      "minutes": 60
+                    },
+                    "failure": {
+                      "text": "You pick the wrong lane to clear. By the time you notice, half the buckets are empty.",
+                      "flags": [
+                        {
+                          "set": "~ch4_plan_tried",
+                          "value": true
+                        }
+                      ],
+                      "minutes": 60
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "fears",
+                  "label": "\"What are they really afraid of, Reeve?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "all": [
+                          {
+                            "not": {
+                              "all": [
+                                {
+                                  "flag": "arc.starter.captives_saved",
+                                  "gte": 3
+                                },
+                                {
+                                  "flag": "arc.starter.reeve_attitude",
+                                  "eq": "friendly"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "not": {
+                              "any": [
+                                {
+                                  "flag": "arc.starter.captives_saved",
+                                  "lte": 1
+                                },
+                                {
+                                  "flag": "arc.starter.reeve_attitude",
+                                  "eq": "hostile"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.main.millbrook_militia"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_rally_tried"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_fears_known"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_fears_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "afraid",
+                    "fear",
+                    "really",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Tamsin rubs his face. \"Not the dragon. Being left behind again, like the night the Choir took our children and nobody came.\" Now you know what to say to them.",
+                      "flags": [
+                        {
+                          "set": "~ch4_fears_known",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Dragons,\" says Tamsin flatly. \"What else?\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_fears_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "hymn",
+                  "label": "\"Who started the humming? Who did the Choir reach first?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "any": [
+                          {
+                            "flag": "arc.starter.captives_saved",
+                            "lte": 1
+                          },
+                          {
+                            "flag": "arc.starter.reeve_attitude",
+                            "eq": "hostile"
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_hymn_known"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_hymn_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "humming",
+                    "hymn",
+                    "first",
+                    "who",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Tamsin will not look at you, but he answers. The miller's wife heard the song first, then her neighbours, house by house. You know now whose names to call, and in what order.",
+                      "flags": [
+                        {
+                          "set": "~ch4_hymn_known",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Tamsin only shakes his head and walks away down the lane.",
+                      "flags": [
+                        {
+                          "set": "~ch4_hymn_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "shame",
+                  "label": "\"You failed them once, Reeve. Do not fail them again.\" (Intimidation DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "all": [
+                            {
+                              "flag": "arc.starter.captives_saved",
+                              "gte": 3
+                            },
+                            {
+                              "flag": "arc.starter.reeve_attitude",
+                              "eq": "friendly"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.main.millbrook_militia"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_reeve_shamed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "failed",
+                    "shame",
+                    "again",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 13,
+                    "success": {
+                      "text": "The words hit Tamsin like a slap. He straightens, takes up his old sword and goes from door to door beside you, shouting names.",
+                      "flags": [
+                        {
+                          "set": "~ch4_reeve_shamed",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Tamsin's face closes like a door. \"Get out of my village,\" he says, loud enough for the lane to hear.",
+                      "flags": [
+                        {
+                          "set": "~ch4_reeve_cold",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "evacuate",
+                  "label": "\"Send the children and the old folk north to Dawnspire, now.\"",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "any": [
+                            {
+                              "flag": "arc.starter.captives_saved",
+                              "lte": 1
+                            },
+                            {
+                              "flag": "arc.starter.reeve_attitude",
+                              "eq": "hostile"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_mb_evacuated"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "children",
+                    "old",
+                    "north",
+                    "evacuate",
+                    "send",
+                    "dawnspire"
+                  ],
+                  "outcome": {
+                    "text": "Tamsin nods slowly and sends two carts north with the children, the old and the sick. Whatever happens to Millbrook now, they will live.",
+                    "flags": [
+                      {
+                        "set": "~ch4_mb_evacuated",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "nettle",
+                        "delta": 5
+                      }
+                    ],
+                    "minutes": 30
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Hold the village, Reeve.\""
+                }
+              ]
+            },
+            {
+              "id": "cold",
+              "text": "Tamsin turns his back on you."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "widow_marrow",
@@ -5214,6 +6806,412 @@
             "flag": "~ch4_ally_lance"
           }
         }
+      ],
+      "conversations": [
+        {
+          "id": "war_table",
+          "label": "Talk to Lord-Commander Thane at the war table",
+          "if": {
+            "not": {
+              "flag": "~ch4_muster_done"
+            }
+          },
+          "keywords": [
+            "thane",
+            "lord",
+            "commander",
+            "war",
+            "table",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Thane leans on the war table, over a map of Emberpeak weighted down with daggers. \"Speak. We have until dawn.\"",
+              "options": [
+                {
+                  "id": "lore",
+                  "label": "\"You fought her kin in the Ashfall Winter. Where is a red dragon weakest?\" (History DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_dragon_lore"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_lore_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "dragon",
+                    "weak",
+                    "fight",
+                    "history",
+                    "wound"
+                  ],
+                  "check": {
+                    "skill": "history",
+                    "dc": 14,
+                    "success": {
+                      "text": "Thane draws on the war table with a finger dipped in wine: the old wound under her left wing, where the Choir drove the Tooth in twenty-three years ago. \"Scar tissue there, and it never healed. If anything can be pulled out of her, it will come out there.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_dragon_lore",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"In the heart,\" says Thane drily, \"like everything else.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_lore_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "captains",
+                  "label": "Ask to address Thane's doubtful captains yourself (Persuasion DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_ally_lance"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_asked_lance"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_captains_cheer"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_captains_sour"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "captains",
+                    "address",
+                    "speech",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "success": {
+                      "text": "You speak to the captains in the yard, plainly, about Millbrook and the barrow and the Teeth. At the end one of them bangs his shield, and then all of them do.",
+                      "flags": [
+                        {
+                          "set": "~ch4_captains_cheer",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The captains hear you out in stony silence. One of them yawns.",
+                      "flags": [
+                        {
+                          "set": "~ch4_captains_sour",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "millbrook",
+                  "label": "\"Lend me knights for Millbrook. The Choir is marching on it.\" (Persuasion DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_mb_burned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_mb_done"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_village_defended"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_mb_knights"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_mb_knights_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "millbrook",
+                    "knights",
+                    "lend",
+                    "village",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 15,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "arc.starter.pip_rescued"
+                        },
+                        "source": "Pip begs Thane for his home village"
+                      }
+                    ],
+                    "success": {
+                      "text": "Thane names two knights and sends them south at a gallop. \"Millbrook gave the Order a page. The Order owes it that much.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_mb_knights",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"I need every lance here,\" says Thane. \"Millbrook must look to itself.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_mb_knights_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Thank you, Lord-Commander.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"What else?\"",
+              "options": [
+                {
+                  "id": "lore",
+                  "label": "\"You fought her kin in the Ashfall Winter. Where is a red dragon weakest?\" (History DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_dragon_lore"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_lore_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "dragon",
+                    "weak",
+                    "fight",
+                    "history",
+                    "wound"
+                  ],
+                  "check": {
+                    "skill": "history",
+                    "dc": 14,
+                    "success": {
+                      "text": "Thane draws on the war table with a finger dipped in wine: the old wound under her left wing, where the Choir drove the Tooth in twenty-three years ago. \"Scar tissue there, and it never healed. If anything can be pulled out of her, it will come out there.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_dragon_lore",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"In the heart,\" says Thane drily, \"like everything else.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_lore_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "captains",
+                  "label": "Ask to address Thane's doubtful captains yourself (Persuasion DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_ally_lance"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_asked_lance"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_captains_cheer"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_captains_sour"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "captains",
+                    "address",
+                    "speech",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "success": {
+                      "text": "You speak to the captains in the yard, plainly, about Millbrook and the barrow and the Teeth. At the end one of them bangs his shield, and then all of them do.",
+                      "flags": [
+                        {
+                          "set": "~ch4_captains_cheer",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The captains hear you out in stony silence. One of them yawns.",
+                      "flags": [
+                        {
+                          "set": "~ch4_captains_sour",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "millbrook",
+                  "label": "\"Lend me knights for Millbrook. The Choir is marching on it.\" (Persuasion DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_mb_burned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_mb_done"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_village_defended"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_mb_knights"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_mb_knights_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "millbrook",
+                    "knights",
+                    "lend",
+                    "village",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 15,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "arc.starter.pip_rescued"
+                        },
+                        "source": "Pip begs Thane for his home village"
+                      }
+                    ],
+                    "success": {
+                      "text": "Thane names two knights and sends them south at a gallop. \"Millbrook gave the Order a page. The Order owes it that much.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_mb_knights",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"I need every lance here,\" says Thane. \"Millbrook must look to itself.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_mb_knights_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Thank you, Lord-Commander.\""
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
@@ -5243,6 +7241,547 @@
             "flag": "~ch4_palace_taken"
           }
         }
+      ],
+      "conversations": [
+        {
+          "id": "envoy",
+          "label": "Have a word with Chamberlain Hale",
+          "if": {
+            "all": [
+              {
+                "not": {
+                  "flag": "~ch4_muster_done"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch4_hale_closed"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch4_palace_taken"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "hale",
+            "chamberlain",
+            "envoy",
+            "word",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Chamberlain Hale sits in the royal tent with a writing-desk on his knees, as if the war were a matter of correspondence. \"The Chamberlain is listening.\"",
+              "options": [
+                {
+                  "id": "plea",
+                  "label": "\"I saved the Crown from the Almoner. Let the Crown stop hunting me.\" (Persuasion DC 17)",
+                  "once": true,
+                  "if": {
+                    "flag": "world.player_outlawed"
+                  },
+                  "keywords": [
+                    "pardon",
+                    "outlaw",
+                    "plea",
+                    "hunting",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 17,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "arc.main.ch3_queen_saved"
+                        },
+                        "source": "You saved the Queen's life in the undercroft"
+                      },
+                      {
+                        "if": {
+                          "flag": "arc.main.cantor_identity_known"
+                        },
+                        "source": "You can name the Almoner's crimes"
+                      }
+                    ],
+                    "success": {
+                      "text": "Hale is silent a long time. Then he takes the warrant with your name on it and holds it in a candle until it burns. \"The Chamberlain has never seen this document.\"",
+                      "flags": [
+                        {
+                          "set": "world.player_outlawed",
+                          "value": false
+                        },
+                        {
+                          "set": "~ch4_hale_pardon",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Hale rings a little bell, and two royal guards appear at the tent flap. \"The Chamberlain suggests you leave before he remembers his duty.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_hale_closed",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "flatter",
+                  "label": "\"The royal guard would follow the Chamberlain's word, surely?\" (Persuasion DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "world.player_outlawed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_ally_crown"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_hale_won"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_hale_flatter_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "flatter",
+                    "word",
+                    "guard",
+                    "follow",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "success": {
+                      "text": "Hale swells. \"The royal guard would follow the Chamberlain into the sea.\" He will speak for you when you ask for it.",
+                      "flags": [
+                        {
+                          "set": "~ch4_hale_won",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The royal guard follows the Queen,\" Hale says coldly, \"as you ought to know.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_hale_flatter_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "purse",
+                  "label": "\"The Crown's treasury should pay the Deepanvil mercenaries, not me.\" (Persuasion DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "world.player_outlawed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_ally_mercs"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_crown_purse"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_purse_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "treasury",
+                    "mercenaries",
+                    "pay",
+                    "purse",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 16,
+                    "success": {
+                      "text": "Hale winces as if you had pulled a tooth, then writes a draft on the treasury. \"The Crown will pay. The Crown will also remember.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_crown_purse",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The treasury is empty,\" says Hale, \"as the whole court knows. That is rather the problem.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_purse_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "threaten",
+                  "label": "\"Sign the order, or I tell the Queen you ignored every warning I gave.\" (Intimidation DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "world.player_outlawed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_ally_crown"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_hale_cowed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "threaten",
+                    "sign",
+                    "warning",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Hale's quill trembles. He will sign whatever you put in front of him now, and he will hate you for it. The whole tent saw.",
+                      "flags": [
+                        {
+                          "set": "~ch4_hale_cowed",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "crown_of_aurelmark",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Hale stands. \"The Chamberlain is not threatened in his own tent.\" He will fight you at every turn now.",
+                      "flags": [
+                        {
+                          "set": "~ch4_hale_closed",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch4_hale_enemy",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Good day, Chamberlain.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Is there more?\"",
+              "options": [
+                {
+                  "id": "plea",
+                  "label": "\"I saved the Crown from the Almoner. Let the Crown stop hunting me.\" (Persuasion DC 17)",
+                  "once": true,
+                  "if": {
+                    "flag": "world.player_outlawed"
+                  },
+                  "keywords": [
+                    "pardon",
+                    "outlaw",
+                    "plea",
+                    "hunting",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 17,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "arc.main.ch3_queen_saved"
+                        },
+                        "source": "You saved the Queen's life in the undercroft"
+                      },
+                      {
+                        "if": {
+                          "flag": "arc.main.cantor_identity_known"
+                        },
+                        "source": "You can name the Almoner's crimes"
+                      }
+                    ],
+                    "success": {
+                      "text": "Hale is silent a long time. Then he takes the warrant with your name on it and holds it in a candle until it burns. \"The Chamberlain has never seen this document.\"",
+                      "flags": [
+                        {
+                          "set": "world.player_outlawed",
+                          "value": false
+                        },
+                        {
+                          "set": "~ch4_hale_pardon",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Hale rings a little bell, and two royal guards appear at the tent flap. \"The Chamberlain suggests you leave before he remembers his duty.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_hale_closed",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "flatter",
+                  "label": "\"The royal guard would follow the Chamberlain's word, surely?\" (Persuasion DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "world.player_outlawed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_ally_crown"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_hale_won"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_hale_flatter_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "flatter",
+                    "word",
+                    "guard",
+                    "follow",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "success": {
+                      "text": "Hale swells. \"The royal guard would follow the Chamberlain into the sea.\" He will speak for you when you ask for it.",
+                      "flags": [
+                        {
+                          "set": "~ch4_hale_won",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The royal guard follows the Queen,\" Hale says coldly, \"as you ought to know.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_hale_flatter_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "purse",
+                  "label": "\"The Crown's treasury should pay the Deepanvil mercenaries, not me.\" (Persuasion DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "world.player_outlawed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_ally_mercs"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_crown_purse"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_purse_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "treasury",
+                    "mercenaries",
+                    "pay",
+                    "purse",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 16,
+                    "success": {
+                      "text": "Hale winces as if you had pulled a tooth, then writes a draft on the treasury. \"The Crown will pay. The Crown will also remember.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_crown_purse",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The treasury is empty,\" says Hale, \"as the whole court knows. That is rather the problem.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_purse_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "threaten",
+                  "label": "\"Sign the order, or I tell the Queen you ignored every warning I gave.\" (Intimidation DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "world.player_outlawed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_ally_crown"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_hale_cowed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "threaten",
+                    "sign",
+                    "warning",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Hale's quill trembles. He will sign whatever you put in front of him now, and he will hate you for it. The whole tent saw.",
+                      "flags": [
+                        {
+                          "set": "~ch4_hale_cowed",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "crown_of_aurelmark",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Hale stands. \"The Chamberlain is not threatened in his own tent.\" He will fight you at every turn now.",
+                      "flags": [
+                        {
+                          "set": "~ch4_hale_closed",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch4_hale_enemy",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Good day, Chamberlain.\""
+                }
+              ]
+            },
+            {
+              "id": "cold",
+              "text": "Hale returns to his letters."
+            }
+          ]
+        }
       ]
     },
     {
@@ -5266,6 +7805,327 @@
           "if": {
             "flag": "arc.main.money_trail_proven"
           }
+        }
+      ],
+      "conversations": [
+        {
+          "id": "ballistae",
+          "label": "Talk business with Guildmistress Ashgrove",
+          "if": {
+            "all": [
+              {
+                "not": {
+                  "flag": "~ch4_muster_done"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch4_ally_ironvault"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch4_ashgrove_angry"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "ashgrove",
+            "guildmistress",
+            "business",
+            "ballistae",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Ashgrove sits on a crate of ballista bolts with her ledger open on her knees. \"Six ballistae, crewed. The question is who pays.\"",
+              "options": [
+                {
+                  "id": "read",
+                  "label": "\"What does the Consortium really want from this war?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_ashgrove_read"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_ashgrove_read_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "want",
+                    "really",
+                    "consortium",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Ashgrove taps her ledger. The Crown owes the Ironvault more than it can pay, and a burned Highcrown pays nothing. \"A dead debtor,\" she says, \"is the worst kind.\" Now you know what to promise her.",
+                      "flags": [
+                        {
+                          "set": "~ch4_ashgrove_read",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Profit,\" says Ashgrove, \"like everybody else. Some of us just admit it.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_ashgrove_read_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "share",
+                  "label": "\"Lend me the ballistae, and a tenth of the dragon's hoard is yours.\" (500 gp later)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch4_hoard_promised"
+                    }
+                  },
+                  "keywords": [
+                    "hoard",
+                    "tenth",
+                    "share",
+                    "promise",
+                    "ballistae"
+                  ],
+                  "outcome": {
+                    "text": "Ashgrove's eyes gleam. \"In writing.\" She draws up the contract then and there: six ballistae now, five hundred gold from the hoard afterwards, and the Consortium does not forgive a broken contract.",
+                    "flags": [
+                      {
+                        "set": "~ch4_hoard_promised",
+                        "value": true
+                      },
+                      {
+                        "set": "~ch4_ally_ironvault",
+                        "value": true
+                      },
+                      {
+                        "inc": "arc.main.war_council_allies",
+                        "by": 1
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "threaten",
+                  "label": "\"When the Choir wins, it will eat your vaults first.\" (Intimidation DC 16)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch4_ashgrove_scared"
+                    }
+                  },
+                  "keywords": [
+                    "eat",
+                    "vaults",
+                    "choir",
+                    "threaten",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 16,
+                    "success": {
+                      "text": "For once Ashgrove has no answer. She looks at her ledger as if it might bite her.",
+                      "flags": [
+                        {
+                          "set": "~ch4_ashgrove_scared",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The Consortium does not do business under threat,\" says Ashgrove, and closes her ledger on your fingers.",
+                      "flags": [
+                        {
+                          "set": "~ch4_ashgrove_angry",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "ironvault_consortium",
+                          "delta": -10
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "out"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Good day, Guildmistress.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"What else?\"",
+              "options": [
+                {
+                  "id": "read",
+                  "label": "\"What does the Consortium really want from this war?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_ashgrove_read"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_ashgrove_read_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "want",
+                    "really",
+                    "consortium",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Ashgrove taps her ledger. The Crown owes the Ironvault more than it can pay, and a burned Highcrown pays nothing. \"A dead debtor,\" she says, \"is the worst kind.\" Now you know what to promise her.",
+                      "flags": [
+                        {
+                          "set": "~ch4_ashgrove_read",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Profit,\" says Ashgrove, \"like everybody else. Some of us just admit it.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_ashgrove_read_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "share",
+                  "label": "\"Lend me the ballistae, and a tenth of the dragon's hoard is yours.\" (500 gp later)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch4_hoard_promised"
+                    }
+                  },
+                  "keywords": [
+                    "hoard",
+                    "tenth",
+                    "share",
+                    "promise",
+                    "ballistae"
+                  ],
+                  "outcome": {
+                    "text": "Ashgrove's eyes gleam. \"In writing.\" She draws up the contract then and there: six ballistae now, five hundred gold from the hoard afterwards, and the Consortium does not forgive a broken contract.",
+                    "flags": [
+                      {
+                        "set": "~ch4_hoard_promised",
+                        "value": true
+                      },
+                      {
+                        "set": "~ch4_ally_ironvault",
+                        "value": true
+                      },
+                      {
+                        "inc": "arc.main.war_council_allies",
+                        "by": 1
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "threaten",
+                  "label": "\"When the Choir wins, it will eat your vaults first.\" (Intimidation DC 16)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch4_ashgrove_scared"
+                    }
+                  },
+                  "keywords": [
+                    "eat",
+                    "vaults",
+                    "choir",
+                    "threaten",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 16,
+                    "success": {
+                      "text": "For once Ashgrove has no answer. She looks at her ledger as if it might bite her.",
+                      "flags": [
+                        {
+                          "set": "~ch4_ashgrove_scared",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The Consortium does not do business under threat,\" says Ashgrove, and closes her ledger on your fingers.",
+                      "flags": [
+                        {
+                          "set": "~ch4_ashgrove_angry",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "ironvault_consortium",
+                          "delta": -10
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "out"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Good day, Guildmistress.\""
+                }
+              ]
+            },
+            {
+              "id": "out",
+              "text": "Ashgrove turns a page and does not look up again."
+            }
+          ]
         }
       ]
     },
@@ -5392,6 +8252,399 @@
             ]
           }
         }
+      ],
+      "conversations": [
+        {
+          "id": "crater",
+          "label": "Speak to Vosk the Hollow",
+          "if": {
+            "all": [
+              {
+                "flag": "arc.main.vosk_fate",
+                "eq": "escaped"
+              },
+              {
+                "flag": "~ch4_tubes_cleared"
+              },
+              {
+                "not": {
+                  "flag": "~ch4_vosk_dealt"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch4_camp_lost"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "vosk",
+            "hollow",
+            "speak",
+            "talk",
+            "parley"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Vosk turns his sewn eyes toward you across the crater. \"You again. Do you ever tire of arriving too late?\"",
+              "options": [
+                {
+                  "id": "stone",
+                  "label": "\"What is that black stone your people sing to?\" (Insight DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_camp_done"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_stone_known"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_stone_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "stone",
+                    "black",
+                    "song",
+                    "sing",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 15,
+                    "success": {
+                      "text": "Vosk cannot resist a scholar's boast. The song-stone, he explains, is tuned to the Ember Tooth like a bell to its clapper. He does not notice that he has told you which note will silence it.",
+                      "flags": [
+                        {
+                          "set": "~ch4_stone_known",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"A stone,\" says Vosk. \"It sings. Do you?\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_stone_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "callers",
+                  "label": "Call to his dragon-callers: \"She will burn you first. She remembers who hurt her.\" (Persuasion DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_camp_done"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_callers_doubt"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_callers_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "callers",
+                    "burn",
+                    "first",
+                    "cultists",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 16,
+                    "success": {
+                      "text": "One of the dragon-callers looks up at the smoking summit, and then at Vosk, and then she simply walks away down the mountain.",
+                      "flags": [
+                        {
+                          "set": "~ch4_callers_doubt",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The dragon-callers sing louder.",
+                      "flags": [
+                        {
+                          "set": "~ch4_callers_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "plan",
+                  "label": "With his circle broken: \"Where does the Choir strike next, Vosk?\" (Intimidation DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~ch4_camp_beaten"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_vosk_dealt"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_coup_plan"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_plan_asked"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "strike",
+                    "next",
+                    "where",
+                    "plan",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Vosk laughs, but he tells you: Highcrown, the throne hall, the moment the dragon burns the upper tiers. And he names the fanatic who holds the servants' door. \"It will not matter,\" he says.",
+                      "flags": [
+                        {
+                          "set": "~ch4_coup_plan",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Vosk hums, and says nothing at all.",
+                      "flags": [
+                        {
+                          "set": "~ch4_plan_asked",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Enough.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Anything else?\" says Vosk, and hums a bar of the hymn.",
+              "options": [
+                {
+                  "id": "stone",
+                  "label": "\"What is that black stone your people sing to?\" (Insight DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_camp_done"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_stone_known"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_stone_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "stone",
+                    "black",
+                    "song",
+                    "sing",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 15,
+                    "success": {
+                      "text": "Vosk cannot resist a scholar's boast. The song-stone, he explains, is tuned to the Ember Tooth like a bell to its clapper. He does not notice that he has told you which note will silence it.",
+                      "flags": [
+                        {
+                          "set": "~ch4_stone_known",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"A stone,\" says Vosk. \"It sings. Do you?\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_stone_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "callers",
+                  "label": "Call to his dragon-callers: \"She will burn you first. She remembers who hurt her.\" (Persuasion DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_camp_done"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_callers_doubt"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_callers_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "callers",
+                    "burn",
+                    "first",
+                    "cultists",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 16,
+                    "success": {
+                      "text": "One of the dragon-callers looks up at the smoking summit, and then at Vosk, and then she simply walks away down the mountain.",
+                      "flags": [
+                        {
+                          "set": "~ch4_callers_doubt",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The dragon-callers sing louder.",
+                      "flags": [
+                        {
+                          "set": "~ch4_callers_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "plan",
+                  "label": "With his circle broken: \"Where does the Choir strike next, Vosk?\" (Intimidation DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~ch4_camp_beaten"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_vosk_dealt"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_coup_plan"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_plan_asked"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "strike",
+                    "next",
+                    "where",
+                    "plan",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Vosk laughs, but he tells you: Highcrown, the throne hall, the moment the dragon burns the upper tiers. And he names the fanatic who holds the servants' door. \"It will not matter,\" he says.",
+                      "flags": [
+                        {
+                          "set": "~ch4_coup_plan",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Vosk hums, and says nothing at all.",
+                      "flags": [
+                        {
+                          "set": "~ch4_plan_asked",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Enough.\""
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
@@ -5417,6 +8670,183 @@
             "flag": "arc.main.harrow_vey_fate",
             "eq": "escaped"
           }
+        }
+      ],
+      "conversations": [
+        {
+          "id": "court",
+          "label": "Call out to Harrow Vey across the court",
+          "if": {
+            "all": [
+              {
+                "flag": "~ch4_streets_clear"
+              },
+              {
+                "flag": "arc.main.harrow_vey_fate",
+                "eq": "escaped"
+              },
+              {
+                "not": {
+                  "flag": "~ch4_vey_beaten"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch4_coup_lost"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "vey",
+            "harrow",
+            "captain",
+            "call",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Harrow Vey leans on the palace fountain with his pirates around him. \"Small world. Come to talk, or come to die?\"",
+              "options": [
+                {
+                  "id": "turn",
+                  "label": "\"The Choir eats its own last, Vey. Is that the deal you want?\" (Persuasion DC 16)",
+                  "once": true,
+                  "keywords": [
+                    "deal",
+                    "turn",
+                    "choir",
+                    "eat",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 16,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "world.rook_status",
+                          "eq": "in_party"
+                        },
+                        "source": "Rook knows Vey from the Isles, and says so"
+                      }
+                    ],
+                    "success": {
+                      "text": "Vey looks at the smoke over the upper tiers for a long moment. \"The throne hall. The dead are in the pews, and there is a ghast behind the dais curtain. Mind it.\" He whistles his pirates off the court and walks out of the city.",
+                      "flags": [
+                        {
+                          "set": "~ch4_vey_beaten",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch4_vey_dealt",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch4_vey_turned",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Nice try,\" says Vey, and draws.",
+                      "encounter": "vey_at_court"
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "fight"
+                },
+                {
+                  "id": "bribe",
+                  "label": "Toss him a heavy purse: \"Sail away, captain.\" (500 gp)",
+                  "once": true,
+                  "if": {
+                    "coins": {
+                      "gte": 50000
+                    }
+                  },
+                  "keywords": [
+                    "purse",
+                    "bribe",
+                    "gold",
+                    "sail",
+                    "pay"
+                  ],
+                  "outcome": {
+                    "text": "Vey weighs the purse, grins, and bows. \"Always a pleasure doing business.\" He and his pirates melt into the smoke.",
+                    "cost": 50000,
+                    "flags": [
+                      {
+                        "set": "~ch4_vey_beaten",
+                        "value": true
+                      },
+                      {
+                        "set": "~ch4_vey_dealt",
+                        "value": true
+                      },
+                      {
+                        "set": "~ch4_vey_bought",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "gone"
+                },
+                {
+                  "id": "taunt",
+                  "label": "Shout to his crew: \"Your captain's already bought his passage out. Did he buy yours?\" (Intimidation DC 15)",
+                  "once": true,
+                  "keywords": [
+                    "crew",
+                    "passage",
+                    "pirates",
+                    "taunt",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Half of Vey's pirates look at each other, and then at the gate, and run for it. Vey swears and draws on you with the rest.",
+                      "flags": [
+                        {
+                          "set": "~ch4_vey_crew_fled",
+                          "value": true
+                        }
+                      ],
+                      "encounter": "vey_at_court"
+                    },
+                    "failure": {
+                      "text": "The pirates laugh, and Vey draws.",
+                      "encounter": "vey_at_court"
+                    }
+                  },
+                  "next": "fight",
+                  "nextOnFail": "fight"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Enough talk.\""
+                }
+              ]
+            },
+            {
+              "id": "gone",
+              "text": "The court is empty but for the smoke."
+            },
+            {
+              "id": "fight",
+              "text": "Steel rings across the palace court."
+            }
+          ]
         }
       ]
     },
@@ -5452,6 +8882,166 @@
             "eq": "left"
           }
         }
+      ],
+      "conversations": [
+        {
+          "id": "amends",
+          "label": "Speak with Ser Corwin",
+          "if": {
+            "all": [
+              {
+                "flag": "world.corwin_status",
+                "eq": "left"
+              },
+              {
+                "not": {
+                  "flag": "~ch4_corwin_parted"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch4_corwin_refused"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "corwin",
+            "ser",
+            "speak",
+            "talk",
+            "amends"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Ser Corwin stands among the Order's knights in a borrowed tabard. \"You wished to speak to me?\"",
+              "options": [
+                {
+                  "id": "apologise",
+                  "label": "\"I was wrong, Corwin. Ride with me again.\" (Persuasion DC 15)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch4_corwin_refused"
+                    }
+                  },
+                  "keywords": [
+                    "sorry",
+                    "wrong",
+                    "apologise",
+                    "again",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 15,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~ch4_crowd_calmed"
+                        },
+                        "source": "Corwin heard how you calmed the crowd on the Ashfall road"
+                      },
+                      {
+                        "if": {
+                          "flag": "~ch4_mb_evacuated"
+                        },
+                        "source": "Corwin heard you saved Millbrook's children first"
+                      }
+                    ],
+                    "success": {
+                      "text": "Corwin looks at you for a long moment. Then he unpins the Order's badge from his cloak. \"Once more, then. Do not make me regret it.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_corwin_back",
+                          "value": true
+                        }
+                      ],
+                      "companionReturns": {
+                        "id": "corwin",
+                        "loyalty": 40
+                      }
+                    },
+                    "failure": {
+                      "text": "\"Words are cheap,\" says Corwin. \"I have heard yours before.\"",
+                      "flags": [
+                        {
+                          "set": "~ch4_corwin_refused",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "back",
+                  "nextOnFail": "end"
+                },
+                {
+                  "id": "bless",
+                  "label": "\"Ride with the Order, then. I will look for your banner in the fight.\"",
+                  "once": true,
+                  "keywords": [
+                    "bless",
+                    "order",
+                    "banner",
+                    "ride",
+                    "goodbye"
+                  ],
+                  "outcome": {
+                    "text": "Something eases in Corwin's face. \"Look for it on the left,\" he says. \"I will be there.\"",
+                    "flags": [
+                      {
+                        "set": "~ch4_corwin_blessed",
+                        "value": true
+                      },
+                      {
+                        "set": "~ch4_corwin_parted",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "end"
+                },
+                {
+                  "id": "mock",
+                  "label": "\"Run back to your Order, then. It has always suited you better.\"",
+                  "once": true,
+                  "keywords": [
+                    "run",
+                    "mock",
+                    "order",
+                    "coward"
+                  ],
+                  "outcome": {
+                    "text": "Corwin turns on his heel. The knights around him heard every word, and so, soon, will the whole Order.",
+                    "flags": [
+                      {
+                        "set": "~ch4_corwin_parted",
+                        "value": true
+                      }
+                    ],
+                    "reputation": [
+                      {
+                        "faction": "order_of_the_dawn_lance",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "end"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "text": "Corwin falls in beside you as if he had never left."
+            },
+            {
+              "id": "end",
+              "text": "Corwin turns back to the knights."
+            }
+          ]
+        }
       ]
     },
     {
@@ -5465,7 +9055,438 @@
       ],
       "voice": "A voice like a furnace door: slow, amused, every word dropped from a great height. Calls the hero \"small thing\" or \"little thief\".",
       "factions": [],
-      "attitude": "hostile"
+      "attitude": "hostile",
+      "conversations": [
+        {
+          "id": "wyrm",
+          "label": "Speak to Pyrraxis",
+          "if": {
+            "all": [
+              {
+                "flag": "~ch4_guardian_down"
+              },
+              {
+                "not": {
+                  "flag": "~ch4_hoard_done"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "pyrraxis",
+            "dragon",
+            "speak",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "The great red head swings toward you, and the hoard shifts like a tide of coins. \"Speak, small thing, before I remember I am hungry.\"",
+              "options": [
+                {
+                  "id": "lucid",
+                  "label": "Speak past the hunger, to the dragon under it (Insight DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_pyrraxis_lucid"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_lucid_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "hunger",
+                    "under",
+                    "mind",
+                    "speak",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 16,
+                    "success": {
+                      "text": "For a heartbeat her eyes clear. \"Twenty-three years,\" she says, in a voice like a furnace door. \"They sing in my blood, small thing. Make them stop.\" Then the hunger takes her back, but you know now that someone is still in there.",
+                      "flags": [
+                        {
+                          "set": "~ch4_pyrraxis_lucid",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "There is nothing in her eyes but fire.",
+                      "flags": [
+                        {
+                          "set": "~ch4_lucid_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "flatter",
+                  "label": "\"Queen of Emberpeak, eldest of the red, the Choir is not worthy of you.\" (Persuasion DC 17)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_pyrraxis_flattered"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_pflatter_tried"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_bargain_struck"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_bargain_refused"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "queen",
+                    "eldest",
+                    "worthy",
+                    "flatter",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 17,
+                    "success": {
+                      "text": "Pyrraxis purrs, a sound like a landslide. \"At last, someone with manners.\" She will listen to an offer now.",
+                      "flags": [
+                        {
+                          "set": "~ch4_pyrraxis_flattered",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Flattery,\" hisses Pyrraxis, \"from a thief in my house.\" Her tail lashes through the coins and catches you.",
+                      "flags": [
+                        {
+                          "set": "~ch4_pflatter_tried",
+                          "value": true
+                        }
+                      ],
+                      "damage": {
+                        "dice": "2d6",
+                        "type": "bludgeoning",
+                        "target": "hero",
+                        "save": {
+                          "ability": "dex",
+                          "dc": 15,
+                          "half": true
+                        }
+                      }
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "cow",
+                  "label": "Raise Dawnbreaker: \"You remember this lance. Hold still.\" (Intimidation DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "any": [
+                          {
+                            "flag": "arc.main.dawnbreaker_holder",
+                            "eq": "player"
+                          },
+                          {
+                            "flag": "arc.main.dawnbreaker_holder",
+                            "eq": "dawn_lance"
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_pyrraxis_cowed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_pyrraxis_insulted"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "dawnbreaker",
+                    "lance",
+                    "still",
+                    "threaten",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 16,
+                    "success": {
+                      "text": "Pyrraxis flinches from the lance that scarred her mother. She lowers herself onto her hoard, trembling, and lets you near the wound.",
+                      "flags": [
+                        {
+                          "set": "~ch4_pyrraxis_cowed",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Pyrraxis roars in your face, and the heat of it blisters your skin. \"Threaten me again, and I will melt that lance to slag.\" She will not bargain with you gladly now.",
+                      "flags": [
+                        {
+                          "set": "~ch4_pyrraxis_insulted",
+                          "value": true
+                        }
+                      ],
+                      "damage": {
+                        "dice": "2d6",
+                        "type": "fire",
+                        "target": "hero",
+                        "save": {
+                          "ability": "dex",
+                          "dc": 15,
+                          "half": true
+                        }
+                      }
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "Step back from her"
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Well?\"",
+              "options": [
+                {
+                  "id": "lucid",
+                  "label": "Speak past the hunger, to the dragon under it (Insight DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_pyrraxis_lucid"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_lucid_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "hunger",
+                    "under",
+                    "mind",
+                    "speak",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 16,
+                    "success": {
+                      "text": "For a heartbeat her eyes clear. \"Twenty-three years,\" she says, in a voice like a furnace door. \"They sing in my blood, small thing. Make them stop.\" Then the hunger takes her back, but you know now that someone is still in there.",
+                      "flags": [
+                        {
+                          "set": "~ch4_pyrraxis_lucid",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "There is nothing in her eyes but fire.",
+                      "flags": [
+                        {
+                          "set": "~ch4_lucid_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "flatter",
+                  "label": "\"Queen of Emberpeak, eldest of the red, the Choir is not worthy of you.\" (Persuasion DC 17)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch4_pyrraxis_flattered"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_pflatter_tried"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_bargain_struck"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_bargain_refused"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "queen",
+                    "eldest",
+                    "worthy",
+                    "flatter",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 17,
+                    "success": {
+                      "text": "Pyrraxis purrs, a sound like a landslide. \"At last, someone with manners.\" She will listen to an offer now.",
+                      "flags": [
+                        {
+                          "set": "~ch4_pyrraxis_flattered",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Flattery,\" hisses Pyrraxis, \"from a thief in my house.\" Her tail lashes through the coins and catches you.",
+                      "flags": [
+                        {
+                          "set": "~ch4_pflatter_tried",
+                          "value": true
+                        }
+                      ],
+                      "damage": {
+                        "dice": "2d6",
+                        "type": "bludgeoning",
+                        "target": "hero",
+                        "save": {
+                          "ability": "dex",
+                          "dc": 15,
+                          "half": true
+                        }
+                      }
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "cow",
+                  "label": "Raise Dawnbreaker: \"You remember this lance. Hold still.\" (Intimidation DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "any": [
+                          {
+                            "flag": "arc.main.dawnbreaker_holder",
+                            "eq": "player"
+                          },
+                          {
+                            "flag": "arc.main.dawnbreaker_holder",
+                            "eq": "dawn_lance"
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_pyrraxis_cowed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch4_pyrraxis_insulted"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "dawnbreaker",
+                    "lance",
+                    "still",
+                    "threaten",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 16,
+                    "success": {
+                      "text": "Pyrraxis flinches from the lance that scarred her mother. She lowers herself onto her hoard, trembling, and lets you near the wound.",
+                      "flags": [
+                        {
+                          "set": "~ch4_pyrraxis_cowed",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Pyrraxis roars in your face, and the heat of it blisters your skin. \"Threaten me again, and I will melt that lance to slag.\" She will not bargain with you gladly now.",
+                      "flags": [
+                        {
+                          "set": "~ch4_pyrraxis_insulted",
+                          "value": true
+                        }
+                      ],
+                      "damage": {
+                        "dice": "2d6",
+                        "type": "fire",
+                        "target": "hero",
+                        "save": {
+                          "ability": "dex",
+                          "dc": 15,
+                          "half": true
+                        }
+                      }
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "Step back from her"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "queen_isolde",
@@ -5480,7 +9501,262 @@
       "factions": [
         "crown_of_aurelmark"
       ],
-      "attitude": "indifferent"
+      "attitude": "indifferent",
+      "conversations": [
+        {
+          "id": "aftermath",
+          "label": "Speak with Queen Isolde",
+          "if": {
+            "all": [
+              {
+                "flag": "~ch4_palace_taken"
+              },
+              {
+                "flag": "world.queen_alive",
+                "eq": true
+              },
+              {
+                "not": {
+                  "flag": "~ch4_queen_dead"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch4_coup_lost"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "queen",
+            "isolde",
+            "majesty",
+            "speak",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Isolde sits on the steps of her dais with soot on her gown. \"Sit, if you like. There are no ceremonies left today.\"",
+              "options": [
+                {
+                  "id": "reward",
+                  "label": "\"The Crown's gratitude is kind, Majesty. The Crown's gold would be kinder.\" (Persuasion DC 14)",
+                  "once": true,
+                  "keywords": [
+                    "reward",
+                    "gold",
+                    "pay",
+                    "gratitude",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "success": {
+                      "text": "Isolde laughs, the first laugh in the palace for a week, and has Hale count out three hundred gold from what is left of the treasury.",
+                      "coins": 30000
+                    },
+                    "failure": {
+                      "text": "The Queen's smile cools. \"The treasury is ash, like half my city.\" The courtiers heard you ask.",
+                      "reputation": [
+                        {
+                          "faction": "crown_of_aurelmark",
+                          "delta": -5
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "millbrook",
+                  "label": "\"Rebuild Millbrook, Majesty. It stood for you when no one else did.\"",
+                  "once": true,
+                  "if": {
+                    "visited": "millbrook_remembers"
+                  },
+                  "keywords": [
+                    "millbrook",
+                    "rebuild",
+                    "village"
+                  ],
+                  "outcome": {
+                    "text": "Isolde writes the order herself: timber, masons, and the Crown's tax on Millbrook forgiven for ten years.",
+                    "flags": [
+                      {
+                        "set": "~ch4_millbrook_rebuilt",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "nettle",
+                        "delta": 5
+                      },
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "mercy",
+                  "label": "\"Spare Harrow Vey the rope, Majesty. Let him hang in the Isles, or not at all.\"",
+                  "once": true,
+                  "if": {
+                    "flag": "arc.main.harrow_vey_fate",
+                    "eq": "captured"
+                  },
+                  "keywords": [
+                    "vey",
+                    "spare",
+                    "rope",
+                    "mercy"
+                  ],
+                  "outcome": {
+                    "text": "Isolde raises an eyebrow, but commutes the sentence to exile. Somewhere below, Harrow Vey is laughing.",
+                    "flags": [
+                      {
+                        "set": "~ch4_vey_spared",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "rook",
+                        "delta": 10
+                      },
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "Bow and withdraw"
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Is there more?\"",
+              "options": [
+                {
+                  "id": "reward",
+                  "label": "\"The Crown's gratitude is kind, Majesty. The Crown's gold would be kinder.\" (Persuasion DC 14)",
+                  "once": true,
+                  "keywords": [
+                    "reward",
+                    "gold",
+                    "pay",
+                    "gratitude",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "success": {
+                      "text": "Isolde laughs, the first laugh in the palace for a week, and has Hale count out three hundred gold from what is left of the treasury.",
+                      "coins": 30000
+                    },
+                    "failure": {
+                      "text": "The Queen's smile cools. \"The treasury is ash, like half my city.\" The courtiers heard you ask.",
+                      "reputation": [
+                        {
+                          "faction": "crown_of_aurelmark",
+                          "delta": -5
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "millbrook",
+                  "label": "\"Rebuild Millbrook, Majesty. It stood for you when no one else did.\"",
+                  "once": true,
+                  "if": {
+                    "visited": "millbrook_remembers"
+                  },
+                  "keywords": [
+                    "millbrook",
+                    "rebuild",
+                    "village"
+                  ],
+                  "outcome": {
+                    "text": "Isolde writes the order herself: timber, masons, and the Crown's tax on Millbrook forgiven for ten years.",
+                    "flags": [
+                      {
+                        "set": "~ch4_millbrook_rebuilt",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "nettle",
+                        "delta": 5
+                      },
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "mercy",
+                  "label": "\"Spare Harrow Vey the rope, Majesty. Let him hang in the Isles, or not at all.\"",
+                  "once": true,
+                  "if": {
+                    "flag": "arc.main.harrow_vey_fate",
+                    "eq": "captured"
+                  },
+                  "keywords": [
+                    "vey",
+                    "spare",
+                    "rope",
+                    "mercy"
+                  ],
+                  "outcome": {
+                    "text": "Isolde raises an eyebrow, but commutes the sentence to exile. Somewhere below, Harrow Vey is laughing.",
+                    "flags": [
+                      {
+                        "set": "~ch4_vey_spared",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "rook",
+                        "delta": 10
+                      },
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "Bow and withdraw"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "encounters": [
@@ -5494,7 +9770,16 @@
         },
         {
           "id": "magma_mephit",
-          "count": 4
+          "count": 3
+        },
+        {
+          "id": "magma_mephit",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch4_moll_ally"
+            }
+          }
         },
         {
           "id": "hell_hound",
@@ -5547,7 +9832,16 @@
         },
         {
           "id": "magma_mephit",
-          "count": 4
+          "count": 3
+        },
+        {
+          "id": "magma_mephit",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch4_moll_ally"
+            }
+          }
         },
         {
           "id": "hell_hound",
@@ -5602,7 +9896,16 @@
       "monsters": [
         {
           "id": "hell_hound",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "hell_hound",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch4_firebreak_built"
+            }
+          }
         }
       ],
       "terrain": [
@@ -5636,7 +9939,16 @@
             "value": true
           }
         ]
-      }
+      },
+      "allies": [
+        {
+          "id": "knight",
+          "count": 2,
+          "if": {
+            "flag": "~ch4_mb_knights"
+          }
+        }
+      ]
     },
     {
       "id": "millbrook_raid_militia",
@@ -5644,7 +9956,16 @@
       "monsters": [
         {
           "id": "hell_hound",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "hell_hound",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch4_firebreak_built"
+            }
+          }
         }
       ],
       "terrain": [
@@ -5661,6 +9982,13 @@
         {
           "id": "guard",
           "count": 2
+        },
+        {
+          "id": "knight",
+          "count": 2,
+          "if": {
+            "flag": "~ch4_mb_knights"
+          }
         }
       ],
       "win": {
@@ -5738,7 +10066,16 @@
             "value": true
           }
         ]
-      }
+      },
+      "allies": [
+        {
+          "id": "knight",
+          "count": 2,
+          "if": {
+            "flag": "~ch4_mb_knights"
+          }
+        }
+      ]
     },
     {
       "id": "millbrook_converted_half",
@@ -5792,7 +10129,16 @@
             "value": true
           }
         ]
-      }
+      },
+      "allies": [
+        {
+          "id": "knight",
+          "count": 2,
+          "if": {
+            "flag": "~ch4_mb_knights"
+          }
+        }
+      ]
     },
     {
       "id": "millbrook_converted_freed",
@@ -5855,7 +10201,16 @@
             "value": true
           }
         ]
-      }
+      },
+      "allies": [
+        {
+          "id": "knight",
+          "count": 2,
+          "if": {
+            "flag": "~ch4_mb_knights"
+          }
+        }
+      ]
     },
     {
       "id": "lava_tubes",
@@ -5905,7 +10260,16 @@
         },
         {
           "id": "cultist_fanatic",
-          "count": 3
+          "count": 2
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch4_callers_doubt"
+            }
+          }
         }
       ],
       "map": "emberpeak_lair",
@@ -5967,7 +10331,16 @@
         },
         {
           "id": "cultist_fanatic",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch4_callers_doubt"
+            }
+          }
         }
       ],
       "map": "emberpeak_lair",
@@ -6267,7 +10640,16 @@
         },
         {
           "id": "pirate",
-          "count": 4
+          "count": 2
+        },
+        {
+          "id": "pirate",
+          "count": 2,
+          "if": {
+            "not": {
+              "flag": "~ch4_vey_crew_fled"
+            }
+          }
         }
       ],
       "map": "highcrown_palace",
@@ -6369,11 +10751,29 @@
         },
         {
           "id": "ghast",
-          "count": 3
+          "count": 2
+        },
+        {
+          "id": "ghast",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch4_vey_turned"
+            }
+          }
         },
         {
           "id": "cultist_fanatic",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch4_coup_plan"
+            }
+          }
         }
       ],
       "map": "highcrown_palace",
@@ -6393,7 +10793,15 @@
       "bosses": [
         "wight"
       ],
-      "allies": [],
+      "allies": [
+        {
+          "id": "knight",
+          "count": 1,
+          "if": {
+            "flag": "~ch4_corwin_blessed"
+          }
+        }
+      ],
       "win": {
         "text": "The wight that led the coup crumbles on the Queen’s dais, and the converted nobles throw down their swords. The throne hall is the Crown’s again.",
         "flags": [
@@ -6437,11 +10845,29 @@
         },
         {
           "id": "ghast",
-          "count": 3
+          "count": 2
+        },
+        {
+          "id": "ghast",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch4_vey_turned"
+            }
+          }
         },
         {
           "id": "cultist_fanatic",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch4_coup_plan"
+            }
+          }
         }
       ],
       "map": "highcrown_palace",
@@ -6465,6 +10891,13 @@
         {
           "id": "knight",
           "count": 3
+        },
+        {
+          "id": "knight",
+          "count": 1,
+          "if": {
+            "flag": "~ch4_corwin_blessed"
+          }
         }
       ],
       "win": {
@@ -6510,11 +10943,29 @@
         },
         {
           "id": "ghast",
-          "count": 3
+          "count": 2
+        },
+        {
+          "id": "ghast",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch4_vey_turned"
+            }
+          }
         },
         {
           "id": "cultist_fanatic",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch4_coup_plan"
+            }
+          }
         }
       ],
       "map": "highcrown_palace",
@@ -6538,6 +10989,13 @@
         {
           "id": "guard",
           "count": 4
+        },
+        {
+          "id": "knight",
+          "count": 1,
+          "if": {
+            "flag": "~ch4_corwin_blessed"
+          }
         }
       ],
       "win": {
@@ -6583,11 +11041,29 @@
         },
         {
           "id": "ghast",
-          "count": 3
+          "count": 2
+        },
+        {
+          "id": "ghast",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch4_vey_turned"
+            }
+          }
         },
         {
           "id": "cultist_fanatic",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch4_coup_plan"
+            }
+          }
         }
       ],
       "map": "highcrown_palace",
@@ -6611,6 +11087,13 @@
         {
           "id": "warrior_veteran",
           "count": 4
+        },
+        {
+          "id": "knight",
+          "count": 1,
+          "if": {
+            "flag": "~ch4_corwin_blessed"
+          }
         }
       ],
       "win": {
@@ -7046,6 +11529,53 @@
         "text": "The Choir withdraws from Highcrown with every Tooth it holds. That night the southern sky over the Gloamfen turns black: the Choir of Teeth has begun at the Maw."
       },
       "required": true
+    },
+    {
+      "id": "moll_bill",
+      "text": "Master Moll's bill reaches the palace.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch4_moll_owed"
+          },
+          {
+            "flag": "~ch4_palace_taken"
+          }
+        ]
+      },
+      "scenes": [
+        "highcrown_burning"
+      ],
+      "outcome": {
+        "text": "A bargewoman's bill for \"refugees, carried, at double\" arrives on the Chamberlain's desk with your name on it. Hale is not amused.",
+        "reputation": [
+          {
+            "faction": "crown_of_aurelmark",
+            "delta": -5
+          }
+        ]
+      }
+    },
+    {
+      "id": "ironvault_share",
+      "text": "The Consortium collects its tenth.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch4_hoard_promised"
+          },
+          {
+            "flag": "~ch4_hoard_claimed"
+          }
+        ]
+      },
+      "scenes": [
+        "pyrraxis_hoard"
+      ],
+      "outcome": {
+        "text": "A Consortium clerk is waiting at the cave mouth with a contract and an empty strongbox. You count five hundred gold into it.",
+        "cost": 50000
+      }
     }
   ],
   "deadlines": [
@@ -7697,6 +12227,230 @@
     {
       "id": "arc.main.ch3_queen_saved",
       "description": "Chapter 3: the hero cured the Queen in the palace undercroft."
+    },
+    {
+      "id": "~ch4_moll_haggle_tried",
+      "description": "Haggled with Master Moll and failed."
+    },
+    {
+      "id": "~ch4_moll_ally",
+      "description": "Master Moll's bargemen draw off one magma mephit on the ridge."
+    },
+    {
+      "id": "~ch4_moll_choir_tried",
+      "description": "Asked Master Moll about the singers and failed."
+    },
+    {
+      "id": "~ch4_barges_seized",
+      "description": "Commandeered Moll's barges in the Crown's name (Crown reputation loss)."
+    },
+    {
+      "id": "~ch4_moll_gone",
+      "description": "Master Moll cast off rather than be commandeered: no barges."
+    },
+    {
+      "id": "~ch4_moll_owed",
+      "description": "Promised Moll double pay from the Crown (her bill arrives at Highcrown)."
+    },
+    {
+      "id": "~ch4_moll_promise_tried",
+      "description": "Tried to talk Moll into carrying the refugees on credit, and failed."
+    },
+    {
+      "id": "~ch4_firebreak_built",
+      "description": "Built a firebreak at Millbrook (one hell hound fewer in the raid)."
+    },
+    {
+      "id": "~ch4_plan_tried",
+      "description": "Tried to plan a firebreak and failed."
+    },
+    {
+      "id": "~ch4_fears_known",
+      "description": "Learned what wavering Millbrook fears (advantage rallying it)."
+    },
+    {
+      "id": "~ch4_fears_tried",
+      "description": "Asked the Reeve what the village fears, and failed."
+    },
+    {
+      "id": "~ch4_hymn_known",
+      "description": "Learned who the Choir reached first (advantage breaking its hold)."
+    },
+    {
+      "id": "~ch4_hymn_tried",
+      "description": "Asked the Reeve about the humming, and failed."
+    },
+    {
+      "id": "~ch4_reeve_shamed",
+      "description": "Shamed Reeve Tamsin into going door to door (advantage rallying / breaking the hold)."
+    },
+    {
+      "id": "~ch4_reeve_cold",
+      "description": "Reeve Tamsin turned against the hero (disadvantage rallying / breaking the hold)."
+    },
+    {
+      "id": "~ch4_mb_evacuated",
+      "description": "Sent Millbrook's children and old folk north to Dawnspire."
+    },
+    {
+      "id": "~ch4_dragon_lore",
+      "description": "Thane showed where Pyrraxis's old wound lies (advantage freeing her)."
+    },
+    {
+      "id": "~ch4_lore_tried",
+      "description": "Asked Thane about red dragons, and failed."
+    },
+    {
+      "id": "~ch4_captains_cheer",
+      "description": "The Lance captains cheered the hero's speech (advantage persuading the Lance)."
+    },
+    {
+      "id": "~ch4_captains_sour",
+      "description": "The Lance captains disliked the hero's speech (disadvantage persuading the Lance)."
+    },
+    {
+      "id": "~ch4_mb_knights",
+      "description": "Thane sent two knights to Millbrook (allies in the Millbrook fights)."
+    },
+    {
+      "id": "~ch4_mb_knights_tried",
+      "description": "Asked Thane for knights for Millbrook and was refused."
+    },
+    {
+      "id": "~ch4_hale_pardon",
+      "description": "Chamberlain Hale burned the hero's warrant at the muster."
+    },
+    {
+      "id": "~ch4_hale_closed",
+      "description": "Chamberlain Hale will not talk to the hero any more."
+    },
+    {
+      "id": "~ch4_hale_won",
+      "description": "Flattered Chamberlain Hale (advantage asking for the royal guard)."
+    },
+    {
+      "id": "~ch4_hale_flatter_tried",
+      "description": "Flattered Chamberlain Hale and failed."
+    },
+    {
+      "id": "~ch4_crown_purse",
+      "description": "Hale agreed the treasury pays the Deepanvil mercenaries."
+    },
+    {
+      "id": "~ch4_purse_tried",
+      "description": "Asked Hale for the treasury and was refused."
+    },
+    {
+      "id": "~ch4_hale_cowed",
+      "description": "Threatened Hale into compliance (advantage asking for the guard; Crown reputation loss)."
+    },
+    {
+      "id": "~ch4_hale_enemy",
+      "description": "Chamberlain Hale speaks against the hero (disadvantage asking for the guard)."
+    },
+    {
+      "id": "~ch4_ashgrove_read",
+      "description": "Learned the Consortium fears a dead debtor (advantage persuading Ashgrove)."
+    },
+    {
+      "id": "~ch4_ashgrove_read_tried",
+      "description": "Tried to read Ashgrove and failed."
+    },
+    {
+      "id": "~ch4_hoard_promised",
+      "description": "Promised Ashgrove 500 gp of the dragon's hoard for her ballistae."
+    },
+    {
+      "id": "~ch4_ashgrove_scared",
+      "description": "Frightened Ashgrove about the Choir (advantage persuading her)."
+    },
+    {
+      "id": "~ch4_ashgrove_angry",
+      "description": "Threatened Ashgrove and failed (disadvantage persuading her)."
+    },
+    {
+      "id": "~ch4_corwin_back",
+      "description": "Talked Ser Corwin into rejoining the party."
+    },
+    {
+      "id": "~ch4_corwin_refused",
+      "description": "Ser Corwin refused the hero's apology."
+    },
+    {
+      "id": "~ch4_corwin_blessed",
+      "description": "Parted with Corwin in friendship (he fights beside the hero in the throne hall)."
+    },
+    {
+      "id": "~ch4_corwin_parted",
+      "description": "Said goodbye to Corwin at the muster."
+    },
+    {
+      "id": "~ch4_stone_known",
+      "description": "Vosk let slip how the song-stone is silenced (advantage unsinging it)."
+    },
+    {
+      "id": "~ch4_stone_tried",
+      "description": "Asked Vosk about the song-stone and failed."
+    },
+    {
+      "id": "~ch4_callers_doubt",
+      "description": "Talked one dragon-caller off the mountain (one fanatic fewer at the camp)."
+    },
+    {
+      "id": "~ch4_callers_tried",
+      "description": "Tried to turn the dragon-callers and failed."
+    },
+    {
+      "id": "~ch4_coup_plan",
+      "description": "Vosk revealed the coup's plan (one fanatic fewer in the throne hall)."
+    },
+    {
+      "id": "~ch4_plan_asked",
+      "description": "Asked Vosk about the Choir's next strike and got nothing."
+    },
+    {
+      "id": "~ch4_pyrraxis_lucid",
+      "description": "Reached the dragon under the hunger (advantage freeing / bargaining)."
+    },
+    {
+      "id": "~ch4_lucid_tried",
+      "description": "Tried to reach Pyrraxis's true mind and failed."
+    },
+    {
+      "id": "~ch4_pyrraxis_flattered",
+      "description": "Flattered Pyrraxis (advantage on the bargain)."
+    },
+    {
+      "id": "~ch4_pflatter_tried",
+      "description": "Flattered Pyrraxis and was clawed for it."
+    },
+    {
+      "id": "~ch4_pyrraxis_cowed",
+      "description": "Cowed Pyrraxis with Dawnbreaker (advantage wrenching the Tooth free)."
+    },
+    {
+      "id": "~ch4_pyrraxis_insulted",
+      "description": "Threatened Pyrraxis and failed (disadvantage on the bargain)."
+    },
+    {
+      "id": "~ch4_vey_turned",
+      "description": "Talked Harrow Vey out of the coup (one ghast fewer in the throne hall)."
+    },
+    {
+      "id": "~ch4_vey_bought",
+      "description": "Paid Harrow Vey 500 gp to sail away."
+    },
+    {
+      "id": "~ch4_vey_crew_fled",
+      "description": "Half of Vey's pirates fled before the fight."
+    },
+    {
+      "id": "~ch4_millbrook_rebuilt",
+      "description": "The Queen ordered Millbrook rebuilt."
+    },
+    {
+      "id": "~ch4_vey_spared",
+      "description": "Asked the Queen to spare Harrow Vey."
     }
   ],
   "endings": [

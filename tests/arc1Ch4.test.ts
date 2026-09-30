@@ -196,7 +196,8 @@ describe('ch4_wyrmfire: companions and encounters', () => {
   });
 
   it('encounters keep the design groups and declare scaling pools of their own monsters', () => {
-    const counts = (id: string) => Object.fromEntries(encounter(id).monsters.map((m) => [m.id, m.count]));
+    // Default groups summed: A135 splits some groups into a conditional part (one fewer when a talk succeeded).
+    const counts = (id: string) => encounter(id).monsters.reduce<Record<string, number>>((n, m) => ({ ...n, [m.id]: (n[m.id] ?? 0) + m.count }), {});
     expect(counts('ember_singers')).toEqual({ cultist_fanatic: 2, magma_mephit: 4, hell_hound: 1 });
     expect(counts('millbrook_raid')).toEqual({ hell_hound: 2 });
     expect(counts('millbrook_converted')).toEqual({ commoner: 6, cultist_fanatic: 1, hell_hound: 2 });
@@ -226,7 +227,8 @@ describe('ch4_wyrmfire: companions and encounters', () => {
     expect(encounter('singers_camp').bosses).toEqual(['mage']);
     expect(encounter('throne_coup').bosses).toEqual(['wight']);
     expect(encounter('vey_at_court').bosses).toEqual(['pirate_captain']);
-    const allies = (id: string) => Object.fromEntries(encounter(id).allies.map((a) => [a.id, a.count]));
+    // Unconditional allies only (A135 adds allies that come when a talk succeeded; tested below).
+    const allies = (id: string) => Object.fromEntries(encounter(id).allies.filter((a) => !a.if).map((a) => [a.id, a.count]));
     expect(allies('ember_singers')).toEqual({});
     expect(allies('ember_singers_patrol')).toEqual({ guard: 3 });
     expect(allies('millbrook_raid_militia')).toEqual({ guard: 2 });
@@ -305,7 +307,10 @@ describe('ch4_wyrmfire: reachability', () => {
       'arc.main.millbrook_militia': true,
       'arc.main.parrot_treasure': 'player',
     };
-    const res = solve(leg('dawnspire_muster', { all: [{ flag: 'arc.main.war_council_allies', gte: 6 }, { visited: 'emberpeak_ascent' }] }), flags, 'leg_goal');
+    // The muster's talks (A135) multiply the states past any sane limit: this leg solves the pledges
+    // without them; the talks have their own scripted tests below.
+    const quiet = { ...leg('dawnspire_muster', { all: [{ flag: 'arc.main.war_council_allies', gte: 6 }, { visited: 'emberpeak_ascent' }] }), npcs: ADV.npcs.map((n) => ({ ...n, conversations: [] })) };
+    const res = solve(quiet, flags, 'leg_goal');
     expect(res.ok, res.reason).toBe(true);
   }); // the heaviest search in the suite (~59k nodes, ~4 s alone)
 
@@ -710,5 +715,231 @@ describe('ch4_wyrmfire: earlier chapters change the chapter', () => {
     expect(seed).toContain('The Ember Tooth burns in your pack');
     expect(seed).toContain('sick and humming');
     expect(describeScene(begin({}, 'highcrown_burning')).seed).toContain('prisoner in her own throne hall');
+  });
+});
+
+describe('ch4_wyrmfire: A135 conversations, approaches and consequences', () => {
+  const at = (scene: string | undefined, flags: Flags = {}, opts: Opts = {}, unlucky = false) => {
+    const c = begin(flags, scene, opts);
+    if (unlucky) c.rng = new UnluckyRng();
+    return c;
+  };
+  const adv = (c: RunContext, id: string) => perform(c, id).rolls[0]!.advantage;
+  const dis = (c: RunContext, id: string) => perform(c, id).rolls[0]!.disadvantage;
+  const LAIR = { [L('camp_done')]: true, [L('guardian_down')]: true };
+
+  it('every key NPC has a conversation with at least 3 approaches that do something; hub scenes vary on return', () => {
+    for (const id of ['barge_master_moll', 'reeve_tamsin', 'aldric_thane', 'chamberlain_hale', 'brunhild_ashgrove', 'ser_corwin', 'vosk', 'pyrraxis', 'harrow_vey', 'queen_isolde']) {
+      const npc = ADV.npcs.find((n) => n.id === id)!;
+      const approaches = new Set<string>();
+      for (const conv of npc.conversations) {
+        for (const node of conv.nodes) {
+          for (const o of node.options) {
+            const out = [o.outcome, o.check?.success, o.check?.failure];
+            if (o.check || out.some((x) => x && (x.flags.length || x.cost || x.coins || x.approval.length || x.reputation.length || x.encounter || x.companionReturns))) approaches.add(o.id);
+          }
+        }
+      }
+      expect(approaches.size, id).toBeGreaterThanOrEqual(3);
+    }
+    for (const s of ['ashfall_road', 'millbrook_remembers', 'dawnspire_muster', 'emberpeak_ascent']) {
+      expect(allScenes(ADV).find((x) => x.id === s)!.revisitSeed, s).toBeDefined();
+    }
+  });
+
+  it('Moll: her bargemen draw off a mephit; a promise of double pay comes due at Highcrown; commandeering costs Crown favour or the barges', () => {
+    const c = at(undefined);
+    play(c, ['talk.barge_master_moll.barges', 'dlg.greet.choir', 'dlg.more.promise', 'dlg.more.bye']);
+    expect(c.state.flags).toMatchObject({ [L('moll_ally')]: true, [L('refugees_led')]: true, [L('moll_owed')]: true });
+    expect(encounter('ember_singers').monsters).toContainEqual({ id: 'magma_mephit', count: 1, if: { not: { flag: L('moll_ally') } } });
+    const bill = at('highcrown_burning', { [L('moll_owed')]: true, [L('palace_taken')]: true });
+    expect(rep(bill, 'crown_of_aurelmark')).toBe(-5);
+
+    const seize = at(undefined);
+    play(seize, ['talk.barge_master_moll.barges', 'dlg.greet.commandeer']);
+    expect(seize.state.flags).toMatchObject({ [L('refugees_led')]: true, [L('barges_seized')]: true });
+    expect(rep(seize, 'crown_of_aurelmark')).toBe(-5);
+
+    const gone = at(undefined, {}, { coins: 6000 }, true);
+    expect(ids(gone)).toContain('hire_barges');
+    play(gone, ['talk.barge_master_moll.barges', 'dlg.greet.commandeer']);
+    expect(gone.state.flags[L('moll_gone')]).toBe(true);
+    expect(ids(gone)).not.toContain('hire_barges');
+    expect(ids(gone)).not.toContain('talk.barge_master_moll.barges');
+
+    const cheap = at(undefined, {}, { coins: 3000 });
+    play(cheap, ['talk.barge_master_moll.barges', 'dlg.greet.haggle']);
+    expect(cheap.state.hero.coins).toBe(1000);
+    expect(cheap.state.flags[L('refugees_led')]).toBe(true);
+  });
+
+  it('Reeve Tamsin: a firebreak costs the raid a hound; insight or shame rallies the village; a failed threat turns him cold', () => {
+    const faithful = at('millbrook_remembers', { 'arc.starter.captives_saved': 4, 'arc.starter.reeve_attitude': 'friendly' });
+    play(faithful, ['talk.reeve_tamsin.firebreak', 'dlg.greet.plan', 'dlg.more.evacuate', 'dlg.more.bye']);
+    expect(faithful.state.flags).toMatchObject({ [L('firebreak_built')]: true, [L('mb_evacuated')]: true });
+    for (const id of ['millbrook_raid', 'millbrook_raid_militia']) expect(encounter(id).monsters).toContainEqual({ id: 'hell_hound', count: 1, if: { not: { flag: L('firebreak_built') } } });
+
+    const wavering = at('millbrook_remembers', { 'arc.starter.captives_saved': 2 });
+    play(wavering, ['talk.reeve_tamsin.firebreak', 'dlg.greet.fears', 'dlg.more.shame', 'dlg.more.bye']);
+    expect(adv(wavering, 'rally_village')).toEqual(expect.arrayContaining(['You know what they are really afraid of', 'Reeve Tamsin goes door to door beside you']));
+
+    const converted = at('millbrook_remembers', { 'arc.starter.captives_saved': 0, 'arc.starter.reeve_attitude': 'hostile' });
+    play(converted, ['talk.reeve_tamsin.firebreak', 'dlg.greet.hymn', 'dlg.more.bye']);
+    expect(adv(converted, 'break_hold')).toContain('You know whose names to call, and in what order');
+
+    const cold = at('millbrook_remembers', { 'arc.starter.captives_saved': 0 }, {}, true);
+    play(cold, ['talk.reeve_tamsin.firebreak', 'dlg.greet.shame']);
+    expect(cold.state.flags[L('reeve_cold')]).toBe(true);
+    expect(ids(cold)).not.toContain('talk.reeve_tamsin.firebreak');
+    expect(dis(cold, 'break_hold')).toContain('Reeve Tamsin has turned his back on you');
+  });
+
+  it('Thane: dragon lore helps free Pyrraxis, a speech sways his captains, and he can send knights to Millbrook', () => {
+    const c = at('dawnspire_muster', { 'arc.starter.pip_rescued': true });
+    play(c, ['talk.aldric_thane.war_table', 'dlg.greet.lore', 'dlg.more.captains', 'dlg.more.millbrook', 'dlg.more.bye']);
+    expect(c.state.flags).toMatchObject({ [L('dragon_lore')]: true, [L('captains_cheer')]: true, [L('mb_knights')]: true });
+    expect(adv(c, 'persuade_lance')).toContain('The captains cheered your speech');
+    expect(encounter('millbrook_raid').allies).toContainEqual({ id: 'knight', count: 2, if: { flag: L('mb_knights') } });
+    expect(adv(at('pyrraxis_hoard', { ...LAIR, [L('dragon_lore')]: true }), 'free_medicine')).toContain('Thane showed you where the old wound lies');
+
+    const sour = at('dawnspire_muster', {}, {}, true);
+    play(sour, ['talk.aldric_thane.war_table', 'dlg.greet.captains', 'dlg.more.bye']);
+    expect(dis(sour, 'persuade_lance')).toContain('The captains were not impressed by your speech');
+  });
+
+  it('Hale: an outlaw can be pardoned; the treasury can pay the mercenaries; a failed threat closes his tent', () => {
+    const outlaw = at('dawnspire_muster', { 'world.player_outlawed': true });
+    expect(ids(outlaw)).not.toContain('pledge_crown');
+    play(outlaw, ['talk.chamberlain_hale.envoy', 'dlg.greet.plea', 'dlg.more.purse', 'dlg.more.bye']);
+    expect(outlaw.state.flags).toMatchObject({ 'world.player_outlawed': false, [L('hale_pardon')]: true, [L('crown_purse')]: true });
+    expect(ids(outlaw)).toEqual(expect.arrayContaining(['pledge_crown', 'hire_mercs_crown']));
+    const coins = outlaw.state.hero.coins;
+    play(outlaw, ['hire_mercs_crown']);
+    expect(outlaw.state.hero.coins).toBe(coins);
+    expect(outlaw.state.flags).toMatchObject({ [L('ally_mercs')]: true, 'arc.main.war_council_allies': 1 });
+
+    const flat = at('dawnspire_muster', { 'world.queen_alive': false, 'arc.main.cantor_identity_known': true });
+    play(flat, ['talk.chamberlain_hale.envoy', 'dlg.greet.flatter', 'dlg.more.bye']);
+    expect(adv(flat, 'persuade_crown')).toContain('Chamberlain Hale speaks for you');
+
+    const u = at('dawnspire_muster', { 'world.queen_alive': false, 'arc.main.cantor_identity_known': true }, {}, true);
+    play(u, ['talk.chamberlain_hale.envoy', 'dlg.greet.threaten']);
+    expect(ids(u)).not.toContain('talk.chamberlain_hale.envoy');
+    expect(dis(u, 'persuade_crown')).toContain('Chamberlain Hale speaks against you');
+  });
+
+  it('Ashgrove: a share of the hoard buys the ballistae and is collected after the claim; a failed threat hurts', () => {
+    const c = at('dawnspire_muster', { 'arc.main.money_trail_proven': true }, { rep: { ironvault_consortium: -30 } });
+    expect(ids(c)).not.toContain('persuade_ironvault');
+    play(c, ['talk.brunhild_ashgrove.ballistae', 'dlg.greet.share']);
+    expect(c.state.flags).toMatchObject({ [L('ally_ironvault')]: true, [L('hoard_promised')]: true, 'arc.main.war_council_allies': 1 });
+    const lair = at('pyrraxis_hoard', { ...LAIR, [L('hoard_promised')]: true });
+    const before = lair.state.hero.coins;
+    play(lair, ['slay_pyrraxis', 'claim_hoard']);
+    expect(lair.state.hero.coins).toBe(before + 250000 - 50000);
+
+    const u = at('dawnspire_muster', { 'arc.main.money_trail_proven': true }, {}, true);
+    play(u, ['talk.brunhild_ashgrove.ballistae', 'dlg.greet.threaten']);
+    expect(rep(u, 'ironvault_consortium')).toBe(-10);
+    expect(ids(u)).not.toContain('talk.brunhild_ashgrove.ballistae');
+    expect(dis(u, 'persuade_ironvault')).toContain('Ashgrove has not forgiven your threat');
+  });
+
+  it('Ser Corwin, gone to the Order, can be won back, or blessed and found fighting beside you', () => {
+    const c = at('dawnspire_muster', { 'world.corwin_status': 'left', 'world.corwin_loyalty': 15 });
+    expect(npcsHere(c)).toContain('ser_corwin');
+    play(c, ['talk.ser_corwin.amends', 'dlg.greet.apologise']);
+    expect(c.state.flags).toMatchObject({ 'world.corwin_status': 'in_party', 'world.corwin_loyalty': 40, [L('corwin_back')]: true });
+    expect(npcsHere(c)).not.toContain('ser_corwin');
+
+    const b = at('dawnspire_muster', { 'world.corwin_status': 'left' });
+    play(b, ['talk.ser_corwin.amends', 'dlg.greet.bless']);
+    expect(b.state.flags[L('corwin_blessed')]).toBe(true);
+    expect(ids(b)).not.toContain('talk.ser_corwin.amends');
+    for (const id of ['throne_coup', 'throne_coup_knights', 'throne_coup_guard', 'throne_coup_mercs']) expect(encounter(id).allies).toContainEqual({ id: 'knight', count: 1, if: { flag: L('corwin_blessed') } });
+  });
+
+  it('Vosk: the song-stone\'s secret, a dragon-caller turned, and the coup\'s plan after his circle breaks', () => {
+    const c = at('emberpeak_ascent', { 'arc.main.vosk_fate': 'escaped' });
+    play(c, ['climb', 'cross_lava', 'clear_tubes']);
+    play(c, ['talk.vosk.crater', 'dlg.greet.stone', 'dlg.more.callers', 'dlg.more.bye']);
+    expect(c.state.flags).toMatchObject({ [L('stone_known')]: true, [L('callers_doubt')]: true });
+    expect(encounter('singers_camp').monsters).toContainEqual({ id: 'cultist_fanatic', count: 1, if: { not: { flag: L('callers_doubt') } } });
+    fight(c, 'storm_camp');
+    play(c, ['talk.vosk.crater', 'dlg.greet.plan', 'dlg.more.bye']);
+    expect(c.state.flags[L('coup_plan')]).toBe(true);
+    expect(adv(c, 'unsing_stone')).toContain('Vosk told you which note silences it');
+    expect(ids(c)).toEqual(expect.arrayContaining(['capture_vosk', 'kill_vosk']));
+    expect(encounter('throne_coup').monsters).toContainEqual({ id: 'cultist_fanatic', count: 1, if: { not: { flag: L('coup_plan') } } });
+  });
+
+  it('Pyrraxis: reaching her true mind, flattery and Dawnbreaker help; a failed threat burns and sours the bargain', () => {
+    const flags = { ...LAIR, 'arc.main.dawnbreaker_holder': 'player', 'arc.main.tooth_want_holder': 'player' };
+    const c = at('pyrraxis_hoard', flags);
+    play(c, ['talk.pyrraxis.wyrm', 'dlg.greet.lucid', 'dlg.more.flatter', 'dlg.more.cow', 'dlg.more.bye']);
+    expect(adv(c, 'free_athletics')).toContain("She holds still under Dawnbreaker's point");
+    expect(adv(c, 'bargain')).toEqual(expect.arrayContaining(['The dragon under the hunger wants the song to stop', 'She enjoyed your manners']));
+
+    const u = at('pyrraxis_hoard', flags, {}, true);
+    const hp = u.state.hero.hp;
+    play(u, ['talk.pyrraxis.wyrm', 'dlg.greet.cow', 'dlg.more.bye']);
+    expect(u.state.hero.hp).toBeLessThan(hp);
+    expect(dis(u, 'bargain')).toContain('You threatened her with the lance');
+    expect(ids(at('pyrraxis_hoard', { [L('camp_done')]: true }))).not.toContain('talk.pyrraxis.wyrm'); // the brood-guardian first
+  });
+
+  it('Harrow Vey: turned (one ghast fewer), bought off, or fought with half his crew gone', () => {
+    const streets = (flags: Flags, opts: Opts = {}, unlucky = false) => {
+      const c = at('highcrown_burning', { 'arc.main.harrow_vey_fate': 'escaped', ...flags }, opts);
+      play(c, ['clear_street_1', 'clear_street_2']);
+      if (unlucky) c.rng = new UnluckyRng();
+      return c;
+    };
+    const t = streets({ 'world.rook_status': 'in_party' });
+    expect(perform(t, 'talk.harrow_vey.court').encounter).toBeUndefined();
+    expect(adv(t, 'dlg.greet.turn')).toContain('Rook knows Vey from the Isles, and says so');
+    expect(t.state.flags).toMatchObject({ [L('vey_turned')]: true, [L('vey_beaten')]: true, 'arc.main.harrow_vey_fate': 'escaped' });
+    expect(ids(t)).toContain('storm_throne');
+    expect(ids(t)).not.toContain('storm_court');
+    expect(ids(t)).not.toContain('capture_vey');
+    expect(encounter('throne_coup').monsters).toContainEqual({ id: 'ghast', count: 1, if: { not: { flag: L('vey_turned') } } });
+
+    const b = streets({}, { coins: 60000 });
+    play(b, ['talk.harrow_vey.court', 'dlg.greet.bribe']);
+    expect(b.state.hero.coins).toBe(10000);
+    expect(ids(b)).toContain('storm_throne');
+
+    const taunt = streets({});
+    perform(taunt, 'talk.harrow_vey.court');
+    expect(perform(taunt, 'dlg.greet.taunt').encounter).toBe('vey_at_court');
+    expect(taunt.state.flags[L('vey_crew_fled')]).toBe(true);
+    expect(encounter('vey_at_court').monsters).toContainEqual({ id: 'pirate', count: 2, if: { not: { flag: L('vey_crew_fled') } } });
+
+    const fail = streets({}, {}, true);
+    perform(fail, 'talk.harrow_vey.court');
+    expect(perform(fail, 'dlg.greet.turn').encounter).toBe('vey_at_court');
+  });
+
+  it('Queen Isolde after the coup: gold, Millbrook rebuilt, mercy for Vey', () => {
+    const c = at('highcrown_burning', { [L('palace_taken')]: true, 'world.queen_alive': true, 'arc.main.harrow_vey_fate': 'captured' });
+    const coins = c.state.hero.coins;
+    play(c, ['talk.queen_isolde.aftermath', 'dlg.greet.reward', 'dlg.more.mercy', 'dlg.more.bye']);
+    expect(c.state.hero.coins).toBe(coins + 30000);
+    expect(c.state.flags[L('vey_spared')]).toBe(true);
+    expect(ids(c)).toContain('end_endures');
+    const dead = at('highcrown_burning', { [L('palace_taken')]: true, 'world.queen_alive': false, [L('queen_dead')]: true });
+    expect(ids(dead)).not.toContain('talk.queen_isolde.aftermath');
+  });
+
+  it('the solver can seat allies through the talks alone (Ashgrove\'s share, the Crown\'s purse)', () => {
+    const goal = { all: [{ flag: L('ally_ironvault') }, { flag: L('ally_mercs') }] };
+    const adventure: Adventure = {
+      ...startingAt('dawnspire_muster'),
+      beats: [...ADV.beats, { id: 'leg_goal', text: 'Leg complete.', trigger: goal, scenes: [], outcome: OutcomeSchema.parse({ ending: 'leg_goal' }), required: false }],
+      endings: [...ADV.endings, { id: 'leg_goal', name: 'Leg goal', text: '' }],
+    };
+    const c = ctx({ 'arc.main.money_trail_proven': true }, { rep: { ironvault_consortium: -30 }, coins: 0 });
+    const res = solveAdventure({ state: c.state, adventure, db, flags: registry() }, 'leg_goal', { depth: 30, nodes: 60000 });
+    expect(res.ok, res.reason).toBe(true);
   });
 });
