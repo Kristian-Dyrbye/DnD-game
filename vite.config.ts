@@ -14,12 +14,16 @@ import type { ProxyOptions } from 'vite';
 const ROOT = fileURLToPath(new URL('.', import.meta.url));
 const WEB_OUT = resolve(ROOT, 'dist-web');
 
-/** Copies assets/models and assets/audio (fetched by Setup / CI) into the web build; skipped if not downloaded. */
+/**
+ * Copies assets/models and assets/audio (fetched by Setup / CI) into the web build; skipped if not downloaded.
+ * CREDITS.md goes along so the published site carries the asset + SRD attributions.
+ */
 function copyGameAssets(): Plugin {
   return {
     name: 'copy-game-assets',
     apply: 'build',
     closeBundle() {
+      cpSync(resolve(ROOT, 'CREDITS.md'), join(WEB_OUT, 'CREDITS.md'));
       for (const sub of ['models', 'audio']) {
         const from = resolve(ROOT, 'assets', sub);
         if (!existsSync(from)) {

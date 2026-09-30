@@ -8,6 +8,10 @@ This work includes material from the System Reference Document 5.2.1 ("SRD 5.2.1
 - **Source text used for conversion:** the community Markdown edition [downfallx/dnd-5e-srd-markdown](https://github.com/downfallx/dnd-5e-srd-markdown) at commit `1b4b99d` (CC-BY-4.0, same SRD 5.2.1 content). It is fetched by `scripts/srd-fetch.mjs` and is not redistributed in this repository.
 - This game is not affiliated with, endorsed by, or sponsored by Wizards of the Coast. Dungeons & Dragons and D&D are trademarks of Wizards of the Coast LLC.
 
+## Web edition (GitHub Pages)
+
+The web edition published by `.github/workflows/pages.yml` redistributes the 3D models, music and sound effects listed below: the workflow fetches them with the same scripts and verified hashes as Setup, and copies them into the site next to a copy of this file. All of them are CC0, which allows redistribution. The Piper voices are **not** part of the web edition (it uses the browser's own speech), and the SRD attribution above applies to the rules data bundled in the site.
+
 ## 3D models
 
 All 3D models are downloaded on the player's machine by `scripts/assets-fetch.mjs` from the authors' official distribution points (listed in `assets/manifest.json`, with the exact files, sizes and sha256 hashes). All are released under **CC0 1.0 Universal (public domain dedication)**. Attribution isn't required, but we credit the authors gladly. Licences were verified on 2026-09-29.

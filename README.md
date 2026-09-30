@@ -24,6 +24,13 @@ A single-player Dungeons & Dragons game (SRD 5.2.1 rules) that runs entirely on 
 
 Your saves are in `saves/`, your settings in `userdata/settings.json`.
 
+## Play in the browser
+
+There is also a **web edition** that runs entirely in your browser: no install, no server, no AI. The story uses written narration, every choice is a button (typed commands still work through keyword matching), and the voice uses your browser's built-in speech. Saves stay in the browser (IndexedDB); use *Export* / *Import* in the save browser to back them up or move them to the Windows edition.
+
+- **Hosted**: the workflow `.github/workflows/pages.yml` builds and publishes it to GitHub Pages on every push to `master` (or by hand from the Actions tab). It fetches the CC0 models and audio, runs the type check and tests, builds, and checks the site stays under the 1 GB Pages limit. One-time setup: in the repository's **Settings → Pages**, set **Source** to **GitHub Actions**. The game is then at `https://<user>.github.io/<repo>/`.
+- **Locally**: `npm run build:web` (writes `dist-web/`, about 100 MB with models and audio), then `npm run preview:web`, or put `dist-web/` on any static web host. `npm run site:size` prints the site size. Asset URLs are relative, so any folder works; set `WEB_BASE=/<repo>/` only if your host needs an absolute base.
+
 ## How to play
 
 - **Story**: read the narration, then click a suggested action or type what you want to do in your own words ("I ask the Reeve about the missing children", "I climb the wall"). The game decides what's possible and rolls the dice; the roll and its math appear in the dice tray.
@@ -52,6 +59,7 @@ npm run dev          # Vite dev server with hot reload, proxies to the game serv
 npm test             # Vitest (no Ollama or Piper needed: tests use mocks)
 npm run typecheck
 npm run build        # production client in dist/client (served by the game server)
+npm run build:web    # web edition (no server, no AI) in dist-web/
 ```
 
 Test shortcuts in the browser: `#creator`, `#quickbuild-<class>`, `#play-<class>` (start at once), `#play-<class>+map`, `#play-<class>+scars`, `#combat-<class>` (combat sandbox), `#load` (save browser).

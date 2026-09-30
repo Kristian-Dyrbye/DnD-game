@@ -1,0 +1,74 @@
+# Builds the web edition (no AI, runs fully in the browser) and publishes it on GitHub Pages.
+# One-time owner step: repository Settings → Pages → Source: "GitHub Actions".
+# The 3D models and audio are CC0 packs fetched from their official sources (see CREDITS.md);
+# they are cached between runs, keyed by their manifests.
+name: Deploy web edition to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time; a newer push doesn't cancel a deploy already running.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: npm
+
+      - run: npm ci
+
+      - name: Cache downloaded model and audio packs
+        uses: actions/cache@v4
+        with:
+          path: |
+            assets/_packs
+            assets/_audio_packs
+          key: game-assets-${{ hashFiles('assets/manifest.json', 'assets/audio-manifest.json') }}
+
+      - name: Fetch CC0 3D models
+        run: node scripts/assets-fetch.mjs
+
+      - name: Fetch CC0 music and sound effects
+        run: node scripts/audio-fetch.mjs
+
+      - run: npm run typecheck
+
+      - run: npm test
+
+      - name: Build the web edition
+        run: npm run build:web
+
+      - name: Check the site size (Pages limit 1 GB)
+        run: node scripts/site-size.mjs
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist-web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

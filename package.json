@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "build:web": "vite build --mode web",
     "preview:web": "vite preview --mode web",
+    "site:size": "node scripts/site-size.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit -p tsconfig.json",
