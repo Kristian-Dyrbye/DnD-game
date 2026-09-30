@@ -1,0 +1,31 @@
+/**
+ * The web edition's host: the whole game running inside the browser page with bundled content and
+ * no AI (template narration, keyword intents, data buttons). Loaded lazily by the InPage transport.
+ */
+import { loadSrd } from '../engine/data/srdBundle';
+import type { SavePort, SessionPorts } from '../engine/session/GameSession';
+import { bundledFlagRegistry, loadBundledAdventures } from './bundled';
+import { createGameHost, worldTables, type GameHost } from './gameHost';
+import { MemorySaves } from './memorySaves';
+
+export interface InPageHostOptions {
+  /** Save storage; defaults to in-memory slots (lost on reload). */
+  saves?: SavePort;
+  sessionPorts?: Partial<SessionPorts>;
+}
+
+export function createInPageHost(opts: InPageHostOptions = {}): GameHost {
+  const srd = loadSrd();
+  const tables = worldTables();
+  const flags = bundledFlagRegistry();
+  const { adventures, problems } = loadBundledAdventures(srd, flags, tables.companions);
+  for (const p of problems) console.warn(`Skipping invalid adventure ${p.file}: ${p.errors.join('; ')}`);
+  return createGameHost({
+    srd,
+    adventures,
+    flags,
+    tables,
+    saves: opts.saves ?? new MemorySaves(),
+    ...(opts.sessionPorts && { sessionPorts: opts.sessionPorts }),
+  });
+}

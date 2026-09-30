@@ -1,0 +1,38 @@
+/**
+ * Adventure content bundled as JSON imports (Vite / Vitest / tsx all support them), for the
+ * in-browser host that can't read data/adventures/ from disk. Keep the list in sync with the folder:
+ * tests/hostInPage.test.ts compares it with the files on disk.
+ */
+import type { SrdDatabase } from '../engine/data/srd';
+import { FlagRegistry } from '../engine/world/flags';
+import type { CompanionRoster } from '../engine/party/companions';
+import { validateAdventureSources, type AdventureSource, type LoadedAdventures } from './content';
+import flagsJson from '../../data/adventures/flags.json';
+import demo from '../../data/adventures/demo/millbrook_demo.json';
+import starter from '../../data/adventures/starter/millbrook_disappearances.json';
+import ch1 from '../../data/adventures/arc1/ch1_whispering_fen.json';
+import ch2 from '../../data/adventures/arc1/ch2_salt_and_treason.json';
+import ch3 from '../../data/adventures/arc1/ch3_the_gilded_lie.json';
+import ch4 from '../../data/adventures/arc1/ch4_wyrmfire.json';
+import ch5 from '../../data/adventures/arc1/ch5_the_hungering_dark.json';
+
+/** Bundled adventure files, keyed by their path under data/adventures/. */
+export const BUNDLED_ADVENTURES: AdventureSource[] = [
+  { file: 'demo/millbrook_demo.json', raw: demo },
+  { file: 'starter/millbrook_disappearances.json', raw: starter },
+  { file: 'arc1/ch1_whispering_fen.json', raw: ch1 },
+  { file: 'arc1/ch2_salt_and_treason.json', raw: ch2 },
+  { file: 'arc1/ch3_the_gilded_lie.json', raw: ch3 },
+  { file: 'arc1/ch4_wyrmfire.json', raw: ch4 },
+  { file: 'arc1/ch5_the_hungering_dark.json', raw: ch5 },
+];
+
+/** A fresh flag registry from the bundled flags.json (adventure docs are added while validating). */
+export function bundledFlagRegistry(): FlagRegistry {
+  return FlagRegistry.fromJson(flagsJson);
+}
+
+/** Validates the bundled adventures, like loadAdventures does for the server. */
+export function loadBundledAdventures(db: SrdDatabase, registry: FlagRegistry, companions?: CompanionRoster): LoadedAdventures {
+  return validateAdventureSources(BUNDLED_ADVENTURES, db, registry, companions);
+}

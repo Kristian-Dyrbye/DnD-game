@@ -12,36 +12,20 @@ import { GAME_VERSION } from '../shared/version';
 import { SettingsStore } from './settingsStore';
 import { Services, type ServiceOverrides } from './services';
 import { SaveError, SaveStore, type SaveMetaInput } from './saveStore';
-import { GameSession, type SessionPorts } from '../engine/session/GameSession';
-import { parseCommand } from '../shared/protocol';
-import { adventureActionPort } from '../engine/adventure/sessionActions';
+import type { GameSession, SessionPorts } from '../engine/session/GameSession';
+import { createGameHost, worldTables } from '../host/gameHost';
+
+export { STARTING_ADVENTURE } from '../host/gameHost';
 import { loadSrd } from '../engine/data/srdBundle';
 import { loadAdventures, loadFlagRegistry } from './adventures';
 import { parseIntent } from '../llm/prompts/intent';
-import { LoreSchema } from '../engine/world/lore';
-import loreJson from '../../data/world/lore.json';
 import { llmNarrator } from './narrator';
 import { TtsQueue } from '../tts/queue';
 import { Notices } from './notices';
-import { TravelEventTableSchema } from '../engine/world/travel';
-import travelEventsJson from '../../data/tables/travel-events.json';
-import { ShopTableSchema } from '../engine/world/shops';
-import shopsJson from '../../data/world/shops.json';
-import { SideQuestTablesSchema } from '../engine/adventure/sidequestTables';
-import sideQuestsJson from '../../data/tables/sidequests.json';
-import { DefeatTableSchema } from '../engine/adventure/defeat';
-import defeatsJson from '../../data/tables/defeat-outcomes.json';
-import { CompanionRosterSchema } from '../engine/party/companions';
-import companionsJson from '../../data/companions.json';
 import { llmBanter } from '../llm/prompts/banter';
-import { createDefaultRegistry } from '../engine/systems';
-import { regionOfState } from '../engine/adventure/runner';
 import { suggestIdeas } from '../llm/prompts/suggest';
 import { llmSummarizer } from '../llm/prompts/summary';
 import { gatherNarrationContext } from '../llm/context/gather';
-
-/** Adventure a new campaign starts with. */
-export const STARTING_ADVENTURE = 'millbrook_disappearances';
 import { backstoryMessages, templateBackstory, type BackstorySummary } from '../llm/prompts/backstory';
 
 export interface AppOptions {
@@ -152,36 +136,34 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   const srd = loadSrd();
   // Assigned once the session exists (the ports below report failures through it).
   let notices: Notices | undefined;
-  const lore = LoreSchema.parse(loreJson);
+  const tables = worldTables();
+  const { lore } = tables;
   const adventuresDir = opts.adventuresDir ?? path.join(opts.rootDir ?? process.cwd(), 'data', 'adventures');
   const flagRegistry = loadFlagRegistry(adventuresDir);
-  const { adventures, problems } = loadAdventures(adventuresDir, srd, flagRegistry, CompanionRosterSchema.parse(companionsJson));
+  const { adventures, problems } = loadAdventures(adventuresDir, srd, flagRegistry, tables.companions);
   for (const p of problems) app.log.warn({ file: p.file, errors: p.errors }, 'Skipping invalid adventure');
-  const defaultAdventure = adventures.has(STARTING_ADVENTURE) ? STARTING_ADVENTURE : [...adventures.keys()][0];
-  const session = new GameSession({
-    systems: createDefaultRegistry({ lore, regionOf: (state) => regionOfState(state, adventures, lore) }),
-    ...(defaultAdventure && { actions: adventureActionPort(adventures, defaultAdventure, srd, {
-        parseIntent: async (text, ictx) => (await parseIntent(services.llm, text, ictx)).intent,
-        narrator: llmNarrator(() => services.llm, lore, srd, (err) => notices?.report('llm', err)),
-        combatNarration: () => settings.get().llm.combatNarration,
-        summarizer: llmSummarizer(() => services.llm),
-        flags: flagRegistry,
-        lore,
-        travelEvents: TravelEventTableSchema.parse(travelEventsJson),
-        shops: ShopTableSchema.parse(shopsJson),
-        sideQuests: SideQuestTablesSchema.parse(sideQuestsJson),
-        defeats: DefeatTableSchema.parse(defeatsJson),
-        companions: CompanionRosterSchema.parse(companionsJson),
-        banter: llmBanter(() => services.llm),
-        suggester: (ctx, offered) => suggestIdeas(services.llm, gatherNarrationContext(ctx.state, lore, ctx.adventure, srd), offered),
-      }) }),
+  // The session wiring is shared with the in-browser web edition (src/host); the server adds the AI ports.
+  const host = createGameHost({
+    srd,
+    adventures,
+    flags: flagRegistry,
+    tables,
+    ai: {
+      parseIntent: async (text, ictx) => (await parseIntent(services.llm, text, ictx)).intent,
+      narrator: llmNarrator(() => services.llm, lore, srd, (err) => notices?.report('llm', err)),
+      combatNarration: () => settings.get().llm.combatNarration,
+      summarizer: llmSummarizer(() => services.llm),
+      banter: llmBanter(() => services.llm),
+      suggester: (ctx, offered) => suggestIdeas(services.llm, gatherNarrationContext(ctx.state, lore, ctx.adventure, srd), offered),
+    },
     saves: {
       save: (slot, meta, state) => saves.save(slot, meta, state).meta,
       autosave: (meta, state) => saves.autosave(meta, state).meta,
       load: (slot) => saves.load(slot).state,
     },
-    ...opts.sessionPorts,
+    ...(opts.sessionPorts && { sessionPorts: opts.sessionPorts }),
   });
+  const session = host.session;
   app.decorate('session', session);
 
   // Spoken narration: narration/dialogue lines are voiced in the background (never blocking play).
@@ -203,18 +185,13 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
     tts.clear();
     return { ok: true };
   });
-  let queue: Promise<void> = Promise.resolve();
   app.register(async (scope) => {
     scope.get('/ws', { websocket: true }, (socket) => {
-      const off = session.on((e) => socket.send(JSON.stringify(e)));
+      const off = host.on((e) => socket.send(JSON.stringify(e)));
       socket.on('close', off);
       socket.on('message', (raw: Buffer) => {
-        const parsed = parseCommand(raw.toString());
-        if (!parsed.ok) {
-          socket.send(JSON.stringify({ type: 'error', message: parsed.error, ...(parsed.reqId && { reqId: parsed.reqId }) }));
-          return;
-        }
-        queue = queue.then(() => session.handle(parsed.command));
+        const err = host.receive(raw.toString());
+        if (err) socket.send(JSON.stringify(err));
       });
     });
   });

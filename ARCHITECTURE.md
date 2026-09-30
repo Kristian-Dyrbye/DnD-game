@@ -55,7 +55,9 @@ Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master. Runs fully of
 │  │  └─ systems/                 System registry (plugin hooks) — the extension point for §16
 │  ├─ llm/                        Provider interface, Ollama client, mock provider, prompt builders, JSON schemas, fallbacks
 │  ├─ tts/                        TTS provider interface, Piper adapter, mock
-│  ├─ server/                     Fastify app: static client, REST (saves, settings, status), WebSocket game channel
+│  ├─ host/                       Game host (no Node imports): GameSession + adventure port + systems + tables (gameHost.ts), shared adventure loader (content.ts),
+│  │                              bundled adventures (bundled.ts), in-memory saves + in-browser host for the web edition (memorySaves.ts, inPage.ts)
+│  ├─ server/                     Fastify app: static client, REST (saves, settings, status), WebSocket game channel; runs the host with the AI ports
 │  ├─ shared/                     Client⇄server protocol types (commands, events), settings schema
 │  └─ client/                     Preact UI, three.js scenes, 2D grid canvas, audio manager
 │     ├─ ui/                      screens: title, creator, main game, combat, map, journal, settings, save browser
@@ -70,8 +72,9 @@ Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master. Runs fully of
 
 - `engine` imports nothing outside itself except `data` types, zod and plain constants/types from `shared` (e.g. `SAVE_SCHEMA_VERSION`). It is **isomorphic**: the server runs it with authority, and the client imports the same pure functions for instant previews (reachable squares, AoE highlights, point-buy math).
 - `llm` and `tts` depend on `engine` types only. They never change game state; they return text or validated JSON.
-- `server` wires everything together: it owns one `GameSession` per open game, persists saves, and proxies Ollama and Piper.
-- `client` never decides mechanics. It sends **commands** and renders **events** and state snapshots.
+- `host` wires the game (session, adventure port, systems, flag registry, lore, companions) with no Node or DOM imports; the AI ports are optional. The server and the web edition both use it.
+- `server` builds the host with disk-loaded adventures, file saves and the LLM ports, persists saves, and proxies Ollama and Piper.
+- `client` never decides mechanics. It sends **commands** and renders **events** and state snapshots through a `Transport` (client/net/transport.ts): `WebSocketTransport` (local server) or `InPageTransport` (lazily loads `host/inPage` and runs the game in the page; web edition).
 - Randomness only comes from `engine/core/rng` (seeded, and its state is saved), so tests and replays are deterministic.
 
 ## 4. Runtime Data Flow

@@ -1,7 +1,6 @@
 /**
- * Client side of the game WebSocket. Keeps the latest server state in signals the UI renders
- * (game state, story log, rolls, suggested actions), reconnects with backoff, and re-requests a
- * snapshot after reconnecting. Commands sent while disconnected wait in a small outbox.
+ * Client side of the game channel (WebSocket or in-page host, see transport.ts). Keeps the latest server state in signals the UI renders
+ * (game state, story log, rolls, suggested actions), and re-requests a snapshot after a reconnect.
  */
 import type { DungeonView } from '../../engine/world/dungeon';
 import { signal } from '@preact/signals';
@@ -12,8 +11,9 @@ import type { Encounter } from '../../engine/combat/encounter';
 import { audio } from '../audio/AudioManager';
 import { sfxForEvent } from '../audio/audioLogic';
 import { ttsPlayer } from '../audio/ttsPlayer';
+import { WebSocketTransport, type Connection, type Transport } from './transport';
 
-export type Connection = 'connecting' | 'open' | 'closed';
+export type { Connection } from './transport';
 
 export const connection = signal<Connection>('closed');
 export const gameState = signal<GameState | null>(null);
@@ -35,10 +35,6 @@ export const heroFallen = signal<string | null>(null);
 export const shopView = signal<ShopView | null>(null);
 /** The journal page the server just saved (so the editor can select a new page). */
 export const lastSavedPage = signal<{ id: string; at: number } | null>(null);
-
-let ws: WebSocket | null = null;
-let retry = 0;
-const outbox: string[] = [];
 
 /** Applies one server event to the signals. Exported for tests. */
 export function applyEvent(e: ServerEvent): void {
@@ -98,38 +94,24 @@ export function applyEvent(e: ServerEvent): void {
   }
 }
 
-export function connect(): void {
-  if (ws || typeof WebSocket === 'undefined') return;
-  connection.value = 'connecting';
-  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-  const sock = new WebSocket(`${proto}://${location.host}/ws`);
-  ws = sock;
-  sock.onopen = () => {
-    connection.value = 'open';
-    retry = 0;
-    if (gameState.value) sock.send(JSON.stringify({ type: 'get_state' } satisfies ClientCommand));
-    while (outbox.length) sock.send(outbox.shift()!);
-  };
-  sock.onmessage = (m) => {
-    try {
-      applyEvent(JSON.parse(String(m.data)) as ServerEvent);
-    } catch {
-      // Ignore malformed server messages.
-    }
-  };
-  sock.onclose = () => {
-    ws = null;
-    connection.value = 'closed';
-    const delay = Math.min(10_000, 500 * 2 ** retry++);
-    setTimeout(connect, delay);
-  };
+let transport: Transport = new WebSocketTransport();
+
+/** Picks how the client reaches the game (WebSocket to the server, or the in-page host). Call before connect(). */
+export function setTransport(t: Transport): void {
+  transport = t;
 }
 
+export function connect(): void {
+  transport.connect({
+    onEvent: applyEvent,
+    onStatus: (s) => (connection.value = s),
+    // After a reconnect, ask for a fresh snapshot of the running game.
+    onOpen: () => (gameState.value ? [{ type: 'get_state' }] : []),
+  });
+}
+
+/** Sends a command, connecting first if needed (commands wait in the transport's outbox until open). */
 export function send(cmd: ClientCommand): void {
-  const raw = JSON.stringify(cmd);
-  if (ws && ws.readyState === WebSocket.OPEN) ws.send(raw);
-  else {
-    outbox.push(raw);
-    connect();
-  }
+  connect();
+  transport.send(cmd);
 }

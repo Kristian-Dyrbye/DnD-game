@@ -1,19 +1,15 @@
 /**
- * Loads every adventure JSON under data/adventures/ (recursively), validating each one. Invalid
- * files are reported and skipped so one broken adventure never stops the game from starting.
+ * Loads every adventure JSON under data/adventures/ (recursively) from disk and validates it with the
+ * shared host loader (src/host/content.ts). Unparseable or invalid files are reported and skipped.
  */
 import type { CompanionRoster } from '../engine/party/companions';
 import fs from 'node:fs';
 import path from 'node:path';
-import type { Adventure } from '../engine/adventure/schema';
-import { validateAdventure } from '../engine/adventure/validate';
 import type { SrdDatabase } from '../engine/data/srd';
 import { FlagRegistry } from '../engine/world/flags';
+import { validateAdventureSources, type AdventureSource, type LoadedAdventures } from '../host/content';
 
-export interface LoadedAdventures {
-  adventures: Map<string, Adventure>;
-  problems: { file: string; errors: string[] }[];
-}
+export type { LoadedAdventures } from '../host/content';
 
 /** Loads the flag registry (data/adventures/flags.json) if present, plus every adventure's flag docs. */
 export function loadFlagRegistry(dir: string): FlagRegistry {
@@ -22,7 +18,7 @@ export function loadFlagRegistry(dir: string): FlagRegistry {
 }
 
 export function loadAdventures(dir: string, db?: SrdDatabase, registry?: FlagRegistry, companions?: CompanionRoster): LoadedAdventures {
-  const adventures = new Map<string, Adventure>();
+  const sources: AdventureSource[] = [];
   const problems: LoadedAdventures['problems'] = [];
   const walk = (d: string) => {
     if (!fs.existsSync(d)) return;
@@ -30,23 +26,15 @@ export function loadAdventures(dir: string, db?: SrdDatabase, registry?: FlagReg
       const full = path.join(d, e.name);
       if (e.isDirectory()) walk(full);
       else if (e.name.endsWith('.json')) {
-        let raw: unknown;
         try {
-          raw = JSON.parse(fs.readFileSync(full, 'utf8'));
+          sources.push({ file: full, raw: JSON.parse(fs.readFileSync(full, 'utf8')) });
         } catch (err) {
           problems.push({ file: full, errors: [`Invalid JSON: ${(err as Error).message}`] });
-          continue;
         }
-        // Only files that look like adventures (other JSON such as flag registries is skipped).
-        if (!raw || typeof raw !== 'object' || !('formatVersion' in raw)) continue;
-        const res = validateAdventure(raw, db, registry, companions);
-        if (res.ok && res.adventure) {
-          adventures.set(res.adventure.id, res.adventure);
-          registry?.addDocs(res.adventure.flags);
-        } else problems.push({ file: full, errors: res.errors });
       }
     }
   };
   walk(dir);
-  return { adventures, problems };
+  const loaded = validateAdventureSources(sources, db, registry, companions);
+  return { adventures: loaded.adventures, problems: [...problems, ...loaded.problems] };
 }
