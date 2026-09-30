@@ -28,7 +28,12 @@ import { Rng } from '../src/engine/core/rng';
 import { loadSrd } from '../src/engine/data/srdBundle';
 import { activeFight } from '../src/engine/adventure/fights';
 import { wholeSentences } from '../src/engine/adventure/narration';
-import { getProgress } from '../src/engine/adventure/runner';
+import { intentContext } from '../src/engine/adventure/intent';
+import { getProgress, type RunContext } from '../src/engine/adventure/runner';
+import { loadAdventures, loadFlagRegistry } from '../src/server/adventures';
+import { CompanionRosterSchema } from '../src/engine/party/companions';
+import companionsJson from '../data/companions.json';
+import { scoreProbe } from './playtest-score';
 import type { GameSession } from '../src/engine/session/GameSession';
 import type { Flags } from '../src/engine/world/flags';
 import { combatStep } from '../tests/helpers/combatPolicy';
@@ -114,7 +119,19 @@ async function main(): Promise<void> {
   });
   const t0 = performance.now();
   const commandMs: { command: string; ms: number; scene: string }[] = [];
-  const probes: { scene: string; text: string; expect: string[]; intent: unknown; understood: boolean | null; ms: number }[] = [];
+  const probes: { scene: string; text: string; expect: string[]; intent: unknown; refined: unknown; actionId?: string; rawUnderstood: boolean | null; understood: boolean | null; ms: number }[] = [];
+  // A122: probes are scored like sessionActions.say scores them (refined intent), so the script
+  // needs the same adventures + flag registry to rebuild the scene's intent context.
+  const advDir = path.join('data', 'adventures');
+  const flagRegistry = loadFlagRegistry(advDir);
+  const roster = CompanionRosterSchema.parse(companionsJson);
+  const { adventures } = loadAdventures(advDir, db, flagRegistry, roster);
+  const probeContext = () => {
+    const adventure = adventures.get(getProgress(session.current)!.adventureId);
+    if (!adventure) return undefined;
+    const ctx: RunContext = { state: structuredClone(session.current), adventure, rng: Rng.fromSeed('probe'), db, flags: flagRegistry, companions: roster };
+    return intentContext(ctx);
+  };
   const suggestionSets: { scene: string; ideas: string[] }[] = [];
 
   /** Wait until background LLM calls are done (cap 180 s), then note the free-text ideas offered. */
@@ -154,17 +171,14 @@ async function main(): Promise<void> {
       probed.add(scene);
       for (const probe of PROBES[scene] ?? (p.adventureId !== 'millbrook_disappearances' ? [{ text: 'I look around carefully and ask whoever is here what is going on', expect: [] }] : [])) {
         const before = llm.calls.length;
+        const ictx = probeContext();
         const ms = await run({ type: 'say', text: probe.text }, `say: ${probe.text}`);
         await settle(scene);
         const call = llm.calls.slice(before).find((c) => c.task === 'intent' && !c.error);
-        let intent: unknown = null;
-        try {
-          intent = call ? JSON.parse(call.reply) : null;
-        } catch {
-          intent = call?.reply ?? null;
+        if (ictx) {
+          const s = scoreProbe(call?.reply, probe.text, ictx, probe.expect);
+          probes.push({ scene, text: probe.text, expect: probe.expect, intent: s.raw, refined: s.refined, ...(s.actionId && { actionId: s.actionId }), rawUnderstood: s.rawUnderstood, understood: s.understood, ms: Math.round(ms) });
         }
-        const actionId = (intent as { actionId?: string } | null)?.actionId;
-        probes.push({ scene, text: probe.text, expect: probe.expect, intent, understood: probe.expect.length ? probe.expect.includes(actionId ?? '') : null, ms: Math.round(ms) });
         if (activeFight(session.current) || getProgress(session.current)!.sceneId !== scene) break;
       }
       continue;
@@ -201,6 +215,10 @@ async function main(): Promise<void> {
     errors: events.filter((e) => e.type === 'error'),
     narration: { story: narrations(false), combat: narrations(true) },
     tasks: summarizeCalls(llm.calls),
+    probeScore: (() => {
+      const scored = probes.filter((p) => p.understood !== null);
+      return { scored: scored.length, raw: scored.filter((p) => p.rawUnderstood).length, refined: scored.filter((p) => p.understood).length };
+    })(),
     probes,
     suggestionSets,
     slowestCommands: [...commandMs].sort((a, b) => b.ms - a.ms).slice(0, 15),
