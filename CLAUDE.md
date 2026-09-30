@@ -24,7 +24,7 @@ These rules **override** anything in the Build Prompt that conflicts with them.
 
 ## 3. Session Protocol (follow it in order, every session)
 
-1. **Load memory.** Read `brain.md` completely, **in chunks**: the Read tool refuses files over 25,000 tokens and `brain.md` is bigger. Use `limit: 150` with `offset` 1, 151, 301, … until a read returns fewer than 150 lines. Never try to read it in one call. Do not read the whole Build Prompt every session: read only the sections listed in the current assignment's `Spec refs`.
+1. **Load memory.** Read `brain.md` completely, **in chunks**: the Read tool refuses files over 25,000 tokens and `brain.md` is bigger. Use `limit: 100` with `offset` 1, 101, 201, … until a read returns fewer than 100 lines. Never try to read it in one call. Do not read the whole Build Prompt every session: read only the sections listed in the current assignment's `Spec refs`.
 2. **Check for a stop signal.** If `brain.md` → Status says `DONE`, write `DONE` to `loop_status.txt` and end the session.
 3. **Pick the assignment.** If an item is already `in-progress` (not `in-progress (helper)`), an earlier session was interrupted: resume that one. Check `git status` / `git diff` first and keep its uncommitted work if it is sound, else revert it with `git checkout -- <files>` and start over. Otherwise take the first item in the Assignment Queue whose status is `todo`. Mark it `in-progress` in `brain.md` immediately.
 4. **Orient cheaply.** Use the File Map in `brain.md` to open only the files you need. Don't scan the whole repo.
