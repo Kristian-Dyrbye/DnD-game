@@ -57,23 +57,44 @@ export class OllamaClient implements LlmProvider {
     return data.message.content;
   }
 
+  /**
+   * Streams the reply. Timeouts: a total deadline (timeoutMs), or with firstChunkTimeoutMs a wait
+   * for the first chunk plus an idle limit between chunks, so a slow but steady reply is not cut.
+   * Failures while reading the body (including the abort) become LlmError too.
+   */
   async *stream(messages: ChatMessage[], opts: ChatOptions = {}): AsyncIterable<string> {
-    const res = await this.post('/api/chat', this.chatBody(messages, opts, true), opts);
-    if (!res.body) throw new LlmError('bad_response', 'Ollama returned no stream');
-    const decoder = new TextDecoder();
-    let buffer = '';
-    for await (const bytes of res.body as unknown as AsyncIterable<Uint8Array>) {
-      buffer += decoder.decode(bytes, { stream: true });
-      let newline: number;
-      while ((newline = buffer.indexOf('\n')) >= 0) {
-        const line = buffer.slice(0, newline).trim();
-        buffer = buffer.slice(newline + 1);
-        const text = parseChunk(line);
-        if (text) yield text;
+    const deadline =
+      opts.firstChunkTimeoutMs !== undefined
+        ? new StreamDeadline(opts.firstChunkTimeoutMs, `no reply from Ollama within ${opts.firstChunkTimeoutMs} ms`, opts.idleTimeoutMs)
+        : new StreamDeadline(this.timeoutFor(opts), `Ollama did not finish within ${this.timeoutFor(opts)} ms`);
+    try {
+      const res = await this.request('/api/chat', this.postInit(this.chatBody(messages, opts, true)), deadline, opts.signal);
+      if (!res.body) throw new LlmError('bad_response', 'Ollama returned no stream');
+      const decoder = new TextDecoder();
+      let buffer = '';
+      for await (const bytes of res.body as unknown as AsyncIterable<Uint8Array>) {
+        buffer += decoder.decode(bytes, { stream: true });
+        let newline: number;
+        while ((newline = buffer.indexOf('\n')) >= 0) {
+          const line = buffer.slice(0, newline).trim();
+          buffer = buffer.slice(newline + 1);
+          const text = parseChunk(line);
+          if (text) {
+            deadline.chunk();
+            yield text;
+          }
+        }
       }
+      const tail = parseChunk(buffer.trim());
+      if (tail) yield tail;
+    } catch (err) {
+      if (err instanceof LlmError) throw err;
+      if (opts.signal?.aborted) throw new LlmError('aborted', 'Request aborted');
+      if (deadline.signal.aborted) throw new LlmError('timeout', deadline.message());
+      throw new LlmError('bad_response', `Ollama stream failed: ${String(err)}`);
+    } finally {
+      deadline.stop();
     }
-    const tail = parseChunk(buffer.trim());
-    if (tail) yield tail;
   }
 
   async listModels(): Promise<string[]> {
@@ -125,27 +146,29 @@ export class OllamaClient implements LlmProvider {
   }
 
   private get(pathname: string): Promise<Response> {
-    return this.request(pathname, { method: 'GET' }, 5000);
+    return this.request(pathname, { method: 'GET' }, fixedDeadline(5000));
   }
 
   private post(pathname: string, body: unknown, opts: ChatOptions): Promise<Response> {
-    return this.request(
-      pathname,
-      { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) },
-      opts.timeoutMs ?? this.config.timeoutMs ?? 120_000,
-      opts.signal,
-    );
+    return this.request(pathname, this.postInit(body), fixedDeadline(this.timeoutFor(opts)), opts.signal);
   }
 
-  private async request(pathname: string, init: RequestInit, timeoutMs: number, signal?: AbortSignal): Promise<Response> {
-    const timeout = AbortSignal.timeout(timeoutMs);
-    const combined = signal ? AbortSignal.any([signal, timeout]) : timeout;
+  private postInit(body: unknown): RequestInit {
+    return { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) };
+  }
+
+  private timeoutFor(opts: ChatOptions): number {
+    return opts.timeoutMs ?? this.config.timeoutMs ?? 120_000;
+  }
+
+  private async request(pathname: string, init: RequestInit, deadline: Deadline, signal?: AbortSignal): Promise<Response> {
+    const combined = signal ? AbortSignal.any([signal, deadline.signal]) : deadline.signal;
     let res: Response;
     try {
       res = await this.fetchFn(new URL(pathname, this.config.baseUrl), { ...init, signal: combined });
     } catch (err) {
       if (signal?.aborted) throw new LlmError('aborted', 'Request aborted');
-      if (timeout.aborted) throw new LlmError('timeout', `Ollama did not answer within ${timeoutMs} ms`);
+      if (deadline.signal.aborted) throw new LlmError('timeout', deadline.message());
       throw new LlmError('unreachable', `Cannot reach Ollama at ${this.config.baseUrl}: ${String(err)}`);
     }
     if (!res.ok) {
@@ -153,6 +176,51 @@ export class OllamaClient implements LlmProvider {
       throw new LlmError('http', `Ollama HTTP ${res.status}: ${text.slice(0, 200)}`);
     }
     return res;
+  }
+}
+
+interface Deadline {
+  readonly signal: AbortSignal;
+  message(): string;
+}
+
+function fixedDeadline(ms: number): Deadline {
+  return { signal: AbortSignal.timeout(ms), message: () => `Ollama did not answer within ${ms} ms` };
+}
+
+/** Aborts after `firstMs` unless re-armed: with `idleMs`, every chunk restarts the clock at `idleMs`. */
+class StreamDeadline implements Deadline {
+  private readonly ctrl = new AbortController();
+  private timer: ReturnType<typeof setTimeout> | undefined;
+  private text: string;
+
+  constructor(firstMs: number, firstText: string, private readonly idleMs?: number) {
+    this.text = firstText;
+    this.arm(firstMs);
+  }
+
+  get signal(): AbortSignal {
+    return this.ctrl.signal;
+  }
+
+  message(): string {
+    return this.text;
+  }
+
+  chunk(): void {
+    if (this.idleMs === undefined) return;
+    this.text = `Ollama stream stalled for ${this.idleMs} ms`;
+    this.arm(this.idleMs);
+  }
+
+  stop(): void {
+    clearTimeout(this.timer);
+  }
+
+  private arm(ms: number): void {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => this.ctrl.abort(), ms);
+    (this.timer as { unref?: () => void }).unref?.();
   }
 }
 

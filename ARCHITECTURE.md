@@ -89,10 +89,13 @@ engine validates the intent/action → chooses check + DC (from adventure data, 
   │
   ├─► client renders the events at once (dice tray, HP, grid) — never waits for the LLM
   └─► narration job: promptBuilder(system persona + region tone, compact state summary,
-        last N exchanges, retrieved NPC/location/faction cards, FIXED FACTS of the outcome)
+        last N exchanges, retrieved NPC/location/faction cards, FIXED FACTS of the outcome;
+        budget ~1400 tokens, reply 3–5 sentences / 220 tokens — sized for CPU inference)
         → llm.streamNarration → tokens streamed to the client over WebSocket
+          (timeouts: 60 s to the first chunk, then 15 s idle between chunks)
         → (optional) TTS queue → audio chunks → client playback
-        → on LLM failure: template narration from engine/adventure text
+        → cut off mid-stream: keep the complete sentences
+        → on LLM failure before a full sentence: template narration from engine/adventure text
   after each scene: llm.summarize(recent log) → story summary stored in GameState
 ```
 

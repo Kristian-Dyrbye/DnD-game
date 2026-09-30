@@ -27,6 +27,7 @@ import { quickBuild } from '../src/engine/character/quickBuild';
 import { Rng } from '../src/engine/core/rng';
 import { loadSrd } from '../src/engine/data/srdBundle';
 import { activeFight } from '../src/engine/adventure/fights';
+import { wholeSentences } from '../src/engine/adventure/narration';
 import { getProgress } from '../src/engine/adventure/runner';
 import type { GameSession } from '../src/engine/session/GameSession';
 import type { Flags } from '../src/engine/world/flags';
@@ -186,11 +187,19 @@ async function main(): Promise<void> {
   }
   await settle('end');
 
+  // A118: story narrations that finished, were cut but kept whole sentences, or fell back to templates.
+  const narrations = (combat: boolean) => {
+    const list = llm.calls.filter((c) => c.task === 'narrate' && c.prompt.includes('moments of the fight') === combat);
+    const partial = list.filter((c) => c.error !== undefined && wholeSentences(c.reply)).length;
+    const failed = list.filter((c) => c.error !== undefined).length - partial;
+    return { calls: list.length, complete: list.length - failed - partial, partial, failed, completeRate: list.length ? Math.round(((list.length - failed) / list.length) * 100) / 100 : null };
+  };
   const report = {
     model: status.model,
     minutes: Math.round((performance.now() - t0) / 600) / 100,
     reachedAdventure: getProgress(session.current)?.adventureId,
     errors: events.filter((e) => e.type === 'error'),
+    narration: { story: narrations(false), combat: narrations(true) },
     tasks: summarizeCalls(llm.calls),
     probes,
     suggestionSets,

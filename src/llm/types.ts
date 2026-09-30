@@ -32,8 +32,12 @@ export interface ChatOptions {
   format?: 'json' | Record<string, unknown>;
   /** Ollama keep_alive (e.g. "5m", 0 to unload right after). */
   keepAlive?: string | number;
-  /** Request timeout in ms (default is provider-specific). */
+  /** Request timeout in ms (default is provider-specific). For streams: the total time, unless firstChunkTimeoutMs is set. */
   timeoutMs?: number;
+  /** Streams only: max wait for the first text chunk (prompt evaluation on a CPU is the slow part). Replaces timeoutMs. */
+  firstChunkTimeoutMs?: number;
+  /** Streams only, with firstChunkTimeoutMs: max silence between two chunks after the first. */
+  idleTimeoutMs?: number;
   signal?: AbortSignal;
 }
 

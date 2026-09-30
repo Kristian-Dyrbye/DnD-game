@@ -7,7 +7,7 @@ import { quickBuild } from '../character/quickBuild';
 import { Rng } from '../core/rng';
 import { loadSrd } from '../data/srdBundle';
 import { GameSession } from '../session/GameSession';
-import { cleanNarration, narrateInto, templateNarration, type Narrator } from './narration';
+import { cleanNarration, dropTrailingFragment, narrateInto, templateNarration, wholeSentences, type Narrator } from './narration';
 import { perform, startAdventure, type RunContext } from './runner';
 import { adventureActionPort } from './sessionActions';
 import { validateAdventure } from './validate';
@@ -80,6 +80,26 @@ describe('narrateInto', () => {
     expect(quiet.events.some((e) => e.type === 'log' && e.entry.text.includes('mossy well'))).toBe(true);
   });
 
+  it('keeps the whole sentences of a reply that fails mid-stream', async () => {
+    const cut: Narrator = async function* () {
+      yield 'Mist curls over the green. "Stay close," the reeve ';
+      yield 'mutters as the bell';
+      throw new Error('timeout');
+    };
+    const { events } = await running(cut);
+    const logged = events.filter((e) => e.type === 'log' && e.entry.kind === 'narration').map((e) => (e.type === 'log' ? e.entry.text : ''));
+    expect(logged).toContain('Mist curls over the green.');
+    expect(logged.some((t) => t.includes('mossy well'))).toBe(false);
+  });
+
+  it('drops an unfinished last sentence from a reply stopped by the token limit', async () => {
+    const long: Narrator = async function* () {
+      yield 'The square bustles. A cart rattles past and';
+    };
+    const { events } = await running(long);
+    expect(events.some((e) => e.type === 'log' && e.entry.text === 'The square bustles.')).toBe(true);
+  });
+
   it('passes the player action and facts to the narrator after the dice are shown', async () => {
     const jobs: { kind: string; playerAction?: string; facts: string[] }[] = [];
     const order: string[] = [];
@@ -102,6 +122,16 @@ describe('narrateInto', () => {
     const c: RunContext = { state: session.current, adventure, rng: session.rng, db };
     const text = await narrateInto(session, { kind: 'outcome', facts: ['A door creaks.'], ctx: c });
     expect(text).toBe('A door creaks.');
+  });
+});
+
+describe('wholeSentences / dropTrailingFragment', () => {
+  it('cuts at the last sentence end, closing quotes included', () => {
+    expect(wholeSentences('You wait. "Who goes there?" a voice calls, and')).toBe('You wait. "Who goes there?"');
+    expect(wholeSentences('No end here')).toBe('');
+    expect(wholeSentences('Done… and then')).toBe('Done…');
+    expect(dropTrailingFragment('No end here')).toBe('No end here');
+    expect(dropTrailingFragment('One. Two')).toBe('One.');
   });
 });
 

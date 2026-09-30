@@ -47,7 +47,7 @@ export interface BuiltPrompt {
 
 export const DM_PERSONA =
   'You are the Dungeon Master of a solo fantasy adventure, narrating for one player. ' +
-  'Write in second person ("you"), present tense, 2 to 4 short paragraphs of vivid, concrete prose.';
+  'Write in second person ("you"), present tense, 3 to 5 sentences of vivid, concrete prose (one short paragraph, two at most).';
 
 export const NARRATION_RULES = [
   'Describe ONLY what the FIXED FACTS and scene notes establish. Never invent items, gold, damage numbers, dice results, new exits or rewards.',
@@ -56,8 +56,11 @@ export const NARRATION_RULES = [
   'Keep NPC secrets hidden unless a fact reveals them. No headings, no bullet lists, no game jargon like "DC".',
 ];
 
-/** Default prompt budget, sized for a 4096-token context with room for the reply. */
-export const DEFAULT_PROMPT_BUDGET = 2200;
+/**
+ * Default prompt budget. The 4096-token context would fit more, but on a CPU prompt evaluation
+ * dominates: ~2200 tokens took 20–75 s to the first token in the A115b playtest.
+ */
+export const DEFAULT_PROMPT_BUDGET = 1400;
 
 export function buildNarrationPrompt(ctx: NarrationContext, req: NarrationRequest, budget = DEFAULT_PROMPT_BUDGET): BuiltPrompt {
   const system = [DM_PERSONA, ...(ctx.tone ? [ctx.tone] : []), 'Rules:', ...NARRATION_RULES.map((r) => `- ${r}`)].join('\n');
@@ -123,7 +126,7 @@ function section(title: string, lines: string[]): string {
 }
 
 function task(req: NarrationRequest): string {
-  if (req.kind === 'scene') return 'Describe the hero arriving in this scene, weaving in the fixed facts.';
+  if (req.kind === 'scene') return 'In 3 to 5 sentences, describe the hero arriving in this scene, weaving in the fixed facts.';
   if (req.kind === 'combat') return 'In one or two short, vivid sentences, narrate these moments of the fight. No numbers or game terms; do not add new hits, deaths or effects.';
-  return `The player: "${req.playerAction ?? 'acts'}". Narrate what happens, following the fixed facts exactly.`;
+  return `The player: "${req.playerAction ?? 'acts'}". In 3 to 5 sentences, narrate what happens, following the fixed facts exactly.`;
 }

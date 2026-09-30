@@ -1,9 +1,10 @@
 /**
  * Narration step (spec §3): after the engine has resolved an action, the facts are narrated.
  * A Narrator (the LLM, injected by the server) streams prose; each chunk goes to the client as a
- * `narration` event and the finished text becomes one log entry. If there is no narrator, or it
- * fails or returns nothing, template narration built from the scene seed and the fixed facts is
- * used instead, so the game never stalls on the model.
+ * `narration` event and the finished text becomes one log entry. A reply cut short keeps its
+ * complete sentences. If there is no narrator, or it fails before a full sentence or returns
+ * nothing, template narration built from the scene seed and the fixed facts is used instead, so
+ * the game never stalls on the model.
  */
 import type { GameSession } from '../session/GameSession';
 import { describeScene, type RunContext } from './runner';
@@ -37,6 +38,7 @@ export async function narrateInto(session: GameSession, job: NarrationJob, narra
   let text = '';
   if (narrator) {
     let started = false;
+    let failed = false;
     try {
       for await (const chunk of narrator(job)) {
         if (!started) {
@@ -47,14 +49,30 @@ export async function narrateInto(session: GameSession, job: NarrationJob, narra
         session.emit({ type: 'narration', phase: 'chunk', entryId: id, text: chunk });
       }
     } catch {
-      text = '';
+      failed = true;
     }
     if (started) session.emit({ type: 'narration', phase: 'end', entryId: id, text: '' });
+    // A reply cut off (timeout or token limit) keeps its whole sentences; the client replaces the
+    // streamed text with the logged entry.
+    text = failed ? wholeSentences(cleanNarration(text)) : dropTrailingFragment(cleanNarration(text));
   }
-  text = cleanNarration(text);
   if (!text) text = templateNarration(job);
   session.addLog('narration', text, undefined, id);
   return text;
+}
+
+const SENTENCE_END = /[.!?…]["'”’)\]]*(?=\s|$)/g;
+
+/** The text up to its last complete sentence ('' when there is none). */
+export function wholeSentences(text: string): string {
+  let end = 0;
+  for (const m of text.matchAll(SENTENCE_END)) end = m.index + m[0].length;
+  return text.slice(0, end).trim();
+}
+
+/** Drops an unfinished last sentence (a reply stopped by the token limit); text without any sentence end stays. */
+export function dropTrailingFragment(text: string): string {
+  return wholeSentences(text) || text;
 }
 
 /** Strips reasoning blocks and markdown clutter small models sometimes add. */

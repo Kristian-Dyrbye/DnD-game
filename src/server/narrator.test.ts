@@ -11,7 +11,9 @@ import { loadSrd } from '../engine/data/srdBundle';
 import { newGameState } from '../engine/session/GameSession';
 import { LoreSchema } from '../engine/world/lore';
 import { MockLlm } from '../llm/mock';
-import type { LlmProvider } from '../llm/types';
+import { estimateTokens } from '../llm/context/cards';
+import { DEFAULT_PROMPT_BUDGET } from '../llm/context/narration';
+import { LlmError, type LlmProvider } from '../llm/types';
 import { llmNarrator } from './narrator';
 
 const db = loadSrd();
@@ -23,6 +25,10 @@ function job() {
   const ctx = { state: newGameState(hero, 'heroic', 1), adventure, rng: Rng.fromSeed(1), db };
   startAdventure(ctx);
   return { kind: 'outcome' as const, playerAction: 'Study the notices', facts: ['Only the rat notice is legible.'], ctx };
+}
+
+function wrap(llm: MockLlm): LlmProvider {
+  return { name: llm.name, chat: llm.chat.bind(llm), stream: llm.stream.bind(llm), listModels: llm.listModels.bind(llm), status: llm.status.bind(llm) };
 }
 
 async function collect(it: AsyncIterable<string>): Promise<string> {
@@ -43,6 +49,34 @@ describe('llmNarrator', () => {
     expect(call.messages[0]!.content).toMatch(/Kingdom of Aurelmark/);
     expect(call.messages[1]!.content).toContain('1. Only the rat notice is legible.');
     expect(call.messages[1]!.content).toContain('"Study the notices"');
+  });
+
+  it('uses short replies with first-chunk and idle timeouts, and a prompt within the CPU budget', async () => {
+    const llm = new MockLlm({ script: ['Fine.'] });
+    const provider: LlmProvider = { ...wrap(llm), name: 'ollama' };
+    await collect(llmNarrator(() => provider, lore, db)(job()));
+    expect(llm.calls[0]!.opts).toMatchObject({ maxTokens: 220, firstChunkTimeoutMs: 60_000, idleTimeoutMs: 15_000 });
+    expect(llm.calls[0]!.opts.timeoutMs).toBeUndefined();
+    expect(llm.calls[0]!.messages[0]!.content).toMatch(/3 to 5 sentences/);
+    const tokens = llm.calls[0]!.messages.reduce((n, m) => n + estimateTokens(m.content), 0);
+    expect(tokens).toBeLessThanOrEqual(DEFAULT_PROMPT_BUDGET);
+  });
+
+  it('ends quietly on a timeout after a full sentence, but reports one before it', async () => {
+    const errors: unknown[] = [];
+    const timingOut = (first: string): LlmProvider => ({
+      ...wrap(new MockLlm()),
+      name: 'ollama',
+      async *stream() {
+        yield first;
+        throw new LlmError('timeout', 'stalled');
+      },
+    });
+    const narrate = (p: LlmProvider) => llmNarrator(() => p, lore, db, (e) => errors.push(e))(job());
+    expect(await collect(narrate(timingOut('The board is bare. Only')))).toBe('The board is bare. Only');
+    expect(errors).toHaveLength(0);
+    await expect(collect(narrate(timingOut('The board')))).rejects.toMatchObject({ kind: 'timeout' });
+    expect(errors).toHaveLength(1);
   });
 
   it('yields nothing for the mock provider (so the engine uses templates)', async () => {

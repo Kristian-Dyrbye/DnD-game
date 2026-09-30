@@ -71,6 +71,78 @@ describe('OllamaClient', () => {
     expect(parts.length).toBe(3);
   });
 
+  describe('stream timeouts', () => {
+    /** A body sending chunks after the given delays (ms, each from the previous), then staying open until aborted. */
+    function slowStream(delays: number[], close = false): Handler {
+      return (_url, init) => {
+        const body = new ReadableStream<Uint8Array>({
+          start(ctrl) {
+            const timers: ReturnType<typeof setTimeout>[] = [];
+            init.signal?.addEventListener('abort', () => {
+              timers.forEach(clearTimeout);
+              ctrl.error(new DOMException('The operation was aborted due to timeout', 'TimeoutError'));
+            });
+            let at = 0;
+            delays.forEach((d, i) => {
+              at += d;
+              timers.push(setTimeout(() => ctrl.enqueue(new TextEncoder().encode(`{"message":{"content":"w${i} "}}\n`)), at));
+            });
+            if (close) timers.push(setTimeout(() => ctrl.close(), at + 5));
+          },
+        });
+        return new Response(body, { status: 200 });
+      };
+    }
+
+    async function drain(c: OllamaClient, opts: Parameters<OllamaClient['stream']>[1]) {
+      const parts: string[] = [];
+      try {
+        for await (const p of c.stream([{ role: 'user', content: 'go' }], opts)) parts.push(p);
+        return { parts };
+      } catch (error) {
+        return { parts, error };
+      }
+    }
+
+    it('times out waiting for the first chunk', async () => {
+      const { c } = client(slowStream([]));
+      const r = await drain(c, { firstChunkTimeoutMs: 30, idleTimeoutMs: 1000 });
+      expect(r.error).toBeInstanceOf(LlmError);
+      expect(r.error).toMatchObject({ kind: 'timeout', message: expect.stringMatching(/no reply/) });
+    });
+
+    it('lets a slow but steady stream run past the first-chunk and idle limits', async () => {
+      // Wide margins (each gap is 300 ms under the limits) so a loaded machine doesn't flake it.
+      const { c } = client(slowStream([20, 200, 200, 200, 200], true));
+      const r = await drain(c, { firstChunkTimeoutMs: 500, idleTimeoutMs: 500 });
+      expect(r.error).toBeUndefined();
+      expect(r.parts.join('')).toBe('w0 w1 w2 w3 w4 ');
+    });
+
+    it('times out when the stream stalls between chunks, after yielding what came', async () => {
+      const { c } = client(slowStream([5, 5]));
+      const r = await drain(c, { firstChunkTimeoutMs: 1000, idleTimeoutMs: 40 });
+      expect(r.parts).toEqual(['w0 ', 'w1 ']);
+      expect(r.error).toMatchObject({ kind: 'timeout', message: expect.stringMatching(/stalled/) });
+    });
+
+    it('turns a total timeout during body reading into LlmError(timeout)', async () => {
+      const { c } = client(slowStream([5]));
+      const r = await drain(c, { timeoutMs: 40 });
+      expect(r.parts).toEqual(['w0 ']);
+      expect(r.error).toBeInstanceOf(LlmError);
+      expect((r.error as LlmError).kind).toBe('timeout');
+    });
+
+    it('reports a caller abort mid-stream as aborted', async () => {
+      const { c } = client(slowStream([5]));
+      const ctrl = new AbortController();
+      setTimeout(() => ctrl.abort(), 30);
+      const r = await drain(c, { timeoutMs: 5000, signal: ctrl.signal });
+      expect(r.error).toMatchObject({ kind: 'aborted' });
+    });
+  });
+
   it('maps HTTP errors to LlmError(http)', async () => {
     const { c } = client(() => new Response('model not found', { status: 404 }));
     await expect(c.chat([{ role: 'user', content: 'x' }])).rejects.toMatchObject({ kind: 'http' });
