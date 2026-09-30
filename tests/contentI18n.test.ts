@@ -140,8 +140,8 @@ describe('real content', () => {
         expect({ lang, key, stale: r.stale, orphan: r.orphan, broken: r.broken }).toEqual({ lang, key, stale: [], orphan: [], broken: [] });
       }
     }
-    // Complete Danish files (A142 demo, A143 starter arc).
-    for (const key of ['millbrook_demo', 'millbrook_disappearances']) {
+    // Complete Danish files (A142 demo, A143 starter arc, A144 ch1).
+    for (const key of ['millbrook_demo', 'millbrook_disappearances', 'ch1_whispering_fen']) {
       const r = checkOverlay(BUNDLED_ADVENTURES.find((a) => (a.raw as { id: string }).id === key)!.raw, BUNDLED_TRANSLATIONS.da![key]);
       expect({ key, missing: r.missing }).toEqual({ key, missing: [] });
     }
@@ -168,6 +168,28 @@ describe('real content', () => {
     expect(logText()).toContain('en sort mund omkranset af syv tænder');
   });
 
+  it('the Danish ch1: translated gate scene, buttons, and a Danish free-text check (A144)', async () => {
+    const host = createGameHost({ srd: db, adventures, flags: bundledFlagRegistry(), tables, translations: BUNDLED_TRANSLATIONS, startingAdventure: 'ch1_whispering_fen', sessionPorts: { newSeed: () => 'a144' } });
+    const events: ServerEvent[] = [];
+    host.on((e) => events.push(e));
+    const labels = () => (events.filter((e) => e.type === 'suggestions').at(-1) as Extract<ServerEvent, { type: 'suggestions' }>).actions.map((a) => a.label);
+    const logText = () => events.flatMap((e) => (e.type === 'log' ? [e.entry.text] : [])).join(' ');
+    const hero = buildCharacter(toBuildInput(quickBuild('cleric', db, Rng.fromSeed(1))), db);
+    await host.send({ type: 'set_language', language: 'da' });
+    await host.send({ type: 'new_game', hero, mode: 'heroic' });
+    await host.idle();
+    expect(events.filter((e) => e.type === 'error')).toEqual([]);
+    expect(labels()).toContain('Underkast dig vogternes inspektion');
+    expect(labels().some((l) => l.startsWith('Undersøg flygtningens sygdom (Medicine SG'))).toBe(true);
+    expect(logText()).toContain('Lygtevogterne vil brænde Hollowmere');
+    const rolls = events.filter((e) => e.type === 'roll').length;
+    await host.send({ type: 'say', text: 'jeg ser nærmere på hans sygdom' });
+    await host.idle();
+    expect(events.filter((e) => e.type === 'error')).toEqual([]);
+    expect(events.filter((e) => e.type === 'roll').length).toBe(rolls + 1);
+    expect(logText()).toMatch(/sporer|forbandelse/);
+  });
+
   it('builds the translated content once per language; languages without overlays get English', () => {
     const content = contentByLanguage(adventures, tables, BUNDLED_TRANSLATIONS);
     expect(content('en').adventures).toBe(adventures);
@@ -175,7 +197,7 @@ describe('real content', () => {
     expect(content('da').adventures.get('millbrook_demo')!.name).toBe('Rotter i den gamle mølle');
     expect(adventures.get('millbrook_demo')!.name).toBe('Rats in the Old Mill');
     // Untranslated files stay the very same objects' content.
-    expect(content('da').adventures.get('ch1_whispering_fen')!.name).toBe(adventures.get('ch1_whispering_fen')!.name);
+    expect(content('da').adventures.get('ch5_the_hungering_dark')!.name).toBe(adventures.get('ch5_the_hungering_dark')!.name);
   });
 
   it('a session in Danish plays the translated adventure; switching back gives English again', async () => {

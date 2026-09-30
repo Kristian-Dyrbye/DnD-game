@@ -104,3 +104,27 @@ Person, town and region names stay as they are (Millbrook, Ravensgate, Brightwat
 | Whispering Fen | Den Hviskende Sump |
 | fen | sump |
 | cultist / lookout | kultist / udkig |
+
+## Content (A144): chapter 1 names
+Hollowmere, Ravensgate, Thornwife Hollow, Mirefold, Port Sorrel, Briarkin, Mireth and person names stay English.
+
+| English | Dansk |
+|---|---|
+| Whispering Sickness (the Sickness) | Den Hviskende Syge (Sygen) |
+| Seven Teeth of Vashkul | Vashkuls Syv Tænder |
+| Tooth of Want / Drowned Tooth / Briar Tooth | Savnets Tand / Den Druknede Tand / Tornetanden |
+| Drowned Abbey / undercroft / nave / reliquary | Det Druknede Kloster / krypt / skib / relikviekammer |
+| Drowned Lady | Den Druknede Frue |
+| Green Father | Den Grønne Fader |
+| Lantern Hold / the Lanterns | Lygteborgen / Lygterne |
+| Grandmother Wick / Gran | Bedstemor Wick / bedste |
+| Warden-Sergeant / Warden-Captain / Abbot | vogtersergent / vogterkaptajn / abbed |
+| Mother Sallow / Brother Ashby / deacon | Moder Sallow / broder Ashby / diakon |
+| the Purge / purge column | Udrensningen / udrensningskolonne |
+| moot(-circle) | tingsted / tingkreds |
+| bell-ash / dead-bells | klokkeaske / de døde klokker |
+| Maw / Maw-rot | Svælget / Svælgråd |
+| Brass Parrot (ship target) | Messingpapegøjen |
+| gibbet / causeway / postern / landing | galge / dæmning / bagport / anløbsbro |
+| stilt-house / walkway | pælehus / gangbro |
+| "lamb", "dearie" (terms of address) | "lam", "skat" |
