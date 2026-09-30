@@ -4,9 +4,9 @@ import { ABILITY_NAMES, SKILL_NAMES } from '../../../engine/rules/basics';
 import type { Background } from '../../../engine/data/schemas';
 import type { MessageKey } from '../../../shared/i18n';
 import { db } from '../../data';
-import { t } from '../i18n';
+import { coins, t } from '../i18n';
 import { creator } from './creatorState';
-import { firstSentence, formatCoins, itemDisplayName } from '../text';
+import { firstSentence, itemDisplayName } from '../text';
 
 const CHOICE_KEYS: Record<string, MessageKey> = {
   holy_symbol: 'creator.item.holySymbol',
@@ -23,7 +23,7 @@ function itemName(id: string): string {
 function packageText(opt: Background['equipment']['a']): string {
   const items = opt.items.map(([id, n]) => (n > 1 ? `${n} × ${itemName(id)}` : itemName(id)));
   const choices = opt.choices.map(choiceLabel);
-  return [...items, ...choices, opt.cost ? formatCoins(opt.cost) : ''].filter(Boolean).join(', ');
+  return [...items, ...choices, opt.cost ? coins(opt.cost) : ''].filter(Boolean).join(', ');
 }
 
 export function BackgroundStep() {
@@ -60,7 +60,7 @@ export function BackgroundStep() {
               </dl>
               {feat && <p class="feat-text">{firstSentence(feat.text, 180)}</p>}
               <p class="equipment-line">
-                <strong>{t('creator.background.gear')}</strong> {packageText(bg.equipment.a)} {t('creator.background.orCoins', { coins: formatCoins(bg.equipment.b.cost) })}
+                <strong>{t('creator.background.gear')}</strong> {packageText(bg.equipment.a)} {t('creator.background.orCoins', { coins: coins(bg.equipment.b.cost) })}
               </p>
             </button>
           );

@@ -4,9 +4,9 @@ import { toBuildInput } from '../../../engine/character/creator';
 import { armorClass, initiativeModifiers, weaponAttack } from '../../../engine/character/derived';
 import { ABILITIES, ABILITY_NAMES, SKILL_NAMES, abilityModifier, formatModifier, type Skill } from '../../../engine/rules/basics';
 import { db } from '../../data';
-import { t } from '../i18n';
+import { coins, t } from '../i18n';
 import { creator } from './creatorState';
-import { formatCoins, groupNames, itemDisplayName } from '../text';
+import { groupNames, itemDisplayName } from '../text';
 
 export function ReviewStep() {
   const s = creator.value;
@@ -100,7 +100,7 @@ export function ReviewStep() {
           <p>
             {groupNames(c.inventory.map((i) => ({ name: itemDisplayName(db.item(i.itemId)?.name ?? i.itemId), quantity: i.quantity, ...(i.equipped && { note: t('creator.review.equipped') }) }))).join(', ')}
           </p>
-          <p>{t('creator.review.coins', { coins: formatCoins(c.coins) })}</p>
+          <p>{t('creator.review.coins', { coins: coins(c.coins) })}</p>
           {c.spellcasting && (
             <>
               <h3>{t('creator.review.spells')}</h3>

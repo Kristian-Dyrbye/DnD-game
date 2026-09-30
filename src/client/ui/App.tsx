@@ -16,9 +16,9 @@ import { lazyScreen } from './lazyScreen';
 import { t } from './i18n';
 import { LanguagePicker } from './LanguagePicker';
 
-const Creator = lazyScreen(async () => (await import('./creator/Creator')).Creator, 'character creator');
-const GameScreen = lazyScreen(async () => (await import('./game/GameScreen')).GameScreen, 'game');
-const DemoCombat = lazyScreen(async () => (await import('./combat/DemoCombat')).DemoCombat, 'combat sandbox');
+const Creator = lazyScreen(async () => (await import('./creator/Creator')).Creator, 'screen.creator');
+const GameScreen = lazyScreen(async () => (await import('./game/GameScreen')).GameScreen, 'screen.game');
+const DemoCombat = lazyScreen(async () => (await import('./combat/DemoCombat')).DemoCombat, 'screen.combat');
 
 function TitleScreen() {
   // `#load` opens the save browser straight away (test shortcut).

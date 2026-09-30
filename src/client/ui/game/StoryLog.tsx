@@ -1,6 +1,7 @@
 /** Centre panel: the story log (narration, dialogue, player lines, system notes) with live streaming text. */
 import { useEffect, useRef } from 'preact/hooks';
 import { storyLog, streaming } from '../../net/gameSocket';
+import { t } from '../i18n';
 
 export function StoryLog() {
   const end = useRef<HTMLDivElement>(null);
@@ -11,8 +12,8 @@ export function StoryLog() {
     end.current?.scrollIntoView?.({ block: 'end' });
   }, [entries.length, live?.text]);
   return (
-    <section class="story-log" aria-label="Story" aria-live="polite">
-      {entries.length === 0 && !live && <p class="hint">The story is about to begin…</p>}
+    <section class="story-log" aria-label={t('story.aria')} aria-live="polite">
+      {entries.length === 0 && !live && <p class="hint">{t('story.beginning')}</p>}
       {entries.map((e) => (
         <p key={e.id} class={`log-entry log-${e.kind}`}>
           {e.kind === 'dialogue' && e.speaker && <strong class="speaker">{e.speaker}: </strong>}

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { timeOfDay } from '../../../engine/world/clock';
 import type { JournalPage } from '../../../engine/session/journal';
 import { gameState, lastSavedPage, send } from '../../net/gameSocket';
+import { currentTranslator, t } from '../i18n';
 import { formatClock } from '../text';
 
 export function JournalPanel({ onClose }: { onClose: () => void }) {
@@ -50,40 +51,40 @@ export function JournalPanel({ onClose }: { onClose: () => void }) {
     send({ type: 'journal_reorder', ids });
   };
   const remove = (id: string) => {
-    if (!confirm('Delete this page?')) return;
+    if (!confirm(t('journal.confirmDelete'))) return;
     send({ type: 'journal_delete', id });
     if (selected === id) setSelected(null);
   };
 
   return (
-    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Journal">
+    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label={t('game.journal')}>
       <section class="journal">
         <header class="journal-head">
-          <h2>Journal</h2>
+          <h2>{t('game.journal')}</h2>
           <button type="button" onClick={newPage}>
-            New page
+            {t('journal.newPage')}
           </button>
-          <button type="button" onClick={onClose} aria-label="Close journal">
-            Close
+          <button type="button" onClick={onClose} aria-label={t('journal.closeAria')}>
+            {t('common.close')}
           </button>
         </header>
         <div class="journal-body">
           <ol class="journal-pages">
-            {pages.length === 0 && <li class="hint small">Your notebook is empty. Write down names, clues and plans.</li>}
+            {pages.length === 0 && <li class="hint small">{t('journal.empty')}</li>}
             {pages.map((p, i) => (
               <li key={p.id} class={p.id === selected ? 'selected' : ''}>
                 <button type="button" class="page-link" onClick={() => setSelected(p.id)}>
                   <strong>{p.title}</strong>
-                  <small>{formatClock(p.updatedAt, timeOfDay(p.updatedAt))}</small>
+                  <small>{formatClock(p.updatedAt, timeOfDay(p.updatedAt), currentTranslator())}</small>
                 </button>
                 <span class="page-tools">
-                  <button type="button" aria-label="Move up" disabled={i === 0} onClick={() => move(p.id, -1)}>
+                  <button type="button" aria-label={t('journal.moveUp')} disabled={i === 0} onClick={() => move(p.id, -1)}>
                     ↑
                   </button>
-                  <button type="button" aria-label="Move down" disabled={i === pages.length - 1} onClick={() => move(p.id, 1)}>
+                  <button type="button" aria-label={t('journal.moveDown')} disabled={i === pages.length - 1} onClick={() => move(p.id, 1)}>
                     ↓
                   </button>
-                  <button type="button" aria-label="Delete page" onClick={() => remove(p.id)}>
+                  <button type="button" aria-label={t('journal.deletePage')} onClick={() => remove(p.id)}>
                     ✕
                   </button>
                 </span>
@@ -91,13 +92,13 @@ export function JournalPanel({ onClose }: { onClose: () => void }) {
             ))}
           </ol>
           <div class="journal-editor">
-            <input type="text" value={title} maxLength={80} placeholder="Page title" aria-label="Page title" onInput={(e) => setTitle((e.target as HTMLInputElement).value)} />
-            <textarea value={body} maxLength={20000} placeholder="Write anything…" aria-label="Page text" onInput={(e) => setBody((e.target as HTMLTextAreaElement).value)} />
+            <input type="text" value={title} maxLength={80} placeholder={t('journal.pageTitle')} aria-label={t('journal.pageTitle')} onInput={(e) => setTitle((e.target as HTMLInputElement).value)} />
+            <textarea value={body} maxLength={20000} placeholder={t('journal.placeholder')} aria-label={t('journal.pageText')} onInput={(e) => setBody((e.target as HTMLTextAreaElement).value)} />
             <div class="journal-actions">
               <button type="button" class="primary" disabled={!dirty} onClick={save}>
-                {current ? 'Save page' : 'Add page'}
+                {t(current ? 'journal.savePage' : 'journal.addPage')}
               </button>
-              {dirty && <span class="hint small">Unsaved changes</span>}
+              {dirty && <span class="hint small">{t('journal.unsaved')}</span>}
             </div>
           </div>
         </div>

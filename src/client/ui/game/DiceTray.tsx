@@ -5,6 +5,7 @@
  */
 import { useEffect, useState } from 'preact/hooks';
 import { rollHistory } from '../../net/gameSocket';
+import { currentTranslator, t } from '../i18n';
 import { dieClass, keptIndex, modeLabel, outcomeLabel } from './dice';
 
 const TUMBLE_MS = 650;
@@ -37,14 +38,17 @@ export function DiceTray() {
 
   const rolling = faces !== null;
   const kept = last ? keptIndex(last) : 0;
+  const tr = currentTranslator();
+  const mode = last && modeLabel(last, tr);
+  const outcome = last && outcomeLabel(last, tr);
   return (
-    <section class="dice-tray" aria-label="Dice">
-      <h2>Dice</h2>
+    <section class="dice-tray" aria-label={t('dice.title')}>
+      <h2>{t('dice.title')}</h2>
       {last ? (
         <div class={`last-roll${rolling ? ' rolling' : ''}`}>
           <div class="roll-head">
             <strong>{last.label}</strong>
-            {modeLabel(last) && <span class={`tag tag-${last.mode}`}>{modeLabel(last)}</span>}
+            {mode && <span class={`tag tag-${last.mode}`}>{mode}</span>}
           </div>
           <div class="dice-set" aria-hidden={rolling}>
             {(faces ?? last.dice).map((d, i) => (
@@ -52,17 +56,17 @@ export function DiceTray() {
                 <span>{d}</span>
               </span>
             ))}
-            {!rolling && outcomeLabel(last) && <span class={`roll-outcome ${last.success ? 'success' : 'failure'}`}>{outcomeLabel(last)}</span>}
+            {!rolling && outcome && <span class={`roll-outcome ${last.success ? 'success' : 'failure'}`}>{outcome}</span>}
           </div>
           <p class="roll-math" aria-live="polite">
-            {rolling ? 'Rolling…' : last.math}
+            {rolling ? t('dice.rolling') : last.math}
           </p>
         </div>
       ) : (
-        <p class="hint small">No rolls yet.</p>
+        <p class="hint small">{t('dice.none')}</p>
       )}
       {rolls.length > 1 && (
-        <ol class="roll-history" reversed aria-label="Roll history">
+        <ol class="roll-history" reversed aria-label={t('dice.historyAria')}>
           {rolls
             .slice(0, -1)
             .reverse()

@@ -8,6 +8,7 @@ import type { ComponentType } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import type { Appearance } from '../../engine/appearance/appearance';
 import type { EquipmentLook } from '../../engine/appearance/equipmentVisuals';
+import { t } from '../ui/i18n';
 
 type PreviewProps = { appearance: Appearance; size?: string; height?: number; look?: EquipmentLook; wounds?: WoundLevel; seed?: string; scars?: readonly ScarLocation[]; wear?: number; onSnapshot?: (dataUrl: string) => void; onPickScar?: (loc: ScarLocation | null) => void };
 let loaded: ComponentType<PreviewProps> | null = null;
@@ -27,6 +28,6 @@ export function CharacterPreview(props: PreviewProps) {
       cancelled = true;
     };
   }, []);
-  if (!Comp) return <div class="character-preview" style={{ height: `${props.height ?? 260}px` }} aria-label="3D character preview (loading)" />;
+  if (!Comp) return <div class="character-preview" style={{ height: `${props.height ?? 260}px` }} aria-label={t('preview.loading')} />;
   return <Comp {...props} />;
 }

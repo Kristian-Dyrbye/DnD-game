@@ -11,6 +11,7 @@ import { ABILITIES, SKILL_NAMES, type Ability } from '../../../engine/rules/basi
 import { db } from '../../data';
 import { send } from '../../net/gameSocket';
 import { PickList } from '../creator/PickList';
+import { t, tn } from '../i18n';
 
 export function LevelUpPanel({ hero, onClose }: { hero: Character; onClose: () => void }) {
   const classId = hero.classes[0]!.classId;
@@ -38,7 +39,7 @@ export function LevelUpPanel({ hero, onClose }: { hero: Character; onClose: () =
       return db
         .spellsForClass(classId, Math.max(maxLevel, 0))
         .filter((s) => (level === 0 ? s.level === 0 : s.level > 0) && !known.has(s.id))
-        .map((s) => ({ id: s.id, label: `${s.name}${s.level ? ` (level ${s.level})` : ''}` }));
+        .map((s) => ({ id: s.id, label: s.level ? t('levelup.spellLevel', { name: s.name, level: s.level }) : s.name }));
     }
     if (ch.kind === 'weapon_mastery') return [...db.weapons.values()].filter((w) => w.mastery && !hero.weaponMasteries.includes(w.id)).map((w) => ({ id: w.id, label: w.name }));
     if (ch.kind === 'expertise') return Object.entries(hero.skills).filter(([, v]) => v === 'proficient').map(([k]) => ({ id: k, label: SKILL_NAMES[k as keyof typeof SKILL_NAMES] }));
@@ -48,9 +49,9 @@ export function LevelUpPanel({ hero, onClose }: { hero: Character; onClose: () =
 
   const problems: string[] = [];
   for (const ch of choices) {
-    if (ch.kind === 'subclass' && !subclassId) problems.push('Choose a subclass');
-    if (ch.kind === 'feat' && featId === 'ability_score_improvement' && asiTotal !== 2) problems.push('Assign 2 ability points');
-    if ('count' in ch && pickFor(ch.kind).length !== ch.count) problems.push(`Choose ${ch.count} ${ch.kind.replace('_', ' ')}`);
+    if (ch.kind === 'subclass' && !subclassId) problems.push(t('levelup.problem.subclass'));
+    if (ch.kind === 'feat' && featId === 'ability_score_improvement' && asiTotal !== 2) problems.push(t('levelup.problem.asi'));
+    if ('count' in ch && pickFor(ch.kind).length !== ch.count) problems.push(t('levelup.problem.pick', { count: ch.count, what: t(`levelup.pick.${ch.kind}`) }));
   }
 
   const confirm = () => {
@@ -71,30 +72,30 @@ export function LevelUpPanel({ hero, onClose }: { hero: Character; onClose: () =
   };
 
   return (
-    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Level up">
+    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label={t('levelup.aria')}>
       <section class="journal settings">
         <header class="journal-head">
           <h2>
-            {cls.name} level {newLevel}
+            {t('levelup.title', { className: cls.name, level: newLevel })}
           </h2>
           <button type="button" onClick={onClose}>
-            Later
+            {t('levelup.later')}
           </button>
         </header>
         <div class="settings-body">
           <p>
-            <strong>New:</strong> {features.length ? features.join(', ') : 'more hit points'}.
+            <strong>{t('levelup.new')}</strong> {features.length ? features.join(', ') : t('levelup.moreHp')}.
           </p>
           <fieldset>
-            <legend>Hit points</legend>
+            <legend>{t('levelup.hp')}</legend>
             <div class="option-row">
               <label class={`option-pill${hpMode === 'average' ? ' selected' : ''}`}>
                 <input type="radio" name="hp" checked={hpMode === 'average'} onChange={() => setHpMode('average')} />
-                Take the average ({avg} + Con)
+                {t('levelup.average', { avg })}
               </label>
               <label class={`option-pill${hpMode === 'roll' ? ' selected' : ''}`}>
                 <input type="radio" name="hp" checked={hpMode === 'roll'} onChange={() => setHpMode('roll')} />
-                Roll 1{cls.hitDie} + Con
+                {t('levelup.roll', { die: cls.hitDie })}
               </label>
             </div>
           </fieldset>
@@ -103,7 +104,7 @@ export function LevelUpPanel({ hero, onClose }: { hero: Character; onClose: () =
               return (
                 <PickList
                   key="subclass"
-                  title="Subclass"
+                  title={t('levelup.subclass')}
                   count={1}
                   options={ch.options.map((id) => ({ id, label: db.subclasses.get(id)?.name ?? id }))}
                   selected={subclassId ? [subclassId] : []}
@@ -115,7 +116,7 @@ export function LevelUpPanel({ hero, onClose }: { hero: Character; onClose: () =
               const feats = [...db.feats.values()].filter((f) => (ch.reason === 'epic_boon' ? f.category === 'epic_boon' : f.category === 'general'));
               return (
                 <fieldset key="feat">
-                  <legend>{ch.reason === 'asi' ? 'Ability Score Improvement or feat' : 'Epic Boon'}</legend>
+                  <legend>{t(ch.reason === 'asi' ? 'levelup.asiOrFeat' : 'levelup.epicBoon')}</legend>
                   <div class="option-row">
                     {feats.map((f) => (
                       <label key={f.id} class={`option-pill${featId === f.id ? ' selected' : ''}`}>
@@ -136,17 +137,17 @@ export function LevelUpPanel({ hero, onClose }: { hero: Character; onClose: () =
                           </select>
                         </label>
                       ))}
-                      <span class="hint small">{2 - asiTotal} points left</span>
+                      <span class="hint small">{tn('levelup.pointsLeft', 2 - asiTotal)}</span>
                     </div>
                   )}
                 </fieldset>
               );
             }
-            return <PickList key={ch.kind} title={ch.kind === 'weapon_mastery' ? 'Weapon masteries' : ch.kind[0]!.toUpperCase() + ch.kind.slice(1)} count={ch.count} options={optionsFor(ch)} selected={pickFor(ch.kind)} onChange={(ids) => setPick(ch.kind, ids)} />;
+            return <PickList key={ch.kind} title={t(`levelup.pick.${ch.kind}`)} count={ch.count} options={optionsFor(ch)} selected={pickFor(ch.kind)} onChange={(ids) => setPick(ch.kind, ids)} />;
           })}
           {problems.length > 0 && <p class="step-problems">{problems.join(' · ')}</p>}
           <button type="button" class="primary" disabled={problems.length > 0} onClick={confirm}>
-            Level up
+            {t('levelup.confirm')}
           </button>
         </div>
       </section>

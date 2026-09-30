@@ -4,15 +4,16 @@
  * sheet basics: abilities, AC/HP/speed, equipment with wear.
  */
 import { useState } from 'preact/hooks';
-import { armorWear, wearLabel } from '../../../engine/character/armorWear';
+import { armorWear } from '../../../engine/character/armorWear';
 import { itemName } from '../../../engine/character/inventory';
-import { SCAR_LABEL, scarText } from '../../../engine/character/scars';
 import { equipmentLook } from '../../../engine/appearance/equipmentVisuals';
-import { woundLevel, woundWords } from '../../../engine/appearance/wounds';
+import { woundLevel } from '../../../engine/appearance/wounds';
 import { totalLevel, type Character, type ScarLocation } from '../../../engine/core/creature';
 import { ABILITIES, abilityModifier } from '../../../engine/rules/basics';
 import { CharacterPreview } from '../../three/LazyCharacterPreview';
 import { db } from '../../data';
+import { t } from '../i18n';
+import { scarLabel, scarLine, wearText, woundText } from './labels';
 
 const signed = (n: number) => (n >= 0 ? `+${n}` : `−${Math.abs(n)}`);
 
@@ -21,17 +22,17 @@ export function CharacterScreen({ c, onClose }: { c: Character; onClose: () => v
   const scar = picked ? c.scars.find((s) => s.location === picked) : undefined;
   const species = db.species.get(c.speciesId)?.name ?? c.speciesId;
   const classes = c.classes.map((x) => `${db.classes.get(x.classId)?.name ?? x.classId} ${x.level}`).join(' / ');
-  const wounds = woundWords(woundLevel(c.hp, c.maxHp));
+  const wounds = woundText(woundLevel(c.hp, c.maxHp));
   return (
-    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label={`Character: ${c.name}`}>
+    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label={t('char.aria', { name: c.name })}>
       <section class="journal character-screen">
         <header class="journal-head">
           <h2>{c.name}</h2>
           <span class="muted small">
-            {species} · {classes} · level {totalLevel(c)}
+            {t('char.line', { species, classes, level: totalLevel(c) })}
           </span>
-          <button type="button" onClick={onClose} aria-label="Close character screen">
-            Close
+          <button type="button" onClick={onClose} aria-label={t('char.closeAria')}>
+            {t('common.close')}
           </button>
         </header>
         <div class="character-body">
@@ -47,25 +48,25 @@ export function CharacterScreen({ c, onClose }: { c: Character; onClose: () => v
               wear={armorWear(c)}
               onPickScar={setPicked}
             />
-            <p class="hint small">Drag to turn. Click a scar to see its story.</p>
+            <p class="hint small">{t('char.dragHint')}</p>
             {scar && (
               <p class="scar-detail" role="status">
-                {scarText(scar)}
+                {scarLine(scar)}
               </p>
             )}
           </div>
           <div class="character-sheet">
             <dl class="member-stats">
-              <dt>HP</dt>
+              <dt>{t('char.hp')}</dt>
               <dd>
                 {c.hp}/{c.maxHp}
                 {wounds && <span class="muted"> · {wounds}</span>}
               </dd>
-              <dt>AC</dt>
+              <dt>{t('party.ac')}</dt>
               <dd>{c.ac}</dd>
-              <dt>Speed</dt>
-              <dd>{c.speed.walk} ft</dd>
-              <dt>XP</dt>
+              <dt>{t('char.speed')}</dt>
+              <dd>{t('char.feet', { n: c.speed.walk })}</dd>
+              <dt>{t('party.xp')}</dt>
               <dd>{c.xp}</dd>
             </dl>
             <table class="ability-table">
@@ -84,25 +85,25 @@ export function CharacterScreen({ c, onClose }: { c: Character; onClose: () => v
                 </tr>
               </tbody>
             </table>
-            <h3>Equipped</h3>
+            <h3>{t('char.equipped')}</h3>
             <ul class="plain-list">
               {c.inventory.filter((i) => i.equipped).map((i) => (
                 <li key={i.uid}>
                   {itemName(i.itemId, db)}
-                  {(i.wear ?? 0) > 0 && <span class="tag tag-wear">{wearLabel(i.wear ?? 0)}</span>}
+                  {(i.wear ?? 0) > 0 && <span class="tag tag-wear">{wearText(i.wear ?? 0)}</span>}
                 </li>
               ))}
-              {!c.inventory.some((i) => i.equipped) && <li class="muted">Nothing equipped.</li>}
+              {!c.inventory.some((i) => i.equipped) && <li class="muted">{t('char.nothingEquipped')}</li>}
             </ul>
-            <h3>Scars</h3>
+            <h3>{t('char.scars')}</h3>
             {c.scars.length === 0 ? (
-              <p class="muted small">No scars — yet.</p>
+              <p class="muted small">{t('char.noScars')}</p>
             ) : (
               <ul class="plain-list">
                 {c.scars.map((s) => (
                   <li key={s.id}>
-                    <button type="button" class={`link-button${picked === s.location ? ' selected' : ''}`} title={scarText(s)} onClick={() => setPicked(s.location)} onMouseEnter={() => setPicked(s.location)}>
-                      {SCAR_LABEL[s.location]}
+                    <button type="button" class={`link-button${picked === s.location ? ' selected' : ''}`} title={scarLine(s)} onClick={() => setPicked(s.location)} onMouseEnter={() => setPicked(s.location)}>
+                      {scarLabel(s.location)}
                     </button>
                     <span class="muted small"> — {s.description}</span>
                   </li>

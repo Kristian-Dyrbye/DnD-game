@@ -12,6 +12,8 @@ import { effectivePace, getMap, initialMap, legHours, planRoute, type Pace } fro
 import { weatherEffects, type WeatherState } from '../../../engine/world/weather';
 import { lore } from '../../data';
 import { gameState, send } from '../../net/gameSocket';
+import type { MessageKey } from '../../../shared/i18n';
+import { t, tn } from '../i18n';
 import { placeLabels, regionPath, terrainGlyphs, type Glyph } from './mapArt';
 
 const REGION_FILL: Record<Region['tone'], string> = { high_fantasy: '#6b7f3a', dark_fantasy: '#3e4a3f', swashbuckling: '#3f6f86' };
@@ -50,16 +52,16 @@ function PlaceIcon({ kind, x, y, solid }: { kind: string; x: number; y: number; 
 }
 
 function TerrainGlyph({ g }: { g: Glyph }) {
-  const t = `translate(${g.x.toFixed(1)} ${g.y.toFixed(1)}) scale(${g.s.toFixed(2)})`;
-  if (g.kind === 'tree') return <path transform={t} d="M0,-9 L6,2 H-6 Z M0,2 V6" class="glyph glyph-tree" />;
-  if (g.kind === 'reed') return <path transform={t} d="M-4,6 Q-3,-2 -5,-8 M0,6 V-10 M4,6 Q3,-2 5,-7" class="glyph glyph-reed" />;
-  if (g.kind === 'wave') return <path transform={t} d="M-9,0 q3,-4 6,0 t6,0 t6,0" class="glyph glyph-wave" />;
-  return <path transform={t} d="M-9,5 Q-3,-8 3,5 M-1,5 Q4,-4 9,5" class="glyph glyph-hill" />;
+  const move = `translate(${g.x.toFixed(1)} ${g.y.toFixed(1)}) scale(${g.s.toFixed(2)})`;
+  if (g.kind === 'tree') return <path transform={move} d="M0,-9 L6,2 H-6 Z M0,2 V6" class="glyph glyph-tree" />;
+  if (g.kind === 'reed') return <path transform={move} d="M-4,6 Q-3,-2 -5,-8 M0,6 V-10 M4,6 Q3,-2 5,-7" class="glyph glyph-reed" />;
+  if (g.kind === 'wave') return <path transform={move} d="M-9,0 q3,-4 6,0 t6,0 t6,0" class="glyph glyph-wave" />;
+  return <path transform={move} d="M-9,5 Q-3,-8 3,5 M-1,5 Q4,-4 9,5" class="glyph glyph-hill" />;
 }
 
 function hoursText(h: number): string {
-  if (h < 8) return `${Math.round(h * 10) / 10} h`;
-  return `${Math.ceil(h / 8)} day${Math.ceil(h / 8) > 1 ? 's' : ''} (${Math.round(h)} h on the road)`;
+  if (h < 8) return t('map.hours', { n: Math.round(h * 10) / 10 });
+  return tn('map.days', Math.ceil(h / 8), { hours: Math.round(h) });
 }
 
 export function WorldMap({ onClose }: { onClose: () => void }) {
@@ -98,20 +100,20 @@ export function WorldMap({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="World map">
+    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label={t('map.aria')}>
       <section class="world-map">
         <header class="journal-head">
           <h2>{lore.continent.name}</h2>
           <span class="muted small">
-            {tod}
+            {t(`time.${tod}`)}
             {fx ? ` · ${fx.description}` : ''}
           </span>
-          <button type="button" onClick={onClose} aria-label="Close map">
-            Close
+          <button type="button" onClick={onClose} aria-label={t('map.closeAria')}>
+            {t('common.close')}
           </button>
         </header>
         <div class="world-map-body">
-          <svg viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`} class="map-svg" role="img" aria-label="Continent map">
+          <svg viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`} class="map-svg" role="img" aria-label={t('map.svgAria')}>
             <rect width={MAP_WIDTH} height={MAP_HEIGHT} fill="#23384a" />
             <defs>
               <filter id="fog-blur" x="-20%" y="-20%" width="140%" height="140%">
@@ -177,46 +179,46 @@ export function WorldMap({ onClose }: { onClose: () => void }) {
           </svg>
           <aside class="map-side">
             <p>
-              <span class="muted">You are in</span> <strong>{loc(map.current).name}</strong>
+              <span class="muted">{t('map.youAreIn')}</span> <strong>{loc(map.current).name}</strong>
             </p>
             {targetLoc ? (
               <>
                 <h3>{targetLoc.name}</h3>
-                <p class="small">{visited.has(targetLoc.id) ? targetLoc.summary : 'You have only heard of this place.'}</p>
+                <p class="small">{visited.has(targetLoc.id) ? targetLoc.summary : t('map.onlyHeard')}</p>
                 {plan ? (
                   <>
                     <p class="small">
-                      {miles} miles by {[...new Set(plan.map((l) => l.kind))].join(', ')} · about {hoursText(hours)}
+                      {t('map.route', { miles, kinds: [...new Set(plan.map((l) => l.kind))].map((k) => t(`map.kind.${k}` as MessageKey)).join(', '), time: hoursText(hours) })}
                     </p>
                     <fieldset>
-                      <legend>Pace</legend>
+                      <legend>{t('map.pace')}</legend>
                       <div class="option-row">
                         {(['slow', 'normal', 'fast'] as const).map((p) => (
                           <label key={p} class={`option-pill${pace === p ? ' selected' : ''}`}>
                             <input type="radio" name="pace" checked={pace === p} onChange={() => setPace(p)} />
-                            {p}
+                            {t(`map.pace.${p}`)}
                           </label>
                         ))}
                       </div>
                       <p class="hint small">
-                        {pace === 'fast' ? 'Fast: less time, but you notice less and cannot sneak.' : pace === 'slow' ? 'Slow: more time, better at spotting danger and foraging.' : 'Normal: a steady pace; hard to be stealthy.'}
-                        {plan.some((l) => l.kind === 'trail' && effectivePace(l.kind, pace) !== pace) ? ' Trails limit you to a normal pace.' : ''}
+                        {t(`map.paceHint.${pace}`)}
+                        {plan.some((l) => l.kind === 'trail' && effectivePace(l.kind, pace) !== pace) ? ` ${t('map.trailLimit')}` : ''}
                       </p>
                     </fieldset>
                     <button type="button" class="primary" onClick={go}>
-                      Travel to {targetLoc.name}
+                      {t('map.travel', { place: targetLoc.name })}
                     </button>
                   </>
                 ) : (
-                  <p class="hint small">You don't know a route there yet.</p>
+                  <p class="hint small">{t('map.noRoute')}</p>
                 )}
               </>
             ) : (
-              <p class="hint small">Choose a place on the map.</p>
+              <p class="hint small">{t('map.choose')}</p>
             )}
             <ul class="map-legend small">
-              <li>solid icon: visited · faded: heard of</li>
-              <li>— road · - - trail · ··· river · — — sea</li>
+              <li>{t('map.legendIcons')}</li>
+              <li>{t('map.legendRoutes')}</li>
             </ul>
           </aside>
         </div>

@@ -15,11 +15,11 @@ export function firstSentence(md: string, max = 160): string {
 }
 
 /** "5000" CP → "50 GP"; mixes GP/SP/CP as needed. */
-export function formatCoins(cp: number): string {
+export function formatCoins(cp: number, tr: Translator = ENGLISH): string {
   const gp = Math.floor(cp / 100);
   const sp = Math.floor((cp % 100) / 10);
   const c = cp % 10;
-  return [gp && `${gp} GP`, sp && `${sp} SP`, c && `${c} CP`].filter(Boolean).join(' ') || '0 GP';
+  return [gp && tr.t('coins.gp', { n: gp }), sp && tr.t('coins.sp', { n: sp }), c && tr.t('coins.cp', { n: c })].filter(Boolean).join(' ') || tr.t('coins.gp', { n: 0 });
 }
 
 /** "Clothes, Traveler's" → "Traveler's Clothes"; "Lantern, Hooded" → "Hooded Lantern". */

@@ -4,7 +4,7 @@
  */
 import { useEffect, useState } from 'preact/hooks';
 import { gameState, send, shopView } from '../../net/gameSocket';
-import { formatCoins } from '../text';
+import { coins, t } from '../i18n';
 
 export function ShopPanel({ shopId, onClose }: { shopId: string; onClose: () => void }) {
   const [tab, setTab] = useState<'buy' | 'sell'>('buy');
@@ -13,41 +13,41 @@ export function ShopPanel({ shopId, onClose }: { shopId: string; onClose: () => 
     send({ type: 'shop_open', shopId });
   }, [shopId]);
   const view = shopView.value?.id === shopId ? shopView.value : null;
-  const coins = gameState.value?.hero.coins ?? 0;
+  const purse = gameState.value?.hero.coins ?? 0;
 
   return (
-    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Shop">
+    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label={t('shop.aria')}>
       <section class="journal shop">
         <header class="journal-head">
-          <h2>{view?.name ?? 'Shop'}</h2>
-          <span class="muted small">Your purse: {formatCoins(coins)}</span>
-          <button type="button" onClick={onClose} aria-label="Close shop">
-            Close
+          <h2>{view?.name ?? t('shop.aria')}</h2>
+          <span class="muted small">{t('shop.purse', { coins: coins(purse) })}</span>
+          <button type="button" onClick={onClose} aria-label={t('shop.closeAria')}>
+            {t('common.close')}
           </button>
         </header>
         {!view ? (
           <p class="hint" style={{ padding: '1rem' }}>
-            Opening…
+            {t('shop.opening')}
           </p>
         ) : !view.open ? (
           <p class="hint" style={{ padding: '1rem' }}>
-            {view.name} is closed at this hour.
+            {t('shop.closed', { name: view.name })}
           </p>
         ) : view.refuses ? (
           <p class="hint" style={{ padding: '1rem' }}>
-            The shopkeeper refuses to deal with you.
+            {t('shop.refuses')}
           </p>
         ) : (
           <div class="shop-body">
             <div class="method-tabs">
               <button type="button" class={tab === 'buy' ? 'selected' : ''} onClick={() => setTab('buy')}>
-                Buy
+                {t('shop.buy')}
               </button>
               <button type="button" class={tab === 'sell' ? 'selected' : ''} onClick={() => setTab('sell')}>
-                Sell
+                {t('shop.sell')}
               </button>
-              <button type="button" disabled={view.haggled !== undefined} title="Persuasion DC 15, once a day" onClick={() => send({ type: 'shop_haggle', shopId })}>
-                {view.haggled === undefined ? 'Haggle' : view.haggled ? 'Haggled: better prices today' : 'Haggle failed today'}
+              <button type="button" disabled={view.haggled !== undefined} title={t('shop.haggleTitle')} onClick={() => send({ type: 'shop_haggle', shopId })}>
+                {t(view.haggled === undefined ? 'shop.haggle' : view.haggled ? 'shop.haggled' : 'shop.haggleFailed')}
               </button>
             </div>
             <ul class="inventory-list">
@@ -55,17 +55,17 @@ export function ShopPanel({ shopId, onClose }: { shopId: string; onClose: () => 
                 view.stock.map((l) => (
                   <li key={l.itemId}>
                     <span class="item-name">
-                      {l.name} <span class="muted">({l.qty} left)</span>
+                      {l.name} <span class="muted">{t('shop.left', { n: l.qty })}</span>
                     </span>
                     <span class="item-actions">
-                      <span class="price">{formatCoins(l.price)}</span>
-                      <button type="button" disabled={coins < l.price} onClick={() => send({ type: 'shop_buy', shopId, itemId: l.itemId, qty: 1 })}>
-                        Buy
+                      <span class="price">{coins(l.price)}</span>
+                      <button type="button" disabled={purse < l.price} onClick={() => send({ type: 'shop_buy', shopId, itemId: l.itemId, qty: 1 })}>
+                        {t('shop.buy')}
                       </button>
                     </span>
                   </li>
                 ))}
-              {tab === 'sell' && view.offers.length === 0 && <li class="hint">Nothing this shop wants to buy (equipped items can't be sold).</li>}
+              {tab === 'sell' && view.offers.length === 0 && <li class="hint">{t('shop.nothingToSell')}</li>}
               {tab === 'sell' &&
                 view.offers.map((o) => (
                   <li key={o.uid}>
@@ -74,9 +74,9 @@ export function ShopPanel({ shopId, onClose }: { shopId: string; onClose: () => 
                       {o.name}
                     </span>
                     <span class="item-actions">
-                      <span class="price">{formatCoins(o.price)}</span>
+                      <span class="price">{coins(o.price)}</span>
                       <button type="button" onClick={() => send({ type: 'shop_sell', shopId, uid: o.uid, qty: 1 })}>
-                        Sell
+                        {t('shop.sell')}
                       </button>
                     </span>
                   </li>

@@ -4,33 +4,25 @@
  */
 import { GAME_TITLE, GAME_VERSION } from '../../shared/version';
 import { WEB_EDITION } from '../edition';
+import { t } from './i18n';
 
 export function AboutPanel({ onClose }: { onClose: () => void }) {
   return (
-    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="About">
+    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label={t('title.about')}>
       <section class="journal about-panel">
         <header class="journal-head">
           <h2>
             {GAME_TITLE} <span class="muted small">v{GAME_VERSION}</span>
           </h2>
-          <button type="button" onClick={onClose} aria-label="Close">
-            Close
+          <button type="button" onClick={onClose} aria-label={t('common.close')}>
+            {t('common.close')}
           </button>
         </header>
         <div class="about-body">
-          {WEB_EDITION ? (
-            <p>
-              A solo Dungeons &amp; Dragons adventure that runs entirely in your browser. The rules, dice and fights are resolved by the game itself, the story is told from written
-              text, and your saves stay in this browser (use Export to keep a copy). The local edition adds an AI Dungeon Master running on your own computer.
-            </p>
-          ) : (
-            <p>
-              A solo Dungeons &amp; Dragons adventure with a local AI Dungeon Master. The rules, dice and fights are resolved by the game itself; the AI (a small model running on your
-              own computer through Ollama) only narrates, voices characters and suggests ideas. Everything runs offline.
-            </p>
-          )}
-          <h3>Rules</h3>
-          <p class="attribution">
+          <p>{t(WEB_EDITION ? 'about.textWeb' : 'about.textLocal')}</p>
+          <h3>{t('about.rules')}</h3>
+          {/* Required CC-BY-4.0 attribution: kept in its official English wording in every language. */}
+          <p class="attribution" lang="en">
             This work includes material from the System Reference Document 5.2.1 ("SRD 5.2.1") by Wizards of the Coast LLC, available at{' '}
             <a href="https://www.dndbeyond.com/srd" target="_blank" rel="noreferrer">
               https://www.dndbeyond.com/srd
@@ -41,16 +33,16 @@ export function AboutPanel({ onClose }: { onClose: () => void }) {
             </a>
             .
           </p>
-          <h3>Art, music and voices</h3>
+          <h3>{t('about.art')}</h3>
           <ul class="plain-list">
-            <li>3D characters, skeletons, dungeon props and weapons: KayKit by Kay Lousberg (CC0).</li>
-            <li>Monsters and animals: Quaternius (CC0 packs).</li>
-            <li>Music, ambience and sound effects: CC0 and public-domain works (Kenney and others).</li>
-            <li>{WEB_EDITION ? "Narration voice: your browser's built-in speech." : 'Narration voices: Piper TTS with voices trained on public-domain LibriVox recordings.'}</li>
+            <li>{t('about.art.models')}</li>
+            <li>{t('about.art.monsters')}</li>
+            <li>{t('about.art.audio')}</li>
+            <li>{t(WEB_EDITION ? 'about.art.voiceWeb' : 'about.art.voiceLocal')}</li>
           </ul>
-          <p class="muted small">Every asset, its author, source and license is listed in CREDITS.md {WEB_EDITION ? 'in the game repository' : 'in the game folder'}.</p>
-          <h3>The world</h3>
-          <p>The continent of Orrimar, its people and the campaign "The Seven Teeth of Vashkul" are original to this game.</p>
+          <p class="muted small">{t(WEB_EDITION ? 'about.creditsWeb' : 'about.creditsLocal')}</p>
+          <h3>{t('about.world')}</h3>
+          <p>{t('about.worldText')}</p>
         </div>
       </section>
     </div>

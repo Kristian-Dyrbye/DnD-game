@@ -7,6 +7,7 @@ import { useMemo } from 'preact/hooks';
 import { buildDungeonGrid, fogSquares, roomSquares, type DungeonView } from '../../../engine/world/dungeon';
 import type { Creature } from '../../../engine/core/creature';
 import { BattleMap } from '../combat/BattleMap';
+import { t } from '../i18n';
 
 export function DungeonPanel({ view, hero }: { view: DungeonView; hero: Creature }) {
   const { grid, fog } = useMemo(() => {
@@ -24,7 +25,7 @@ export function DungeonPanel({ view, hero }: { view: DungeonView; hero: Creature
   const roomName = view.map.rooms.find((r) => r.id === view.room)?.name ?? '';
   const cell = Math.max(10, Math.min(24, Math.floor(260 / Math.max(view.map.width, view.map.height))));
   return (
-    <section class="dungeon-panel" aria-label={`Map: ${view.map.name}, you are in ${roomName}`}>
+    <section class="dungeon-panel" aria-label={t('dungeon.aria', { map: view.map.name, room: roomName })}>
       <h2>
         {view.map.name} <span class="muted small">· {roomName}</span>
       </h2>

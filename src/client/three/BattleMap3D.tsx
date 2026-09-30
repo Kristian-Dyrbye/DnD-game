@@ -20,6 +20,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { cellKey, footprintSize } from '../../engine/combat/grid';
 import type { BattleMapProps } from '../ui/combat/BattleMap';
 import { settings } from '../ui/settingsState';
+import { t } from '../ui/i18n';
 import { SIDE_COLOURS, edgeSegments, hpColour, modelTokens, overlayFor, terrainOf, tokenCentre, worldToSquare } from './battle3d';
 import { buildCharacterModel, type CharacterModel } from './characterModel';
 
@@ -344,7 +345,7 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
   }, [p.grid, p.creatures, p.sides, p.activeId, p.targets, p.fog, modelsReady]);
 
   return (
-    <div class="battle-3d" ref={host} aria-label="3D battle map: drag to rotate, wheel to zoom, right-drag to pan, click a square to act">
+    <div class="battle-3d" ref={host} aria-label={t('combat.map3dAria')}>
       {message && <p class="preview-error">{message}</p>}
     </div>
   );

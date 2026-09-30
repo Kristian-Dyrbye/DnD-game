@@ -25,6 +25,7 @@ import { db } from '../../data';
 import { BattleMap } from './BattleMap';
 import { BattleMap3D } from '../../three/LazyBattleMap3D';
 import { settings } from '../settingsState';
+import { t } from '../i18n';
 
 type Mode =
   | { kind: 'move' }
@@ -150,14 +151,14 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
     <div class="combat-screen">
       <header class="game-bar">
         <div class="game-where">
-          <strong>Combat</strong>
-          <span class="muted">Round {state.turns.round}</span>
-          {enc.status !== 'ongoing' && <span class={`tag ${enc.status === 'won' ? 'tag-advantage' : 'tag-disadvantage'}`}>{enc.status === 'won' ? 'Victory' : 'Defeat'}</span>}
+          <strong>{t('combat.title')}</strong>
+          <span class="muted">{t('combat.round', { n: state.turns.round })}</span>
+          {enc.status !== 'ongoing' && <span class={`tag ${enc.status === 'won' ? 'tag-advantage' : 'tag-disadvantage'}`}>{t(enc.status === 'won' ? 'combat.victory' : 'combat.defeat')}</span>}
         </div>
         <nav class="game-menu">
           {onLeave && (
             <button type="button" onClick={onLeave}>
-              {leaveLabel ?? (enc.status === 'ongoing' ? 'Leave' : 'Continue')}
+              {leaveLabel ?? t(enc.status === 'ongoing' ? 'combat.leave' : 'combat.continue')}
             </button>
           )}
         </nav>
@@ -181,8 +182,8 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
             };
             return view === '3d' ? <BattleMap3D {...mapProps} onUnavailable={() => setView('2d')} /> : <BattleMap {...mapProps} />;
           })()}
-          <button type="button" class="view-toggle" onClick={() => setView(view === '3d' ? '2d' : '3d')} title="Switch between the 3D map and the 2D token map">
-            {view === '3d' ? '2D map' : '3D map'}
+          <button type="button" class="view-toggle" onClick={() => setView(view === '3d' ? '2d' : '3d')} title={t('combat.viewTitle')}>
+            {t(view === '3d' ? 'combat.view2d' : 'combat.view3d')}
           </button>
         </div>
         {narration && (
@@ -190,18 +191,18 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
             {narration}
           </p>
         )}
-        <section class="action-bar" aria-label="Actions">
+        <section class="action-bar" aria-label={t('combat.actionsAria')}>
           {!myTurn ? (
-            <p class="hint small">{enc.status === 'ongoing' ? 'Waiting…' : enc.status === 'won' ? 'The fight is won.' : 'You have fallen.'}</p>
+            <p class="hint small">{t(enc.status === 'ongoing' ? 'combat.waiting' : enc.status === 'won' ? 'combat.won' : 'combat.fallen')}</p>
           ) : (
             <>
-              <span class={`econ ${budget.action ? 'on' : ''}`}>Action</span>
-              <span class={`econ ${budget.bonusAction ? 'on' : ''}`}>Bonus</span>
-              <span class={`econ ${budget.reaction ? 'on' : ''}`}>Reaction</span>
+              <span class={`econ ${budget.action ? 'on' : ''}`}>{t('combat.econ.action')}</span>
+              <span class={`econ ${budget.bonusAction ? 'on' : ''}`}>{t('combat.econ.bonus')}</span>
+              <span class={`econ ${budget.reaction ? 'on' : ''}`}>{t('combat.econ.reaction')}</span>
               <span class="econ acting">{hero?.name}</span>
-              <span class="econ on">Move {hero ? movementLeft(state.turns, heroId, hero) : 0} ft</span>
+              <span class="econ on">{t('combat.moveLeft', { n: hero ? movementLeft(state.turns, heroId, hero) : 0 })}</span>
               <button type="button" class={mode.kind === 'move' ? 'selected' : ''} onClick={() => setMode({ kind: 'move' })}>
-                Move
+                {t('combat.move')}
               </button>
               {profiles.map((pr) => (
                 <button key={pr.id} type="button" class={mode.kind === 'attack' && mode.profile.id === pr.id ? 'selected' : ''} disabled={!budget.action && !(budget.attacksLeft ?? 0)} onClick={() => setMode({ kind: 'attack', profile: pr })}>
@@ -220,7 +221,7 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
                     type="button"
                     class={`spell${selected ? ' selected' : ''}`}
                     disabled={!usable || !!noSlot}
-                    title={`${sp.level === 0 ? 'Cantrip' : `Level ${sp.level}`} · ${econ === 'bonusAction' ? 'bonus action' : 'action'}${sp.area ? ' · area: click a square' : ''}`}
+                    title={[sp.level === 0 ? t('combat.spell.cantrip') : t('combat.spell.level', { n: sp.level }), t(econ === 'bonusAction' ? 'combat.spell.bonusAction' : 'combat.spell.action'), ...(sp.area ? [t('combat.spell.area')] : [])].join(' · ')}
                     onClick={() => (selfOnly ? run({ kind: 'cast', spellId: sp.id, targetIds: [heroId] }) : setMode(sp.area || zoneNeedsAim(sp) ? { kind: 'area', spellId: sp.id } : { kind: 'spell', spellId: sp.id }))}
                   >
                     ✦ {sp.name}
@@ -233,50 +234,50 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
                 </button>
               ))}
               <button type="button" disabled={!budget.action} onClick={() => run({ kind: 'dash' })}>
-                Dash
+                {t('combat.dash')}
               </button>
               <button type="button" disabled={!budget.action} onClick={() => run({ kind: 'disengage' })}>
-                Disengage
+                {t('combat.disengage')}
               </button>
               <button type="button" disabled={!budget.action} onClick={() => run({ kind: 'dodge' })}>
-                Dodge
+                {t('combat.dodge')}
               </button>
               <button type="button" class="primary" onClick={() => run({ kind: 'end_turn' })}>
-                End turn
+                {t('combat.endTurn')}
               </button>
               <div class="action-row-more">
                 {hero && hasCondition(hero, 'prone') && (
-                  <button type="button" class="primary" title="Costs half your Speed" onClick={() => run({ kind: 'stand' })}>
-                    Stand up
+                  <button type="button" class="primary" title={t('combat.standTitle')} onClick={() => run({ kind: 'stand' })}>
+                    {t('combat.stand')}
                   </button>
                 )}
-                <button type="button" class={mode.kind === 'grapple' ? 'selected' : ''} disabled={!budget.action && !(budget.attacksLeft ?? 0)} title="Unarmed Strike: grab a creature within 5 ft (needs a free hand)" onClick={() => setMode({ kind: 'grapple' })}>
-                  Grapple
+                <button type="button" class={mode.kind === 'grapple' ? 'selected' : ''} disabled={!budget.action && !(budget.attacksLeft ?? 0)} title={t('combat.grappleTitle')} onClick={() => setMode({ kind: 'grapple' })}>
+                  {t('combat.grapple')}
                 </button>
                 <button type="button" class={mode.kind === 'shove' && mode.effect === 'prone' ? 'selected' : ''} disabled={!budget.action && !(budget.attacksLeft ?? 0)} onClick={() => setMode({ kind: 'shove', effect: 'prone' })}>
-                  Shove prone
+                  {t('combat.shoveProne')}
                 </button>
                 <button type="button" class={mode.kind === 'shove' && mode.effect === 'push' ? 'selected' : ''} disabled={!budget.action && !(budget.attacksLeft ?? 0)} onClick={() => setMode({ kind: 'shove', effect: 'push' })}>
-                  Shove away
+                  {t('combat.shoveAway')}
                 </button>
                 {grappled && (
                   <button type="button" disabled={!budget.action} onClick={() => run({ kind: 'escape_grapple' })}>
-                    Escape grapple
+                    {t('combat.escapeGrapple')}
                   </button>
                 )}
                 {grappling.length > 0 && (
                   <label class="small">
-                    <input type="checkbox" checked={drag} onChange={(e) => setDrag((e.target as HTMLInputElement).checked)} /> Drag grappled (double cost)
+                    <input type="checkbox" checked={drag} onChange={(e) => setDrag((e.target as HTMLInputElement).checked)} /> {t('combat.drag')}
                   </label>
                 )}
                 {holdingZones.map((z) => (
                   <button key={z.id} type="button" disabled={!budget.action} onClick={() => run({ kind: 'escape_zone', zoneId: z.id })}>
-                    Break free of {z.name}
+                    {t('combat.breakFree', { zone: z.name })}
                   </button>
                 ))}
                 {myZones.map((z) => (
-                  <button key={z.id} type="button" class={`spell${mode.kind === 'zone' && mode.zoneId === z.id ? ' selected' : ''}`} disabled={z.bolt || z.move?.economy === 'action' ? !budget.action : !budget.bonusAction} title="Click a square" onClick={() => setMode({ kind: 'zone', zoneId: z.id })}>
-                    ✦ {z.bolt ? `${z.name}: new bolt` : `Move ${z.name}`}
+                  <button key={z.id} type="button" class={`spell${mode.kind === 'zone' && mode.zoneId === z.id ? ' selected' : ''}`} disabled={z.bolt || z.move?.economy === 'action' ? !budget.action : !budget.bonusAction} title={t('combat.clickSquare')} onClick={() => setMode({ kind: 'zone', zoneId: z.id })}>
+                    ✦ {t(z.bolt ? 'combat.zoneBolt' : 'combat.zoneMove', { zone: z.name })}
                   </button>
                 ))}
                 {items.map((it) => (
@@ -285,14 +286,14 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
                       ⚗ {it.name}
                     </button>
                     {it.bonusAction && (
-                      <button type="button" class={mode.kind === 'item' && mode.uid === it.uid ? 'selected' : ''} disabled={!budget.bonusAction} title="Give it to an ally within 5 ft" onClick={() => setMode({ kind: 'item', uid: it.uid })}>
-                        give
+                      <button type="button" class={mode.kind === 'item' && mode.uid === it.uid ? 'selected' : ''} disabled={!budget.bonusAction} title={t('combat.giveTitle')} onClick={() => setMode({ kind: 'item', uid: it.uid })}>
+                        {t('combat.give')}
                       </button>
                     )}
                   </span>
                 ))}
                 <span class="skill-pick">
-                  <select value={studySkill} aria-label="Study skill" onChange={(e) => setStudySkill((e.target as HTMLSelectElement).value as StudySkill)}>
+                  <select value={studySkill} aria-label={t('combat.studyAria')} onChange={(e) => setStudySkill((e.target as HTMLSelectElement).value as StudySkill)}>
                     {STUDY_SKILLS.map((s) => (
                       <option key={s} value={s}>
                         {SKILL_NAME(s)}
@@ -300,24 +301,24 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
                     ))}
                   </select>
                   <button type="button" disabled={!budget.action} onClick={() => run({ kind: 'study', skill: studySkill, topic: 'the foes and the battlefield' })}>
-                    Study
+                    {t('combat.study')}
                   </button>
                 </span>
                 <span class="skill-pick">
-                  <select value={influenceSkill} aria-label="Influence skill" onChange={(e) => setInfluenceSkill((e.target as HTMLSelectElement).value as InfluenceSkill)}>
+                  <select value={influenceSkill} aria-label={t('combat.influenceAria')} onChange={(e) => setInfluenceSkill((e.target as HTMLSelectElement).value as InfluenceSkill)}>
                     {INFLUENCE_SKILLS.map((s) => (
                       <option key={s} value={s}>
                         {SKILL_NAME(s)}
                       </option>
                     ))}
                   </select>
-                  <button type="button" class={mode.kind === 'influence' ? 'selected' : ''} disabled={!budget.action} title="Then click a foe within 60 ft" onClick={() => setMode({ kind: 'influence', skill: influenceSkill })}>
-                    Influence
+                  <button type="button" class={mode.kind === 'influence' ? 'selected' : ''} disabled={!budget.action} title={t('combat.influenceTitle')} onClick={() => setMode({ kind: 'influence', skill: influenceSkill })}>
+                    {t('combat.influence')}
                   </button>
                 </span>
                 {readyProfile && (
-                  <button type="button" disabled={!budget.action} title="Attack when an enemy comes within reach (uses your Reaction)" onClick={() => run({ kind: 'ready', attackProfileId: readyProfile.id })}>
-                    Ready {readyProfile.name}
+                  <button type="button" disabled={!budget.action} title={t('combat.readyTitle')} onClick={() => run({ kind: 'ready', attackProfileId: readyProfile.id })}>
+                    {t('combat.ready', { attack: readyProfile.name })}
                   </button>
                 )}
               </div>
@@ -327,8 +328,8 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
         </section>
       </main>
       <aside class="combat-side">
-        <section class="turn-tracker" aria-label="Turn order">
-          <h2>Initiative</h2>
+        <section class="turn-tracker" aria-label={t('combat.orderAria')}>
+          <h2>{t('combat.initiative')}</h2>
           <ol>
             {order.map((e) => {
               const c = state.creatures[e.id];
@@ -345,8 +346,8 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
             })}
           </ol>
         </section>
-        <section class="combat-log" aria-label="Combat log" aria-live="polite">
-          <h2>Combat log</h2>
+        <section class="combat-log" aria-label={t('combat.log')} aria-live="polite">
+          <h2>{t('combat.log')}</h2>
           <ol reversed>
             {[...enc.log].reverse().map((l, i) => (
               <li key={enc.log.length - i}>{l}</li>

@@ -2,6 +2,7 @@
 import { useEffect } from 'preact/hooks';
 import { db } from '../../data';
 import { combatDemoClass, screen } from '../state';
+import { t } from '../i18n';
 import { CombatScreen } from './CombatScreen';
 import { demoAct, demoCombat, startDemoCombat } from './combatDemo';
 
@@ -14,5 +15,5 @@ export function DemoCombat() {
   if (!demoCombat.value) startDemoCombat(cls);
   const cur = demoCombat.value;
   if (!cur) return null;
-  return <CombatScreen enc={cur.enc} ctx={cur.ctx} act={demoAct} onLeave={() => (screen.value = 'title')} leaveLabel="Leave sandbox" />;
+  return <CombatScreen enc={cur.enc} ctx={cur.ctx} act={demoAct} onLeave={() => (screen.value = 'title')} leaveLabel={t('combat.leaveSandbox')} />;
 }

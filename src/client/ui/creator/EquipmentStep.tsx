@@ -3,9 +3,9 @@ import type { CreatorState } from '../../../engine/character/creator';
 import type { ClassData } from '../../../engine/data/schemas';
 import type { MessageKey } from '../../../shared/i18n';
 import { db } from '../../data';
-import { t } from '../i18n';
+import { coins, t } from '../i18n';
 import { creator } from './creatorState';
-import { formatCoins, itemDisplayName } from '../text';
+import { itemDisplayName } from '../text';
 
 type Pkg = ClassData['startingEquipment'][number];
 
@@ -26,7 +26,7 @@ function PackageText({ pkg }: { pkg: Pkg }) {
   const items = pkg.items.map(([id, n]) => `${n > 1 ? `${n} × ` : ''}${itemDisplayName(db.item(id)?.name ?? id)}`);
   const choices = pkg.choices.map(choiceLabel);
   const parts = [...items, ...choices];
-  return <span>{parts.length ? `${parts.join(', ')}${pkg.cost ? `, ${formatCoins(pkg.cost)}` : ''}` : formatCoins(pkg.cost)}</span>;
+  return <span>{parts.length ? `${parts.join(', ')}${pkg.cost ? `, ${coins(pkg.cost)}` : ''}` : coins(pkg.cost)}</span>;
 }
 
 const update = (patch: Partial<CreatorState>) => (creator.value = { ...creator.value, ...patch });

@@ -6,6 +6,7 @@
 import { useEffect, useRef } from 'preact/hooks';
 import { cellKey, footprintSize, type Grid, type Point } from '../../../engine/combat/grid';
 import type { Creatures } from '../../../engine/combat/turns';
+import { t } from '../i18n';
 
 export const CELL = 48;
 const CELL_DEFAULT = CELL;
@@ -198,7 +199,7 @@ export function BattleMap(p: BattleMapProps) {
       width={w}
       height={h}
       role="img"
-      aria-label="Battle map"
+      aria-label={t('combat.mapAria')}
       onClick={(e) => {
         const sq = toSquare(e);
         if (sq) p.onSquare?.(sq);

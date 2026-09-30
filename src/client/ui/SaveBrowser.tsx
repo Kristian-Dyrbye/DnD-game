@@ -7,6 +7,7 @@ import { useEffect, useState } from 'preact/hooks';
 import type { SaveMeta } from '../../shared/save';
 import { send } from '../net/gameSocket';
 import { downloadSave, saveLibrary } from '../net/saveLibrary';
+import { language, t } from './i18n';
 import { screen } from './state';
 
 export function SaveBrowser({ mode, onClose }: { mode: 'load' | 'save'; onClose: () => void }) {
@@ -20,7 +21,7 @@ export function SaveBrowser({ mode, onClose }: { mode: 'load' | 'save'; onClose:
     try {
       downloadSave(await saveLibrary().exportFile(slot));
     } catch (err) {
-      setMessage(`Export failed: ${(err as Error).message}`);
+      setMessage(t('saves.exportFailed', { error: (err as Error).message }));
     }
   };
   const importSave = async (input: HTMLInputElement) => {
@@ -29,9 +30,9 @@ export function SaveBrowser({ mode, onClose }: { mode: 'load' | 'save'; onClose:
     if (!f) return;
     try {
       const meta = await saveLibrary().importText(await f.text());
-      setMessage(`Imported "${meta.name}".`);
+      setMessage(t('saves.imported', { name: meta.name }));
     } catch (err) {
-      setMessage(`Import failed: ${(err as Error).message}`);
+      setMessage(t('saves.importFailed', { error: (err as Error).message }));
     }
     refresh();
   };
@@ -49,14 +50,15 @@ export function SaveBrowser({ mode, onClose }: { mode: 'load' | 'save'; onClose:
     await saveLibrary().remove(slot).catch(() => undefined);
     refresh();
   };
+  const heading = t(mode === 'load' ? 'saves.load' : 'saves.save');
 
   return (
-    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label={mode === 'load' ? 'Load game' : 'Save game'}>
+    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label={heading}>
       <section class="journal save-browser">
         <header class="journal-head">
-          <h2>{mode === 'load' ? 'Load game' : 'Save game'}</h2>
-          <button type="button" onClick={onClose} aria-label="Close">
-            Close
+          <h2>{heading}</h2>
+          <button type="button" onClick={onClose} aria-label={t('common.close')}>
+            {t('common.close')}
           </button>
         </header>
         {mode === 'save' && (
@@ -68,15 +70,15 @@ export function SaveBrowser({ mode, onClose }: { mode: 'load' | 'save'; onClose:
               setName('');
             }}
           >
-            <input type="text" maxLength={80} placeholder="Name this save (optional)" value={name} onInput={(e) => setName((e.target as HTMLInputElement).value)} />
+            <input type="text" maxLength={80} placeholder={t('saves.namePlaceholder')} value={name} onInput={(e) => setName((e.target as HTMLInputElement).value)} />
             <button type="submit" class="primary">
-              Save as new
+              {t('saves.saveAsNew')}
             </button>
           </form>
         )}
         <div class="save-import">
           <label class="button-like">
-            Import save…
+            {t('saves.import')}
             <input type="file" accept=".json,application/json" class="visually-hidden" onChange={(e) => void importSave(e.target as HTMLInputElement)} />
           </label>
           {message && (
@@ -85,37 +87,34 @@ export function SaveBrowser({ mode, onClose }: { mode: 'load' | 'save'; onClose:
             </span>
           )}
         </div>
-        {saves === null && <p class="hint">Loading saves…</p>}
-        {saves?.length === 0 && <p class="hint">No saves yet.</p>}
+        {saves === null && <p class="hint">{t('saves.loading')}</p>}
+        {saves?.length === 0 && <p class="hint">{t('saves.none')}</p>}
         <ul class="save-list">
           {saves?.map((s) => (
             <li key={s.slotId} class={`save-card${s.kind === 'auto' ? ' auto' : ''}`}>
               {s.thumbnail ? <img class="save-thumb" src={s.thumbnail} alt={`${s.characterName}`} width={96} height={96} /> : <div class="save-thumb empty" aria-hidden="true" />}
               <div class="save-info">
                 <strong>{s.name}</strong>
+                <span class="muted small">{t('saves.meta', { name: s.characterName, level: s.level, location: s.location })}</span>
                 <span class="muted small">
-                  {s.characterName} · level {s.level} · {s.location}
-                </span>
-                <span class="muted small">
-                  {new Date(s.savedAt).toLocaleString()} · {s.mode === 'hardcore' ? 'Hardcore' : 'Heroic'}
-                  {s.kind === 'auto' ? ' · autosave' : ''}
+                  {[new Date(s.savedAt).toLocaleString(language.value), t(s.mode === 'hardcore' ? 'creator.difficulty.hardcore' : 'creator.difficulty.heroic'), ...(s.kind === 'auto' ? [t('saves.autosave')] : [])].join(' · ')}
                 </span>
               </div>
               <div class="save-actions">
                 <button type="button" onClick={() => load(s.slotId)}>
-                  Load
+                  {t('saves.loadButton')}
                 </button>
-                <button type="button" onClick={() => void exportSave(s.slotId)} title="Download this save as a .json file">
-                  Export
+                <button type="button" onClick={() => void exportSave(s.slotId)} title={t('saves.exportTitle')}>
+                  {t('saves.export')}
                 </button>
                 {mode === 'save' && s.kind === 'manual' && (
                   <button type="button" onClick={() => saveTo(s.slotId, s.name)}>
-                    Overwrite
+                    {t('saves.overwrite')}
                   </button>
                 )}
                 {s.kind === 'manual' && (
                   <button type="button" class="link-button" onClick={() => void remove(s.slotId)}>
-                    Delete
+                    {t('saves.delete')}
                   </button>
                 )}
               </div>

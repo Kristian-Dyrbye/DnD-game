@@ -4,8 +4,10 @@
  */
 import type { ComponentType } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import type { MessageKey } from '../../shared/i18n';
+import { t } from './i18n';
 
-export function lazyScreen(load: () => Promise<ComponentType>, label: string): ComponentType {
+export function lazyScreen(load: () => Promise<ComponentType>, label: MessageKey): ComponentType {
   let loaded: ComponentType | null = null;
   return function LazyScreen() {
     const [Comp, setComp] = useState<ComponentType | null>(() => loaded);
@@ -30,7 +32,7 @@ export function lazyScreen(load: () => Promise<ComponentType>, label: string): C
     if (Comp) return <Comp />;
     return (
       <main class="screen-loading" aria-busy={!failed}>
-        <p>{failed ? `The ${label} failed to load: ${failed}` : `Loading the ${label}…`}</p>
+        <p>{failed ? t('screen.failed', { name: t(label), error: failed }) : t('screen.loading', { name: t(label) })}</p>
       </main>
     );
   };

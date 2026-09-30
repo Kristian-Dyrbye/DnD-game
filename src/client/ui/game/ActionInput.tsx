@@ -5,22 +5,23 @@
 import { useState } from 'preact/hooks';
 import { WEB_EDITION } from '../../edition';
 import { connection, dialogue, send, suggestions } from '../../net/gameSocket';
+import { t } from '../i18n';
 
 export function ActionInput() {
   const [text, setText] = useState('');
   const offline = connection.value !== 'open';
   const submit = (e: Event) => {
     e.preventDefault();
-    const t = text.trim();
-    if (!t) return;
-    send({ type: 'say', text: t.slice(0, 500) });
+    const typed = text.trim();
+    if (!typed) return;
+    send({ type: 'say', text: typed.slice(0, 500) });
     setText('');
   };
   const talk = dialogue.value;
   return (
-    <section class="action-input" aria-label="Your actions">
+    <section class="action-input" aria-label={t('action.aria')}>
       {talk && (
-        <div class="dialogue-panel" role="group" aria-label={`Conversation with ${talk.npc}`}>
+        <div class="dialogue-panel" role="group" aria-label={t('action.conversationAria', { npc: talk.npc })}>
           <p class="dialogue-line">
             <strong>{talk.speaker}:</strong> “{talk.text}”
           </p>
@@ -38,15 +39,15 @@ export function ActionInput() {
           type="text"
           value={text}
           maxLength={500}
-          placeholder="Or describe what you do…"
-          aria-label="Describe what you do"
+          placeholder={t('action.placeholder')}
+          aria-label={t('action.describeAria')}
           onInput={(e) => setText((e.target as HTMLInputElement).value)}
         />
         <button type="submit" class="primary" disabled={offline || !text.trim()}>
-          Act
+          {t('action.act')}
         </button>
       </form>
-      {WEB_EDITION && <p class="hint small free-text-hint">Use the buttons for best results: typed text is matched by keywords only.</p>}
+      {WEB_EDITION && <p class="hint small free-text-hint">{t('action.webHint')}</p>}
     </section>
   );
 }

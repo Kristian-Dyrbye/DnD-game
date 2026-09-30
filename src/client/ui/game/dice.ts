@@ -1,5 +1,6 @@
 /** Pure helpers for the dice tray (which die counts, crit/fumble styling, outcome text). */
 import type { RollRecord } from '../../../engine/session/gameState';
+import { ENGLISH, type Translator } from '../../../shared/i18n';
 
 /** Index of the die that counts: the higher for advantage, the lower for disadvantage. */
 export function keptIndex(r: Pick<RollRecord, 'dice' | 'mode'>): number {
@@ -12,10 +13,10 @@ export function dieClass(value: number, kept: boolean): string {
   return ['die', 'd20', kept ? 'kept' : 'dropped', kept && value === 20 ? 'crit' : '', kept && value === 1 ? 'fumble' : ''].filter(Boolean).join(' ');
 }
 
-export function modeLabel(r: Pick<RollRecord, 'mode'>): string | undefined {
-  return r.mode === 'advantage' ? 'Advantage' : r.mode === 'disadvantage' ? 'Disadvantage' : undefined;
+export function modeLabel(r: Pick<RollRecord, 'mode'>, tr: Translator = ENGLISH): string | undefined {
+  return r.mode === 'advantage' ? tr.t('dice.advantage') : r.mode === 'disadvantage' ? tr.t('dice.disadvantage') : undefined;
 }
 
-export function outcomeLabel(r: Pick<RollRecord, 'success'>): string | undefined {
-  return r.success === undefined ? undefined : r.success ? 'Success' : 'Failure';
+export function outcomeLabel(r: Pick<RollRecord, 'success'>, tr: Translator = ENGLISH): string | undefined {
+  return r.success === undefined ? undefined : tr.t(r.success ? 'dice.success' : 'dice.failure');
 }

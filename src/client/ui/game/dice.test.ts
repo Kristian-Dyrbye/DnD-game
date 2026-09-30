@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { translator } from '../../../shared/i18n';
 import { dieClass, keptIndex, modeLabel, outcomeLabel } from './dice';
 
 describe('dice tray helpers', () => {
@@ -21,5 +22,7 @@ describe('dice tray helpers', () => {
     expect(modeLabel({ mode: 'normal' })).toBeUndefined();
     expect(outcomeLabel({ success: false })).toBe('Failure');
     expect(outcomeLabel({})).toBeUndefined();
+    expect(modeLabel({ mode: 'disadvantage' }, translator('da'))).toBe('Ulempe');
+    expect(outcomeLabel({ success: true }, translator('da'))).toBe('Lykkedes');
   });
 });

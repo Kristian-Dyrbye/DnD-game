@@ -12,6 +12,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { Appearance } from '../../engine/appearance/appearance';
 import { buildCharacterModel, type CharacterModel } from './characterModel';
 import { settings } from '../ui/settingsState';
+import { t } from '../ui/i18n';
 
 /** Points the camera at the model so the whole figure fits (models differ in scale). */
 function frame(camera: THREE.PerspectiveCamera, controls: OrbitControls, obj: THREE.Object3D): void {
@@ -177,7 +178,7 @@ export function CharacterPreview({ appearance, size = 'medium', height = 260, lo
   }, [key]);
 
   return (
-    <div class="character-preview" ref={host} style={{ height: `${height}px` }} aria-label="3D character preview (drag to rotate)">
+    <div class="character-preview" ref={host} style={{ height: `${height}px` }} aria-label={t('preview.aria')}>
       {error && <p class="preview-error">{error}</p>}
     </div>
   );

@@ -40,3 +40,21 @@ There is no official Danish D&D 5e. These are the game's own choices; use them i
 | speed | fart | |
 | spell | besværgelse | |
 | weapon mastery | våbenmesterskab | |
+| advantage / disadvantage | fordel / ulempe | dice tray tags |
+| coins GP / SP / CP | gm / sm / km | guld-, sølv-, kobbermønter |
+| companion | følgesvend | |
+| Constitution (short) | Kon | "+ Kon" in the level-up HP choice |
+| Dash / Disengage / Dodge | Spurt / Træk dig ud / Undvig | combat buttons |
+| DC | SG (sværhedsgrad) | "Overtalelse SG 15" |
+| Epic Boon | episk gave | |
+| Ability Score Improvement | forbedring af evneværdi | |
+| exhaustion | udmattelse | |
+| Grapple / Shove | grib / skub | |
+| miles | engelske mil | a Danish "mil" is 7.5 km |
+| party | gruppe | |
+| Persuasion | Overtalelse | until A149 fixes all skill names |
+| Ready (action) | hold klar | |
+| round / turn | runde / tur | |
+| scar | ar | |
+| subclass | underklasse | |
+| Study / Influence | undersøg / påvirk | |
