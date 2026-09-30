@@ -225,7 +225,7 @@ A conversation is a small tree of NPC lines and player replies. It works the sam
 
 - Author the group for a party of four. The game scales it to the real party: the cheapest non-boss monsters are removed while the fight is above the High XP budget, and `scaling.pool` monsters are added while it is below Low.
 - `allies`: `[{ "id": "guard", "count": 2 }]` — friendly stat blocks that fight on the party's side, run by the companion AI.
-- Any monster or ally group may carry an `if` condition: it only joins when the condition holds, so one encounter can cover several situations instead of variants.
+- Any monster or ally group may carry an `if` condition: it only joins when the condition holds, so one encounter can cover several situations instead of variants. The same monster may appear in several groups (e.g. `{ "id": "spy", "count": 1 }` plus `{ "id": "spy", "count": 1, "if": { "not": { "flag": "~pip_scouted" } } }` = one fewer spy once the flag is set); the groups that join are summed before the fight.
 - `statOverrides`: `{ "young_red_dragon": { "name": "Pyrraxis", "hpPercent": 60, "ac": 19 } }` — per monster id, a new name, HP (absolute `hp` or `hpPercent` of the stat block) and AC.
 - `bosses` lists monster ids that are never removed. When it is empty, the single most expensive monster type counts as the boss.
 - In Heroic mode, `lose` is the **defeat outcome** (captured, robbed, rescued...).

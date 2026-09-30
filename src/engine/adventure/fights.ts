@@ -8,7 +8,7 @@ import { wearFromFight } from '../character/armorWear';
 import type { Character } from '../core/creature';
 import type { SrdDatabase } from '../data/srd';
 import type { CombatContext } from '../combat/combatState';
-import { playerAct, setupEncounter, type Encounter, type PlayerAction } from '../combat/encounter';
+import { mergeMonsterGroups, playerAct, setupEncounter, type Encounter, type PlayerAction } from '../combat/encounter';
 import type { GameState } from '../session/gameState';
 import { getMap } from '../world/travel';
 import type { Lore } from '../world/lore';
@@ -65,7 +65,7 @@ export function startFight(ctx: RunContext, encounterId: string, rng: Rng, db: S
   const cctx: CombatContext = { rng, db };
   // Scale to the real party with SRD budgets (authored lists assume a party of four).
   const party = [ctx.state.hero, ...ctx.state.companions].filter((c) => !c.dead);
-  const groups = activeGroups(ctx, def.monsters);
+  const groups = mergeMonsterGroups(activeGroups(ctx, def.monsters));
   const monsters = db.tables ? scaleMonsters(groups, party.map((c) => c.classes.reduce((s, x) => s + x.level, 0)), db, db.tables, { pool: def.scaling?.pool ?? [], bossIds: bossesOf(def, db) }) : groups;
   const place = fightMap(ctx, def);
   const enc = setupEncounter(

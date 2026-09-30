@@ -131,6 +131,30 @@
                 "flag": "~ch3_warrant"
               },
               "seed": "The royal warrant in your belt opens doors all over the city."
+            },
+            {
+              "if": {
+                "flag": "~ch3_hale_enemy"
+              },
+              "seed": "Chamberlain Hale has had your name written into the list of persons to be watched."
+            },
+            {
+              "if": {
+                "flag": "~ch3_hale_won"
+              },
+              "seed": "Chamberlain Hale nods to you across the hall like a man who has been paid, or flattered."
+            },
+            {
+              "if": {
+                "flag": "~ch3_queen_warned"
+              },
+              "seed": "A taster now stands behind the Queen's chair, and the court whispers about it."
+            },
+            {
+              "if": {
+                "flag": "~ch3_aurek_fled"
+              },
+              "seed": "The Almonry library door stays shut. Aurek has not come down since you frightened him."
             }
           ],
           "npcs": [
@@ -586,7 +610,29 @@
                 },
                 "failure": {
                   "text": "Chamberlain Hale reminds the Queen that warrants are \"not for strangers\", and your request goes to a committee."
-                }
+                },
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_hale_won"
+                    },
+                    "source": "Chamberlain Hale speaks for you"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch3_hale_cowed"
+                    },
+                    "source": "Chamberlain Hale holds his tongue"
+                  }
+                ],
+                "disadvantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_hale_enemy"
+                    },
+                    "source": "Chamberlain Hale speaks against you"
+                  }
+                ]
               }
             },
             {
@@ -648,7 +694,29 @@
                 },
                 "failure": {
                   "text": "\"A friend of pirates asks me for a warrant,\" Hale says to no one in particular. The Queen declines."
-                }
+                },
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_hale_won"
+                    },
+                    "source": "Chamberlain Hale speaks for you"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch3_hale_cowed"
+                    },
+                    "source": "Chamberlain Hale holds his tongue"
+                  }
+                ],
+                "disadvantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_hale_enemy"
+                    },
+                    "source": "Chamberlain Hale speaks against you"
+                  }
+                ]
               }
             },
             {
@@ -707,7 +775,29 @@
                       "value": true
                     }
                   ]
-                }
+                },
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_hale_won"
+                    },
+                    "source": "Chamberlain Hale speaks for you"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch3_hale_cowed"
+                    },
+                    "source": "Chamberlain Hale holds his tongue"
+                  }
+                ],
+                "disadvantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_hale_enemy"
+                    },
+                    "source": "Chamberlain Hale speaks against you"
+                  }
+                ]
               }
             },
             {
@@ -764,7 +854,29 @@
                       "value": true
                     }
                   ]
-                }
+                },
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_hale_won"
+                    },
+                    "source": "Chamberlain Hale speaks for you"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch3_hale_cowed"
+                    },
+                    "source": "Chamberlain Hale holds his tongue"
+                  }
+                ],
+                "disadvantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_hale_enemy"
+                    },
+                    "source": "Chamberlain Hale speaks against you"
+                  }
+                ]
               }
             },
             {
@@ -829,54 +941,63 @@
               "if": {
                 "all": [
                   {
-                    "not": {
-                      "all": [
-                        {
-                          "flag": "world.player_outlawed"
-                        },
-                        {
-                          "not": {
-                            "flag": "~ch3_gate_passed"
-                          }
+                    "all": [
+                      {
+                        "not": {
+                          "all": [
+                            {
+                              "flag": "world.player_outlawed"
+                            },
+                            {
+                              "not": {
+                                "flag": "~ch3_gate_passed"
+                              }
+                            }
+                          ]
                         }
-                      ]
-                    }
-                  },
-                  {
-                    "flag": "~ch3_audience_done"
-                  },
-                  {
-                    "any": [
-                      {
-                        "flag": "arc.main.tooth_want_holder",
-                        "eq": "player"
                       },
                       {
-                        "flag": "arc.main.tooth_abbey_holder",
-                        "eq": "player"
+                        "flag": "~ch3_audience_done"
                       },
                       {
-                        "flag": "arc.main.tooth_wick_holder",
-                        "eq": "player"
+                        "any": [
+                          {
+                            "flag": "arc.main.tooth_want_holder",
+                            "eq": "player"
+                          },
+                          {
+                            "flag": "arc.main.tooth_abbey_holder",
+                            "eq": "player"
+                          },
+                          {
+                            "flag": "arc.main.tooth_wick_holder",
+                            "eq": "player"
+                          },
+                          {
+                            "flag": "arc.main.tooth_parrot_holder",
+                            "eq": "player"
+                          },
+                          {
+                            "flag": "arc.main.tooth_reef_holder",
+                            "eq": "player"
+                          }
+                        ]
                       },
                       {
-                        "flag": "arc.main.tooth_parrot_holder",
-                        "eq": "player"
+                        "not": {
+                          "flag": "~ch3_tooth_entrusted"
+                        }
                       },
                       {
-                        "flag": "arc.main.tooth_reef_holder",
-                        "eq": "player"
+                        "not": {
+                          "flag": "~ch3_vaelthorn_done"
+                        }
                       }
                     ]
                   },
                   {
                     "not": {
-                      "flag": "~ch3_tooth_entrusted"
-                    }
-                  },
-                  {
-                    "not": {
-                      "flag": "~ch3_vaelthorn_done"
+                      "flag": "~ch3_teeth_refused"
                     }
                   }
                 ]
@@ -906,16 +1027,25 @@
               "if": {
                 "all": [
                   {
-                    "flag": "~ch3_audience_done"
-                  },
-                  {
-                    "flag": "world.aurek_status",
-                    "eq": "met"
+                    "all": [
+                      {
+                        "flag": "~ch3_audience_done"
+                      },
+                      {
+                        "flag": "world.aurek_status",
+                        "eq": "met"
+                      },
+                      {
+                        "not": {
+                          "flag": "arc.main.isles_alliance",
+                          "eq": "red_gull"
+                        }
+                      }
+                    ]
                   },
                   {
                     "not": {
-                      "flag": "arc.main.isles_alliance",
-                      "eq": "red_gull"
+                      "flag": "~ch3_aurek_fled"
                     }
                   }
                 ]
@@ -947,15 +1077,24 @@
               "if": {
                 "all": [
                   {
-                    "flag": "~ch3_audience_done"
+                    "all": [
+                      {
+                        "flag": "~ch3_audience_done"
+                      },
+                      {
+                        "flag": "world.aurek_status",
+                        "eq": "met"
+                      },
+                      {
+                        "flag": "arc.main.isles_alliance",
+                        "eq": "red_gull"
+                      }
+                    ]
                   },
                   {
-                    "flag": "world.aurek_status",
-                    "eq": "met"
-                  },
-                  {
-                    "flag": "arc.main.isles_alliance",
-                    "eq": "red_gull"
+                    "not": {
+                      "flag": "~ch3_aurek_fled"
+                    }
                   }
                 ]
               },
@@ -983,43 +1122,52 @@
               "if": {
                 "all": [
                   {
-                    "flag": "~ch3_audience_done"
-                  },
-                  {
-                    "flag": "world.aurek_status",
-                    "eq": "met"
-                  },
-                  {
-                    "any": [
+                    "all": [
+                      {
+                        "flag": "~ch3_audience_done"
+                      },
+                      {
+                        "flag": "world.aurek_status",
+                        "eq": "met"
+                      },
                       {
                         "any": [
                           {
-                            "flag": "arc.main.tooth_want_holder",
-                            "eq": "player"
+                            "any": [
+                              {
+                                "flag": "arc.main.tooth_want_holder",
+                                "eq": "player"
+                              },
+                              {
+                                "flag": "arc.main.tooth_abbey_holder",
+                                "eq": "player"
+                              },
+                              {
+                                "flag": "arc.main.tooth_wick_holder",
+                                "eq": "player"
+                              },
+                              {
+                                "flag": "arc.main.tooth_parrot_holder",
+                                "eq": "player"
+                              },
+                              {
+                                "flag": "arc.main.tooth_reef_holder",
+                                "eq": "player"
+                              }
+                            ]
                           },
                           {
-                            "flag": "arc.main.tooth_abbey_holder",
-                            "eq": "player"
-                          },
-                          {
-                            "flag": "arc.main.tooth_wick_holder",
-                            "eq": "player"
-                          },
-                          {
-                            "flag": "arc.main.tooth_parrot_holder",
-                            "eq": "player"
-                          },
-                          {
-                            "flag": "arc.main.tooth_reef_holder",
+                            "flag": "arc.main.tooth_vaelthorn_holder",
                             "eq": "player"
                           }
                         ]
-                      },
-                      {
-                        "flag": "arc.main.tooth_vaelthorn_holder",
-                        "eq": "player"
                       }
                     ]
+                  },
+                  {
+                    "not": {
+                      "flag": "~ch3_aurek_fled"
+                    }
                   }
                 ]
               },
@@ -1139,6 +1287,10 @@
               },
               "minutes": 60
             }
+          ],
+          "revisitSeed": [
+            "The Tower Hall again, bright with banners and whispering courtiers.",
+            "Back in Highcrown's white tiers, where every face in the Tower Hall seems to remember yours."
           ]
         },
         {
@@ -1188,6 +1340,12 @@
                 "flag": "arc.main.money_trail_proven"
               },
               "seed": "The Almonry's debts lie open on the table, tallied in your hand."
+            },
+            {
+              "if": {
+                "flag": "~ch3_ashgrove_angry"
+              },
+              "seed": "The clerks go quiet when you come in; they all heard the Guildmistress throw you out."
             }
           ],
           "npcs": [
@@ -1278,7 +1436,15 @@
                 },
                 "failure": {
                   "text": "\"Coin first, then talk,\" says the Guildmistress, and turns back to her ledgers."
-                }
+                },
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_queen_letter"
+                    },
+                    "source": "You carry the Queen's own letter"
+                  }
+                ]
               }
             },
             {
@@ -1403,7 +1569,29 @@
                 },
                 "failure": {
                   "text": "\"The Consortium's books are the Consortium's business,\" says Ashgrove."
-                }
+                },
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_ashgrove_fear"
+                    },
+                    "source": "Ashgrove is afraid of the Almonry's loans"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch3_queen_letter"
+                    },
+                    "source": "You carry the Queen's own letter"
+                  }
+                ],
+                "disadvantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_ashgrove_angry"
+                    },
+                    "source": "Ashgrove has thrown you out once already"
+                  }
+                ]
               }
             },
             {
@@ -1464,7 +1652,15 @@
                 },
                 "failure": {
                   "text": "Ashgrove reads the warrant and asks which clause obliges a dwarven guild to anything. You cannot find one."
-                }
+                },
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_queen_letter"
+                    },
+                    "source": "You carry the Queen's own letter"
+                  }
+                ]
               }
             },
             {
@@ -1715,7 +1911,8 @@
               "to": "vaelthorn_sky_towers",
               "minutes": 1440
             }
-          ]
+          ],
+          "revisitSeed": "The counting-halls of Deepanvil again: abacus-clatter and the smell of lamp oil."
         },
         {
           "id": "vaelthorn_sky_towers",
@@ -2393,6 +2590,12 @@
                       "eq": "in_party"
                     },
                     "source": "Aurek reads Veyran shorthand"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch3_vosk_read"
+                    },
+                    "source": "You saw where Vosk keeps his letters"
                   }
                 ]
               }
@@ -2444,7 +2647,8 @@
               },
               "minutes": 1440
             }
-          ]
+          ],
+          "revisitSeed": "The broken sky-towers of Old Vaelthorn again, the wind singing through them."
         },
         {
           "id": "dawnspire_vigil",
@@ -2492,6 +2696,18 @@
                 "flag": "~ch3_corwin_reinstated"
               },
               "seed": "Ser Corwin wears the Lance tabard again."
+            },
+            {
+              "if": {
+                "flag": "~ch3_pip_sent_home"
+              },
+              "seed": "Pip's too-big tabard hangs on a peg by the gate. He rode for Millbrook at first light."
+            },
+            {
+              "if": {
+                "flag": "~ch3_lance_pledged"
+              },
+              "seed": "Two knights are saddling their horses for Highcrown, on Thane's word."
             }
           ],
           "npcs": [
@@ -2748,7 +2964,21 @@
                 },
                 "failure": {
                   "text": "\"The Order dismissed him for cause,\" says Thane. Corwin says nothing at all."
-                }
+                },
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_thane_softened"
+                    },
+                    "source": "Thane has already heard Corwin out"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch3_thane_confessed"
+                    },
+                    "source": "Thane has confessed his own failure to you"
+                  }
+                ]
               }
             },
             {
@@ -2766,17 +2996,26 @@
                   {
                     "all": [
                       {
-                        "flag": "~ch3_lance_decided"
+                        "all": [
+                          {
+                            "flag": "~ch3_lance_decided"
+                          },
+                          {
+                            "not": {
+                              "flag": "~ch3_vigil_done"
+                            }
+                          }
+                        ]
                       },
                       {
-                        "not": {
-                          "flag": "~ch3_vigil_done"
-                        }
+                        "flag": "arc.starter.pip_rescued"
                       }
                     ]
                   },
                   {
-                    "flag": "arc.starter.pip_rescued"
+                    "not": {
+                      "flag": "~ch3_pip_sent_home"
+                    }
                   }
                 ]
               },
@@ -2818,9 +3057,16 @@
                     ]
                   },
                   {
-                    "not": {
-                      "flag": "arc.starter.pip_rescued"
-                    }
+                    "any": [
+                      {
+                        "not": {
+                          "flag": "arc.starter.pip_rescued"
+                        }
+                      },
+                      {
+                        "flag": "~ch3_pip_sent_home"
+                      }
+                    ]
                   }
                 ]
               },
@@ -2866,7 +3112,8 @@
               },
               "minutes": 720
             }
-          ]
+          ],
+          "revisitSeed": "Dawnspire Keep again, its chapel bell tolling the hours of the vigil."
         },
         {
           "id": "almoners_masque",
@@ -2920,6 +3167,24 @@
                 "flag": "~ch3_pip_warned"
               },
               "seed": "Pip has come along as your \"page\", wearing a mask three sizes too big."
+            },
+            {
+              "if": {
+                "flag": "~ch3_pip_page"
+              },
+              "seed": "Pip trots at your heel with your cloak over his arm, bursting with importance."
+            },
+            {
+              "if": {
+                "flag": "~ch3_seraphine_fooled"
+              },
+              "seed": "Seraphine waves to you across the garden, fondly, like an old friend."
+            },
+            {
+              "if": {
+                "flag": "~ch3_hale_ally"
+              },
+              "seed": "Chamberlain Hale catches your eye and taps the ledger under his arm."
             }
           ],
           "npcs": [
@@ -2994,7 +3259,15 @@
                       "value": true
                     }
                   ]
-                }
+                },
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_pip_page"
+                    },
+                    "source": "Pip fusses over you like a real page"
+                  }
+                ]
               }
             },
             {
@@ -3059,7 +3332,15 @@
                       "value": true
                     }
                   ]
-                }
+                },
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_pip_page"
+                    },
+                    "source": "Pip fusses over you like a real page"
+                  }
+                ]
               }
             },
             {
@@ -3123,6 +3404,12 @@
                       "flag": "~ch3_seraphine_suspected"
                     },
                     "source": "You already suspected her"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch3_cinderdale_known"
+                    },
+                    "source": "You know what the Ashfall Winter did to her"
                   }
                 ],
                 "disadvantageIf": [
@@ -3195,6 +3482,12 @@
                       "flag": "~ch3_seraphine_suspected"
                     },
                     "source": "You already suspected her"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch3_cinderdale_known"
+                    },
+                    "source": "You know what the Ashfall Winter did to her"
                   }
                 ],
                 "disadvantageIf": [
@@ -3464,7 +3757,29 @@
                     }
                   ],
                   "encounter": "masque_guards"
-                }
+                },
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_hale_ally"
+                    },
+                    "source": "Chamberlain Hale stands beside you"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch3_queen_doubt"
+                    },
+                    "source": "The Queen already had her doubts"
+                  }
+                ],
+                "disadvantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch3_hale_enemy"
+                    },
+                    "source": "Chamberlain Hale speaks against you"
+                  }
+                ]
               }
             },
             {
@@ -3832,6 +4147,18 @@
                 "flag": "~ch3_locket"
               },
               "seed": "Liesel's locket is cold in your hand: a little girl's face, and the name \"Liesel, Cinderdale\"."
+            },
+            {
+              "if": {
+                "flag": "~ch3_lance_pledged"
+              },
+              "seed": "Thane's two knights come clattering down the stair behind you, swords drawn."
+            },
+            {
+              "if": {
+                "flag": "~ch3_queen_warned"
+              },
+              "seed": "The phial of purge you urged on the Queen still stands by her bed."
             }
           ],
           "npcs": [
@@ -4090,6 +4417,12 @@
                       "eq": "in_party"
                     },
                     "source": "Nettle knows the Sickness"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch3_queen_warned"
+                    },
+                    "source": "The Queen kept the purge by her bed, as you urged"
                   }
                 ]
               }
@@ -4629,6 +4962,505 @@
           "from": 0,
           "to": 24
         }
+      ],
+      "conversations": [
+        {
+          "id": "petition",
+          "label": "Ask for a private word with the Queen",
+          "if": {
+            "all": [
+              {
+                "not": {
+                  "all": [
+                    {
+                      "flag": "world.player_outlawed"
+                    },
+                    {
+                      "not": {
+                        "flag": "~ch3_gate_passed"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "flag": "~ch3_audience_done"
+              },
+              {
+                "not": {
+                  "flag": "~ch3_queen_stung"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch3_queen_offended"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "queen",
+            "isolde",
+            "majesty",
+            "private",
+            "word"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Isolde waves her ladies back a few steps. \"You have a quarter of an hour. Hale will tell you I cannot spare it.\"",
+              "options": [
+                {
+                  "id": "godmother",
+                  "label": "\"How well do you know Lady Seraphine, Majesty?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_queen_doubt"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_godmother_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "godmother",
+                    "seraphine",
+                    "know",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Isolde talks about her godmother with love, and then, without meaning to, about the nights Seraphine is \"out among the poor\" and cannot be found. She stops, and frowns. The doubt is hers now, not yours.",
+                      "flags": [
+                        {
+                          "set": "~ch3_queen_doubt",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"She raised me,\" the Queen says, and that is the end of it.",
+                      "flags": [
+                        {
+                          "set": "~ch3_godmother_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "debt",
+                  "label": "\"The Crown owes the Ironvault, Majesty. Let me carry your word to them.\" (Persuasion DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_queen_letter"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_queen_stung"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "debt",
+                    "ironvault",
+                    "letter",
+                    "deepanvil",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 15,
+                    "success": {
+                      "text": "Isolde flushes, then writes a short letter to Guildmistress Ashgrove in her own hand: the Crown will honour its debts, and the bearer speaks for the Crown.",
+                      "flags": [
+                        {
+                          "set": "~ch3_queen_letter",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The Queen's face closes. \"The Crown's debts are the Crown's business.\" The court heard you ask.",
+                      "flags": [
+                        {
+                          "set": "~ch3_queen_stung",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "crown_of_aurelmark",
+                          "delta": -5
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "warn",
+                  "label": "\"Someone close to you serves the Choir, Majesty. Guard your cup.\" (Persuasion DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "any": [
+                          {
+                            "flag": "~ch3_seraphine_suspected"
+                          },
+                          {
+                            "flag": "arc.starter.dream_heard"
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_queen_warned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_queen_offended"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "warn",
+                    "cup",
+                    "poison",
+                    "guard",
+                    "choir",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 16,
+                    "success": {
+                      "text": "Isolde does not believe you, not quite. But she orders a taster for her cup, and a phial of the court physicians' strongest purge kept by her bed.",
+                      "flags": [
+                        {
+                          "set": "~ch3_queen_warned",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The Queen laughs, and repeats the joke to her godmother that evening. From now on the Almoner's people watch you.",
+                      "flags": [
+                        {
+                          "set": "~ch3_queen_offended",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch3_noticed",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "crown_of_aurelmark",
+                          "delta": -5
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "pledge",
+                  "label": "\"Command me, Majesty.\"",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch3_queen_pledge"
+                    }
+                  },
+                  "keywords": [
+                    "pledge",
+                    "command",
+                    "serve",
+                    "swear"
+                  ],
+                  "outcome": {
+                    "text": "Isolde smiles for the first time. \"Then find me the Choir, and bring me its Teeth.\" The court sees the Queen's favour fall on you.",
+                    "flags": [
+                      {
+                        "set": "~ch3_queen_pledge",
+                        "value": true
+                      }
+                    ],
+                    "reputation": [
+                      {
+                        "faction": "crown_of_aurelmark",
+                        "delta": 5
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "Bow and withdraw"
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Is there more?\"",
+              "options": [
+                {
+                  "id": "godmother",
+                  "label": "\"How well do you know Lady Seraphine, Majesty?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_queen_doubt"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_godmother_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "godmother",
+                    "seraphine",
+                    "know",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Isolde talks about her godmother with love, and then, without meaning to, about the nights Seraphine is \"out among the poor\" and cannot be found. She stops, and frowns. The doubt is hers now, not yours.",
+                      "flags": [
+                        {
+                          "set": "~ch3_queen_doubt",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"She raised me,\" the Queen says, and that is the end of it.",
+                      "flags": [
+                        {
+                          "set": "~ch3_godmother_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "debt",
+                  "label": "\"The Crown owes the Ironvault, Majesty. Let me carry your word to them.\" (Persuasion DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_queen_letter"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_queen_stung"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "debt",
+                    "ironvault",
+                    "letter",
+                    "deepanvil",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 15,
+                    "success": {
+                      "text": "Isolde flushes, then writes a short letter to Guildmistress Ashgrove in her own hand: the Crown will honour its debts, and the bearer speaks for the Crown.",
+                      "flags": [
+                        {
+                          "set": "~ch3_queen_letter",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The Queen's face closes. \"The Crown's debts are the Crown's business.\" The court heard you ask.",
+                      "flags": [
+                        {
+                          "set": "~ch3_queen_stung",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "crown_of_aurelmark",
+                          "delta": -5
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "warn",
+                  "label": "\"Someone close to you serves the Choir, Majesty. Guard your cup.\" (Persuasion DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "any": [
+                          {
+                            "flag": "~ch3_seraphine_suspected"
+                          },
+                          {
+                            "flag": "arc.starter.dream_heard"
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_queen_warned"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_queen_offended"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "warn",
+                    "cup",
+                    "poison",
+                    "guard",
+                    "choir",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 16,
+                    "success": {
+                      "text": "Isolde does not believe you, not quite. But she orders a taster for her cup, and a phial of the court physicians' strongest purge kept by her bed.",
+                      "flags": [
+                        {
+                          "set": "~ch3_queen_warned",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The Queen laughs, and repeats the joke to her godmother that evening. From now on the Almoner's people watch you.",
+                      "flags": [
+                        {
+                          "set": "~ch3_queen_offended",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch3_noticed",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "crown_of_aurelmark",
+                          "delta": -5
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "pledge",
+                  "label": "\"Command me, Majesty.\"",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch3_queen_pledge"
+                    }
+                  },
+                  "keywords": [
+                    "pledge",
+                    "command",
+                    "serve",
+                    "swear"
+                  ],
+                  "outcome": {
+                    "text": "Isolde smiles for the first time. \"Then find me the Choir, and bring me its Teeth.\" The court sees the Queen's favour fall on you.",
+                    "flags": [
+                      {
+                        "set": "~ch3_queen_pledge",
+                        "value": true
+                      }
+                    ],
+                    "reputation": [
+                      {
+                        "faction": "crown_of_aurelmark",
+                        "delta": 5
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "Bow and withdraw"
+                }
+              ]
+            },
+            {
+              "id": "cold",
+              "text": "The Queen turns to her next petitioner."
+            }
+          ]
+        }
       ]
     },
     {
@@ -4663,6 +5495,510 @@
           "from": 0,
           "to": 24
         }
+      ],
+      "conversations": [
+        {
+          "id": "almoner",
+          "label": "Speak with Lady Seraphine",
+          "if": {
+            "all": [
+              {
+                "not": {
+                  "all": [
+                    {
+                      "flag": "world.player_outlawed"
+                    },
+                    {
+                      "not": {
+                        "flag": "~ch3_gate_passed"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "flag": "~ch3_audience_done"
+              },
+              {
+                "not": {
+                  "flag": "arc.main.cantor_identity_known"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "seraphine",
+            "almoner",
+            "lady",
+            "talk",
+            "speak"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "\"You must be so tired, after the Isles. Sit, please. How can the Almonry help you?\"",
+              "options": [
+                {
+                  "id": "almonry",
+                  "label": "\"Tell me about the Almonry's work, my lady.\" (Insight DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_seraphine_suspected"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_almonry_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "almonry",
+                    "work",
+                    "charity",
+                    "poor",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 15,
+                    "success": {
+                      "text": "She speaks of soup kitchens and fever wards, and it is all true. But every question she asks back is about the Teeth: where, how many, who holds them.",
+                      "flags": [
+                        {
+                          "set": "~ch3_seraphine_suspected",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "She speaks of soup kitchens and fever wards, and you believe every word.",
+                      "flags": [
+                        {
+                          "set": "~ch3_almonry_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "winter",
+                  "label": "\"Where were you in the Ashfall Winter, my lady?\" (History DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_cinderdale_known"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_winter_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "winter",
+                    "ashfall",
+                    "cinderdale",
+                    "history",
+                    "past"
+                  ],
+                  "check": {
+                    "skill": "history",
+                    "dc": 14,
+                    "success": {
+                      "text": "\"Cinderdale,\" she says, after a moment. \"The Order rode away and left us. My sister was six.\" She smiles as if she had said nothing at all. You will remember that name.",
+                      "flags": [
+                        {
+                          "set": "~ch3_cinderdale_known",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Oh, here and there,\" she says, \"doing what I could.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_winter_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "grateful",
+                  "label": "Play the grateful hero: \"Might the Almonry help fund my hunt?\" (Deception DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_seraphine_fooled"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_seraphine_wary"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "fund",
+                    "help",
+                    "grateful",
+                    "money",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 15,
+                    "success": {
+                      "text": "Seraphine presses fifty gold into your hands and pats them. She has decided you are a simple, useful sort of hero. She will send fewer knives after a simple hero.",
+                      "coins": 5000,
+                      "flags": [
+                        {
+                          "set": "~ch3_seraphine_fooled",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Seraphine's smile stays, but her eyes rest on you a moment too long. She has decided you are dangerous.",
+                      "flags": [
+                        {
+                          "set": "~ch3_seraphine_wary",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "refuse",
+                  "label": "\"The Teeth stay with me, my lady. All of them.\"",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "any": [
+                          {
+                            "flag": "arc.main.tooth_want_holder",
+                            "eq": "player"
+                          },
+                          {
+                            "flag": "arc.main.tooth_abbey_holder",
+                            "eq": "player"
+                          },
+                          {
+                            "flag": "arc.main.tooth_wick_holder",
+                            "eq": "player"
+                          },
+                          {
+                            "flag": "arc.main.tooth_parrot_holder",
+                            "eq": "player"
+                          },
+                          {
+                            "flag": "arc.main.tooth_reef_holder",
+                            "eq": "player"
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_tooth_entrusted"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_teeth_refused"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "refuse",
+                    "keep",
+                    "teeth",
+                    "no",
+                    "stay"
+                  ],
+                  "outcome": {
+                    "text": "\"Of course,\" Seraphine says warmly. \"They could not be in better hands.\" She does not ask again.",
+                    "flags": [
+                      {
+                        "set": "~ch3_teeth_refused",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      },
+                      {
+                        "companion": "rook",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Thank you, my lady.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"What else would you like to know, my dear?\"",
+              "options": [
+                {
+                  "id": "almonry",
+                  "label": "\"Tell me about the Almonry's work, my lady.\" (Insight DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_seraphine_suspected"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_almonry_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "almonry",
+                    "work",
+                    "charity",
+                    "poor",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 15,
+                    "success": {
+                      "text": "She speaks of soup kitchens and fever wards, and it is all true. But every question she asks back is about the Teeth: where, how many, who holds them.",
+                      "flags": [
+                        {
+                          "set": "~ch3_seraphine_suspected",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "She speaks of soup kitchens and fever wards, and you believe every word.",
+                      "flags": [
+                        {
+                          "set": "~ch3_almonry_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "winter",
+                  "label": "\"Where were you in the Ashfall Winter, my lady?\" (History DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_cinderdale_known"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_winter_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "winter",
+                    "ashfall",
+                    "cinderdale",
+                    "history",
+                    "past"
+                  ],
+                  "check": {
+                    "skill": "history",
+                    "dc": 14,
+                    "success": {
+                      "text": "\"Cinderdale,\" she says, after a moment. \"The Order rode away and left us. My sister was six.\" She smiles as if she had said nothing at all. You will remember that name.",
+                      "flags": [
+                        {
+                          "set": "~ch3_cinderdale_known",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Oh, here and there,\" she says, \"doing what I could.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_winter_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "grateful",
+                  "label": "Play the grateful hero: \"Might the Almonry help fund my hunt?\" (Deception DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_seraphine_fooled"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_seraphine_wary"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "fund",
+                    "help",
+                    "grateful",
+                    "money",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 15,
+                    "success": {
+                      "text": "Seraphine presses fifty gold into your hands and pats them. She has decided you are a simple, useful sort of hero. She will send fewer knives after a simple hero.",
+                      "coins": 5000,
+                      "flags": [
+                        {
+                          "set": "~ch3_seraphine_fooled",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Seraphine's smile stays, but her eyes rest on you a moment too long. She has decided you are dangerous.",
+                      "flags": [
+                        {
+                          "set": "~ch3_seraphine_wary",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "refuse",
+                  "label": "\"The Teeth stay with me, my lady. All of them.\"",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "any": [
+                          {
+                            "flag": "arc.main.tooth_want_holder",
+                            "eq": "player"
+                          },
+                          {
+                            "flag": "arc.main.tooth_abbey_holder",
+                            "eq": "player"
+                          },
+                          {
+                            "flag": "arc.main.tooth_wick_holder",
+                            "eq": "player"
+                          },
+                          {
+                            "flag": "arc.main.tooth_parrot_holder",
+                            "eq": "player"
+                          },
+                          {
+                            "flag": "arc.main.tooth_reef_holder",
+                            "eq": "player"
+                          }
+                        ]
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_tooth_entrusted"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_teeth_refused"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "refuse",
+                    "keep",
+                    "teeth",
+                    "no",
+                    "stay"
+                  ],
+                  "outcome": {
+                    "text": "\"Of course,\" Seraphine says warmly. \"They could not be in better hands.\" She does not ask again.",
+                    "flags": [
+                      {
+                        "set": "~ch3_teeth_refused",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      },
+                      {
+                        "companion": "rook",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Thank you, my lady.\""
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
@@ -4677,7 +6013,893 @@
       "factions": [
         "crown_of_aurelmark"
       ],
-      "attitude": "indifferent"
+      "attitude": "indifferent",
+      "conversations": [
+        {
+          "id": "protocol",
+          "label": "Have a word with Chamberlain Hale",
+          "if": {
+            "all": [
+              {
+                "not": {
+                  "all": [
+                    {
+                      "flag": "world.player_outlawed"
+                    },
+                    {
+                      "not": {
+                        "flag": "~ch3_gate_passed"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch3_hale_enemy"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "hale",
+            "chamberlain",
+            "word",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "\"The Chamberlain keeps the Queen's calendar, and the Queen's calendar is full. State your business.\"",
+              "options": [
+                {
+                  "id": "flatter",
+                  "label": "\"The Chamberlain's good sense is spoken of even in the Isles.\" (Persuasion DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_won"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_flatter_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "flatter",
+                    "praise",
+                    "sense",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "success": {
+                      "text": "Hale inflates like a pigeon. \"The Chamberlain is gratified that someone has noticed.\" From now on he murmurs in the Queen's ear for you, not against you.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_won",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The Chamberlain,\" says Hale, \"has been flattered by better liars.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_flatter_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "won",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "almonry",
+                  "label": "\"You have doubts about the Almonry's spending, don't you?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_ally"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_almonry_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "almonry",
+                    "spending",
+                    "doubts",
+                    "insight",
+                    "money"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Hale lowers his voice. He has warned the Queen twice that the Almonry spends like a war, and been laughed at twice. \"If you find the Chamberlain proof,\" he says, \"the Chamberlain will stand beside you when you show it.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_ally",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The Almonry's accounts are a matter for the Crown,\" Hale says stiffly.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_almonry_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "ally",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "threaten",
+                  "label": "\"Keep whispering about my pirate friends, Chamberlain, and they may come to visit.\" (Intimidation DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_cowed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_enemy"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "threaten",
+                    "pirate",
+                    "whisper",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Hale goes the colour of his ruff and holds his tongue for the rest of the day. Half the court saw you do it.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_cowed",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "crown_of_aurelmark",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Hale draws himself up. \"The Chamberlain will remember this.\" He will speak against you at every turn now.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_enemy",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "cold",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "bribe",
+                  "label": "Offer \"a gift for the Chamberlain's household\" (25 gp)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_won"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_enemy"
+                        }
+                      },
+                      {
+                        "coins": {
+                          "gte": 2500
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "gift",
+                    "bribe",
+                    "gold",
+                    "pay"
+                  ],
+                  "outcome": {
+                    "text": "The purse vanishes into Hale's sleeve without a word being said. From now on he murmurs in the Queen's ear for you.",
+                    "cost": 2500,
+                    "flags": [
+                      {
+                        "set": "~ch3_hale_won",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "won"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Good day, Chamberlain.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Is there anything else, or may the Chamberlain return to his duties?\"",
+              "options": [
+                {
+                  "id": "flatter",
+                  "label": "\"The Chamberlain's good sense is spoken of even in the Isles.\" (Persuasion DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_won"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_flatter_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "flatter",
+                    "praise",
+                    "sense",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "success": {
+                      "text": "Hale inflates like a pigeon. \"The Chamberlain is gratified that someone has noticed.\" From now on he murmurs in the Queen's ear for you, not against you.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_won",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The Chamberlain,\" says Hale, \"has been flattered by better liars.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_flatter_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "won",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "almonry",
+                  "label": "\"You have doubts about the Almonry's spending, don't you?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_ally"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_almonry_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "almonry",
+                    "spending",
+                    "doubts",
+                    "insight",
+                    "money"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Hale lowers his voice. He has warned the Queen twice that the Almonry spends like a war, and been laughed at twice. \"If you find the Chamberlain proof,\" he says, \"the Chamberlain will stand beside you when you show it.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_ally",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The Almonry's accounts are a matter for the Crown,\" Hale says stiffly.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_almonry_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "ally",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "threaten",
+                  "label": "\"Keep whispering about my pirate friends, Chamberlain, and they may come to visit.\" (Intimidation DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_cowed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_enemy"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "threaten",
+                    "pirate",
+                    "whisper",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Hale goes the colour of his ruff and holds his tongue for the rest of the day. Half the court saw you do it.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_cowed",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "crown_of_aurelmark",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Hale draws himself up. \"The Chamberlain will remember this.\" He will speak against you at every turn now.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_enemy",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "cold",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "bribe",
+                  "label": "Offer \"a gift for the Chamberlain's household\" (25 gp)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_won"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_enemy"
+                        }
+                      },
+                      {
+                        "coins": {
+                          "gte": 2500
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "gift",
+                    "bribe",
+                    "gold",
+                    "pay"
+                  ],
+                  "outcome": {
+                    "text": "The purse vanishes into Hale's sleeve without a word being said. From now on he murmurs in the Queen's ear for you.",
+                    "cost": 2500,
+                    "flags": [
+                      {
+                        "set": "~ch3_hale_won",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "won"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Good day, Chamberlain.\""
+                }
+              ]
+            },
+            {
+              "id": "won",
+              "text": "\"The Chamberlain will see what can be done.\"",
+              "options": [
+                {
+                  "id": "flatter",
+                  "label": "\"The Chamberlain's good sense is spoken of even in the Isles.\" (Persuasion DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_won"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_flatter_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "flatter",
+                    "praise",
+                    "sense",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "success": {
+                      "text": "Hale inflates like a pigeon. \"The Chamberlain is gratified that someone has noticed.\" From now on he murmurs in the Queen's ear for you, not against you.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_won",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The Chamberlain,\" says Hale, \"has been flattered by better liars.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_flatter_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "won",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "almonry",
+                  "label": "\"You have doubts about the Almonry's spending, don't you?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_ally"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_almonry_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "almonry",
+                    "spending",
+                    "doubts",
+                    "insight",
+                    "money"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Hale lowers his voice. He has warned the Queen twice that the Almonry spends like a war, and been laughed at twice. \"If you find the Chamberlain proof,\" he says, \"the Chamberlain will stand beside you when you show it.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_ally",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The Almonry's accounts are a matter for the Crown,\" Hale says stiffly.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_almonry_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "ally",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "threaten",
+                  "label": "\"Keep whispering about my pirate friends, Chamberlain, and they may come to visit.\" (Intimidation DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_cowed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_enemy"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "threaten",
+                    "pirate",
+                    "whisper",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Hale goes the colour of his ruff and holds his tongue for the rest of the day. Half the court saw you do it.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_cowed",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "crown_of_aurelmark",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Hale draws himself up. \"The Chamberlain will remember this.\" He will speak against you at every turn now.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_enemy",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "cold",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "bribe",
+                  "label": "Offer \"a gift for the Chamberlain's household\" (25 gp)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_won"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_enemy"
+                        }
+                      },
+                      {
+                        "coins": {
+                          "gte": 2500
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "gift",
+                    "bribe",
+                    "gold",
+                    "pay"
+                  ],
+                  "outcome": {
+                    "text": "The purse vanishes into Hale's sleeve without a word being said. From now on he murmurs in the Queen's ear for you.",
+                    "cost": 2500,
+                    "flags": [
+                      {
+                        "set": "~ch3_hale_won",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "won"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Good day, Chamberlain.\""
+                }
+              ]
+            },
+            {
+              "id": "ally",
+              "text": "\"Now, is there anything else?\"",
+              "options": [
+                {
+                  "id": "flatter",
+                  "label": "\"The Chamberlain's good sense is spoken of even in the Isles.\" (Persuasion DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_won"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_flatter_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "flatter",
+                    "praise",
+                    "sense",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "success": {
+                      "text": "Hale inflates like a pigeon. \"The Chamberlain is gratified that someone has noticed.\" From now on he murmurs in the Queen's ear for you, not against you.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_won",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The Chamberlain,\" says Hale, \"has been flattered by better liars.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_flatter_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "won",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "almonry",
+                  "label": "\"You have doubts about the Almonry's spending, don't you?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_ally"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_almonry_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "almonry",
+                    "spending",
+                    "doubts",
+                    "insight",
+                    "money"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Hale lowers his voice. He has warned the Queen twice that the Almonry spends like a war, and been laughed at twice. \"If you find the Chamberlain proof,\" he says, \"the Chamberlain will stand beside you when you show it.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_ally",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The Almonry's accounts are a matter for the Crown,\" Hale says stiffly.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_almonry_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "ally",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "threaten",
+                  "label": "\"Keep whispering about my pirate friends, Chamberlain, and they may come to visit.\" (Intimidation DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_cowed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_enemy"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "threaten",
+                    "pirate",
+                    "whisper",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Hale goes the colour of his ruff and holds his tongue for the rest of the day. Half the court saw you do it.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_cowed",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "crown_of_aurelmark",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Hale draws himself up. \"The Chamberlain will remember this.\" He will speak against you at every turn now.",
+                      "flags": [
+                        {
+                          "set": "~ch3_hale_enemy",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "cold",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "bribe",
+                  "label": "Offer \"a gift for the Chamberlain's household\" (25 gp)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_won"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_hale_enemy"
+                        }
+                      },
+                      {
+                        "coins": {
+                          "gte": 2500
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "gift",
+                    "bribe",
+                    "gold",
+                    "pay"
+                  ],
+                  "outcome": {
+                    "text": "The purse vanishes into Hale's sleeve without a word being said. From now on he murmurs in the Queen's ear for you.",
+                    "cost": 2500,
+                    "flags": [
+                      {
+                        "set": "~ch3_hale_won",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": -5
+                      }
+                    ]
+                  },
+                  "next": "won"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Good day, Chamberlain.\""
+                }
+              ]
+            },
+            {
+              "id": "cold",
+              "text": "Hale turns his back on you."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "aurek",
@@ -4714,6 +6936,357 @@
             }
           }
         }
+      ],
+      "conversations": [
+        {
+          "id": "readings",
+          "label": "Talk to Aurek about his aunt's library",
+          "if": {
+            "all": [
+              {
+                "flag": "~ch3_audience_done"
+              },
+              {
+                "flag": "world.aurek_status",
+                "eq": "met"
+              },
+              {
+                "not": {
+                  "flag": "~ch3_aurek_fled"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "aurek",
+            "library",
+            "scholar",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "\"I am so sorry to impose. Footnote: I am always sorry. Might I ask you about the Teeth? Or you could ask me something. Either.\"",
+              "options": [
+                {
+                  "id": "father",
+                  "label": "\"Your father studied the Teeth, didn't he?\" (History DC 13)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch3_father_tried"
+                    }
+                  },
+                  "keywords": [
+                    "father",
+                    "research",
+                    "study",
+                    "history",
+                    "song"
+                  ],
+                  "check": {
+                    "skill": "history",
+                    "dc": 13,
+                    "success": {
+                      "text": "Aurek lights up. His father believed the Teeth could be \"sung backwards\", and nobody has asked him about it in years. By the end of it he is packing a satchel to come with you.",
+                      "flags": [
+                        {
+                          "set": "~ch3_aurek_father",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch3_father_tried",
+                          "value": true
+                        }
+                      ],
+                      "recruit": "aurek"
+                    },
+                    "failure": {
+                      "text": "You mix up two Veyran scholars, and Aurek corrects you so politely that you both want to sink through the floor.",
+                      "flags": [
+                        {
+                          "set": "~ch3_father_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "joined",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "aunt",
+                  "label": "\"Does your aunt know you are talking to me?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_aurek_hint"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_aunt_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "aunt",
+                    "know",
+                    "seraphine",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Aurek goes pale and says no, too quickly. There is something about his aunt he wants to tell someone. Earn his trust and he will tell you.",
+                      "flags": [
+                        {
+                          "set": "~ch3_aurek_hint",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Oh, she knows everything,\" Aurek says, and laughs, and you cannot tell if it is a joke.",
+                      "flags": [
+                        {
+                          "set": "~ch3_aunt_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "scare",
+                  "label": "\"Your aunt is the Cantor, boy. Choose a side.\" (Intimidation DC 12)",
+                  "once": true,
+                  "if": {
+                    "any": [
+                      {
+                        "flag": "~ch3_seraphine_suspected"
+                      },
+                      {
+                        "flag": "arc.starter.dream_heard"
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "cantor",
+                    "side",
+                    "choose",
+                    "threaten",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 12,
+                    "success": {
+                      "text": "Aurek stares at you, white to the lips. Then he nods. \"I will come. To prove you wrong.\" He has not forgiven you for saying it.",
+                      "flags": [
+                        {
+                          "set": "~ch3_aurek_scared",
+                          "value": true
+                        }
+                      ],
+                      "recruit": "aurek"
+                    },
+                    "failure": {
+                      "text": "Aurek backs away from you, and then he runs, straight up the stair to the Almonry. You have a very good idea whom he will tell.",
+                      "flags": [
+                        {
+                          "set": "~ch3_aurek_fled",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch3_seraphine_wary",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "joined",
+                  "nextOnFail": "fled"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Another time, Aurek.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Was there, ah, anything else?\"",
+              "options": [
+                {
+                  "id": "father",
+                  "label": "\"Your father studied the Teeth, didn't he?\" (History DC 13)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch3_father_tried"
+                    }
+                  },
+                  "keywords": [
+                    "father",
+                    "research",
+                    "study",
+                    "history",
+                    "song"
+                  ],
+                  "check": {
+                    "skill": "history",
+                    "dc": 13,
+                    "success": {
+                      "text": "Aurek lights up. His father believed the Teeth could be \"sung backwards\", and nobody has asked him about it in years. By the end of it he is packing a satchel to come with you.",
+                      "flags": [
+                        {
+                          "set": "~ch3_aurek_father",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch3_father_tried",
+                          "value": true
+                        }
+                      ],
+                      "recruit": "aurek"
+                    },
+                    "failure": {
+                      "text": "You mix up two Veyran scholars, and Aurek corrects you so politely that you both want to sink through the floor.",
+                      "flags": [
+                        {
+                          "set": "~ch3_father_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "joined",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "aunt",
+                  "label": "\"Does your aunt know you are talking to me?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_aurek_hint"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_aunt_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "aunt",
+                    "know",
+                    "seraphine",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Aurek goes pale and says no, too quickly. There is something about his aunt he wants to tell someone. Earn his trust and he will tell you.",
+                      "flags": [
+                        {
+                          "set": "~ch3_aurek_hint",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Oh, she knows everything,\" Aurek says, and laughs, and you cannot tell if it is a joke.",
+                      "flags": [
+                        {
+                          "set": "~ch3_aunt_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "scare",
+                  "label": "\"Your aunt is the Cantor, boy. Choose a side.\" (Intimidation DC 12)",
+                  "once": true,
+                  "if": {
+                    "any": [
+                      {
+                        "flag": "~ch3_seraphine_suspected"
+                      },
+                      {
+                        "flag": "arc.starter.dream_heard"
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "cantor",
+                    "side",
+                    "choose",
+                    "threaten",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 12,
+                    "success": {
+                      "text": "Aurek stares at you, white to the lips. Then he nods. \"I will come. To prove you wrong.\" He has not forgiven you for saying it.",
+                      "flags": [
+                        {
+                          "set": "~ch3_aurek_scared",
+                          "value": true
+                        }
+                      ],
+                      "recruit": "aurek"
+                    },
+                    "failure": {
+                      "text": "Aurek backs away from you, and then he runs, straight up the stair to the Almonry. You have a very good idea whom he will tell.",
+                      "flags": [
+                        {
+                          "set": "~ch3_aurek_fled",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch3_seraphine_wary",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "joined",
+                  "nextOnFail": "fled"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Another time, Aurek.\""
+                }
+              ]
+            },
+            {
+              "id": "joined",
+              "text": "Aurek falls in beside you, clutching his satchel."
+            },
+            {
+              "id": "fled",
+              "text": "The Almonry door bangs shut behind him."
+            }
+          ]
+        }
       ]
     },
     {
@@ -4748,6 +7321,480 @@
             ]
           }
         }
+      ],
+      "conversations": [
+        {
+          "id": "parley",
+          "label": "Parley with Vosk the Hollow",
+          "if": {
+            "all": [
+              {
+                "flag": "arc.main.vosk_fate",
+                "eq": "unknown"
+              },
+              {
+                "not": {
+                  "flag": "~ch3_vosk_beaten"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "all": [
+                      {
+                        "flag": "~ch3_lance_lifted"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_race_lost"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "all": [
+                      {
+                        "flag": "~ch3_climb_2"
+                      },
+                      {
+                        "flag": "~ch3_race_lost"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "keywords": [
+            "vosk",
+            "parley",
+            "talk",
+            "hollow"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Vosk inclines his head toward you, though his eyes are sewn shut. \"Shall we talk first? Violence is so untidy in a library.\"",
+              "options": [
+                {
+                  "id": "read",
+                  "label": "\"Why does a scholar serve hunger, Vosk?\" (Insight DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_vosk_read"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_vosk_read_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "why",
+                    "scholar",
+                    "hunger",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 15,
+                    "success": {
+                      "text": "Vosk talks of a hunger that ends all hunger, and while he talks his hand goes, again and again, to a satchel of letters at his hip. Whatever he would die for is in there.",
+                      "flags": [
+                        {
+                          "set": "~ch3_vosk_read",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Vosk hums the Choir's tune and answers nothing.",
+                      "flags": [
+                        {
+                          "set": "~ch3_vosk_read_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "fanatics",
+                  "label": "Speak past him to his fanatics: \"He will feed you to it first.\" (Persuasion DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_fanatics_doubt"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_fanatics_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "fanatics",
+                    "cultists",
+                    "feed",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 16,
+                    "success": {
+                      "text": "One of the fanatics lowers his blade, looks at Vosk, and walks backwards out of the Vault. Vosk does not stop him.",
+                      "flags": [
+                        {
+                          "set": "~ch3_fanatics_doubt",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The fanatics hum along with their master.",
+                      "flags": [
+                        {
+                          "set": "~ch3_fanatics_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "walk",
+                  "label": "\"You cannot lift the lance, and you will not take the Tooth. Walk away.\" (Intimidation DC 17)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~ch3_lance_lifted"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_race_lost"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "walk",
+                    "away",
+                    "leave",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 17,
+                    "success": {
+                      "text": "Vosk weighs the lance in your hands and the fall at his back. \"Another day, then,\" he says, and climbs out through the broken wall with his fanatics. You keep the Tooth and the lance, and he keeps his secrets.",
+                      "flags": [
+                        {
+                          "set": "arc.main.vosk_fate",
+                          "value": "escaped"
+                        },
+                        {
+                          "set": "~ch3_vosk_backed_down",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"No,\" says Vosk politely, and raises his hands.",
+                      "encounter": "vosk_fight"
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "fight"
+                },
+                {
+                  "id": "trade",
+                  "label": "\"Keep the Tooth, then. Leave the lance.\" (Persuasion DC 14)",
+                  "once": true,
+                  "if": {
+                    "flag": "~ch3_race_lost"
+                  },
+                  "keywords": [
+                    "trade",
+                    "lance",
+                    "keep",
+                    "leave",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "success": {
+                      "text": "Vosk considers the chained lance, which six of his people could barely drag. \"It is far too heavy anyway.\" He leaves Dawnbreaker at your feet and takes the Sky Tooth down the tower.",
+                      "flags": [
+                        {
+                          "set": "arc.main.tooth_vaelthorn_holder",
+                          "value": "choir"
+                        },
+                        {
+                          "set": "arc.main.dawnbreaker_holder",
+                          "value": "player"
+                        },
+                        {
+                          "set": "arc.main.vosk_fate",
+                          "value": "escaped"
+                        },
+                        {
+                          "set": "~ch3_lance_ransomed",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"I think I will keep both,\" says Vosk.",
+                      "encounter": "vosk_at_vault"
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "fight"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Enough talk.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Anything else?\" Vosk hums a bar of the hymn.",
+              "options": [
+                {
+                  "id": "read",
+                  "label": "\"Why does a scholar serve hunger, Vosk?\" (Insight DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_vosk_read"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_vosk_read_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "why",
+                    "scholar",
+                    "hunger",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 15,
+                    "success": {
+                      "text": "Vosk talks of a hunger that ends all hunger, and while he talks his hand goes, again and again, to a satchel of letters at his hip. Whatever he would die for is in there.",
+                      "flags": [
+                        {
+                          "set": "~ch3_vosk_read",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Vosk hums the Choir's tune and answers nothing.",
+                      "flags": [
+                        {
+                          "set": "~ch3_vosk_read_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "fanatics",
+                  "label": "Speak past him to his fanatics: \"He will feed you to it first.\" (Persuasion DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_fanatics_doubt"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_fanatics_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "fanatics",
+                    "cultists",
+                    "feed",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 16,
+                    "success": {
+                      "text": "One of the fanatics lowers his blade, looks at Vosk, and walks backwards out of the Vault. Vosk does not stop him.",
+                      "flags": [
+                        {
+                          "set": "~ch3_fanatics_doubt",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The fanatics hum along with their master.",
+                      "flags": [
+                        {
+                          "set": "~ch3_fanatics_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "walk",
+                  "label": "\"You cannot lift the lance, and you will not take the Tooth. Walk away.\" (Intimidation DC 17)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~ch3_lance_lifted"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_race_lost"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "walk",
+                    "away",
+                    "leave",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 17,
+                    "success": {
+                      "text": "Vosk weighs the lance in your hands and the fall at his back. \"Another day, then,\" he says, and climbs out through the broken wall with his fanatics. You keep the Tooth and the lance, and he keeps his secrets.",
+                      "flags": [
+                        {
+                          "set": "arc.main.vosk_fate",
+                          "value": "escaped"
+                        },
+                        {
+                          "set": "~ch3_vosk_backed_down",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"No,\" says Vosk politely, and raises his hands.",
+                      "encounter": "vosk_fight"
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "fight"
+                },
+                {
+                  "id": "trade",
+                  "label": "\"Keep the Tooth, then. Leave the lance.\" (Persuasion DC 14)",
+                  "once": true,
+                  "if": {
+                    "flag": "~ch3_race_lost"
+                  },
+                  "keywords": [
+                    "trade",
+                    "lance",
+                    "keep",
+                    "leave",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "success": {
+                      "text": "Vosk considers the chained lance, which six of his people could barely drag. \"It is far too heavy anyway.\" He leaves Dawnbreaker at your feet and takes the Sky Tooth down the tower.",
+                      "flags": [
+                        {
+                          "set": "arc.main.tooth_vaelthorn_holder",
+                          "value": "choir"
+                        },
+                        {
+                          "set": "arc.main.dawnbreaker_holder",
+                          "value": "player"
+                        },
+                        {
+                          "set": "arc.main.vosk_fate",
+                          "value": "escaped"
+                        },
+                        {
+                          "set": "~ch3_lance_ransomed",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"I think I will keep both,\" says Vosk.",
+                      "encounter": "vosk_at_vault"
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "fight"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Enough talk.\""
+                }
+              ]
+            },
+            {
+              "id": "gone",
+              "text": "The wind moans through the broken wall where Vosk climbed out."
+            },
+            {
+              "id": "fight",
+              "text": "Ice gathers in Vosk's open hands."
+            }
+          ]
+        }
       ]
     },
     {
@@ -4762,7 +7809,570 @@
       "factions": [
         "order_of_the_dawn_lance"
       ],
-      "attitude": "indifferent"
+      "attitude": "indifferent",
+      "conversations": [
+        {
+          "id": "vigil",
+          "label": "Speak with Lord-Commander Thane",
+          "if": {
+            "not": {
+              "flag": "~ch3_vigil_done"
+            }
+          },
+          "keywords": [
+            "thane",
+            "lord",
+            "commander",
+            "speak",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Thane does not look up from the altar. \"Speak.\"",
+              "options": [
+                {
+                  "id": "winter",
+                  "label": "\"Tell me about the Ashfall Winter, Lord-Commander.\" (Insight DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_thane_confessed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_thane_closed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "winter",
+                    "ashfall",
+                    "cinderdale",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 15,
+                    "success": {
+                      "text": "Thane is silent a long time. \"I gave the order to leave Cinderdale,\" he says at last. \"We had food for the knights or for the town. Not both.\" He has never said it aloud before.",
+                      "flags": [
+                        {
+                          "set": "~ch3_thane_confessed",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "order_of_the_dawn_lance",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"It was a hard winter,\" says Thane, and nothing more.",
+                      "flags": [
+                        {
+                          "set": "~ch3_thane_closed",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "corwin",
+                  "label": "\"Ser Corwin did what the Order would not. Hear him out.\" (Persuasion DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "world.corwin_status",
+                        "eq": "in_party"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_corwin_reinstated"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_thane_softened"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_corwin_case_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "corwin",
+                    "hear",
+                    "reinstate",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "success": {
+                      "text": "Thane looks at Corwin properly for the first time. \"Perhaps,\" he says. It is more than Corwin has had from him in years.",
+                      "flags": [
+                        {
+                          "set": "~ch3_thane_softened",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Ser Corwin can speak for himself,\" says Thane. Corwin does not.",
+                      "flags": [
+                        {
+                          "set": "~ch3_corwin_case_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "muster",
+                  "label": "\"When the Choir moves, will the Lance ride with me?\" (Persuasion DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_lance_pledged"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_muster_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "muster",
+                    "ride",
+                    "knights",
+                    "help",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 15,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "arc.main.dawnbreaker_holder",
+                          "eq": "dawn_lance"
+                        },
+                        "source": "You brought Dawnbreaker home"
+                      }
+                    ],
+                    "disadvantageIf": [
+                      {
+                        "if": {
+                          "all": [
+                            {
+                              "flag": "~ch3_lance_decided"
+                            },
+                            {
+                              "flag": "arc.main.dawnbreaker_holder",
+                              "eq": "player"
+                            }
+                          ]
+                        },
+                        "source": "You kept the Order's lance"
+                      }
+                    ],
+                    "success": {
+                      "text": "Thane names two knights to ride at your back to Highcrown. \"Send for them when the Choir shows its face.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_lance_pledged",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The Order rides for the Order,\" says Thane.",
+                      "flags": [
+                        {
+                          "set": "~ch3_muster_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "rebuke",
+                  "label": "\"You left Cinderdale to starve. Do not leave Highcrown.\" (Intimidation DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~ch3_thane_confessed"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_lance_pledged"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "rebuke",
+                    "shame",
+                    "starve",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 14,
+                    "success": {
+                      "text": "The words land like a blow. Thane names two knights to ride with you, and does not look at you again. His knights will not forget how you spoke to him.",
+                      "flags": [
+                        {
+                          "set": "~ch3_lance_pledged",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "order_of_the_dawn_lance",
+                          "delta": -5
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Thane's hand goes to his sword, and stays there. \"You are a guest in this keep. Remember it.\" The whole chapel heard.",
+                      "flags": [
+                        {
+                          "set": "~ch3_muster_tried",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "order_of_the_dawn_lance",
+                          "delta": -10
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Good night, Lord-Commander.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Is that all?\"",
+              "options": [
+                {
+                  "id": "winter",
+                  "label": "\"Tell me about the Ashfall Winter, Lord-Commander.\" (Insight DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_thane_confessed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_thane_closed"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "winter",
+                    "ashfall",
+                    "cinderdale",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 15,
+                    "success": {
+                      "text": "Thane is silent a long time. \"I gave the order to leave Cinderdale,\" he says at last. \"We had food for the knights or for the town. Not both.\" He has never said it aloud before.",
+                      "flags": [
+                        {
+                          "set": "~ch3_thane_confessed",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "order_of_the_dawn_lance",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"It was a hard winter,\" says Thane, and nothing more.",
+                      "flags": [
+                        {
+                          "set": "~ch3_thane_closed",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "corwin",
+                  "label": "\"Ser Corwin did what the Order would not. Hear him out.\" (Persuasion DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "world.corwin_status",
+                        "eq": "in_party"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_corwin_reinstated"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_thane_softened"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_corwin_case_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "corwin",
+                    "hear",
+                    "reinstate",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "success": {
+                      "text": "Thane looks at Corwin properly for the first time. \"Perhaps,\" he says. It is more than Corwin has had from him in years.",
+                      "flags": [
+                        {
+                          "set": "~ch3_thane_softened",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Ser Corwin can speak for himself,\" says Thane. Corwin does not.",
+                      "flags": [
+                        {
+                          "set": "~ch3_corwin_case_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "muster",
+                  "label": "\"When the Choir moves, will the Lance ride with me?\" (Persuasion DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_lance_pledged"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_muster_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "muster",
+                    "ride",
+                    "knights",
+                    "help",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 15,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "arc.main.dawnbreaker_holder",
+                          "eq": "dawn_lance"
+                        },
+                        "source": "You brought Dawnbreaker home"
+                      }
+                    ],
+                    "disadvantageIf": [
+                      {
+                        "if": {
+                          "all": [
+                            {
+                              "flag": "~ch3_lance_decided"
+                            },
+                            {
+                              "flag": "arc.main.dawnbreaker_holder",
+                              "eq": "player"
+                            }
+                          ]
+                        },
+                        "source": "You kept the Order's lance"
+                      }
+                    ],
+                    "success": {
+                      "text": "Thane names two knights to ride at your back to Highcrown. \"Send for them when the Choir shows its face.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_lance_pledged",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The Order rides for the Order,\" says Thane.",
+                      "flags": [
+                        {
+                          "set": "~ch3_muster_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "rebuke",
+                  "label": "\"You left Cinderdale to starve. Do not leave Highcrown.\" (Intimidation DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~ch3_thane_confessed"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_lance_pledged"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "rebuke",
+                    "shame",
+                    "starve",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 14,
+                    "success": {
+                      "text": "The words land like a blow. Thane names two knights to ride with you, and does not look at you again. His knights will not forget how you spoke to him.",
+                      "flags": [
+                        {
+                          "set": "~ch3_lance_pledged",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "order_of_the_dawn_lance",
+                          "delta": -5
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Thane's hand goes to his sword, and stays there. \"You are a guest in this keep. Remember it.\" The whole chapel heard.",
+                      "flags": [
+                        {
+                          "set": "~ch3_muster_tried",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "order_of_the_dawn_lance",
+                          "delta": -10
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Good night, Lord-Commander.\""
+                }
+              ]
+            },
+            {
+              "id": "cold",
+              "text": "Thane turns back to the altar."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "pip_hallard",
@@ -4781,8 +8391,232 @@
           "from": 0,
           "to": 24,
           "if": {
-            "flag": "arc.starter.pip_rescued"
+            "all": [
+              {
+                "flag": "arc.starter.pip_rescued"
+              },
+              {
+                "not": {
+                  "flag": "~ch3_pip_sent_home"
+                }
+              }
+            ]
           }
+        }
+      ],
+      "conversations": [
+        {
+          "id": "page",
+          "label": "Talk to Pip",
+          "if": {
+            "all": [
+              {
+                "not": {
+                  "flag": "~ch3_vigil_done"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch3_pip_sent_home"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "pip",
+            "page",
+            "talk",
+            "boy"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "\"My lord! My lady! Whatever you are! Is it true you found Dawnbreaker? What can I do? I can do anything!\"",
+              "options": [
+                {
+                  "id": "scout",
+                  "label": "\"Pip, have you seen anything strange around the keep?\"",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch3_pip_scouted"
+                    }
+                  },
+                  "keywords": [
+                    "seen",
+                    "strange",
+                    "keep",
+                    "scout",
+                    "look"
+                  ],
+                  "outcome": {
+                    "text": "\"Two pilgrims asked which window was the guest cell, my lord! And one of them had no shadow.\" Pip shows you the roof they were looking at. You bar the skylight: one way in fewer.",
+                    "flags": [
+                      {
+                        "set": "~ch3_pip_scouted",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "masque",
+                  "label": "\"How would you like to be my page at a royal masque?\"",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch3_pip_page"
+                    }
+                  },
+                  "keywords": [
+                    "masque",
+                    "page",
+                    "come",
+                    "highcrown"
+                  ],
+                  "outcome": {
+                    "text": "Pip nearly faints with joy. He will carry your mask, fetch your wine and fuss over you like a real page, which is excellent cover.",
+                    "flags": [
+                      {
+                        "set": "~ch3_pip_page",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "home",
+                  "label": "\"Go home to Millbrook, Pip. This is no place for you.\"",
+                  "once": true,
+                  "keywords": [
+                    "home",
+                    "millbrook",
+                    "go",
+                    "safe",
+                    "leave"
+                  ],
+                  "outcome": {
+                    "text": "Pip argues, then cries, then goes. He rides for Millbrook at first light with a letter for his mother. Wherever the Choir strikes next, it will not be at him.",
+                    "flags": [
+                      {
+                        "set": "~ch3_pip_sent_home",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "home"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Go and get some sleep, Pip.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Anything else, my lord? Anything at all?\"",
+              "options": [
+                {
+                  "id": "scout",
+                  "label": "\"Pip, have you seen anything strange around the keep?\"",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch3_pip_scouted"
+                    }
+                  },
+                  "keywords": [
+                    "seen",
+                    "strange",
+                    "keep",
+                    "scout",
+                    "look"
+                  ],
+                  "outcome": {
+                    "text": "\"Two pilgrims asked which window was the guest cell, my lord! And one of them had no shadow.\" Pip shows you the roof they were looking at. You bar the skylight: one way in fewer.",
+                    "flags": [
+                      {
+                        "set": "~ch3_pip_scouted",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "masque",
+                  "label": "\"How would you like to be my page at a royal masque?\"",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch3_pip_page"
+                    }
+                  },
+                  "keywords": [
+                    "masque",
+                    "page",
+                    "come",
+                    "highcrown"
+                  ],
+                  "outcome": {
+                    "text": "Pip nearly faints with joy. He will carry your mask, fetch your wine and fuss over you like a real page, which is excellent cover.",
+                    "flags": [
+                      {
+                        "set": "~ch3_pip_page",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "home",
+                  "label": "\"Go home to Millbrook, Pip. This is no place for you.\"",
+                  "once": true,
+                  "keywords": [
+                    "home",
+                    "millbrook",
+                    "go",
+                    "safe",
+                    "leave"
+                  ],
+                  "outcome": {
+                    "text": "Pip argues, then cries, then goes. He rides for Millbrook at first light with a letter for his mother. Wherever the Choir strikes next, it will not be at him.",
+                    "flags": [
+                      {
+                        "set": "~ch3_pip_sent_home",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "home"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Go and get some sleep, Pip.\""
+                }
+              ]
+            },
+            {
+              "id": "home",
+              "text": "Pip salutes you with his wooden practice sword, very badly, and goes to pack."
+            }
+          ]
         }
       ]
     },
@@ -4798,7 +8632,490 @@
       "factions": [
         "ironvault_consortium"
       ],
-      "attitude": "indifferent"
+      "attitude": "indifferent",
+      "conversations": [
+        {
+          "id": "counting",
+          "label": "Talk business with Guildmistress Ashgrove",
+          "if": {
+            "all": [
+              {
+                "not": {
+                  "all": [
+                    {
+                      "flag": "arc.main.isles_alliance",
+                      "eq": "red_gull"
+                    },
+                    {
+                      "not": {
+                        "flag": "~ch3_restitution_settled"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch3_ashgrove_angry"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "ashgrove",
+            "guildmistress",
+            "business",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "\"Speak quickly. Time is money, and you are spending mine.\"",
+              "options": [
+                {
+                  "id": "fear",
+                  "label": "\"The Almonry's loans frighten you. Why?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_books_open"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_ashgrove_fear"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_fear_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "loans",
+                    "fear",
+                    "frighten",
+                    "insight",
+                    "almonry"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Ashgrove counts on her fingers and runs out of fingers. \"No charity borrows like that. Nobody borrows like that unless they mean never to pay.\" She is afraid, and she is listening now.",
+                      "flags": [
+                        {
+                          "set": "~ch3_ashgrove_fear",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Fear is bad for business,\" says Ashgrove. \"So is gossip.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_fear_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "haggle",
+                  "label": "\"Clearing a mine is worth double, Guildmistress.\" (Persuasion DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_favor_done"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_double_reward"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_haggle_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "double",
+                    "reward",
+                    "haggle",
+                    "price",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 15,
+                    "success": {
+                      "text": "Ashgrove grunts, which is a dwarven yes. \"Clear it, and the Ironvault adds a hundred gold to the reward. In writing.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_double_reward",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"A job is worth what I pay for it,\" says Ashgrove.",
+                      "flags": [
+                        {
+                          "set": "~ch3_haggle_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bluff",
+                  "label": "\"The Queen sent me to audit the Consortium.\" (Deception DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_books_open"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_warrant"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_queen_letter"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "audit",
+                    "queen",
+                    "sent",
+                    "bluff",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 16,
+                    "success": {
+                      "text": "Ashgrove has never seen a royal auditor this young, and says so, but she unlocks the ledgers anyway. The Consortium does not argue with the Crown in front of the clerks.",
+                      "flags": [
+                        {
+                          "set": "~ch3_books_open",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch3_ashgrove_bluffed",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Ashgrove asks to see your commission. You do not have one. \"Out,\" she says, and every clerk in the hall hears her.",
+                      "flags": [
+                        {
+                          "set": "~ch3_ashgrove_angry",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "ironvault_consortium",
+                          "delta": -10
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "out"
+                },
+                {
+                  "id": "mine",
+                  "label": "\"What is down in that mine?\"",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_favor_done"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_mine_known"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "mine",
+                    "down",
+                    "deep",
+                    "what"
+                  ],
+                  "outcome": {
+                    "text": "Ashgrove unrolls a mine plan and taps a side gallery. \"Grimlocks nest there. Go in by the old ore-chute and you skip the worst of them. Mind the rust monster: it eats swords.\"",
+                    "flags": [
+                      {
+                        "set": "~ch3_mine_known",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Good day, Guildmistress.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"What else?\"",
+              "options": [
+                {
+                  "id": "fear",
+                  "label": "\"The Almonry's loans frighten you. Why?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_books_open"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_ashgrove_fear"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_fear_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "loans",
+                    "fear",
+                    "frighten",
+                    "insight",
+                    "almonry"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Ashgrove counts on her fingers and runs out of fingers. \"No charity borrows like that. Nobody borrows like that unless they mean never to pay.\" She is afraid, and she is listening now.",
+                      "flags": [
+                        {
+                          "set": "~ch3_ashgrove_fear",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Fear is bad for business,\" says Ashgrove. \"So is gossip.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_fear_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "haggle",
+                  "label": "\"Clearing a mine is worth double, Guildmistress.\" (Persuasion DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_favor_done"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_double_reward"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_haggle_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "double",
+                    "reward",
+                    "haggle",
+                    "price",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 15,
+                    "success": {
+                      "text": "Ashgrove grunts, which is a dwarven yes. \"Clear it, and the Ironvault adds a hundred gold to the reward. In writing.\"",
+                      "flags": [
+                        {
+                          "set": "~ch3_double_reward",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"A job is worth what I pay for it,\" says Ashgrove.",
+                      "flags": [
+                        {
+                          "set": "~ch3_haggle_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bluff",
+                  "label": "\"The Queen sent me to audit the Consortium.\" (Deception DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_books_open"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_warrant"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_queen_letter"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "audit",
+                    "queen",
+                    "sent",
+                    "bluff",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 16,
+                    "success": {
+                      "text": "Ashgrove has never seen a royal auditor this young, and says so, but she unlocks the ledgers anyway. The Consortium does not argue with the Crown in front of the clerks.",
+                      "flags": [
+                        {
+                          "set": "~ch3_books_open",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch3_ashgrove_bluffed",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Ashgrove asks to see your commission. You do not have one. \"Out,\" she says, and every clerk in the hall hears her.",
+                      "flags": [
+                        {
+                          "set": "~ch3_ashgrove_angry",
+                          "value": true
+                        }
+                      ],
+                      "reputation": [
+                        {
+                          "faction": "ironvault_consortium",
+                          "delta": -10
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "out"
+                },
+                {
+                  "id": "mine",
+                  "label": "\"What is down in that mine?\"",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch3_favor_done"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch3_mine_known"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "mine",
+                    "down",
+                    "deep",
+                    "what"
+                  ],
+                  "outcome": {
+                    "text": "Ashgrove unrolls a mine plan and taps a side gallery. \"Grimlocks nest there. Go in by the old ore-chute and you skip the worst of them. Mind the rust monster: it eats swords.\"",
+                    "flags": [
+                      {
+                        "set": "~ch3_mine_known",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Good day, Guildmistress.\""
+                }
+              ]
+            },
+            {
+              "id": "out",
+              "text": "Two Consortium guards show you to the door of her counting-room."
+            }
+          ]
+        }
+      ]
     }
   ],
   "encounters": [
@@ -4862,7 +9179,16 @@
         },
         {
           "id": "grimlock",
-          "count": 4
+          "count": 3
+        },
+        {
+          "id": "grimlock",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch3_mine_known"
+            }
+          }
         }
       ],
       "terrain": [
@@ -5021,7 +9347,16 @@
         },
         {
           "id": "cultist_fanatic",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch3_fanatics_doubt"
+            }
+          }
         }
       ],
       "terrain": [
@@ -5078,7 +9413,16 @@
         },
         {
           "id": "cultist_fanatic",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch3_fanatics_doubt"
+            }
+          }
         }
       ],
       "terrain": [
@@ -5151,15 +9495,40 @@
       "monsters": [
         {
           "id": "spy",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "spy",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch3_pip_scouted"
+            }
+          }
         },
         {
           "id": "cultist_fanatic",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch3_seraphine_fooled"
+            }
+          }
         },
         {
           "id": "shadow",
           "count": 2
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "flag": "~ch3_seraphine_wary"
+          }
         }
       ],
       "terrain": [
@@ -5213,15 +9582,40 @@
       "monsters": [
         {
           "id": "spy",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "spy",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch3_pip_scouted"
+            }
+          }
         },
         {
           "id": "cultist_fanatic",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch3_seraphine_fooled"
+            }
+          }
         },
         {
           "id": "shadow",
           "count": 2
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "flag": "~ch3_seraphine_wary"
+          }
         }
       ],
       "terrain": [
@@ -5276,7 +9670,16 @@
       "monsters": [
         {
           "id": "guard",
-          "count": 6
+          "count": 4
+        },
+        {
+          "id": "guard",
+          "count": 2,
+          "if": {
+            "not": {
+              "flag": "~ch3_hale_ally"
+            }
+          }
         },
         {
           "id": "knight",
@@ -5387,7 +9790,16 @@
             "value": true
           }
         ]
-      }
+      },
+      "allies": [
+        {
+          "id": "knight",
+          "count": 2,
+          "if": {
+            "flag": "~ch3_lance_pledged"
+          }
+        }
+      ]
     },
     {
       "id": "undercroft_ambush",
@@ -5453,7 +9865,16 @@
             "value": true
           }
         ]
-      }
+      },
+      "allies": [
+        {
+          "id": "knight",
+          "count": 2,
+          "if": {
+            "flag": "~ch3_lance_pledged"
+          }
+        }
+      ]
     }
   ],
   "beats": [
@@ -6886,10 +11307,19 @@
       "trigger": {
         "all": [
           {
-            "flag": "~ch3_vigil_lost"
+            "all": [
+              {
+                "flag": "~ch3_vigil_lost"
+              },
+              {
+                "flag": "arc.starter.pip_rescued"
+              }
+            ]
           },
           {
-            "flag": "arc.starter.pip_rescued"
+            "not": {
+              "flag": "~ch3_pip_sent_home"
+            }
           }
         ]
       },
@@ -7550,6 +11980,101 @@
       "outcome": {
         "xp": 9000
       }
+    },
+    {
+      "id": "aurek_father",
+      "text": "Aurek talks about his father's research half the night. Nobody has listened to him like that in years.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "world.aurek_status",
+            "eq": "in_party"
+          },
+          {
+            "flag": "~ch3_aurek_father"
+          }
+        ]
+      },
+      "outcome": {
+        "approval": [
+          {
+            "companion": "aurek",
+            "delta": 10
+          }
+        ]
+      }
+    },
+    {
+      "id": "aurek_scared",
+      "text": "Aurek keeps a careful distance from you. \"Choose a side,\" he mutters, when he thinks you cannot hear.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "world.aurek_status",
+            "eq": "in_party"
+          },
+          {
+            "flag": "~ch3_aurek_scared"
+          }
+        ]
+      },
+      "outcome": {
+        "approval": [
+          {
+            "companion": "aurek",
+            "delta": -10
+          }
+        ]
+      }
+    },
+    {
+      "id": "aurek_confides_early",
+      "text": "Aurek takes you aside, white-faced. \"You asked if my aunt knew. She goes out on the nights the Choir sings. Every time.\"",
+      "trigger": {
+        "all": [
+          {
+            "flag": "world.aurek_status",
+            "eq": "in_party"
+          },
+          {
+            "flag": "world.aurek_loyalty",
+            "gte": 50
+          },
+          {
+            "flag": "~ch3_aurek_hint"
+          },
+          {
+            "not": {
+              "flag": "~ch3_aurek_confided"
+            }
+          }
+        ]
+      },
+      "outcome": {
+        "flags": [
+          {
+            "set": "~ch3_aurek_confided",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ashgrove_double",
+      "text": "A Consortium runner brings a sealed purse: the hundred gold Ashgrove promised in writing.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch3_favor_done"
+          },
+          {
+            "flag": "~ch3_double_reward"
+          }
+        ]
+      },
+      "outcome": {
+        "coins": 10000
+      }
     }
   ],
   "deadlines": [
@@ -7983,6 +12508,194 @@
     {
       "id": "arc.main.ch1_sallow_confessed",
       "description": "Chapter 1: captured Sallow confessed the Cantor clue (read here as clue 5)."
+    },
+    {
+      "id": "~ch3_hale_won",
+      "description": "Won Chamberlain Hale over by flattery or a gift (advantage on warrant and pardon requests)."
+    },
+    {
+      "id": "~ch3_hale_flatter_tried",
+      "description": "Flattered Chamberlain Hale and failed."
+    },
+    {
+      "id": "~ch3_hale_ally",
+      "description": "Chamberlain Hale shares his doubts about the Almonry (advantage accusing her, fewer guards at the masque)."
+    },
+    {
+      "id": "~ch3_hale_almonry_tried",
+      "description": "Asked Chamberlain Hale about the Almonry and failed."
+    },
+    {
+      "id": "~ch3_hale_cowed",
+      "description": "Threatened Chamberlain Hale into silence (advantage on requests; the court saw)."
+    },
+    {
+      "id": "~ch3_hale_enemy",
+      "description": "Chamberlain Hale speaks against the hero (disadvantage on requests and the contested accusation)."
+    },
+    {
+      "id": "~ch3_queen_doubt",
+      "description": "Planted a doubt about Seraphine in the Queen (advantage on the contested accusation)."
+    },
+    {
+      "id": "~ch3_godmother_tried",
+      "description": "Asked the Queen about her godmother and failed."
+    },
+    {
+      "id": "~ch3_queen_letter",
+      "description": "Carries the Queen's letter to Ashgrove (advantage opening the ledgers and on restitution)."
+    },
+    {
+      "id": "~ch3_queen_stung",
+      "description": "Offended the Queen by raising the Crown's debts."
+    },
+    {
+      "id": "~ch3_queen_warned",
+      "description": "Warned the Queen to guard her cup (advantage saving her)."
+    },
+    {
+      "id": "~ch3_queen_offended",
+      "description": "The Queen laughed off the warning and told Seraphine."
+    },
+    {
+      "id": "~ch3_queen_pledge",
+      "description": "Pledged service to the Queen."
+    },
+    {
+      "id": "~ch3_almonry_tried",
+      "description": "Asked Seraphine about the Almonry and saw nothing."
+    },
+    {
+      "id": "~ch3_cinderdale_known",
+      "description": "Seraphine let slip that she survived Cinderdale (advantage listening to her song)."
+    },
+    {
+      "id": "~ch3_winter_tried",
+      "description": "Asked Seraphine about the Ashfall Winter and learned nothing."
+    },
+    {
+      "id": "~ch3_seraphine_fooled",
+      "description": "Seraphine thinks the hero harmless (one fanatic fewer at the vigil)."
+    },
+    {
+      "id": "~ch3_seraphine_wary",
+      "description": "Seraphine thinks the hero dangerous (one more fanatic at the vigil)."
+    },
+    {
+      "id": "~ch3_teeth_refused",
+      "description": "Refused to let the Almonry keep any Tooth."
+    },
+    {
+      "id": "~ch3_aurek_father",
+      "description": "Asked Aurek about his father's research (he joined; approval)."
+    },
+    {
+      "id": "~ch3_father_tried",
+      "description": "Asked Aurek about his father."
+    },
+    {
+      "id": "~ch3_aurek_hint",
+      "description": "Aurek almost told the hero about his aunt (he confides at loyalty 50)."
+    },
+    {
+      "id": "~ch3_aunt_tried",
+      "description": "Asked Aurek whether his aunt knew, and got nothing."
+    },
+    {
+      "id": "~ch3_aurek_scared",
+      "description": "Frightened Aurek into joining (approval loss)."
+    },
+    {
+      "id": "~ch3_aurek_fled",
+      "description": "Frightened Aurek away to his aunt."
+    },
+    {
+      "id": "~ch3_ashgrove_fear",
+      "description": "Ashgrove admitted the Almonry loans frighten her (advantage persuading her)."
+    },
+    {
+      "id": "~ch3_fear_tried",
+      "description": "Asked Ashgrove about the loans and failed."
+    },
+    {
+      "id": "~ch3_double_reward",
+      "description": "Ashgrove promised 100 gp more for clearing the mine."
+    },
+    {
+      "id": "~ch3_haggle_tried",
+      "description": "Haggled with Ashgrove and failed."
+    },
+    {
+      "id": "~ch3_ashgrove_bluffed",
+      "description": "Bluffed Ashgrove into opening the ledgers as a royal auditor."
+    },
+    {
+      "id": "~ch3_ashgrove_angry",
+      "description": "Ashgrove threw the hero out for a failed bluff."
+    },
+    {
+      "id": "~ch3_mine_known",
+      "description": "Ashgrove showed the ore-chute into the mine (one grimlock fewer)."
+    },
+    {
+      "id": "~ch3_vosk_read",
+      "description": "Saw where Vosk keeps his letters (advantage searching his notes)."
+    },
+    {
+      "id": "~ch3_vosk_read_tried",
+      "description": "Tried to read Vosk and failed."
+    },
+    {
+      "id": "~ch3_fanatics_doubt",
+      "description": "Talked one of Vosk's fanatics out of the fight."
+    },
+    {
+      "id": "~ch3_fanatics_tried",
+      "description": "Tried to turn Vosk's fanatics and failed."
+    },
+    {
+      "id": "~ch3_vosk_backed_down",
+      "description": "Faced Vosk down: he left without a fight."
+    },
+    {
+      "id": "~ch3_lance_ransomed",
+      "description": "Let Vosk keep the Sky Tooth in exchange for Dawnbreaker."
+    },
+    {
+      "id": "~ch3_thane_confessed",
+      "description": "Thane confessed abandoning Cinderdale."
+    },
+    {
+      "id": "~ch3_thane_closed",
+      "description": "Asked Thane about the Ashfall Winter and got nothing."
+    },
+    {
+      "id": "~ch3_thane_softened",
+      "description": "Thane agreed to hear Corwin out (advantage pleading for him)."
+    },
+    {
+      "id": "~ch3_corwin_case_tried",
+      "description": "Spoke for Corwin to Thane and failed."
+    },
+    {
+      "id": "~ch3_lance_pledged",
+      "description": "Thane pledged two knights (allies in the undercroft)."
+    },
+    {
+      "id": "~ch3_muster_tried",
+      "description": "Asked Thane for knights and was refused."
+    },
+    {
+      "id": "~ch3_pip_scouted",
+      "description": "Pip showed the assassins' way in (one spy fewer at the vigil)."
+    },
+    {
+      "id": "~ch3_pip_page",
+      "description": "Pip comes to the masque as the hero's page (advantage blending in)."
+    },
+    {
+      "id": "~ch3_pip_sent_home",
+      "description": "Sent Pip home to Millbrook before the vigil."
     }
   ],
   "endings": [

@@ -22,6 +22,13 @@ describe('encounter controller', () => {
     expect(enc.status === 'ongoing' ? currentId(enc.state.turns) : enc.heroId).toBe('hero');
   });
 
+  it('merges split groups of the same monster so every creature id is unique', () => {
+    const ctx = { rng: Rng.fromSeed(1), db };
+    const enc = setupEncounter({ hero: hero(), monsters: [{ id: 'goblin_warrior', count: 2 }, { id: 'goblin_boss', count: 1 }, { id: 'goblin_warrior', count: 1 }], db }, ctx);
+    expect(Object.keys(enc.state.creatures).sort()).toEqual(['goblin_boss_1', 'goblin_warrior_1', 'goblin_warrior_2', 'goblin_warrior_3', 'hero']);
+    expect(enc.state.turns.order.length).toBe(5);
+  });
+
   it('refuses actions out of turn and runs to a conclusion deterministically', () => {
     const run = (seed: number) => {
       const ctx = { rng: Rng.fromSeed(seed), db };

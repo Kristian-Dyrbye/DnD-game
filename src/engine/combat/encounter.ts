@@ -125,11 +125,25 @@ export interface EncounterSetup {
   fog?: string[];
 }
 
+/**
+ * Sums groups of the same monster (authored lists may split one kind into a base group and a
+ * conditional one), so every creature gets a unique id (`grimlock_1`…`grimlock_4`).
+ */
+export function mergeMonsterGroups(list: readonly { id: string; count: number }[]): { id: string; count: number }[] {
+  const out: { id: string; count: number }[] = [];
+  for (const m of list) {
+    const ex = out.find((x) => x.id === m.id);
+    if (ex) ex.count += m.count;
+    else out.push({ id: m.id, count: m.count });
+  }
+  return out;
+}
+
 /** Places everyone, rolls initiative and runs AI turns until the hero is up (or it's over). */
 export function setupEncounter(setup: EncounterSetup, ctx: CombatContext): Encounter {
   const grid = setup.grid ?? defaultArena(ctx.rng);
   const spawn = (list: { id: string; count: number }[], prefix = '', label = '') =>
-    list.flatMap((m) => {
+    mergeMonsterGroups(list).flatMap((m) => {
       const data = setup.db.monsters.get(m.id);
       if (!data) throw new Error(`Unknown monster ${m.id}`);
       const o = setup.overrides?.[m.id];

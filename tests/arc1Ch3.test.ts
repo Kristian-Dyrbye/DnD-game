@@ -184,7 +184,10 @@ describe('ch3_the_gilded_lie: companions and encounters', () => {
   });
 
   it('encounters keep the design groups and declare scaling pools of their own monsters', () => {
-    const counts = (id: string) => Object.fromEntries(ADV.encounters.find((e) => e.id === id)!.monsters.map((m) => [m.id, m.count]));
+    // Summed over the groups present by default (no `if`, or `if: {not: …}`). A134 split some groups
+    // (one fewer if a flag is set) and added reinforcements that only come when a flag is set.
+    const byDefault = (m: { if?: Condition }) => !m.if || 'not' in m.if;
+    const counts = (id: string) => ADV.encounters.find((e) => e.id === id)!.monsters.filter(byDefault).reduce<Record<string, number>>((o, m) => ({ ...o, [m.id]: (o[m.id] ?? 0) + m.count }), {});
     expect(counts('gate_arrest')).toEqual({ guard: 4, knight: 1 });
     expect(counts('deep_mine')).toEqual({ grick: 2, rust_monster: 1, grimlock: 4 });
     expect(counts('vault_constructs')).toEqual({ animated_armor: 3 });
@@ -540,5 +543,183 @@ describe('ch3_the_gilded_lie: earlier chapters change the chapter', () => {
     const seed = (fate: string) => describeScene(begin({ 'arc.main.hollowmere_fate': fate })).seed;
     expect(seed('purged')).toContain('burned Hollowmere');
     expect(seed('cured')).toContain('cured, not burned');
+  });
+});
+
+describe('ch3_the_gilded_lie: A134 conversations, approaches and consequences', () => {
+  const L = 'arc.main.ch3_';
+  const at = (scene: string, flags: Flags = {}, unlucky = false) => {
+    const c = begin(flags, scene);
+    if (unlucky) c.rng = new UnluckyRng();
+    return c;
+  };
+  const beats = (c: RunContext) => getProgress(c.state)!.beats;
+  const enc = (id: string) => ADV.encounters.find((e) => e.id === id)!;
+  const adv = (c: RunContext, id: string) => perform(c, id).rolls[0]!.advantage;
+  const HALL = { [`${L}audience_done`]: true };
+
+  it('every key NPC has a conversation with at least 3 approaches that do something; hub scenes vary on return', () => {
+    for (const id of ['chamberlain_hale', 'queen_isolde', 'seraphine_vell', 'aurek', 'brunhild_ashgrove', 'vosk', 'aldric_thane', 'pip_hallard']) {
+      const npc = ADV.npcs.find((n) => n.id === id)!;
+      const approaches = new Set<string>();
+      for (const conv of npc.conversations) {
+        for (const node of conv.nodes) {
+          for (const o of node.options) {
+            const out = [o.outcome, o.check?.success, o.check?.failure];
+            if (o.check || out.some((x) => x && (x.flags.length || x.cost || x.coins || x.approval.length || x.reputation.length || x.encounter || x.recruit))) approaches.add(o.id);
+          }
+        }
+      }
+      expect(approaches.size, id).toBeGreaterThanOrEqual(3);
+    }
+    for (const s of ['highcrown_audience', 'deepanvil_ledgers', 'vaelthorn_sky_towers', 'dawnspire_vigil']) {
+      expect(allScenes(ADV).find((x) => x.id === s)!.revisitSeed, s).toBeDefined();
+    }
+  });
+
+  it('Hale: flattery helps the warrant; an insight makes him an ally at the masque; a failed threat turns him against you', () => {
+    const c = at('highcrown_audience', HALL);
+    play(c, ['talk.chamberlain_hale.protocol', 'dlg.greet.flatter', 'dlg.won.almonry', 'dlg.ally.bye']);
+    expect(c.state.flags).toMatchObject({ [`${L}hale_won`]: true, [`${L}hale_ally`]: true });
+    expect(adv(c, 'request_warrant')).toContain('Chamberlain Hale speaks for you');
+
+    const m = at('almoners_masque', { [`${L}vigil_done`]: true, [`${L}hale_ally`]: true, [`${L}queen_doubt`]: true, 'arc.starter.dream_heard': true, 'arc.main.almoner_seal_seen': true });
+    expect(adv(m, 'accuse_contested')).toEqual(expect.arrayContaining(['Chamberlain Hale stands beside you', 'The Queen already had her doubts']));
+    expect(enc('masque_guards').monsters).toContainEqual({ id: 'guard', count: 2, if: { not: { flag: `${L}hale_ally` } } });
+
+    const u = at('highcrown_audience', HALL, true);
+    play(u, ['talk.chamberlain_hale.protocol', 'dlg.greet.threaten']);
+    expect(u.state.flags[`${L}hale_enemy`]).toBe(true);
+    expect(ids(u)).not.toContain('talk.chamberlain_hale.protocol');
+    expect(perform(u, 'request_warrant').rolls[0]!.disadvantage).toContain('Chamberlain Hale speaks against you');
+  });
+
+  it('the Queen: her letter opens Ashgrove\'s ledgers, a heeded warning helps save her, an unheeded one tells Seraphine', () => {
+    const c = at('highcrown_audience', { ...HALL, 'arc.starter.dream_heard': true });
+    play(c, ['talk.queen_isolde.petition', 'dlg.greet.debt', 'dlg.more.warn', 'dlg.more.pledge', 'dlg.more.bye']);
+    expect(c.state.flags).toMatchObject({ [`${L}queen_letter`]: true, [`${L}queen_warned`]: true, [`${L}queen_pledge`]: true });
+    expect(rep(c, 'crown_of_aurelmark')).toBe(5);
+    expect(adv(at('deepanvil_ledgers', { ...HALL, [`${L}queen_letter`]: true }), 'persuade_books')).toContain("You carry the Queen's own letter");
+    const q = at('palace_undercroft', { [`${L}queen_warned`]: true });
+    play(q, ['fight_rearguard']);
+    expect(adv(q, 'save_queen')).toContain('The Queen kept the purge by her bed, as you urged');
+
+    const u = at('highcrown_audience', { ...HALL, 'arc.starter.dream_heard': true }, true);
+    play(u, ['talk.queen_isolde.petition', 'dlg.greet.warn']);
+    expect(u.state.flags).toMatchObject({ [`${L}queen_offended`]: true, [`${L}noticed`]: true });
+    expect(rep(u, 'crown_of_aurelmark')).toBe(-5);
+    expect(ids(u)).not.toContain('talk.queen_isolde.petition');
+  });
+
+  it('Seraphine: fooling her pays and thins the assassins, failing sends more; refusing her the Teeth closes the Almonry vaults', () => {
+    const c = at('highcrown_audience', { ...HALL, 'arc.main.tooth_parrot_holder': 'player' });
+    const coins = c.state.hero.coins;
+    play(c, ['talk.seraphine_vell.almoner', 'dlg.greet.grateful', 'dlg.more.refuse', 'dlg.more.winter', 'dlg.more.bye']);
+    expect(c.state.hero.coins).toBe(coins + 5000);
+    expect(c.state.flags).toMatchObject({ [`${L}seraphine_fooled`]: true, [`${L}teeth_refused`]: true, [`${L}cinderdale_known`]: true });
+    expect(ids(c)).not.toContain('entrust_tooth');
+    expect(adv(at('almoners_masque', { [`${L}vigil_done`]: true, [`${L}cinderdale_known`]: true }), 'listen_voice')).toContain('You know what the Ashfall Winter did to her');
+
+    const u = at('highcrown_audience', HALL, true);
+    play(u, ['talk.seraphine_vell.almoner', 'dlg.greet.grateful']);
+    expect(u.state.flags[`${L}seraphine_wary`]).toBe(true);
+    for (const id of ['vigil_assassins', 'vigil_assassins_surprise']) {
+      expect(enc(id).monsters).toContainEqual({ id: 'cultist_fanatic', count: 1, if: { flag: `${L}seraphine_wary` } });
+      expect(enc(id).monsters).toContainEqual({ id: 'cultist_fanatic', count: 1, if: { not: { flag: `${L}seraphine_fooled` } } });
+      expect(enc(id).monsters).toContainEqual({ id: 'spy', count: 1, if: { not: { flag: `${L}pip_scouted` } } });
+    }
+  });
+
+  it('Aurek: his father\'s research wins him (and his approval); a threat can scare him off to his aunt; a hint lets him confide sooner', () => {
+    const c = at('highcrown_audience', HALL);
+    expect(c.state.flags['world.aurek_status']).toBe('met');
+    play(c, ['talk.aurek.readings', 'dlg.greet.father']);
+    expect(c.state.flags['world.aurek_status']).toBe('in_party');
+    perform(c, 'study_seraphine');
+    expect(beats(c)).toContain('aurek_father');
+    expect(c.state.flags['world.aurek_loyalty']).toBe(60);
+
+    const u = at('highcrown_audience', { ...HALL, 'arc.starter.dream_heard': true }, true);
+    play(u, ['talk.aurek.readings', 'dlg.greet.scare']);
+    expect(u.state.flags).toMatchObject({ [`${L}aurek_fled`]: true, [`${L}seraphine_wary`]: true, 'world.aurek_status': 'met' });
+    for (const id of ['talk.aurek.readings', 'talk_aurek', 'show_tooth_aurek']) expect(ids(u)).not.toContain(id);
+
+    const h = at('almoners_masque', { 'world.aurek_status': 'in_party', 'world.aurek_loyalty': 50, [`${L}aurek_hint`]: true, [`${L}vigil_done`]: true });
+    expect(beats(h)).toContain('aurek_confides_early');
+    expect(h.state.flags[`${L}aurek_confided`]).toBe(true);
+  });
+
+  it('Ashgrove: her mine plan spares a grimlock, a haggle pays 100 gp more, her fear helps persuade her; a failed bluff gets you thrown out', () => {
+    const c = at('deepanvil_ledgers', HALL);
+    play(c, ['talk.brunhild_ashgrove.counting', 'dlg.greet.mine', 'dlg.more.haggle', 'dlg.more.fear', 'dlg.more.bye']);
+    expect(c.state.flags).toMatchObject({ [`${L}mine_known`]: true, [`${L}double_reward`]: true, [`${L}ashgrove_fear`]: true });
+    expect(adv(c, 'persuade_books')).toContain("Ashgrove is afraid of the Almonry's loans");
+    expect(enc('deep_mine').monsters).toContainEqual({ id: 'grimlock', count: 1, if: { not: { flag: `${L}mine_known` } } });
+    const coins = c.state.hero.coins;
+    play(c, ['clear_mine']);
+    expect(beats(c)).toContain('ashgrove_double');
+    expect(c.state.hero.coins).toBe(coins + 10000);
+
+    const u = at('deepanvil_ledgers', HALL, true);
+    play(u, ['talk.brunhild_ashgrove.counting', 'dlg.greet.bluff']);
+    expect(u.state.flags[`${L}ashgrove_angry`]).toBe(true);
+    expect(rep(u, 'ironvault_consortium')).toBe(-10);
+    expect(ids(u)).not.toContain('talk.brunhild_ashgrove.counting');
+    expect(perform(u, 'persuade_books').rolls[0]!.disadvantage).toContain('Ashgrove has thrown you out once already');
+  });
+
+  it('Vosk: faced down, he leaves without a fight; after a lost race he trades the lance for the Tooth; a doubting fanatic walks away', () => {
+    const c = at('vaelthorn_sky_towers', HALL);
+    play(c, ['climb_first', 'climb_second', 'disable_wards', 'enter_vault', 'recite_oath', 'talk.vosk.parley', 'dlg.greet.fanatics', 'dlg.more.walk']);
+    expect(c.state.flags).toMatchObject({
+      [`${L}fanatics_doubt`]: true,
+      [`${L}vosk_backed_down`]: true,
+      [`${L}vaelthorn_done`]: true,
+      'arc.main.vosk_fate': 'escaped',
+      'arc.main.tooth_vaelthorn_holder': 'player',
+      'arc.main.dawnbreaker_holder': 'player',
+    });
+    expect(ids(c)).not.toContain('face_vosk');
+    for (const id of ['vosk_fight', 'vosk_at_vault']) expect(enc(id).monsters).toContainEqual({ id: 'cultist_fanatic', count: 1, if: { not: { flag: `${L}fanatics_doubt` } } });
+
+    const r = at('vaelthorn_sky_towers', HALL, true);
+    perform(r, 'climb_first');
+    r.rng = new LuckyRng();
+    play(r, ['climb_second', 'talk.vosk.parley', 'dlg.greet.trade']);
+    expect(r.state.flags).toMatchObject({ [`${L}lance_ransomed`]: true, 'arc.main.tooth_vaelthorn_holder': 'choir', 'arc.main.dawnbreaker_holder': 'player', 'arc.main.vosk_fate': 'escaped', [`${L}vaelthorn_done`]: true });
+    expect(ids(r)).not.toContain('confront_vosk');
+  });
+
+  it('Thane: his confession and Corwin\'s case help the plea; a muster brings knights to the undercroft; a failed rebuke costs the Order', () => {
+    const base = { [`${L}vaelthorn_done`]: true, 'arc.main.dawnbreaker_holder': 'player', 'world.corwin_status': 'in_party', 'world.corwin_loyalty': 50 };
+    const c = at('dawnspire_vigil', base);
+    play(c, ['talk.aldric_thane.vigil', 'dlg.greet.winter', 'dlg.more.corwin', 'dlg.more.muster', 'dlg.more.bye']);
+    expect(c.state.flags).toMatchObject({ [`${L}thane_confessed`]: true, [`${L}thane_softened`]: true, [`${L}lance_pledged`]: true });
+    expect(rep(c, 'order_of_the_dawn_lance')).toBe(5);
+    perform(c, 'keep_lance');
+    expect(adv(c, 'plead_for_corwin')).toEqual(expect.arrayContaining(['Thane has already heard Corwin out', 'Thane has confessed his own failure to you']));
+    for (const id of ['undercroft_rearguard', 'undercroft_ambush']) expect(enc(id).allies).toContainEqual({ id: 'knight', count: 2, if: { flag: `${L}lance_pledged` } });
+
+    const u = at('dawnspire_vigil', { ...base, [`${L}thane_confessed`]: true }, true);
+    play(u, ['talk.aldric_thane.vigil', 'dlg.greet.rebuke']);
+    expect(rep(u, 'order_of_the_dawn_lance')).toBe(-10);
+    expect(u.state.flags[`${L}lance_pledged`]).toBeFalsy();
+  });
+
+  it('Pip: sent home he is safe but cannot wake you; kept, he scouts the roof and plays your page at the masque', () => {
+    const base = { [`${L}vaelthorn_done`]: true, 'arc.main.dawnbreaker_holder': 'player', 'arc.starter.pip_rescued': true };
+    const home = at('dawnspire_vigil', base);
+    play(home, ['talk.pip_hallard.page', 'dlg.greet.home']);
+    expect(home.state.flags[`${L}pip_sent_home`]).toBe(true);
+    expect(npcsHere(home)).not.toContain('pip_hallard');
+    perform(home, 'return_lance');
+    expect(ids(home)).toContain('keep_watch');
+    expect(ids(home)).not.toContain('pip_wakes');
+
+    const kept = at('dawnspire_vigil', base);
+    play(kept, ['talk.pip_hallard.page', 'dlg.greet.scout', 'dlg.more.masque', 'dlg.more.bye', 'return_lance']);
+    expect(kept.state.flags).toMatchObject({ [`${L}pip_scouted`]: true, [`${L}pip_page`]: true });
+    expect(ids(kept)).toContain('pip_wakes');
+    expect(adv(at('almoners_masque', { [`${L}vigil_done`]: true, [`${L}pip_page`]: true }), 'blend_perform')).toContain('Pip fusses over you like a real page');
   });
 });
