@@ -1,0 +1,53 @@
+{
+  "$source": "data/world/shops.json",
+  "strings": {
+    "shops/marrows_goods/name": {
+      "hash": "d8c6c72d",
+      "text": "Marrows Varer"
+    },
+    "shops/brightwater_forge/name": {
+      "hash": "b338c948",
+      "text": "Brightwater-smedjen"
+    },
+    "shops/brightwater_market/name": {
+      "hash": "92341ecb",
+      "text": "Brightwaters markedsboder"
+    },
+    "shops/hearth_and_herb/name": {
+      "hash": "14324206",
+      "text": "Apoteket Arne & Urt"
+    },
+    "shops/highcrown_arcana/name": {
+      "hash": "948ff09a",
+      "text": "Den Forgyldte Fjerpen, magiske varer"
+    },
+    "shops/highcrown_armory/name": {
+      "hash": "0545032b",
+      "text": "Det Kongelige Rustkammers Udsalg"
+    },
+    "shops/ravensgate_provisioner/name": {
+      "hash": "d0282e79",
+      "text": "Ravensgates Proviantboder"
+    },
+    "shops/hollowmere_trader/name": {
+      "hash": "2dfcde39",
+      "text": "Handelsstedet Den Sidste Lygte"
+    },
+    "shops/lantern_hold_quartermaster/name": {
+      "hash": "2b964482",
+      "text": "Lygteborgens Kvartermester"
+    },
+    "shops/port_sorrel_chandlery/name": {
+      "hash": "8a501997",
+      "text": "Port Sorrels Skibshandel"
+    },
+    "shops/port_sorrel_curios/name": {
+      "hash": "0d2b2ee2",
+      "text": "Saltwinds Kuriositeter"
+    },
+    "shops/gullhaven_black_market/name": {
+      "hash": "c74037ac",
+      "text": "Mågereden"
+    }
+  }
+}

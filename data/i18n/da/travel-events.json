@@ -1,0 +1,117 @@
+{
+  "$source": "data/tables/travel-events.json",
+  "strings": {
+    "events/merchant_caravan/text": {
+      "hash": "7a3f6866",
+      "text": "En handelskaravane rumler forbi, og kuskene deler vejsladder om røvere længere mod syd."
+    },
+    "events/knight_patrol/text": {
+      "hash": "1734eccf",
+      "text": "En patrulje fra Daggrylansen rider forbi med smældende bannere og hilser de rejsende, der holder sig til vejen."
+    },
+    "events/road_bandits/text": {
+      "hash": "e2c8144e",
+      "text": "Røvere træder frem bag en væltet vogn og kræver vejpenge."
+    },
+    "events/wolf_pack/text": {
+      "hash": "2553dc77",
+      "text": "En ulveflok følger sporet i skyggerne og lukker sig så om dig."
+    },
+    "events/washed_out_bridge/text": {
+      "hash": "f191c3e6",
+      "text": "Broen forude er skyllet væk af regnen."
+    },
+    "events/washed_out_bridge/check/success": {
+      "hash": "a4f5fd7e",
+      "text": "Du vader over den opsvulmede å uden at miste fodfæstet."
+    },
+    "events/washed_out_bridge/check/failure": {
+      "hash": "ea2d7cb9",
+      "text": "Strømmen trækker dig under, før du kravler op, gennemblødt og forslået."
+    },
+    "events/old_shrine/text": {
+      "hash": "00990eaf",
+      "text": "En mosgroet vejhelligdom for en glemt helgen; nogen har lagt friske blomster."
+    },
+    "events/fen_lights/text": {
+      "hash": "c20204a0",
+      "text": "Blege lys vipper over mosen og lokker væk fra stien."
+    },
+    "events/fen_lights/check/success": {
+      "hash": "53c3ef31",
+      "text": "Du holder dig til den rette sti og lader lysene drive bort."
+    },
+    "events/fen_lights/check/failure": {
+      "hash": "d17daec3",
+      "text": "Du følger lysene i en time, før det går op for dig, at du har gået i ring."
+    },
+    "events/bog_zombies/text": {
+      "hash": "7ab4c0c7",
+      "text": "Oppustede skikkelser rejser sig af mosen og rækker ud efter varmt kød."
+    },
+    "events/giant_frogs/text": {
+      "hash": "888dd1b9",
+      "text": "Kæmpefrøer lurer i sivene langs dæmningsvejen."
+    },
+    "events/sinking_mud/text": {
+      "hash": "88ca034a",
+      "text": "Dæmningsvejen giver efter og bliver til sugende mudder."
+    },
+    "events/sinking_mud/check/success": {
+      "hash": "bddde63b",
+      "text": "Du hiver dig fri og finder fastere grund."
+    },
+    "events/sinking_mud/check/failure": {
+      "hash": "e04b528b",
+      "text": "Du mister en time og det meste af dine kræfter på at vriste dig fri af mosen."
+    },
+    "events/plague_cart/text": {
+      "hash": "c3fa664d",
+      "text": "En vogn med ligklædte kroppe knirker forbi; kusken er maskeret og tavs."
+    },
+    "events/stirge_swarm/text": {
+      "hash": "8f21b411",
+      "text": "En hvinende lyd fylder luften, da stirges dykker ned."
+    },
+    "events/dolphins/text": {
+      "hash": "38487277",
+      "text": "Delfiner kappes med stævnen, og besætningen hepper på dem."
+    },
+    "events/pirate_sail/text": {
+      "hash": "d907b21f",
+      "text": "En slup med røde sejl lægger sig langs siden, og entrehagerne flyver."
+    },
+    "events/squall/text": {
+      "hash": "a1e5c707",
+      "text": "En byge slår ind over skibet, og en bølge fejer hen over dækket."
+    },
+    "events/squall/check/success": {
+      "hash": "b896f3c4",
+      "text": "Du griber et tov og rider bølgen af."
+    },
+    "events/squall/check/failure": {
+      "hash": "79088fd7",
+      "text": "Du bliver slynget mod rælingen, før besætningen hiver dig tilbage."
+    },
+    "events/reef_sharks/text": {
+      "hash": "1b6a20fb",
+      "text": "Finner kredser om skibet i havblikket, mens hajerne får færten af affaldet fra kabyssen."
+    },
+    "events/shore_crabs/text": {
+      "hash": "c6c08b67",
+      "text": "Kæmpekrabber klaprer op af brændingen mod kyststien."
+    },
+    "events/floating_crate/text": {
+      "hash": "4558884b",
+      "text": "En forseglet kasse vipper forbi på bølgerne, stemplet med mærket fra et kompagni, der gik under for mange år siden."
+    },
+    "events/lost_traveler/text": {
+      "hash": "bdbf04b8",
+      "text": "En vildfaren rejsende spørger om vej og deler en pibe tobak som tak."
+    },
+    "events/rainbow_campsite/text": {
+      "hash": "9e8cbc45",
+      "text": "Du slår lejr under en himmel fuld af stjerner; natten går fredeligt."
+    }
+  }
+}
