@@ -21,7 +21,7 @@ import { areHostile } from './combatState';
 import type { ActionResult } from './combatState';
 import { castInCombat, featureInCombat, spellRangeFt } from './castAction';
 import { previewArea, templateFromArea, templateFromCaster } from './aoe';
-import { dbOf } from './combatState';
+import { dbOf, msgsOf } from './combatState';
 import type { CombatContext, CombatEvent, CombatState } from './combatState';
 import { canPlace, createGrid, distanceFt, placeToken, setCell, type Grid, type Point } from './grid';
 import { rollInitiativeOrder, toEntries } from './initiative';
@@ -166,7 +166,7 @@ export function setupEncounter(setup: EncounterSetup, ctx: CombatContext): Encou
   for (const c of foes) spawnAt(c, setup.spawns?.foes, [grid.width - 2, grid.width - 1]);
   const rolls = rollInitiativeOrder(
     [...party.map((c) => ({ creature: c, side: 'party' as const })), ...foes.map((c) => ({ creature: c, side: 'enemy' as const, group: c.id.replace(/_\d+$/, '') }))],
-    { rng: ctx.rng, ...(ctx.db && { db: ctx.db }) },
+    { rng: ctx.rng, ...(ctx.db && { db: ctx.db }), ...(ctx.msgs && { msgs: ctx.msgs }) },
   );
   const creatures = Object.fromEntries([...party, ...foes].map((c) => [c.id, c]));
   const turns = startCombat(toEntries(rolls));
@@ -175,7 +175,7 @@ export function setupEncounter(setup: EncounterSetup, ctx: CombatContext): Encou
     heroId: setup.hero.id,
     controlled: [setup.hero.id, ...(setup.playerControlled ?? []).filter((id) => (setup.companions ?? []).some((c) => c.id === id))],
     roster: Object.fromEntries(turns.order.map((e) => [e.id, e.side])),
-    log: ['Roll for initiative!', ...rolls.map((r) => `${creatures[r.id]?.name ?? r.id}: ${r.text}`)],
+    log: [msgsOf(ctx).m('combat.initiative'), ...rolls.map((r) => `${creatures[r.id]?.name ?? r.id}: ${r.text}`)],
     status: 'ongoing',
     ...(setup.fog?.length && { fog: setup.fog }),
   };
@@ -184,22 +184,22 @@ export function setupEncounter(setup: EncounterSetup, ctx: CombatContext): Encou
 }
 
 function turnCtx(enc: Encounter, ctx: CombatContext) {
-  return { rng: ctx.rng, grid: enc.state.grid, ...(ctx.db && { db: ctx.db }), ...(ctx.table && { table: ctx.table }) };
+  return { rng: ctx.rng, grid: enc.state.grid, ...(ctx.db && { db: ctx.db }), ...(ctx.table && { table: ctx.table }), ...(ctx.msgs && { msgs: ctx.msgs }) };
 }
 
-function checkEnd(enc: Encounter): boolean {
+function checkEnd(enc: Encounter, ctx: CombatContext): boolean {
   const sides = livingSides(enc.state.turns, enc.state.creatures);
   const hero = enc.state.creatures[enc.heroId];
   if (!sides.has('enemy')) enc.status = 'won';
   else if (!sides.has('party') || (hero && hero.dead)) enc.status = 'lost';
-  if (enc.status !== 'ongoing') push(enc, [enc.status === 'won' ? 'Victory!' : 'Defeat…']);
+  if (enc.status !== 'ongoing') push(enc, [msgsOf(ctx).m(enc.status === 'won' ? 'combat.victory' : 'combat.defeat')]);
   return enc.status !== 'ongoing';
 }
 
 /** Ends the current turn and lets the AI act until it is the hero's turn again (or the fight ends). */
 function advance(enc: Encounter, ctx: CombatContext, aiOpts: AiOptions = {}): void {
   for (let guard = 0; guard < 200; guard++) {
-    if (checkEnd(enc)) return;
+    if (checkEnd(enc, ctx)) return;
     const ending = enc.state.turns.turnActive ? currentId(enc.state.turns) : undefined;
     if (ending) zoneTurn(enc, ctx, ending, 'end');
     const r = nextTurn(enc.state.turns, enc.state.creatures, turnCtx(enc, ctx));
@@ -208,7 +208,7 @@ function advance(enc: Encounter, ctx: CombatContext, aiOpts: AiOptions = {}): vo
     const id = currentId(enc.state.turns);
     if (!id) return;
     zoneTurn(enc, ctx, id, 'start');
-    if (checkEnd(enc)) return;
+    if (checkEnd(enc, ctx)) return;
     if (isControlled(enc, id)) {
       const pc = enc.state.creatures[id];
       // A downed character rolls death saves in startTurn; nothing else to do this turn.
@@ -323,9 +323,10 @@ export function isControlled(enc: Encounter, id: string): boolean {
 
 /** Applies one action for the player-controlled creature whose turn it is. Returns an error message if refused. */
 export function playerAct(enc: Encounter, ctx: CombatContext, a: PlayerAction): string | undefined {
-  if (enc.status !== 'ongoing') return 'The fight is over.';
+  const { m } = msgsOf(ctx);
+  if (enc.status !== 'ongoing') return m('combat.over');
   const id = currentId(enc.state.turns);
-  if (!id || !isControlled(enc, id)) return 'It is not your turn.';
+  if (!id || !isControlled(enc, id)) return m('combat.notYourTurn');
   if (a.kind === 'end_turn') {
     advance(enc, ctx);
     return undefined;
@@ -334,7 +335,7 @@ export function playerAct(enc: Encounter, ctx: CombatContext, a: PlayerAction): 
     const spell = dbOf(ctx).spells.get(a.spellId);
     const range = spell ? spellRangeFt(spell) : undefined;
     const me = enc.state.grid.tokens[id];
-    if (spell && range !== undefined && range > 0 && me && distanceFt(me, { x: a.area.x, y: a.area.y, size: 'medium' }) > range) return `${spell.name}: that point is out of range (${range} ft).`;
+    if (spell && range !== undefined && range > 0 && me && distanceFt(me, { x: a.area.x, y: a.area.y, size: 'medium' }) > range) return m('combat.outOfRange', { spell: spell.name, ft: range });
   }
   if (a.kind === 'cast' || a.kind === 'feature') {
     const r =
@@ -351,7 +352,7 @@ export function playerAct(enc: Encounter, ctx: CombatContext, a: PlayerAction): 
     if (!r.ok) return r.error;
     enc.state = r.state;
     if (a.kind === 'cast' && a.targetIds[0]) enc.focusId = a.targetIds[0];
-    checkEnd(enc);
+    checkEnd(enc, ctx);
     return undefined;
   }
   if (a.kind === 'zone') {
@@ -378,12 +379,12 @@ export function playerAct(enc: Encounter, ctx: CombatContext, a: PlayerAction): 
             : a.kind === 'dodge'
               ? dodge(enc.state, ctx, id)
               : undefined;
-  if (!res) return 'Unknown action.';
+  if (!res) return m('combat.unknownAction');
   push(enc, res.events.map((e) => e.text));
   if (!res.ok) return res.error;
   enc.state = res.state;
   if (a.kind === 'attack') enc.focusId = a.targetId;
-  if (checkEnd(enc)) return undefined;
+  if (checkEnd(enc, ctx)) return undefined;
   // Dropping on your own turn (e.g. an Opportunity Attack) ends it.
   if ((enc.state.creatures[id]?.hp ?? 0) <= 0) advance(enc, ctx);
   return undefined;
@@ -417,7 +418,7 @@ function otherAction(enc: Encounter, ctx: CombatContext, id: string, a: PlayerAc
       if (!c) return undefined;
       const r = standUp(s.turns, id, c, ctx.table);
       if (!r.ok) return { ok: false, error: r.error, state: s, events: [] };
-      return { ok: true, state: { ...s, turns: r.state, creatures: { ...s.creatures, [id]: r.creature } }, events: [{ kind: 'move', actorId: id, text: `${c.name} stands up (${r.costFt} ft).` }] };
+      return { ok: true, state: { ...s, turns: r.state, creatures: { ...s.creatures, [id]: r.creature } }, events: [{ kind: 'move', actorId: id, text: msgsOf(ctx).m('combat.standsUp', { name: c.name, ft: r.costFt }) }] };
     }
     default:
       return undefined;
@@ -429,7 +430,7 @@ function finish(enc: Encounter, ctx: CombatContext, id: string, r: ActionResult)
   push(enc, r.events.map((e) => e.text));
   if (!r.ok) return r.error;
   enc.state = r.state;
-  if (checkEnd(enc)) return undefined;
+  if (checkEnd(enc, ctx)) return undefined;
   if ((enc.state.creatures[id]?.hp ?? 0) <= 0) advance(enc, ctx);
   return undefined;
 }

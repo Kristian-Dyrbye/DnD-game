@@ -7,6 +7,7 @@
  */
 import { formatD20Test, resolveRollMode, rollD20, type D20Roll, type Modifier, type RollMode } from '../core/dice';
 import type { Rng } from '../core/rng';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { Creature } from '../core/creature';
 import {
   ABILITY_NAMES,
@@ -32,6 +33,8 @@ export interface D20TestInput {
   autoFail?: string;
   /** Exhaustion level (0–6): −2 per level. */
   exhaustion?: number;
+  /** Language of the math line (default English). */
+  msgs?: Messages;
 }
 
 export interface D20TestResult {
@@ -61,7 +64,8 @@ export function d20Test(input: D20TestInput): D20TestResult {
   let success: boolean | undefined;
   if (input.autoFail) success = false;
   else if (input.target) success = total >= input.target.value;
-  const outcome = input.autoFail ? `Automatic failure (${input.autoFail})` : success === undefined ? undefined : success ? 'Success' : 'Failure';
+  const msgs = input.msgs ?? ENGLISH_MESSAGES;
+  const outcome = input.autoFail ? msgs.m('roll.autoFail', { reason: input.autoFail }) : success === undefined ? undefined : msgs.m(success ? 'roll.success' : 'roll.failure');
   return {
     label: input.label,
     d20,
@@ -73,7 +77,7 @@ export function d20Test(input: D20TestInput): D20TestResult {
     ...(input.autoFail && { autoFail: input.autoFail }),
     advantage,
     disadvantage,
-    text: formatD20Test({ d20, modifiers, total, ...(input.target && { target: input.target }), ...(outcome && { outcome }) }),
+    text: formatD20Test({ d20, modifiers, total, ...(input.target && { target: input.target }), ...(outcome && { outcome }) }, msgs),
   };
 }
 
@@ -87,6 +91,8 @@ export interface CheckOptions {
   /** Extra bonuses/penalties (Bless, Guidance, cover...). */
   bonuses?: Modifier[];
   autoFail?: string;
+  /** Language of the math line (default English). */
+  msgs?: Messages;
 }
 
 /** Modifier list for an ability check, optionally with a skill (uses the skill's default ability unless overridden). */
@@ -114,6 +120,7 @@ export function abilityCheck(c: Creature, ability: Ability, skill: Skill | undef
     ...(opts.advantage && { advantage: opts.advantage }),
     ...(opts.disadvantage && { disadvantage: opts.disadvantage }),
     ...(opts.autoFail && { autoFail: opts.autoFail }),
+    ...(opts.msgs && { msgs: opts.msgs }),
   });
 }
 
@@ -140,6 +147,7 @@ export function savingThrow(c: Creature, ability: Ability, opts: CheckOptions): 
     ...(opts.advantage && { advantage: opts.advantage }),
     ...(opts.disadvantage && { disadvantage: opts.disadvantage }),
     ...(opts.autoFail && { autoFail: opts.autoFail }),
+    ...(opts.msgs && { msgs: opts.msgs }),
   });
 }
 

@@ -17,6 +17,7 @@
 import type { Character, Creature, Side } from '../core/creature';
 import type { Modifier } from '../core/dice';
 import type { Rng } from '../core/rng';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { SrdDatabase } from '../data/srd';
 import { loadSrd } from '../data/srdBundle';
 import { initiativeModifiers } from '../character/derived';
@@ -57,6 +58,8 @@ export interface InitiativeOptions {
   rng: Rng;
   db?: SrdDatabase;
   table?: ConditionTable;
+  /** Language of the roll lines (default English). */
+  msgs?: Messages;
 }
 
 const isCharacter = (c: Creature): c is Character => c.kind === 'character' && 'classes' in c;
@@ -100,8 +103,10 @@ export function rollInitiative(p: InitiativeParticipant, opts: InitiativeOptions
     exhaustion: c.exhaustion,
     advantage: modes.advantage,
     disadvantage: modes.disadvantage,
+    ...(opts.msgs && { msgs: opts.msgs }),
   });
-  const reasons = [...modes.advantage.map((s) => `adv: ${s}`), ...modes.disadvantage.map((s) => `dis: ${s}`)];
+  const { m } = opts.msgs ?? ENGLISH_MESSAGES;
+  const reasons = [...modes.advantage.map((s) => `${m('roll.adv')}: ${s}`), ...modes.disadvantage.map((s) => `${m('roll.dis')}: ${s}`)];
   return {
     id: c.id,
     side: p.side,
@@ -109,7 +114,7 @@ export function rollInitiative(p: InitiativeParticipant, opts: InitiativeOptions
     dexMod: abilityModifier(c.abilities.dex),
     ...(p.group && { group: p.group }),
     roll,
-    text: `${c.name} initiative: ${roll.text}${reasons.length ? ` [${reasons.join('; ')}]` : ''}`,
+    text: `${m('combat.initiativeRoll', { name: c.name, roll: roll.text })}${reasons.length ? ` [${reasons.join('; ')}]` : ''}`,
   };
 }
 

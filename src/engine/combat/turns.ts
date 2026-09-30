@@ -35,6 +35,7 @@ import { revertExpiredEffects, startOfTurnEffects } from '../rules/spellHooks';
 import { endOfTurnSpellEffects } from '../rules/spellHooks2';
 import { deathSaveAdvantage, endOfTurnSpellEffects3, resetOncePerTurnEffects } from '../rules/spellHooks3';
 import { footprintSize, type Grid } from './grid';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import { movementBudget, standUpCost, type MoveMode } from './movement';
 import { compareInitiative, type InitiativeEntry } from './initiative';
 
@@ -103,6 +104,8 @@ export interface TurnContext {
   grid?: Grid;
   /** Fear's end-of-turn save only happens when the caster is out of sight. Default: visible. */
   casterVisible?: (creatureId: string, casterId: string) => boolean;
+  /** Language of the turn lines (default English). */
+  msgs?: Messages;
 }
 
 export interface TurnResult {
@@ -267,27 +270,27 @@ export function standUp(
 // ---------------------------------------------------------------- turn hooks
 
 /** Monsters at 0 HP die; characters at 0 HP who aren't yet Unconscious fall Unconscious. */
-function settleZeroHp(c: Creature, events: TurnEvent[]): Creature {
+function settleZeroHp(c: Creature, events: TurnEvent[], { m }: Messages): Creature {
   if (c.dead || c.hp > 0) return c;
   if (!isCharacter(c)) {
-    events.push({ kind: 'died', creatureId: c.id, text: `${c.name} dies.` });
+    events.push({ kind: 'died', creatureId: c.id, text: m('turn.dies', { name: c.name }) });
     return { ...c, dead: true };
   }
   if (c.conditions.some((x) => x.condition === 'unconscious')) return c;
-  events.push({ kind: 'log', creatureId: c.id, text: `${c.name} falls Unconscious.` });
+  events.push({ kind: 'log', creatureId: c.id, text: m('turn.unconscious', { name: c.name }) });
   const down = applyCondition(c, { condition: 'unconscious' }).creature as Character;
   const reset: Character = { ...down, deathSaves: { successes: 0, failures: 0, stable: false } };
   return reset;
 }
 
-function applyTurnEvent(creatures: Creatures, event: 'start_of_turn' | 'end_of_turn', id: string, events: TurnEvent[]): Creatures {
+function applyTurnEvent(creatures: Creatures, event: 'start_of_turn' | 'end_of_turn', id: string, events: TurnEvent[], { m }: Messages): Creatures {
   const { creatures: list, expired } = onTurnEvent(Object.values(creatures), event, id);
   const out: Creatures = Object.fromEntries(list.map((c) => [c.id, c]));
   for (const { creatureId, effect } of expired) {
     const c = out[creatureId];
     if (!c) continue;
     out[creatureId] = revertExpiredEffects(c, [effect]);
-    events.push({ kind: 'effect_expired', creatureId, text: `${effect.key} on ${c.name} ends.` });
+    events.push({ kind: 'effect_expired', creatureId, text: m('turn.effectEnds', { effect: effect.key, name: c.name }) });
   }
   return out;
 }
@@ -297,29 +300,31 @@ export function startTurn(state: TurnState, creatures: Creatures, ctx: TurnConte
   const id = currentId(state);
   if (id === undefined) return { state, creatures, events: [] };
   const events: TurnEvent[] = [];
+  const msgs = ctx.msgs ?? ENGLISH_MESSAGES;
+  const { m } = msgs;
   const next = withBudget({ ...state, round: Math.max(1, state.round), turnActive: true }, id, freshBudget());
-  let all = applyTurnEvent(creatures, 'start_of_turn', id, events);
+  let all = applyTurnEvent(creatures, 'start_of_turn', id, events, msgs);
   let c = all[id];
   if (!c) return { state: next, creatures: all, events };
-  events.unshift({ kind: 'turn_start', creatureId: id, text: `${c.name}'s turn (round ${next.round}).` });
+  events.unshift({ kind: 'turn_start', creatureId: id, text: m('turn.start', { name: c.name, round: next.round }) });
 
   c = startOfTurnEffects(resetOncePerTurnEffects(c));
 
   if (c.kind === 'monster' && c.statBlockId) {
-    const m = (ctx.db ?? loadSrd()).monsters.get(c.statBlockId);
-    if (m) {
-      const r = rollRecharges(c, m, ctx.rng);
+    const block = (ctx.db ?? loadSrd()).monsters.get(c.statBlockId);
+    if (block) {
+      const r = rollRecharges(c, block, ctx.rng);
       c = r.creature;
-      for (const name of r.recharged) events.push({ kind: 'recharge', creatureId: id, text: `${c.name}'s ${name} recharges.` });
+      for (const name of r.recharged) events.push({ kind: 'recharge', creatureId: id, text: m('turn.recharge', { name: c.name, ability: name }) });
     }
   }
 
   if (isCharacter(c) && needsDeathSave(c)) {
     // Beacon of Hope gives Advantage on Death Saving Throws.
-    const ds = rollDeathSave(c, ctx.rng, [], deathSaveAdvantage(c) ? 'advantage' : 'normal');
+    const ds = rollDeathSave(c, ctx.rng, [], deathSaveAdvantage(c) ? 'advantage' : 'normal', msgs);
     c = ds.character;
-    events.push({ kind: 'death_save', creatureId: id, text: `${c.name} death save: ${ds.text}` });
-    if (ds.outcome === 'died') events.push({ kind: 'died', creatureId: id, text: `${c.name} dies.` });
+    events.push({ kind: 'death_save', creatureId: id, text: m('turn.deathSave', { name: c.name, roll: ds.text }) });
+    if (ds.outcome === 'died') events.push({ kind: 'died', creatureId: id, text: m('turn.dies', { name: c.name }) });
     // A creature revived by a natural 20 regains 1 HP but stays Prone; it can act this turn.
   }
 
@@ -327,7 +332,7 @@ export function startTurn(state: TurnState, creatures: Creatures, ctx: TurnConte
   return { state: next, creatures: all, events };
 }
 
-function tickConcentration(all: Creatures, id: string, events: TurnEvent[]): Creatures {
+function tickConcentration(all: Creatures, id: string, events: TurnEvent[], { m }: Messages): Creatures {
   const c = all[id];
   if (!c || !isCharacter(c)) return all;
   const conc = c.spellcasting?.concentration;
@@ -338,12 +343,12 @@ function tickConcentration(all: Creatures, id: string, events: TurnEvent[]): Cre
   }
   const map = new Map(Object.entries(all));
   const spellId = endConcentration({ creatures: map }, id);
-  events.push({ kind: 'concentration_ended', creatureId: id, text: `${c.name}'s ${spellId ?? 'spell'} ends (duration expired).` });
+  events.push({ kind: 'concentration_ended', creatureId: id, text: m('turn.concentrationEnds', { name: c.name, spell: spellId ?? m('turn.spell') }) });
   return Object.fromEntries(map);
 }
 
 /** SRD: ending a turn in another creature's space → Prone, unless Tiny or larger than that creature. */
-function proneInSpace(all: Creatures, id: string, grid: Grid, table: ConditionTable | undefined, events: TurnEvent[]): Creatures {
+function proneInSpace(all: Creatures, id: string, grid: Grid, table: ConditionTable | undefined, events: TurnEvent[], { m }: Messages): Creatures {
   const me = grid.tokens[id];
   const c = all[id];
   if (!me || !c || me.size === 'tiny') return all;
@@ -357,7 +362,7 @@ function proneInSpace(all: Creatures, id: string, grid: Grid, table: ConditionTa
   if (!sharesWithBiggerOrEqual || hasCondition(c, 'prone', table)) return all;
   const r = applyCondition(c, { condition: 'prone' }, table);
   if (!r.applied) return all;
-  events.push({ kind: 'prone', creatureId: id, text: `${c.name} ends its turn in another creature's space and falls Prone.` });
+  events.push({ kind: 'prone', creatureId: id, text: m('turn.prone', { name: c.name }) });
   return { ...all, [id]: r.creature };
 }
 
@@ -366,6 +371,8 @@ export function endTurn(state: TurnState, creatures: Creatures, ctx: TurnContext
   const id = currentId(state);
   if (id === undefined || !state.turnActive) return { state, creatures, events: [] };
   const events: TurnEvent[] = [];
+  const msgs = ctx.msgs ?? ENGLISH_MESSAGES;
+  const { m } = msgs;
   let all = { ...creatures };
   let c = all[id];
   if (c && !c.dead) {
@@ -374,26 +381,26 @@ export function endTurn(state: TurnState, creatures: Creatures, ctx: TurnContext
     c = s3.creature;
     for (const text of [...s2.log, ...s3.log]) events.push({ kind: 'log', creatureId: id, text });
 
-    const saves = endOfTurnSaves(c, ctx.rng, ctx.table);
+    const saves = endOfTurnSaves(c, ctx.rng, ctx.table, msgs);
     c = saves.creature;
     for (const r of saves.results) {
-      events.push({ kind: 'save', creatureId: id, text: `${c.name} save vs ${r.condition}: ${r.roll.text}${r.roll.success ? ` — ${r.condition} ends` : ''}` });
+      events.push({ kind: 'save', creatureId: id, text: `${m('turn.saveVs', { name: c.name, condition: r.condition, roll: r.roll.text })}${r.roll.success ? ` — ${m('turn.conditionEnds', { condition: r.condition })}` : ''}` });
     }
 
     const tc = tickConditions(c);
     c = tc.creature;
-    for (const cond of tc.expired) events.push({ kind: 'condition_expired', creatureId: id, text: `${c.name} is no longer ${cond}.` });
+    for (const cond of tc.expired) events.push({ kind: 'condition_expired', creatureId: id, text: m('turn.noLonger', { name: c.name, condition: cond }) });
     const te = tickEffects(c);
     c = revertExpiredEffects(te.creature, te.expired);
-    for (const e of te.expired) events.push({ kind: 'effect_expired', creatureId: id, text: `${e.key} on ${c.name} ends.` });
+    for (const e of te.expired) events.push({ kind: 'effect_expired', creatureId: id, text: m('turn.effectEnds', { effect: e.key, name: c.name }) });
 
-    c = settleZeroHp(c, events);
+    c = settleZeroHp(c, events, msgs);
     all[id] = c;
-    all = tickConcentration(all, id, events);
-    if (ctx.grid) all = proneInSpace(all, id, ctx.grid, ctx.table, events);
+    all = tickConcentration(all, id, events, msgs);
+    if (ctx.grid) all = proneInSpace(all, id, ctx.grid, ctx.table, events, msgs);
   }
-  all = applyTurnEvent(all, 'end_of_turn', id, events);
-  events.push({ kind: 'turn_end', creatureId: id, text: `${all[id]?.name ?? id}'s turn ends.` });
+  all = applyTurnEvent(all, 'end_of_turn', id, events, msgs);
+  events.push({ kind: 'turn_end', creatureId: id, text: m('turn.end', { name: all[id]?.name ?? id }) });
   return { state: { ...state, turnActive: false }, creatures: all, events };
 }
 
@@ -407,6 +414,8 @@ const takesTurns = (c: Creature | undefined): boolean => !!c && !c.dead;
  */
 export function nextTurn(state: TurnState, creatures: Creatures, ctx: TurnContext): TurnResult {
   const events: TurnEvent[] = [];
+  const msgs = ctx.msgs ?? ENGLISH_MESSAGES;
+  const { m } = msgs;
   let s = state;
   let all = creatures;
   if (s.turnActive) {
@@ -420,7 +429,7 @@ export function nextTurn(state: TurnState, creatures: Creatures, ctx: TurnContex
   for (const e of s.order) {
     const c = all[e.id];
     if (!c || c.kind === 'character') continue;
-    const settled = settleZeroHp(c, events);
+    const settled = settleZeroHp(c, events, msgs);
     if (settled !== c) all = { ...all, [e.id]: settled };
     if (settled.dead) dying.push(e.id);
   }
@@ -439,14 +448,14 @@ export function nextTurn(state: TurnState, creatures: Creatures, ctx: TurnContex
       if (i >= n) round++;
       break;
     }
-    if (c && c.kind === 'character') events.push({ kind: 'skipped', creatureId: c.id, text: `${c.name} is dead; turn skipped.` });
+    if (c && c.kind === 'character') events.push({ kind: 'skipped', creatureId: c.id, text: m('turn.skippedDead', { name: c.name }) });
   }
   for (const id of dying) {
-    events.push({ kind: 'skipped', creatureId: id, text: `${all[id]?.name ?? id} is removed from the initiative order.` });
+    events.push({ kind: 'skipped', creatureId: id, text: m('turn.removed', { name: all[id]?.name ?? id }) });
     s = removeCombatant(s, id);
   }
   if (chosen === undefined) return { state: { ...s, turnActive: false }, creatures: all, events };
-  if (!hadTurn || round > s.round) events.push({ kind: 'round_start', text: `Round ${round} begins.` });
+  if (!hadTurn || round > s.round) events.push({ kind: 'round_start', text: m('turn.round', { round }) });
   const currentIndex = s.order.findIndex((e) => e.id === chosen);
   const started = startTurn({ ...s, currentIndex, round, turnActive: false }, all, ctx);
   return { state: started.state, creatures: started.creatures, events: [...events, ...started.events] };

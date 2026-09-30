@@ -6,6 +6,7 @@
 import { formatD20Test, rollD20, type Modifier, type RollMode } from '../core/dice';
 import type { Character, Creature } from '../core/creature';
 import type { Rng } from '../core/rng';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import { applyCondition, removeCondition } from './conditions';
 import { heal } from './damage';
 import type { DamageReport } from './damage';
@@ -61,7 +62,7 @@ export interface DeathSaveResult {
 }
 
 /** Start-of-turn death save: d20 ≥ 10 succeeds; 1 = two failures; 20 = regain 1 HP. Exhaustion applies (it's a D20 Test). */
-export function rollDeathSave(c: Character, rng: Rng, bonuses: Modifier[] = [], mode: RollMode = 'normal'): DeathSaveResult {
+export function rollDeathSave(c: Character, rng: Rng, bonuses: Modifier[] = [], mode: RollMode = 'normal', msgs: Messages = ENGLISH_MESSAGES): DeathSaveResult {
   const d20 = rollD20(rng, mode);
   const modifiers = [...bonuses];
   if (c.exhaustion > 0) modifiers.push({ value: -2 * c.exhaustion, label: 'Exhaustion' });
@@ -72,7 +73,7 @@ export function rollDeathSave(c: Character, rng: Rng, bonuses: Modifier[] = [], 
 
   if (d20.natural === 20) {
     const revived = reviveAt(c, 1);
-    return { character: revived, natural: 20, total, outcome: 'revived', text: `${formatD20Test({ d20, modifiers, total, target: { kind: 'DC', value: 10 } })} — Natural 20: regains 1 HP!` };
+    return { character: revived, natural: 20, total, outcome: 'revived', text: `${formatD20Test({ d20, modifiers, total, target: { kind: 'DC', value: 10 } }, msgs)} — ${msgs.m('roll.death.revived')}` };
   }
   if (d20.natural === 1) {
     saves.failures += 2;
@@ -95,19 +96,19 @@ export function rollDeathSave(c: Character, rng: Rng, bonuses: Modifier[] = [], 
     character = { ...c, deathSaves: saves };
   }
   const label: Record<DeathSaveResult['outcome'], string> = {
-    success: 'Success',
-    failure: 'Failure',
-    double_failure: 'Natural 1: two failures',
+    success: msgs.m('roll.success'),
+    failure: msgs.m('roll.failure'),
+    double_failure: msgs.m('roll.death.double'),
     revived: '',
-    stable: 'Third success: Stable',
-    died: 'Third failure: dead',
+    stable: msgs.m('roll.death.stable'),
+    died: msgs.m('roll.death.died'),
   };
   return {
     character,
     natural: d20.natural,
     total,
     outcome,
-    text: `${formatD20Test({ d20, modifiers, total, target: { kind: 'DC', value: 10 }, outcome: label[outcome] })} (${saves.successes}✓ ${Math.min(3, saves.failures)}✗)`,
+    text: `${formatD20Test({ d20, modifiers, total, target: { kind: 'DC', value: 10 }, outcome: label[outcome] }, msgs)} (${saves.successes}✓ ${Math.min(3, saves.failures)}✗)`,
   };
 }
 

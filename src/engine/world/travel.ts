@@ -229,7 +229,7 @@ export function travel(ctx: TravelContext, to: string, pace: Pace): TravelResult
     const fx = weatherEffects(w);
     // Extreme heat/cold: one DC 10 Constitution save per travel day, Exhaustion on a failure.
     if (fx.hazard && leg.kind !== 'sea') {
-      const save = savingThrow(hero, 'con', { rng: ctx.rng, dc: 10 });
+      const save = savingThrow(hero, 'con', { rng: ctx.rng, dc: 10, ...(ctx.msgs && { msgs: ctx.msgs }) });
       result.rolls.push(save);
       if (!save.success) hero.exhaustion = Math.min(6, hero.exhaustion + 1);
       const heat = fx.hazard === 'extreme_heat';
@@ -249,6 +249,7 @@ export function travel(ctx: TravelContext, to: string, pace: Pace): TravelResult
       const r = skillCheck(hero, ev.check.skill, {
         rng: ctx.rng,
         dc: ev.check.dc,
+        ...(ctx.msgs && { msgs: ctx.msgs }),
         ...(pe.advantage.includes(ev.check.skill) && { advantage: [`${pace} pace`] }),
         ...(pe.disadvantage.includes(ev.check.skill) && { disadvantage: [`${pace} pace`] }),
       });

@@ -7,6 +7,7 @@
  */
 import type { ActiveCondition, Creature } from '../core/creature';
 import type { Rng } from '../core/rng';
+import type { Messages } from '../i18n';
 import type { ConditionData, ConditionModifiers } from '../data/schemas';
 import { loadSrd } from '../data/srdBundle';
 import { ABILITY_NAMES, type Ability, type Condition } from './basics';
@@ -126,12 +127,13 @@ export function endOfTurnSaves(
   c: Creature,
   rng: Rng,
   table: ConditionTable = defaultTable(),
+  msgs?: Messages,
 ): { creature: Creature; results: { condition: Condition; roll: D20TestResult }[] } {
   let creature = c;
   const results: { condition: Condition; roll: D20TestResult }[] = [];
   for (const ac of c.conditions) {
     if (!ac.endSave) continue;
-    const roll = savingThrow(creature, ac.endSave.ability, { rng, dc: ac.endSave.dc, ...saveModes(creature, ac.endSave.ability, table) });
+    const roll = savingThrow(creature, ac.endSave.ability, { rng, dc: ac.endSave.dc, ...saveModes(creature, ac.endSave.ability, table), ...(msgs && { msgs }) });
     results.push({ condition: ac.condition, roll });
     if (roll.success) creature = { ...creature, conditions: creature.conditions.filter((x) => x !== ac && !(x.condition === ac.condition && x.sourceId === ac.sourceId)) };
   }

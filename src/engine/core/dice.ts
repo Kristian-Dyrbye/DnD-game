@@ -5,6 +5,7 @@
  * Every result carries the individual dice so the UI can show the math.
  */
 import type { Rng } from './rng';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
 export interface DiceTerm {
   kind: 'dice';
@@ -212,17 +213,18 @@ export interface D20TestText {
  * The visible math line, e.g.
  *   "d20: 14 + 5 (Persuasion) = 19 vs DC 15 — Success"
  *   "d20 (adv: 7, 14 → 14) + 5 (Persuasion) = 19 vs DC 15 — Success"
+ * Words (adv/dis, vs, DC/AC) in `msgs`' language; the outcome comes already localized.
  */
-export function formatD20Test(t: D20TestText): string {
+export function formatD20Test(t: D20TestText, msgs: Messages = ENGLISH_MESSAGES): string {
   const die =
     t.d20.mode === 'normal'
       ? `d20: ${t.d20.natural}`
-      : `d20 (${t.d20.mode === 'advantage' ? 'adv' : 'dis'}: ${t.d20.rolls.join(', ')} → ${t.d20.natural})`;
+      : `d20 (${msgs.m(t.d20.mode === 'advantage' ? 'roll.adv' : 'roll.dis')}: ${t.d20.rolls.join(', ')} → ${t.d20.natural})`;
   const mods = t.modifiers
     .filter((m) => m.value !== 0)
     .map((m) => ` ${m.value < 0 ? '−' : '+'} ${Math.abs(m.value)} (${m.label})`)
     .join('');
-  const target = t.target ? ` vs ${t.target.kind} ${t.target.value}` : '';
+  const target = t.target ? ` ${msgs.m('roll.vs', { kind: msgs.m(t.target.kind === 'DC' ? 'roll.DC' : 'roll.AC'), n: t.target.value })}` : '';
   const outcome = t.outcome ? ` — ${t.outcome}` : '';
   return `${die}${mods} = ${t.total}${target}${outcome}`;
 }

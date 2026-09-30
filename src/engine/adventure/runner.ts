@@ -426,7 +426,7 @@ function resolveCheck(ctx: RunContext, c: Check): { success: boolean; rolls: D20
   const cc = conditionContext(ctx.state, getProgress(ctx.state), flagsFor(ctx));
   const advantage = c.advantageIf.filter((x) => evalCondition(x.if, cc)).map((x) => x.source);
   const disadvantage = c.disadvantageIf.filter((x) => evalCondition(x.if, cc)).map((x) => x.source);
-  const opts = { rng: ctx.rng, dc: c.dc, advantage, disadvantage };
+  const opts = { rng: ctx.rng, dc: c.dc, advantage, disadvantage, ...(ctx.msgs && { msgs: ctx.msgs }) };
   const one = (who: Character): D20TestResult => {
     if (c.save) return savingThrow(who, c.save, opts);
     const ability = c.ability ?? (c.skill ? SKILL_ABILITY[c.skill] : 'str');
@@ -549,7 +549,7 @@ function storyDamage(ctx: RunContext, d: NonNullable<Outcome['damage']>, result:
   for (const c of targets) {
     let amount = rolled.total;
     if (d.save) {
-      const s = savingThrow(c, d.save.ability, { rng: ctx.rng, dc: d.save.dc });
+      const s = savingThrow(c, d.save.ability, { rng: ctx.rng, dc: d.save.dc, ...(ctx.msgs && { msgs: ctx.msgs }) });
       result.rolls.push(s);
       if (s.success) amount = d.save.half ? Math.floor(amount / 2) : 0;
     }

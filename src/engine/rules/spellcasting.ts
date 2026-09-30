@@ -6,6 +6,7 @@
  */
 import type { Character, Creature, SpellcastingState } from '../core/creature';
 import type { Rng } from '../core/rng';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { Effect } from '../data/common';
 import type { ClassData, RulesTables, Spell } from '../data/schemas';
 import { abilityModifier, type Ability } from './basics';
@@ -183,7 +184,7 @@ export function concentrationCheck(ctx: EffectContext, casterId: string, damage:
     ctx.log.push({ targetId: casterId, kind: 'info', text: `${caster.name} loses concentration on ${spell}` });
     return undefined;
   }
-  const res = savingThrow(caster, 'con', { rng, dc: concentrationDc(damage), ...saveModes(caster, 'con') });
+  const res = savingThrow(caster, 'con', { rng, dc: concentrationDc(damage), ...saveModes(caster, 'con'), ...(ctx.msgs && { msgs: ctx.msgs }) });
   ctx.log.push({ targetId: casterId, kind: 'save', text: `${caster.name} concentration: ${res.text}` });
   if (!res.success) {
     const spell = endConcentration(ctx, casterId);
@@ -196,6 +197,8 @@ export function concentrationCheck(ctx: EffectContext, casterId: string, damage:
 
 export interface CastOptions {
   rng: Rng;
+  /** Language of the log lines (default English). */
+  msgs?: Messages;
   caster: Character;
   spell: Spell;
   slot: SlotChoice;
@@ -239,6 +242,7 @@ export function castSpell(o: CastOptions): CastResult {
   const sourceId = `${o.caster.id}:${o.spell.id}`;
   const ctx = createEffectContext({
     rng: o.rng,
+    ...(o.msgs && { msgs: o.msgs }),
     source: o.caster,
     targets: o.targets,
     saveDc: spellSaveDc(o.caster, o.ability) + (o.saveDcBonus ?? 0),
@@ -282,7 +286,7 @@ export function castSpell(o: CastOptions): CastResult {
   ctx.log.push({
     targetId: o.caster.id,
     kind: 'info',
-    text: `${o.caster.name} casts ${o.spell.name}${o.spell.level > 0 ? ` (level ${level}${o.slot.kind === 'ritual' ? ', ritual' : ''})` : ''}`,
+    text: (o.msgs ?? ENGLISH_MESSAGES).m(o.spell.level === 0 ? 'combat.casts' : o.slot.kind === 'ritual' ? 'combat.castsRitual' : 'combat.castsLevel', { caster: o.caster.name, spell: o.spell.name, level }),
   });
   if (effects.length === 0) ctx.log.push({ kind: 'info', text: `(${o.spell.name} has no automated effects yet)` });
   if (beamHook) {

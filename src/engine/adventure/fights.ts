@@ -63,7 +63,7 @@ export function activeFight(state: GameState): ActiveFight | undefined {
 export function startFight(ctx: RunContext, encounterId: string, rng: Rng, db: SrdDatabase): ActiveFight {
   const def = ctx.adventure.encounters.find((e) => e.id === encounterId);
   if (!def) throw new Error(`Unknown encounter ${encounterId}`);
-  const cctx: CombatContext = { rng, db };
+  const cctx: CombatContext = { rng, db, ...(ctx.msgs && { msgs: ctx.msgs }) };
   // Scale to the real party with SRD budgets (authored lists assume a party of four).
   const party = [ctx.state.hero, ...ctx.state.companions].filter((c) => !c.dead);
   const groups = mergeMonsterGroups(activeGroups(ctx, def.monsters));
@@ -91,7 +91,7 @@ export function startFight(ctx: RunContext, encounterId: string, rng: Rng, db: S
 export function fightAct(state: GameState, action: PlayerAction, rng: Rng, db: SrdDatabase, msgs: Messages = ENGLISH_MESSAGES): string | undefined {
   const f = activeFight(state);
   if (!f) return msgs.m('fight.none');
-  return playerAct(f.enc, { rng, db }, action);
+  return playerAct(f.enc, { rng, db, msgs }, action);
 }
 
 export type FightEnd = 'win' | 'lose' | 'flee';

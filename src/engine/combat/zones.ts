@@ -450,7 +450,7 @@ export function zoneStrike(state: CombatState, ctx: CombatContext, zoneId: strin
   if (!z?.attack || !z.point || !target || !caster || target.dead) return fail(state, 'Invalid target');
   const tt = state.grid.tokens[targetId];
   if (!tt || distanceFt({ ...z.point, size: 'medium' }, tt) > z.attack.reachFt) return fail(state, `${target.name} isn't within ${z.attack.reachFt} ft of ${z.name}`);
-  const ectx = createEffectContext({ rng: ctx.rng, source: caster, targets: [target], attackBonus: z.attack.attackBonus, spellMod: z.attack.spellMod, damageBonus: z.attack.spellMod });
+  const ectx = createEffectContext({ rng: ctx.rng, ...(ctx.msgs && { msgs: ctx.msgs }), source: caster, targets: [target], attackBonus: z.attack.attackBonus, spellMod: z.attack.spellMod, damageBonus: z.attack.spellMod });
   executeEffects([{ kind: 'attack', attack: 'melee_spell', onHit: [{ kind: 'damage', damage: z.attack.damage }] }], [targetId], ectx);
   const creatures = { ...state.creatures };
   for (const [id, c] of ectx.creatures) creatures[id] = c;

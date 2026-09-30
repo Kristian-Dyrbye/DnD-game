@@ -118,7 +118,7 @@ export function useMagicItem(state: CombatState, ctx: CombatContext, id: string,
   if (potion) {
     removeItem(owner, uid, 1);
   }
-  const ectx = createEffectContext({ rng: ctx.rng, source: owner, targets: targetId === id ? [] : [target] });
+  const ectx = createEffectContext({ rng: ctx.rng, ...(ctx.msgs && { msgs: ctx.msgs }), source: owner, targets: targetId === id ? [] : [target] });
   executeEffects(item.effects, [targetId], ectx);
   const creatures = { ...p.state.creatures };
   for (const [cid, c] of ectx.creatures) creatures[cid] = c;

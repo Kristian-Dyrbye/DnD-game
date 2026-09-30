@@ -182,7 +182,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
   // Combat narration runs in the background; the command returns at once (A069).
   const combatVoice = new CombatNarrationQueue(opts.narrator);
   const narrateCombat = (session: GameSession, ctx: RunContext, lines: readonly string[]) => {
-    const facts = pickMoments(lines, opts.combatNarration?.() ?? 'key');
+    const facts = pickMoments(lines, opts.combatNarration?.() ?? 'key', session.msgs);
     if (facts.length) combatVoice.push(session, { kind: 'combat', facts, ctx });
   };
 

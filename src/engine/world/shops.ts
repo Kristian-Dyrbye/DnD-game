@@ -240,7 +240,7 @@ export function haggle(ctx: ShopContext & { rng: Rng }, shopId: string): { ok: f
   const s = shopState(def, ctx);
   const day = Math.floor(ctx.state.time / MINUTES_PER_DAY);
   if (s.haggle?.day === day) return { ok: false, error: m('shop.noHaggle') };
-  const roll = skillCheck(ctx.state.hero, 'persuasion', { rng: ctx.rng, dc: HAGGLE_DC });
+  const roll = skillCheck(ctx.state.hero, 'persuasion', { rng: ctx.rng, dc: HAGGLE_DC, ...(ctx.msgs && { msgs: ctx.msgs }) });
   s.haggle = { day, success: roll.success === true };
   return { ok: true, roll, success: roll.success === true };
 }

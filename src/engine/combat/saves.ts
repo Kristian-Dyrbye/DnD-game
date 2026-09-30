@@ -39,6 +39,7 @@ export function combatSave(state: CombatState, ctx: CombatContext, id: string, a
     disadvantage: [...cond.disadvantage, ...e3.disadvantage, ...feat.disadvantage],
     bonuses: [...e1.modifiers, ...e3.modifiers],
     ...(cond.autoFail && { autoFail: cond.autoFail }),
+    ...(ctx.msgs && { msgs: ctx.msgs }),
   });
 }
 
@@ -72,6 +73,7 @@ export function combatCheck(
     disadvantage: modes.flatMap((m) => m.disadvantage),
     bonuses,
     ...(autoFail && { autoFail }),
+    ...(ctx.msgs && { msgs: ctx.msgs }),
   });
   const used = skill && helpCheckModes(c, skill).advantage.length ? consumeHelpCheck(c, skill) : c;
   return { state: used === c ? state : withCreature(state, used), result };

@@ -155,6 +155,7 @@ export function castInCombat(state: CombatState, ctx: CombatContext, o: CastInCo
   try {
     const r = castSpell({
       rng: ctx.rng,
+      ...(ctx.msgs && { msgs: ctx.msgs }),
       caster,
       spell,
       slot,

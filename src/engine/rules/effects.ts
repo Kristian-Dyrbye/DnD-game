@@ -11,6 +11,7 @@
 import { parseDice, formatDice, roll, type DiceExpr, type Modifier } from '../core/dice';
 import type { Creature } from '../core/creature';
 import type { Rng } from '../core/rng';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { Damage, Duration, Effect } from '../data/common';
 import { ABILITY_NAMES } from './basics';
 import { applyCondition, attackModes, canAct, resistsAllDamage, saveModes } from './conditions';
@@ -28,6 +29,8 @@ export type HookFn = (ctx: EffectContext, targetId: string, params: Record<strin
 
 export interface EffectContext {
   rng: Rng;
+  /** Language of the log lines (default English). */
+  msgs?: Messages;
   /** Caster/user. Also used for attack-roll condition modes. */
   source: Creature;
   /** All creatures touched by the effect, by id. Updated in place as effects resolve. */
@@ -130,7 +133,7 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
           if (Array.isArray(effect.onSuccess)) for (const e of effect.onSuccess) runEffect(e, [id], ctx, { ...state, sharedDamage: shared });
           continue;
         }
-        const res = savingThrow(target, effect.ability, { rng: ctx.rng, dc, ...saveModes(target, effect.ability) });
+        const res = savingThrow(target, effect.ability, { rng: ctx.rng, dc, ...saveModes(target, effect.ability), ...(ctx.msgs && { msgs: ctx.msgs }) });
         ctx.log.push({ targetId: id, kind: 'save', text: `${target.name} ${ABILITY_NAMES[effect.ability]} save: ${res.text}` });
         // Evasion (Monk/Rogue 7): Dex saves for half damage → none on a success, half on a failure.
         const evasion = effect.ability === 'dex' && effect.onSuccess === 'half' && target.effects.some((e) => e.key === 'evasion') && canAct(target);
@@ -158,7 +161,7 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
         const label = effect.attack.endsWith('spell') ? 'Spell attack' : 'Attack';
         const mods: Modifier[] = [{ value: ctx.attackBonus ?? 0, label }];
         const advantage = [...modes.advantage, ...(ctx.attackAdvantage ? [ctx.attackAdvantage] : [])];
-        const res = attackRoll({ rng: ctx.rng, label, modifiers: mods, targetAc: target.ac, advantage, disadvantage: modes.disadvantage, exhaustion: source.exhaustion, ...(modes.autoCrit && { autoCrit: modes.autoCrit }) });
+        const res = attackRoll({ rng: ctx.rng, label, modifiers: mods, targetAc: target.ac, advantage, disadvantage: modes.disadvantage, exhaustion: source.exhaustion, ...(modes.autoCrit && { autoCrit: modes.autoCrit }), ...(ctx.msgs && { msgs: ctx.msgs }) });
         ctx.log.push({ targetId: id, kind: 'attack', text: `${source.name} → ${target.name}: ${res.text}` });
         if (res.hit) for (const e of effect.onHit) runEffect(e, [id], ctx, { ...state, crit: res.crit, sharedDamage: new Map() });
         else if (ctx.potentCantrip) for (const e of effect.onHit) if (e.kind === 'damage') runEffect(e, [id], ctx, { ...state, half: true, sharedDamage: new Map() });
@@ -228,10 +231,12 @@ export function dealDamage(ctx: EffectContext, id: string, rolled: DamageRollRes
   ctx.creatures.set(id, outcome.creature);
   ctx.lastDamage?.set(id, report.totalAfterDefenses);
   const notes = report.adjusted.filter((a) => a.note).map((a) => `${a.type} ${a.note}`);
+  const { m } = ctx.msgs ?? ENGLISH_MESSAGES;
+  const fate = outcome.event === 'died' ? ` — ${m('combat.dies')}` : outcome.event === 'unconscious' ? ` — ${m('combat.fallsUnconscious')}` : '';
   ctx.log.push({
     targetId: id,
     kind: 'damage',
-    text: `${target.name} takes ${report.totalAfterDefenses} damage${half ? ' (half)' : ''} — ${rolled.text}${notes.length ? ` [${notes.join(', ')}]` : ''}${outcome.event === 'died' ? ' — dies!' : outcome.event === 'unconscious' ? ' — falls unconscious!' : ''}`,
+    text: `${m(half ? 'combat.takesHalf' : 'combat.takes', { name: target.name, n: report.totalAfterDefenses })} — ${rolled.text}${notes.length ? ` [${notes.join(', ')}]` : ''}${fate}`,
   });
   if (report.totalAfterDefenses > 0) ctx.onDamaged?.(ctx, id, report.totalAfterDefenses);
 }

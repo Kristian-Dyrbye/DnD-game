@@ -13,6 +13,7 @@ import type { Grid, GridToken } from './grid';
 import type { Creatures, TurnState } from './turns';
 import type { Zone } from './zones';
 import type { ScarMark } from '../character/scars';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
 export interface CombatState {
   grid: Grid;
@@ -32,6 +33,8 @@ export interface CombatContext {
   table?: ConditionTable;
   /** Is `b` hostile to `a`? Default: different initiative sides (party / enemy / neutral). */
   isHostile?: (a: string, b: string) => boolean;
+  /** Language of the combat log (default English; the session passes its own). */
+  msgs?: Messages;
 }
 
 export type CombatEventKind = 'action' | 'attack' | 'damage' | 'save' | 'check' | 'condition' | 'effect' | 'move' | 'info';
@@ -56,6 +59,8 @@ export const fail = (state: CombatState, error: string, events: CombatEvent[] = 
 });
 
 export const dbOf = (ctx: CombatContext): SrdDatabase => ctx.db ?? loadSrd();
+
+export const msgsOf = (ctx: { msgs?: Messages }): Messages => ctx.msgs ?? ENGLISH_MESSAGES;
 
 export function sideOf(state: CombatState, id: string): string | undefined {
   return state.turns.order.find((e) => e.id === id)?.side;

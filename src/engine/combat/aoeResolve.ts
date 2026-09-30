@@ -15,6 +15,7 @@
  */
 import type { Creature } from '../core/creature';
 import { formatD20Test, type Modifier } from '../core/dice';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { Damage } from '../data/common';
 import type { Ability, Condition } from '../rules/basics';
 import type { D20TestResult } from '../rules/checks';
@@ -62,18 +63,18 @@ export interface AreaEffectOutcome {
 }
 
 /** Add a flat bonus (cover) to a finished save result, recomputing total, success and text. */
-export function addSaveBonus(r: D20TestResult, mod: Modifier): D20TestResult {
+export function addSaveBonus(r: D20TestResult, mod: Modifier, msgs: Messages = ENGLISH_MESSAGES): D20TestResult {
   if (mod.value === 0) return r;
   const modifiers = [...r.modifiers, mod];
   const total = r.total + mod.value;
   const success = r.autoFail ? false : r.target ? total >= r.target.value : undefined;
-  const outcome = r.autoFail ? `Automatic failure (${r.autoFail})` : success === undefined ? undefined : success ? 'Success' : 'Failure';
+  const outcome = r.autoFail ? msgs.m('roll.autoFail', { reason: r.autoFail }) : success === undefined ? undefined : msgs.m(success ? 'roll.success' : 'roll.failure');
   return {
     ...r,
     modifiers,
     total,
     ...(success !== undefined && { success }),
-    text: formatD20Test({ d20: r.d20, modifiers, total, ...(r.target && { target: r.target }), ...(outcome && { outcome }) }),
+    text: formatD20Test({ d20: r.d20, modifiers, total, ...(r.target && { target: r.target }), ...(outcome && { outcome }) }, msgs),
   };
 }
 
@@ -116,7 +117,7 @@ export function resolveAreaEffect(state: CombatState, ctx: CombatContext, o: Are
         if (cr.cover === 'half' || cr.cover === 'three_quarters') cover = cr.cover;
       }
       save = combatSave(next, ctx, id, o.save.ability, o.save.dc);
-      if (cover !== 'none') save = addSaveBonus(save, { value: cover === 'half' ? 2 : 5, label: cover === 'half' ? 'Half Cover' : 'Three-Quarters Cover' });
+      if (cover !== 'none') save = addSaveBonus(save, { value: cover === 'half' ? 2 : 5, label: cover === 'half' ? 'Half Cover' : 'Three-Quarters Cover' }, ctx.msgs);
       events.push({ kind: 'save', targetId: id, text: `${c.name} ${save.label}: ${save.text}` });
     }
     const failed = !save || !save.success;

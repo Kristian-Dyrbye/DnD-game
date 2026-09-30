@@ -95,7 +95,7 @@ function improvise(ctx: RunContext, skill: Skill, targetId: string | undefined, 
   p.done.push(key);
   ctx.state.time += TIME_COSTS.quick_action;
   const dc = improvisedDc(ctx);
-  const roll = skillCheck(ctx.state.hero, skill, { rng: ctx.rng, dc });
+  const roll = skillCheck(ctx.state.hero, skill, { rng: ctx.rng, dc, ...(ctx.msgs && { msgs: ctx.msgs }) });
   const what = SKILL_NAMES[skill];
   const fact = m(roll.success ? 'resolve.improvSuccess' : 'resolve.improvFail', { skill: what });
   return { result: { ...empty(), rolls: [roll], facts: [fact] }, via: 'improvised_check', playerAction: text };

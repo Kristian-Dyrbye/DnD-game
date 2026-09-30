@@ -62,7 +62,7 @@ import {
   weaponEffectMods,
 } from '../rules/spellHooks3';
 import { breakHiding, consumeHelpAttack, dodgeActive, hasOncePerTurnMarker, helpAttackSource } from './actionEffects';
-import { areHostile, cloneGridTokens, dbOf, fail, withCreature, type ActionResult, type CombatContext, type CombatEvent, type CombatState } from './combatState';
+import { areHostile, cloneGridTokens, dbOf, fail, msgsOf, withCreature, type ActionResult, type CombatContext, type CombatEvent, type CombatState } from './combatState';
 import { distanceFt, footprintSize, moveToken, type Grid } from './grid';
 import { computeCover, hasLineOfSight } from './los';
 import { planMove } from './movement';
@@ -465,12 +465,13 @@ export function dealCombatDamage(
   const warded = applyDeathWard(before, zero.creature);
   let after = warded.creature;
   const notes = report.adjusted.filter((a) => a.note).map((a) => `${a.type} ${a.note}`);
-  const fate = warded.triggered ? ' — Death Ward holds them at 1 HP!' : zero.event === 'died' ? ' — dies!' : zero.event === 'unconscious' ? ' — falls unconscious!' : '';
+  const { m } = msgsOf(ctx);
+  const fate = warded.triggered ? ` — ${m('combat.deathWard')}` : zero.event === 'died' ? ` — ${m('combat.dies')}` : zero.event === 'unconscious' ? ` — ${m('combat.fallsUnconscious')}` : '';
   events.push({
     kind: 'damage',
     actorId: sourceId,
     targetId,
-    text: `${before.name} takes ${report.totalAfterDefenses} damage${opts.text ? ` — ${opts.text}` : ''}${notes.length ? ` [${notes.join(', ')}]` : ''}${fate}`,
+    text: `${m('combat.takes', { name: before.name, n: report.totalAfterDefenses })}${opts.text ? ` — ${opts.text}` : ''}${notes.length ? ` [${notes.join(', ')}]` : ''}${fate}`,
   });
   if (report.totalAfterDefenses > 0) {
     after = endControlOnHarm(after, sourceId);
@@ -509,7 +510,7 @@ export function dealCombatDamage(
     }
     const hit = next.creatures[targetId] as Creature;
     if (isCharacter(hit) && hit.spellcasting?.concentration) {
-      const ectx = createEffectContext({ rng: ctx.rng, source: hit, targets: Object.values(next.creatures) });
+      const ectx = createEffectContext({ rng: ctx.rng, ...(ctx.msgs && { msgs: ctx.msgs }), source: hit, targets: Object.values(next.creatures) });
       concentrationCheck(ectx, targetId, report.totalAfterDefenses, ctx.rng);
       next = { ...next, creatures: Object.fromEntries(ectx.creatures) };
       for (const l of ectx.log) events.push({ kind: l.kind === 'save' ? 'save' : 'info', targetId, text: l.text });
@@ -636,14 +637,16 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
     exhaustion: attacker.exhaustion,
     ...(isCharacter(attacker) && { critOn: featureCritOn(attacker, db) }),
     ...(check.autoCrit && { autoCrit: check.autoCrit }),
+    ...(ctx.msgs && { msgs: ctx.msgs }),
   });
-  const modeNote = [advantage.length ? `Advantage: ${advantage.join(', ')}` : '', disadvantage.length ? `Disadvantage: ${disadvantage.join(', ')}` : ''].filter(Boolean).join('; ');
-  const coverNote = check.coverBonus ? ` (AC includes +${check.coverBonus} ${check.cover.replace('_', '-')} cover)` : '';
+  const { m } = msgsOf(ctx);
+  const modeNote = [advantage.length ? m('combat.advantage', { list: advantage.join(', ') }) : '', disadvantage.length ? m('combat.disadvantage', { list: disadvantage.join(', ') }) : ''].filter(Boolean).join('; ');
+  const coverNote = check.coverBonus ? ` (${m(check.cover === 'half' ? 'combat.cover.half' : 'combat.cover.three_quarters', { n: check.coverBonus })})` : '';
   events.push({
     kind: 'attack',
     actorId: attacker.id,
     targetId: target.id,
-    text: `${attacker.name} attacks ${target.name} with ${profile.name}: ${res.text}${coverNote}${modeNote ? ` [${modeNote}]` : ''}`,
+    text: `${m('combat.attack', { attacker: attacker.name, target: target.name, weapon: profile.name, roll: res.text })}${coverNote}${modeNote ? ` [${modeNote}]` : ''}`,
   });
 
   // Things used up or broken by making an attack roll.

@@ -8,6 +8,7 @@
  */
 import { formatD20Test, parseDice, roll, type DiceExpr, type Modifier, type RollResult } from '../core/dice';
 import type { Rng } from '../core/rng';
+import { ENGLISH_MESSAGES } from '../i18n';
 import type { Creature } from '../core/creature';
 import type { Damage } from '../data/common';
 import type { DamageType } from './basics';
@@ -40,13 +41,14 @@ export function attackRoll(input: AttackRollInput): AttackRollResult {
     crit = true;
   } else hit = base.total >= input.targetAc;
   if (hit && input.autoCrit) crit = true;
-  const outcome = !hit ? (natural === 1 ? 'Miss (natural 1)' : 'Miss') : crit ? (natural >= critOn ? 'Critical Hit!' : `Critical Hit (${input.autoCrit})`) : 'Hit';
+  const { m } = input.msgs ?? ENGLISH_MESSAGES;
+  const outcome = !hit ? m(natural === 1 ? 'roll.missNat1' : 'roll.miss') : crit ? (natural >= critOn ? m('roll.crit') : m('roll.critBecause', { reason: input.autoCrit ?? '' })) : m('roll.hit');
   return {
     ...base,
     hit,
     crit,
     success: hit,
-    text: formatD20Test({ d20: base.d20, modifiers: base.modifiers, total: base.total, target: { kind: 'AC', value: input.targetAc }, outcome }),
+    text: formatD20Test({ d20: base.d20, modifiers: base.modifiers, total: base.total, target: { kind: 'AC', value: input.targetAc }, outcome }, input.msgs),
   };
 }
 
