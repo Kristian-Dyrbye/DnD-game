@@ -32,21 +32,22 @@ const INFLUENCE_ABILITY = { deception: 'cha', intimidation: 'cha', performance: 
 function payFor(state: CombatState, ctx: CombatContext, id: string, kind: EconomyKind): ActionResult<{ actor: Creature }> {
   const actor = state.creatures[id];
   if (!actor || actor.dead) return fail(state, `Unknown creature ${id}`);
-  if (!canAct(actor, ctx.table)) return fail(state, `${actor.name} can't act (Incapacitated)`);
+  if (!canAct(actor, ctx.table)) return fail(state, msgsOf(ctx).m('turn.incapacitated', { name: actor.name }));
   const r = spend(state.turns, id, kind, actor, ctx.table, msgsOf(ctx));
   if (!r.ok) return fail(state, r.error);
   return { ok: true, state: { ...state, turns: r.state }, events: [], actor };
 }
 
-/** Study: an Intelligence check with a knowledge/investigation skill. */
-export function study(state: CombatState, ctx: CombatContext, id: string, opts: { skill: StudySkill; topic: string; dc?: number }): ActionResult<{ success: boolean }> {
+/** Study: an Intelligence check with a knowledge/investigation skill (no topic: "the foes and the battlefield"). */
+export function study(state: CombatState, ctx: CombatContext, id: string, opts: { skill: StudySkill; topic?: string; dc?: number }): ActionResult<{ success: boolean }> {
   const p = payFor(state, ctx, id, 'action');
   if (!p.ok) return p;
   const r = combatCheck(p.state, ctx, id, 'int', opts.skill, opts.dc ?? 15);
+  const { m } = msgsOf(ctx);
   return {
     ok: true,
     state: r.state,
-    events: [{ kind: 'check', actorId: id, text: `${p.actor.name} studies ${opts.topic} — ${r.result.text}` }],
+    events: [{ kind: 'check', actorId: id, text: m('other.studies', { name: p.actor.name, topic: opts.topic ?? m('other.studyTopic'), roll: r.result.text }) }],
     success: r.result.success === true,
   };
 }
@@ -62,8 +63,9 @@ export function influence(
   const target = state.creatures[targetId];
   const a = state.grid.tokens[id];
   const b = state.grid.tokens[targetId];
-  if (!target || target.dead || !a || !b || targetId === id) return fail(state, 'Invalid target');
-  if (distanceFt(a, b) > 60) return fail(state, `${target.name} is too far away to influence`);
+  const { m } = msgsOf(ctx);
+  if (!target || target.dead || !a || !b || targetId === id) return fail(state, m('act.invalidTarget'));
+  if (distanceFt(a, b) > 60) return fail(state, m('other.tooFar', { name: target.name }));
   const p = payFor(state, ctx, id, 'action');
   if (!p.ok) return p;
   const dc = opts.dc ?? Math.max(15, target.abilities.int);
@@ -71,7 +73,7 @@ export function influence(
   return {
     ok: true,
     state: r.state,
-    events: [{ kind: 'check', actorId: id, targetId, text: `${p.actor.name} tries to influence ${target.name} — ${r.result.text}` }],
+    events: [{ kind: 'check', actorId: id, targetId, text: m('other.influences', { name: p.actor.name, target: target.name, roll: r.result.text }) }],
     success: r.result.success === true,
     dc,
   };
@@ -81,7 +83,7 @@ export function influence(
 export function utilize(state: CombatState, ctx: CombatContext, id: string, what: string): ActionResult {
   const p = payFor(state, ctx, id, 'action');
   if (!p.ok) return p;
-  return { ok: true, state: p.state, events: [{ kind: 'action', actorId: id, text: `${p.actor.name} uses ${what}.` }] };
+  return { ok: true, state: p.state, events: [{ kind: 'action', actorId: id, text: msgsOf(ctx).m('other.uses', { name: p.actor.name, what }) }] };
 }
 
 /** Magic items the character carries whose effects are automated (potions of healing…). */
@@ -97,19 +99,20 @@ export function usableMagicItems(c: Creature, ctx: CombatContext): { uid: string
 /** Magic: use a carried magic item (potion: Bonus Action, drink or give within 5 ft; used up). */
 export function useMagicItem(state: CombatState, ctx: CombatContext, id: string, uid: string, targetId: string = id): ActionResult {
   const user = state.creatures[id];
-  if (!user || user.kind !== 'character' || !('inventory' in user)) return fail(state, `${user?.name ?? id} has no items`);
+  const { m } = msgsOf(ctx);
+  if (!user || user.kind !== 'character' || !('inventory' in user)) return fail(state, m('other.noItems', { name: user?.name ?? id }));
   const entry = (user as Character).inventory.find((i) => i.uid === uid);
   const item = entry ? dbOf(ctx).magicItems.get(entry.itemId) : undefined;
-  if (!entry || !item) return fail(state, 'No such magic item');
-  if (!item.effects?.length) return fail(state, `${item.name} has no automated effect yet`);
+  if (!entry || !item) return fail(state, m('other.noItem'));
+  if (!item.effects?.length) return fail(state, m('other.noEffect', { item: item.name }));
   const potion = item.category === 'potion';
   const target = state.creatures[targetId];
-  if (!target || target.dead) return fail(state, 'Invalid target');
+  if (!target || target.dead) return fail(state, m('act.invalidTarget'));
   if (targetId !== id) {
     const a = state.grid.tokens[id];
     const b = state.grid.tokens[targetId];
-    if (!potion) return fail(state, `${item.name} can only be used on yourself`);
-    if (!a || !b || distanceFt(a, b) > 5) return fail(state, `${target.name} must be within 5 ft to be given ${item.name}`);
+    if (!potion) return fail(state, m('other.selfOnly', { item: item.name }));
+    if (!a || !b || distanceFt(a, b) > 5) return fail(state, m('other.giveWithin', { name: target.name, item: item.name }));
   }
   const p = payFor(state, ctx, id, potion ? 'bonusAction' : 'action');
   if (!p.ok) return p;
@@ -122,9 +125,13 @@ export function useMagicItem(state: CombatState, ctx: CombatContext, id: string,
   executeEffects(item.effects, [targetId], ectx);
   const creatures = { ...p.state.creatures };
   for (const [cid, c] of ectx.creatures) creatures[cid] = c;
-  const verb = potion ? (targetId === id ? 'drinks' : `gives ${target.name}`) : 'uses';
+  const line = !potion
+    ? m('other.uses', { name: user.name, what: item.name })
+    : targetId === id
+      ? m('other.drinks', { name: user.name, item: item.name })
+      : m('other.gives', { name: user.name, target: target.name, item: item.name });
   const events: CombatEvent[] = [
-    { kind: 'action', actorId: id, ...(targetId !== id && { targetId }), text: `${user.name} ${verb} ${potion ? 'a ' : ''}${item.name}.` },
+    { kind: 'action', actorId: id, ...(targetId !== id && { targetId }), text: line },
     ...ectx.log.map((l): CombatEvent => ({ kind: 'effect', actorId: id, ...(l.targetId && { targetId: l.targetId }), text: l.text })),
   ];
   return { ok: true, state: { ...p.state, creatures }, events };

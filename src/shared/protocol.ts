@@ -31,7 +31,7 @@ export const PlayerActionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('grapple'), targetId: z.string().max(60) }),
   z.object({ kind: z.literal('shove'), targetId: z.string().max(60), effect: z.enum(['push', 'prone']) }),
   z.object({ kind: z.literal('escape_grapple') }),
-  z.object({ kind: z.literal('study'), skill: z.enum(STUDY_SKILLS), topic: z.string().max(120) }),
+  z.object({ kind: z.literal('study'), skill: z.enum(STUDY_SKILLS), topic: z.string().max(120).optional() }),
   z.object({ kind: z.literal('influence'), targetId: z.string().max(60), skill: z.enum(INFLUENCE_SKILLS) }),
   z.object({ kind: z.literal('utilize'), what: z.string().max(120) }),
   z.object({ kind: z.literal('use_item'), uid: z.string().max(20), targetId: z.string().max(60).optional() }),

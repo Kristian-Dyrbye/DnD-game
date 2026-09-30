@@ -17,11 +17,15 @@ import { applyCondition, attackModes, removeCondition, saveModes } from './condi
 import { applyDamage, attackRoll, rollDamage, type DamageRollResult } from './damage';
 import { healFromZero } from './death';
 import { dealDamage, upcastDice, type EffectContext, type HookFn } from './effects';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
 type Params = Record<string, unknown> | undefined;
 const num = (p: Params, key: string, fallback = 0) => (typeof p?.[key] === 'number' ? (p[key] as number) : fallback);
 const src = (ctx: EffectContext) => ctx.conditionSourceId ?? ctx.source.id;
 const up = (ctx: EffectContext) => ctx.upcastLevels ?? 0;
+const msg = (ctx: EffectContext): Messages => ctx.msgs ?? ENGLISH_MESSAGES;
+/** Spread into roll options so their math lines use the cast's language. */
+const lang = (ctx: EffectContext) => (ctx.msgs ? { msgs: ctx.msgs } : {});
 
 /** How many projectiles this target gets: the player's allocation, else an even split (first targets get the remainder). */
 function share(ctx: EffectContext, targetId: string, total: number): number {
@@ -40,13 +44,15 @@ function spellAttack(ctx: EffectContext, id: string): { hit: boolean; crit: bool
   const target = ctx.creatures.get(id)!;
   const source = ctx.creatures.get(ctx.source.id) ?? ctx.source;
   const modes = attackModes({ attacker: source, target, distanceFt: ctx.distances?.get(id) ?? 30 });
+  const label = msg(ctx).m('eff.spellAttack');
   const res = attackRoll({
     rng: ctx.rng,
-    label: 'Spell attack',
-    modifiers: [{ value: ctx.attackBonus ?? 0, label: 'Spell attack' }],
+    label,
+    modifiers: [{ value: ctx.attackBonus ?? 0, label }],
     targetAc: target.ac,
     advantage: [...modes.advantage, ...(ctx.attackAdvantage ? [ctx.attackAdvantage] : [])],
     disadvantage: modes.disadvantage,
+    ...lang(ctx),
   });
   ctx.log.push({ targetId: id, kind: 'attack', text: `${source.name} → ${target.name}: ${res.text}` });
   return res;
@@ -55,7 +61,7 @@ function spellAttack(ctx: EffectContext, id: string): { hit: boolean; crit: bool
 function sharedRoll(ctx: EffectContext, key: string, rng: Rng, damage: Damage[]): DamageRollResult {
   const cached = ctx.scratch?.get(key) as DamageRollResult | undefined;
   if (cached) return cached;
-  const r = rollDamage(rng, damage);
+  const r = rollDamage(rng, damage, lang(ctx));
   ctx.scratch?.set(key, r);
   return r;
 }
@@ -69,7 +75,7 @@ export const SPELL_HOOKS_2: Record<string, HookFn> = {
   magic_missile: (ctx, id, p) => {
     const darts = share(ctx, id, num(p, 'darts', 3) + num(p, 'dartsPerUpcast', 1) * up(ctx));
     const dmg = (p?.damage as Damage | undefined) ?? { dice: '1d4+1', type: 'force' };
-    for (let i = 0; i < darts; i++) dealDamage(ctx, id, rollDamage(ctx.rng, [dmg]), false);
+    for (let i = 0; i < darts; i++) dealDamage(ctx, id, rollDamage(ctx.rng, [dmg], lang(ctx)), false);
   },
   scorching_ray: (ctx, id, p) => {
     const rays = share(ctx, id, num(p, 'rays', 3) + num(p, 'raysPerUpcast', 1) * up(ctx));
@@ -77,26 +83,26 @@ export const SPELL_HOOKS_2: Record<string, HookFn> = {
     for (let i = 0; i < rays; i++) {
       if (!ctx.creatures.get(id) || ctx.creatures.get(id)!.dead) break;
       const r = spellAttack(ctx, id);
-      if (r.hit) dealDamage(ctx, id, rollDamage(ctx.rng, [dmg], { crit: r.crit }), false);
+      if (r.hit) dealDamage(ctx, id, rollDamage(ctx.rng, [dmg], { crit: r.crit, ...lang(ctx) }), false);
     }
   },
   chromatic_orb: (ctx, id, p) => {
     const types = (p?.damageTypes as DamageType[] | undefined) ?? ['fire'];
     const type = (types.includes(ctx.choice as DamageType) ? ctx.choice : types[0]) as DamageType;
-    dealDamage(ctx, id, rollDamage(ctx.rng, withUpcast({ dice: String(p?.dice ?? '3d8'), type }, p?.upcast, up(ctx))), false);
+    dealDamage(ctx, id, rollDamage(ctx.rng, withUpcast({ dice: String(p?.dice ?? '3d8'), type }, p?.upcast, up(ctx)), lang(ctx)), false);
   },
   disintegrate: (ctx, id) => {
     const c = ctx.creatures.get(id);
     if (c && c.hp === 0 && !c.dead) ctx.creatures.set(id, { ...c, dead: true });
-    if (c && c.hp === 0) ctx.log.push({ targetId: id, kind: 'hook', text: `${c.name} is reduced to dust.` });
+    if (c && c.hp === 0) ctx.log.push({ targetId: id, kind: 'hook', text: msg(ctx).m('hook.dust', { name: c.name }) });
   },
   power_word_kill: (ctx, id, p) => {
     const c = ctx.creatures.get(id);
     if (!c) return;
     if (c.hp <= num(p, 'hpThreshold', 100)) {
       ctx.creatures.set(id, { ...c, hp: 0, dead: true });
-      ctx.log.push({ targetId: id, kind: 'hook', text: `${c.name} dies instantly (Power Word Kill).` });
-    } else dealDamage(ctx, id, rollDamage(ctx.rng, [(p?.otherwise as Damage | undefined) ?? { dice: '12d12', type: 'psychic' }]), false);
+      ctx.log.push({ targetId: id, kind: 'hook', text: msg(ctx).m('hook.pwk', { name: c.name }) });
+    } else dealDamage(ctx, id, rollDamage(ctx.rng, [(p?.otherwise as Damage | undefined) ?? { dice: '12d12', type: 'psychic' }], lang(ctx)), false);
   },
   power_word_heal: (ctx, id, p) => {
     let c = ctx.creatures.get(id);
@@ -104,7 +110,7 @@ export const SPELL_HOOKS_2: Record<string, HookFn> = {
     c = healFromZero(c, c.maxHp).creature;
     for (const cond of (p?.endsConditions as Condition[] | undefined) ?? []) c = removeCondition(c, cond);
     ctx.creatures.set(id, c);
-    ctx.log.push({ targetId: id, kind: 'heal', text: `${c.name} is fully healed (Power Word Heal).` });
+    ctx.log.push({ targetId: id, kind: 'heal', text: msg(ctx).m('hook.pwh', { name: c.name }) });
   },
   lesser_restoration: (ctx, id, p) => {
     const c = ctx.creatures.get(id);
@@ -113,14 +119,14 @@ export const SPELL_HOOKS_2: Record<string, HookFn> = {
     const pick = options.find((o) => o === ctx.choice && c.conditions.some((x) => x.condition === o)) ?? options.find((o) => c.conditions.some((x) => x.condition === o));
     if (pick) {
       ctx.creatures.set(id, removeCondition(c, pick));
-      ctx.log.push({ targetId: id, kind: 'hook', text: `${c.name} is no longer ${pick}.` });
+      ctx.log.push({ targetId: id, kind: 'hook', text: msg(ctx).m('turn.noLonger', { name: c.name, condition: pick }) });
     }
   },
   revivify: (ctx, id, p) => {
     const c = ctx.creatures.get(id);
     if (!c || !c.dead) return;
     ctx.creatures.set(id, { ...c, dead: false, hp: num(p, 'hp', 1), conditions: c.conditions.filter((x) => x.condition !== 'unconscious') });
-    ctx.log.push({ targetId: id, kind: 'heal', text: `${c.name} returns to life with ${num(p, 'hp', 1)} HP.` });
+    ctx.log.push({ targetId: id, kind: 'heal', text: msg(ctx).m('hook.revived', { name: c.name, n: num(p, 'hp', 1) }) });
   },
   command: (ctx, id, p) => {
     const c = ctx.creatures.get(id);
@@ -129,7 +135,7 @@ export const SPELL_HOOKS_2: Record<string, HookFn> = {
     let next = addEffect(c, { key: 'commanded', sourceId: src(ctx), data: { word }, expires: { on: 'end_of_turn', creatureId: id, skip: 0 } });
     if (word === 'grovel') next = applyCondition(next, { condition: 'prone' }).creature;
     ctx.creatures.set(id, next);
-    ctx.log.push({ targetId: id, kind: 'hook', text: `${c.name} obeys: "${word}".` });
+    ctx.log.push({ targetId: id, kind: 'hook', text: msg(ctx).m('hook.obeys', { name: c.name, word }) });
   },
   sleep: (ctx, id, p) => {
     const c = ctx.creatures.get(id);
@@ -146,7 +152,7 @@ export const SPELL_HOOKS_2: Record<string, HookFn> = {
     if (!c) return;
     const option = (p?.options as string[] | undefined)?.includes(ctx.choice ?? '') ? ctx.choice! : 'extra_damage';
     ctx.creatures.set(id, addEffect(c, { key: 'cursed', sourceId: src(ctx), roundsLeft: num(p, 'durationRounds', 10), data: { ...(p ?? {}), option, casterId: ctx.source.id } }));
-    ctx.log.push({ targetId: id, kind: 'hook', text: `${c.name} is cursed (${option.replace(/_/g, ' ')}).` });
+    ctx.log.push({ targetId: id, kind: 'hook', text: msg(ctx).m('hook.cursed', { name: c.name, option: option.replace(/_/g, ' ') }) });
   },
   blindness_deafness: (ctx, id, p) => {
     const c = ctx.creatures.get(id);
@@ -168,11 +174,12 @@ export const SPELL_HOOKS_2: Record<string, HookFn> = {
       if (!ends) {
         const check = roll('1d20', ctx.rng).total + (ctx.spellMod ?? 0);
         ends = check >= num(p, 'checkDcBase', 10) + level;
-        ctx.log.push({ targetId: id, kind: 'hook', text: `Dispel check vs DC ${10 + level}: ${check}${ends ? ' — success' : ' — failure'}` });
+        const { m } = msg(ctx);
+        ctx.log.push({ targetId: id, kind: 'hook', text: m('hook.dispel', { dc: 10 + level, roll: check, outcome: m(ends ? 'hook.dispelSuccess' : 'hook.dispelFailure') }) });
       }
       if (ends) {
         next = { ...removeEffects(next, (e) => e.sourceId === s), conditions: next.conditions.filter((x) => x.sourceId !== s) };
-        ctx.log.push({ targetId: id, kind: 'hook', text: `${s.split(':')[1]!.replace(/_/g, ' ')} ends on ${c.name}.` });
+        ctx.log.push({ targetId: id, kind: 'hook', text: msg(ctx).m('hook.dispelEnds', { effect: s.split(':')[1]!.replace(/_/g, ' '), name: c.name }) });
       }
     }
     ctx.creatures.set(id, next);
@@ -180,7 +187,7 @@ export const SPELL_HOOKS_2: Record<string, HookFn> = {
   counterspell: (ctx, id) => {
     const c = ctx.creatures.get(id);
     if (c) ctx.creatures.set(id, addEffect(c, { key: 'counterspelled', sourceId: src(ctx), expires: { on: 'end_of_turn', creatureId: id, skip: 0 } }));
-    ctx.log.push({ targetId: id, kind: 'hook', text: 'The spell is countered (the slot is not spent).' });
+    ctx.log.push({ targetId: id, kind: 'hook', text: msg(ctx).m('hook.countered') });
   },
   vampiric_touch: (ctx, id, p) => {
     const dealt = ctx.lastDamage?.get(id) ?? 0;
@@ -188,12 +195,12 @@ export const SPELL_HOOKS_2: Record<string, HookFn> = {
     if (!caster || dealt <= 0) return;
     const amount = Math.floor(dealt * num(p, 'healFractionOfDamage', 0.5));
     ctx.creatures.set(ctx.source.id, healFromZero(caster, amount).creature);
-    ctx.log.push({ targetId: ctx.source.id, kind: 'heal', text: `${caster.name} drains ${amount} HP.` });
+    ctx.log.push({ targetId: ctx.source.id, kind: 'heal', text: msg(ctx).m('hook.drains', { name: caster.name, n: amount }) });
   },
   divine_smite: (ctx, id, p) => {
     const c = ctx.creatures.get(id);
     if (!c || !(p?.bonusVsCreatureTypes as string[] | undefined)?.includes(c.creatureType)) return;
-    dealDamage(ctx, id, rollDamage(ctx.rng, [{ dice: String(p?.bonusDice ?? '1d8'), type: (p?.bonusType as DamageType | undefined) ?? 'radiant' }]), false);
+    dealDamage(ctx, id, rollDamage(ctx.rng, [{ dice: String(p?.bonusDice ?? '1d8'), type: (p?.bonusType as DamageType | undefined) ?? 'radiant' }], lang(ctx)), false);
   },
   ice_knife: (ctx, id, p) => {
     const ex = p?.explosion as Record<string, unknown> | undefined;
@@ -201,14 +208,14 @@ export const SPELL_HOOKS_2: Record<string, HookFn> = {
     if (!ex || !c || c.dead) return;
     const dmg = withUpcast((ex.damage as Damage | undefined) ?? { dice: '2d6', type: 'cold' }, ex.upcast, up(ctx));
     const rolled = sharedRoll(ctx, 'ice_knife', ctx.rng, dmg);
-    const save = savingThrow(c, 'dex', { rng: ctx.rng, dc: ctx.saveDc ?? 10, ...saveModes(c, 'dex') });
-    ctx.log.push({ targetId: id, kind: 'save', text: `${c.name} Dexterity save (Ice Knife burst): ${save.text}` });
+    const save = savingThrow(c, 'dex', { rng: ctx.rng, dc: ctx.saveDc ?? 10, ...saveModes(c, 'dex'), ...lang(ctx) });
+    ctx.log.push({ targetId: id, kind: 'save', text: msg(ctx).m('hook.iceKnife', { name: c.name, roll: save.text }) });
     if (!save.success) dealDamage(ctx, id, rolled, false);
   },
   acid_arrow: (ctx, id, p) => {
     const dmg = withUpcast((p?.damage as Damage | undefined) ?? { dice: '4d4', type: 'acid' }, p?.upcast, up(ctx));
     const r = spellAttack(ctx, id);
-    dealDamage(ctx, id, rollDamage(ctx.rng, dmg, { crit: r.crit }), !r.hit);
+    dealDamage(ctx, id, rollDamage(ctx.rng, dmg, { crit: r.crit, ...lang(ctx) }), !r.hit);
     const c = ctx.creatures.get(id);
     if (r.hit && c && !c.dead) {
       const delayed = p?.delayed as Record<string, unknown> | undefined;
@@ -217,7 +224,7 @@ export const SPELL_HOOKS_2: Record<string, HookFn> = {
     }
   },
   misty_step: (ctx, id, p) => {
-    ctx.log.push({ targetId: id, kind: 'hook', text: `Teleport up to ${num(p, 'teleportFt', 30)} ft to a space you can see.` });
+    ctx.log.push({ targetId: id, kind: 'hook', text: msg(ctx).m('hook.teleport', { ft: num(p, 'teleportFt', 30) }) });
   },
 };
 
@@ -225,22 +232,23 @@ export const SPELL_HOOKS_2: Record<string, HookFn> = {
  * End of a creature's turn: Acid Arrow's delayed damage, Sleep's second save. Call before
  * onTurnEvent('end_of_turn') removes the effects.
  */
-export function endOfTurnSpellEffects<T extends Creature>(c: T, rng: Rng): { creature: T; log: string[] } {
+export function endOfTurnSpellEffects<T extends Creature>(c: T, rng: Rng, msgs: Messages = ENGLISH_MESSAGES): { creature: T; log: string[] } {
   let next = c;
   const log: string[] = [];
+  const { m } = msgs;
   for (const e of c.effects) {
     if (e.key === 'acid_arrow' && e.data.damage) {
       const d = e.data.damage as Damage;
       const amount = roll(d.dice, rng).total;
       next = applyDamage(next, [{ amount, type: d.type }]).creature as T;
-      log.push(`${c.name} takes ${amount} acid damage from the lingering acid.`);
+      log.push(m('hook.acid', { name: c.name, n: amount }));
     }
     if (e.key === 'sleep_pending') {
-      const save = savingThrow(next, 'wis', { rng, dc: num(e.data, 'dc', 10), ...saveModes(next, 'wis') });
+      const save = savingThrow(next, 'wis', { rng, dc: num(e.data, 'dc', 10), ...saveModes(next, 'wis'), msgs });
       if (!save.success) {
         next = applyCondition(next, { condition: 'unconscious', ...(e.sourceId && { sourceId: e.sourceId }), roundsLeft: num(e.data, 'durationRounds', 10) }).creature as T;
-        log.push(`${c.name} falls asleep (${save.text}).`);
-      } else log.push(`${c.name} fights off the sleep (${save.text}).`);
+        log.push(m('hook.asleep', { name: c.name, roll: save.text }));
+      } else log.push(m('hook.wakes', { name: c.name, roll: save.text }));
     }
   }
   return { creature: next, log };

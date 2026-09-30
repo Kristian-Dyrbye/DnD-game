@@ -63,7 +63,7 @@ export type PlayerAction =
   | { kind: 'grapple'; targetId: string }
   | { kind: 'shove'; targetId: string; effect: 'push' | 'prone' }
   | { kind: 'escape_grapple' }
-  | { kind: 'study'; skill: StudySkill; topic: string }
+  | { kind: 'study'; skill: StudySkill; topic?: string }
   | { kind: 'influence'; targetId: string; skill: InfluenceSkill }
   | { kind: 'utilize'; what: string }
   | { kind: 'use_item'; uid: string; targetId?: string }
@@ -401,7 +401,7 @@ function otherAction(enc: Encounter, ctx: CombatContext, id: string, a: PlayerAc
     case 'escape_grapple':
       return escapeGrapple(s, ctx, id);
     case 'study':
-      return study(s, ctx, id, { skill: a.skill, topic: a.topic });
+      return study(s, ctx, id, { skill: a.skill, ...(a.topic && { topic: a.topic }) });
     case 'influence':
       return influence(s, ctx, id, a.targetId, { skill: a.skill });
     case 'utilize':

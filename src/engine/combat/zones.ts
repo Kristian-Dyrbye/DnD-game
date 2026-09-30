@@ -38,6 +38,7 @@ import { areHostile, dbOf, fail, withCreature, type ActionResult, type CombatCon
 import { combatCheck } from './saves';
 import { cellKey, distanceFt, getCell, setCell, tokenSquares, type Point } from './grid';
 import { currentId, spend, type EconomyKind } from './turns';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
 export type ZoneTrigger = 'enter' | 'start_turn' | 'end_turn';
 
@@ -252,7 +253,7 @@ export function removeZone(state: CombatState, id: string): CombatState {
 }
 
 /** Drop zones whose caster is gone or no longer concentrating on the spell. */
-export function pruneZones(state: CombatState): { state: CombatState; events: CombatEvent[] } {
+export function pruneZones(state: CombatState, msgs: Messages = ENGLISH_MESSAGES): { state: CombatState; events: CombatEvent[] } {
   let next = state;
   const events: CombatEvent[] = [];
   for (const z of zonesOf(state)) {
@@ -260,13 +261,13 @@ export function pruneZones(state: CombatState): { state: CombatState; events: Co
     const concOk = !z.concentration || (caster && !caster.dead && caster.kind === 'character' && (caster as { spellcasting?: { concentration?: { spellId: string } } }).spellcasting?.concentration?.spellId === z.spellId);
     if (caster && !caster.dead && concOk) continue;
     next = removeZone(next, z.id);
-    events.push({ kind: 'info', actorId: z.casterId, text: `${z.name} ends.` });
+    events.push({ kind: 'info', actorId: z.casterId, text: msgs.m('zone.ends', { spell: z.name }) });
   }
   return { state: next, events };
 }
 
 /** Resolve a zone's effect on one creature (save, damage, condition), honouring once-per-turn. */
-function hit(state: CombatState, ctx: CombatContext, z: Zone, id: string, why: string): { state: CombatState; events: CombatEvent[] } {
+function hit(state: CombatState, ctx: CombatContext, z: Zone, id: string, why: 'zone.enters' | 'zone.startsIn' | 'zone.endsIn'): { state: CombatState; events: CombatEvent[] } {
   if (!affects(state, ctx, z, id)) return { state, events: [] };
   const stamp = turnStamp(state);
   if (z.oncePerTurn && z.lastHit[id] === stamp) return { state, events: [] };
@@ -274,7 +275,7 @@ function hit(state: CombatState, ctx: CombatContext, z: Zone, id: string, why: s
   const zones = zonesOf(state).map((o) => (o.id === z.id ? { ...o, lastHit: { ...o.lastHit, [id]: stamp } } : o));
   let next = withZones(state, zones);
   const name = next.creatures[id]?.name ?? id;
-  const events: CombatEvent[] = [{ kind: 'effect', actorId: z.casterId, targetId: id, text: `${name} ${why} ${z.name}.` }];
+  const events: CombatEvent[] = [{ kind: 'effect', actorId: z.casterId, targetId: id, text: msgsOf(ctx).m(why, { name, spell: z.name }) }];
   if (z.condition && next.creatures[id]!.conditions.some((c) => c.condition === z.condition && c.sourceId === z.sourceId) && !z.damage) return { state: next, events: [] };
   const template = z.template ?? templateFromArea({ shape: 'sphere', size: 5 } as Parameters<typeof templateFromArea>[0], { origin: { x: z.point!.x + 0.5, y: z.point!.y + 0.5 } });
   const r = resolveAreaEffect(next, ctx, {
@@ -301,13 +302,14 @@ function firing(state: CombatState, trigger: ZoneTrigger, id: string): Zone[] {
 
 /** Start/end of a creature's turn: zone effects on it; the caster's turn end ticks its zones. */
 export function zonesAtTurn(state: CombatState, ctx: CombatContext, id: string, when: 'start' | 'end'): { state: CombatState; events: CombatEvent[] } {
-  let next = pruneZones(state);
+  const msgs = msgsOf(ctx);
+  let next = pruneZones(state, msgs);
   const events = [...next.events];
   let cur = next.state;
   for (const z of firing(cur, when === 'start' ? 'start_turn' : 'end_turn', id)) {
     const live = zonesOf(cur).find((o) => o.id === z.id);
     if (!live) continue;
-    const r = hit(cur, ctx, live, id, when === 'start' ? 'starts its turn in' : 'ends its turn in');
+    const r = hit(cur, ctx, live, id, when === 'start' ? 'zone.startsIn' : 'zone.endsIn');
     cur = r.state;
     events.push(...r.events);
   }
@@ -315,11 +317,11 @@ export function zonesAtTurn(state: CombatState, ctx: CombatContext, id: string, 
     for (const z of zonesOf(cur).filter((o) => o.casterId === id && o.roundsLeft !== undefined)) {
       if (z.roundsLeft! <= 1) {
         cur = removeZone(cur, z.id);
-        events.push({ kind: 'info', actorId: id, text: `${z.name} ends.` });
+        events.push({ kind: 'info', actorId: id, text: msgs.m('zone.ends', { spell: z.name }) });
       } else cur = withZones(cur, zonesOf(cur).map((o) => (o.id === z.id ? { ...o, roundsLeft: o.roundsLeft! - 1 } : o)));
     }
   }
-  next = pruneZones(cur);
+  next = pruneZones(cur, msgs);
   return { state: next.state, events: [...events, ...next.events] };
 }
 
@@ -341,7 +343,7 @@ export function zonesAfterMove(
   before: Map<string, Set<string>>,
   mover?: { id: string; path: readonly Point[] },
 ): { state: CombatState; events: CombatEvent[] } {
-  let cur = pruneZones(state).state;
+  let cur = pruneZones(state, msgsOf(ctx)).state;
   const events: CombatEvent[] = [];
   for (const z of zonesOf(cur).filter((o) => o.triggers.includes('enter'))) {
     const was = before.get(z.id) ?? new Set<string>();
@@ -354,7 +356,7 @@ export function zonesAfterMove(
     for (const id of entered) {
       const live = zonesOf(cur).find((o) => o.id === z.id);
       if (!live) break;
-      const r = hit(cur, ctx, live, id, 'enters');
+      const r = hit(cur, ctx, live, id, 'zone.enters');
       cur = r.state;
       events.push(...r.events);
     }
@@ -366,14 +368,15 @@ export function zonesAfterMove(
 export function escapeZone(state: CombatState, ctx: CombatContext, id: string, zoneId: string): ActionResult<{ success: boolean }> {
   const z = zonesOf(state).find((o) => o.id === zoneId);
   const c = state.creatures[id];
-  if (!z || !c || !z.condition || !c.conditions.some((x) => x.condition === z.condition && x.sourceId === z.sourceId)) return fail(state, `${c?.name ?? id} isn't held by that`);
+  const { m } = msgsOf(ctx);
+  if (!z || !c || !z.condition || !c.conditions.some((x) => x.condition === z.condition && x.sourceId === z.sourceId)) return fail(state, m('zone.notHeld', { name: c?.name ?? id }));
   const paid = spend(state.turns, id, 'action', c, ctx.table, msgsOf(ctx));
   if (!paid.ok) return fail(state, paid.error);
   const r = combatCheck({ ...state, turns: paid.state }, ctx, id, 'str', 'athletics', z.escapeDc ?? 10);
   const success = r.result.success === true;
   let next = r.state;
   if (success) next = withCreature(next, removeCondition(next.creatures[id]!, z.condition, z.sourceId));
-  return { ok: true, state: next, events: [{ kind: 'check', actorId: id, text: `${c.name} struggles against ${z.name} — ${r.result.text}` }], success };
+  return { ok: true, state: next, events: [{ kind: 'check', actorId: id, text: m('zone.struggles', { name: c.name, spell: z.name, roll: r.result.text }) }], success };
 }
 
 export interface ZoneActOptions {
@@ -387,10 +390,11 @@ export interface ZoneActOptions {
 export function zoneAct(state: CombatState, ctx: CombatContext, casterId: string, zoneId: string, o: ZoneActOptions): ActionResult {
   const z = zonesOf(state).find((x) => x.id === zoneId && x.casterId === casterId);
   const caster = state.creatures[casterId];
-  if (!z || !caster) return fail(state, 'No such spell effect');
-  if (currentId(state.turns) !== casterId || !state.turns.turnActive) return fail(state, `It isn't ${caster.name}'s turn`);
+  const { m } = msgsOf(ctx);
+  if (!z || !caster) return fail(state, m('zone.none'));
+  if (currentId(state.turns) !== casterId || !state.turns.turnActive) return fail(state, m('turn.notYours', { name: caster.name }));
   const economy = z.bolt?.economy ?? z.move?.economy;
-  if (!economy) return fail(state, `${z.name} can't be moved`);
+  if (!economy) return fail(state, m('zone.cantMove', { spell: z.name }));
   const paid = spend(state.turns, casterId, economy, caster, ctx.table, msgsOf(ctx));
   if (!paid.ok) return fail(state, paid.error);
   let cur: CombatState = { ...state, turns: paid.state };
@@ -398,7 +402,7 @@ export function zoneAct(state: CombatState, ctx: CombatContext, casterId: string
 
   if (z.bolt) {
     const me = cur.grid.tokens[casterId];
-    if (!o.to || !me || distanceFt(me, { ...o.to, size: 'medium' }) > z.bolt.rangeFt) return fail(state, `Choose a point within ${z.bolt.rangeFt} ft`);
+    if (!o.to || !me || distanceFt(me, { ...o.to, size: 'medium' }) > z.bolt.rangeFt) return fail(state, m('zone.pointWithin', { ft: z.bolt.rangeFt }));
     const r = resolveAreaEffect(cur, ctx, {
       casterId,
       template: templateFromArea({ shape: 'sphere', size: z.bolt.radiusFt } as Parameters<typeof templateFromArea>[0], { origin: { x: o.to.x + 0.5, y: o.to.y + 0.5 } }),
@@ -408,14 +412,14 @@ export function zoneAct(state: CombatState, ctx: CombatContext, casterId: string
       halfOnSave: true,
     });
     if (!r.ok) return fail(state, r.error);
-    return { ok: true, state: r.state, events: [{ kind: 'action', actorId: casterId, text: `${caster.name} calls down another bolt of ${z.name}.` }, ...r.events] };
+    return { ok: true, state: r.state, events: [{ kind: 'action', actorId: casterId, text: m('zone.bolt', { name: caster.name, spell: z.name }) }, ...r.events] };
   }
 
   if (o.to) {
     const from = z.point ?? (z.template ? { x: Math.floor(z.template.origin.x), y: Math.floor(z.template.origin.y) } : undefined);
-    if (!from) return fail(state, `${z.name} can't be moved`);
+    if (!from) return fail(state, m('zone.cantMove', { spell: z.name }));
     const moved = distanceFt({ ...from, size: 'medium' }, { ...o.to, size: 'medium' });
-    if (moved > z.move!.ft) return fail(state, `${z.name} moves at most ${z.move!.ft} ft`);
+    if (moved > z.move!.ft) return fail(state, m('zone.movesMax', { spell: z.name, ft: z.move!.ft }));
     const before = zoneMembership(cur);
     cur = clearTerrain(cur, z);
     const dx = o.to.x - from.x;
@@ -427,7 +431,7 @@ export function zoneAct(state: CombatState, ctx: CombatContext, casterId: string
       ...(z.template && { template: { ...z.template, origin: { x: z.template.origin.x + dx, y: z.template.origin.y + dy } } }),
     };
     cur = applyTerrain(withZones(cur, zonesOf(cur).map((x) => (x.id === z.id ? movedZone : x))), movedZone);
-    events.push({ kind: 'move', actorId: casterId, text: `${caster.name} moves ${z.name} ${moved} ft.` });
+    events.push({ kind: 'move', actorId: casterId, text: m('zone.moves', { name: caster.name, spell: z.name, ft: moved }) });
     const after = zonesAfterMove(cur, ctx, before);
     cur = after.state;
     events.push(...after.events);
@@ -447,15 +451,16 @@ export function zoneStrike(state: CombatState, ctx: CombatContext, zoneId: strin
   const z = zonesOf(state).find((x) => x.id === zoneId);
   const target = state.creatures[targetId];
   const caster = z ? state.creatures[z.casterId] : undefined;
-  if (!z?.attack || !z.point || !target || !caster || target.dead) return fail(state, 'Invalid target');
+  const { m } = msgsOf(ctx);
+  if (!z?.attack || !z.point || !target || !caster || target.dead) return fail(state, m('act.invalidTarget'));
   const tt = state.grid.tokens[targetId];
-  if (!tt || distanceFt({ ...z.point, size: 'medium' }, tt) > z.attack.reachFt) return fail(state, `${target.name} isn't within ${z.attack.reachFt} ft of ${z.name}`);
+  if (!tt || distanceFt({ ...z.point, size: 'medium' }, tt) > z.attack.reachFt) return fail(state, m('zone.notWithin', { name: target.name, ft: z.attack.reachFt, spell: z.name }));
   const ectx = createEffectContext({ rng: ctx.rng, ...(ctx.msgs && { msgs: ctx.msgs }), source: caster, targets: [target], attackBonus: z.attack.attackBonus, spellMod: z.attack.spellMod, damageBonus: z.attack.spellMod });
   executeEffects([{ kind: 'attack', attack: 'melee_spell', onHit: [{ kind: 'damage', damage: z.attack.damage }] }], [targetId], ectx);
   const creatures = { ...state.creatures };
   for (const [id, c] of ectx.creatures) creatures[id] = c;
   const events = ectx.log.map((l): CombatEvent => ({ kind: 'attack', actorId: z.casterId, ...(l.targetId && { targetId: l.targetId }), text: l.text }));
-  return { ok: true, state: { ...state, creatures }, events: [{ kind: 'action', actorId: z.casterId, targetId, text: `${z.name} strikes at ${target.name}.` }, ...events] };
+  return { ok: true, state: { ...state, creatures }, events: [{ kind: 'action', actorId: z.casterId, targetId, text: m('zone.strikes', { spell: z.name, name: target.name }) }, ...events] };
 }
 
 /** Zones the creature controls that it can act with (for the UI / AI). */

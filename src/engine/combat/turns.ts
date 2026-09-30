@@ -372,8 +372,8 @@ export function endTurn(state: TurnState, creatures: Creatures, ctx: TurnContext
   let all = { ...creatures };
   let c = all[id];
   if (c && !c.dead) {
-    const s2 = endOfTurnSpellEffects(c, ctx.rng);
-    const s3 = endOfTurnSpellEffects3(s2.creature, ctx.rng, (casterId) => ctx.casterVisible?.(id, casterId) ?? true);
+    const s2 = endOfTurnSpellEffects(c, ctx.rng, msgs);
+    const s3 = endOfTurnSpellEffects3(s2.creature, ctx.rng, (casterId) => ctx.casterVisible?.(id, casterId) ?? true, msgs);
     c = s3.creature;
     for (const text of [...s2.log, ...s3.log]) events.push({ kind: 'log', creatureId: id, text });
 

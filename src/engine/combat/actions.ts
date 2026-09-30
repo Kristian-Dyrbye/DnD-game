@@ -220,7 +220,7 @@ function holdSpell(state: CombatState, ctx: CombatContext, id: string, action: E
   if (spellEconomy(spell) !== 'action') return fail(state, m('act.readyActionOnly'));
   const slot = action.slot ?? lowestSlotFor(caster, spell);
   if (!slot) return fail(state, m('act.noSlot', { name: caster.name, spell: spell.name }));
-  const problem = slotProblem(spell, slot, caster.spellcasting);
+  const problem = slotProblem(spell, slot, caster.spellcasting, msgsOf(ctx));
   if (problem) return fail(state, problem);
   let next = state;
   const events: CombatEvent[] = [];

@@ -18,7 +18,7 @@ import { effectSaveAdjustments } from '../rules/spellHooks';
 import { effectCheckBonuses, effectCheckModes, effectSaveAdjustments3 } from '../rules/spellHooks3';
 import { featureCheckBonuses, featureCheckModes, featureSaveModes } from '../character/features';
 import { consumeHelpCheck, dodgeSaveModes, helpCheckModes } from './actionEffects';
-import { dbOf, withCreature, type CombatContext, type CombatEvent, type CombatState } from './combatState';
+import { dbOf, msgsOf, withCreature, type CombatContext, type CombatEvent, type CombatState } from './combatState';
 
 const isCharacter = (c: Creature): c is Character => c.kind === 'character' && 'classes' in c;
 
@@ -99,6 +99,7 @@ export function applyActionRiders(
   label: string,
 ): { state: CombatState; events: CombatEvent[] } {
   const events: CombatEvent[] = [];
+  const { m } = msgsOf(ctx);
   let next = state;
   const saved = new Map<string, boolean>();
   for (const r of riders) {
@@ -111,14 +112,14 @@ export function applyActionRiders(
       if (!saved.has(key)) {
         const s = combatSave(next, ctx, targetId, r.save.ability, r.save.dc);
         saved.set(key, s.success === true);
-        events.push({ kind: 'save', actorId: sourceId, targetId, text: `${target.name} ${ABILITY_NAME[r.save.ability]} save vs ${label}: ${s.text}` });
+        events.push({ kind: 'save', actorId: sourceId, targetId, text: m('rider.save', { name: target.name, ability: ABILITY_NAME[r.save.ability], label, roll: s.text }) });
       }
       if (saved.get(key)) continue;
     }
     if (r.condition === 'grappled') {
       const g = grappleTarget(target, sourceId, r.escapeDc ?? 10, ctx.table);
       next = withCreature(next, g.creature);
-      events.push({ kind: 'condition', actorId: sourceId, targetId, text: g.applied ? `${target.name} is Grappled (${label}, escape DC ${r.escapeDc ?? 10}).` : `${target.name} can't be Grappled.` });
+      events.push({ kind: 'condition', actorId: sourceId, targetId, text: g.applied ? m('rider.grappled', { name: target.name, label, dc: r.escapeDc ?? 10 }) : m('act.cantGrapple', { name: target.name }) });
       continue;
     }
     const res = applyCondition(
@@ -134,7 +135,7 @@ export function applyActionRiders(
     );
     next = withCreature(next, res.creature);
     const name = r.condition[0]!.toUpperCase() + r.condition.slice(1);
-    events.push({ kind: 'condition', actorId: sourceId, targetId, text: res.applied ? `${target.name} has the ${name} condition (${label}).` : `${target.name} is immune to ${name}.` });
+    events.push({ kind: 'condition', actorId: sourceId, targetId, text: `${res.applied ? m('cond.hasFrom', { name: target.name, condition: name, label }) : m('cond.immune', { name: target.name, condition: name })}.` });
   }
   return { state: next, events };
 }

@@ -300,7 +300,7 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
                       </option>
                     ))}
                   </select>
-                  <button type="button" disabled={!budget.action} onClick={() => run({ kind: 'study', skill: studySkill, topic: 'the foes and the battlefield' })}>
+                  <button type="button" disabled={!budget.action} onClick={() => run({ kind: 'study', skill: studySkill })}>
                     {t('combat.study')}
                   </button>
                 </span>

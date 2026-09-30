@@ -17,14 +17,14 @@ import type { Creature } from '../core/creature';
 import { formatD20Test, type Modifier } from '../core/dice';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { Damage } from '../data/common';
-import type { Ability, Condition } from '../rules/basics';
+import { ABILITY_NAMES, type Ability, type Condition } from '../rules/basics';
 import type { D20TestResult } from '../rules/checks';
 import { applyCondition } from '../rules/conditions';
 import { rollDamage, type DamageRollResult } from '../rules/damage';
 import { combatSave } from './saves';
 import { dealCombatDamage } from './attack';
 import { previewArea, type AoeTemplate } from './aoe';
-import { withCreature, type ActionResult, type CombatContext, type CombatEvent, type CombatState } from './combatState';
+import { msgsOf, withCreature, type ActionResult, type CombatContext, type CombatEvent, type CombatState } from './combatState';
 import type { GridToken, Point } from './grid';
 import { computeCover, type CoverGrade } from './los';
 
@@ -89,7 +89,9 @@ function originFootprint(state: CombatState, tpl: AoeTemplate): Pick<GridToken, 
 }
 
 export function resolveAreaEffect(state: CombatState, ctx: CombatContext, o: AreaEffectOptions): ActionResult<AreaEffectOutcome> {
-  const label = o.label ?? 'Area effect';
+  const msgs = msgsOf(ctx);
+  const { m } = msgs;
+  const label = o.label ?? m('aoe.label');
   const source = o.casterId ?? label;
   const preview = previewArea(state.grid, o.template, { ...(o.excludeIds && { excludeIds: o.excludeIds }) });
   const exclude = new Set(o.excludeIds ?? []);
@@ -99,10 +101,10 @@ export function resolveAreaEffect(state: CombatState, ctx: CombatContext, o: Are
   events.push({
     kind: 'effect',
     ...(o.casterId && { actorId: o.casterId }),
-    text: `${casterName ? `${casterName}: ` : ''}${label} (${o.template.sizeFt}-ft ${o.template.shape}) — ${ids.length} creature${ids.length === 1 ? '' : 's'} in the area`,
+    text: `${casterName ? `${casterName}: ` : ''}${msgs.mn('aoe.area', ids.length, { label, size: o.template.sizeFt, shape: m(`aoe.shape.${o.template.shape}`) })}`,
   });
-  const damageRoll = o.damage?.length ? rollDamage(ctx.rng, o.damage) : undefined;
-  if (damageRoll) events.push({ kind: 'effect', ...(o.casterId && { actorId: o.casterId }), text: `${label} damage (rolled once for all targets): ${damageRoll.text}` });
+  const damageRoll = o.damage?.length ? rollDamage(ctx.rng, o.damage, { msgs }) : undefined;
+  if (damageRoll) events.push({ kind: 'effect', ...(o.casterId && { actorId: o.casterId }), text: m('aoe.damageOnce', { label, roll: damageRoll.text }) });
 
   const from = originFootprint(state, o.template);
   let next = state;
@@ -118,14 +120,14 @@ export function resolveAreaEffect(state: CombatState, ctx: CombatContext, o: Are
       }
       save = combatSave(next, ctx, id, o.save.ability, o.save.dc);
       if (cover !== 'none') save = addSaveBonus(save, { value: cover === 'half' ? 2 : 5, label: cover === 'half' ? 'Half Cover' : 'Three-Quarters Cover' }, ctx.msgs);
-      events.push({ kind: 'save', targetId: id, text: `${c.name} ${save.label}: ${save.text}` });
+      events.push({ kind: 'save', targetId: id, text: m('eff.save', { name: c.name, ability: ABILITY_NAMES[o.save.ability], roll: save.text }) });
     }
     const failed = !save || !save.success;
     let dealt = 0;
     if (damageRoll && (failed || (o.halfOnSave ?? true))) {
       const half = !failed;
       const instances = damageRoll.parts.map((p) => ({ type: p.type, amount: half ? Math.floor(p.total / 2) : p.total }));
-      const r = dealCombatDamage(next, ctx, source, id, instances, { text: `${label}${half ? ' (half)' : ''}` });
+      const r = dealCombatDamage(next, ctx, source, id, instances, { text: `${label}${half ? m('roll.half') : ''}` });
       next = r.state;
       events.push(...r.events);
       dealt = r.dealt;
@@ -145,7 +147,7 @@ export function resolveAreaEffect(state: CombatState, ctx: CombatContext, o: Are
           ctx.table,
         );
         next = withCreature(next, res.creature);
-        events.push({ kind: 'condition', targetId: id, text: res.applied ? `${target.name} has the ${cf.condition} condition (${label})` : `${target.name} is immune to ${cf.condition}` });
+        events.push({ kind: 'condition', targetId: id, text: res.applied ? m('cond.hasFrom', { name: target.name, condition: cf.condition, label }) : m('cond.immune', { name: target.name, condition: cf.condition }) });
       }
     }
     targets.push({ id, ...(save && { save }), cover, damage: dealt });

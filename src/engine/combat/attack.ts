@@ -477,7 +477,7 @@ export function dealCombatDamage(
   });
   if (report.totalAfterDefenses > 0) {
     after = endControlOnHarm(after, sourceId);
-    const dom = dominationDamageSave(after, ctx.rng);
+    const dom = dominationDamageSave(after, ctx.rng, msgsOf(ctx));
     after = dom.creature;
     if (dom.save) events.push({ kind: 'save', targetId, text: m('atk.domination', { name: after.name, roll: dom.save.text }) });
   }
@@ -614,7 +614,7 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
   const attacksLeft = () => next.turns.budgets[o.attackerId]?.attacksLeft ?? 0;
 
   // Sanctuary: the attacker must succeed on the save or lose the attack.
-  const sanctuary = sanctuaryCheck(target, attacker, ctx.rng);
+  const sanctuary = sanctuaryCheck(target, attacker, ctx.rng, msgsOf(ctx));
   if (!sanctuary.allowed) {
     events.push({ kind: 'save', actorId: attacker.id, targetId: target.id, text: m('atk.sanctuary', { name: attacker.name, roll: sanctuary.save?.text ?? '' }) });
     return { ok: true, state: next, events, hit: false, crit: false, damage: 0, attacksLeft: attacksLeft() };
@@ -770,6 +770,7 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
         rng: ctx.rng,
         onOwnTurn: onOwnTurn(next.turns, attacker.id),
         use: mastery === 'push' ? pushWanted >= 5 : true,
+        msgs: msgsOf(ctx),
       });
       next = withCreature(withCreature(next, m.attacker), m.target);
       if (m.save) events.push({ kind: 'save', targetId: target.id, text: m.text ?? m.save.text });

@@ -11,6 +11,7 @@ import { SIZES } from './basics';
 import { savingThrow, type D20TestResult } from './checks';
 import { applyCondition, saveModes } from './conditions';
 import { addEffect } from './activeEffects';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
 export type Mastery = (typeof WEAPON_MASTERIES)[number];
 
@@ -27,6 +28,8 @@ export interface MasteryHitInput {
   onOwnTurn?: boolean;
   /** The player chose to use the property (Push/Topple/Slow are optional). Default true. */
   use?: boolean;
+  /** Language of the rider texts (default English). */
+  msgs?: Messages;
 }
 
 export interface MasteryOutcome {
@@ -46,17 +49,19 @@ export function applyMasteryOnHit(i: MasteryHitInput): MasteryOutcome {
   const { attacker, target } = i;
   const onOwnTurn = i.onOwnTurn ?? true;
   if (i.use === false) return { attacker, target };
+  const { m } = i.msgs ?? ENGLISH_MESSAGES;
+  const name = target.name;
   switch (i.mastery) {
     case 'cleave':
-      return { attacker, target, cleave: true, text: 'Cleave: may strike a second creature within 5 ft' };
+      return { attacker, target, cleave: true, text: m('mastery.cleave') };
     case 'push':
-      if (SIZES.indexOf(target.size) > LARGE) return { attacker, target, text: `${target.name} is too large to push` };
-      return { attacker, target, pushFt: 10, text: `Push: ${target.name} can be pushed 10 ft` };
+      if (SIZES.indexOf(target.size) > LARGE) return { attacker, target, text: m('mastery.tooLarge', { name }) };
+      return { attacker, target, pushFt: 10, text: m('mastery.push', { name }) };
     case 'sap':
       return {
         attacker,
         target: addEffect(target, { key: 'sap', sourceId: attacker.id, consumeOn: 'own_attack', expires: { on: 'start_of_turn', creatureId: attacker.id, skip: 0 } }),
-        text: `Sap: ${target.name} has Disadvantage on its next attack`,
+        text: m('mastery.sap', { name }),
       };
     case 'slow':
       if (i.damageDealt <= 0) return { attacker, target };
@@ -64,13 +69,13 @@ export function applyMasteryOnHit(i: MasteryHitInput): MasteryOutcome {
       return {
         attacker,
         target: addEffect(target, { key: 'slow', sourceId: attacker.id, expires: { on: 'start_of_turn', creatureId: attacker.id, skip: 0 } }),
-        text: `Slow: ${target.name}'s Speed drops by 10 ft`,
+        text: m('mastery.slow', { name }),
       };
     case 'topple': {
       const dc = 8 + i.abilityMod + attacker.proficiencyBonus;
-      const save = savingThrow(target, 'con', { rng: i.rng, dc, ...saveModes(target, 'con') });
-      if (save.success) return { attacker, target, save, text: `Topple: ${target.name} keeps its footing (${save.text})` };
-      return { attacker, target: applyCondition(target, { condition: 'prone' }).creature, save, text: `Topple: ${target.name} falls Prone (${save.text})` };
+      const save = savingThrow(target, 'con', { rng: i.rng, dc, ...saveModes(target, 'con'), ...(i.msgs && { msgs: i.msgs }) });
+      if (save.success) return { attacker, target, save, text: m('mastery.toppleKeeps', { name, roll: save.text }) };
+      return { attacker, target: applyCondition(target, { condition: 'prone' }).creature, save, text: m('mastery.toppleFalls', { name, roll: save.text }) };
     }
     case 'vex':
       if (i.damageDealt <= 0) return { attacker, target };
@@ -83,7 +88,7 @@ export function applyMasteryOnHit(i: MasteryHitInput): MasteryOutcome {
           expires: { on: 'end_of_turn', creatureId: attacker.id, skip: onOwnTurn ? 1 : 0 },
         }),
         target,
-        text: `Vex: Advantage on the next attack against ${target.name}`,
+        text: m('mastery.vex', { name }),
       };
     case 'graze':
     case 'nick':

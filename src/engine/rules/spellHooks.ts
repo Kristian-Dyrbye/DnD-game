@@ -14,6 +14,7 @@ import { addEffect, removeEffects } from './activeEffects';
 import { grantTempHp } from './damage';
 import { removeCondition } from './conditions';
 import type { EffectContext, HookFn } from './effects';
+import { ENGLISH_MESSAGES } from '../i18n';
 
 type Params = Record<string, unknown> | undefined;
 
@@ -44,7 +45,7 @@ function put(ctx: EffectContext, targetId: string, key: string, p: Params, extra
   const rounds = durationRounds(ctx, p);
   const cleared = removeEffects(c, (e) => e.key === key && e.sourceId === src);
   ctx.creatures.set(targetId, addEffect(cleared, { key, sourceId: src, ...(rounds !== undefined && { roundsLeft: rounds }), data: { ...(p ?? {}) }, ...extra }));
-  ctx.log.push({ targetId, kind: 'hook', text: `${c.name} is affected by ${key.replace(/_/g, ' ')}` });
+  ctx.log.push({ targetId, kind: 'hook', text: (ctx.msgs ?? ENGLISH_MESSAGES).m('hook.affected', { name: c.name, effect: key.replace(/_/g, ' ') }) });
 }
 
 export const SPELL_HOOKS: Record<string, HookFn> = {

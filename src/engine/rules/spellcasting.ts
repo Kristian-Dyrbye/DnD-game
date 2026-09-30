@@ -115,22 +115,23 @@ export function castLevel(spell: Spell, choice: SlotChoice, state?: Spellcasting
 }
 
 /** Validates a slot choice; returns an error message or undefined if castable. */
-export function slotProblem(spell: Spell, choice: SlotChoice, state: SpellcastingState | undefined): string | undefined {
-  if (spell.level === 0) return choice.kind === 'cantrip' || choice.kind === 'free' ? undefined : 'Cantrips need no slot';
+export function slotProblem(spell: Spell, choice: SlotChoice, state: SpellcastingState | undefined, msgs: Messages = ENGLISH_MESSAGES): string | undefined {
+  const { m } = msgs;
+  if (spell.level === 0) return choice.kind === 'cantrip' || choice.kind === 'free' ? undefined : m('slot.cantrip');
   switch (choice.kind) {
     case 'cantrip':
-      return `${spell.name} is not a cantrip`;
+      return m('slot.notCantrip', { spell: spell.name });
     case 'ritual':
-      return spell.castingTime.ritual ? undefined : `${spell.name} can't be cast as a ritual`;
+      return spell.castingTime.ritual ? undefined : m('slot.notRitual', { spell: spell.name });
     case 'free':
       return undefined;
     case 'pact':
-      if (!state?.pact || state.pact.current < 1) return 'No Pact Magic slots left';
-      if (state.pact.level < spell.level) return `Pact slots (level ${state.pact.level}) are too low for ${spell.name}`;
+      if (!state?.pact || state.pact.current < 1) return m('slot.noPact');
+      if (state.pact.level < spell.level) return m('slot.pactLow', { level: state.pact.level, spell: spell.name });
       return undefined;
     case 'slot':
-      if (choice.level < spell.level) return `${spell.name} needs a level ${spell.level}+ slot`;
-      if (!state || (state.slots[choice.level - 1] ?? 0) < 1) return `No level ${choice.level} slots left`;
+      if (choice.level < spell.level) return m('slot.needs', { spell: spell.name, level: spell.level });
+      if (!state || (state.slots[choice.level - 1] ?? 0) < 1) return m('slot.none', { level: choice.level });
       return undefined;
   }
 }
@@ -179,16 +180,17 @@ export function concentrationDc(damage: number): number {
 export function concentrationCheck(ctx: EffectContext, casterId: string, damage: number, rng: Rng): D20TestResult | undefined {
   const caster = ctx.creatures.get(casterId) as Character | undefined;
   if (!caster?.spellcasting?.concentration) return undefined;
+  const { m } = ctx.msgs ?? ENGLISH_MESSAGES;
   if (caster.dead || !canAct(caster)) {
     const spell = endConcentration(ctx, casterId);
-    ctx.log.push({ targetId: casterId, kind: 'info', text: `${caster.name} loses concentration on ${spell}` });
+    ctx.log.push({ targetId: casterId, kind: 'info', text: m('conc.loses', { name: caster.name, spell: String(spell) }) });
     return undefined;
   }
   const res = savingThrow(caster, 'con', { rng, dc: concentrationDc(damage), ...saveModes(caster, 'con'), ...(ctx.msgs && { msgs: ctx.msgs }) });
-  ctx.log.push({ targetId: casterId, kind: 'save', text: `${caster.name} concentration: ${res.text}` });
+  ctx.log.push({ targetId: casterId, kind: 'save', text: m('conc.check', { name: caster.name, roll: res.text }) });
   if (!res.success) {
     const spell = endConcentration(ctx, casterId);
-    ctx.log.push({ targetId: casterId, kind: 'info', text: `${caster.name} loses concentration on ${spell}` });
+    ctx.log.push({ targetId: casterId, kind: 'info', text: m('conc.loses', { name: caster.name, spell: String(spell) }) });
   }
   return res;
 }
@@ -233,9 +235,10 @@ export interface CastResult {
 
 /** Casts a spell: checks and spends the slot, handles concentration, runs effects. Throws SpellError if it can't be cast. */
 export function castSpell(o: CastOptions): CastResult {
-  if (!canAct(o.caster)) throw new SpellError(`${o.caster.name} can't cast spells while incapacitated`);
+  const msgs = o.msgs ?? ENGLISH_MESSAGES;
+  if (!canAct(o.caster)) throw new SpellError(msgs.m('cast.incapacitated', { name: o.caster.name }));
   const state = o.caster.spellcasting;
-  const problem = slotProblem(o.spell, o.slot, state);
+  const problem = slotProblem(o.spell, o.slot, state, msgs);
   if (problem) throw new SpellError(problem);
 
   const level = castLevel(o.spell, o.slot, state);
@@ -269,7 +272,7 @@ export function castSpell(o: CastOptions): CastResult {
   // A new concentration spell ends the old one first.
   if (o.spell.duration.concentration && state?.concentration) {
     const ended = endConcentration(ctx, o.caster.id);
-    ctx.log.push({ targetId: o.caster.id, kind: 'info', text: `${o.caster.name} stops concentrating on ${ended}` });
+    ctx.log.push({ targetId: o.caster.id, kind: 'info', text: msgs.m('conc.stops', { name: o.caster.name, spell: String(ended) }) });
   }
 
   // Spend the slot before effects so reactions/logs see the new state.
@@ -286,9 +289,9 @@ export function castSpell(o: CastOptions): CastResult {
   ctx.log.push({
     targetId: o.caster.id,
     kind: 'info',
-    text: (o.msgs ?? ENGLISH_MESSAGES).m(o.spell.level === 0 ? 'combat.casts' : o.slot.kind === 'ritual' ? 'combat.castsRitual' : 'combat.castsLevel', { caster: o.caster.name, spell: o.spell.name, level }),
+    text: msgs.m(o.spell.level === 0 ? 'combat.casts' : o.slot.kind === 'ritual' ? 'combat.castsRitual' : 'combat.castsLevel', { caster: o.caster.name, spell: o.spell.name, level }),
   });
-  if (effects.length === 0) ctx.log.push({ kind: 'info', text: `(${o.spell.name} has no automated effects yet)` });
+  if (effects.length === 0) ctx.log.push({ kind: 'info', text: msgs.m('cast.noAuto', { spell: o.spell.name }) });
   if (beamHook) {
     // One attack per beam; beams go to targets by allocation or round-robin.
     const beams = levelTableValue(beamHook.params!.beamsByLevel as Record<string, number>, o.characterLevel);

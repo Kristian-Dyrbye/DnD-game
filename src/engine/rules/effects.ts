@@ -102,6 +102,7 @@ interface RunState {
 }
 
 function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, state: RunState): void {
+  const { m } = ctx.msgs ?? ENGLISH_MESSAGES;
   switch (effect.kind) {
     case 'area':
       for (const e of effect.effects) runEffect(e, targetIds, ctx, { ...state, sharedDamage: state.sharedDamage ?? new Map() });
@@ -113,7 +114,8 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
         if (!rolled || state.crit) {
           rolled = rollDamage(ctx.rng, upcastDamage(effect.damage, effect.upcast, ctx.upcastLevels), {
             crit: state.crit ?? false,
-            ...(ctx.damageBonus && { modifiers: [{ value: ctx.damageBonus, label: 'Bonus' }] }),
+            ...(ctx.damageBonus && { modifiers: [{ value: ctx.damageBonus, label: m('eff.bonus') }] }),
+            ...(ctx.msgs && { msgs: ctx.msgs }),
           });
           if (shared && !state.crit) shared.set(effect, rolled);
         }
@@ -129,17 +131,17 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
         if (!target || target.dead) continue;
         const dc = effect.dc ?? ctx.saveDc ?? 10;
         if (ctx.sculptIds?.has(id)) {
-          ctx.log.push({ targetId: id, kind: 'save', text: `${target.name} is shielded from the spell (Sculpt Spells)` });
+          ctx.log.push({ targetId: id, kind: 'save', text: m('eff.sculpt', { name: target.name }) });
           if (Array.isArray(effect.onSuccess)) for (const e of effect.onSuccess) runEffect(e, [id], ctx, { ...state, sharedDamage: shared });
           continue;
         }
         const res = savingThrow(target, effect.ability, { rng: ctx.rng, dc, ...saveModes(target, effect.ability), ...(ctx.msgs && { msgs: ctx.msgs }) });
-        ctx.log.push({ targetId: id, kind: 'save', text: `${target.name} ${ABILITY_NAMES[effect.ability]} save: ${res.text}` });
+        ctx.log.push({ targetId: id, kind: 'save', text: m('eff.save', { name: target.name, ability: ABILITY_NAMES[effect.ability], roll: res.text }) });
         // Evasion (Monk/Rogue 7): Dex saves for half damage → none on a success, half on a failure.
         const evasion = effect.ability === 'dex' && effect.onSuccess === 'half' && target.effects.some((e) => e.key === 'evasion') && canAct(target);
         if (evasion) {
           if (!res.success) for (const e of effect.onFail) runEffect(e, [id], ctx, { ...state, half: e.kind === 'damage' ? true : state.half, sharedDamage: shared });
-          else ctx.log.push({ targetId: id, kind: 'info', text: `${target.name} evades all damage (Evasion)` });
+          else ctx.log.push({ targetId: id, kind: 'info', text: m('eff.evasion', { name: target.name }) });
           continue;
         }
         if (!res.success) {
@@ -158,7 +160,7 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
         if (!target || target.dead) continue;
         const source = ctx.creatures.get(ctx.source.id) ?? ctx.source;
         const modes = attackModes({ attacker: source, target, distanceFt: ctx.distances?.get(id) ?? 5 });
-        const label = effect.attack.endsWith('spell') ? 'Spell attack' : 'Attack';
+        const label = m(effect.attack.endsWith('spell') ? 'eff.spellAttack' : 'eff.attack');
         const mods: Modifier[] = [{ value: ctx.attackBonus ?? 0, label }];
         const advantage = [...modes.advantage, ...(ctx.attackAdvantage ? [ctx.attackAdvantage] : [])];
         const res = attackRoll({ rng: ctx.rng, label, modifiers: mods, targetAc: target.ac, advantage, disadvantage: modes.disadvantage, exhaustion: source.exhaustion, ...(modes.autoCrit && { autoCrit: modes.autoCrit }), ...(ctx.msgs && { msgs: ctx.msgs }) });
@@ -181,7 +183,7 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
         const { creature, healed } = healFromZero(target, amount);
         ctx.creatures.set(id, creature);
         const extras = `${effect.addSpellMod ? ` + ${ctx.spellMod ?? 0}` : ''}${ctx.healBonus ? ` + ${ctx.healBonus}` : ''}`;
-        ctx.log.push({ targetId: id, kind: 'heal', text: `${target.name} regains ${healed} HP (${r.notation}: ${diceTotal}${ctx.maxHealDice ? ' max' : ''}${extras})` });
+        ctx.log.push({ targetId: id, kind: 'heal', text: m('eff.heal', { name: target.name, n: healed, roll: `${r.notation}: ${diceTotal}${ctx.maxHealDice ? m('eff.max') : ''}${extras}` }) });
       }
       return;
     }
@@ -191,7 +193,7 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
         if (!target) continue;
         const amount = roll(effect.dice, ctx.rng).total;
         ctx.creatures.set(id, grantTempHp(target, amount));
-        ctx.log.push({ targetId: id, kind: 'temp_hp', text: `${target.name} gains ${amount} temporary HP` });
+        ctx.log.push({ targetId: id, kind: 'temp_hp', text: m('eff.tempHp', { name: target.name, n: amount }) });
       }
       return;
     }
@@ -206,7 +208,7 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
           ...(rounds !== undefined && { roundsLeft: rounds }),
         });
         ctx.creatures.set(id, res.creature);
-        ctx.log.push({ targetId: id, kind: 'condition', text: res.applied ? `${target.name} has the ${effect.condition} condition` : `${target.name} is immune to ${effect.condition}` });
+        ctx.log.push({ targetId: id, kind: 'condition', text: m(res.applied ? 'cond.has' : 'cond.immune', { name: target.name, condition: effect.condition }) });
       }
       return;
     }
@@ -214,7 +216,7 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
       const fn = ctx.hooks?.[effect.hook];
       for (const id of targetIds) {
         if (fn) fn(ctx, id, effect.params);
-        else ctx.log.push({ targetId: id, kind: 'hook', text: `(effect "${effect.hook}" not implemented yet)` });
+        else ctx.log.push({ targetId: id, kind: 'hook', text: m('eff.notImplemented', { hook: effect.hook }) });
       }
       return;
     }

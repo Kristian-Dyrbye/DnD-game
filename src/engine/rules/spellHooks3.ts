@@ -23,12 +23,16 @@ import { applyCondition, attackModes, saveModes } from './conditions';
 import { attackRoll, rollDamage, type DamageRollResult } from './damage';
 import { dealDamage, type EffectContext, type HookFn } from './effects';
 import { cantripMultiplier, levelTableValue } from './spellcasting';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
 type Params = Record<string, unknown> | undefined;
 const num = (p: Params, key: string, fallback = 0) => (typeof p?.[key] === 'number' ? (p[key] as number) : fallback);
 const src = (ctx: EffectContext) => ctx.conditionSourceId ?? ctx.source.id;
 const eff = (c: Creature, key: string) => c.effects.filter((e) => e.key === key);
 const strs = (v: unknown): string[] => (Array.isArray(v) ? (v as string[]) : []);
+const msg = (ctx: EffectContext): Messages => ctx.msgs ?? ENGLISH_MESSAGES;
+/** Spread into roll options so their math lines use the cast's language. */
+const lang = (ctx: EffectContext) => (ctx.msgs ? { msgs: ctx.msgs } : {});
 
 // ---------------------------------------------------------------- shared helpers
 
@@ -73,7 +77,7 @@ function put(ctx: EffectContext, targetId: string, key: string, p: Params, extra
   const r = rounds(ctx, p);
   const cleared = removeEffects(c, (e) => e.key === key && e.sourceId === s);
   ctx.creatures.set(targetId, addEffect(cleared, { key, sourceId: s, ...(r !== undefined && { roundsLeft: r }), data: { ...(p ?? {}), ...extraData }, ...extra }));
-  ctx.log.push({ targetId, kind: 'hook', text: `${c.name} is affected by ${key.replace(/_/g, ' ')}` });
+  ctx.log.push({ targetId, kind: 'hook', text: msg(ctx).m('hook.affected', { name: c.name, effect: key.replace(/_/g, ' ') }) });
 }
 
 /** The condition this cast put on the target (same sourceId), if any. */
@@ -87,7 +91,7 @@ function typeAllowed(ctx: EffectContext, id: string, p: Params, cond: Condition)
   const types = strs(p?.creatureTypes);
   if (!c || types.length === 0 || types.includes(c.creatureType)) return true;
   ctx.creatures.set(id, { ...c, conditions: c.conditions.filter((x) => !(x.condition === cond && x.sourceId === src(ctx))) });
-  ctx.log.push({ targetId: id, kind: 'hook', text: `${c.name} is unaffected (${c.creatureType}).` });
+  ctx.log.push({ targetId: id, kind: 'hook', text: msg(ctx).m('hook.unaffected', { name: c.name, type: c.creatureType }) });
   return false;
 }
 
@@ -95,21 +99,23 @@ function spellAttack(ctx: EffectContext, id: string): { hit: boolean; crit: bool
   const target = ctx.creatures.get(id)!;
   const source = ctx.creatures.get(ctx.source.id) ?? ctx.source;
   const modes = attackModes({ attacker: source, target, distanceFt: ctx.distances?.get(id) ?? 30 });
+  const label = msg(ctx).m('eff.spellAttack');
   const res = attackRoll({
     rng: ctx.rng,
-    label: 'Spell attack',
-    modifiers: [{ value: ctx.attackBonus ?? 0, label: 'Spell attack' }],
+    label,
+    modifiers: [{ value: ctx.attackBonus ?? 0, label }],
     targetAc: target.ac,
     advantage: [...modes.advantage, ...(ctx.attackAdvantage ? [ctx.attackAdvantage] : [])],
     disadvantage: modes.disadvantage,
     exhaustion: source.exhaustion,
     ...(modes.autoCrit && { autoCrit: modes.autoCrit }),
+    ...lang(ctx),
   });
   ctx.log.push({ targetId: id, kind: 'attack', text: `${source.name} → ${target.name}: ${res.text}` });
   return res;
 }
 
-const bonusMods = (ctx: EffectContext): Modifier[] => (ctx.damageBonus ? [{ value: ctx.damageBonus, label: 'Bonus' }] : []);
+const bonusMods = (ctx: EffectContext): Modifier[] => (ctx.damageBonus ? [{ value: ctx.damageBonus, label: msg(ctx).m('eff.bonus') }] : []);
 
 // ---------------------------------------------------------------- hooks
 
@@ -146,7 +152,7 @@ export const SPELL_HOOKS_3: Record<string, HookFn> = {
     if (!c || c.dead) return;
     const cleared = removeEffects(c, (e) => e.key === 'slow' && e.sourceId === src(ctx));
     ctx.creatures.set(id, addEffect(cleared, { key: 'slow', sourceId: src(ctx), data: { speedPenalty: num(p, 'speedReductionFt', 10), spell: 'ray_of_frost' }, expires: { on: 'start_of_turn', creatureId: ctx.source.id, skip: 0 } }));
-    ctx.log.push({ targetId: id, kind: 'hook', text: `${c.name}'s Speed drops by ${num(p, 'speedReductionFt', 10)} ft.` });
+    ctx.log.push({ targetId: id, kind: 'hook', text: msg(ctx).m('hook.speedDrops', { name: c.name, ft: num(p, 'speedReductionFt', 10) }) });
   },
   chill_touch: (ctx, id, p) => put(ctx, id, 'no_healing', p, { expires: { on: 'end_of_turn', creatureId: ctx.source.id, skip: 1 } }),
   // SRD 5.2.1: the target can't make Opportunity Attacks (not all reactions) until the start of its next turn.
@@ -165,7 +171,7 @@ export const SPELL_HOOKS_3: Record<string, HookFn> = {
     // Hurl the flame as part of the casting (later hurls: combat re-runs this hook with the flame effect present).
     const d = (p?.damage as Damage | undefined) ?? { dice: '1d8', type: 'fire' };
     const r = spellAttack(ctx, id);
-    const rolled = rollDamage(ctx.rng, [{ ...d, dice: scaleDice(d.dice, cantripMultiplier(casterLevel(ctx.source))) }], { crit: r.crit, modifiers: bonusMods(ctx) });
+    const rolled = rollDamage(ctx.rng, [{ ...d, dice: scaleDice(d.dice, cantripMultiplier(casterLevel(ctx.source))) }], { crit: r.crit, modifiers: bonusMods(ctx), ...lang(ctx) });
     if (r.hit) dealDamage(ctx, id, rolled, false);
     else if (ctx.potentCantrip) dealDamage(ctx, id, rolled, true);
   },
@@ -193,7 +199,7 @@ export const SPELL_HOOKS_3: Record<string, HookFn> = {
     const types = strs(p?.damageTypes) as DamageType[];
     const type = (types.includes(ctx.choice as DamageType) ? ctx.choice : (types[0] ?? 'fire')) as DamageType;
     const dice = levelTableDice(p?.diceByLevel as Record<string, string> | undefined, casterLevel(ctx.source)) ?? String(p?.dice ?? '1d8');
-    const base = rollDamage(ctx.rng, [{ dice, type }], { modifiers: bonusMods(ctx) });
+    const base = rollDamage(ctx.rng, [{ dice, type }], { modifiers: bonusMods(ctx), ...lang(ctx) });
     const explodeOn = num(p, 'explodeOn', 8);
     const sides = Number(/d(\d+)/.exec(dice)?.[1] ?? 8);
     const maxExtra = p?.maxExtraDice === 'spell_mod' ? Math.max(0, ctx.spellMod ?? 0) : num(p, 'maxExtraDice', 0);
@@ -211,7 +217,7 @@ export const SPELL_HOOKS_3: Record<string, HookFn> = {
       parts: [{ ...part, total: part.total + bonus }],
       total: base.total + bonus,
       crit: false,
-      text: `${base.text}${extra.length ? ` + burst [${extra.join(', ')}]` : ''}`,
+      text: `${base.text}${extra.length ? msg(ctx).m('hook.burst', { list: extra.join(', ') }) : ''}`,
     };
     dealDamage(ctx, id, rolled, false);
   },
@@ -253,8 +259,8 @@ export const SPELL_HOOKS_3: Record<string, HookFn> = {
     const mode = ctx.choice === 'reduce' ? 'reduce' : 'enlarge';
     const save = p?.unwillingSave as Ability | undefined;
     if (save && id !== ctx.source.id && c.kind === 'monster') {
-      const res = savingThrow(c, save, { rng: ctx.rng, dc: ctx.saveDc ?? 10, ...saveModes(c, save) });
-      ctx.log.push({ targetId: id, kind: 'save', text: `${c.name} save vs ${mode}: ${res.text}` });
+      const res = savingThrow(c, save, { rng: ctx.rng, dc: ctx.saveDc ?? 10, ...saveModes(c, save), ...lang(ctx) });
+      ctx.log.push({ targetId: id, kind: 'save', text: msg(ctx).m('turn.saveVs', { name: c.name, condition: mode, roll: res.text }) });
       if (res.success) return;
     }
     const opt = ((p?.options as Record<string, Record<string, unknown>> | undefined)?.[mode] ?? {}) as Record<string, unknown>;
@@ -344,10 +350,10 @@ export function endControlOnHarm<T extends Creature>(c: T, casterId: string): T 
 }
 
 /** Dominate X: a dominated creature repeats the Wis save each time it takes damage; success ends the spell on it. */
-export function dominationDamageSave<T extends Creature>(c: T, rng: Rng): { creature: T; save?: D20TestResult } {
+export function dominationDamageSave<T extends Creature>(c: T, rng: Rng, msgs?: Messages): { creature: T; save?: D20TestResult } {
   const dom = c.effects.find((e) => e.key === 'dominated' && e.data.repeatSaveOnDamage === true);
   if (!dom) return { creature: c };
-  const save = savingThrow(c, 'wis', { rng, dc: num(dom.data, 'dc', 10), ...saveModes(c, 'wis') });
+  const save = savingThrow(c, 'wis', { rng, dc: num(dom.data, 'dc', 10), ...saveModes(c, 'wis'), ...(msgs && { msgs }) });
   if (!save.success) return { creature: c, save };
   const without = removeEffects(c, (e) => e.sourceId === dom.sourceId);
   return { creature: { ...without, conditions: without.conditions.filter((x) => x.sourceId !== dom.sourceId) }, save };
@@ -357,17 +363,17 @@ export function dominationDamageSave<T extends Creature>(c: T, rng: Rng): { crea
  * End of the creature's turn: Fear's repeat Wis save only when the caster is out of line of sight
  * (`casterVisible(casterId)` from combat). Success ends frightened + the fear effect.
  */
-export function endOfTurnSpellEffects3<T extends Creature>(c: T, rng: Rng, casterVisible: (casterId: string) => boolean): { creature: T; log: string[] } {
+export function endOfTurnSpellEffects3<T extends Creature>(c: T, rng: Rng, casterVisible: (casterId: string) => boolean, msgs: Messages = ENGLISH_MESSAGES): { creature: T; log: string[] } {
   let next = c;
   const log: string[] = [];
   for (const e of c.effects) {
     if (e.key !== 'fear' || casterVisible(String(e.data.casterId))) continue;
-    const save = savingThrow(next, 'wis', { rng, dc: num(e.data, 'dc', 10), ...saveModes(next, 'wis') });
+    const save = savingThrow(next, 'wis', { rng, dc: num(e.data, 'dc', 10), ...saveModes(next, 'wis'), msgs });
     if (save.success) {
       const without = removeEffects(next, (x) => x.sourceId === e.sourceId && x.key === 'fear');
       next = { ...without, conditions: without.conditions.filter((x) => !(x.condition === 'frightened' && x.sourceId === e.sourceId)) };
-      log.push(`${c.name} shakes off the fear (${save.text}).`);
-    } else log.push(`${c.name} is still terrified (${save.text}).`);
+      log.push(msgs.m('hook.fearShaken', { name: c.name, roll: save.text }));
+    } else log.push(msgs.m('hook.fearStill', { name: c.name, roll: save.text }));
   }
   return { creature: next, log };
 }
@@ -464,11 +470,11 @@ export function mirrorImageRedirect<T extends Creature>(target: T, attacker: Cre
  * Sanctuary: call when `attacker` targets the warded creature with an attack or a damaging spell.
  * The attacker makes a Wis save; on a failure it must choose another target or lose the attack.
  */
-export function sanctuaryCheck(target: Creature, attacker: Creature, rng: Rng): { allowed: boolean; save?: D20TestResult } {
+export function sanctuaryCheck(target: Creature, attacker: Creature, rng: Rng, msgs?: Messages): { allowed: boolean; save?: D20TestResult } {
   const e = eff(target, 'sanctuary')[0];
   if (!e || attacker.id === target.id) return { allowed: true };
   const ability = (e.data.save as Ability | undefined) ?? 'wis';
-  const save = savingThrow(attacker, ability, { rng, dc: num(e.data, 'dc', 10), ...saveModes(attacker, ability) });
+  const save = savingThrow(attacker, ability, { rng, dc: num(e.data, 'dc', 10), ...saveModes(attacker, ability), ...(msgs && { msgs }) });
   return { allowed: save.success === true, save };
 }
 

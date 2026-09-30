@@ -21,6 +21,7 @@ import { distanceFt, type Point } from './grid';
 import { addZone, createZone, zoneStrike } from './zones';
 import { hasLineOfSight } from './los';
 import { spend, type EconomyKind } from './turns';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
 const isCharacter = (c: Creature | undefined): c is Character => !!c && c.kind === 'character' && 'classes' in c;
 
@@ -89,14 +90,15 @@ export function slotsLeft(c: Character): number {
 }
 
 /** Why a target can't be reached by a spell/feature of this range from where the caster stands. */
-export function reachProblem(state: CombatState, casterId: string, targetId: string, rangeFt: number | undefined): string | undefined {
+export function reachProblem(state: CombatState, casterId: string, targetId: string, rangeFt: number | undefined, msgs: Messages = ENGLISH_MESSAGES): string | undefined {
   if (targetId === casterId) return undefined;
-  if (rangeFt === 0) return 'Only the caster can be targeted';
+  const { m } = msgs;
+  if (rangeFt === 0) return m('cast.onlySelf');
   const a = state.grid.tokens[casterId];
   const b = state.grid.tokens[targetId];
-  if (!a || !b) return 'Both creatures must be on the battle map';
-  if (rangeFt !== undefined && distanceFt(a, b) > rangeFt) return `Out of range (${distanceFt(a, b)} ft > ${rangeFt} ft)`;
-  if (!hasLineOfSight(state.grid, casterId, targetId)) return 'No clear line to the target';
+  if (!a || !b) return m('atk.notOnMap');
+  if (rangeFt !== undefined && distanceFt(a, b) > rangeFt) return m('cast.outOfRange', { ft: distanceFt(a, b), max: rangeFt });
+  if (!hasLineOfSight(state.grid, casterId, targetId)) return m('cast.noLine');
   return undefined;
 }
 
@@ -126,21 +128,23 @@ export interface CastInCombatOptions {
 export function castInCombat(state: CombatState, ctx: CombatContext, o: CastInCombatOptions): ActionResult<{ castAtLevel: number }> {
   const db = dbOf(ctx);
   const caster = state.creatures[o.casterId];
-  if (!isCharacter(caster)) return fail(state, `${o.casterId} can't cast spells`);
+  const msgs = msgsOf(ctx);
+  const { m } = msgs;
+  if (!isCharacter(caster)) return fail(state, m('act.cantCast', { name: caster?.name ?? o.casterId }));
   const spell = db.spells.get(o.spellId);
   if (!spell) return fail(state, `Unknown spell ${o.spellId}`);
-  if (!knowsSpell(caster, spell.id)) return fail(state, `${caster.name} doesn't have ${spell.name} prepared`);
+  if (!knowsSpell(caster, spell.id)) return fail(state, m('act.notPrepared', { name: caster.name, spell: spell.name }));
   const economy = spellEconomy(spell);
-  if (!economy) return fail(state, `${spell.name} can't be cast as an action here`);
+  if (!economy) return fail(state, m('cast.notAction', { spell: spell.name }));
   const slot = o.slot ?? lowestSlotFor(caster, spell);
-  if (!slot) return fail(state, `${caster.name} has no slot left for ${spell.name}`);
+  if (!slot) return fail(state, m('act.noSlot', { name: caster.name, spell: spell.name }));
   const range = spellRangeFt(spell);
   const targets: Creature[] = [];
   const distances = new Map<string, number>();
   for (const id of o.targetIds) {
     const t = state.creatures[id];
     if (!t) return fail(state, `Unknown creature ${id}`);
-    const problem = o.areaTargets ? undefined : reachProblem(state, o.casterId, id, range);
+    const problem = o.areaTargets ? undefined : reachProblem(state, o.casterId, id, range, msgs);
     if (problem) return fail(state, `${spell.name} → ${t.name}: ${problem}`);
     targets.push(t);
     const a = state.grid.tokens[o.casterId];
@@ -172,7 +176,7 @@ export function castInCombat(state: CombatState, ctx: CombatContext, o: CastInCo
       // Creatures caught by the casting itself aren't hit again by the zone this turn.
       const stamp = `${next.turns.round}:${next.turns.currentIndex}`;
       next = addZone(next, { ...zone, lastHit: Object.fromEntries(o.targetIds.map((id) => [id, stamp])) });
-      events.push({ kind: 'effect', actorId: o.casterId, text: `${spell.name} fills the area.` });
+      events.push({ kind: 'effect', actorId: o.casterId, text: m('cast.fills', { spell: spell.name }) });
       const firstTarget = o.targetIds.find((id) => id !== o.casterId);
       if (zone.attack && firstTarget) {
         const s = zoneStrike(next, ctx, zone.id, firstTarget);
@@ -204,14 +208,15 @@ const TOUCH_FEATURES = new Set(['lay_on_hands']);
 export function featureInCombat(state: CombatState, ctx: CombatContext, o: FeatureInCombatOptions): ActionResult {
   const db = dbOf(ctx);
   const actor = state.creatures[o.actorId];
-  if (!isCharacter(actor)) return fail(state, `${o.actorId} has no class features`);
+  const msgs = msgsOf(ctx);
+  if (!isCharacter(actor)) return fail(state, msgs.m('cast.noFeatures', { name: actor?.name ?? o.actorId }));
   const found = featureActions(actor, db).find((a) => a.action.id === o.actionId);
-  if (!found) return fail(state, `${actor.name} doesn't have ${o.actionId}`);
+  if (!found) return fail(state, msgs.m('cast.noFeature', { name: actor.name, feature: o.actionId }));
   if (found.problem) return fail(state, found.problem);
   const target = o.targetId ? state.creatures[o.targetId] : undefined;
   if (o.targetId && !target) return fail(state, `Unknown creature ${o.targetId}`);
   if (target) {
-    const problem = reachProblem(state, o.actorId, target.id, TOUCH_FEATURES.has(o.actionId) ? 5 : 60);
+    const problem = reachProblem(state, o.actorId, target.id, TOUCH_FEATURES.has(o.actionId) ? 5 : 60, msgs);
     if (problem) return fail(state, `${found.action.name} → ${target.name}: ${problem}`);
   }
   const cost = found.action.cost;

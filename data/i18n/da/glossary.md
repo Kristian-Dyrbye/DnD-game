@@ -66,3 +66,8 @@ There is no official Danish D&D 5e. These are the game's own choices; use them i
 | cover (half / three-quarters / total) | dække (halvt / trekvart / fuldt) | |
 | long range | lang afstand | |
 | Hide / Search / Help | gemme sig / lede efter / hjælpe | |
+| saving throw | redningsslag | "Dexterity-redningsslag" (ability names stay SRD English until A149) |
+| temporary HP | midlertidige LP | |
+| spell attack | besværgelsesangreb | |
+| spell slot / Pact Magic slot | plads / pagtplads | "en plads på niveau 3+" |
+| area effect; sphere / cone / cube / line / cylinder / emanation | områdeeffekt; kugle / kegle / terning / linje / cylinder / udstråling | |

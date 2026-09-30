@@ -45,12 +45,13 @@ export function multiattackSaveActions(c: Creature, ctx: CombatContext): string[
 /** Why `targetId` can't be the target of this save action, or undefined. */
 export function saveActionProblem(state: CombatState, ctx: CombatContext, actorId: string, action: MonsterAction, targetId: string): string | undefined {
   const target = state.creatures[targetId];
-  if (!target || target.dead) return 'Invalid target';
-  if (targetId === actorId) return `${action.name} targets another creature`;
+  const msgs = msgsOf(ctx);
+  if (!target || target.dead) return msgs.m('act.invalidTarget');
+  if (targetId === actorId) return msgs.m('mon.targetsOther', { action: action.name });
   if (/one creature Grappled by the/i.test(action.text) && !target.effects.some((e) => e.key === 'grappled_by' && e.sourceId === actorId)) {
-    return `${target.name} must be Grappled by the user of ${action.name}`;
+    return msgs.m('mon.mustBeGrappled', { name: target.name, action: action.name });
   }
-  return reachProblem(state, actorId, targetId, saveActionRange(action));
+  return reachProblem(state, actorId, targetId, saveActionRange(action), msgs);
 }
 
 /** Use a single-target save action on `targetId` (see module doc). */
@@ -58,8 +59,9 @@ export function monsterSaveAction(state: CombatState, ctx: CombatContext, actorI
   const actor = state.creatures[actorId];
   if (!actor) return fail(state, `Unknown creature ${actorId}`);
   const action = monsterActionOf(actor, ctx, actionName);
-  if (!action || !isSingleTargetSave(action)) return fail(state, `${actor.name} has no save action ${actionName}`);
-  if (!actionAvailable(actor, action)) return fail(state, `${action.name} isn't available (recharging or used up)`);
+  const { m } = msgsOf(ctx);
+  if (!action || !isSingleTargetSave(action)) return fail(state, m('mon.noSaveAction', { name: actor.name, action: actionName }));
+  if (!actionAvailable(actor, action)) return fail(state, m('mon.unavailable', { action: action.name }));
   const problem = saveActionProblem(state, ctx, actorId, action, targetId);
   if (problem) return fail(state, `${action.name}: ${problem}`);
 
@@ -79,10 +81,10 @@ export function monsterSaveAction(state: CombatState, ctx: CombatContext, actorI
   const save = action.save!;
   const target = next.creatures[targetId] as Creature;
   const s = combatSave(next, ctx, targetId, save.ability, save.dc);
-  const events: CombatEvent[] = [{ kind: 'save', actorId, targetId, text: `${actor.name} uses ${action.name} on ${target.name} — ${s.text}` }];
+  const events: CombatEvent[] = [{ kind: 'save', actorId, targetId, text: m('mon.uses', { name: actor.name, action: action.name, target: target.name, roll: s.text }) }];
   let damage = 0;
   if (save.damage?.length && (!s.success || save.halfOnSuccess)) {
-    const rolled = rollDamage(ctx.rng, save.damage);
+    const rolled = rollDamage(ctx.rng, save.damage, { msgs: msgsOf(ctx) });
     const half = s.success;
     const d = dealCombatDamage(
       next,
@@ -90,7 +92,7 @@ export function monsterSaveAction(state: CombatState, ctx: CombatContext, actorI
       actorId,
       targetId,
       rolled.parts.map((p) => ({ amount: half ? Math.floor(p.total / 2) : p.total, type: p.type })),
-      { text: `${rolled.text}${half ? ' (half)' : ''}` },
+      { text: `${rolled.text}${half ? m('roll.half') : ''}` },
     );
     next = d.state;
     damage = d.dealt;
