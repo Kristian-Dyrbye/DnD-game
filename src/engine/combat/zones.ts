@@ -39,6 +39,7 @@ import { combatCheck } from './saves';
 import { cellKey, distanceFt, getCell, setCell, tokenSquares, type Point } from './grid';
 import { currentId, spend, type EconomyKind } from './turns';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
+import { spellName } from '../i18n/srdNames';
 
 export type ZoneTrigger = 'enter' | 'start_turn' | 'end_turn';
 
@@ -267,6 +268,9 @@ export function pruneZones(state: CombatState, msgs: Messages = ENGLISH_MESSAGES
 }
 
 /** Resolve a zone's effect on one creature (save, damage, condition), honouring once-per-turn. */
+/** The zone's spell name in the log language (zones store the English name). */
+const zoneName = (msgs: Messages, z: Zone): string => spellName(msgs.lang, { id: z.spellId, name: z.name });
+
 function hit(state: CombatState, ctx: CombatContext, z: Zone, id: string, why: 'zone.enters' | 'zone.startsIn' | 'zone.endsIn'): { state: CombatState; events: CombatEvent[] } {
   if (!affects(state, ctx, z, id)) return { state, events: [] };
   const stamp = turnStamp(state);
@@ -275,13 +279,13 @@ function hit(state: CombatState, ctx: CombatContext, z: Zone, id: string, why: '
   const zones = zonesOf(state).map((o) => (o.id === z.id ? { ...o, lastHit: { ...o.lastHit, [id]: stamp } } : o));
   let next = withZones(state, zones);
   const name = next.creatures[id]?.name ?? id;
-  const events: CombatEvent[] = [{ kind: 'effect', actorId: z.casterId, targetId: id, text: msgsOf(ctx).m(why, { name, spell: z.name }) }];
+  const events: CombatEvent[] = [{ kind: 'effect', actorId: z.casterId, targetId: id, text: msgsOf(ctx).m(why, { name, spell: zoneName(msgsOf(ctx), z) }) }];
   if (z.condition && next.creatures[id]!.conditions.some((c) => c.condition === z.condition && c.sourceId === z.sourceId) && !z.damage) return { state: next, events: [] };
   const template = z.template ?? templateFromArea({ shape: 'sphere', size: 5 } as Parameters<typeof templateFromArea>[0], { origin: { x: z.point!.x + 0.5, y: z.point!.y + 0.5 } });
   const r = resolveAreaEffect(next, ctx, {
     casterId: z.casterId,
     template,
-    label: z.name,
+    label: zoneName(msgsOf(ctx), z),
     ...(z.save && { save: z.save }),
     ...(z.damage && { damage: z.damage }),
     halfOnSave: z.halfOnSuccess,
@@ -376,7 +380,7 @@ export function escapeZone(state: CombatState, ctx: CombatContext, id: string, z
   const success = r.result.success === true;
   let next = r.state;
   if (success) next = withCreature(next, removeCondition(next.creatures[id]!, z.condition, z.sourceId));
-  return { ok: true, state: next, events: [{ kind: 'check', actorId: id, text: m('zone.struggles', { name: c.name, spell: z.name, roll: r.result.text }) }], success };
+  return { ok: true, state: next, events: [{ kind: 'check', actorId: id, text: m('zone.struggles', { name: c.name, spell: zoneName(msgsOf(ctx), z), roll: r.result.text }) }], success };
 }
 
 export interface ZoneActOptions {
@@ -406,13 +410,13 @@ export function zoneAct(state: CombatState, ctx: CombatContext, casterId: string
     const r = resolveAreaEffect(cur, ctx, {
       casterId,
       template: templateFromArea({ shape: 'sphere', size: z.bolt.radiusFt } as Parameters<typeof templateFromArea>[0], { origin: { x: o.to.x + 0.5, y: o.to.y + 0.5 } }),
-      label: z.name,
+      label: zoneName(msgsOf(ctx), z),
       ...(z.save && { save: z.save }),
       ...(z.damage && { damage: z.damage }),
       halfOnSave: true,
     });
     if (!r.ok) return fail(state, r.error);
-    return { ok: true, state: r.state, events: [{ kind: 'action', actorId: casterId, text: m('zone.bolt', { name: caster.name, spell: z.name }) }, ...r.events] };
+    return { ok: true, state: r.state, events: [{ kind: 'action', actorId: casterId, text: m('zone.bolt', { name: caster.name, spell: zoneName(msgsOf(ctx), z) }) }, ...r.events] };
   }
 
   if (o.to) {
@@ -431,7 +435,7 @@ export function zoneAct(state: CombatState, ctx: CombatContext, casterId: string
       ...(z.template && { template: { ...z.template, origin: { x: z.template.origin.x + dx, y: z.template.origin.y + dy } } }),
     };
     cur = applyTerrain(withZones(cur, zonesOf(cur).map((x) => (x.id === z.id ? movedZone : x))), movedZone);
-    events.push({ kind: 'move', actorId: casterId, text: m('zone.moves', { name: caster.name, spell: z.name, ft: moved }) });
+    events.push({ kind: 'move', actorId: casterId, text: m('zone.moves', { name: caster.name, spell: zoneName(msgsOf(ctx), z), ft: moved }) });
     const after = zonesAfterMove(cur, ctx, before);
     cur = after.state;
     events.push(...after.events);
@@ -454,7 +458,7 @@ export function zoneStrike(state: CombatState, ctx: CombatContext, zoneId: strin
   const { m } = msgsOf(ctx);
   if (!z?.attack || !z.point || !target || !caster || target.dead) return fail(state, m('act.invalidTarget'));
   const tt = state.grid.tokens[targetId];
-  if (!tt || distanceFt({ ...z.point, size: 'medium' }, tt) > z.attack.reachFt) return fail(state, m('zone.notWithin', { name: target.name, ft: z.attack.reachFt, spell: z.name }));
+  if (!tt || distanceFt({ ...z.point, size: 'medium' }, tt) > z.attack.reachFt) return fail(state, m('zone.notWithin', { name: target.name, ft: z.attack.reachFt, spell: zoneName(msgsOf(ctx), z) }));
   const ectx = createEffectContext({ rng: ctx.rng, ...(ctx.msgs && { msgs: ctx.msgs }), source: caster, targets: [target], attackBonus: z.attack.attackBonus, spellMod: z.attack.spellMod, damageBonus: z.attack.spellMod });
   executeEffects([{ kind: 'attack', attack: 'melee_spell', onHit: [{ kind: 'damage', damage: z.attack.damage }] }], [targetId], ectx);
   const creatures = { ...state.creatures };

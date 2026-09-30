@@ -82,13 +82,13 @@ describe('spells and zones (A141g)', () => {
     const fb = castInCombat(turnOf(esc.state, 'me'), ctx(da, 10, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1), { casterId: 'me', spellId: 'fireball', targetIds: ['g1', 'g2'], areaTargets: true });
     if (!fb.ok) throw new Error(fb.error);
     const log = [text(cast), text(m), text(esc), text(fb)].join('\n');
-    expect(log).toMatch(/^Web fylder området\.$/m);
-    expect(log).toMatch(/^Goblin bevæger sig ind i Web\.$/m);
-    expect(log).toMatch(/^Brenna: Web \(terning på 20 fod\) — 1 skabning i området$/m);
+    expect(log).toMatch(/^Spind fylder området\.$/m);
+    expect(log).toMatch(/^Goblin bevæger sig ind i Spind\.$/m);
+    expect(log).toMatch(/^Brenna: Spind \(terning på 20 fod\) — 1 skabning i området$/m);
     expect(log).toMatch(/^Goblin Behændighed-redningsslag: d20: 1 .* mod SG \d+ — Fiasko$/m);
-    expect(log).toMatch(/^Goblin får tilstanden restrained \(Web\)$/m);
-    expect(log).toMatch(/^Goblin kæmper mod Web — /m);
-    expect(log).toMatch(/^Brenna kaster Fireball \(niveau 3\)$/m);
+    expect(log).toMatch(/^Goblin får tilstanden restrained \(Spind\)$/m);
+    expect(log).toMatch(/^Goblin kæmper mod Spind — /m);
+    expect(log).toMatch(/^Brenna kaster Ildkugle \(niveau 3\)$/m);
     expect(log).toMatch(/^Hobgoblin tager \d+ skade/m);
     for (const line of log.split('\n')) expect(head(line)).not.toMatch(ENGLISH_HEADS);
   });
@@ -98,7 +98,7 @@ describe('spells and zones (A141g)', () => {
     expect(reachProblem(s, 'me', 'g1', 30, da)).toBe('Uden for rækkevidde (60 fod > 30 fod)');
     expect(reachProblem(s, 'me', 'g1', 0, da)).toBe('Kun besværgeren selv kan være mål');
     const fireball = db.spells.get('fireball')!;
-    expect(slotProblem(fireball, { kind: 'slot', level: 1 }, undefined, da)).toBe('Fireball kræver en plads på niveau 3+');
+    expect(slotProblem(fireball, { kind: 'slot', level: 1 }, undefined, da)).toBe('Ildkugle kræver en plads på niveau 3+');
     expect(slotProblem(fireball, { kind: 'slot', level: 1 }, undefined)).toBe('Fireball needs a level 3+ slot');
     expect(castInCombat(s, ctx(da), { casterId: 'g1', spellId: 'fireball', targetIds: [] })).toMatchObject({ ok: false, error: 'Goblin kan ikke kaste besværgelser' });
   });

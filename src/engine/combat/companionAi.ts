@@ -70,6 +70,7 @@ import { knowsSpell, lowestSlotFor, reachProblem, slotsLeft, spellcastingSource,
 import { areHostile, dbOf, msgsOf, type ActionResult, type CombatContext, type CombatState } from './combatState';
 import { distanceFt, type GridToken, type Point } from './grid';
 import { computeCover } from './los';
+import { spellName } from '../i18n/srdNames';
 
 export type CompanionRole = 'healer' | 'ranged' | 'defender' | 'striker';
 
@@ -305,7 +306,7 @@ function healOptions(p: Planner, dest: Point, sources: readonly HealSource[], ne
       const target = p.state.creatures[need.id]!;
       const value = healValue(src, need, target.maxHp);
       const amount = need.down ? Math.min(src.expected, target.maxHp) : Math.min(src.expected, need.missing);
-      out.push({ value, steps: [src.step(need.id, amount)], usesSlot: src.usesSlot, kind: 'heal', targetId: need.id, label: msgsOf(p.ctx).m('ai.healOn', { spell: src.name, target: target.name }) });
+      out.push({ value, steps: [src.step(need.id, amount)], usesSlot: src.usesSlot, kind: 'heal', targetId: need.id, label: msgsOf(p.ctx).m('ai.healOn', { spell: spellName(msgsOf(p.ctx).lang, src), target: target.name }) });
     }
   }
   return out;
@@ -412,7 +413,7 @@ export function planCompanionTurn(state: CombatState, ctx: CombatContext, actorI
         const check = checkAttack(hyp, ctx, actorId, h, ct.profile);
         if (!check.ok) continue;
         const e = ct.kind === 'attack' ? expectedAttackDamage(ct.profile, check, target) * ct.beams : expectedSaveDamage(ct.damage, target, ct.save!.ability, ct.save!.dc, ct.save!.half);
-        if (e > 0) out.push({ value: targetBonus(h, e), steps: [{ kind: 'cast', spellId: ct.spell.id, targetIds: [h] }], usesSlot: false, kind: 'cantrip', targetId: h, label: m('ai.castsAt', { spell: ct.spell.name, target: target.name }) });
+        if (e > 0) out.push({ value: targetBonus(h, e), steps: [{ kind: 'cast', spellId: ct.spell.id, targetIds: [h] }], usesSlot: false, kind: 'cantrip', targetId: h, label: m('ai.castsAt', { spell: spellName(msgsOf(ctx).lang, ct.spell), target: target.name }) });
       }
     }
     out.push(...healOptions(p, dest, sources, needs, 'action', lastSlot));

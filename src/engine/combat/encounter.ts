@@ -27,6 +27,7 @@ import { canPlace, createGrid, distanceFt, placeToken, setCell, type Grid, type 
 import { rollInitiativeOrder, toEntries } from './initiative';
 import { currentId, livingSides, nextTurn, startCombat } from './turns';
 import { zonesAtTurn } from './zones';
+import { spellName } from '../i18n/srdNames';
 
 export type EncounterStatus = 'ongoing' | 'won' | 'lost';
 
@@ -335,7 +336,7 @@ export function playerAct(enc: Encounter, ctx: CombatContext, a: PlayerAction): 
     const spell = dbOf(ctx).spells.get(a.spellId);
     const range = spell ? spellRangeFt(spell) : undefined;
     const me = enc.state.grid.tokens[id];
-    if (spell && range !== undefined && range > 0 && me && distanceFt(me, { x: a.area.x, y: a.area.y, size: 'medium' }) > range) return m('combat.outOfRange', { spell: spell.name, ft: range });
+    if (spell && range !== undefined && range > 0 && me && distanceFt(me, { x: a.area.x, y: a.area.y, size: 'medium' }) > range) return m('combat.outOfRange', { spell: spellName(msgsOf(ctx).lang, spell), ft: range });
   }
   if (a.kind === 'cast' || a.kind === 'feature') {
     const r =

@@ -22,6 +22,7 @@ import { addZone, createZone, zoneStrike } from './zones';
 import { hasLineOfSight } from './los';
 import { spend, type EconomyKind } from './turns';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
+import { spellName } from '../i18n/srdNames';
 
 const isCharacter = (c: Creature | undefined): c is Character => !!c && c.kind === 'character' && 'classes' in c;
 
@@ -133,11 +134,11 @@ export function castInCombat(state: CombatState, ctx: CombatContext, o: CastInCo
   if (!isCharacter(caster)) return fail(state, m('act.cantCast', { name: caster?.name ?? o.casterId }));
   const spell = db.spells.get(o.spellId);
   if (!spell) return fail(state, `Unknown spell ${o.spellId}`);
-  if (!knowsSpell(caster, spell.id)) return fail(state, m('act.notPrepared', { name: caster.name, spell: spell.name }));
+  if (!knowsSpell(caster, spell.id)) return fail(state, m('act.notPrepared', { name: caster.name, spell: spellName(msgs.lang, spell) }));
   const economy = spellEconomy(spell);
-  if (!economy) return fail(state, m('cast.notAction', { spell: spell.name }));
+  if (!economy) return fail(state, m('cast.notAction', { spell: spellName(msgs.lang, spell) }));
   const slot = o.slot ?? lowestSlotFor(caster, spell);
-  if (!slot) return fail(state, m('act.noSlot', { name: caster.name, spell: spell.name }));
+  if (!slot) return fail(state, m('act.noSlot', { name: caster.name, spell: spellName(msgs.lang, spell) }));
   const range = spellRangeFt(spell);
   const targets: Creature[] = [];
   const distances = new Map<string, number>();
@@ -145,7 +146,7 @@ export function castInCombat(state: CombatState, ctx: CombatContext, o: CastInCo
     const t = state.creatures[id];
     if (!t) return fail(state, `Unknown creature ${id}`);
     const problem = o.areaTargets ? undefined : reachProblem(state, o.casterId, id, range, msgs);
-    if (problem) return fail(state, `${spell.name} → ${t.name}: ${problem}`);
+    if (problem) return fail(state, `${spellName(msgs.lang, spell)} → ${t.name}: ${problem}`);
     targets.push(t);
     const a = state.grid.tokens[o.casterId];
     const b = state.grid.tokens[id];
@@ -176,7 +177,7 @@ export function castInCombat(state: CombatState, ctx: CombatContext, o: CastInCo
       // Creatures caught by the casting itself aren't hit again by the zone this turn.
       const stamp = `${next.turns.round}:${next.turns.currentIndex}`;
       next = addZone(next, { ...zone, lastHit: Object.fromEntries(o.targetIds.map((id) => [id, stamp])) });
-      events.push({ kind: 'effect', actorId: o.casterId, text: m('cast.fills', { spell: spell.name }) });
+      events.push({ kind: 'effect', actorId: o.casterId, text: m('cast.fills', { spell: spellName(msgs.lang, spell) }) });
       const firstTarget = o.targetIds.find((id) => id !== o.casterId);
       if (zone.attack && firstTarget) {
         const s = zoneStrike(next, ctx, zone.id, firstTarget);

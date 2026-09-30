@@ -18,6 +18,7 @@ import daBackgrounds from '../../../data/i18n/da/srd/backgrounds.json';
 import daFeats from '../../../data/i18n/da/srd/feats.json';
 import daWeapons from '../../../data/i18n/da/srd/weapons.json';
 import daArmor from '../../../data/i18n/da/srd/armor.json';
+import daSpells from '../../../data/i18n/da/srd/spells.json';
 
 export const SRD_NAME_KINDS = [
   'rules', 'conditions', 'classes', 'subclasses', 'species', 'backgrounds', 'feats',
@@ -37,6 +38,7 @@ export const SRD_NAME_OVERLAYS: Partial<Record<Language, Partial<Record<SrdNameK
     feats: daFeats,
     weapons: daWeapons,
     armor: daArmor,
+    spells: daSpells,
   },
 };
 
@@ -51,5 +53,9 @@ export const abilityName = (lang: Language, a: Ability): string => srdName(lang,
 /** "Con" / Danish "Kon" (check labels). */
 export const abilityShort = (lang: Language, a: Ability): string => srdName(lang, 'rules', `ability_short/${a}`, a[0]!.toUpperCase() + a.slice(1));
 export const skillName = (lang: Language, s: Skill): string => srdName(lang, 'rules', `skill/${s}`, SKILL_NAMES[s]);
+/** Spell name for log lines. */
+export const spellName = (lang: Language, spell: { id: string; name: string }): string => srdName(lang, 'spells', spell.id, spell.name);
+/** Spell known only by id (concentration lines): the translated name, else the id as before (English lines keep ids). */
+export const spellIdName = (lang: Language, id: string): string => srdName(lang, 'spells', id, id);
 /** Rules words without their own file: damage, creature_type, size, school, mastery, property. */
 export const ruleWord = (lang: Language, group: string, id: string, english: string): string => srdName(lang, 'rules', `${group}/${id}`, english);

@@ -13,6 +13,7 @@ import type { Rng } from '../../core/rng';
 import { classLevel, equipped } from '../derived';
 import type { FeatureImpl } from './types';
 import { ENGLISH_MESSAGES, type Messages } from '../../i18n';
+import { spellIdName } from '../../i18n/srdNames';
 
 const raging = (c: Character) => hasEffect(c, 'rage');
 const level = (c: Character) => classLevel(c, 'barbarian');
@@ -49,7 +50,7 @@ export const barbarianFeatures: FeatureImpl[] = [
           if (next.spellcasting?.concentration) {
             const { concentration, ...rest } = next.spellcasting;
             next = { ...next, spellcasting: rest };
-            log.push(msgs.m('feat.rageConc', { name: c.name, spell: concentration.spellId }));
+            log.push(msgs.m('feat.rageConc', { name: c.name, spell: spellIdName(msgs.lang, concentration.spellId) }));
           }
           return { character: next, log };
         },

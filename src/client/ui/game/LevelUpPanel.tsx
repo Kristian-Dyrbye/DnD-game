@@ -40,7 +40,10 @@ export function LevelUpPanel({ hero, onClose }: { hero: Character; onClose: () =
       return db
         .spellsForClass(classId, Math.max(maxLevel, 0))
         .filter((s) => (level === 0 ? s.level === 0 : s.level > 0) && !known.has(s.id))
-        .map((s) => ({ id: s.id, label: s.level ? t('levelup.spellLevel', { name: s.name, level: s.level }) : s.name }));
+        .map((s) => {
+          const name = srdText('spells', s.id, s.name);
+          return { id: s.id, label: s.level ? t('levelup.spellLevel', { name, level: s.level }) : name };
+        });
     }
     if (ch.kind === 'weapon_mastery') return [...db.weapons.values()].filter((w) => w.mastery && !hero.weaponMasteries.includes(w.id)).map((w) => ({ id: w.id, label: srdText('weapons', w.id, w.name) }));
     if (ch.kind === 'expertise') return Object.entries(hero.skills).filter(([, v]) => v === 'proficient').map(([k]) => ({ id: k, label: skillText(k as keyof typeof SKILL_NAMES) }));

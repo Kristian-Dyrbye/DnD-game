@@ -1,0 +1,1361 @@
+{
+  "$source": "data/srd/spells.json",
+  "strings": {
+    "acid_arrow": {
+      "hash": "dd2375f1",
+      "text": "Syrepil"
+    },
+    "acid_splash": {
+      "hash": "860452e7",
+      "text": "Syrestænk"
+    },
+    "aid": {
+      "hash": "a3bcf7c1",
+      "text": "Bistand"
+    },
+    "alarm": {
+      "hash": "c221c77a",
+      "text": "Alarm"
+    },
+    "alter_self": {
+      "hash": "2558266b",
+      "text": "Forandr dig selv"
+    },
+    "animal_friendship": {
+      "hash": "9de1e661",
+      "text": "Dyrevenskab"
+    },
+    "animal_messenger": {
+      "hash": "ff50eeb6",
+      "text": "Dyrebud"
+    },
+    "animal_shapes": {
+      "hash": "7e1cb259",
+      "text": "Dyreskikkelser"
+    },
+    "animate_dead": {
+      "hash": "5f0d0f1e",
+      "text": "Genopliv de døde"
+    },
+    "animate_objects": {
+      "hash": "d07237bc",
+      "text": "Besjæl genstande"
+    },
+    "antilife_shell": {
+      "hash": "9eae68c1",
+      "text": "Antilivsskal"
+    },
+    "antimagic_field": {
+      "hash": "9bf00110",
+      "text": "Antimagisk felt"
+    },
+    "antipathy_sympathy": {
+      "hash": "9095e84d",
+      "text": "Antipati/Sympati"
+    },
+    "arcane_eye": {
+      "hash": "2bcd1ca2",
+      "text": "Magisk øje"
+    },
+    "arcane_hand": {
+      "hash": "871477a8",
+      "text": "Magisk hånd"
+    },
+    "arcane_lock": {
+      "hash": "6a85037a",
+      "text": "Magisk lås"
+    },
+    "arcane_sword": {
+      "hash": "6f247e9e",
+      "text": "Magisk sværd"
+    },
+    "arcanists_magic_aura": {
+      "hash": "fbad9820",
+      "text": "Magikerens magiske aura"
+    },
+    "astral_projection": {
+      "hash": "cfb57bf7",
+      "text": "Astral projektion"
+    },
+    "augury": {
+      "hash": "66ddad5e",
+      "text": "Varsel"
+    },
+    "aura_of_life": {
+      "hash": "d0fa0213",
+      "text": "Livets aura"
+    },
+    "awaken": {
+      "hash": "6d49b956",
+      "text": "Væk til live"
+    },
+    "bane": {
+      "hash": "9874b5f9",
+      "text": "Forbandelse"
+    },
+    "banishment": {
+      "hash": "1378c826",
+      "text": "Forvisning"
+    },
+    "barkskin": {
+      "hash": "01ddf7c2",
+      "text": "Barkhud"
+    },
+    "beacon_of_hope": {
+      "hash": "8d33308c",
+      "text": "Håbets fyrtårn"
+    },
+    "befuddlement": {
+      "hash": "726f14aa",
+      "text": "Forvirring af sindet"
+    },
+    "bestow_curse": {
+      "hash": "0694c3f7",
+      "text": "Påfør forbandelse"
+    },
+    "black_tentacles": {
+      "hash": "8367566b",
+      "text": "Sorte tentakler"
+    },
+    "blade_barrier": {
+      "hash": "6a2cf982",
+      "text": "Klingebarriere"
+    },
+    "bless": {
+      "hash": "eceab678",
+      "text": "Velsignelse"
+    },
+    "blight": {
+      "hash": "654c30ef",
+      "text": "Visnen"
+    },
+    "blindness_deafness": {
+      "hash": "3b90b2f3",
+      "text": "Blindhed/Døvhed"
+    },
+    "blink": {
+      "hash": "dbd66129",
+      "text": "Blink"
+    },
+    "blur": {
+      "hash": "d2dcfbb8",
+      "text": "Sløring"
+    },
+    "burning_hands": {
+      "hash": "90f8ddf6",
+      "text": "Brændende hænder"
+    },
+    "call_lightning": {
+      "hash": "9181d35f",
+      "text": "Kald lynet"
+    },
+    "calm_emotions": {
+      "hash": "c4f1d39c",
+      "text": "Dæmp følelser"
+    },
+    "chain_lightning": {
+      "hash": "f986a550",
+      "text": "Kædelyn"
+    },
+    "charm_monster": {
+      "hash": "9afea506",
+      "text": "Fortryl monster"
+    },
+    "charm_person": {
+      "hash": "97a098b5",
+      "text": "Fortryl person"
+    },
+    "chill_touch": {
+      "hash": "52ce1f16",
+      "text": "Dødskold berøring"
+    },
+    "chromatic_orb": {
+      "hash": "bd13d2c0",
+      "text": "Kromatisk kugle"
+    },
+    "circle_of_death": {
+      "hash": "bd2874a8",
+      "text": "Dødens cirkel"
+    },
+    "clairvoyance": {
+      "hash": "7d90efdf",
+      "text": "Clairvoyance"
+    },
+    "clone": {
+      "hash": "d143cd22",
+      "text": "Klon"
+    },
+    "cloudkill": {
+      "hash": "e0a82622",
+      "text": "Dræbersky"
+    },
+    "color_spray": {
+      "hash": "6d9382ad",
+      "text": "Farvesprøjt"
+    },
+    "command": {
+      "hash": "c67c8f52",
+      "text": "Befaling"
+    },
+    "commune": {
+      "hash": "599722f1",
+      "text": "Samtale med guderne"
+    },
+    "commune_with_nature": {
+      "hash": "96c61df6",
+      "text": "Samtale med naturen"
+    },
+    "comprehend_languages": {
+      "hash": "936c1e05",
+      "text": "Forstå sprog"
+    },
+    "compulsion": {
+      "hash": "88ad3f06",
+      "text": "Tvang"
+    },
+    "cone_of_cold": {
+      "hash": "85613b57",
+      "text": "Kuldekegle"
+    },
+    "confusion": {
+      "hash": "80f45ccb",
+      "text": "Forvirring"
+    },
+    "conjure_animals": {
+      "hash": "b9e68702",
+      "text": "Fremman dyr"
+    },
+    "conjure_celestial": {
+      "hash": "416b7249",
+      "text": "Fremman himmelvæsen"
+    },
+    "conjure_elemental": {
+      "hash": "dcd0a722",
+      "text": "Fremman elementar"
+    },
+    "conjure_fey": {
+      "hash": "465a84df",
+      "text": "Fremman feer"
+    },
+    "conjure_minor_elementals": {
+      "hash": "ed0c141c",
+      "text": "Fremman mindre elementarer"
+    },
+    "conjure_woodland_beings": {
+      "hash": "b3eb5c2b",
+      "text": "Fremman skovvæsner"
+    },
+    "contact_other_plane": {
+      "hash": "1a5f9373",
+      "text": "Kontakt et andet plan"
+    },
+    "contagion": {
+      "hash": "1f72ba79",
+      "text": "Smitte"
+    },
+    "contingency": {
+      "hash": "9bf04314",
+      "text": "Beredskab"
+    },
+    "continual_flame": {
+      "hash": "9110a62f",
+      "text": "Evig flamme"
+    },
+    "control_water": {
+      "hash": "f90dbbf5",
+      "text": "Styr vand"
+    },
+    "control_weather": {
+      "hash": "c392669a",
+      "text": "Styr vejret"
+    },
+    "counterspell": {
+      "hash": "08b6897f",
+      "text": "Modbesværgelse"
+    },
+    "create_food_and_water": {
+      "hash": "e1b83005",
+      "text": "Skab mad og vand"
+    },
+    "create_or_destroy_water": {
+      "hash": "9bfc2d1b",
+      "text": "Skab eller ødelæg vand"
+    },
+    "create_undead": {
+      "hash": "0b61acf6",
+      "text": "Skab udøde"
+    },
+    "creation": {
+      "hash": "82a63744",
+      "text": "Skabelse"
+    },
+    "cure_wounds": {
+      "hash": "8aaf3ae8",
+      "text": "Hel sår"
+    },
+    "dancing_lights": {
+      "hash": "027ed1fc",
+      "text": "Dansende lys"
+    },
+    "darkness": {
+      "hash": "381b330a",
+      "text": "Mørke"
+    },
+    "darkvision": {
+      "hash": "571f72c9",
+      "text": "Mørkesyn"
+    },
+    "daylight": {
+      "hash": "29cc3b47",
+      "text": "Dagslys"
+    },
+    "death_ward": {
+      "hash": "50f22535",
+      "text": "Dødsværn"
+    },
+    "delayed_blast_fireball": {
+      "hash": "adda1634",
+      "text": "Forsinket ildkugle"
+    },
+    "demiplane": {
+      "hash": "fef918de",
+      "text": "Halvplan"
+    },
+    "detect_evil_and_good": {
+      "hash": "719e994a",
+      "text": "Fornem ondt og godt"
+    },
+    "detect_magic": {
+      "hash": "b1f1cfe5",
+      "text": "Fornem magi"
+    },
+    "detect_poison_and_disease": {
+      "hash": "dd6cc049",
+      "text": "Fornem gift og sygdom"
+    },
+    "detect_thoughts": {
+      "hash": "617f6a9c",
+      "text": "Fornem tanker"
+    },
+    "dimension_door": {
+      "hash": "7139a165",
+      "text": "Dimensionsdør"
+    },
+    "disguise_self": {
+      "hash": "d5cd47d0",
+      "text": "Forklæd dig"
+    },
+    "disintegrate": {
+      "hash": "8bb4efb2",
+      "text": "Opløs"
+    },
+    "dispel_evil_and_good": {
+      "hash": "4d02ebd0",
+      "text": "Fordriv ondt og godt"
+    },
+    "dispel_magic": {
+      "hash": "6b96a457",
+      "text": "Ophæv magi"
+    },
+    "dissonant_whispers": {
+      "hash": "ad0fd0e5",
+      "text": "Skurrende hvisken"
+    },
+    "divination": {
+      "hash": "b561fc6c",
+      "text": "Spådom"
+    },
+    "divine_favor": {
+      "hash": "e8b89142",
+      "text": "Guddommelig gunst"
+    },
+    "divine_smite": {
+      "hash": "90173046",
+      "text": "Guddommeligt slag"
+    },
+    "divine_word": {
+      "hash": "9899a906",
+      "text": "Guddommeligt ord"
+    },
+    "dominate_beast": {
+      "hash": "e5c747c7",
+      "text": "Behersk dyr"
+    },
+    "dominate_monster": {
+      "hash": "4c8c8f7e",
+      "text": "Behersk monster"
+    },
+    "dominate_person": {
+      "hash": "f9ec450d",
+      "text": "Behersk person"
+    },
+    "dragons_breath": {
+      "hash": "37c484ca",
+      "text": "Dragens ånde"
+    },
+    "dream": {
+      "hash": "54bc383c",
+      "text": "Drøm"
+    },
+    "druidcraft": {
+      "hash": "41b5972b",
+      "text": "Druidekunst"
+    },
+    "earthquake": {
+      "hash": "60ae2420",
+      "text": "Jordskælv"
+    },
+    "eldritch_blast": {
+      "hash": "e3079fca",
+      "text": "Overjordisk stråle"
+    },
+    "elementalism": {
+      "hash": "b61e0f69",
+      "text": "Elementarisme"
+    },
+    "enhance_ability": {
+      "hash": "3a0c0bf7",
+      "text": "Styrk evne"
+    },
+    "enlarge_reduce": {
+      "hash": "594875c4",
+      "text": "Forstør/Formindsk"
+    },
+    "ensnaring_strike": {
+      "hash": "83844b3a",
+      "text": "Fangende slag"
+    },
+    "entangle": {
+      "hash": "1f09dbb9",
+      "text": "Indfiltring"
+    },
+    "enthrall": {
+      "hash": "3243db57",
+      "text": "Betagelse"
+    },
+    "etherealness": {
+      "hash": "c46f34d8",
+      "text": "Æterisk form"
+    },
+    "expeditious_retreat": {
+      "hash": "e3e88b6f",
+      "text": "Hastig tilbagetrækning"
+    },
+    "eyebite": {
+      "hash": "db9a9e60",
+      "text": "Ondt øje"
+    },
+    "fabricate": {
+      "hash": "c1d9ea04",
+      "text": "Fremstil"
+    },
+    "faerie_fire": {
+      "hash": "3af8f1ab",
+      "text": "Feild"
+    },
+    "faithful_hound": {
+      "hash": "67063b74",
+      "text": "Tro hund"
+    },
+    "false_life": {
+      "hash": "5fad751a",
+      "text": "Falsk liv"
+    },
+    "fear": {
+      "hash": "4d6ae227",
+      "text": "Frygt"
+    },
+    "feather_fall": {
+      "hash": "ba849301",
+      "text": "Fjerfald"
+    },
+    "find_familiar": {
+      "hash": "309cabb9",
+      "text": "Find tjenerånd"
+    },
+    "find_steed": {
+      "hash": "2e9811b5",
+      "text": "Find ganger"
+    },
+    "find_the_path": {
+      "hash": "f1b54be8",
+      "text": "Find vejen"
+    },
+    "find_traps": {
+      "hash": "ac29a0fa",
+      "text": "Find fælder"
+    },
+    "finger_of_death": {
+      "hash": "24ea2ce3",
+      "text": "Dødens finger"
+    },
+    "fireball": {
+      "hash": "643f7cd8",
+      "text": "Ildkugle"
+    },
+    "fire_bolt": {
+      "hash": "71c4faac",
+      "text": "Ildpil"
+    },
+    "fire_shield": {
+      "hash": "0055d572",
+      "text": "Ildskjold"
+    },
+    "fire_storm": {
+      "hash": "745cc47c",
+      "text": "Ildstorm"
+    },
+    "flame_blade": {
+      "hash": "90b9886a",
+      "text": "Flammeklinge"
+    },
+    "flame_strike": {
+      "hash": "bbc44aba",
+      "text": "Flammeslag"
+    },
+    "flaming_sphere": {
+      "hash": "ef422cd4",
+      "text": "Flammende kugle"
+    },
+    "flesh_to_stone": {
+      "hash": "1403838b",
+      "text": "Kød til sten"
+    },
+    "floating_disk": {
+      "hash": "a5341f38",
+      "text": "Svævende skive"
+    },
+    "fly": {
+      "hash": "227bfa82",
+      "text": "Flyv"
+    },
+    "fog_cloud": {
+      "hash": "77460ef6",
+      "text": "Tågesky"
+    },
+    "forbiddance": {
+      "hash": "85ab2656",
+      "text": "Forbud"
+    },
+    "forcecage": {
+      "hash": "0510699c",
+      "text": "Kraftbur"
+    },
+    "foresight": {
+      "hash": "281834e4",
+      "text": "Forudseenhed"
+    },
+    "freedom_of_movement": {
+      "hash": "e0a3be93",
+      "text": "Bevægelsesfrihed"
+    },
+    "freezing_sphere": {
+      "hash": "885e4d0a",
+      "text": "Frysende kugle"
+    },
+    "gaseous_form": {
+      "hash": "4fcd1c04",
+      "text": "Gasform"
+    },
+    "gate": {
+      "hash": "968d3732",
+      "text": "Portal"
+    },
+    "geas": {
+      "hash": "fc334ce1",
+      "text": "Geas"
+    },
+    "gentle_repose": {
+      "hash": "8f1fdfa0",
+      "text": "Blid hvile"
+    },
+    "giant_insect": {
+      "hash": "f2025da2",
+      "text": "Kæmpeinsekt"
+    },
+    "glibness": {
+      "hash": "08f1a29a",
+      "text": "Glat tunge"
+    },
+    "globe_of_invulnerability": {
+      "hash": "0bb88bcc",
+      "text": "Usårlighedens kugle"
+    },
+    "glyph_of_warding": {
+      "hash": "70e570c0",
+      "text": "Værnende glyf"
+    },
+    "goodberry": {
+      "hash": "d0895798",
+      "text": "Godbær"
+    },
+    "grease": {
+      "hash": "e9b90d86",
+      "text": "Fedt"
+    },
+    "greater_invisibility": {
+      "hash": "cdf5f964",
+      "text": "Større usynlighed"
+    },
+    "greater_restoration": {
+      "hash": "730eb439",
+      "text": "Større genoprettelse"
+    },
+    "guardian_of_faith": {
+      "hash": "9e3559b3",
+      "text": "Troens vogter"
+    },
+    "guards_and_wards": {
+      "hash": "32640be5",
+      "text": "Vagter og værn"
+    },
+    "guidance": {
+      "hash": "74122bf7",
+      "text": "Vejledning"
+    },
+    "guiding_bolt": {
+      "hash": "dbf2a73f",
+      "text": "Ledende lyn"
+    },
+    "gust_of_wind": {
+      "hash": "1d4fdbcb",
+      "text": "Vindstød"
+    },
+    "hallow": {
+      "hash": "c13d5350",
+      "text": "Helliggør"
+    },
+    "hallucinatory_terrain": {
+      "hash": "0598d2d5",
+      "text": "Hallucinatorisk terræn"
+    },
+    "harm": {
+      "hash": "6defb627",
+      "text": "Skade"
+    },
+    "haste": {
+      "hash": "dd2f6010",
+      "text": "Hast"
+    },
+    "heal": {
+      "hash": "ba97377b",
+      "text": "Helbred"
+    },
+    "healing_word": {
+      "hash": "92b3e4ab",
+      "text": "Helende ord"
+    },
+    "heat_metal": {
+      "hash": "cbd18c78",
+      "text": "Glød metal"
+    },
+    "hellish_rebuke": {
+      "hash": "e24ff506",
+      "text": "Helvedes irettesættelse"
+    },
+    "heroes_feast": {
+      "hash": "eb545f69",
+      "text": "Heltenes gilde"
+    },
+    "heroism": {
+      "hash": "4d6fe37c",
+      "text": "Heltemod"
+    },
+    "hex": {
+      "hash": "613f34ea",
+      "text": "Heksning"
+    },
+    "hideous_laughter": {
+      "hash": "6e7561b6",
+      "text": "Afskyelig latter"
+    },
+    "hold_monster": {
+      "hash": "646b9bbe",
+      "text": "Lam monster"
+    },
+    "hold_person": {
+      "hash": "92f32a4d",
+      "text": "Lam person"
+    },
+    "holy_aura": {
+      "hash": "dba3ba56",
+      "text": "Hellig aura"
+    },
+    "hunters_mark": {
+      "hash": "f6532452",
+      "text": "Jægerens mærke"
+    },
+    "hypnotic_pattern": {
+      "hash": "0fa7fdf1",
+      "text": "Hypnotisk mønster"
+    },
+    "ice_knife": {
+      "hash": "2cfdf121",
+      "text": "Iskniv"
+    },
+    "ice_storm": {
+      "hash": "5e5387c9",
+      "text": "Isstorm"
+    },
+    "identify": {
+      "hash": "ebef033d",
+      "text": "Identificer"
+    },
+    "illusory_script": {
+      "hash": "5e60b257",
+      "text": "Illusorisk skrift"
+    },
+    "imprisonment": {
+      "hash": "3abab8d8",
+      "text": "Fængsling"
+    },
+    "incendiary_cloud": {
+      "hash": "7ca93152",
+      "text": "Brandsky"
+    },
+    "inflict_wounds": {
+      "hash": "b44ccd58",
+      "text": "Påfør sår"
+    },
+    "insect_plague": {
+      "hash": "55f54719",
+      "text": "Insektplage"
+    },
+    "instant_summons": {
+      "hash": "e36f9752",
+      "text": "Øjeblikkelig tilkaldelse"
+    },
+    "irresistible_dance": {
+      "hash": "a0c2605f",
+      "text": "Uimodståelig dans"
+    },
+    "invisibility": {
+      "hash": "b69cde0e",
+      "text": "Usynlighed"
+    },
+    "jump": {
+      "hash": "0e1ef32d",
+      "text": "Spring"
+    },
+    "knock": {
+      "hash": "4460f31f",
+      "text": "Bank på"
+    },
+    "legend_lore": {
+      "hash": "5e92f048",
+      "text": "Sagnviden"
+    },
+    "lesser_restoration": {
+      "hash": "474e6827",
+      "text": "Mindre genoprettelse"
+    },
+    "levitate": {
+      "hash": "cb4b34f3",
+      "text": "Svæv"
+    },
+    "light": {
+      "hash": "8ad2f8cf",
+      "text": "Lys"
+    },
+    "lightning_bolt": {
+      "hash": "5123d8f8",
+      "text": "Lynstråle"
+    },
+    "locate_animals_or_plants": {
+      "hash": "c5ba6ec7",
+      "text": "Find dyr eller planter"
+    },
+    "locate_creature": {
+      "hash": "0ca32740",
+      "text": "Find væsen"
+    },
+    "locate_object": {
+      "hash": "7001cfa2",
+      "text": "Find genstand"
+    },
+    "longstrider": {
+      "hash": "471796fc",
+      "text": "Langskridt"
+    },
+    "mage_armor": {
+      "hash": "f1c89470",
+      "text": "Magikerrustning"
+    },
+    "mage_hand": {
+      "hash": "27aed3b4",
+      "text": "Magikerhånd"
+    },
+    "magic_circle": {
+      "hash": "02ec16d8",
+      "text": "Magisk cirkel"
+    },
+    "magic_jar": {
+      "hash": "140d8e99",
+      "text": "Magisk krukke"
+    },
+    "magic_missile": {
+      "hash": "26b2a53c",
+      "text": "Magisk projektil"
+    },
+    "magic_mouth": {
+      "hash": "b979bc8f",
+      "text": "Magisk mund"
+    },
+    "magic_weapon": {
+      "hash": "0b8aa688",
+      "text": "Magisk våben"
+    },
+    "magnificent_mansion": {
+      "hash": "5e9032bb",
+      "text": "Prægtigt palæ"
+    },
+    "major_image": {
+      "hash": "5ef8988b",
+      "text": "Stort billede"
+    },
+    "mass_cure_wounds": {
+      "hash": "634df2c2",
+      "text": "Masseheling af sår"
+    },
+    "mass_heal": {
+      "hash": "dfab84b1",
+      "text": "Massehelbredelse"
+    },
+    "mass_healing_word": {
+      "hash": "084eb545",
+      "text": "Helende ord til mange"
+    },
+    "mass_suggestion": {
+      "hash": "edb99f6b",
+      "text": "Massesuggestion"
+    },
+    "maze": {
+      "hash": "4c472342",
+      "text": "Labyrint"
+    },
+    "meld_into_stone": {
+      "hash": "516b60fe",
+      "text": "Smelt ind i sten"
+    },
+    "mending": {
+      "hash": "ab5d9363",
+      "text": "Reparation"
+    },
+    "message": {
+      "hash": "ae0ed984",
+      "text": "Budskab"
+    },
+    "meteor_swarm": {
+      "hash": "2b2ef6ed",
+      "text": "Meteorsværm"
+    },
+    "mind_blank": {
+      "hash": "41fbe3d7",
+      "text": "Tom bevidsthed"
+    },
+    "mind_spike": {
+      "hash": "15fa3897",
+      "text": "Tankespyd"
+    },
+    "minor_illusion": {
+      "hash": "3928dcdd",
+      "text": "Mindre illusion"
+    },
+    "mirage_arcane": {
+      "hash": "738e60b0",
+      "text": "Magisk luftspejling"
+    },
+    "mirror_image": {
+      "hash": "6c1c162b",
+      "text": "Spejlbillede"
+    },
+    "mislead": {
+      "hash": "03d6cea6",
+      "text": "Vildled"
+    },
+    "misty_step": {
+      "hash": "4952f327",
+      "text": "Tågeskridt"
+    },
+    "modify_memory": {
+      "hash": "32ab2812",
+      "text": "Ændr hukommelse"
+    },
+    "moonbeam": {
+      "hash": "9e2dc9bf",
+      "text": "Månestråle"
+    },
+    "move_earth": {
+      "hash": "6bb8e418",
+      "text": "Flyt jord"
+    },
+    "nondetection": {
+      "hash": "a0212b87",
+      "text": "Uopdagelighed"
+    },
+    "passwall": {
+      "hash": "64be902c",
+      "text": "Gå gennem mur"
+    },
+    "pass_without_trace": {
+      "hash": "30b6ac6d",
+      "text": "Gå uden spor"
+    },
+    "phantasmal_force": {
+      "hash": "6729779b",
+      "text": "Fantasmekraft"
+    },
+    "phantasmal_killer": {
+      "hash": "070bf31f",
+      "text": "Fantasmedræber"
+    },
+    "phantom_steed": {
+      "hash": "d44e6bfd",
+      "text": "Fantomganger"
+    },
+    "planar_ally": {
+      "hash": "431d820d",
+      "text": "Planallieret"
+    },
+    "planar_binding": {
+      "hash": "257c9f3c",
+      "text": "Planbinding"
+    },
+    "plane_shift": {
+      "hash": "dcad8ca5",
+      "text": "Planskift"
+    },
+    "plant_growth": {
+      "hash": "f0eff71d",
+      "text": "Plantevækst"
+    },
+    "poison_spray": {
+      "hash": "35b960c4",
+      "text": "Giftsprøjt"
+    },
+    "polymorph": {
+      "hash": "4bbe6193",
+      "text": "Forvandling"
+    },
+    "power_word_heal": {
+      "hash": "59b98f94",
+      "text": "Magtord: Helbred"
+    },
+    "power_word_kill": {
+      "hash": "307df646",
+      "text": "Magtord: Dræb"
+    },
+    "power_word_stun": {
+      "hash": "205b059a",
+      "text": "Magtord: Lamslå"
+    },
+    "prayer_of_healing": {
+      "hash": "94404fb5",
+      "text": "Helbredende bøn"
+    },
+    "prestidigitation": {
+      "hash": "82d36296",
+      "text": "Taskenspil"
+    },
+    "prismatic_spray": {
+      "hash": "a8c8395e",
+      "text": "Prismatisk sprøjt"
+    },
+    "prismatic_wall": {
+      "hash": "39f49bd9",
+      "text": "Prismatisk mur"
+    },
+    "private_sanctum": {
+      "hash": "1fbebd03",
+      "text": "Privat helligdom"
+    },
+    "produce_flame": {
+      "hash": "62054f28",
+      "text": "Frembring flamme"
+    },
+    "programmed_illusion": {
+      "hash": "979b5c8a",
+      "text": "Programmeret illusion"
+    },
+    "project_image": {
+      "hash": "323720af",
+      "text": "Projicer billede"
+    },
+    "protection_from_energy": {
+      "hash": "1c10fcd6",
+      "text": "Beskyttelse mod energi"
+    },
+    "protection_from_evil_and_good": {
+      "hash": "768f2ed2",
+      "text": "Beskyttelse mod ondt og godt"
+    },
+    "protection_from_poison": {
+      "hash": "ff7a2afe",
+      "text": "Beskyttelse mod gift"
+    },
+    "purify_food_and_drink": {
+      "hash": "72231751",
+      "text": "Rens mad og drikke"
+    },
+    "raise_dead": {
+      "hash": "f49880b3",
+      "text": "Oprejs de døde"
+    },
+    "ray_of_enfeeblement": {
+      "hash": "40c3428e",
+      "text": "Svækkelsens stråle"
+    },
+    "ray_of_frost": {
+      "hash": "1743ce7a",
+      "text": "Froststråle"
+    },
+    "regenerate": {
+      "hash": "d5d8a4cf",
+      "text": "Regenerer"
+    },
+    "ray_of_sickness": {
+      "hash": "80001aad",
+      "text": "Sygdommens stråle"
+    },
+    "reincarnate": {
+      "hash": "8b035d11",
+      "text": "Genfødsel"
+    },
+    "remove_curse": {
+      "hash": "71dc6617",
+      "text": "Fjern forbandelse"
+    },
+    "resilient_sphere": {
+      "hash": "0dc73ef1",
+      "text": "Modstandsdygtig kugle"
+    },
+    "resistance": {
+      "hash": "00362020",
+      "text": "Modstand"
+    },
+    "resurrection": {
+      "hash": "17a97156",
+      "text": "Genopstandelse"
+    },
+    "reverse_gravity": {
+      "hash": "a0758457",
+      "text": "Omvendt tyngdekraft"
+    },
+    "revivify": {
+      "hash": "f6db8d7d",
+      "text": "Genoplivning"
+    },
+    "rope_trick": {
+      "hash": "c2a12e8e",
+      "text": "Rebtrick"
+    },
+    "sacred_flame": {
+      "hash": "bcc88e12",
+      "text": "Hellig flamme"
+    },
+    "sanctuary": {
+      "hash": "12849509",
+      "text": "Fristed"
+    },
+    "scorching_ray": {
+      "hash": "22d433f7",
+      "text": "Svidende stråle"
+    },
+    "scrying": {
+      "hash": "b6bea792",
+      "text": "Skuen"
+    },
+    "searing_smite": {
+      "hash": "9fe51d06",
+      "text": "Brændende slag"
+    },
+    "secret_chest": {
+      "hash": "31699c98",
+      "text": "Hemmelig kiste"
+    },
+    "see_invisibility": {
+      "hash": "6d489d3b",
+      "text": "Se det usynlige"
+    },
+    "seeming": {
+      "hash": "0b71b9c1",
+      "text": "Tilsyneladende"
+    },
+    "sending": {
+      "hash": "83fd00e9",
+      "text": "Sendebud"
+    },
+    "sequester": {
+      "hash": "8f98078e",
+      "text": "Afsondring"
+    },
+    "shapechange": {
+      "hash": "da03e632",
+      "text": "Hamskifte"
+    },
+    "shatter": {
+      "hash": "3a0f39ae",
+      "text": "Knus"
+    },
+    "shield": {
+      "hash": "798a26d0",
+      "text": "Skjold"
+    },
+    "shield_of_faith": {
+      "hash": "b383f91d",
+      "text": "Troens skjold"
+    },
+    "shillelagh": {
+      "hash": "314fc8b0",
+      "text": "Shillelagh"
+    },
+    "shining_smite": {
+      "hash": "32075bbf",
+      "text": "Skinnende slag"
+    },
+    "shocking_grasp": {
+      "hash": "97597f4c",
+      "text": "Chokerende greb"
+    },
+    "silence": {
+      "hash": "76177b2c",
+      "text": "Stilhed"
+    },
+    "silent_image": {
+      "hash": "68593dc9",
+      "text": "Stumt billede"
+    },
+    "simulacrum": {
+      "hash": "b0c251b7",
+      "text": "Simulakrum"
+    },
+    "sleep": {
+      "hash": "2fa62ca8",
+      "text": "Søvn"
+    },
+    "sleet_storm": {
+      "hash": "f787fa55",
+      "text": "Sludstorm"
+    },
+    "slow": {
+      "hash": "edc18ed8",
+      "text": "Langsomhed"
+    },
+    "sorcerous_burst": {
+      "hash": "4ea24d56",
+      "text": "Troldmandsudbrud"
+    },
+    "spare_the_dying": {
+      "hash": "8a9b0eae",
+      "text": "Skån de døende"
+    },
+    "speak_with_animals": {
+      "hash": "c18d8dde",
+      "text": "Tal med dyr"
+    },
+    "speak_with_dead": {
+      "hash": "93d7bcc3",
+      "text": "Tal med de døde"
+    },
+    "speak_with_plants": {
+      "hash": "2a17c92f",
+      "text": "Tal med planter"
+    },
+    "spider_climb": {
+      "hash": "ee24fb15",
+      "text": "Edderkoppeklatring"
+    },
+    "spike_growth": {
+      "hash": "acddb0d0",
+      "text": "Tornevækst"
+    },
+    "spirit_guardians": {
+      "hash": "ea7e14f8",
+      "text": "Åndevogtere"
+    },
+    "spiritual_weapon": {
+      "hash": "230c00de",
+      "text": "Åndeligt våben"
+    },
+    "starry_wisp": {
+      "hash": "faed110f",
+      "text": "Stjernedunst"
+    },
+    "stinking_cloud": {
+      "hash": "7124270f",
+      "text": "Stinkende sky"
+    },
+    "stone_shape": {
+      "hash": "ac66e18b",
+      "text": "Form sten"
+    },
+    "stoneskin": {
+      "hash": "f785421f",
+      "text": "Stenhud"
+    },
+    "storm_of_vengeance": {
+      "hash": "92413711",
+      "text": "Hævnens storm"
+    },
+    "suggestion": {
+      "hash": "eb53a62d",
+      "text": "Suggestion"
+    },
+    "summon_dragon": {
+      "hash": "b43d1051",
+      "text": "Tilkald drage"
+    },
+    "sunbeam": {
+      "hash": "da5e70c6",
+      "text": "Solstråle"
+    },
+    "sunburst": {
+      "hash": "492b3d35",
+      "text": "Soludbrud"
+    },
+    "symbol": {
+      "hash": "3a105ef1",
+      "text": "Symbol"
+    },
+    "telekinesis": {
+      "hash": "de7c5831",
+      "text": "Telekinese"
+    },
+    "telepathic_bond": {
+      "hash": "1753b193",
+      "text": "Telepatisk bånd"
+    },
+    "teleport": {
+      "hash": "652e66de",
+      "text": "Teleporter"
+    },
+    "teleportation_circle": {
+      "hash": "1420dee1",
+      "text": "Teleportationscirkel"
+    },
+    "thaumaturgy": {
+      "hash": "b5d04474",
+      "text": "Thaumaturgi"
+    },
+    "thunderwave": {
+      "hash": "fe94f2b8",
+      "text": "Tordenbølge"
+    },
+    "time_stop": {
+      "hash": "12606fc4",
+      "text": "Tidsstop"
+    },
+    "tiny_hut": {
+      "hash": "932e705a",
+      "text": "Lille hytte"
+    },
+    "tongues": {
+      "hash": "9397824a",
+      "text": "Tunger"
+    },
+    "transport_via_plants": {
+      "hash": "9a8f3c14",
+      "text": "Rejs gennem planter"
+    },
+    "tree_stride": {
+      "hash": "83c6054a",
+      "text": "Træskridt"
+    },
+    "true_polymorph": {
+      "hash": "272f2b35",
+      "text": "Sand forvandling"
+    },
+    "true_resurrection": {
+      "hash": "e1b4ed0c",
+      "text": "Sand genopstandelse"
+    },
+    "true_seeing": {
+      "hash": "957f85fe",
+      "text": "Sandt syn"
+    },
+    "true_strike": {
+      "hash": "72bd1105",
+      "text": "Sikkert slag"
+    },
+    "tsunami": {
+      "hash": "77368ec8",
+      "text": "Tsunami"
+    },
+    "unseen_servant": {
+      "hash": "a40a6f2c",
+      "text": "Usynlig tjener"
+    },
+    "vampiric_touch": {
+      "hash": "d1d81bfd",
+      "text": "Vampyrisk berøring"
+    },
+    "vicious_mockery": {
+      "hash": "92525895",
+      "text": "Ondskabsfuld hån"
+    },
+    "vitriolic_sphere": {
+      "hash": "355e8107",
+      "text": "Ætsende kugle"
+    },
+    "wall_of_fire": {
+      "hash": "83bac86a",
+      "text": "Ildmur"
+    },
+    "wall_of_force": {
+      "hash": "1ae13fbd",
+      "text": "Kraftmur"
+    },
+    "wall_of_ice": {
+      "hash": "c7bc8a1d",
+      "text": "Ismur"
+    },
+    "wall_of_stone": {
+      "hash": "4a53dfdb",
+      "text": "Stenmur"
+    },
+    "wall_of_thorns": {
+      "hash": "2acc6438",
+      "text": "Tornemur"
+    },
+    "warding_bond": {
+      "hash": "c64697b2",
+      "text": "Værnende bånd"
+    },
+    "water_breathing": {
+      "hash": "9a4e73de",
+      "text": "Vandånding"
+    },
+    "water_walk": {
+      "hash": "48d49091",
+      "text": "Gå på vand"
+    },
+    "web": {
+      "hash": "72645431",
+      "text": "Spind"
+    },
+    "weird": {
+      "hash": "3cfca936",
+      "text": "Rædselssyn"
+    },
+    "wind_walk": {
+      "hash": "9ea31270",
+      "text": "Vindvandring"
+    },
+    "wind_wall": {
+      "hash": "a5a31d75",
+      "text": "Vindmur"
+    },
+    "wish": {
+      "hash": "8a841356",
+      "text": "Ønske"
+    },
+    "word_of_recall": {
+      "hash": "bd132c53",
+      "text": "Hjemkaldelsens ord"
+    },
+    "zone_of_truth": {
+      "hash": "e62a94a1",
+      "text": "Sandhedens zone"
+    }
+  }
+}

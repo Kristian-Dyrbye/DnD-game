@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { checkStrings, parseOverlay } from '../src/shared/contentI18n';
-import { abilityName, abilityShort, ruleWord, skillName, srdName, SRD_NAME_KINDS, SRD_NAME_OVERLAYS, type SrdNameKind } from '../src/engine/i18n/srdNames';
+import { abilityName, abilityShort, ruleWord, skillName, spellIdName, spellName, srdName, SRD_NAME_KINDS, SRD_NAME_OVERLAYS, type SrdNameKind } from '../src/engine/i18n/srdNames';
 import { srdNameSources } from '../src/engine/i18n/srdNameSources';
 import { messages } from '../src/engine/i18n';
 import { savingThrow, skillCheck } from '../src/engine/rules/checks';
@@ -49,7 +49,7 @@ describe('SRD name overlays (A149)', () => {
   it('looks names up with English fallback', () => {
     expect(srdName('da', 'classes', 'fighter', 'Fighter')).toBe('Kriger');
     expect(srdName('en', 'classes', 'fighter', 'Fighter')).toBe('Fighter');
-    expect(srdName('da', 'spells', 'fireball', 'Fireball')).toBe('Fireball'); // not translated yet
+    expect(srdName('da', 'monsters', 'goblin_warrior', 'Goblin Warrior')).toBe('Goblin Warrior'); // not translated yet
     expect(srdName('da', 'classes', 'no_such_class', 'Nope')).toBe('Nope');
     expect(abilityName('da', 'dex')).toBe('Behændighed');
     expect(abilityShort('da', 'con')).toBe('Kon');
@@ -58,6 +58,27 @@ describe('SRD name overlays (A149)', () => {
     expect(skillName('en', 'sleight_of_hand')).toBe('Sleight of Hand');
     expect(ruleWord('da', 'damage', 'fire', 'Fire')).toBe('Ild');
     expect(srdName('da', 'conditions', 'poisoned', 'Poisoned')).toBe('Forgiftet');
+  });
+
+  it('every spell has a Danish name; ids of concentration lines stay ids in English (A149b)', () => {
+    for (const s of db.spells.values()) {
+      const da = spellName('da', s);
+      expect(da, s.id).not.toBe('');
+      expect(spellName('en', s)).toBe(s.name);
+    }
+    expect(spellName('da', db.spells.get('fireball')!)).toBe('Ildkugle');
+    expect(spellIdName('da', 'hold_person')).toBe('Lam person');
+    expect(spellIdName('en', 'hold_person')).toBe('hold_person');
+    const translated = [...db.spells.values()].filter((s) => spellName('da', s) !== s.name).length;
+    expect(translated).toBeGreaterThan(300); // a few names are the same in Danish (Alarm, Blink, Symbol…)
+  });
+
+  it('spell screens show spell names through srdText', () => {
+    for (const f of ['src/client/ui/creator/SpellsStep.tsx', 'src/client/ui/game/LevelUpPanel.tsx', 'src/client/ui/combat/CombatScreen.tsx']) {
+      const src = fs.readFileSync(path.join(process.cwd(), f), 'utf8');
+      expect(src, f).toMatch(/srdText\('spells'/);
+      expect(src, f).not.toMatch(/\{sp\.name\}|name: s\.name/);
+    }
   });
 
   it('client UI shows ability/skill names through ui/srdText.ts, not the English tables', () => {

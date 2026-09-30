@@ -46,6 +46,7 @@ import { endConcentration, expendSlot, slotProblem, type SlotChoice } from '../r
 import type { SpellcastingState } from '../core/creature';
 import { castInCombat, knowsSpell, lowestSlotFor, spellEconomy } from './castAction';
 import { zoneMembership, zonesAfterMove } from './zones';
+import { spellIdName, spellName } from '../i18n/srdNames';
 
 const isCharacter = (c: Creature): c is Character => c.kind === 'character' && 'classes' in c;
 
@@ -216,10 +217,10 @@ function holdSpell(state: CombatState, ctx: CombatContext, id: string, action: E
   const caster = c as Character;
   const spell = dbOf(ctx).spells.get(action.spellId);
   if (!spell) return fail(state, `Unknown spell ${action.spellId}`);
-  if (!knowsSpell(caster, spell.id)) return fail(state, m('act.notPrepared', { name: caster.name, spell: spell.name }));
+  if (!knowsSpell(caster, spell.id)) return fail(state, m('act.notPrepared', { name: caster.name, spell: spellName(msgsOf(ctx).lang, spell) }));
   if (spellEconomy(spell) !== 'action') return fail(state, m('act.readyActionOnly'));
   const slot = action.slot ?? lowestSlotFor(caster, spell);
-  if (!slot) return fail(state, m('act.noSlot', { name: caster.name, spell: spell.name }));
+  if (!slot) return fail(state, m('act.noSlot', { name: caster.name, spell: spellName(msgsOf(ctx).lang, spell) }));
   const problem = slotProblem(spell, slot, caster.spellcasting, msgsOf(ctx));
   if (problem) return fail(state, problem);
   let next = state;
@@ -228,7 +229,7 @@ function holdSpell(state: CombatState, ctx: CombatContext, id: string, action: E
     const map = new Map(Object.entries(state.creatures));
     const ended = endConcentration({ creatures: map }, id);
     next = { ...state, creatures: Object.fromEntries(map) };
-    if (ended) events.push({ kind: 'info', actorId: id, text: m('act.stopsConcentrating', { name: caster.name, spell: ended }) });
+    if (ended) events.push({ kind: 'info', actorId: id, text: m('act.stopsConcentrating', { name: caster.name, spell: spellIdName(msgsOf(ctx).lang, ended) }) });
   }
   const now = next.creatures[id] as Character;
   const held: Character = {
@@ -271,7 +272,7 @@ export function ready(state: CombatState, ctx: CombatContext, id: string, trigge
     data: { trigger, action: held },
   });
   const { m } = msgsOf(ctx);
-  const what = held.kind === 'spell' ? m('act.heldSpell', { spell: dbOf(ctx).spells.get(held.spellId)?.name ?? held.spellId }) : '';
+  const what = held.kind === 'spell' ? m('act.heldSpell', { spell: spellName(msgsOf(ctx).lang, { id: held.spellId, name: dbOf(ctx).spells.get(held.spellId)?.name ?? held.spellId }) }) : '';
   return { ok: true, state: withCreature(base, actor), events: [...events, { kind: 'action', actorId: id, text: m('act.readies', { name: actor.name, what, trigger }) }] };
 }
 
@@ -300,9 +301,9 @@ export function triggerReadied(
     return { ok: true, state: cleared(s), events: [{ kind: 'action', actorId: id, text: m('act.readyTriggers', { name: c.name, trigger: r.trigger }) }, ...events], readied: r.action, attack: outcome };
   }
   if (r.action.kind === 'spell') {
-    const spellName = dbOf(ctx).spells.get(r.action.spellId)?.name ?? r.action.spellId;
+    const shownSpell = spellName(msgsOf(ctx).lang, { id: r.action.spellId, name: dbOf(ctx).spells.get(r.action.spellId)?.name ?? r.action.spellId });
     if (!holdsReadiedSpell(c, r.action.spellId)) {
-      return { ok: true, state: cleared(state), events: [{ kind: 'info', actorId: id, text: m('act.readyLost', { name: c.name, spell: spellName }) }], readied: r.action };
+      return { ok: true, state: cleared(state), events: [{ kind: 'info', actorId: id, text: m('act.readyLost', { name: c.name, spell: shownSpell }) }], readied: r.action };
     }
     const targetIds = opts.targetIds ?? (opts.targetId ? [opts.targetId] : []);
     const slot: SlotChoice = r.action.slot ?? { kind: 'cantrip' };
@@ -312,7 +313,7 @@ export function triggerReadied(
     const refunded: Character = { ...caster, spellcasting: slotBack(rest, slot) };
     const cast = castInCombat(withCreature(state, refunded), ctx, { casterId: id, spellId: r.action.spellId, targetIds, slot, economy: 'reaction' });
     if (!cast.ok) return fail(state, cast.error);
-    return { ok: true, state: cleared(cast.state), events: [{ kind: 'action', actorId: id, text: m('act.readySpellTriggers', { name: c.name, spell: spellName, trigger: r.trigger }) }, ...cast.events], readied: r.action };
+    return { ok: true, state: cleared(cast.state), events: [{ kind: 'action', actorId: id, text: m('act.readySpellTriggers', { name: c.name, spell: shownSpell, trigger: r.trigger }) }, ...cast.events], readied: r.action };
   }
   const p = pay(state, ctx, id, 'reaction');
   if (!p.ok) return p;

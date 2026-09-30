@@ -38,6 +38,7 @@ import { footprintSize, type Grid } from './grid';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import { movementBudget, standUpCost, type MoveMode } from './movement';
 import { compareInitiative, type InitiativeEntry } from './initiative';
+import { spellIdName } from '../i18n/srdNames';
 
 // ---------------------------------------------------------------- schema
 
@@ -328,7 +329,7 @@ export function startTurn(state: TurnState, creatures: Creatures, ctx: TurnConte
   return { state: next, creatures: all, events };
 }
 
-function tickConcentration(all: Creatures, id: string, events: TurnEvent[], { m }: Messages): Creatures {
+function tickConcentration(all: Creatures, id: string, events: TurnEvent[], { m, lang }: Messages): Creatures {
   const c = all[id];
   if (!c || !isCharacter(c)) return all;
   const conc = c.spellcasting?.concentration;
@@ -339,7 +340,7 @@ function tickConcentration(all: Creatures, id: string, events: TurnEvent[], { m 
   }
   const map = new Map(Object.entries(all));
   const spellId = endConcentration({ creatures: map }, id);
-  events.push({ kind: 'concentration_ended', creatureId: id, text: m('turn.concentrationEnds', { name: c.name, spell: spellId ?? m('turn.spell') }) });
+  events.push({ kind: 'concentration_ended', creatureId: id, text: m('turn.concentrationEnds', { name: c.name, spell: spellId ? spellIdName(lang, spellId) : m('turn.spell') }) });
   return Object.fromEntries(map);
 }
 

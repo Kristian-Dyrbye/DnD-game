@@ -16,6 +16,7 @@ import { createEffectContext, executeEffects, type EffectContext, type HookFn } 
 import { SPELL_HOOKS, revertExpiredEffects } from './spellHooks';
 import { SPELL_HOOKS_2 } from './spellHooks2';
 import { SPELL_HOOKS_3 } from './spellHooks3';
+import { spellIdName, spellName } from '../i18n/srdNames';
 
 // ---------------------------------------------------------------- slot tables
 
@@ -120,17 +121,17 @@ export function slotProblem(spell: Spell, choice: SlotChoice, state: Spellcastin
   if (spell.level === 0) return choice.kind === 'cantrip' || choice.kind === 'free' ? undefined : m('slot.cantrip');
   switch (choice.kind) {
     case 'cantrip':
-      return m('slot.notCantrip', { spell: spell.name });
+      return m('slot.notCantrip', { spell: spellName(msgs.lang, spell) });
     case 'ritual':
-      return spell.castingTime.ritual ? undefined : m('slot.notRitual', { spell: spell.name });
+      return spell.castingTime.ritual ? undefined : m('slot.notRitual', { spell: spellName(msgs.lang, spell) });
     case 'free':
       return undefined;
     case 'pact':
       if (!state?.pact || state.pact.current < 1) return m('slot.noPact');
-      if (state.pact.level < spell.level) return m('slot.pactLow', { level: state.pact.level, spell: spell.name });
+      if (state.pact.level < spell.level) return m('slot.pactLow', { level: state.pact.level, spell: spellName(msgs.lang, spell) });
       return undefined;
     case 'slot':
-      if (choice.level < spell.level) return m('slot.needs', { spell: spell.name, level: spell.level });
+      if (choice.level < spell.level) return m('slot.needs', { spell: spellName(msgs.lang, spell), level: spell.level });
       if (!state || (state.slots[choice.level - 1] ?? 0) < 1) return m('slot.none', { level: choice.level });
       return undefined;
   }
@@ -180,17 +181,17 @@ export function concentrationDc(damage: number): number {
 export function concentrationCheck(ctx: EffectContext, casterId: string, damage: number, rng: Rng): D20TestResult | undefined {
   const caster = ctx.creatures.get(casterId) as Character | undefined;
   if (!caster?.spellcasting?.concentration) return undefined;
-  const { m } = ctx.msgs ?? ENGLISH_MESSAGES;
+  const { m, lang } = ctx.msgs ?? ENGLISH_MESSAGES;
   if (caster.dead || !canAct(caster)) {
     const spell = endConcentration(ctx, casterId);
-    ctx.log.push({ targetId: casterId, kind: 'info', text: m('conc.loses', { name: caster.name, spell: String(spell) }) });
+    ctx.log.push({ targetId: casterId, kind: 'info', text: m('conc.loses', { name: caster.name, spell: spellIdName(lang, String(spell)) }) });
     return undefined;
   }
   const res = savingThrow(caster, 'con', { rng, dc: concentrationDc(damage), ...saveModes(caster, 'con'), ...(ctx.msgs && { msgs: ctx.msgs }) });
   ctx.log.push({ targetId: casterId, kind: 'save', text: m('conc.check', { name: caster.name, roll: res.text }) });
   if (!res.success) {
     const spell = endConcentration(ctx, casterId);
-    ctx.log.push({ targetId: casterId, kind: 'info', text: m('conc.loses', { name: caster.name, spell: String(spell) }) });
+    ctx.log.push({ targetId: casterId, kind: 'info', text: m('conc.loses', { name: caster.name, spell: spellIdName(lang, String(spell)) }) });
   }
   return res;
 }
@@ -272,7 +273,7 @@ export function castSpell(o: CastOptions): CastResult {
   // A new concentration spell ends the old one first.
   if (o.spell.duration.concentration && state?.concentration) {
     const ended = endConcentration(ctx, o.caster.id);
-    ctx.log.push({ targetId: o.caster.id, kind: 'info', text: msgs.m('conc.stops', { name: o.caster.name, spell: String(ended) }) });
+    ctx.log.push({ targetId: o.caster.id, kind: 'info', text: msgs.m('conc.stops', { name: o.caster.name, spell: spellIdName(msgs.lang, String(ended)) }) });
   }
 
   // Spend the slot before effects so reactions/logs see the new state.
@@ -289,9 +290,9 @@ export function castSpell(o: CastOptions): CastResult {
   ctx.log.push({
     targetId: o.caster.id,
     kind: 'info',
-    text: msgs.m(o.spell.level === 0 ? 'combat.casts' : o.slot.kind === 'ritual' ? 'combat.castsRitual' : 'combat.castsLevel', { caster: o.caster.name, spell: o.spell.name, level }),
+    text: msgs.m(o.spell.level === 0 ? 'combat.casts' : o.slot.kind === 'ritual' ? 'combat.castsRitual' : 'combat.castsLevel', { caster: o.caster.name, spell: spellName(msgs.lang, o.spell), level }),
   });
-  if (effects.length === 0) ctx.log.push({ kind: 'info', text: msgs.m('cast.noAuto', { spell: o.spell.name }) });
+  if (effects.length === 0) ctx.log.push({ kind: 'info', text: msgs.m('cast.noAuto', { spell: spellName(msgs.lang, o.spell) }) });
   if (beamHook) {
     // One attack per beam; beams go to targets by allocation or round-robin.
     const beams = levelTableValue(beamHook.params!.beamsByLevel as Record<string, number>, o.characterLevel);

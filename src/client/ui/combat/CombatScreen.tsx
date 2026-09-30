@@ -26,6 +26,7 @@ import { BattleMap } from './BattleMap';
 import { BattleMap3D } from '../../three/LazyBattleMap3D';
 import { settings } from '../settingsState';
 import { language, t } from '../i18n';
+import { srdText } from '../srdText';
 import { messages } from '../../../engine/i18n';
 
 type Mode =
@@ -225,7 +226,7 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
                     title={[sp.level === 0 ? t('combat.spell.cantrip') : t('combat.spell.level', { n: sp.level }), t(econ === 'bonusAction' ? 'combat.spell.bonusAction' : 'combat.spell.action'), ...(sp.area ? [t('combat.spell.area')] : [])].join(' · ')}
                     onClick={() => (selfOnly ? run({ kind: 'cast', spellId: sp.id, targetIds: [heroId] }) : setMode(sp.area || zoneNeedsAim(sp) ? { kind: 'area', spellId: sp.id } : { kind: 'spell', spellId: sp.id }))}
                   >
-                    ✦ {sp.name}
+                    ✦ {srdText('spells', sp.id, sp.name)}
                   </button>
                 );
               })}
@@ -273,12 +274,12 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
                 )}
                 {holdingZones.map((z) => (
                   <button key={z.id} type="button" disabled={!budget.action} onClick={() => run({ kind: 'escape_zone', zoneId: z.id })}>
-                    {t('combat.breakFree', { zone: z.name })}
+                    {t('combat.breakFree', { zone: srdText('spells', z.spellId, z.name) })}
                   </button>
                 ))}
                 {myZones.map((z) => (
                   <button key={z.id} type="button" class={`spell${mode.kind === 'zone' && mode.zoneId === z.id ? ' selected' : ''}`} disabled={z.bolt || z.move?.economy === 'action' ? !budget.action : !budget.bonusAction} title={t('combat.clickSquare')} onClick={() => setMode({ kind: 'zone', zoneId: z.id })}>
-                    ✦ {t(z.bolt ? 'combat.zoneBolt' : 'combat.zoneMove', { zone: z.name })}
+                    ✦ {t(z.bolt ? 'combat.zoneBolt' : 'combat.zoneMove', { zone: srdText('spells', z.spellId, z.name) })}
                   </button>
                 ))}
                 {items.map((it) => (

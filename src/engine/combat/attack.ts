@@ -67,6 +67,7 @@ import { distanceFt, footprintSize, moveToken, type Grid } from './grid';
 import { computeCover, hasLineOfSight } from './los';
 import { planMove } from './movement';
 import { budgetOf, currentId, setAttacksLeft, spend, type TurnState } from './turns';
+import { spellName } from '../i18n/srdNames';
 
 // ---------------------------------------------------------------- attack profiles
 
@@ -648,7 +649,7 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
     kind: 'attack',
     actorId: attacker.id,
     targetId: target.id,
-    text: `${m('combat.attack', { attacker: attacker.name, target: target.name, weapon: profile.name, roll: res.text })}${coverNote}${modeNote ? ` [${modeNote}]` : ''}`,
+    text: `${m('combat.attack', { attacker: attacker.name, target: target.name, weapon: profile.id.startsWith('spell:') ? spellName(msgsOf(ctx).lang, { id: profile.id.slice(6), name: profile.name }) : profile.name, roll: res.text })}${coverNote}${modeNote ? ` [${modeNote}]` : ''}`,
   });
 
   // Things used up or broken by making an attack roll.

@@ -223,3 +223,24 @@ Full lists in `data/i18n/da/srd/*.json`; the key choices:
 | masteries: Cleave / Graze / Nick / Push / Sap / Slow / Topple / Vex | Kløv / Strejf / Snit / Skub / Svæk / Sænk / Vælt / Drille |
 | sizes: Tiny … Gargantuan | Lillebitte / Lille / Mellem / Stor / Kæmpestor / Enorm |
 | Proficiency / Half proficiency (modifier labels) | Kyndighed / Halv kyndighed |
+
+## SRD spell names (A149b)
+
+All 339 in data/i18n/da/srd/spells.json. Patterns to reuse:
+
+| English | Danish |
+|---|---|
+| Conjure X / Summon X | Fremman X / Tilkald X |
+| Detect X | Fornem X |
+| Locate X | Find X |
+| Hold Person / Monster | Lam person / monster |
+| Power Word X | Magtord: X |
+| Wall of X | X-mur (Ildmur, Ismur, Stenmur) |
+| Protection from X | Beskyttelse mod X |
+| X Smite | X slag (Brændende slag, Guddommeligt slag) |
+| Cure Wounds / Healing Word | Hel sår / Helende ord |
+| Fireball / Fire Bolt / Magic Missile | Ildkugle / Ildpil / Magisk projektil |
+| Eldritch Blast | Overjordisk stråle |
+| Find Familiar / Find Steed | Find tjenerånd / Find ganger |
+| Web / Misty Step / Counterspell | Spind / Tågeskridt / Modbesværgelse |
+| kept: Alarm, Blink, Geas, Shillelagh, Symbol, Tsunami, Clairvoyance, Suggestion | same |

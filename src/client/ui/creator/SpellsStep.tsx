@@ -4,8 +4,11 @@ import { spellCounts } from '../../../engine/character/creator';
 import type { Spell } from '../../../engine/data/schemas';
 import { db } from '../../data';
 import { t } from '../i18n';
+import { ruleText, srdText } from '../srdText';
 import { creator } from './creatorState';
 import { firstSentence } from '../text';
+
+const spellName = (sp: Spell): string => srdText('spells', sp.id, sp.name);
 
 function castTime(sp: Spell): string {
   const c = sp.castingTime;
@@ -20,7 +23,7 @@ function range(sp: Spell): string {
 
 function SpellGrid({ title, spells, count, selected, onChange }: { title: string; spells: Spell[]; count: number; selected: string[]; onChange: (ids: string[]) => void }) {
   const [filter, setFilter] = useState('');
-  const shown = spells.filter((sp) => sp.name.toLowerCase().includes(filter.toLowerCase()));
+  const shown = spells.filter((sp) => spellName(sp).toLowerCase().includes(filter.toLowerCase()));
   return (
     <fieldset>
       <legend>
@@ -34,9 +37,9 @@ function SpellGrid({ title, spells, count, selected, onChange }: { title: string
           return (
             <label key={sp.id} class={`spell-card${on ? ' selected' : ''}${full ? ' disabled' : ''}`}>
               <input type="checkbox" checked={on} disabled={full} onChange={() => onChange(on ? selected.filter((x) => x !== sp.id) : [...selected, sp.id])} />
-              <span class="spell-name">{sp.name}</span>
+              <span class="spell-name">{spellName(sp)}</span>
               <span class="spell-meta">
-                {sp.school[0]!.toUpperCase() + sp.school.slice(1)} · {castTime(sp)} · {range(sp)}
+                {ruleText('school', sp.school, sp.school[0]!.toUpperCase() + sp.school.slice(1))} ·{castTime(sp)} · {range(sp)}
                 {sp.duration.concentration ? ` · ${t('creator.spells.concentration')}` : ''}
               </span>
               <small>{firstSentence(sp.text, 150)}</small>
@@ -53,7 +56,7 @@ export function SpellsStep() {
   const cls = s.classId ? db.classes.get(s.classId) : undefined;
   if (!cls) return <p class="hint">{t('creator.needClass')}</p>;
   const need = spellCounts(s, db);
-  const all = db.spellsForClass(cls.id, 1).sort((a, b) => a.name.localeCompare(b.name));
+  const all = db.spellsForClass(cls.id, 1).sort((a, b) => spellName(a).localeCompare(spellName(b)));
   return (
     <section>
       <h2>{t('creator.spells.title')}</h2>
