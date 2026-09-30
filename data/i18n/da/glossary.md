@@ -167,3 +167,22 @@ Highcrown, Deepanvil Hold, Dawnspire (Keep = "Dawnspire-borgen"), Emberpeaks, Ci
 | undercroft / catacombs / ossuary | krypt / katakomber / benhus |
 | purge (medicine) | udrensningsmiddel |
 | "my lady" (to Seraphine) / "my lord/my lady" (Pip) | "frue" / "herre"/"frue" |
+
+## Content (A147): chapter 4 names
+Emberpeak, Gloamfen, Silverrun, Brightwater, Deepanvil and person names stay English. "Widow Marrow" = "enken Marrow" (as the starter arc).
+
+| English | Dansk |
+|---|---|
+| Wyrmfire | Dragebrand |
+| Ember Tooth | Glødetanden |
+| Ashfall road | Askefaldsvejen |
+| ember-singers / dragon-callers / song-stone | glødesangere / dragekaldere / sangstenen |
+| brood-guardian / hoard / lair | yngelvogter / skat / hule |
+| war council / muster | krigsråd / mønstring |
+| Master (Moll) / barge(-master) | Mester Moll / pram (prammeskipper) |
+| firebreak (crews) | brandbælte (brandbæltehold) |
+| fire-resistance tonic / potion of heroism | ildmodstandsdrik / heltemodseliksir |
+| Street of Lamps / Tanners' Stair / throne hall / dais | Lampegaden / Garvertrappen / tronsalen / tronforhøjning |
+| Choir of Teeth | Tændernes Kor |
+| royal envoy / royal guard / draft (on the treasury) | kongeligt sendebud / kongelig garde / anvisning |
+| "duck" (Moll) / "small thing", "little thief" (Pyrraxis) | "lille due" / "lille ting", "lille tyv" |

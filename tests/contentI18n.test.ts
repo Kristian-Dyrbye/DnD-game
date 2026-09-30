@@ -140,8 +140,8 @@ describe('real content', () => {
         expect({ lang, key, stale: r.stale, orphan: r.orphan, broken: r.broken }).toEqual({ lang, key, stale: [], orphan: [], broken: [] });
       }
     }
-    // Complete Danish files (A142 demo, A143 starter arc, A144 ch1, A145 ch2, A146 ch3).
-    for (const key of ['millbrook_demo', 'millbrook_disappearances', 'ch1_whispering_fen', 'ch2_salt_and_treason', 'ch3_the_gilded_lie']) {
+    // Complete Danish files (A142 demo, A143 starter arc, A144 ch1, A145 ch2, A146 ch3, A147 ch4).
+    for (const key of ['millbrook_demo', 'millbrook_disappearances', 'ch1_whispering_fen', 'ch2_salt_and_treason', 'ch3_the_gilded_lie', 'ch4_wyrmfire']) {
       const r = checkOverlay(BUNDLED_ADVENTURES.find((a) => (a.raw as { id: string }).id === key)!.raw, BUNDLED_TRANSLATIONS.da![key]);
       expect({ key, missing: r.missing }).toEqual({ key, missing: [] });
     }
@@ -228,6 +228,28 @@ describe('real content', () => {
     await host.idle();
     expect(events.filter((e) => e.type === 'error')).toEqual([]);
     expect(logText()).toContain('uden at afbryde én eneste gang');
+  });
+
+  it('the Danish ch4: translated refugee road, buttons, and a Danish free-text check (A147)', async () => {
+    const host = createGameHost({ srd: db, adventures, flags: bundledFlagRegistry(), tables, translations: BUNDLED_TRANSLATIONS, startingAdventure: 'ch4_wyrmfire', sessionPorts: { newSeed: () => 'a147' } });
+    const events: ServerEvent[] = [];
+    host.on((e) => events.push(e));
+    const labels = () => (events.filter((e) => e.type === 'suggestions').at(-1) as Extract<ServerEvent, { type: 'suggestions' }>).actions.map((a) => a.label);
+    const logText = () => events.flatMap((e) => (e.type === 'log' ? [e.entry.text] : [])).join(' ');
+    const hero = buildCharacter(toBuildInput(quickBuild('paladin', db, Rng.fromSeed(1))), db);
+    await host.send({ type: 'set_language', language: 'da' });
+    await host.send({ type: 'new_game', hero, mode: 'heroic' });
+    await host.idle();
+    expect(events.filter((e) => e.type === 'error')).toEqual([]);
+    expect(labels().some((l) => l.startsWith('Berolig den panikslagne mængde'))).toBe(true);
+    expect(labels()).toContain('Rid mod Dawnspire-borgen og krigsrådet');
+    expect(logText()).toContain('Pyrraxis, vågen og sulten');
+    const rolls = events.filter((e) => e.type === 'roll').length;
+    await host.send({ type: 'say', text: 'berolig mængden' });
+    await host.idle();
+    expect(events.filter((e) => e.type === 'error')).toEqual([]);
+    expect(events.filter((e) => e.type === 'roll').length).toBe(rolls + 1);
+    expect(logText()).toMatch(/begynder at lytte|for skrigene/);
   });
 
   it('builds the translated content once per language; languages without overlays get English', () => {
