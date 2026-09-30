@@ -4,8 +4,10 @@
  * (WebSocket clients, LLM ports) and inside the browser page (web edition: no AI, template narration,
  * keyword intents, data buttons). Commands run one at a time, in order, like on the server.
  */
-import { GameSession, type SavePort, type SessionPorts } from '../engine/session/GameSession';
-import { adventureActionPort, type AdventurePortOptions } from '../engine/adventure/sessionActions';
+import { GameSession, type ActionPort, type SavePort, type SessionPorts } from '../engine/session/GameSession';
+import { adventureActionPort, type AdventureActionPort, type AdventurePortOptions } from '../engine/adventure/sessionActions';
+import type { ContentTranslations } from '../shared/contentI18n';
+import { contentByLanguage, type LocalizedContent } from './translations';
 import type { Adventure } from '../engine/adventure/schema';
 import type { SrdDatabase } from '../engine/data/srd';
 import type { FlagRegistry } from '../engine/world/flags';
@@ -65,6 +67,8 @@ export interface GameHostOptions {
   sessionPorts?: Partial<SessionPorts>;
   /** Adventure started by new_game; defaults to STARTING_ADVENTURE (or the first loaded one). */
   startingAdventure?: string;
+  /** Content overlays by language (data/i18n/<lang>/*.json); missing texts stay English. */
+  translations?: ContentTranslations;
 }
 
 export interface GameHost {
@@ -86,17 +90,36 @@ export function createGameHost(opts: GameHostOptions): GameHost {
   const { adventures, srd } = opts;
   const wanted = opts.startingAdventure ?? STARTING_ADVENTURE;
   const defaultAdventure = adventures.has(wanted) ? wanted : [...adventures.keys()][0];
-  const actions = defaultAdventure
-    ? adventureActionPort(adventures, defaultAdventure, srd, {
+  // One adventure port per content language (translated adventures + tables); each command goes to
+  // the port of the session's current language. Log lines keep the language they were written in.
+  const content = contentByLanguage(adventures, t, opts.translations);
+  const ports = new Map<LocalizedContent, AdventureActionPort>();
+  const portFor = (lang: string): AdventureActionPort => {
+    const c = content(lang);
+    let p = ports.get(c);
+    if (!p) {
+      p = adventureActionPort(c.adventures, defaultAdventure!, srd, {
         ...opts.ai,
         flags: opts.flags,
-        lore: t.lore,
-        travelEvents: t.travelEvents,
-        shops: t.shops,
-        sideQuests: t.sideQuests,
-        defeats: t.defeats,
-        companions: t.companions,
-      })
+        lore: c.tables.lore,
+        travelEvents: c.tables.travelEvents,
+        shops: c.tables.shops,
+        sideQuests: c.tables.sideQuests,
+        defeats: c.tables.defeats,
+        companions: c.tables.companions,
+      });
+      ports.set(c, p);
+    }
+    return p;
+  };
+  const actions: ActionPort | undefined = defaultAdventure
+    ? {
+        say: (s, text) => portFor(s.language).say(s, text),
+        choose: (s, id) => portFor(s.language).choose(s, id),
+        begin: (s) => portFor(s.language).begin?.(s) ?? Promise.resolve(),
+        travel: (s, to, pace) => portFor(s.language).travel?.(s, to, pace) ?? Promise.resolve(),
+        command: (s, cmd) => portFor(s.language).command?.(s, cmd) ?? Promise.resolve(),
+      }
     : undefined;
   const session = new GameSession({
     systems: createDefaultRegistry({ lore: t.lore, regionOf: (state) => regionOfState(state, adventures, t.lore) }),
@@ -119,7 +142,7 @@ export function createGameHost(opts: GameHostOptions): GameHost {
     on: (listener) => session.on(listener),
     async idle() {
       await queue;
-      await actions?.idle();
+      for (const p of ports.values()) await p.idle();
     },
   };
 }

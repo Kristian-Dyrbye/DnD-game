@@ -1,0 +1,354 @@
+{
+  "$source": "data/adventures/demo/millbrook_demo.json",
+  "strings": {
+    "name": {
+      "hash": "79a0a250",
+      "text": "Rotter i den gamle mølle"
+    },
+    "summary": {
+      "hash": "57fcb96b",
+      "text": "Et lille pladsholder-eventyr til test og som standardspil før startbuen fandtes: møllerens kælder er fuld af rotter, og noget andet lurer dernede."
+    },
+    "chapters/one/name": {
+      "hash": "d3766aa1",
+      "text": "Den gamle mølle"
+    },
+    "chapters/one/summary": {
+      "hash": "d737a10a",
+      "text": "Svar på opslaget, kom ind i møllen, ryd kælderen."
+    },
+    "chapters/one/scenes/millbrook_square/name": {
+      "hash": "f23ecb69",
+      "text": "Millbrooks torv"
+    },
+    "chapters/one/scenes/millbrook_square/seed": {
+      "hash": "3f0f37d0",
+      "text": "Et brolagt torv omkring en mosgroet brønd. Markedsboderne lukker; duften af brød driver fra bageren. En opslagstavle hælder op ad brønden."
+    },
+    "chapters/one/scenes/millbrook_square/variants/0/seed": {
+      "hash": "ab52ca4d",
+      "text": "Byens folk nikker til dig, når du går forbi. Rygtet om den ryddede kælder har bredt sig."
+    },
+    "chapters/one/scenes/millbrook_square/pois/notice_board/name": {
+      "hash": "6a3598d9",
+      "text": "Opslagstavle"
+    },
+    "chapters/one/scenes/millbrook_square/pois/notice_board/seed": {
+      "hash": "56d9549b",
+      "text": "Vejrbidte opslag, ét helt nyt: 'ROTTER i den gamle mølle. Dusør. Spørg borgmester Hobb.'"
+    },
+    "chapters/one/scenes/millbrook_square/pois/notice_board/actions/read/label": {
+      "hash": "c8d798b0",
+      "text": "Læs opslagene grundigt"
+    },
+    "chapters/one/scenes/millbrook_square/pois/notice_board/actions/read/keywords": {
+      "hash": "9d27d66b",
+      "text": [
+        "opslag",
+        "tavle",
+        "læs"
+      ]
+    },
+    "chapters/one/scenes/millbrook_square/pois/notice_board/actions/read/check/success/text": {
+      "hash": "a507e521",
+      "text": "Under rotteopslaget sidder et ældre, halvt revet i stykker: møllerens kældernøgle blev 'væk' den nat, han forsvandt."
+    },
+    "chapters/one/scenes/millbrook_square/pois/notice_board/actions/read/check/failure/text": {
+      "hash": "0cd3753c",
+      "text": "Kun det nye opslag om rotter i den gamle mølle kan læses."
+    },
+    "chapters/one/scenes/millbrook_square/actions/talk_mayor/label": {
+      "hash": "5c6c09e4",
+      "text": "Tal med borgmester Hobb"
+    },
+    "chapters/one/scenes/millbrook_square/actions/talk_mayor/keywords": {
+      "hash": "55efd5c3",
+      "text": [
+        "borgmester",
+        "hobb",
+        "tal",
+        "dusør"
+      ]
+    },
+    "chapters/one/scenes/millbrook_square/actions/talk_mayor/outcome/text": {
+      "hash": "b1f03fa7",
+      "text": "Borgmester Hobb lover 10 guldmønter, hvis møllekælderen bliver ryddet, og giver dig en ekstranøgle til mølledøren."
+    },
+    "chapters/one/scenes/millbrook_square/actions/claim_reward/label": {
+      "hash": "880dc40d",
+      "text": "Hent borgmesterens dusør"
+    },
+    "chapters/one/scenes/millbrook_square/actions/claim_reward/keywords": {
+      "hash": "42d59658",
+      "text": [
+        "dusør",
+        "hent",
+        "guld"
+      ]
+    },
+    "chapters/one/scenes/millbrook_square/actions/claim_reward/outcome/text": {
+      "hash": "b3f5f990",
+      "text": "Borgmester Hobb tæller ti guldmønter op med tydelig lettelse."
+    },
+    "chapters/one/scenes/millbrook_square/exits/to_mill/label": {
+      "hash": "28304663",
+      "text": "Gå hen til den gamle mølle"
+    },
+    "chapters/one/scenes/old_mill/name": {
+      "hash": "d3766aa1",
+      "text": "Den gamle mølle"
+    },
+    "chapters/one/scenes/old_mill/seed": {
+      "hash": "3a7af1a9",
+      "text": "Et knirkende vandhjul drejer over en træg bæk. Mølledøren er spærret med en rusten hængelås. Skrabelyde kommer nedefra."
+    },
+    "chapters/one/scenes/old_mill/exits/unlock/label": {
+      "hash": "f4ecc5e0",
+      "text": "Lås døren op med borgmesterens nøgle"
+    },
+    "chapters/one/scenes/old_mill/exits/force/label": {
+      "hash": "9aded911",
+      "text": "Bryd døren op"
+    },
+    "chapters/one/scenes/old_mill/exits/force/check/success/text": {
+      "hash": "bb72b268",
+      "text": "Det rådne beslag splintres, og døren svinger ind."
+    },
+    "chapters/one/scenes/old_mill/exits/force/check/failure/text": {
+      "hash": "a87ef660",
+      "text": "Døren ryster, men holder. Din skulder værker."
+    },
+    "chapters/one/scenes/old_mill/exits/back/label": {
+      "hash": "81a4dc86",
+      "text": "Gå tilbage til torvet"
+    },
+    "chapters/one/scenes/mill_cellar/name": {
+      "hash": "76de12c6",
+      "text": "Møllekælderen"
+    },
+    "chapters/one/scenes/mill_cellar/seed": {
+      "hash": "1ac604d3",
+      "text": "En lav kælder med fugtige melsække og gnavede korntønder. Røde øjne glimter mellem tønderne."
+    },
+    "chapters/one/scenes/mill_cellar/onEnter/text": {
+      "hash": "e8434765",
+      "text": "To kæmperotter farer ud af sækkene!"
+    },
+    "chapters/one/scenes/mill_cellar/pois/chest/name": {
+      "hash": "c9714566",
+      "text": "Møllerens pengeskrin"
+    },
+    "chapters/one/scenes/mill_cellar/pois/chest/seed": {
+      "hash": "db9e7042",
+      "text": "Et lille jernbeslået skrin klemt ind bag en tønde."
+    },
+    "chapters/one/scenes/mill_cellar/pois/chest/actions/open/label": {
+      "hash": "4c76f37a",
+      "text": "Åbn pengeskrinet"
+    },
+    "chapters/one/scenes/mill_cellar/pois/chest/actions/open/keywords": {
+      "hash": "320e5f01",
+      "text": [
+        "skrin",
+        "kiste",
+        "åbn"
+      ]
+    },
+    "chapters/one/scenes/mill_cellar/pois/chest/actions/open/outcome/text": {
+      "hash": "83148170",
+      "text": "I skrinet finder du det, mølleren efterlod."
+    },
+    "chapters/one/scenes/mill_cellar/actions/fight_rats/label": {
+      "hash": "cb5641da",
+      "text": "Bekæmp rotterne"
+    },
+    "chapters/one/scenes/mill_cellar/actions/fight_rats/keywords": {
+      "hash": "194579fd",
+      "text": [
+        "kæmp",
+        "angrib",
+        "rotter"
+      ]
+    },
+    "chapters/one/scenes/mill_cellar/exits/up/label": {
+      "hash": "66d3c23a",
+      "text": "Klatr op i møllen igen"
+    },
+    "npcs/mayor_hobb/name": {
+      "hash": "ac2a1cf8",
+      "text": "Borgmester Hobb"
+    },
+    "npcs/mayor_hobb/personality": {
+      "hash": "c46c5953",
+      "text": "Rund, nervøs, gavmild med løfter og langsom med mønter."
+    },
+    "npcs/mayor_hobb/secrets": {
+      "hash": "9d4f201f",
+      "text": [
+        "Han solgte mølleren det dårlige korn, der lokkede rotterne til."
+      ]
+    },
+    "npcs/mayor_hobb/voice": {
+      "hash": "f3dc89ec",
+      "text": "Pertentlig, forpustet, kalder alle for 'min ven'."
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/label": {
+      "hash": "fa1b9496",
+      "text": "Spørg borgmester Hobb om den gamle mølle"
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/keywords": {
+      "hash": "88c67a3d",
+      "text": [
+        "spørg",
+        "mølleren",
+        "spørgsmål"
+      ]
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/greet/text": {
+      "hash": "40ca4c3b",
+      "text": "Min ven! Så du har set opslaget? Frygtelig historie med den gamle mølle. Hvad kan jeg fortælle dig?"
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/greet/options/miller/label": {
+      "hash": "0aa286ca",
+      "text": "\"Hvad skete der med mølleren?\""
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/greet/options/miller/keywords": {
+      "hash": "a7cf9063",
+      "text": [
+        "mølleren",
+        "skete"
+      ]
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/greet/options/sense/label": {
+      "hash": "46a44c7b",
+      "text": "Hold øje med hans ansigt, mens han taler om møllen"
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/greet/options/sense/keywords": {
+      "hash": "f469b178",
+      "text": [
+        "øje",
+        "ansigt",
+        "lyver"
+      ]
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/greet/options/sense/check/success/text": {
+      "hash": "978feba0",
+      "text": "Hans blik flakker mod kornmagasinet, hver gang møllen kommer på tale: han skjuler noget om kornet."
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/greet/options/sense/check/failure/text": {
+      "hash": "ca3d3a57",
+      "text": "Han virker ikke som andet end en bekymret, pertentlig mand."
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/greet/options/press/label": {
+      "hash": "20a0d162",
+      "text": "\"Det var dit korn, der lokkede rotterne, ikke?\""
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/greet/options/press/keywords": {
+      "hash": "a06acbac",
+      "text": [
+        "korn",
+        "tru",
+        "skyld"
+      ]
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/greet/options/press/check/failure/text": {
+      "hash": "e1a993eb",
+      "text": "Borgmesteren puster sig op og bliver rød i hovedet."
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/greet/options/leave/label": {
+      "hash": "41b06f8e",
+      "text": "\"Jeg skal se, hvad jeg kan gøre.\""
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/miller/text": {
+      "hash": "20b27a13",
+      "text": "Aldo? Han har været væk en uge nu. Efterlod sin kældernøgle, siger de. Eller tabte den. Underlig fyr, mumlede altid om mørket under møllen."
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/miller/options/back/label": {
+      "hash": "6eabb677",
+      "text": "\"Fortæl mig mere om møllen.\""
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/confess/text": {
+      "hash": "ff26ed6a",
+      "text": "Godt, godt! Kornet var dårligt, og jeg solgte ham det billigt. Her, fem guldmønter mere for ulejligheden, og hold det for dig selv, min ven."
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/confess/options/back/label": {
+      "hash": "bedb9ea4",
+      "text": "\"Er der andet, jeg bør vide?\""
+    },
+    "npcs/mayor_hobb/conversations/mill_talk/nodes/bluster/text": {
+      "hash": "57482f6c",
+      "text": "Hvor vover du! Jeg er borgmester i denne by, og det vil jeg bede dig huske!"
+    },
+    "encounters/cellar_rats/name": {
+      "hash": "05531166",
+      "text": "Kælderrotter"
+    },
+    "encounters/cellar_rats/terrain": {
+      "hash": "76beeedc",
+      "text": [
+        "tønder (halvt dække)",
+        "melsække (vanskeligt terræn)"
+      ]
+    },
+    "encounters/cellar_rats/win/text": {
+      "hash": "a9e058e7",
+      "text": "Den sidste rotte hviner og ligger stille."
+    },
+    "encounters/cellar_rats/lose/text": {
+      "hash": "5a6d98b3",
+      "text": "Du vågner på torvet, bidt og forslået; en bonde slæbte dig ud."
+    },
+    "encounters/cellar_rats/flee/text": {
+      "hash": "fa270c1a",
+      "text": "Du kravler op ad stigen og smækker lemmen i."
+    },
+    "beats/rat_return/text": {
+      "hash": "648bbd38",
+      "text": "Da du går tilbage over torvet, hører du børn juble over rotterne."
+    },
+    "endings/rats_cleared/name": {
+      "hash": "179c39bd",
+      "text": "Rotterne er ryddet"
+    },
+    "endings/rats_cleared/text": {
+      "hash": "a7c1bfe8",
+      "text": "Millbrooks mølle er sikker igen, indtil videre."
+    },
+    "quests/rat_problem/name": {
+      "hash": "347532bd",
+      "text": "Rotterne i den gamle mølle"
+    },
+    "quests/rat_problem/objectives/learn/text": {
+      "hash": "3a7bae64",
+      "text": "Find ud af, hvem der satte opslaget om rotterne op"
+    },
+    "quests/rat_problem/objectives/enter/text": {
+      "hash": "f8f7e422",
+      "text": "Kom ind i den gamle møllekælder"
+    },
+    "quests/rat_problem/objectives/clear/text": {
+      "hash": "c035b9c0",
+      "text": "Tag dig af det, der er i kælderen"
+    },
+    "quests/rat_problem/objectives/reward/text": {
+      "hash": "3f0cd59c",
+      "text": "Vend tilbage til borgmester Hobb efter dusøren"
+    },
+    "maps/old_mill/name": {
+      "hash": "d3766aa1",
+      "text": "Den gamle mølle"
+    },
+    "maps/old_mill/rooms/mill_floor/name": {
+      "hash": "35bd2da9",
+      "text": "Møllegulvet"
+    },
+    "maps/old_mill/rooms/stairs/name": {
+      "hash": "cd2314e0",
+      "text": "Kældertrappen"
+    },
+    "maps/old_mill/rooms/cellar/name": {
+      "hash": "15a83c6a",
+      "text": "Kælderen"
+    }
+  }
+}

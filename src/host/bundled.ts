@@ -1,6 +1,6 @@
 /**
  * Adventure content bundled as JSON imports (Vite / Vitest / tsx all support them), for the
- * in-browser host that can't read data/adventures/ from disk. Keep the list in sync with the folder:
+ * in-browser host that can't read data/adventures/ or data/i18n/ from disk. Keep the lists in sync with the folders:
  * tests/hostInPage.test.ts compares it with the files on disk.
  */
 import type { SrdDatabase } from '../engine/data/srd';
@@ -15,6 +15,8 @@ import ch2 from '../../data/adventures/arc1/ch2_salt_and_treason.json';
 import ch3 from '../../data/adventures/arc1/ch3_the_gilded_lie.json';
 import ch4 from '../../data/adventures/arc1/ch4_wyrmfire.json';
 import ch5 from '../../data/adventures/arc1/ch5_the_hungering_dark.json';
+import { parseOverlay, type ContentTranslations } from '../shared/contentI18n';
+import daDemo from '../../data/i18n/da/millbrook_demo.json';
 
 /** Bundled adventure files, keyed by their path under data/adventures/. */
 export const BUNDLED_ADVENTURES: AdventureSource[] = [
@@ -26,6 +28,14 @@ export const BUNDLED_ADVENTURES: AdventureSource[] = [
   { file: 'arc1/ch4_wyrmfire.json', raw: ch4 },
   { file: 'arc1/ch5_the_hungering_dark.json', raw: ch5 },
 ];
+
+/** Bundled content translations (data/i18n/<lang>/<key>.json), same keys as the server loads.
+ * Keep in sync with the folder (tests/hostInPage.test.ts). */
+export const BUNDLED_TRANSLATIONS: ContentTranslations = {
+  da: {
+    millbrook_demo: parseOverlay(daDemo),
+  },
+};
 
 /** A fresh flag registry from the bundled flags.json (adventure docs are added while validating). */
 export function bundledFlagRegistry(): FlagRegistry {

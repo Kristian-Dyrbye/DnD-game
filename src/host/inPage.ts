@@ -4,7 +4,7 @@
  */
 import { loadSrd } from '../engine/data/srdBundle';
 import type { SavePort, SessionPorts } from '../engine/session/GameSession';
-import { bundledFlagRegistry, loadBundledAdventures } from './bundled';
+import { BUNDLED_TRANSLATIONS, bundledFlagRegistry, loadBundledAdventures } from './bundled';
 import { createGameHost, worldTables, type GameHost } from './gameHost';
 import { MemorySaves } from './memorySaves';
 
@@ -25,6 +25,7 @@ export function createInPageHost(opts: InPageHostOptions = {}): GameHost {
     adventures,
     flags,
     tables,
+    translations: BUNDLED_TRANSLATIONS,
     saves: opts.saves ?? new MemorySaves(),
     ...(opts.sessionPorts && { sessionPorts: opts.sessionPorts }),
   });

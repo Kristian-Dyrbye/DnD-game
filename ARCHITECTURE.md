@@ -31,6 +31,7 @@ Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master. Runs fully of
 │  ├─ srd/                        SRD 5.2 rules as JSON (classes, spells, monsters, items, feats, ...) + zod-validated
 │  ├─ world/lore.json             Continent, regions (tone profiles), factions, gods, locations
 │  ├─ adventures/<arcId>/         Authored adventures (the ADVENTURE_FORMAT.md schema)
+│  ├─ i18n/<lang>/<key>.json      Content translation overlays (text by id path + hash of the English; ADVENTURE_FORMAT.md "Translations", npm run i18n:check)
 │  └─ tables/                     Random tables (side quests, travel events, weather, loot, defeat outcomes)
 ├─ assets/                        Committed manifests + small CC0 assets; large packs downloaded by Setup.bat
 ├─ src/
@@ -59,6 +60,7 @@ Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master. Runs fully of
 │  ├─ host/                       Game host (no Node imports): GameSession + adventure port + systems + tables (gameHost.ts), shared adventure loader (content.ts),
 │  │                              bundled adventures (bundled.ts), in-memory saves + in-browser host for the web edition (memorySaves.ts, inPage.ts),
 │  │                              IndexedDB save backend with a memory-only fallback (indexedDbSaves.ts)
+│  │                              content in the session language: overlays merged once per language, one adventure port per language (translations.ts; overlay logic in shared/contentI18n.ts)
 │  ├─ server/                     Fastify app: static client, REST (saves, settings, status), WebSocket game channel; runs the host with the AI ports
 │  ├─ shared/                     Client⇄server protocol types (commands, events), settings schema, i18n.ts + i18n/<lang>.ts (UI text catalogs; client language signal in client/ui/i18n.ts), i18nCore.ts (languages, placeholders, plurals; shared with the engine). Engine-written lines: src/engine/i18n.ts + engine/i18n/<lang>.ts (Messages; GameSession.language, set by the `set_language` command the client sends on connect and on a switch; RunContext.msgs)
 │  └─ client/                     Preact UI, three.js scenes, 2D grid canvas, audio manager

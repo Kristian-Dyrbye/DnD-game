@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
 import { InPageTransport, type Connection } from '../src/client/net/transport';
 import { createInPageHost } from '../src/host/inPage';
 import { MemorySaves } from '../src/host/memorySaves';
-import { BUNDLED_ADVENTURES } from '../src/host/bundled';
+import { BUNDLED_ADVENTURES, BUNDLED_TRANSLATIONS } from '../src/host/bundled';
 import { STARTING_ADVENTURE } from '../src/host/gameHost';
 import type { GameHost } from '../src/host/gameHost';
 import type { ServerEvent } from '../src/shared/protocol';
@@ -105,6 +105,17 @@ describe('in-page game host', () => {
     };
     walk(root);
     expect(BUNDLED_ADVENTURES.map((a) => a.file).sort()).toEqual(onDisk.sort());
+  });
+
+  it('bundles every content translation under data/i18n (A142)', () => {
+    const root = path.join(process.cwd(), 'data', 'i18n');
+    const onDisk: string[] = [];
+    for (const lang of fs.readdirSync(root, { withFileTypes: true })) {
+      if (!lang.isDirectory()) continue;
+      for (const f of fs.readdirSync(path.join(root, lang.name))) if (f.endsWith('.json')) onDisk.push(`${lang.name}/${f.slice(0, -5)}`);
+    }
+    const bundled = Object.entries(BUNDLED_TRANSLATIONS).flatMap(([lang, o]) => Object.keys(o ?? {}).map((k) => `${lang}/${k}`));
+    expect(bundled.sort()).toEqual(onDisk.sort());
   });
 });
 

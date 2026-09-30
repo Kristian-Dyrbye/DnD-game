@@ -325,6 +325,33 @@ Generated side quests follow the same shape every time (A137). In `data/tables/s
 
 The quality gate rejects quests with fewer than 3 approaches, and quests where the solver can't end the job with every outcome variant.
 
+## Translations
+
+Adventures are written in English. A translation is an **overlay file**; it never copies the adventure. The English file stays the only place where ids, flags, checks and outcomes live.
+
+- **Where:** `data/i18n/<lang>/<key>.json`. For an adventure, `<key>` is the adventure's `id` (e.g. `data/i18n/da/millbrook_disappearances.json`). The world tables use fixed keys: `companions`, `lore`, `travel-events`, `shops`, `sidequests` and `defeat-outcomes`.
+- **Shape:** `{ "$source": "<English file>", "strings": { "<path>": { "hash": "<hash of the English>", "text": "<translation>" } } }`.
+- **Paths:** these are object keys joined by `/`. An array element is named by its `id` when that id is unique in the array, otherwise by its index:
+  - `chapters/one/scenes/mill_cellar/pois/chest/actions/open/label`
+  - `npcs/mayor_hobb/conversations/mill_talk/nodes/greet/text`
+  - `scenes/x/onEnter/0/text`
+- **Translatable fields** are listed in `TEXT_FIELDS` in `src/shared/contentI18n.ts`. They include `name`, `seed`, `revisitSeed`, `text`, `texts`, `label`, `description`, `personality`, `voice`, `secrets`, `summary`, `tip`, `warning`, `keywords`, `terrain`, `source`, and the table text fields.
+  - A string array (`keywords`, `secrets`, `texts`, a `revisitSeed` list) is one entry. Its translation is an array too, and it may have a different length.
+  - Translate `keywords` into words a player of that language would type; the keyword parser matches them.
+  - Ids, flags, skills and SRD ids are never translated.
+  - The adventure's `flags` docs stay English.
+  - `{placeholders}` in table texts (e.g. `{antagonist}`) must be kept exactly as they are.
+- **Loading:** the server and the web edition merge each overlay over a copy of the English content once per language. The session then plays the copy for its language. Anything missing, empty or of the wrong shape falls back to English. Lines already in the log keep the language they were written in.
+- **Web edition:** new overlay files must also be imported in `src/host/bundled.ts` (`BUNDLED_TRANSLATIONS`). A test compares that list with the folder.
+- **Checking:** `npm run i18n:check` lists every content file per language as translated / missing / stale / orphan / broken.
+  - Stale means the English changed after the text was translated (its hash differs). The old translation is still used until you update it and its `hash`.
+  - Orphan means the path no longer exists in the English.
+  - Broken means a string/array mismatch or different placeholders.
+  - `-- --lang=da -v` lists the paths.
+  - `-- --lang=da --stub=<key>` adds every missing entry with the English text and `"todo": true`, and drops orphans. Todo entries count as missing and are ignored when loading. Translate the text, set `hash` if it was stale, and delete `todo`.
+  - `-- --strict` exits with 1 if any existing overlay needs work.
+- **Example:** `data/i18n/da/millbrook_demo.json` is a complete Danish overlay of the demo adventure. For Danish D&D terms, see `data/i18n/da/glossary.md`.
+
 ## Versioning
 
 - `formatVersion` changes only on breaking changes.

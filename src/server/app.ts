@@ -18,7 +18,7 @@ import { parseSaveFile } from '../engine/session/saveFile';
 
 export { STARTING_ADVENTURE } from '../host/gameHost';
 import { loadSrd } from '../engine/data/srdBundle';
-import { loadAdventures, loadFlagRegistry } from './adventures';
+import { loadAdventures, loadFlagRegistry, loadTranslations } from './adventures';
 import { parseIntent } from '../llm/prompts/intent';
 import { llmNarrator } from './narrator';
 import { TtsQueue } from '../tts/queue';
@@ -153,12 +153,16 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   const flagRegistry = loadFlagRegistry(adventuresDir);
   const { adventures, problems } = loadAdventures(adventuresDir, srd, flagRegistry, tables.companions);
   for (const p of problems) app.log.warn({ file: p.file, errors: p.errors }, 'Skipping invalid adventure');
+  // Content translations live next to the adventures folder (data/i18n/<lang>/<key>.json).
+  const i18n = loadTranslations(path.join(path.dirname(adventuresDir), 'i18n'));
+  for (const p of i18n.problems) app.log.warn({ file: p.file, errors: p.errors }, 'Skipping invalid translation');
   // The session wiring is shared with the in-browser web edition (src/host); the server adds the AI ports.
   const host = createGameHost({
     srd,
     adventures,
     flags: flagRegistry,
     tables,
+    translations: i18n.translations,
     ai: {
       parseIntent: async (text, ictx) => (await parseIntent(services.llm, text, ictx)).intent,
       narrator: llmNarrator(() => services.llm, lore, srd, (err) => notices?.report('llm', err)),
