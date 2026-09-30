@@ -7,7 +7,7 @@ export const MIN_NODE_MAJOR = 20;
 export const GAME_PORT = 3210;
 export const OLLAMA_URL = 'http://127.0.0.1:11434';
 /** Keep in sync with src/shared/settings.ts (a test checks this). */
-export const DEFAULT_MODEL = 'qwen3:4b';
+export const DEFAULT_MODEL = 'llama3.2:3b';
 
 /** "v22.4.1" → 22 */
 export function nodeMajor(version) {

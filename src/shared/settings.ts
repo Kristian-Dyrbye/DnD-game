@@ -8,9 +8,9 @@ const volume = z.number().min(0).max(1);
 
 export const LlmSettingsSchema = z.object({
   /** Ollama model tag used for narration and JSON calls. */
-  model: z.string().min(1).default('qwen3:4b'),
+  model: z.string().min(1).default('llama3.2:3b'),
   /** Used if the main model isn't pulled. */
-  fallbackModel: z.string().min(1).default('llama3.2:3b'),
+  fallbackModel: z.string().min(1).default('qwen3:4b-instruct'),
   baseUrl: z.string().url().default('http://127.0.0.1:11434'),
   /** Force the mock LLM even if Ollama is available (development, low-memory play). */
   useMock: z.boolean().default(false),

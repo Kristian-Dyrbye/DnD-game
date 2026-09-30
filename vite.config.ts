@@ -24,5 +24,8 @@ export default defineConfig({
     root: '.',
     include: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'tests/**/*.test.ts'],
     environment: 'node',
+    // Adventure solver and full-fight simulation tests take 3–12 s alone and 30 s+ under full parallel load
+    // on a hybrid laptop CPU (i7-1260P: tests landing on E-cores); the 5 s default flakes.
+    testTimeout: 60_000,
   },
 });

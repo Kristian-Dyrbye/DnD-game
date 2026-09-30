@@ -17,7 +17,7 @@ Solo D&D 5e (SRD 5.2) browser game with a local AI Dungeon Master. Runs fully of
 | Validation | **zod** | One schema library for SRD data, saves, LLM JSON output and the API. |
 | Tests | **Vitest** | Native TypeScript and ESM, and it shares the Vite config. |
 | Dev runner | `tsx` for the server; `vite` dev server that proxies to it | No build step during development. |
-| LLM | **Ollama**, default model `qwen3:4b` (Q4, about 2.5 GB), `think:false`; fallback `llama3.2:3b` | Fits the 3 GB budget and gives reliable JSON. Configurable in settings. |
+| LLM | **Ollama**, default model `llama3.2:3b` (Q4, about 2 GB); fallback `qwen3:4b-instruct` (`think:false`) | Won the A010 benchmark: 5/5 valid JSON, ~7 tok/s on a laptop CPU, 2.4 GB resident — inside the 3 GB budget. Configurable in settings. |
 | TTS | **Piper** (Windows binary + ONNX voices, about 60 MB each), spawned by the server | Offline, light and fast on CPU. |
 | Storage | Versioned JSON save files in `saves/`, with a migration chain | Easy to read and diff, with no native dependencies. |
 

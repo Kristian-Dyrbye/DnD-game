@@ -307,7 +307,7 @@ describe('ch4_wyrmfire: reachability', () => {
     };
     const res = solve(leg('dawnspire_muster', { all: [{ flag: 'arc.main.war_council_allies', gte: 6 }, { visited: 'emberpeak_ascent' }] }), flags, 'leg_goal');
     expect(res.ok, res.reason).toBe(true);
-  });
+  }, 180_000); // the heaviest search in the suite: ~12 s alone, 60 s+ under full parallel load (see A117)
 
   it.each(['escaped', 'captured'])('leg 4 (Vosk %s): the solver climbs Emberpeak and reaches the lair', (vosk) => {
     const res = solve(leg('emberpeak_ascent', { visited: 'pyrraxis_hoard' }), { 'arc.main.vosk_fate': vosk, [L('muster_done')]: true }, 'leg_goal');

@@ -18,7 +18,7 @@ A single-player Dungeons & Dragons game (SRD 5.2.1 rules) that runs entirely on 
 
 ## Getting started
 
-1. **Run `Setup.bat`** once. It checks Node, installs the packages, builds the game, offers to install Ollama (via winget) and pulls the default model (`qwen3:4b`), and downloads the free 3D models, audio and narration voices.
+1. **Run `Setup.bat`** once. It checks Node, installs the packages, builds the game, offers to install Ollama (via winget) and pulls the default model (`llama3.2:3b`), and downloads the free 3D models, audio and narration voices.
 2. **Run `Start Game.bat`**. It starts Ollama if needed, starts the game server and opens the game in your browser (http://127.0.0.1:3210).
 3. Click **New Game**, build a hero (or use Quick Build), and play.
 
@@ -39,7 +39,7 @@ Your saves are in `saves/`, your settings in `userdata/settings.json`.
 
 ## Swapping the AI model
 
-The default model is `qwen3:4b`; the fallback is `llama3.2:3b`. Any Ollama model works: pull it (`ollama pull <name>`) and set it in Settings → AI. Small 3–4B instruction models give the best balance on 8 GB machines; larger models narrate better but use more memory.
+The default model is `llama3.2:3b`; the fallback is `qwen3:4b-instruct`. (Use the `-instruct` tag of Qwen3: plain `qwen3:4b` is now a thinking-only model that is far too slow for narration.) Any Ollama model works: pull it (`ollama pull <name>`) and set it in Settings → AI. Small 3–4B instruction models give the best balance on 8 GB machines; larger models narrate better but use more memory.
 
 To compare models on your own PC, run `node scripts/bench-llm.mjs` (add `--pull` to download the candidates first, or name models to test). It measures JSON reliability, speed and memory with the game's real prompt shapes and recommends a default; results go to `userdata/bench-llm.json`.
 

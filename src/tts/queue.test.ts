@@ -10,6 +10,7 @@ import { quickBuild } from '../engine/character/quickBuild';
 import { Rng } from '../engine/core/rng';
 import { loadSrd } from '../engine/data/srdBundle';
 import { MockTts } from './mock';
+import { MockLlm } from '../llm/mock';
 import { speakable, TtsQueue } from './queue';
 import { TtsError, type TtsProvider } from './types';
 
@@ -85,7 +86,7 @@ describe('TTS in the server', () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'dnd-tts-'));
     try {
       const voice: TtsProvider = { ...new MockTts(), name: 'test-voice', synthesize: (t, o) => new MockTts().synthesize(t, o), listVoices: async () => ['v'], status: async () => ({ provider: 'test-voice', ready: true, binaryFound: true, voices: ['v'] }) };
-      app = await buildApp({ savesDir: dir, userDataDir: dir, services: { tts: voice }, sessionPorts: { newSeed: () => 'tts' } });
+      app = await buildApp({ savesDir: dir, userDataDir: dir, services: { llm: new MockLlm(), tts: voice }, sessionPorts: { newSeed: () => 'tts' } });
       await app.ready();
       const events: { type: string; entryId?: number }[] = [];
       app.session.on((e) => events.push(e as { type: string; entryId?: number }));

@@ -5,7 +5,7 @@
  * with the recommended default.
  *
  *   node scripts/bench-llm.mjs                      # default candidates (pulled ones only)
- *   node scripts/bench-llm.mjs qwen3:4b phi4-mini   # specific models
+ *   node scripts/bench-llm.mjs llama3.2:3b phi4-mini # specific models
  *   node scripts/bench-llm.mjs --pull               # pull missing candidates first
  *
  * Needs Ollama running on http://127.0.0.1:11434 (Start Game.bat starts it).
@@ -15,7 +15,7 @@ import path from 'node:path';
 import { INTENT_SCHEMA, INTENT_TASKS, NARRATION_TASKS, parseIntentReply, pickBest, scoreModel } from './bench-llm-lib.mjs';
 
 const BASE = process.env.OLLAMA_HOST ?? 'http://127.0.0.1:11434';
-const DEFAULT_CANDIDATES = ['qwen3:4b', 'llama3.2:3b', 'gemma3:4b', 'phi4-mini'];
+const DEFAULT_CANDIDATES = ['llama3.2:3b', 'qwen3:4b-instruct', 'gemma3:4b', 'phi4-mini'];
 const args = process.argv.slice(2);
 const pull = args.includes('--pull');
 const wanted = args.filter((a) => !a.startsWith('--'));
@@ -116,7 +116,7 @@ async function main() {
   }
   const toRun = candidates.filter((c) => installed.includes(c) || installed.includes(`${c}:latest`));
   if (!toRun.length) {
-    console.error(`None of ${candidates.join(', ')} is installed. Pull one (ollama pull qwen3:4b) or use --pull.`);
+    console.error(`None of ${candidates.join(', ')} is installed. Pull one (ollama pull llama3.2:3b) or use --pull.`);
     process.exit(1);
   }
   const results = [];

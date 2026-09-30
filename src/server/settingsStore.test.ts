@@ -17,7 +17,7 @@ afterEach(() => {
 
 describe('SettingsStore', () => {
   it('returns defaults when no file exists', () => {
-    expect(new SettingsStore(dir).get().llm.model).toBe('qwen3:4b');
+    expect(new SettingsStore(dir).get().llm.model).toBe('llama3.2:3b');
   });
 
   it('persists updates and reloads them', () => {
@@ -36,7 +36,7 @@ describe('SettingsStore', () => {
 
   it('survives a corrupt file', () => {
     fs.writeFileSync(path.join(dir, SETTINGS_FILE), '{not json');
-    expect(new SettingsStore(dir).get().llm.model).toBe('qwen3:4b');
+    expect(new SettingsStore(dir).get().llm.model).toBe('llama3.2:3b');
   });
 
   it('keeps valid fields when some fields are invalid', () => {

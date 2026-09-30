@@ -4,6 +4,7 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import { buildApp } from './app';
+import { MockLlm } from '../llm/mock';
 import { GAME_VERSION } from '../shared/version';
 import { buildCharacter } from '../engine/character/builder';
 import { toBuildInput } from '../engine/character/creator';
@@ -29,7 +30,7 @@ describe('server app', () => {
   it('runs a game over the WebSocket channel: ping, new_game snapshot, save', async () => {
     const savesDir = fs.mkdtempSync(path.join(os.tmpdir(), 'dnd-ws-'));
     try {
-      app = await buildApp({ savesDir, sessionPorts: { newSeed: () => 'ws-test' } });
+      app = await buildApp({ savesDir, services: { llm: new MockLlm() }, sessionPorts: { newSeed: () => 'ws-test' } });
       await app.ready();
       const ws = await app.injectWS('/ws');
       const events: { type: string; [k: string]: unknown }[] = [];

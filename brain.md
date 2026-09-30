@@ -3,10 +3,10 @@
 > This is the only memory carried between sessions. Read it fully at the start of every session. Update it at the end of every session. Keep it under about 400 lines.
 
 ## Status
-- **State:** BLOCKED — all buildable work is done; only A010 (LLM benchmark) and A115b (real-LLM playtest) remain, both waiting for the owner to install Ollama.
-- **Current phase:** 13 (Polish) complete except the Ollama-blocked items
-- **Last completed assignment:** A116
-- **Notes for next session:** Once Ollama is installed: set A010 and A115b to todo, run `node scripts/bench-llm.mjs --pull`, record the result, then playtest starter + ch1 with the real model (A115b). Everything else (full campaign starter→ch5, 3D map, wounds/scars/wear, docs) is built and tested (133 test files, 1177 tests). Test URLs: `#play-<class>`, `#play-<class>+map`, `#play-<class>+scars`, `#combat-<class>`, `#load`.
+- **State:** CONTINUE — Ollama installed (2026-09-30); A010 done; A115b (real-LLM playtest) and A117 (solver speed) remain.
+- **Current phase:** 13 (Polish)
+- **Last completed assignment:** A010
+- **Notes for next session:** Ollama 0.35 runs locally with llama3.2:3b (default) and qwen3:4b-instruct (fallback). Next: A115b playtest starter + ch1 with the real model (~7 tok/s on CPU, so expect ~15 s per narration). Everything else (full campaign starter→ch5, 3D map, wounds/scars/wear, docs) is built and tested (133 test files, 1177 tests). Test URLs: `#play-<class>`, `#play-<class>+map`, `#play-<class>+scars`, `#combat-<class>`, `#load`.
 
 ## Assignment Queue
 <!-- Compact format (one item per line, to keep brain.md small):
@@ -19,7 +19,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 ### Phase 1 — Foundation
 - [done] A001, A002, A003, A004, A005, A006, A007, A008, A009
-- [blocked] A010 — Pick & benchmark LLM (needs Ollama) | Spec: §2, §3 | Done: run `node scripts/bench-llm.mjs --pull` (script + tested helpers ready: JSON validity, sensible intents, tok/s, first token, memory, score + recommendation → userdata/bench-llm.json); record the result in the Decisions Log and set DEFAULT_MODEL if another model wins (README already explains swapping) | Dep: A005, owner installs Ollama
+- [done] A010 — Pick & benchmark LLM → llama3.2:3b default, qwen3:4b-instruct fallback
 
 ### Phase 2 — Rules Engine
 - [done] A011, A012, A013, A014, A015, A016, A017, A018, A019, A020, A021, A022, A023, A024, A025, A026, A027, A028, A029, A030, A031, A032, A033, A034, A034a, A035, A036, A037, A038, A039, A039b, A039c, A040, A041, A042
@@ -79,10 +79,12 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - [done] A111, A112, A113
 - [done] A114 — Docs + About screen
 - [done] A115 — Full playtest pass (mock LLM; real-LLM pass queued as A115b)
-- [blocked] A115b — Playtest with the real LLM | Spec: §17 | Done: play starter + ch1 with Ollama (qwen3:4b): narration quality, intent parsing on free text, suggestion ideas, JSON validity, speed on 8 GB; issues become queue items | Dep: A010 (owner installs Ollama)
+- [todo] A115b — Playtest with the real LLM | Spec: §17 | Done: play starter + ch1 with Ollama (llama3.2:3b): narration quality, intent parsing on free text, suggestion ideas, JSON validity, speed on this CPU (~7 tok/s; narration 90 s / combat 30 s timeouts must hold); issues become queue items | Dep: A010
 - [done] A116 — Final check: typecheck, 1177 tests, build all pass (Status can't be DONE while A010/A115b wait for Ollama)
+- [todo] A117 — Speed up the adventure solver | Spec: §17 | Done: tests/arc1Ch4 "leg 3: at Dawnspire … seats all six allies" runs < 5 s alone (now ~12 s; 60 s+ under full parallel load) so its 180 s per-test timeout can go; other solver tests (arc1Ch1/2, starterArc) also faster; same results | Dep: —
 
 ## Completed Log
+- A010 — benchmarked with the real Ollama: llama3.2:3b 79.9 (5/5 JSON, 5/5 sensible, 7.1 tok/s, 4.7 s first token, 2443 MB) beat qwen3:4b-instruct 75.9 (5.1 tok/s, 6.5 s, 3036 MB); default → llama3.2:3b, fallback → qwen3:4b-instruct; tests no longer hit a running Ollama (MockLlm in app/queue tests); testTimeout 60 s — shared/settings.ts, scripts/{check-deps-lib,bench-llm}.mjs, vite.config.ts, src/server/app.test.ts, src/tts/queue.test.ts, README.md, ARCHITECTURE.md, userdata/bench-llm.json
 <!-- One line per assignment: A<id> — what was built — key files. Compress into per-phase summaries when long. -->
 - A116 — final check green; fixes found by the ch5 playtest: auto-ASI crashed when the 2nd primary ability was Con (asiIncreases now always spends +2 under the cap), fights failed to start when big monsters found no room at the map edge (placement falls back to the nearest free square), Teeth counts now recomputed on holder writes (recountTeeth) — party/companions.ts, combat/encounter.ts, adventure/runner.ts
 - Campaign content: arc chapter 5 "The Hungering Dark" (A105, helper) — data/adventures/arc1/ch5_the_hungering_dark.json (6 scenes, 10 NPCs, 26 encounters, Maw map, 5 campaign endings from DESIGN §12, 4 Cantor fates) + tests/arc1Ch5.test.ts; ch4 endings chain into it. The whole campaign now runs starter → ch1 → ch2 → ch3 → ch4 → ch5.
@@ -140,6 +142,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 
 
 ## Decisions Log
+- A010: Default model llama3.2:3b (best score, fastest, only candidate inside the 3 GB budget); fallback qwen3:4b-instruct. Plain `qwen3:4b` is now "Qwen3 Thinking" (2507): it ignores think:false and reasons 500–700 tokens before answering (2–3 min per reply at ~4.4 tok/s) — never use it. gemma3:4b / phi4-mini not benchmarked (over budget / ~10 min each on this CPU); owner can run `node scripts/bench-llm.mjs gemma3:4b phi4-mini` later. Bench candidates now llama3.2:3b, qwen3:4b-instruct, gemma3:4b, phi4-mini.
 - A105 (helper): Ch5 reads the seven Tooth holder flags directly (engine now also keeps teeth_secured/teeth_choir). 'Opened' = all seven 'choir'; the wraith joins at ≥ 5 choir; seal strength = local number `~ch5_seal` filled by beats in maw_final_seal; unclaimed Teeth count for neither side. Thefts take the lowest-numbered carried Tooth via `~ch5_take_<event>` flags. Design gap resolved: an escaped Cantor always gives 'stirring' + A Quiet Hunger. Siege = one 'Hold the walls' action + beats picking 1 of 12 variants (guarded by `~ch5_siege_done`). A betrayed Rook can't rejoin; winning the Persuasion makes him pry back a Choir Tooth. Finale: 2 Hunger Pulls, ≤ 2 Pry attempts, one retry; second defeat → escaped. 4-day deadline to the Jaw-Stone (missed → disadvantage on Pull saves). Epilogue lines are beats after the seal. +16,000 XP (L10) at the sanctum gate.
 - A101c: Retrofit kept to mechanics the texts already promised (costs, falls, traps, scars). Bosses rely on the default rule (single most expensive monster type) — ch1–3 leaders are already the priciest stat blocks; allied-guard fights and `since` races were left as authored (they work and the chapter tests pin them).
 - A115: Playtest with the real LLM isn't possible (Ollama not installed): queued as A115b (blocked with A010). Automated playtests use template narration; they check robustness, not prose quality.
@@ -225,7 +228,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - A000: Tests = Vitest; dev = tsx + vite proxy; single npm package (no workspaces) — simplest for the loop.
 - A000: Engine is pure isomorphic TS; the server owns the authoritative GameSession; the client imports engine functions only for previews. Alt: client-side engine — rejected because of saves/LLM/TTS on the server and headless smoke tests.
 - A000: Transport = WebSocket for commands/events/stream tokens; REST for saves/settings/status.
-- A000: Default LLM = qwen3:4b (Q4, ~2.5 GB, think:false); fallback llama3.2:3b (~2 GB). gemma3:4b rejected (~3.3 GB, over budget). To be confirmed by A010 benchmark.
+- A000: Default LLM = qwen3:4b (Q4, ~2.5 GB, think:false); fallback llama3.2:3b (~2 GB). gemma3:4b rejected (~3.3 GB, over budget). Superseded by A010 (llama3.2:3b default).
 - A000: TTS = Piper Windows binary spawned per request; voices downloaded by Setup.bat.
 - A000: Saves = versioned JSON + migration chain; systems keep data in state.extensions[id].
 - A000: §16 readiness = System Registry (hooks: initState, migrate, onTimeAdvance, onRest, downtimeActivities, commands, promptCards); namespaced flags (arc.<id>.*, world.*); standalone validateAdventure().
@@ -296,6 +299,7 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - client: `ui/game/mapArt.ts` (region outlines, glyphs, label placement), `ui/SaveBrowser.tsx` (load/save with thumbnails), `ui/game/CharacterScreen.tsx` (3D model + scars + sheet), `three/BattleMap3D.tsx` (3D battle map) + `three/LazyBattleMap3D.tsx` + `three/battle3d.ts` (pure helpers), `main.tsx`, `index.html`, `styles.css`, `data.ts` (db); `net/gameSocket.ts` (ws + signals + applyEvent); `ui/App.tsx`, `ui/state.ts` (screens; `#creator`, `#quickbuild-<class>`, `#play-<class>`, `#play-<class>+map`), `ui/settingsState.ts` (+applyAccessibility), `ui/SettingsPanel.tsx`, `ui/text.ts`, `ui/StatusIndicator.tsx`, `ui/creator/*` (creator steps), `ui/game/LevelUpPanel.tsx`, `ui/game/{GameScreen,PartyPanel,StoryLog,ActionInput,DiceTray,JournalPanel,WorldMap,InventoryPanel,ShopPanel}.tsx`; `ui/combat/{BattleMap,CombatScreen}.tsx` + `combatDemo.ts` + `dice.ts`; `three/{loader,characterModel,CharacterPreview}`; `audio/AudioManager.ts` (music crossfade, ambience, SFX pools, unlock on first gesture) + `audio/audioLogic.ts` (pickVariant, channelVolume, sfxForEvent)
 
 ## Gotchas & Lessons
+- Solver/fight tests are CPU-heavy (3–12 s alone) and 3–5× slower under full parallel load on the hybrid CPU → vite.config testTimeout 60 s; the ch4 Dawnspire leg has its own 180 s (A117). Running Setup.bat rewrites package-lock.json (drops `libc` fields, different npm) — restore it with `git checkout -- package-lock.json` unless deps changed.
 - Encounter-starting beats keyed on flags can fire again when a later choice flips the flag: give selection beats a 'done' guard. Don't reuse one local flag across scenes. PowerShell 5 Get/Set-Content garbles UTF-8 curly quotes — edit with node/python. The solver always makes its rolls: endings that need a loss need scripted tests with an always-fail Rng.
 - Fights started by onEnter or beats fire once: if they can be lost (Heroic defeat → goto elsewhere), add a rematch action or the scene soft-locks (smoke test caught this in the barrow).
 - The session log is capped at 200 entries: long tests can't search early lines.
@@ -331,16 +335,14 @@ Every assignment's Done also implicitly includes: `npm run typecheck` + `npm tes
 - Testing .bat from the PowerShell tool: native commands don't follow Push-Location; call `cmd /c "`"<absolute path>`""`. To dry-run Start Game.bat, copy it with `call npm start` replaced by an echo.
 - npm 11 blocks install scripts by default (`allow-scripts` warning for esbuild). Ignore it: tsx/vite work via esbuild's optional platform package. Don't run approve-scripts unless something breaks.
 - To smoke-test the server: `PORT=3299 npx tsx src/server/main.ts &`, curl, then kill the PID from `netstat -ano | grep :3299` with `taskkill //PID <pid> //F` (Git Bash needs `//`).
-- Ollama client unverified against a real server (not installed yet); A010 should confirm `think:false` is accepted and structured `format` schemas work.
+- Ollama 0.35 verified: /api/chat with think:false works on qwen3:4b-instruct; tags qwen3:4b-instruct shows `thinking` capability but answers directly. Any test that builds the app/session without `services: { llm: new MockLlm() }` talks to the REAL Ollama when it runs (slow, CPU contention) — always inject the mock.
 - The dev PC has 32 GB RAM, but the TARGET is 8 GB: keep budgets per spec §1; don't rely on local headroom.
 - Running the server from the project root creates `userdata/` (gitignored). Tests use temp dirs.
-- Node v26.3.0, npm 11.16.0, git 2.53 are installed. Ollama is not installed yet (2026-09-29).
+- Node v26.3.0, npm 11.16.0, git 2.53, Ollama 0.35.0 installed (2026-09-30). winget is NOT available on this PC. CPU i7-1260P (4 P + 8 E cores), 16 GB RAM, Iris Xe (LLM runs on CPU).
 
 ## Blockers / Owner Review
 <!-- Blockers: what's wrong + the exact fix the owner should apply. Owner Review: non-urgent decisions the owner may want to revisit. -->
-- BLOCKER (A115b): the real-LLM playtest also needs Ollama. Fix: install Ollama, run `ollama pull qwen3:4b` (or Setup.bat), then set A010 and A115b to todo.
 - Owner Review (future engine ideas from the chapter authors, not queued): count-of-flags conditions; an outcome to return a betrayed companion; status conditions (poisoned/frightened) in outcomes; legendary/extra actions in statOverrides; mid-fight triggers (at half HP / each round) so parleys and pulls can happen inside combat; group checks.
 - Owner Review: 77 of 330 SRD monsters use a creature-type stand-in model (beasts → wolf, monstrosities → dino…); more CC0 model packs would help.
-- BLOCKER (A010): Ollama not installed (checked 2026-09-29). Fix: install from https://ollama.com/download (or run Setup.bat, which offers winget), then set A010 back to todo. Everything else proceeds with the mock.
 - Owner Review: listen to the downloaded music/SFX (assets/audio after `node scripts/audio-fetch.mjs`) and flag tracks to swap — they were chosen by metadata only.
-- Owner Review: default model qwen3:4b is provisional until A010 benchmarks it.
+- Owner Review: default model llama3.2:3b chosen by the A010 benchmark (userdata/bench-llm.json). Narration quality vs qwen3:4b-instruct is judged in A115b; switch in Settings → AI if you prefer the other.
