@@ -61,6 +61,7 @@ export function applyEvent(e: ServerEvent): void {
       return;
     case 'log':
       storyLog.value = [...storyLog.value, e.entry].slice(-200);
+      ttsPlayer.line(e.entry);
       if (streaming.value?.entryId === e.entry.id) streaming.value = null;
       return;
     case 'narration':

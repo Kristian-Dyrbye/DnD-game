@@ -29,6 +29,8 @@ export const TtsSettingsSchema = z.object({
   piperPath: z.string().default('tools/piper/piper.exe'),
   voiceDir: z.string().default('assets/voices'),
   narratorVoice: z.string().default('en_GB-cori-medium'),
+  /** Web edition: speechSynthesis voice name ('' = the browser's default voice). */
+  browserVoice: z.string().default(''),
   unloadWhenIdle: z.boolean().default(true),
 });
 

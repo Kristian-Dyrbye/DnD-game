@@ -1,5 +1,9 @@
-/** Input area: suggested action buttons plus a free-text box (free text goes through intent parsing). */
+/**
+ * Input area: suggested action buttons plus a free-text box (free text goes through intent parsing;
+ * in the web edition keyword matching only, so the box says the buttons work best).
+ */
 import { useState } from 'preact/hooks';
+import { WEB_EDITION } from '../../edition';
 import { connection, send, suggestions } from '../../net/gameSocket';
 
 export function ActionInput() {
@@ -34,6 +38,7 @@ export function ActionInput() {
           Act
         </button>
       </form>
+      {WEB_EDITION && <p class="hint small free-text-hint">Use the buttons for best results: typed text is matched by keywords only.</p>}
     </section>
   );
 }

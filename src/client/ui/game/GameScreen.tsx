@@ -28,6 +28,7 @@ import { DiceTray } from './DiceTray';
 import { JournalPanel } from './JournalPanel';
 import { WorldMap } from './WorldMap';
 import { speaking, ttsPlayer } from '../../audio/ttsPlayer';
+import { WEB_EDITION } from '../../edition';
 import { InventoryPanel } from './InventoryPanel';
 import { LevelUpPanel } from './LevelUpPanel';
 import { ShopPanel } from './ShopPanel';
@@ -128,7 +129,7 @@ export function GameScreen() {
           >
             Hint: {hintOn ? 'on' : 'off'}
           </button>
-          <button type="button" aria-pressed={voiceOn} title="Read the story aloud (Piper voice)" onClick={() => void updateSettings({ tts: { enabled: !voiceOn } })}>
+          <button type="button" aria-pressed={voiceOn} title={WEB_EDITION ? "Read the story aloud (your browser's voice)" : 'Read the story aloud (Piper voice)'} onClick={() => void updateSettings({ tts: { enabled: !voiceOn } })}>
             Voice: {voiceOn ? 'on' : 'off'}
           </button>
           {speaking.value && (
@@ -158,7 +159,7 @@ export function GameScreen() {
       {h && <PartyPanel hero={h} companions={state?.companions ?? []} onLevelUp={() => setLevelUpOpen(true)} loyalty={Object.fromEntries((state?.companions ?? []).map((c) => [c.id, Number(state?.flags[`world.${c.id}_loyalty`] ?? 50)]))} controls={(state?.extensions.party as { control?: Record<string, 'ai' | 'player'> } | undefined)?.control ?? {}} />}
       {levelUpOpen && h && <LevelUpPanel hero={h} onClose={() => setLevelUpOpen(false)} />}
       <main class="game-main">
-        {connection.value !== 'open' && <p class="connection-note">{connection.value === 'connecting' ? 'Connecting to the game server…' : 'Disconnected — retrying…'}</p>}
+        {connection.value !== 'open' && <p class="connection-note">{connection.value === 'connecting' ? WEB_EDITION ? 'Starting the game…' : 'Connecting to the game server…' : 'Disconnected — retrying…'}</p>}
         <StoryLog />
         {lastError.value && (
           <p class="game-error" role="alert">

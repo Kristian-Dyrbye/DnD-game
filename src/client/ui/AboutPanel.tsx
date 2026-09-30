@@ -3,6 +3,7 @@
  * where the free assets come from. The full list with licenses is CREDITS.md in the game folder.
  */
 import { GAME_TITLE, GAME_VERSION } from '../../shared/version';
+import { WEB_EDITION } from '../edition';
 
 export function AboutPanel({ onClose }: { onClose: () => void }) {
   return (
@@ -17,10 +18,17 @@ export function AboutPanel({ onClose }: { onClose: () => void }) {
           </button>
         </header>
         <div class="about-body">
-          <p>
-            A solo Dungeons &amp; Dragons adventure with a local AI Dungeon Master. The rules, dice and fights are resolved by the game itself; the AI (a small model running on your
-            own computer through Ollama) only narrates, voices characters and suggests ideas. Everything runs offline.
-          </p>
+          {WEB_EDITION ? (
+            <p>
+              A solo Dungeons &amp; Dragons adventure that runs entirely in your browser. The rules, dice and fights are resolved by the game itself, the story is told from written
+              text, and your saves stay in this browser (use Export to keep a copy). The local edition adds an AI Dungeon Master running on your own computer.
+            </p>
+          ) : (
+            <p>
+              A solo Dungeons &amp; Dragons adventure with a local AI Dungeon Master. The rules, dice and fights are resolved by the game itself; the AI (a small model running on your
+              own computer through Ollama) only narrates, voices characters and suggests ideas. Everything runs offline.
+            </p>
+          )}
           <h3>Rules</h3>
           <p class="attribution">
             This work includes material from the System Reference Document 5.2.1 ("SRD 5.2.1") by Wizards of the Coast LLC, available at{' '}
@@ -38,9 +46,9 @@ export function AboutPanel({ onClose }: { onClose: () => void }) {
             <li>3D characters, skeletons, dungeon props and weapons: KayKit by Kay Lousberg (CC0).</li>
             <li>Monsters and animals: Quaternius (CC0 packs).</li>
             <li>Music, ambience and sound effects: CC0 and public-domain works (Kenney and others).</li>
-            <li>Narration voices: Piper TTS with voices trained on public-domain LibriVox recordings.</li>
+            <li>{WEB_EDITION ? "Narration voice: your browser's built-in speech." : 'Narration voices: Piper TTS with voices trained on public-domain LibriVox recordings.'}</li>
           </ul>
-          <p class="muted small">Every asset, its author, source and license is listed in CREDITS.md in the game folder.</p>
+          <p class="muted small">Every asset, its author, source and license is listed in CREDITS.md {WEB_EDITION ? 'in the game repository' : 'in the game folder'}.</p>
           <h3>The world</h3>
           <p>The continent of Orrimar, its people and the campaign "The Seven Teeth of Vashkul" are original to this game.</p>
         </div>

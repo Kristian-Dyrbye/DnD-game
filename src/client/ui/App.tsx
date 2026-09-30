@@ -1,6 +1,7 @@
 /** Root UI component: switches between the title screen, the character creator and the game. */
 import { GAME_TITLE } from '../../shared/version';
 import { StatusIndicator } from './StatusIndicator';
+import { WEB_EDITION } from '../edition';
 import { Creator } from './creator/Creator';
 import { combatDemoClass, screen, settingsOpen, startNewCharacter } from './state';
 import { CombatScreen } from './combat/CombatScreen';
@@ -20,7 +21,7 @@ function TitleScreen() {
   return (
     <main class="title-screen">
       <h1>{GAME_TITLE}</h1>
-      <p>A solo adventure with a local AI Dungeon Master.</p>
+      <p>{WEB_EDITION ? 'A solo adventure in your browser.' : 'A solo adventure with a local AI Dungeon Master.'}</p>
       <div class="title-actions">
         <button type="button" class="primary" onClick={startNewCharacter}>
           New Game

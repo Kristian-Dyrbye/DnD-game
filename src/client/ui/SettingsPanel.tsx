@@ -1,13 +1,19 @@
 /**
  * Settings (spec §14): volumes, narration voice, AI model + test connection, performance presets
  * (including the 2D battle map), accessibility (text size, readable font, colour-blind helpers) and
- * gameplay. Every change is saved immediately (PUT /api/settings, deep-merged on the server).
+ * gameplay. Every change is saved immediately (PUT /api/settings, deep-merged on the server; the web
+ * edition stores them in localStorage, has no AI tab and picks a browser voice instead of Piper).
  */
 import { useEffect, useState } from 'preact/hooks';
 import { applyPreset, type Settings } from '../../shared/settings';
+import { ttsPlayer } from '../audio/ttsPlayer';
+import { WEB_EDITION } from '../edition';
 import { loadSettings, settings, updateSettings } from './settingsState';
 
 type Section = keyof Settings;
+
+/** The web edition has no AI, so no AI tab. */
+const TABS = (['audio', 'ai', 'performance', 'accessibility', 'gameplay'] as const).filter((t) => !(WEB_EDITION && t === 'ai'));
 
 function Slider({ label, value, min = 0, max = 1, step = 0.05, format = (v: number) => `${Math.round(v * 100)}%`, onChange }: { label: string; value: number; min?: number; max?: number; step?: number; format?: (v: number) => string; onChange: (v: number) => void }) {
   return (
@@ -54,8 +60,17 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
   const [test, setTest] = useState<string | null>(null);
   useEffect(() => {
     void loadSettings();
+    if (WEB_EDITION) {
+      // Browsers load their voice list lazily and announce it with 'voiceschanged'.
+      const refresh = () => setVoices(ttsPlayer.voices());
+      refresh();
+      if (typeof speechSynthesis === 'undefined') return;
+      speechSynthesis.addEventListener('voiceschanged', refresh);
+      return () => speechSynthesis.removeEventListener('voiceschanged', refresh);
+    }
     fetch('/api/llm/models').then((r) => r.json()).then((d: { models: string[] }) => setModels(d.models)).catch(() => undefined);
     fetch('/api/tts/voices').then((r) => r.json()).then((d: { voices: string[] }) => setVoices(d.voices)).catch(() => undefined);
+    return undefined;
   }, []);
   const s = settings.value;
   const set = <K extends Section>(section: K, patch: Partial<Settings[K]>) => void updateSettings({ [section]: patch });
@@ -80,7 +95,7 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
           </button>
         </header>
         <div class="method-tabs settings-tabs">
-          {(['audio', 'ai', 'performance', 'accessibility', 'gameplay'] as const).map((t) => (
+          {TABS.map((t) => (
             <button key={t} type="button" class={tab === t ? 'selected' : ''} onClick={() => setTab(t)}>
               {t === 'ai' ? 'AI' : t[0]!.toUpperCase() + t.slice(1)}
             </button>
@@ -98,9 +113,20 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
                 <Slider label="Music" value={s.audio.music} onChange={(v) => set('audio', { music: v })} />
                 <Slider label="Sound effects" value={s.audio.sfx} onChange={(v) => set('audio', { sfx: v })} />
                 <Slider label="Narration voice" value={s.audio.narration} onChange={(v) => set('audio', { narration: v })} />
-                <Toggle label="Read the story aloud" hint="Piper voice, generated in the background" value={s.tts.enabled} onChange={(v) => set('tts', { enabled: v })} />
-                {voices.length > 0 && <Choice label="Narrator voice" value={s.tts.narratorVoice} options={voices} onChange={(v) => set('tts', { narratorVoice: v })} />}
-                <Toggle label="Unload the voice when idle" value={s.tts.unloadWhenIdle} onChange={(v) => set('tts', { unloadWhenIdle: v })} />
+                {WEB_EDITION ? (
+                  <>
+                    <Toggle label="Read the story aloud" hint="your browser's own voice" value={s.tts.enabled} onChange={(v) => set('tts', { enabled: v })} />
+                    {voices.length > 0 && (
+                      <Choice label="Narrator voice" value={s.tts.browserVoice} options={[{ id: '', label: 'Browser default' }, ...voices.map((v) => ({ id: v, label: v }))]} onChange={(v) => set('tts', { browserVoice: v })} />
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Toggle label="Read the story aloud" hint="Piper voice, generated in the background" value={s.tts.enabled} onChange={(v) => set('tts', { enabled: v })} />
+                    {voices.length > 0 && <Choice label="Narrator voice" value={s.tts.narratorVoice} options={voices} onChange={(v) => set('tts', { narratorVoice: v })} />}
+                    <Toggle label="Unload the voice when idle" value={s.tts.unloadWhenIdle} onChange={(v) => set('tts', { unloadWhenIdle: v })} />
+                  </>
+                )}
               </>
             )}
             {tab === 'ai' && (

@@ -1,9 +1,11 @@
-/** Creator step 7: name, personality and backstory (with an optional AI suggestion). */
+/** Creator step 7: name, personality and backstory (with an optional AI suggestion; a template story in the web edition). */
 import { useState } from 'preact/hooks';
 import type { CreatorState } from '../../../engine/character/creator';
 import { randomName } from '../../../engine/character/quickBuild';
 import { Rng } from '../../../engine/core/rng';
+import { templateBackstory } from '../../../llm/prompts/backstory';
 import { db } from '../../data';
+import { WEB_EDITION } from '../../edition';
 import { creator } from '../state';
 
 const FIELDS: { key: keyof CreatorState['personality']; label: string; placeholder: string }[] = [
@@ -20,20 +22,27 @@ export function IdentityStep() {
   const setPersonality = (key: keyof CreatorState['personality'], value: string) => (creator.value = { ...creator.value, personality: { ...creator.value.personality, [key]: value } });
 
   const suggest = async () => {
+    const summary = {
+      name: s.name,
+      species: db.species.get(s.speciesId ?? '')?.name ?? 'Human',
+      className: db.classes.get(s.classId ?? '')?.name ?? 'Adventurer',
+      background: db.backgrounds.get(s.backgroundId ?? '')?.name ?? 'Wanderer',
+      homeland: 'Millbrook, a village in Aurelmark',
+      ...s.personality,
+    };
+    if (WEB_EDITION) {
+      // No AI in the web edition: the same template story the server falls back to.
+      setPersonality('backstory', templateBackstory(summary));
+      setNote('A starting point: edit it freely.');
+      return;
+    }
     setBusy(true);
     setNote('');
     try {
       const res = await fetch('/api/llm/backstory', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          name: s.name,
-          species: db.species.get(s.speciesId ?? '')?.name ?? 'Human',
-          className: db.classes.get(s.classId ?? '')?.name ?? 'Adventurer',
-          background: db.backgrounds.get(s.backgroundId ?? '')?.name ?? 'Wanderer',
-          homeland: 'Millbrook, a village in Aurelmark',
-          ...s.personality,
-        }),
+        body: JSON.stringify(summary),
       });
       const data = (await res.json()) as { text: string; source: string };
       setPersonality('backstory', data.text);

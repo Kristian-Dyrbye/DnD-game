@@ -1,11 +1,13 @@
 /** Cached glTF loading for the client (models are served by the game server at /assets/models/). */
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import type { Outfit } from '../../engine/appearance/appearance';
+import { assetUrl } from '../edition';
 
 const loader = new GLTFLoader();
 const cache = new Map<string, Promise<GLTF>>();
 
-export function loadGltf(url: string): Promise<GLTF> {
+export function loadGltf(path: string): Promise<GLTF> {
+  const url = assetUrl(path);
   let p = cache.get(url);
   if (!p) {
     p = loader.loadAsync(url);

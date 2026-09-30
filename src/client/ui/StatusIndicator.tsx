@@ -1,5 +1,6 @@
-/** Small corner indicator: AI service, narration voice and free RAM. Polls /api/status. */
+/** Small corner indicator: AI service, narration voice and free RAM. Polls /api/status (web edition: tab memory only). */
 import { useEffect, useState } from 'preact/hooks';
+import { WEB_EDITION } from '../edition';
 import {
   llmIndicator,
   memoryIndicator,
@@ -11,6 +12,25 @@ import {
 const POLL_MS = 10_000;
 
 export function StatusIndicator() {
+  return WEB_EDITION ? <WebStatus /> : <ServerStatus />;
+}
+
+/** Web edition: no server, AI or Piper to watch; only the tab's own memory (Chromium). */
+function WebStatus() {
+  const [mb, setMb] = useState(tabHeapMB());
+  useEffect(() => {
+    const id = setInterval(() => setMb(tabHeapMB()), POLL_MS);
+    return () => clearInterval(id);
+  }, []);
+  if (mb === undefined) return null;
+  return (
+    <div class="status-indicator">
+      <Light ind={tabIndicator(mb)} />
+    </div>
+  );
+}
+
+function ServerStatus() {
   const [status, setStatus] = useState<SystemStatus | null>(null);
   const [ttsEnabled, setTtsEnabled] = useState(true);
   const [serverDown, setServerDown] = useState(false);

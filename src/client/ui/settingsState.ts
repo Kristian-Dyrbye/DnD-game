@@ -72,6 +72,7 @@ function applyAudioSettings(s: Settings): void {
   audio.setVolumes(s.audio);
   ttsPlayer.setVolume(s.audio.master * s.audio.narration);
   ttsPlayer.setEnabled(s.tts.enabled);
+  ttsPlayer.setVoice(s.tts.browserVoice);
   applyAccessibility(s);
 }
 

@@ -6,13 +6,14 @@
  */
 import manifest from '../../../assets/audio-manifest.json';
 import type { Ambience, Mood } from '../../engine/world/mood';
+import { assetUrl } from '../edition';
 import { channelVolume, pickVariant, type Volumes } from './audioLogic';
 
 type Track = { file: string; loop: boolean; title: string };
 const MOODS = manifest.moods as unknown as Record<string, Track[]>;
 const AMBIENCE = manifest.ambience as unknown as Record<string, Track[]>;
 const SFX = manifest.sfx as unknown as Record<string, string[]>;
-const BASE = '/assets/audio/';
+const BASE = assetUrl('/assets/audio/');
 const FADE_MS = 1500;
 
 export class AudioManager {
