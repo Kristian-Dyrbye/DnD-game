@@ -1,6 +1,6 @@
 @echo off
 setlocal EnableDelayedExpansion
-title Solo D&D Build Loop
+title Solo DnD Build Loop
 cd /d "%~dp0"
 
 REM ============ SETTINGS ============
