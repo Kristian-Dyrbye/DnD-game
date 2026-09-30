@@ -1,0 +1,73 @@
+{
+  "$source": "data/srd/feats.json",
+  "strings": {
+    "alert": {
+      "hash": "5d7eca99",
+      "text": "Årvågen"
+    },
+    "magic_initiate": {
+      "hash": "3228659f",
+      "text": "Magisk indviet"
+    },
+    "savage_attacker": {
+      "hash": "278564df",
+      "text": "Vild angriber"
+    },
+    "skilled": {
+      "hash": "8f891457",
+      "text": "Dygtig"
+    },
+    "ability_score_improvement": {
+      "hash": "3f612757",
+      "text": "Forbedring af evneværdi"
+    },
+    "grappler": {
+      "hash": "d0f79ac2",
+      "text": "Bryder"
+    },
+    "archery": {
+      "hash": "a0543ec1",
+      "text": "Bueskydning"
+    },
+    "defense": {
+      "hash": "fcbb60f3",
+      "text": "Forsvar"
+    },
+    "great_weapon_fighting": {
+      "hash": "588302b0",
+      "text": "Kamp med store våben"
+    },
+    "two_weapon_fighting": {
+      "hash": "6395c992",
+      "text": "Kamp med to våben"
+    },
+    "boon_of_combat_prowess": {
+      "hash": "e4336fa1",
+      "text": "Gave: kampdygtighed"
+    },
+    "boon_of_dimensional_travel": {
+      "hash": "bcf9ed4f",
+      "text": "Gave: dimensionsrejse"
+    },
+    "boon_of_fate": {
+      "hash": "fadabaae",
+      "text": "Gave: skæbne"
+    },
+    "boon_of_irresistible_offense": {
+      "hash": "53c40ecf",
+      "text": "Gave: uimodståeligt angreb"
+    },
+    "boon_of_spell_recall": {
+      "hash": "f867254b",
+      "text": "Gave: besværgelseshukommelse"
+    },
+    "boon_of_the_night_spirit": {
+      "hash": "7a466c9a",
+      "text": "Gave: nattens ånd"
+    },
+    "boon_of_truesight": {
+      "hash": "459134b9",
+      "text": "Gave: sandsyn"
+    }
+  }
+}

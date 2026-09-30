@@ -76,7 +76,7 @@ describe('class feature texts (A141h)', () => {
     const zombies = [monster('zombie', 'z1', 'Zombie'), monster('zombie', 'z2', 'Zombie 2')];
     const turn = useFeatureAction(c, db, 'turn_undead', { rng: fixed(1, 1, 3, 3), targets: zombies, msgs: da });
     expect(turn.log[0]).toMatch(/^Brenna løfter sit hellige symbol: Turn Undead \(SG \d+\)\.$/);
-    expect(turn.log.some((l) => l.includes('Wisdom-redningsslag'))).toBe(true);
+    expect(turn.log.some((l) => l.includes('Visdom-redningsslag'))).toBe(true);
     expect(turn.log.some((l) => l.endsWith('er drevet bort i 1 minut.'))).toBe(true);
     const spark = useFeatureAction(c, db, 'divine_spark', { rng: fixed(5, 5), target: zombies[0]!, msgs: da });
     expect(spark.log[0]).toBe('Brenna kanaliserer en Divine Spark.');

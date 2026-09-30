@@ -4,6 +4,7 @@ import { db } from '../../data';
 import { t } from '../i18n';
 import { creator } from './creatorState';
 import { firstSentence } from '../text';
+import { srdText } from '../srdText';
 
 const cap = (s: string) => s[0]!.toUpperCase() + s.slice(1);
 const sizeName = (z: string) => (z === 'small' ? t('creator.size.small') : z === 'medium' ? t('creator.size.medium') : cap(z));
@@ -24,7 +25,7 @@ export function SpeciesStep() {
             aria-pressed={s.speciesId === sp.id}
             onClick={() => (creator.value = chooseSpecies(creator.value, sp.id))}
           >
-            <h3>{sp.name}</h3>
+            <h3>{srdText('species', sp.id, sp.name)}</h3>
             <dl class="card-stats">
               <dt>{t('creator.species.size')}</dt>
               <dd>{sp.sizes.map(sizeName).join(t('creator.or'))}</dd>

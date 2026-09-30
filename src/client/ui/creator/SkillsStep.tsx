@@ -1,12 +1,13 @@
 /** Creator step 5a: skills (class picks, species picks, Human feat) and the class's level-1 options. */
 import { choiceValues, creationChoices, setChoiceValues } from '../../../engine/character/creator';
-import { SKILLS, SKILL_ABILITY, SKILL_NAMES, ABILITY_NAMES, type Skill } from '../../../engine/rules/basics';
+import { SKILLS, SKILL_ABILITY, type Skill } from '../../../engine/rules/basics';
 import { db } from '../../data';
 import { currentTranslator, t } from '../i18n';
 import { creator } from './creatorState';
 import { PickList } from './PickList';
+import { srdText, abilityAbbr, skillText } from '../srdText';
 
-const skillLabel = (k: Skill) => `${SKILL_NAMES[k]} (${ABILITY_NAMES[SKILL_ABILITY[k]].slice(0, 3)})`;
+const skillLabel = (k: Skill) => `${skillText(k)} (${abilityAbbr(SKILL_ABILITY[k])})`;
 
 export function SkillsStep() {
   const s = creator.value;
@@ -21,9 +22,9 @@ export function SkillsStep() {
   return (
     <section>
       <h2>{t('creator.skills.title')}</h2>
-      <p class="hint">{t('creator.skills.hint', { skills: bg.skills.map((k) => SKILL_NAMES[k]).join(t('creator.and')) })}</p>
+      <p class="hint">{t('creator.skills.hint', { skills: bg.skills.map((k) => skillText(k)).join(t('creator.and')) })}</p>
       <PickList
-        title={t('creator.skills.classSkills', { name: cls.name })}
+        title={t('creator.skills.classSkills', { name: srdText('classes', cls.id, cls.name) })}
         count={cls.skillChoices.count}
         options={classOptions}
         selected={s.classSkills}

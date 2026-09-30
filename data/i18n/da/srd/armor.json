@@ -1,0 +1,57 @@
+{
+  "$source": "data/srd/armor.json",
+  "strings": {
+    "padded_armor": {
+      "hash": "794bdb88",
+      "text": "Vattert rustning"
+    },
+    "leather_armor": {
+      "hash": "e494dc79",
+      "text": "Læderrustning"
+    },
+    "studded_leather_armor": {
+      "hash": "d36c06ea",
+      "text": "Nittet læderrustning"
+    },
+    "hide_armor": {
+      "hash": "5d08425e",
+      "text": "Skindrustning"
+    },
+    "chain_shirt": {
+      "hash": "42da47ee",
+      "text": "Ringbrynjeskjorte"
+    },
+    "scale_mail": {
+      "hash": "43fb1fcc",
+      "text": "Skælbrynje"
+    },
+    "breastplate": {
+      "hash": "dacc2c58",
+      "text": "Brystplade"
+    },
+    "half_plate_armor": {
+      "hash": "cf1c5ddf",
+      "text": "Halv pladerustning"
+    },
+    "ring_mail": {
+      "hash": "81c6e09a",
+      "text": "Ringrustning"
+    },
+    "chain_mail": {
+      "hash": "c48397b1",
+      "text": "Ringbrynje"
+    },
+    "splint_armor": {
+      "hash": "c57f084c",
+      "text": "Skinnerustning"
+    },
+    "plate_armor": {
+      "hash": "11f6a8b0",
+      "text": "Pladerustning"
+    },
+    "shield": {
+      "hash": "798a26d0",
+      "text": "Skjold"
+    }
+  }
+}

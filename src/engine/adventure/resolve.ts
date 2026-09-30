@@ -3,7 +3,8 @@
  * first, SRD DC guidance for improvised attempts) → seeded roll → state change → fixed facts for
  * the narrator. The LLM never decides success; it only narrates the facts produced here.
  */
-import { SKILL_NAMES, type Skill } from '../rules/basics';
+import type { Skill } from '../rules/basics';
+import { skillName } from '../i18n/srdNames';
 import { skillCheck } from '../rules/checks';
 import type { ValidatedIntent } from './intent';
 import { availableActions, currentScene, getProgress, npcsHere, perform, type RunContext, type StepResult } from './runner';
@@ -90,13 +91,13 @@ function improvise(ctx: RunContext, skill: Skill, targetId: string | undefined, 
   const p = getProgress(ctx.state)!;
   const key = `${p.sceneId}/improv:${skill}:${targetId ?? '-'}:${p.entries ?? 0}`;
   if (p.done.includes(key)) {
-    return { result: { ...empty(), facts: [m('resolve.alreadyTried', { skill: SKILL_NAMES[skill] })] }, via: 'already_tried', playerAction: text };
+    return { result: { ...empty(), facts: [m('resolve.alreadyTried', { skill: skillName((ctx.msgs ?? ENGLISH_MESSAGES).lang, skill) })] }, via: 'already_tried', playerAction: text };
   }
   p.done.push(key);
   ctx.state.time += TIME_COSTS.quick_action;
   const dc = improvisedDc(ctx);
   const roll = skillCheck(ctx.state.hero, skill, { rng: ctx.rng, dc, ...(ctx.msgs && { msgs: ctx.msgs }) });
-  const what = SKILL_NAMES[skill];
+  const what = skillName((ctx.msgs ?? ENGLISH_MESSAGES).lang, skill);
   const fact = m(roll.success ? 'resolve.improvSuccess' : 'resolve.improvFail', { skill: what });
   return { result: { ...empty(), rolls: [roll], facts: [fact] }, via: 'improvised_check', playerAction: text };
 }

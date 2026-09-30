@@ -1,0 +1,53 @@
+{
+  "$source": "data/srd/classes.json",
+  "strings": {
+    "barbarian": {
+      "hash": "1669e561",
+      "text": "Barbar"
+    },
+    "bard": {
+      "hash": "c7ba247a",
+      "text": "Barde"
+    },
+    "cleric": {
+      "hash": "1c88877d",
+      "text": "Præst"
+    },
+    "druid": {
+      "hash": "60a1b4bf",
+      "text": "Druide"
+    },
+    "fighter": {
+      "hash": "aa09eb22",
+      "text": "Kriger"
+    },
+    "monk": {
+      "hash": "55667f3e",
+      "text": "Munk"
+    },
+    "paladin": {
+      "hash": "66e148fc",
+      "text": "Paladin"
+    },
+    "ranger": {
+      "hash": "b52ea500",
+      "text": "Skovløber"
+    },
+    "rogue": {
+      "hash": "4efd5a0d",
+      "text": "Skælm"
+    },
+    "sorcerer": {
+      "hash": "940d3d80",
+      "text": "Troldmand"
+    },
+    "warlock": {
+      "hash": "2e7326a2",
+      "text": "Heksemester"
+    },
+    "wizard": {
+      "hash": "42181c2a",
+      "text": "Magiker"
+    }
+  }
+}

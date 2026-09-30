@@ -6,6 +6,7 @@ import { db } from '../../data';
 import { coins, t } from '../i18n';
 import { creator } from './creatorState';
 import { itemDisplayName } from '../text';
+import { srdText } from '../srdText';
 
 type Pkg = ClassData['startingEquipment'][number];
 
@@ -46,7 +47,7 @@ export function EquipmentStep() {
       <h2>{t('creator.equipment.title')}</h2>
       <p class="hint">{t('creator.equipment.hint')}</p>
       <fieldset>
-        <legend>{t('creator.equipment.of', { name: cls.name })}</legend>
+        <legend>{t('creator.equipment.of', { name: srdText('classes', cls.id, cls.name) })}</legend>
         {cls.startingEquipment.map((pkg, i) => (
           <label key={i} class={`package${s.classEquipment === i ? ' selected' : ''}`}>
             <input type="radio" name="class-equipment" checked={s.classEquipment === i} onChange={() => update({ classEquipment: i })} />
@@ -55,7 +56,7 @@ export function EquipmentStep() {
         ))}
       </fieldset>
       <fieldset>
-        <legend>{t('creator.equipment.of', { name: bg.name })}</legend>
+        <legend>{t('creator.equipment.of', { name: srdText('backgrounds', bg.id, bg.name) })}</legend>
         {(['a', 'b'] as const).map((k) => (
           <label key={k} class={`package${s.backgroundEquipment === k ? ' selected' : ''}`}>
             <input type="radio" name="bg-equipment" checked={s.backgroundEquipment === k} onChange={() => update({ backgroundEquipment: k })} />

@@ -1,0 +1,361 @@
+{
+  "$source": "src/engine/rules/basics.ts",
+  "strings": {
+    "ability/str": {
+      "hash": "da4d03d0",
+      "text": "Styrke"
+    },
+    "ability/dex": {
+      "hash": "43a80f2f",
+      "text": "Behændighed"
+    },
+    "ability/con": {
+      "hash": "dcbee1c6",
+      "text": "Konstitution"
+    },
+    "ability/int": {
+      "hash": "ae1e75e2",
+      "text": "Intelligens"
+    },
+    "ability/wis": {
+      "hash": "7421f406",
+      "text": "Visdom"
+    },
+    "ability/cha": {
+      "hash": "32eb1663",
+      "text": "Karisma"
+    },
+    "ability_short/str": {
+      "hash": "24d66930",
+      "text": "Sty"
+    },
+    "ability_short/dex": {
+      "hash": "405ea1ce",
+      "text": "Beh"
+    },
+    "ability_short/con": {
+      "hash": "531868eb",
+      "text": "Kon"
+    },
+    "ability_short/int": {
+      "hash": "f87415fe",
+      "text": "Int"
+    },
+    "ability_short/wis": {
+      "hash": "89828d7a",
+      "text": "Vis"
+    },
+    "ability_short/cha": {
+      "hash": "60102e9d",
+      "text": "Kar"
+    },
+    "skill/acrobatics": {
+      "hash": "e1286cde",
+      "text": "Akrobatik"
+    },
+    "skill/animal_handling": {
+      "hash": "41eb0b1a",
+      "text": "Dyrehåndtering"
+    },
+    "skill/arcana": {
+      "hash": "876f1c33",
+      "text": "Arkana"
+    },
+    "skill/athletics": {
+      "hash": "f258c9e2",
+      "text": "Atletik"
+    },
+    "skill/deception": {
+      "hash": "08bab228",
+      "text": "Bedrag"
+    },
+    "skill/history": {
+      "hash": "7d96597f",
+      "text": "Historie"
+    },
+    "skill/insight": {
+      "hash": "260e170b",
+      "text": "Indsigt"
+    },
+    "skill/intimidation": {
+      "hash": "61db5b3e",
+      "text": "Intimidering"
+    },
+    "skill/investigation": {
+      "hash": "6b4da599",
+      "text": "Undersøgelse"
+    },
+    "skill/medicine": {
+      "hash": "985d873d",
+      "text": "Lægekunst"
+    },
+    "skill/nature": {
+      "hash": "18aa5caa",
+      "text": "Natur"
+    },
+    "skill/perception": {
+      "hash": "fdfe3e9a",
+      "text": "Opmærksomhed"
+    },
+    "skill/performance": {
+      "hash": "8f517045",
+      "text": "Optræden"
+    },
+    "skill/persuasion": {
+      "hash": "522116c6",
+      "text": "Overtalelse"
+    },
+    "skill/religion": {
+      "hash": "fce42ac6",
+      "text": "Religion"
+    },
+    "skill/sleight_of_hand": {
+      "hash": "485faee3",
+      "text": "Fingerfærdighed"
+    },
+    "skill/stealth": {
+      "hash": "96b60c1c",
+      "text": "Snigen"
+    },
+    "skill/survival": {
+      "hash": "c06582cf",
+      "text": "Overlevelse"
+    },
+    "damage/acid": {
+      "hash": "d532cfc8",
+      "text": "Syre"
+    },
+    "damage/bludgeoning": {
+      "hash": "a5de7e79",
+      "text": "Knusende"
+    },
+    "damage/cold": {
+      "hash": "6a72bc2f",
+      "text": "Kulde"
+    },
+    "damage/fire": {
+      "hash": "0ed762f9",
+      "text": "Ild"
+    },
+    "damage/force": {
+      "hash": "1f64fa24",
+      "text": "Kraft"
+    },
+    "damage/lightning": {
+      "hash": "6299d5a5",
+      "text": "Lyn"
+    },
+    "damage/necrotic": {
+      "hash": "e9266aaa",
+      "text": "Nekrotisk"
+    },
+    "damage/piercing": {
+      "hash": "0fbc95ae",
+      "text": "Gennemborende"
+    },
+    "damage/poison": {
+      "hash": "bc3e60d1",
+      "text": "Gift"
+    },
+    "damage/psychic": {
+      "hash": "5afb5544",
+      "text": "Psykisk"
+    },
+    "damage/radiant": {
+      "hash": "e5ccaf14",
+      "text": "Strålende"
+    },
+    "damage/slashing": {
+      "hash": "380aa9f6",
+      "text": "Huggende"
+    },
+    "damage/thunder": {
+      "hash": "f280d631",
+      "text": "Torden"
+    },
+    "creature_type/aberration": {
+      "hash": "d7b640e6",
+      "text": "Aberration"
+    },
+    "creature_type/beast": {
+      "hash": "b2861bfc",
+      "text": "Dyr"
+    },
+    "creature_type/celestial": {
+      "hash": "a2bc7ce1",
+      "text": "Himmelsk væsen"
+    },
+    "creature_type/construct": {
+      "hash": "67c9e312",
+      "text": "Konstrukt"
+    },
+    "creature_type/dragon": {
+      "hash": "cc1ebe3e",
+      "text": "Drage"
+    },
+    "creature_type/elemental": {
+      "hash": "00b6576a",
+      "text": "Elementarvæsen"
+    },
+    "creature_type/fey": {
+      "hash": "1e8d3d57",
+      "text": "Alfevæsen"
+    },
+    "creature_type/fiend": {
+      "hash": "03b3acf5",
+      "text": "Djævlevæsen"
+    },
+    "creature_type/giant": {
+      "hash": "9ec277ee",
+      "text": "Kæmpe"
+    },
+    "creature_type/humanoid": {
+      "hash": "3b302062",
+      "text": "Humanoid"
+    },
+    "creature_type/monstrosity": {
+      "hash": "6377010e",
+      "text": "Uhyre"
+    },
+    "creature_type/ooze": {
+      "hash": "a4a694ba",
+      "text": "Slimvæsen"
+    },
+    "creature_type/plant": {
+      "hash": "8dc56832",
+      "text": "Plante"
+    },
+    "creature_type/undead": {
+      "hash": "b21753a0",
+      "text": "Udød"
+    },
+    "size/tiny": {
+      "hash": "e3dc9b8b",
+      "text": "Lillebitte"
+    },
+    "size/small": {
+      "hash": "4880662c",
+      "text": "Lille"
+    },
+    "size/medium": {
+      "hash": "09be5f96",
+      "text": "Mellem"
+    },
+    "size/large": {
+      "hash": "f18b9f54",
+      "text": "Stor"
+    },
+    "size/huge": {
+      "hash": "e7baf382",
+      "text": "Kæmpestor"
+    },
+    "size/gargantuan": {
+      "hash": "b62b7889",
+      "text": "Enorm"
+    },
+    "school/abjuration": {
+      "hash": "c80cde0c",
+      "text": "Afværgelse"
+    },
+    "school/conjuration": {
+      "hash": "4191742d",
+      "text": "Fremmanelse"
+    },
+    "school/divination": {
+      "hash": "b561fc6c",
+      "text": "Spådom"
+    },
+    "school/enchantment": {
+      "hash": "007d2482",
+      "text": "Fortryllelse"
+    },
+    "school/evocation": {
+      "hash": "85ade249",
+      "text": "Påkaldelse"
+    },
+    "school/illusion": {
+      "hash": "5ec0d2ee",
+      "text": "Illusion"
+    },
+    "school/necromancy": {
+      "hash": "d69b3bc6",
+      "text": "Nekromanti"
+    },
+    "school/transmutation": {
+      "hash": "fbdf8f4e",
+      "text": "Forvandling"
+    },
+    "mastery/cleave": {
+      "hash": "177d98e9",
+      "text": "Kløv"
+    },
+    "mastery/graze": {
+      "hash": "364241e6",
+      "text": "Strejf"
+    },
+    "mastery/nick": {
+      "hash": "985f8a8e",
+      "text": "Snit"
+    },
+    "mastery/push": {
+      "hash": "f0c9fffd",
+      "text": "Skub"
+    },
+    "mastery/sap": {
+      "hash": "34a7242b",
+      "text": "Svæk"
+    },
+    "mastery/slow": {
+      "hash": "edc18ed8",
+      "text": "Sænk"
+    },
+    "mastery/topple": {
+      "hash": "93ae34a7",
+      "text": "Vælt"
+    },
+    "mastery/vex": {
+      "hash": "eabb0994",
+      "text": "Drille"
+    },
+    "property/ammunition": {
+      "hash": "da36dfca",
+      "text": "Ammunition"
+    },
+    "property/finesse": {
+      "hash": "490e3daa",
+      "text": "Finesse"
+    },
+    "property/heavy": {
+      "hash": "b9d577e0",
+      "text": "Tung"
+    },
+    "property/light": {
+      "hash": "8ad2f8cf",
+      "text": "Let"
+    },
+    "property/loading": {
+      "hash": "53af8357",
+      "text": "Ladning"
+    },
+    "property/range": {
+      "hash": "a311e772",
+      "text": "Rækkevidde"
+    },
+    "property/reach": {
+      "hash": "f2b8c218",
+      "text": "Lang rækkevidde"
+    },
+    "property/thrown": {
+      "hash": "52b5a273",
+      "text": "Kastevåben"
+    },
+    "property/two_handed": {
+      "hash": "a2457234",
+      "text": "Tohånds"
+    },
+    "property/versatile": {
+      "hash": "61784262",
+      "text": "Alsidig"
+    }
+  }
+}

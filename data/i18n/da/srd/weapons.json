@@ -1,0 +1,157 @@
+{
+  "$source": "data/srd/weapons.json",
+  "strings": {
+    "club": {
+      "hash": "ed3376ad",
+      "text": "Kølle"
+    },
+    "dagger": {
+      "hash": "6d980fdb",
+      "text": "Dolk"
+    },
+    "greatclub": {
+      "hash": "4186f77a",
+      "text": "Storkølle"
+    },
+    "handaxe": {
+      "hash": "67423d5c",
+      "text": "Håndøkse"
+    },
+    "javelin": {
+      "hash": "70ef4c74",
+      "text": "Kastespyd"
+    },
+    "light_hammer": {
+      "hash": "ffd952ef",
+      "text": "Let hammer"
+    },
+    "mace": {
+      "hash": "387f5c57",
+      "text": "Stridskølle"
+    },
+    "quarterstaff": {
+      "hash": "3c4c4df3",
+      "text": "Stav"
+    },
+    "sickle": {
+      "hash": "ba62e21c",
+      "text": "Segl"
+    },
+    "spear": {
+      "hash": "286121fe",
+      "text": "Spyd"
+    },
+    "dart": {
+      "hash": "56571b28",
+      "text": "Kastepil"
+    },
+    "light_crossbow": {
+      "hash": "021d1ea9",
+      "text": "Let armbrøst"
+    },
+    "shortbow": {
+      "hash": "159ccf9b",
+      "text": "Kortbue"
+    },
+    "sling": {
+      "hash": "1db8e536",
+      "text": "Slynge"
+    },
+    "battleaxe": {
+      "hash": "9a035871",
+      "text": "Stridsøkse"
+    },
+    "flail": {
+      "hash": "550b04cf",
+      "text": "Plejl"
+    },
+    "glaive": {
+      "hash": "8291c711",
+      "text": "Glavind"
+    },
+    "greataxe": {
+      "hash": "93b5e68e",
+      "text": "Storøkse"
+    },
+    "greatsword": {
+      "hash": "7fa6030b",
+      "text": "Tohåndssværd"
+    },
+    "halberd": {
+      "hash": "0a3b2fb1",
+      "text": "Hellebard"
+    },
+    "lance": {
+      "hash": "866d8aa4",
+      "text": "Lanse"
+    },
+    "longsword": {
+      "hash": "0b84eb30",
+      "text": "Langsværd"
+    },
+    "maul": {
+      "hash": "33674f92",
+      "text": "Forhammer"
+    },
+    "morningstar": {
+      "hash": "d6b62f53",
+      "text": "Morgenstjerne"
+    },
+    "pike": {
+      "hash": "91afbe3a",
+      "text": "Pike"
+    },
+    "rapier": {
+      "hash": "1c40b56c",
+      "text": "Kårde"
+    },
+    "scimitar": {
+      "hash": "ae8d731f",
+      "text": "Krumsabel"
+    },
+    "shortsword": {
+      "hash": "bacf3d86",
+      "text": "Kortsværd"
+    },
+    "trident": {
+      "hash": "8597c99b",
+      "text": "Trefork"
+    },
+    "warhammer": {
+      "hash": "a9d50927",
+      "text": "Stridshammer"
+    },
+    "war_pick": {
+      "hash": "484d9e72",
+      "text": "Stridshakke"
+    },
+    "whip": {
+      "hash": "1401d47b",
+      "text": "Pisk"
+    },
+    "blowgun": {
+      "hash": "c0f673d1",
+      "text": "Blæserør"
+    },
+    "hand_crossbow": {
+      "hash": "3962b7bc",
+      "text": "Håndarmbrøst"
+    },
+    "heavy_crossbow": {
+      "hash": "93242f1c",
+      "text": "Tung armbrøst"
+    },
+    "longbow": {
+      "hash": "3cd129c9",
+      "text": "Langbue"
+    },
+    "musket": {
+      "hash": "d7b255bc",
+      "text": "Musket"
+    },
+    "pistol": {
+      "hash": "2b9d7f76",
+      "text": "Pistol"
+    }
+  }
+}

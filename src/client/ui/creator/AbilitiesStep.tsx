@@ -15,10 +15,11 @@ import {
 } from '../../../engine/character/abilityScores';
 import type { AbilityMethod, CreatorState } from '../../../engine/character/creator';
 import { Rng } from '../../../engine/core/rng';
-import { ABILITIES, ABILITY_NAMES, abilityModifier, formatModifier, type Ability } from '../../../engine/rules/basics';
+import { ABILITIES, abilityModifier, formatModifier, type Ability } from '../../../engine/rules/basics';
 import { db } from '../../data';
 import { t } from '../i18n';
 import { creator } from './creatorState';
+import { srdText, abilityText } from '../srdText';
 
 const METHODS: AbilityMethod[] = ['standard_array', 'point_buy', 'roll'];
 
@@ -49,7 +50,7 @@ function AssignSelect({ ability, pool }: { ability: Ability; pool: number[] }) {
   const value = s.baseScores[ability];
   return (
     <select
-      aria-label={t('creator.abilities.scoreAria', { ability: ABILITY_NAMES[ability] })}
+      aria-label={t('creator.abilities.scoreAria', { ability: abilityText(ability) })}
       value={value ?? ''}
       onChange={(e) => {
         const v = (e.target as HTMLSelectElement).value;
@@ -170,17 +171,17 @@ export function AbilitiesStep() {
               return (
                 <tr key={a} class={cls?.primaryAbilities.includes(a) ? 'primary-ability' : ''}>
                   <th scope="row">
-                    {ABILITY_NAMES[a]}
+                    {abilityText(a)}
                     {cls?.primaryAbilities.includes(a) && <span class="tag tag-primary">{t('creator.abilities.primary')}</span>}
                   </th>
                   <td>
                     {s.abilityMethod === 'point_buy' ? (
                       <span class="stepper">
-                        <button type="button" aria-label={t('creator.abilities.lowerAria', { ability: ABILITY_NAMES[a] })} disabled={!canAdjustPointBuy(s.baseScores, a, -1)} onClick={() => update({ baseScores: { ...s.baseScores, [a]: (base ?? 8) - 1 } })}>
+                        <button type="button" aria-label={t('creator.abilities.lowerAria', { ability: abilityText(a) })} disabled={!canAdjustPointBuy(s.baseScores, a, -1)} onClick={() => update({ baseScores: { ...s.baseScores, [a]: (base ?? 8) - 1 } })}>
                           −
                         </button>
                         <span class="stepper-value">{base ?? 8}</span>
-                        <button type="button" aria-label={t('creator.abilities.raiseAria', { ability: ABILITY_NAMES[a] })} disabled={!canAdjustPointBuy(s.baseScores, a, 1)} onClick={() => update({ baseScores: { ...s.baseScores, [a]: (base ?? 8) + 1 } })}>
+                        <button type="button" aria-label={t('creator.abilities.raiseAria', { ability: abilityText(a) })} disabled={!canAdjustPointBuy(s.baseScores, a, 1)} onClick={() => update({ baseScores: { ...s.baseScores, [a]: (base ?? 8) + 1 } })}>
                           +
                         </button>
                       </span>
@@ -190,7 +191,7 @@ export function AbilitiesStep() {
                   </td>
                   <td>
                     {allowed ? (
-                      <span class="bonus-buttons" role="group" aria-label={t('creator.abilities.bonusAria', { ability: ABILITY_NAMES[a] })}>
+                      <span class="bonus-buttons" role="group" aria-label={t('creator.abilities.bonusAria', { ability: abilityText(a) })}>
                         {[0, 1, 2].map((v) => (
                           <button key={v} type="button" class={bonus === v ? 'selected' : ''} aria-pressed={bonus === v} onClick={() => setBonus(a, v)} disabled={v > 0 && bonus !== v && bonusTotal - bonus + v > 3}>
                             {v ? `+${v}` : '0'}
@@ -214,12 +215,12 @@ export function AbilitiesStep() {
         <div class="quick-actions">
           {s.abilityMethod !== 'point_buy' && pool.length === 6 && (
             <button type="button" onClick={() => update({ baseScores: suggestAssignment(pool, cls.primaryAbilities) })}>
-              {t('creator.abilities.suggest', { name: cls.name })}
+              {t('creator.abilities.suggest', { name: srdText('classes', cls.id, cls.name) })}
             </button>
           )}
           {s.abilityMethod === 'point_buy' && (
             <button type="button" onClick={() => update({ baseScores: suggestAssignment([15, 15, 15, 8, 8, 8], cls.primaryAbilities) })}>
-              {t('creator.abilities.suggest', { name: cls.name })}
+              {t('creator.abilities.suggest', { name: srdText('classes', cls.id, cls.name) })}
             </button>
           )}
           {bg && (

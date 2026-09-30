@@ -2,11 +2,11 @@
 import { chooseClass } from '../../../engine/character/creator';
 import { quickBuild } from '../../../engine/character/quickBuild';
 import { Rng } from '../../../engine/core/rng';
-import { ABILITY_NAMES } from '../../../engine/rules/basics';
 import { db } from '../../data';
 import { t } from '../i18n';
 import { creator } from './creatorState';
 import { CLASS_INFO, classText } from './classInfo';
+import { srdText, abilityText } from '../srdText';
 
 const ARMOR_KEYS = { light: 'creator.armor.light', medium: 'creator.armor.medium', heavy: 'creator.armor.heavy', shield: 'creator.armor.shield' } as const;
 
@@ -20,7 +20,7 @@ export function ClassStep() {
       {selected && (
         <p class="quick-build">
           <button type="button" onClick={() => (creator.value = quickBuild(selected, db, Rng.fromSeed(`${Date.now()}`)))}>
-            {t('creator.class.quickBuild', { name: db.classes.get(selected)?.name ?? selected })}
+            {t('creator.class.quickBuild', { name: srdText('classes', selected, db.classes.get(selected)?.name ?? selected) })}
           </button>{' '}
           <span class="hint">{t('creator.class.quickBuildHint')}</span>
         </p>
@@ -38,7 +38,7 @@ export function ClassStep() {
               onClick={() => (creator.value = chooseClass(creator.value, c.id))}
             >
               <div class="card-head">
-                <h3>{c.name}</h3>
+                <h3>{srdText('classes', c.id, c.name)}</h3>
                 {c.beginnerFriendly && <span class="tag tag-beginner">{t('creator.class.beginner')}</span>}
               </div>
               {info && <p class="card-role">{classText(c.id, 'role')}</p>}
@@ -47,7 +47,7 @@ export function ClassStep() {
                 <dt>{t('creator.class.hitDie')}</dt>
                 <dd>{c.hitDie.toUpperCase()}</dd>
                 <dt>{t('creator.class.primary')}</dt>
-                <dd>{c.primaryAbilities.map((a) => ABILITY_NAMES[a]).join(c.multiclass.anyOf ? t('creator.or') : ' & ')}</dd>
+                <dd>{c.primaryAbilities.map((a) => abilityText(a)).join(c.multiclass.anyOf ? t('creator.or') : ' & ')}</dd>
                 <dt>{t('creator.class.armor')}</dt>
                 <dd>{armor}</dd>
                 <dt>{t('creator.class.magic')}</dt>

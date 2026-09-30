@@ -1,0 +1,65 @@
+{
+  "$source": "data/srd/conditions.json",
+  "strings": {
+    "blinded": {
+      "hash": "55532dc5",
+      "text": "Blændet"
+    },
+    "charmed": {
+      "hash": "a1f24af1",
+      "text": "Charmeret"
+    },
+    "deafened": {
+      "hash": "b4421f93",
+      "text": "Døvet"
+    },
+    "exhaustion": {
+      "hash": "d21c162d",
+      "text": "Udmattelse"
+    },
+    "frightened": {
+      "hash": "cb12c1e7",
+      "text": "Skræmt"
+    },
+    "grappled": {
+      "hash": "baf77820",
+      "text": "Grebet"
+    },
+    "incapacitated": {
+      "hash": "f97d1e8b",
+      "text": "Uarbejdsdygtig"
+    },
+    "invisible": {
+      "hash": "bab31830",
+      "text": "Usynlig"
+    },
+    "paralyzed": {
+      "hash": "e19fb9bb",
+      "text": "Lammet"
+    },
+    "petrified": {
+      "hash": "7bf6c7bf",
+      "text": "Forstenet"
+    },
+    "poisoned": {
+      "hash": "45133928",
+      "text": "Forgiftet"
+    },
+    "prone": {
+      "hash": "3fd41cc5",
+      "text": "Liggende"
+    },
+    "restrained": {
+      "hash": "07359b6c",
+      "text": "Fastholdt"
+    },
+    "stunned": {
+      "hash": "98510c44",
+      "text": "Lamslået"
+    },
+    "unconscious": {
+      "hash": "3c8978ec",
+      "text": "Bevidstløs"
+    }
+  }
+}

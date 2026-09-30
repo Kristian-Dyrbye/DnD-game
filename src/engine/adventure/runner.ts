@@ -31,6 +31,7 @@ import { changeReputation, type ReputationChange } from '../world/factions';
 import type { Lore } from '../world/lore';
 import { trackQuests } from './quests';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
+import { abilityShort, srdName } from '../i18n/srdNames';
 import { conversationFor, conversationOffers, LEAVE_TALK, openOptions, optionFor, speakerOf, talkDoneKey, talkNode, DIALOGUE_PREFIX, TALK_PREFIX, type TalkProgress } from './conversation';
 
 export interface AdventureProgress {
@@ -412,8 +413,11 @@ export function activeGroups<T extends { id: string; count: number; if?: Conditi
 
 export function checkLabel(c: Check, msgs: Messages = ENGLISH_MESSAGES): string {
   const { m } = msgs;
-  // Skill/ability names stay SRD English until A149.
-  const name = c.save ? m('check.save', { ability: cap(c.save) }) : c.skill ? cap(c.skill.replace(/_/g, ' ')) : m('check.ability', { ability: cap(c.ability ?? 'str') });
+  const name = c.save
+    ? m('check.save', { ability: abilityShort(msgs.lang, c.save) })
+    : c.skill
+      ? srdName(msgs.lang, 'rules', `skill/${c.skill}`, cap(c.skill.replace(/_/g, ' ')))
+      : m('check.ability', { ability: abilityShort(msgs.lang, c.ability ?? 'str') });
   const label = m('check.dc', { name, dc: c.dc });
   return c.group ? m('check.group', { name: label }) : label;
 }

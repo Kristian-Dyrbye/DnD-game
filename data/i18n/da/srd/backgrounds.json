@@ -1,0 +1,21 @@
+{
+  "$source": "data/srd/backgrounds.json",
+  "strings": {
+    "acolyte": {
+      "hash": "df015762",
+      "text": "Tempeltjener"
+    },
+    "criminal": {
+      "hash": "81098388",
+      "text": "Forbryder"
+    },
+    "sage": {
+      "hash": "5152348d",
+      "text": "Lærd"
+    },
+    "soldier": {
+      "hash": "cd778e55",
+      "text": "Soldat"
+    }
+  }
+}

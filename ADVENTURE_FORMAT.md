@@ -350,6 +350,7 @@ Adventures are written in English. A translation is an **overlay file**; it neve
   - `-- --lang=da -v` lists the paths.
   - `-- --lang=da --stub=<key>` adds every missing entry with the English text and `"todo": true`, and drops orphans. Todo entries count as missing and are ignored when loading. Translate the text, set `hash` if it was stale, and delete `todo`.
   - `-- --strict` exits with 1 if any existing overlay needs work.
+- **SRD rules names** (class, species, skill, condition, weapon… names; the rules texts stay English) use the same shape in `data/i18n/<lang>/srd/<kind>.json`, where the path is the SRD id (`fighter`, `elf/lineages/high_elf`) or `<group>/<id>` for rules words (`skill/stealth`, `ability_short/con`, `damage/fire`). The kinds are listed in `SRD_NAME_KINDS` (`src/engine/i18n/srdNames.ts`), and new files must be imported there. Stub with `--stub=srd/<kind>`. The engine reads them with `srdName`/`abilityName`/`skillName`, and the UI with `ui/srdText.ts`.
 - **Example:** `data/i18n/da/millbrook_demo.json` is a complete Danish overlay of the demo adventure. For Danish D&D terms, see `data/i18n/da/glossary.md`.
 
 ## Versioning

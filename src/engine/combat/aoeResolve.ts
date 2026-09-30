@@ -17,7 +17,8 @@ import type { Creature } from '../core/creature';
 import { formatD20Test, type Modifier } from '../core/dice';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { Damage } from '../data/common';
-import { ABILITY_NAMES, type Ability, type Condition } from '../rules/basics';
+import type { Ability, Condition } from '../rules/basics';
+import { abilityName } from '../i18n/srdNames';
 import type { D20TestResult } from '../rules/checks';
 import { applyCondition } from '../rules/conditions';
 import { rollDamage, type DamageRollResult } from '../rules/damage';
@@ -120,7 +121,7 @@ export function resolveAreaEffect(state: CombatState, ctx: CombatContext, o: Are
       }
       save = combatSave(next, ctx, id, o.save.ability, o.save.dc);
       if (cover !== 'none') save = addSaveBonus(save, { value: cover === 'half' ? 2 : 5, label: cover === 'half' ? 'Half Cover' : 'Three-Quarters Cover' }, ctx.msgs);
-      events.push({ kind: 'save', targetId: id, text: m('eff.save', { name: c.name, ability: ABILITY_NAMES[o.save.ability], roll: save.text }) });
+      events.push({ kind: 'save', targetId: id, text: m('eff.save', { name: c.name, ability: abilityName(msgs.lang, o.save.ability), roll: save.text }) });
     }
     const failed = !save || !save.success;
     let dealt = 0;

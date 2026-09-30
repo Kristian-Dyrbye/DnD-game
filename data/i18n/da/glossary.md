@@ -52,7 +52,7 @@ There is no official Danish D&D 5e. These are the game's own choices; use them i
 | Grapple / Shove | grib / skub | |
 | miles | engelske mil | a Danish "mil" is 7.5 km |
 | party | gruppe | |
-| Persuasion | Overtalelse | until A149 fixes all skill names |
+| Persuasion | Overtalelse | |
 | Ready (action) | hold klar | |
 | round / turn | runde / tur | |
 | scar | ar | |
@@ -60,7 +60,7 @@ There is no official Danish D&D 5e. These are the game's own choices; use them i
 | Study / Influence | undersøg / påvirk | |
 | short rest / long rest | kort hvil / langt hvil | |
 | safe house | skjulested | companions wait there |
-| unconscious (prose) | bevidstløs | condition names stay SRD English until A149 |
+| unconscious (prose) | bevidstløs | |
 | approves / disapproves | bifalder / misbilliger | companion approval lines |
 | Opportunity Attack | lejlighedsangreb | |
 | cover (half / three-quarters / total) | dække (halvt / trekvart / fuldt) | |
@@ -207,3 +207,19 @@ Gloamfen, Mireth, Cinderdale, Orrimar and person names stay English. Vosk addres
 | "partner", "boss" (Rook) / "little mushroom" (Wick) / "my dear" (Seraphine) | "makker", "chef" / "lille svamp" / "min kære" |
 | endings: Hungering Dawn / Pale Mother's Mercy / Hollow Throne / Dawn over Orrimar / A Quiet Hunger | Den Sultne Daggry / Den Blege Moders Nåde / Den Tomme Trone / Daggry over Orrimar / En Stille Sult |
 | "the Unkillable" | "den Udræbelige" |
+
+## SRD rules names (A149)
+Full lists in `data/i18n/da/srd/*.json`; the key choices:
+
+| English | Dansk |
+|---|---|
+| Str / Dex / Con / Int / Wis / Cha (short) | Sty / Beh / Kon / Int / Vis / Kar |
+| classes: Barbarian / Bard / Cleric / Druid / Fighter / Monk / Paladin / Ranger / Rogue / Sorcerer / Warlock / Wizard | Barbar / Barde / Præst / Druide / Kriger / Munk / Paladin / Skovløber / Skælm / Troldmand / Heksemester / Magiker |
+| Champion / Hunter / Thief / Evoker | Mester / Jæger / Tyv / Påkalder |
+| species: Dragonborn / Dwarf / Elf / Gnome / Goliath / Halfling / Human / Orc / Tiefling | Drageblod / Dværg / Elver / Gnom / Goliat / Halvling / Menneske / Ork / Tiefling |
+| backgrounds: Acolyte / Criminal / Sage / Soldier | Tempeltjener / Forbryder / Lærd / Soldat |
+| conditions: Blinded / Charmed / Frightened / Grappled / Incapacitated / Paralyzed / Poisoned / Prone / Restrained / Stunned / Unconscious | Blændet / Charmeret / Skræmt / Grebet / Uarbejdsdygtig / Lammet / Forgiftet / Liggende / Fastholdt / Lamslået / Bevidstløs |
+| damage: Bludgeoning / Piercing / Slashing / Force / Radiant / Necrotic | Knusende / Gennemborende / Huggende / Kraft / Strålende / Nekrotisk |
+| masteries: Cleave / Graze / Nick / Push / Sap / Slow / Topple / Vex | Kløv / Strejf / Snit / Skub / Svæk / Sænk / Vælt / Drille |
+| sizes: Tiny … Gargantuan | Lillebitte / Lille / Mellem / Stor / Kæmpestor / Enorm |
+| Proficiency / Half proficiency (modifier labels) | Kyndighed / Halv kyndighed |

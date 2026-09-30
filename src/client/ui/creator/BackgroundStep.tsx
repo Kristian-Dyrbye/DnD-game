@@ -1,12 +1,12 @@
 /** Creator step 2: choose a background — shows ability score options, origin feat, skills, tool and equipment. */
 import { chooseBackground } from '../../../engine/character/creator';
-import { ABILITY_NAMES, SKILL_NAMES } from '../../../engine/rules/basics';
 import type { Background } from '../../../engine/data/schemas';
 import type { MessageKey } from '../../../shared/i18n';
 import { db } from '../../data';
 import { coins, t } from '../i18n';
 import { creator } from './creatorState';
 import { firstSentence, itemDisplayName } from '../text';
+import { srdText, abilityText, skillText } from '../srdText';
 
 const CHOICE_KEYS: Record<string, MessageKey> = {
   holy_symbol: 'creator.item.holySymbol',
@@ -44,17 +44,17 @@ export function BackgroundStep() {
               aria-pressed={selected === bg.id}
               onClick={() => (creator.value = chooseBackground(creator.value, bg.id))}
             >
-              <h3>{bg.name}</h3>
+              <h3>{srdText('backgrounds', bg.id, bg.name)}</h3>
               <dl class="card-stats">
                 <dt>{t('creator.background.abilities')}</dt>
-                <dd>{bg.abilityScores.map((a) => ABILITY_NAMES[a]).join(', ')}</dd>
+                <dd>{bg.abilityScores.map((a) => abilityText(a)).join(', ')}</dd>
                 <dt>{t('creator.background.feat')}</dt>
                 <dd>
-                  {feat?.name ?? bg.featId}
+                  {srdText('feats', bg.featId, feat?.name ?? bg.featId)}
                   {bg.featOption ? ` (${bg.featOption[0]!.toUpperCase()}${bg.featOption.slice(1)})` : ''}
                 </dd>
                 <dt>{t('creator.background.skills')}</dt>
-                <dd>{bg.skills.map((s) => SKILL_NAMES[s]).join(', ')}</dd>
+                <dd>{bg.skills.map((s) => skillText(s)).join(', ')}</dd>
                 <dt>{t('creator.background.tool')}</dt>
                 <dd>{tool}</dd>
               </dl>

@@ -12,6 +12,7 @@ import { db } from '../../data';
 import { send } from '../../net/gameSocket';
 import { PickList } from '../creator/PickList';
 import { t, tn } from '../i18n';
+import { srdText, skillText } from '../srdText';
 
 export function LevelUpPanel({ hero, onClose }: { hero: Character; onClose: () => void }) {
   const classId = hero.classes[0]!.classId;
@@ -41,9 +42,9 @@ export function LevelUpPanel({ hero, onClose }: { hero: Character; onClose: () =
         .filter((s) => (level === 0 ? s.level === 0 : s.level > 0) && !known.has(s.id))
         .map((s) => ({ id: s.id, label: s.level ? t('levelup.spellLevel', { name: s.name, level: s.level }) : s.name }));
     }
-    if (ch.kind === 'weapon_mastery') return [...db.weapons.values()].filter((w) => w.mastery && !hero.weaponMasteries.includes(w.id)).map((w) => ({ id: w.id, label: w.name }));
-    if (ch.kind === 'expertise') return Object.entries(hero.skills).filter(([, v]) => v === 'proficient').map(([k]) => ({ id: k, label: SKILL_NAMES[k as keyof typeof SKILL_NAMES] }));
-    if (ch.kind === 'skills') return Object.keys(SKILL_NAMES).filter((k) => !hero.skills[k as keyof typeof SKILL_NAMES]).map((k) => ({ id: k, label: SKILL_NAMES[k as keyof typeof SKILL_NAMES] }));
+    if (ch.kind === 'weapon_mastery') return [...db.weapons.values()].filter((w) => w.mastery && !hero.weaponMasteries.includes(w.id)).map((w) => ({ id: w.id, label: srdText('weapons', w.id, w.name) }));
+    if (ch.kind === 'expertise') return Object.entries(hero.skills).filter(([, v]) => v === 'proficient').map(([k]) => ({ id: k, label: skillText(k as keyof typeof SKILL_NAMES) }));
+    if (ch.kind === 'skills') return Object.keys(SKILL_NAMES).filter((k) => !hero.skills[k as keyof typeof SKILL_NAMES]).map((k) => ({ id: k, label: skillText(k as keyof typeof SKILL_NAMES) }));
     return [];
   };
 
@@ -76,7 +77,7 @@ export function LevelUpPanel({ hero, onClose }: { hero: Character; onClose: () =
       <section class="journal settings">
         <header class="journal-head">
           <h2>
-            {t('levelup.title', { className: cls.name, level: newLevel })}
+            {t('levelup.title', { className: srdText('classes', cls.id, cls.name), level: newLevel })}
           </h2>
           <button type="button" onClick={onClose}>
             {t('levelup.later')}
@@ -106,7 +107,7 @@ export function LevelUpPanel({ hero, onClose }: { hero: Character; onClose: () =
                   key="subclass"
                   title={t('levelup.subclass')}
                   count={1}
-                  options={ch.options.map((id) => ({ id, label: db.subclasses.get(id)?.name ?? id }))}
+                  options={ch.options.map((id) => ({ id, label: srdText('subclasses', id, db.subclasses.get(id)?.name ?? id) }))}
                   selected={subclassId ? [subclassId] : []}
                   onChange={(ids) => setSubclass(ids[0])}
                 />

@@ -40,9 +40,9 @@ describe('fallback templates in the session language (A141d)', () => {
   });
 
   it('check labels', () => {
-    expect(checkLabel(CheckSchema.parse({ skill: 'stealth', dc: 12, group: true }), da)).toBe('Gruppeprøve: Stealth SG 12');
-    expect(checkLabel(CheckSchema.parse({ save: 'con', dc: 13 }), da)).toBe('Con-redningsslag SG 13');
-    expect(checkLabel(CheckSchema.parse({ ability: 'str', dc: 10 }), da)).toBe('Str-prøve SG 10');
+    expect(checkLabel(CheckSchema.parse({ skill: 'stealth', dc: 12, group: true }), da)).toBe('Gruppeprøve: Snigen SG 12');
+    expect(checkLabel(CheckSchema.parse({ save: 'con', dc: 13 }), da)).toBe('Kon-redningsslag SG 13');
+    expect(checkLabel(CheckSchema.parse({ ability: 'str', dc: 10 }), da)).toBe('Sty-prøve SG 10');
     expect(checkLabel(CheckSchema.parse({ save: 'con', dc: 13 }))).toBe('Con save DC 13');
     expect(checkLabel(CheckSchema.parse({ ability: 'str', dc: 10 }))).toBe('Str check DC 10');
   });

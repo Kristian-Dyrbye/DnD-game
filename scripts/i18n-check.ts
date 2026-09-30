@@ -7,12 +7,15 @@
  *   npm run i18n:check -- --lang=da -v     one language, list the paths
  *   npm run i18n:check -- --lang=da --stub=<key>[,<key>]   add stubs (English text, "todo": true) for
  *                                          missing entries and drop orphans in data/i18n/da/<key>.json
+ *                                          (SRD names, A149: key `srd/<kind>` → data/i18n/da/srd/<kind>.json)
  *   npm run i18n:check -- --strict         exit 1 unless every overlay that exists is complete and current
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { checkOverlay, parseOverlay, stubOverlay, type ContentOverlay } from '../src/shared/contentI18n';
+import { checkOverlay, checkStrings, parseOverlay, stubOverlay, stubStrings, type ContentOverlay, type OverlayReport } from '../src/shared/contentI18n';
 import { TABLE_SOURCES } from '../src/host/translations';
+import { SRD_NAME_KINDS, srdNameSourceFile, srdNameSources } from '../src/engine/i18n/srdNameSources';
+import type { SrdNameKind } from '../src/engine/i18n/srdNames';
 
 const root = process.cwd();
 const args = process.argv.slice(2);
@@ -44,7 +47,8 @@ const langs = opt('lang')
   : [...new Set(['da', ...(fs.existsSync(i18nDir) ? fs.readdirSync(i18nDir, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name) : [])])];
 const stubKeys = new Set((opt('stub') ?? '').split(',').filter(Boolean));
 const src = sources();
-for (const k of stubKeys) if (!src.has(k)) throw new Error(`Unknown content key "${k}" (known: ${[...src.keys()].join(', ')})`);
+const srdKeys = new Set<string>(SRD_NAME_KINDS.map((k) => `srd/${k}`));
+for (const k of stubKeys) if (!src.has(k) && !srdKeys.has(k)) throw new Error(`Unknown content key "${k}" (known: ${[...src.keys()].join(', ')})`);
 let bad = 0;
 
 for (const lang of langs) {
@@ -73,13 +77,45 @@ for (const lang of langs) {
       overlay = stubOverlay(content, overlay, file);
       fs.writeFileSync(overlayFile, JSON.stringify(overlay, null, 2) + '\n');
     }
-    const r = checkOverlay(content, overlay);
-    const status = !overlay ? 'no translation' : `${r.translated}/${r.total} translated, ${r.missing.length} missing, ${r.stale.length} stale, ${r.orphan.length} orphan, ${r.broken.length} broken`;
-    console.log(`  ${key.padEnd(28)} ${status}`);
-    if (overlay && (r.missing.length || r.stale.length || r.orphan.length || r.broken.length)) bad++;
-    if (verbose && overlay) {
-      for (const [label, list] of [['missing', r.missing], ['stale', r.stale], ['orphan', r.orphan], ['broken', r.broken]] as const) for (const p of list) console.log(`    ${label}: ${p}`);
+    report(key, overlay, checkOverlay(content, overlay));
+  }
+  // SRD names (A149): data/i18n/<lang>/srd/<kind>.json, English from the SRD data.
+  const srdDir = path.join(dir, 'srd');
+  for (const f of fs.existsSync(srdDir) ? fs.readdirSync(srdDir).filter((x) => x.endsWith('.json')) : []) {
+    if (!srdKeys.has(`srd/${f.slice(0, -5)}`)) {
+      console.log(`  srd/${f}: unknown SRD name kind`);
+      bad++;
     }
+  }
+  for (const kind of SRD_NAME_KINDS as readonly SrdNameKind[]) {
+    const key = `srd/${kind}`;
+    const file = path.join(srdDir, `${kind}.json`);
+    let overlay: ContentOverlay | undefined;
+    if (fs.existsSync(file)) {
+      try {
+        overlay = parseOverlay(JSON.parse(fs.readFileSync(file, 'utf8')));
+      } catch (err) {
+        console.log(`  ${key}: ${(err as Error).message}`);
+        bad++;
+        continue;
+      }
+    }
+    const strings = srdNameSources(kind);
+    if (stubKeys.has(key)) {
+      fs.mkdirSync(srdDir, { recursive: true });
+      overlay = stubStrings(strings, overlay, srdNameSourceFile(kind));
+      fs.writeFileSync(file, JSON.stringify(overlay, null, 2) + '\n');
+    }
+    report(key, overlay, checkStrings(strings, overlay));
+  }
+}
+
+function report(key: string, overlay: ContentOverlay | undefined, r: OverlayReport): void {
+  const status = !overlay ? 'no translation' : `${r.translated}/${r.total} translated, ${r.missing.length} missing, ${r.stale.length} stale, ${r.orphan.length} orphan, ${r.broken.length} broken`;
+  console.log(`  ${key.padEnd(28)} ${status}`);
+  if (overlay && (r.missing.length || r.stale.length || r.orphan.length || r.broken.length)) bad++;
+  if (verbose && overlay) {
+    for (const [label, list] of [['missing', r.missing], ['stale', r.stale], ['orphan', r.orphan], ['broken', r.broken]] as const) for (const p of list) console.log(`    ${label}: ${p}`);
   }
 }
 if (strict && bad) {

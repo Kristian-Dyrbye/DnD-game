@@ -8,11 +8,10 @@
 import { formatD20Test, resolveRollMode, rollD20, type D20Roll, type Modifier, type RollMode } from '../core/dice';
 import type { Rng } from '../core/rng';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
+import { abilityName, skillName } from '../i18n/srdNames';
 import type { Creature } from '../core/creature';
 import {
-  ABILITY_NAMES,
   SKILL_ABILITY,
-  SKILL_NAMES,
   abilityModifier,
   proficiencyContribution,
   type Ability,
@@ -59,12 +58,12 @@ export function d20Test(input: D20TestInput): D20TestResult {
   const mode = resolveRollMode(advantage.length, disadvantage.length);
   const d20 = rollD20(input.rng, mode);
   const modifiers = [...input.modifiers];
-  if (input.exhaustion && input.exhaustion > 0) modifiers.push({ value: -2 * input.exhaustion, label: 'Exhaustion' });
+  const msgs = input.msgs ?? ENGLISH_MESSAGES;
+  if (input.exhaustion && input.exhaustion > 0) modifiers.push({ value: -2 * input.exhaustion, label: msgs.m('mod.exhaustion') });
   const total = d20.natural + modifiers.reduce((sum, m) => sum + m.value, 0);
   let success: boolean | undefined;
   if (input.autoFail) success = false;
   else if (input.target) success = total >= input.target.value;
-  const msgs = input.msgs ?? ENGLISH_MESSAGES;
   const outcome = input.autoFail ? msgs.m('roll.autoFail', { reason: input.autoFail }) : success === undefined ? undefined : msgs.m(success ? 'roll.success' : 'roll.failure');
   return {
     label: input.label,
@@ -96,25 +95,26 @@ export interface CheckOptions {
 }
 
 /** Modifier list for an ability check, optionally with a skill (uses the skill's default ability unless overridden). */
-export function checkModifiers(c: Creature, ability: Ability, skill?: Skill, profOverride?: ProficiencyLevel): Modifier[] {
+export function checkModifiers(c: Creature, ability: Ability, skill?: Skill, profOverride?: ProficiencyLevel, msgs: Messages = ENGLISH_MESSAGES): Modifier[] {
   const printed = skill && ability === SKILL_ABILITY[skill] ? c.skillBonuses?.[skill] : undefined;
-  if (printed !== undefined) return [{ value: printed, label: SKILL_NAMES[skill!] }];
-  const mods: Modifier[] = [{ value: abilityModifier(c.abilities[ability]), label: ABILITY_NAMES[ability] }];
+  if (printed !== undefined) return [{ value: printed, label: skillName(msgs.lang, skill!) }];
+  const mods: Modifier[] = [{ value: abilityModifier(c.abilities[ability]), label: abilityName(msgs.lang, ability) }];
   const level = profOverride ?? (skill ? (c.skills[skill] ?? 'none') : 'none');
   const prof = proficiencyContribution(level, c.proficiencyBonus);
   if (prof !== 0) {
-    const kind = level === 'expertise' ? 'Expertise' : level === 'half' ? 'Half proficiency' : 'Proficiency';
-    mods.push({ value: prof, label: skill ? `${kind}: ${SKILL_NAMES[skill]}` : kind });
+    const kind = msgs.m(level === 'expertise' ? 'mod.expertise' : level === 'half' ? 'mod.halfProficiency' : 'mod.proficiency');
+    mods.push({ value: prof, label: skill ? `${kind}: ${skillName(msgs.lang, skill)}` : kind });
   }
   return mods;
 }
 
 /** Ability check, e.g. abilityCheck(hero, 'cha', 'persuasion', { rng, dc: 15 }). */
 export function abilityCheck(c: Creature, ability: Ability, skill: Skill | undefined, opts: CheckOptions): D20TestResult {
+  const msgs = opts.msgs ?? ENGLISH_MESSAGES;
   return d20Test({
     rng: opts.rng,
-    label: skill ? SKILL_NAMES[skill] : `${ABILITY_NAMES[ability]} check`,
-    modifiers: [...checkModifiers(c, ability, skill), ...(opts.bonuses ?? [])],
+    label: skill ? skillName(msgs.lang, skill) : msgs.m('check.ability', { ability: abilityName(msgs.lang, ability) }),
+    modifiers: [...checkModifiers(c, ability, skill, undefined, msgs), ...(opts.bonuses ?? [])],
     exhaustion: c.exhaustion,
     ...(opts.dc !== undefined && { target: { kind: 'DC' as const, value: opts.dc } }),
     ...(opts.advantage && { advantage: opts.advantage }),
@@ -129,19 +129,20 @@ export function skillCheck(c: Creature, skill: Skill, opts: CheckOptions): D20Te
   return abilityCheck(c, SKILL_ABILITY[skill], skill, opts);
 }
 
-export function saveModifiers(c: Creature, ability: Ability): Modifier[] {
+export function saveModifiers(c: Creature, ability: Ability, msgs: Messages = ENGLISH_MESSAGES): Modifier[] {
   const printed = c.saveBonuses?.[ability];
-  if (printed !== undefined) return [{ value: printed, label: `${ABILITY_NAMES[ability]} save` }];
-  const mods: Modifier[] = [{ value: abilityModifier(c.abilities[ability]), label: ABILITY_NAMES[ability] }];
-  if (c.saveProficiencies.includes(ability)) mods.push({ value: c.proficiencyBonus, label: 'Proficiency' });
+  if (printed !== undefined) return [{ value: printed, label: msgs.m('check.save', { ability: abilityName(msgs.lang, ability) }) }];
+  const mods: Modifier[] = [{ value: abilityModifier(c.abilities[ability]), label: abilityName(msgs.lang, ability) }];
+  if (c.saveProficiencies.includes(ability)) mods.push({ value: c.proficiencyBonus, label: msgs.m('mod.proficiency') });
   return mods;
 }
 
 export function savingThrow(c: Creature, ability: Ability, opts: CheckOptions): D20TestResult {
+  const msgs = opts.msgs ?? ENGLISH_MESSAGES;
   return d20Test({
     rng: opts.rng,
-    label: `${ABILITY_NAMES[ability]} save`,
-    modifiers: [...saveModifiers(c, ability), ...(opts.bonuses ?? [])],
+    label: msgs.m('check.save', { ability: abilityName(msgs.lang, ability) }),
+    modifiers: [...saveModifiers(c, ability, msgs), ...(opts.bonuses ?? [])],
     exhaustion: c.exhaustion,
     ...(opts.dc !== undefined && { target: { kind: 'DC' as const, value: opts.dc } }),
     ...(opts.advantage && { advantage: opts.advantage }),

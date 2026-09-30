@@ -112,8 +112,8 @@ describe('story module messages in Danish', () => {
     expect(resolve({ action: 'look' })).toEqual(['Du ser dig grundigt omkring.']);
     expect(resolve({ action: 'rest' })).toEqual(['Det her er ikke et sted til et ordentligt hvil.']);
     expect(resolve({ action: 'other' })).toEqual(['Der kommer ikke noget synligt ud af det.']);
-    expect(resolve({ action: 'skill_check', skill: 'acrobatics' })[0]).toMatch(/^Forsøget med Acrobatics (lykkes|mislykkes)/);
-    expect(resolve({ action: 'skill_check', skill: 'acrobatics' })[0]).toMatch(/^Det har du allerede prøvet \(Acrobatics\)/);
+    expect(resolve({ action: 'skill_check', skill: 'acrobatics' })[0]).toMatch(/^Forsøget med Akrobatik (lykkes|mislykkes)/);
+    expect(resolve({ action: 'skill_check', skill: 'acrobatics' })[0]).toMatch(/^Det har du allerede prøvet \(Akrobatik\)/);
   });
 
   it('localizes fight and defeat lines', () => {

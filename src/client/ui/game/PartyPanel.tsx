@@ -6,10 +6,11 @@ import { coins, t } from '../i18n';
 import { canLevelUp } from '../../../engine/character/leveling';
 import { send } from '../../net/gameSocket';
 import { scarLabel, scarLine } from './labels';
+import { srdText } from '../srdText';
 
 function MemberCard({ c, lead, onLevelUp, loyalty, control, onToggle }: { c: Character; lead?: boolean; onLevelUp?: () => void; loyalty?: number; control?: 'ai' | 'player'; onToggle?: () => void }) {
   const pct = Math.max(0, Math.min(100, (c.hp / c.maxHp) * 100));
-  const classes = c.classes.map((cl) => `${db.classes.get(cl.classId)?.name ?? cl.classId} ${cl.level}`).join(' / ');
+  const classes = c.classes.map((cl) => `${srdText('classes', cl.classId, db.classes.get(cl.classId)?.name ?? cl.classId)} ${cl.level}`).join(' / ');
   const hpClass = pct <= 25 ? 'low' : pct <= 50 ? 'mid' : 'ok';
   const mood = loyalty === undefined ? undefined : loyalty <= 20 ? t('party.unhappy') : loyalty >= 70 ? t('party.devoted') : undefined;
   return (

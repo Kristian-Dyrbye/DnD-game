@@ -1,0 +1,157 @@
+{
+  "$source": "data/srd/species.json",
+  "strings": {
+    "dragonborn": {
+      "hash": "7b69df85",
+      "text": "Drageblod"
+    },
+    "dragonborn/lineageLabel": {
+      "hash": "e5850bd3",
+      "text": "Drageherkomst"
+    },
+    "dragonborn/lineages/black": {
+      "hash": "ad9b8c37",
+      "text": "Sort drage"
+    },
+    "dragonborn/lineages/gold": {
+      "hash": "1146c682",
+      "text": "Gulddrage"
+    },
+    "dragonborn/lineages/blue": {
+      "hash": "b0e3a6f0",
+      "text": "Blå drage"
+    },
+    "dragonborn/lineages/green": {
+      "hash": "cb18459f",
+      "text": "Grøn drage"
+    },
+    "dragonborn/lineages/brass": {
+      "hash": "fe213be1",
+      "text": "Messingdrage"
+    },
+    "dragonborn/lineages/red": {
+      "hash": "d6f38a7f",
+      "text": "Rød drage"
+    },
+    "dragonborn/lineages/bronze": {
+      "hash": "3eaa4acc",
+      "text": "Bronzedrage"
+    },
+    "dragonborn/lineages/silver": {
+      "hash": "ffbb12cb",
+      "text": "Sølvdrage"
+    },
+    "dragonborn/lineages/copper": {
+      "hash": "dc7d2667",
+      "text": "Kobberdrage"
+    },
+    "dragonborn/lineages/white": {
+      "hash": "3c32fab5",
+      "text": "Hvid drage"
+    },
+    "dwarf": {
+      "hash": "40ea6d3b",
+      "text": "Dværg"
+    },
+    "elf": {
+      "hash": "bd8edcc6",
+      "text": "Elver"
+    },
+    "elf/lineageLabel": {
+      "hash": "5b100d04",
+      "text": "Elverafstamning"
+    },
+    "elf/lineages/drow": {
+      "hash": "0f852319",
+      "text": "Drow"
+    },
+    "elf/lineages/high_elf": {
+      "hash": "28f6ea88",
+      "text": "Højelver"
+    },
+    "elf/lineages/wood_elf": {
+      "hash": "77d4d935",
+      "text": "Skovelver"
+    },
+    "gnome": {
+      "hash": "766112f7",
+      "text": "Gnom"
+    },
+    "gnome/lineageLabel": {
+      "hash": "c817a83d",
+      "text": "Gnomeafstamning"
+    },
+    "gnome/lineages/forest_gnome": {
+      "hash": "e7ec4890",
+      "text": "Skovgnom"
+    },
+    "gnome/lineages/rock_gnome": {
+      "hash": "a7a90d4c",
+      "text": "Klippegnom"
+    },
+    "goliath": {
+      "hash": "4053b73b",
+      "text": "Goliat"
+    },
+    "goliath/lineageLabel": {
+      "hash": "10b8ed13",
+      "text": "Kæmpeherkomst"
+    },
+    "goliath/lineages/clouds_jaunt": {
+      "hash": "54ed1755",
+      "text": "Skyens spring (skykæmpe)"
+    },
+    "goliath/lineages/fires_burn": {
+      "hash": "75ebdd84",
+      "text": "Ildens brand (ildkæmpe)"
+    },
+    "goliath/lineages/frosts_chill": {
+      "hash": "e876574f",
+      "text": "Frostens kulde (frostkæmpe)"
+    },
+    "goliath/lineages/hills_tumble": {
+      "hash": "96f77f20",
+      "text": "Bakkens fald (bakkekæmpe)"
+    },
+    "goliath/lineages/stones_endurance": {
+      "hash": "f2497f62",
+      "text": "Stenens udholdenhed (stenkæmpe)"
+    },
+    "goliath/lineages/storms_thunder": {
+      "hash": "8e7e04c9",
+      "text": "Stormens torden (stormkæmpe)"
+    },
+    "halfling": {
+      "hash": "f288d190",
+      "text": "Halvling"
+    },
+    "human": {
+      "hash": "1983851a",
+      "text": "Menneske"
+    },
+    "orc": {
+      "hash": "02a88e45",
+      "text": "Ork"
+    },
+    "tiefling": {
+      "hash": "7e18eacd",
+      "text": "Tiefling"
+    },
+    "tiefling/lineageLabel": {
+      "hash": "df6c004e",
+      "text": "Djævlearv"
+    },
+    "tiefling/lineages/abyssal": {
+      "hash": "893854fa",
+      "text": "Afgrundsarv"
+    },
+    "tiefling/lineages/chthonic": {
+      "hash": "6757681f",
+      "text": "Underverdensarv"
+    },
+    "tiefling/lineages/infernal": {
+      "hash": "cff414de",
+      "text": "Helvedesarv"
+    }
+  }
+}

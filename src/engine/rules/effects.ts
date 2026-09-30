@@ -13,7 +13,7 @@ import type { Creature } from '../core/creature';
 import type { Rng } from '../core/rng';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { Damage, Duration, Effect } from '../data/common';
-import { ABILITY_NAMES } from './basics';
+import { abilityName } from '../i18n/srdNames';
 import { applyCondition, attackModes, canAct, resistsAllDamage, saveModes } from './conditions';
 import { applyDamage, attackRoll, grantTempHp, rollDamage, type DamageRollResult } from './damage';
 import { healFromZero, resolveDamageAtZero } from './death';
@@ -136,7 +136,7 @@ function runEffect(effect: Effect, targetIds: string[], ctx: EffectContext, stat
           continue;
         }
         const res = savingThrow(target, effect.ability, { rng: ctx.rng, dc, ...saveModes(target, effect.ability), ...(ctx.msgs && { msgs: ctx.msgs }) });
-        ctx.log.push({ targetId: id, kind: 'save', text: m('eff.save', { name: target.name, ability: ABILITY_NAMES[effect.ability], roll: res.text }) });
+        ctx.log.push({ targetId: id, kind: 'save', text: m('eff.save', { name: target.name, ability: abilityName((ctx.msgs ?? ENGLISH_MESSAGES).lang, effect.ability), roll: res.text }) });
         // Evasion (Monk/Rogue 7): Dex saves for half damage → none on a success, half on a failure.
         const evasion = effect.ability === 'dex' && effect.onSuccess === 'half' && target.effects.some((e) => e.key === 'evasion') && canAct(target);
         if (evasion) {

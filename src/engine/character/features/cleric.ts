@@ -8,7 +8,8 @@ import type { Character, Creature } from '../../core/creature';
 import type { Effect } from '../../data/common';
 import type { Rng } from '../../core/rng';
 import { roll } from '../../core/dice';
-import { ABILITY_NAMES, abilityModifier } from '../../rules/basics';
+import { abilityModifier } from '../../rules/basics';
+import { abilityName } from '../../i18n/srdNames';
 import { applyCondition } from '../../rules/conditions';
 import { createEffectContext, executeEffects } from '../../rules/effects';
 import { spellSaveDc } from '../../rules/spellcasting';
@@ -105,7 +106,7 @@ export const clericFeatures: FeatureImpl[] = [
           const others: Creature[] = [];
           for (const t of targets.filter((x) => x.creatureType === 'undead' && !x.dead)) {
             const save = savingThrow(t, 'wis', { rng, dc, msgs });
-            log.push(msgs.m('eff.save', { name: t.name, ability: ABILITY_NAMES.wis, roll: save.text }));
+            log.push(msgs.m('eff.save', { name: t.name, ability: abilityName(msgs.lang, 'wis'), roll: save.text }));
             if (save.success) continue;
             const source = `${c.id}:turn_undead`;
             let turned = applyCondition(t, { condition: 'frightened', sourceId: source, roundsLeft: 10 }).creature;

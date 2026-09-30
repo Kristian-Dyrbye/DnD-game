@@ -180,7 +180,7 @@ describe('real content', () => {
     await host.idle();
     expect(events.filter((e) => e.type === 'error')).toEqual([]);
     expect(labels()).toContain('Underkast dig vogternes inspektion');
-    expect(labels().some((l) => l.startsWith('Undersøg flygtningens sygdom (Medicine SG'))).toBe(true);
+    expect(labels().some((l) => l.startsWith('Undersøg flygtningens sygdom (Lægekunst SG'))).toBe(true);
     expect(logText()).toContain('Lygtevogterne vil brænde Hollowmere');
     const rolls = events.filter((e) => e.type === 'roll').length;
     await host.send({ type: 'say', text: 'jeg ser nærmere på hans sygdom' });

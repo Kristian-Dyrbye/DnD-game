@@ -85,7 +85,7 @@ describe('spells and zones (A141g)', () => {
     expect(log).toMatch(/^Web fylder området\.$/m);
     expect(log).toMatch(/^Goblin bevæger sig ind i Web\.$/m);
     expect(log).toMatch(/^Brenna: Web \(terning på 20 fod\) — 1 skabning i området$/m);
-    expect(log).toMatch(/^Goblin Dexterity-redningsslag: d20: 1 .* mod SG \d+ — Fiasko$/m);
+    expect(log).toMatch(/^Goblin Behændighed-redningsslag: d20: 1 .* mod SG \d+ — Fiasko$/m);
     expect(log).toMatch(/^Goblin får tilstanden restrained \(Web\)$/m);
     expect(log).toMatch(/^Goblin kæmper mod Web — /m);
     expect(log).toMatch(/^Brenna kaster Fireball \(niveau 3\)$/m);

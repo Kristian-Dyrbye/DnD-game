@@ -2,11 +2,12 @@
 import { buildCharacter, validateBuild } from '../../../engine/character/builder';
 import { toBuildInput } from '../../../engine/character/creator';
 import { armorClass, initiativeModifiers, weaponAttack } from '../../../engine/character/derived';
-import { ABILITIES, ABILITY_NAMES, SKILL_NAMES, abilityModifier, formatModifier, type Skill } from '../../../engine/rules/basics';
+import { ABILITIES, abilityModifier, formatModifier, type Skill } from '../../../engine/rules/basics';
 import { db } from '../../data';
 import { coins, t } from '../i18n';
 import { creator } from './creatorState';
 import { groupNames, itemDisplayName } from '../text';
+import { srdText, abilityAbbr, skillText } from '../srdText';
 
 export function ReviewStep() {
   const s = creator.value;
@@ -34,9 +35,9 @@ export function ReviewStep() {
       <h2>{c.name}</h2>
       <p class="hint">
         {t('creator.review.line', {
-          species: db.species.get(c.speciesId)?.name ?? c.speciesId,
-          className: cls.name,
-          background: db.backgrounds.get(c.backgroundId)?.name ?? c.backgroundId,
+          species: srdText('species', c.speciesId, db.species.get(c.speciesId)?.name ?? c.speciesId),
+          className: srdText('classes', cls.id, cls.name),
+          background: srdText('backgrounds', c.backgroundId, db.backgrounds.get(c.backgroundId)?.name ?? c.backgroundId),
           mode: t(s.difficulty === 'hardcore' ? 'creator.difficulty.hardcore' : 'creator.difficulty.heroic'),
         })}
       </p>
@@ -66,7 +67,7 @@ export function ReviewStep() {
         <div class="sheet-block abilities">
           {ABILITIES.map((a) => (
             <div key={a}>
-              <span>{ABILITY_NAMES[a].slice(0, 3).toUpperCase()}</span>
+              <span>{abilityAbbr(a).toUpperCase()}</span>
               <strong>{c.abilities[a]}</strong>
               <small>{formatModifier(abilityModifier(c.abilities[a]))}</small>
             </div>
@@ -77,7 +78,7 @@ export function ReviewStep() {
           <p>
             {(Object.entries(c.skills) as [Skill, string][])
               .filter(([, v]) => v === 'proficient' || v === 'expertise')
-              .map(([k, v]) => `${SKILL_NAMES[k]}${v === 'expertise' ? ` ${t('creator.review.expertise')}` : ''}`)
+              .map(([k, v]) => `${skillText(k)}${v === 'expertise' ? ` ${t('creator.review.expertise')}` : ''}`)
               .join(', ')}
           </p>
           <h3>{t('creator.review.attacks')}</h3>
@@ -110,7 +111,7 @@ export function ReviewStep() {
             </>
           )}
           <h3>{t('creator.review.feats')}</h3>
-          <p>{c.featIds.map((f) => db.feats.get(f)?.name ?? f).join(', ')}</p>
+          <p>{c.featIds.map((f) => srdText('feats', f, db.feats.get(f)?.name ?? f)).join(', ')}</p>
         </div>
       </div>
       {s.personality.backstory && (

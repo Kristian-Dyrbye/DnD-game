@@ -1,0 +1,53 @@
+{
+  "$source": "data/srd/subclasses.json",
+  "strings": {
+    "path_of_the_berserker": {
+      "hash": "c18a31e1",
+      "text": "Berserkerens vej"
+    },
+    "college_of_lore": {
+      "hash": "0e5190bd",
+      "text": "Lærdommens kollegium"
+    },
+    "life_domain": {
+      "hash": "a6563479",
+      "text": "Livets domæne"
+    },
+    "circle_of_the_land": {
+      "hash": "1cdc0e36",
+      "text": "Landets cirkel"
+    },
+    "champion": {
+      "hash": "8b740ac6",
+      "text": "Mester"
+    },
+    "warrior_of_the_open_hand": {
+      "hash": "765e0020",
+      "text": "Den åbne hånds kriger"
+    },
+    "oath_of_devotion": {
+      "hash": "1afeb374",
+      "text": "Hengivelsens ed"
+    },
+    "hunter": {
+      "hash": "34179c93",
+      "text": "Jæger"
+    },
+    "thief": {
+      "hash": "22107c63",
+      "text": "Tyv"
+    },
+    "draconic_sorcery": {
+      "hash": "ba7f9a43",
+      "text": "Drageblodets magi"
+    },
+    "fiend_patron": {
+      "hash": "5c7a727f",
+      "text": "Djævlepagten"
+    },
+    "evoker": {
+      "hash": "127b3d23",
+      "text": "Påkalder"
+    }
+  }
+}

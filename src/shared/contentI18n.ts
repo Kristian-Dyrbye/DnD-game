@@ -144,7 +144,11 @@ export interface OverlayReport {
 
 /** Compares an overlay with its English source. */
 export function checkOverlay(content: unknown, overlay: ContentOverlay | undefined): OverlayReport {
-  const src = sourceStrings(content);
+  return checkStrings(sourceStrings(content), overlay);
+}
+
+/** checkOverlay over an explicit list of English strings (SRD name overlays, A149). */
+export function checkStrings(src: SourceString[], overlay: ContentOverlay | undefined): OverlayReport {
   const r: OverlayReport = { total: src.length, translated: 0, missing: [], stale: [], orphan: [], broken: [] };
   const known = new Set<string>();
   for (const s of src) {
@@ -169,8 +173,13 @@ export function checkOverlay(content: unknown, overlay: ContentOverlay | undefin
 /** Adds stub entries (English text, `todo: true`) for every missing path and drops orphans; keeps
  * existing translations (also stale ones, for the translator to review). Entries follow file order. */
 export function stubOverlay(content: unknown, overlay: ContentOverlay | undefined, source?: string): ContentOverlay {
+  return stubStrings(sourceStrings(content), overlay, source);
+}
+
+/** stubOverlay over an explicit list of English strings (SRD name overlays, A149). */
+export function stubStrings(src: SourceString[], overlay: ContentOverlay | undefined, source?: string): ContentOverlay {
   const strings: Record<string, OverlayEntry> = {};
-  for (const s of sourceStrings(content)) {
+  for (const s of src) {
     const e = overlay?.strings[s.path];
     strings[s.path] = e && !e.todo ? e : { hash: s.hash, text: s.value, todo: true };
   }

@@ -14,14 +14,15 @@ import { CharacterPreview } from '../../three/LazyCharacterPreview';
 import { db } from '../../data';
 import { t } from '../i18n';
 import { scarLabel, scarLine, wearText, woundText } from './labels';
+import { srdText } from '../srdText';
 
 const signed = (n: number) => (n >= 0 ? `+${n}` : `−${Math.abs(n)}`);
 
 export function CharacterScreen({ c, onClose }: { c: Character; onClose: () => void }) {
   const [picked, setPicked] = useState<ScarLocation | null>(null);
   const scar = picked ? c.scars.find((s) => s.location === picked) : undefined;
-  const species = db.species.get(c.speciesId)?.name ?? c.speciesId;
-  const classes = c.classes.map((x) => `${db.classes.get(x.classId)?.name ?? x.classId} ${x.level}`).join(' / ');
+  const species = srdText('species', c.speciesId, db.species.get(c.speciesId)?.name ?? c.speciesId);
+  const classes = c.classes.map((x) => `${srdText('classes', x.classId, db.classes.get(x.classId)?.name ?? x.classId)} ${x.level}`).join(' / ');
   const wounds = woundText(woundLevel(c.hp, c.maxHp));
   return (
     <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label={t('char.aria', { name: c.name })}>

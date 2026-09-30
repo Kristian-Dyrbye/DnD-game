@@ -21,6 +21,7 @@ import { ReviewStep } from './ReviewStep';
 import { AppearanceStep } from './AppearanceStep';
 import { CharacterPreview } from '../../three/LazyCharacterPreview';
 import { defaultAppearanceFor } from '../../../engine/appearance/appearance';
+import { srdText } from '../srdText';
 
 const STEP_COMPONENTS: Partial<Record<CreatorStep, ComponentType>> = {
   class: ClassStep,
@@ -56,11 +57,11 @@ function Summary() {
       <h3>{s.name.trim() || t('creator.unnamed')}</h3>
       <dl>
         <dt>{t('creator.step.class')}</dt>
-        <dd>{cls?.name ?? '—'}</dd>
+        <dd>{cls ? srdText('classes', cls.id, cls.name) : '—'}</dd>
         <dt>{t('creator.step.background')}</dt>
-        <dd>{bg?.name ?? '—'}</dd>
+        <dd>{bg ? srdText('backgrounds', bg.id, bg.name) : '—'}</dd>
         <dt>{t('creator.step.species')}</dt>
-        <dd>{sp?.name ?? '—'}</dd>
+        <dd>{sp ? srdText('species', sp.id, sp.name) : '—'}</dd>
       </dl>
     </aside>
   );
