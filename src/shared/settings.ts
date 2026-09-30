@@ -98,6 +98,32 @@ export function parseSettings(input: unknown): Settings {
   return SettingsSchema.parse(input);
 }
 
+/**
+ * Reads stored settings without ever failing: a valid object is used as is, otherwise valid fields
+ * are kept section by section, field by field, and everything else falls back to defaults.
+ */
+export function salvageSettings(raw: unknown): Settings {
+  const whole = SettingsSchema.safeParse(raw);
+  if (whole.success) return whole.data;
+  let settings = defaultSettings();
+  if (!raw || typeof raw !== 'object') return settings;
+  for (const [section, fields] of Object.entries(raw as Record<string, unknown>)) {
+    if (!fields || typeof fields !== 'object') continue;
+    for (const [field, value] of Object.entries(fields as Record<string, unknown>)) {
+      const attempt = SettingsSchema.safeParse(mergeSettings(settings, { [section]: { [field]: value } }));
+      if (attempt.success) settings = attempt.data;
+    }
+  }
+  return settings;
+}
+
+/** Applies a partial patch and validates the result. */
+export function patchSettings(base: Settings, patch: unknown): { ok: true; settings: Settings } | { ok: false; error: string } {
+  const result = SettingsSchema.safeParse(mergeSettings(base, patch));
+  if (!result.success) return { ok: false, error: result.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; ') };
+  return { ok: true, settings: result.data };
+}
+
 /** Merges a patch into settings section by section. Unknown sections are ignored. Does not validate. */
 export function mergeSettings(base: Settings, patch: unknown): unknown {
   if (!patch || typeof patch !== 'object') return base;

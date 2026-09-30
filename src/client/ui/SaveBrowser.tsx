@@ -4,22 +4,37 @@
  * to a new slot or overwrite a manual one. Autosaves can be loaded but not overwritten or deleted.
  */
 import { useEffect, useState } from 'preact/hooks';
-import type { SaveListEntry, SaveMeta } from '../../shared/save';
+import type { SaveMeta } from '../../shared/save';
 import { send } from '../net/gameSocket';
+import { downloadSave, saveLibrary } from '../net/saveLibrary';
 import { screen } from './state';
-
-async function fetchSaves(): Promise<SaveMeta[]> {
-  const res = await fetch('/api/saves');
-  if (!res.ok) return [];
-  const list = (await res.json()) as SaveListEntry[];
-  return list.flatMap((e) => (e.ok ? [e.meta] : [])).sort((a, b) => b.savedAt.localeCompare(a.savedAt));
-}
 
 export function SaveBrowser({ mode, onClose }: { mode: 'load' | 'save'; onClose: () => void }) {
   const [saves, setSaves] = useState<SaveMeta[] | null>(null);
   const [name, setName] = useState('');
-  const refresh = () => void fetchSaves().then(setSaves);
+  const [message, setMessage] = useState<string | null>(null);
+  const refresh = () => void saveLibrary().list().then(setSaves, () => setSaves([]));
   useEffect(refresh, []);
+
+  const exportSave = async (slot: string) => {
+    try {
+      downloadSave(await saveLibrary().exportFile(slot));
+    } catch (err) {
+      setMessage(`Export failed: ${(err as Error).message}`);
+    }
+  };
+  const importSave = async (input: HTMLInputElement) => {
+    const f = input.files?.[0];
+    input.value = '';
+    if (!f) return;
+    try {
+      const meta = await saveLibrary().importText(await f.text());
+      setMessage(`Imported "${meta.name}".`);
+    } catch (err) {
+      setMessage(`Import failed: ${(err as Error).message}`);
+    }
+    refresh();
+  };
 
   const load = (slot: string) => {
     send({ type: 'load', slot });
@@ -31,7 +46,7 @@ export function SaveBrowser({ mode, onClose }: { mode: 'load' | 'save'; onClose:
     setTimeout(refresh, 400);
   };
   const remove = async (slot: string) => {
-    await fetch(`/api/saves/${slot}`, { method: 'DELETE' });
+    await saveLibrary().remove(slot).catch(() => undefined);
     refresh();
   };
 
@@ -59,6 +74,17 @@ export function SaveBrowser({ mode, onClose }: { mode: 'load' | 'save'; onClose:
             </button>
           </form>
         )}
+        <div class="save-import">
+          <label class="button-like">
+            Import save…
+            <input type="file" accept=".json,application/json" class="visually-hidden" onChange={(e) => void importSave(e.target as HTMLInputElement)} />
+          </label>
+          {message && (
+            <span class="muted small" role="status">
+              {message}
+            </span>
+          )}
+        </div>
         {saves === null && <p class="hint">Loading saves…</p>}
         {saves?.length === 0 && <p class="hint">No saves yet.</p>}
         <ul class="save-list">
@@ -78,6 +104,9 @@ export function SaveBrowser({ mode, onClose }: { mode: 'load' | 'save'; onClose:
               <div class="save-actions">
                 <button type="button" onClick={() => load(s.slotId)}>
                   Load
+                </button>
+                <button type="button" onClick={() => void exportSave(s.slotId)} title="Download this save as a .json file">
+                  Export
                 </button>
                 {mode === 'save' && s.kind === 'manual' && (
                   <button type="button" onClick={() => saveTo(s.slotId, s.name)}>

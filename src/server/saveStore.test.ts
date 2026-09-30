@@ -7,6 +7,13 @@ import { buildApp } from './app';
 import { MockLlm } from '../llm/mock';
 import { MockTts } from '../tts/mock';
 import type { SaveListEntry } from '../shared/save';
+import { SAVE_SCHEMA_VERSION } from '../shared/version';
+import { newGameState } from '../engine/session/GameSession';
+import { buildCharacter } from '../engine/character/builder';
+import { toBuildInput } from '../engine/character/creator';
+import { quickBuild } from '../engine/character/quickBuild';
+import { Rng } from '../engine/core/rng';
+import { loadSrd } from '../engine/data/srdBundle';
 
 let dir: string;
 let clock: number;
@@ -95,6 +102,24 @@ describe('save routes', () => {
       expect((await app.inject({ method: 'GET', url: '/api/saves/slot-1' })).statusCode).toBe(404);
       expect((await app.inject({ method: 'PUT', url: '/api/saves/BAD..', payload: { meta, state: {} } })).statusCode).toBe(400);
       expect((await app.inject({ method: 'PUT', url: '/api/saves/x', payload: { state: {} } })).statusCode).toBe(400);
+    } finally {
+      await app.close();
+    }
+  });
+
+  it('imports an exported save file after validating it', async () => {
+    const app = await buildApp({ userDataDir: dir, savesDir: path.join(dir, 'saves'), services: { llm: new MockLlm(), tts: new MockTts() } });
+    try {
+      const db = loadSrd();
+      const state = newGameState(buildCharacter(toBuildInput(quickBuild('rogue', db, Rng.fromSeed(3))), db), 'heroic', 'import');
+      const file = { schemaVersion: SAVE_SCHEMA_VERSION, meta: { ...meta, slotId: 'elsewhere', kind: 'auto', savedAt: '2026-01-01T00:00:00Z' }, state };
+      const res = await app.inject({ method: 'POST', url: '/api/saves/import-abc/import', payload: file });
+      expect(res.statusCode).toBe(200);
+      expect(res.json()).toMatchObject({ slotId: 'import-abc', kind: 'manual', name: meta.name });
+      expect((await app.inject({ method: 'GET', url: '/api/saves/import-abc' })).json().state.hero.name).toBe(state.hero.name);
+      const bad = await app.inject({ method: 'POST', url: '/api/saves/import-bad/import', payload: { ...file, state: { hero: 1 } } });
+      expect(bad.statusCode).toBe(400);
+      expect(bad.json().error).toMatch(/damaged/);
     } finally {
       await app.close();
     }

@@ -382,6 +382,10 @@ body.cb-helpers .hp-bar.hp-mid div { background-image: repeating-linear-gradient
 .save-browser { width: min(760px, 96vw); }
 .save-new { display: flex; gap: 0.5rem; padding: 0.5rem 1rem; }
 .save-new input { flex: 1; }
+.save-import { display: flex; gap: 0.75rem; align-items: center; padding: 0 1rem 0.5rem; }
+.button-like { cursor: pointer; color: var(--fg); background: #2a241c; border: 1px solid #4a3f30; border-radius: 6px; padding: 0.5rem 1rem; }
+.button-like:hover, .button-like:focus-within { border-color: var(--accent); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .save-list { list-style: none; margin: 0; padding: 0.5rem 1rem 1rem; display: grid; gap: 0.5rem; max-height: 60vh; overflow: auto; }
 .save-card { display: grid; grid-template-columns: 96px 1fr auto; gap: 0.75rem; align-items: center; background: #221d16; border: 1px solid #3a3226; border-radius: 6px; padding: 0.4rem; }
 .save-card.auto { opacity: 0.9; }

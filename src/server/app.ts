@@ -14,6 +14,7 @@ import { Services, type ServiceOverrides } from './services';
 import { SaveError, SaveStore, type SaveMetaInput } from './saveStore';
 import type { GameSession, SessionPorts } from '../engine/session/GameSession';
 import { createGameHost, worldTables } from '../host/gameHost';
+import { parseSaveFile } from '../engine/session/saveFile';
 
 export { STARTING_ADVENTURE } from '../host/gameHost';
 import { loadSrd } from '../engine/data/srdBundle';
@@ -124,6 +125,16 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   app.put<{ Params: { slot: string }; Body: { meta?: SaveMetaInput; state?: unknown } | null }>('/api/saves/:slot', async (req) => {
     // meta is validated inside SaveStore.save (400 on failure).
     return saves.save(req.params.slot, req.body?.meta as SaveMetaInput, req.body?.state ?? null).meta;
+  });
+  // Import save: the body is an exported save file (migrated + validated before it is stored).
+  app.post<{ Params: { slot: string }; Body: unknown }>('/api/saves/:slot/import', async (req, reply) => {
+    let file;
+    try {
+      file = parseSaveFile(req.body);
+    } catch (err) {
+      return reply.code(400).send({ error: (err as Error).message, kind: 'invalid' });
+    }
+    return saves.save(req.params.slot, file.meta, file.state).meta;
   });
   app.delete<{ Params: { slot: string } }>('/api/saves/:slot', async (req, reply) => {
     saves.delete(req.params.slot);

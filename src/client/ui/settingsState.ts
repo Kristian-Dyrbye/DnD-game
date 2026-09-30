@@ -1,10 +1,72 @@
-/** Client copy of the server settings (loaded once, updated through PUT /api/settings). */
+/**
+ * Client copy of the settings. The local edition loads them from the server (PUT /api/settings,
+ * deep-merged there); the web edition keeps them in localStorage (setSettingsBackend).
+ */
 import { signal } from '@preact/signals';
-import type { Settings } from '../../shared/settings';
+import { defaultSettings, patchSettings, salvageSettings, type Settings } from '../../shared/settings';
 import { audio } from '../audio/AudioManager';
 import { ttsPlayer } from '../audio/ttsPlayer';
 
 export const settings = signal<Settings | null>(null);
+
+/** Where settings live. `update` returns the new settings, or null if the patch was refused. */
+export interface SettingsBackend {
+  load(): Promise<Settings>;
+  update(patch: Record<string, unknown>): Promise<Settings | null>;
+}
+
+export const serverSettingsBackend: SettingsBackend = {
+  async load() {
+    return (await (await fetch('/api/settings')).json()) as Settings;
+  },
+  async update(patch) {
+    const res = await fetch('/api/settings', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(patch) });
+    return res.ok ? ((await res.json()) as Settings) : null;
+  },
+};
+
+export const LOCAL_SETTINGS_KEY = 'solo-dnd.settings';
+
+/**
+ * Settings in localStorage. Storage can be missing, full or blocked (private windows): reads then
+ * give the defaults (bad fields salvaged one by one) and writes keep the settings for this page only.
+ */
+export function localSettingsBackend(storage: Pick<Storage, 'getItem' | 'setItem'> | undefined = globalThis.localStorage): SettingsBackend {
+  let current: Settings | null = null;
+  const read = (): Settings => {
+    try {
+      const text = storage?.getItem(LOCAL_SETTINGS_KEY);
+      return text ? salvageSettings(JSON.parse(text)) : defaultSettings();
+    } catch {
+      return defaultSettings();
+    }
+  };
+  return {
+    async load() {
+      current ??= read();
+      return structuredClone(current);
+    },
+    async update(patch) {
+      const result = patchSettings((current ??= read()), patch);
+      if (!result.ok) return null;
+      current = result.settings;
+      try {
+        storage?.setItem(LOCAL_SETTINGS_KEY, JSON.stringify(current));
+      } catch {
+        // Not stored (quota/blocked); the change still applies until the page closes.
+      }
+      return structuredClone(current);
+    },
+  };
+}
+
+let backend: SettingsBackend = serverSettingsBackend;
+
+/** Switches where settings are stored (web edition); the next loadSettings reads from it. */
+export function setSettingsBackend(b: SettingsBackend): void {
+  backend = b;
+  loading = null;
+}
 
 function applyAudioSettings(s: Settings): void {
   audio.setVolumes(s.audio);
@@ -24,8 +86,8 @@ export function applyAccessibility(s: Settings): void {
 let loading: Promise<void> | null = null;
 
 export function loadSettings(): Promise<void> {
-  loading ??= fetch('/api/settings')
-    .then((r) => r.json() as Promise<Settings>)
+  loading ??= backend
+    .load()
     .then((s) => {
       settings.value = s;
       applyAudioSettings(s);
@@ -36,11 +98,11 @@ export function loadSettings(): Promise<void> {
   return loading;
 }
 
-/** Sends a partial settings patch (deep-merged on the server) and stores the result. */
+/** Sends a partial settings patch (deep-merged by the backend) and stores the result. */
 export async function updateSettings(patch: Record<string, unknown>): Promise<void> {
-  const res = await fetch('/api/settings', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(patch) });
-  if (res.ok) {
-    settings.value = (await res.json()) as Settings;
-    applyAudioSettings(settings.value);
+  const next = await backend.update(patch);
+  if (next) {
+    settings.value = next;
+    applyAudioSettings(next);
   }
 }
