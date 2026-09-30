@@ -6,6 +6,7 @@
  * (ranged attack disadvantage, flames out), and heat/cold hazards for travel.
  */
 import { Rng } from '../core/rng';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import { calendarDate } from './clock';
 import type { Lore, WeatherKind } from './lore';
 
@@ -38,16 +39,17 @@ export interface WeatherEffects {
   description: string;
 }
 
-const BASE: Record<WeatherKind, Omit<WeatherEffects, 'rangedDisadvantage' | 'perceptionDisadvantage' | 'description'> & { text: string }> = {
-  clear: { travelMultiplier: 1, obscured: 'none', extinguishesFlames: false, text: 'Clear skies' },
-  rain: { travelMultiplier: 0.75, obscured: 'light', extinguishesFlames: true, text: 'Steady rain' },
-  fog: { travelMultiplier: 0.75, obscured: 'heavy', extinguishesFlames: false, text: 'Thick fog' },
-  storm: { travelMultiplier: 0.5, obscured: 'light', extinguishesFlames: true, text: 'A howling storm' },
-  snow: { travelMultiplier: 0.5, obscured: 'light', extinguishesFlames: false, hazard: 'extreme_cold', text: 'Falling snow' },
-  heat: { travelMultiplier: 0.75, obscured: 'none', extinguishesFlames: false, hazard: 'extreme_heat', text: 'Oppressive heat' },
+const BASE: Record<WeatherKind, Omit<WeatherEffects, 'rangedDisadvantage' | 'perceptionDisadvantage' | 'description'>> = {
+  clear: { travelMultiplier: 1, obscured: 'none', extinguishesFlames: false },
+  rain: { travelMultiplier: 0.75, obscured: 'light', extinguishesFlames: true },
+  fog: { travelMultiplier: 0.75, obscured: 'heavy', extinguishesFlames: false },
+  storm: { travelMultiplier: 0.5, obscured: 'light', extinguishesFlames: true },
+  snow: { travelMultiplier: 0.5, obscured: 'light', extinguishesFlames: false, hazard: 'extreme_cold' },
+  heat: { travelMultiplier: 0.75, obscured: 'none', extinguishesFlames: false, hazard: 'extreme_heat' },
 };
 
-export function weatherEffects(w: Pick<WeatherState, 'kind' | 'wind'>): WeatherEffects {
+/** `description` is in the language of `msgs` (default English). */
+export function weatherEffects(w: Pick<WeatherState, 'kind' | 'wind'>, { m }: Messages = ENGLISH_MESSAGES): WeatherEffects {
   const b = BASE[w.kind];
   const strong = w.wind === 'strong';
   // Strong wind disperses fog to light obscurement.
@@ -59,7 +61,7 @@ export function weatherEffects(w: Pick<WeatherState, 'kind' | 'wind'>): WeatherE
     rangedDisadvantage: strong,
     extinguishesFlames: b.extinguishesFlames || strong,
     ...(b.hazard && { hazard: b.hazard }),
-    description: `${b.text}${strong ? ' and strong wind' : w.wind === 'breezy' ? ', breezy' : ''}`,
+    description: strong ? m('weather.strongWind', { weather: m(`weather.${w.kind}`) }) : w.wind === 'breezy' ? m('weather.breezy', { weather: m(`weather.${w.kind}`) }) : m(`weather.${w.kind}`),
   };
 }
 
@@ -75,17 +77,8 @@ export function weatherAt(lore: Lore, regionId: string, minutes: number, campaig
   return { kind, wind, regionId: region.id, block };
 }
 
-const CHANGE_TEXT: Record<WeatherKind, string> = {
-  clear: 'The skies clear.',
-  rain: 'Rain begins to fall.',
-  fog: 'Fog rolls in, thick and grey.',
-  storm: 'A storm breaks overhead.',
-  snow: 'Snow starts to fall.',
-  heat: 'The air turns hot and heavy.',
-};
-
-export function weatherChangeText(prev: WeatherState | undefined, next: WeatherState): string | undefined {
+export function weatherChangeText(prev: WeatherState | undefined, next: WeatherState, { m }: Messages = ENGLISH_MESSAGES): string | undefined {
   if (prev && prev.kind === next.kind && prev.wind === next.wind) return undefined;
-  if (prev && prev.kind === next.kind) return next.wind === 'strong' ? 'The wind picks up sharply.' : 'The wind dies down.';
-  return CHANGE_TEXT[next.kind] + (next.wind === 'strong' && next.kind !== 'storm' ? ' A strong wind blows.' : '');
+  if (prev && prev.kind === next.kind) return m(next.wind === 'strong' ? 'weather.windUp' : 'weather.windDown');
+  return m(`weather.to.${next.kind}`) + (next.wind === 'strong' && next.kind !== 'storm' ? ` ${m('weather.windBlows')}` : '');
 }

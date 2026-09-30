@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { addItem, removeItem } from '../character/inventory';
 import { Rng } from '../core/rng';
 import type { SrdDatabase } from '../data/srd';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import { skillCheck, type D20TestResult } from '../rules/checks';
 import type { GameState } from '../session/gameState';
 import { inHours } from '../adventure/conditions';
@@ -51,7 +52,11 @@ export interface ShopContext {
   db: SrdDatabase;
   lore: Lore;
   table: ShopTable;
+  /** Language of trade errors (default English). */
+  msgs?: Messages;
 }
+
+const msg = (ctx: ShopContext) => (ctx.msgs ?? ENGLISH_MESSAGES).m;
 
 // ---------------------------------------------------------------- availability and value
 
@@ -177,21 +182,22 @@ export function isOpen(def: ShopDef, time: number): boolean {
 export type TradeResult = { ok: true; coins: number } | { ok: false; error: string };
 
 function refusal(def: ShopDef, ctx: ShopContext): string | undefined {
-  if (!isOpen(def, ctx.state.time)) return `${def.name} is closed right now.`;
-  if (repMultiplier(def, ctx) === undefined) return `${def.name} refuses to trade with you.`;
+  if (!isOpen(def, ctx.state.time)) return msg(ctx)('shop.closed', { shop: def.name });
+  if (repMultiplier(def, ctx) === undefined) return msg(ctx)('shop.refuses', { shop: def.name });
   return undefined;
 }
 
 export function buy(ctx: ShopContext, shopId: string, itemId: string, qty = 1): TradeResult {
+  const m = msg(ctx);
   const def = findShop(ctx, shopId);
-  if (!def) return { ok: false, error: 'No such shop.' };
+  if (!def) return { ok: false, error: m('shop.none') };
   const refused = refusal(def, ctx);
   if (refused) return { ok: false, error: refused };
   const line = shopState(def, ctx).stock.find((s) => s.itemId === itemId);
-  if (!line || line.qty < qty) return { ok: false, error: 'Not enough in stock.' };
+  if (!line || line.qty < qty) return { ok: false, error: m('shop.noStock') };
   const unit = buyPrice(def, ctx, itemId)!;
   const cost = unit * qty;
-  if (ctx.state.hero.coins < cost) return { ok: false, error: 'You cannot afford that.' };
+  if (ctx.state.hero.coins < cost) return { ok: false, error: m('shop.cantAfford') };
   ctx.state.hero.coins -= cost;
   line.qty -= qty;
   addItem(ctx.state.hero, itemId, qty, ctx.db);
@@ -199,19 +205,20 @@ export function buy(ctx: ShopContext, shopId: string, itemId: string, qty = 1): 
 }
 
 export function sell(ctx: ShopContext, shopId: string, uid: string, qty = 1): TradeResult {
+  const m = msg(ctx);
   const def = findShop(ctx, shopId);
-  if (!def) return { ok: false, error: 'No such shop.' };
+  if (!def) return { ok: false, error: m('shop.none') };
   const refused = refusal(def, ctx);
   if (refused) return { ok: false, error: refused };
   const entry = ctx.state.hero.inventory.find((i) => i.uid === uid);
-  if (!entry || entry.quantity < qty) return { ok: false, error: 'You do not have that many.' };
-  if (entry.equipped) return { ok: false, error: 'Unequip it first.' };
+  if (!entry || entry.quantity < qty) return { ok: false, error: m('shop.notEnough') };
+  if (entry.equipped) return { ok: false, error: m('shop.unequipFirst') };
   const s = shopState(def, ctx);
   let paid = 0;
   // Price drops unit by unit as the shop fills up with the same item.
   for (let i = 0; i < qty; i++) {
     const unit = sellPrice(def, ctx, entry.itemId);
-    if (unit === undefined) return { ok: false, error: `${def.name} has no use for that.` };
+    if (unit === undefined) return { ok: false, error: m('shop.noUse', { shop: def.name }) };
     paid += unit;
     s.sold[entry.itemId] = (s.sold[entry.itemId] ?? 0) + 1;
   }
@@ -225,13 +232,14 @@ export function sell(ctx: ShopContext, shopId: string, uid: string, qty = 1): Tr
 
 /** Once per shop per day: DC 15 Persuasion; success = 10% better prices for the rest of the day. */
 export function haggle(ctx: ShopContext & { rng: Rng }, shopId: string): { ok: false; error: string } | { ok: true; roll: D20TestResult; success: boolean } {
+  const m = msg(ctx);
   const def = findShop(ctx, shopId);
-  if (!def) return { ok: false, error: 'No such shop.' };
+  if (!def) return { ok: false, error: m('shop.none') };
   const refused = refusal(def, ctx);
   if (refused) return { ok: false, error: refused };
   const s = shopState(def, ctx);
   const day = Math.floor(ctx.state.time / MINUTES_PER_DAY);
-  if (s.haggle?.day === day) return { ok: false, error: 'The shopkeeper will not haggle again today.' };
+  if (s.haggle?.day === day) return { ok: false, error: m('shop.noHaggle') };
   const roll = skillCheck(ctx.state.hero, 'persuasion', { rng: ctx.rng, dc: HAGGLE_DC });
   s.haggle = { day, success: roll.success === true };
   return { ok: true, roll, success: roll.success === true };

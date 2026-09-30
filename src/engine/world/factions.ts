@@ -5,6 +5,7 @@
  * Revered ≥ 80. Changes ripple once through lore relationships: allies gain half, enemies lose half.
  * Gating helpers cover quests/allies (tier checks), prices, safe houses and refusal of service.
  */
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { GameState } from '../session/gameState';
 import type { Lore } from './lore';
 
@@ -98,8 +99,8 @@ export function canUseSafeHouse(score: number): boolean {
   return tierAtLeast(score, 'friendly');
 }
 
-export function describeChange(c: ReputationChange, lore?: Lore): string {
-  const name = lore?.factions.find((f) => f.id === c.faction)?.name ?? c.faction.replace(/_/g, ' ');
-  const sign = c.delta > 0 ? '+' : '';
-  return `${name}: ${sign}${c.delta} reputation${c.newTier ? ` (now ${TIER_NAMES[c.newTier]})` : ''}`;
+export function describeChange(c: ReputationChange, lore?: Lore, { m }: Messages = ENGLISH_MESSAGES): string {
+  const faction = lore?.factions.find((f) => f.id === c.faction)?.name ?? c.faction.replace(/_/g, ' ');
+  const delta = `${c.delta > 0 ? '+' : ''}${c.delta}`;
+  return c.newTier ? m('rep.changeTier', { faction, delta, tier: m(`rep.tier.${c.newTier}`) }) : m('rep.change', { faction, delta });
 }

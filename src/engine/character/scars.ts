@@ -60,16 +60,18 @@ export function scarLocation(damageType: string | undefined, rng: Rng, taken: re
   return rng.pick(pool.length ? pool : ANY);
 }
 
-/** "Scimitar of the Goblin Boss" / "fire from the Young Red Dragon". */
-export function scarDescription(m: Pick<ScarMark, 'sourceName' | 'weapon' | 'damageType'>): string {
+/** "Scimitar of the Goblin Boss" / "fire from the Young Red Dragon" (stored in the save as written). */
+export function scarDescription(mark: Pick<ScarMark, 'sourceName' | 'weapon' | 'damageType'>, { m }: Messages = ENGLISH_MESSAGES): string {
   const burn = ['fire', 'acid', 'cold', 'lightning', 'necrotic', 'radiant', 'thunder', 'poison', 'psychic', 'force'];
-  if (m.damageType && burn.includes(m.damageType) && !m.weapon) return `${m.damageType} from the ${m.sourceName}`;
-  return `${m.weapon ?? 'blow'} of the ${m.sourceName}`;
+  const source = mark.sourceName;
+  if (mark.damageType && burn.includes(mark.damageType) && !mark.weapon) return m('scar.element', { type: mark.damageType, source });
+  return mark.weapon ? m('scar.weapon', { weapon: mark.weapon, source }) : m('scar.blow', { source });
 }
 
 /** Label for a scar: "Left cheek: Claw of the Owlbear (The Old Mill)". */
-export function scarText(s: Scar): string {
-  return `${SCAR_LABEL[s.location]}: ${s.description}${s.origin ? ` (${s.origin})` : ''}`;
+export function scarText(s: Scar, { m }: Messages = ENGLISH_MESSAGES): string {
+  const place = m(`scar.place.${s.location}`);
+  return s.origin ? m('scar.textOrigin', { place, description: s.description, origin: s.origin }) : m('scar.text', { place, description: s.description });
 }
 
 function add(c: Character, scar: Omit<Scar, 'id'>): Character {
@@ -95,8 +97,8 @@ export function rollScars(party: Character[], marks: readonly ScarMark[], rng: R
     const best = mine.find((m) => m.cause === 'down') ?? mine[0]!;
     if (rng.next() >= SCAR_CHANCE[best.cause]) return c;
     const location = scarLocation(best.damageType, rng, c.scars.map((s) => s.location));
-    const next = add(c, { location, cause: best.cause, description: scarDescription(best), origin, at });
-    lines.push(msgs.m('story.scar', { name: c.name, scar: scarText(next.scars.at(-1)!) }));
+    const next = add(c, { location, cause: best.cause, description: scarDescription(best, msgs), origin, at });
+    lines.push(msgs.m('story.scar', { name: c.name, scar: scarText(next.scars.at(-1)!, msgs) }));
     return next;
   });
   return { party: out, lines };

@@ -140,7 +140,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       const def = opts.companions?.companions.find((c) => c.id === back.id);
       if (def) session.addLog('system', returnCompanion(session.current, def, opts.companions!, back.loyalty, db, session.msgs).message);
     }
-    for (const c of r.reputation ?? []) if (!c.ripple || c.newTier) session.addLog('system', describeChange(c, opts.lore));
+    for (const c of r.reputation ?? []) if (!c.ripple || c.newTier) session.addLog('system', describeChange(c, opts.lore, session.msgs));
     for (const tip of r.tips ?? []) {
       const seen = (session.current.extensions.tipsSeen as string[] | undefined) ?? [];
       if (seen.includes(tip)) continue;
@@ -220,7 +220,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     const day = Math.floor(session.current.time / MINUTES_PER_DAY);
     const { m } = session.msgs;
     const out: SuggestedAction[] = offersAt(session.current, here).map((o) => ({ id: `sq:take:${o.id}`, label: m('job.take', { source: o.sourceLabel, name: o.adventure.name }) }));
-    if (offerSources(session.current, deps, here).length && !sideQuestState(session.current).checked.includes(`${here}:${day}`)) out.push({ id: 'sq:look', label: m('job.look') });
+    if (offerSources(session.current, deps, here, session.msgs).length && !sideQuestState(session.current).checked.includes(`${here}:${day}`)) out.push({ id: 'sq:look', label: m('job.look') });
     return out;
   };
 
@@ -289,7 +289,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     const { m } = session.msgs;
     if (!deps || !here) throw new Error(m('job.noneHere'));
     if (actionId === 'sq:look') {
-      const added = refreshOffers(session.current, deps, here);
+      const added = refreshOffers(session.current, deps, here, session.msgs);
       const all = offersAt(session.current, here);
       session.addLog('narration', all.length ? m('job.askAround', { offers: all.map((o) => m('job.offer', { source: o.sourceLabel, summary: o.adventure.summary })).join(' ') }) : m('job.nobody'));
       if (added.length === 0 && all.length === 0) session.addLog('system', m('job.tryLater'));
@@ -297,7 +297,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       return;
     }
     const offerId = actionId.slice('sq:take:'.length);
-    acceptOffer(session.current, offerId);
+    acceptOffer(session.current, offerId, session.msgs);
     const ctx = ctxFor(session);
     await publish(session, ctx, startAdventure(ctx));
     offer(session, ctx);
@@ -334,7 +334,8 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       const before = ctx.state.time;
       const dest = lore.locations.find((l) => l.id === to);
       if (!dest) throw new Error(m('travel.unknown'));
-      let res = travel({ state: ctx.state, lore, rng: session.rng, ...(opts.travelEvents && { events: opts.travelEvents }) }, to, pace);
+      const tctx = { state: ctx.state, lore, rng: session.rng, msgs: session.msgs, ...(opts.travelEvents && { events: opts.travelEvents }) };
+      let res = travel(tctx, to, pace);
       if (!res.ok) throw new Error(res.error ?? m('travel.cannot'));
       for (let guard = 0; ; guard++) {
         for (const roll of res.rolls) session.addRoll({ label: roll.label, dice: roll.d20.rolls, mode: roll.mode, modifier: roll.total - roll.d20.natural, total: roll.total, math: roll.text, ...(roll.success !== undefined && { success: roll.success }) });
@@ -342,12 +343,12 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
         const deps = sqDeps();
         const met = res.log.find((l) => l.eventId && opts.travelEvents?.events.find((e) => e.id === l.eventId)?.kind === 'discovery');
         if (deps && met && res.arrived) {
-          const o = roadOffer(ctx.state, deps, to);
+          const o = roadOffer(ctx.state, deps, to, session.msgs);
           if (o) session.addLog('system', m('job.roadOffer', { name: o.adventure.name }));
         }
         if (!res.encounter || guard >= 3) break;
         session.addLog('system', m('travel.encounter'));
-        res = travel({ state: ctx.state, lore, rng: session.rng, ...(opts.travelEvents && { events: opts.travelEvents }) }, to, pace);
+        res = travel(tctx, to, pace);
         if (!res.ok) break;
       }
       const days = Math.round((ctx.state.time - before) / 1440);
@@ -417,7 +418,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       const hero = session.current.hero;
       if (cmd.type === 'equip' || cmd.type === 'unequip') {
         if (!db) throw new Error(m('equip.needsSrd'));
-        const r = cmd.type === 'equip' ? equipItem(hero, cmd.uid, db, cmd.slot) : unequipItem(hero, cmd.uid, db);
+        const r = cmd.type === 'equip' ? equipItem(hero, cmd.uid, db, cmd.slot, session.msgs) : unequipItem(hero, cmd.uid, db, session.msgs);
         if (!r.ok) throw new Error(r.error);
         return;
       }
@@ -429,8 +430,8 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
           const here = getMap(session.current)?.current;
           const smith = opts.shops?.shops.find((s) => s.id === cmd.shopId && s.kind === 'smith');
           if (!smith || smith.locationId !== here) throw new Error(m('repair.noSmith'));
-          r = repairAtSmith(hero, cmd.uid, db);
-        } else r = mendYourself(hero, cmd.uid);
+          r = repairAtSmith(hero, cmd.uid, db, session.msgs);
+        } else r = mendYourself(hero, cmd.uid, session.msgs);
         if (!r.ok) throw new Error(r.error);
         const before = session.current.time;
         session.current.hero = r.character;
@@ -443,7 +444,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       const here = getMap(session.current)?.current;
       const shop = opts.shops.shops.find((s) => s.id === cmd.shopId);
       if (!shop || shop.locationId !== here) throw new Error(m('shop.notHere'));
-      const sctx = { state: session.current, db, lore: opts.lore, table: opts.shops };
+      const sctx = { state: session.current, db, lore: opts.lore, table: opts.shops, msgs: session.msgs };
       if (cmd.type === 'shop_buy') {
         const r = buy(sctx, cmd.shopId, cmd.itemId, cmd.qty);
         if (!r.ok) throw new Error(r.error);

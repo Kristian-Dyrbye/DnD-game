@@ -13,7 +13,8 @@ import { weatherEffects, type WeatherState } from '../../../engine/world/weather
 import { lore } from '../../data';
 import { gameState, send } from '../../net/gameSocket';
 import type { MessageKey } from '../../../shared/i18n';
-import { t, tn } from '../i18n';
+import { language, t, tn } from '../i18n';
+import { messages } from '../../../engine/i18n';
 import { placeLabels, regionPath, terrainGlyphs, type Glyph } from './mapArt';
 
 const REGION_FILL: Record<Region['tone'], string> = { high_fantasy: '#6b7f3a', dark_fantasy: '#3e4a3f', swashbuckling: '#3f6f86' };
@@ -70,7 +71,7 @@ export function WorldMap({ onClose }: { onClose: () => void }) {
   const [target, setTarget] = useState<string | null>(null);
   const [pace, setPace] = useState<Pace>('normal');
   const weather = state?.extensions.weather as WeatherState | undefined;
-  const fx = weather ? weatherEffects(weather) : undefined;
+  const fx = weather ? weatherEffects(weather, messages(language.value)) : undefined;
   const tod = state ? timeOfDay(state.time) : 'day';
 
   const plan = useMemo(() => (target ? planRoute(lore, map.current, target, map.known) : undefined), [target, map.current, map.known.length]);

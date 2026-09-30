@@ -9,6 +9,7 @@
 import { z } from 'zod';
 import { roll } from '../core/dice';
 import type { Rng } from '../core/rng';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import { savingThrow, skillCheck, type D20TestResult } from '../rules/checks';
 import { SKILLS, type Skill } from '../rules/basics';
 import type { GameState } from '../session/gameState';
@@ -158,6 +159,8 @@ export interface TravelContext {
   lore: Lore;
   rng: Rng;
   events?: TravelEventTable;
+  /** Language of the log lines and errors (default English). */
+  msgs?: Messages;
 }
 
 export interface TravelLog {
@@ -206,10 +209,11 @@ function pickEvent(ctx: TravelContext, region: string | undefined, kind: Route['
 export function travel(ctx: TravelContext, to: string, pace: Pace): TravelResult {
   const { state, lore } = ctx;
   const map = (state.extensions.map as MapState | undefined) ?? (state.extensions.map = initialMap(lore));
+  const { m } = ctx.msgs ?? ENGLISH_MESSAGES;
   const base = { legs: [] as Leg[], minutes: 0, at: map.current, arrived: false, log: [] as TravelLog[], rolls: [] as D20TestResult[] };
-  if (!map.known.includes(to)) return { ok: false, error: 'You do not know the way there yet.', ...base };
+  if (!map.known.includes(to)) return { ok: false, error: m('travel.noWay'), ...base };
   const legs = planRoute(lore, map.current, to, map.known);
-  if (!legs) return { ok: false, error: 'There is no known route there.', ...base };
+  if (!legs) return { ok: false, error: m('travel.noRoute'), ...base };
   const start = state.time;
   const result: TravelResult = { ok: true, ...base, legs };
   const hero = state.hero;
@@ -228,7 +232,8 @@ export function travel(ctx: TravelContext, to: string, pace: Pace): TravelResult
       const save = savingThrow(hero, 'con', { rng: ctx.rng, dc: 10 });
       result.rolls.push(save);
       if (!save.success) hero.exhaustion = Math.min(6, hero.exhaustion + 1);
-      result.log.push({ day, text: save.success ? `You endure the ${fx.hazard === 'extreme_heat' ? 'heat' : 'cold'}.` : `The ${fx.hazard === 'extreme_heat' ? 'heat' : 'cold'} wears you down (1 level of Exhaustion).` });
+      const heat = fx.hazard === 'extreme_heat';
+      result.log.push({ day, text: m(save.success ? (heat ? 'travel.endureHeat' : 'travel.endureCold') : heat ? 'travel.heatWears' : 'travel.coldWears') });
     }
     if (!ctx.events || ctx.rng.next() >= ctx.events.chancePerDay) return;
     const tod = ctx.rng.int(1, 3) === 1 ? 'night' : timeOfDay(state.time);

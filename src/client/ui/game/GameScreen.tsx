@@ -37,7 +37,8 @@ import { shopsAt } from '../../../engine/world/shops';
 import { shops } from '../../data';
 import { PartyPanel } from './PartyPanel';
 import { StoryLog } from './StoryLog';
-import { currentTranslator, t } from '../i18n';
+import { currentTranslator, language, t } from '../i18n';
+import { messages } from '../../../engine/i18n';
 
 export function GameScreen() {
   const state = gameState.value;
@@ -102,7 +103,7 @@ export function GameScreen() {
         <div class="game-where">
           <strong>{state?.location.name ?? '…'}</strong>
           {state && <span class="muted">{formatClock(state.time, timeOfDay(state.time), currentTranslator())}</span>}
-          {weather && <span class="muted weather">{weatherEffects(weather).description}</span>}
+          {weather && <span class="muted weather">{weatherEffects(weather, messages(language.value)).description}</span>}
         </div>
         <nav class="game-menu" aria-label={t('game.menuAria')}>
           <button type="button" disabled={!state} onClick={() => setMapOpen(true)}>

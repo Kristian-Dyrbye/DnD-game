@@ -6,6 +6,7 @@
  */
 import type { Character, InventoryItem } from '../core/creature';
 import type { SrdDatabase } from '../data/srd';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import { armorClass, baseSpeed } from './derived';
 
 export function isUniqueItem(itemId: string, db?: SrdDatabase): boolean {
@@ -71,16 +72,16 @@ export function refreshDerived(hero: Character, db: SrdDatabase): void {
 export type EquipResult = { ok: true } | { ok: false; error: string };
 
 /** Equips an inventory entry, freeing whatever the slot (or a two-handed grip) needs. */
-export function equipItem(hero: Character, uid: string, db: SrdDatabase, slot?: EquipSlot): EquipResult {
+export function equipItem(hero: Character, uid: string, db: SrdDatabase, slot?: EquipSlot, { m }: Messages = ENGLISH_MESSAGES): EquipResult {
   const entry = hero.inventory.find((i) => i.uid === uid);
-  if (!entry) return { ok: false, error: 'You do not have that.' };
+  if (!entry) return { ok: false, error: m('equip.notOwned') };
   const slots = equipSlots(entry.itemId, db);
   const target = slot ?? slots[0];
-  if (!target || !slots.includes(target)) return { ok: false, error: 'That cannot be equipped there.' };
+  if (!target || !slots.includes(target)) return { ok: false, error: m('equip.wrongSlot') };
   const clear = (s: EquipSlot) => hero.inventory.forEach((i) => i.equipped === s && i.uid !== uid && delete i.equipped);
   const twoHanded = (i: InventoryItem | undefined) => !!i && !!db.weapons.get(i.itemId)?.properties.includes('two_handed');
   if (target === 'worn') {
-    if (hero.inventory.filter((i) => i.equipped === 'worn').length >= 3 && entry.equipped !== 'worn') return { ok: false, error: 'You already wear three magic items.' };
+    if (hero.inventory.filter((i) => i.equipped === 'worn').length >= 3 && entry.equipped !== 'worn') return { ok: false, error: m('equip.threeWorn') };
   } else clear(target);
   if (target === 'main_hand' && twoHanded(entry)) {
     clear('shield');
@@ -97,9 +98,9 @@ export function equipItem(hero: Character, uid: string, db: SrdDatabase, slot?: 
   return { ok: true };
 }
 
-export function unequipItem(hero: Character, uid: string, db: SrdDatabase): EquipResult {
+export function unequipItem(hero: Character, uid: string, db: SrdDatabase, { m }: Messages = ENGLISH_MESSAGES): EquipResult {
   const entry = hero.inventory.find((i) => i.uid === uid);
-  if (!entry?.equipped) return { ok: false, error: 'That is not equipped.' };
+  if (!entry?.equipped) return { ok: false, error: m('equip.notEquipped') };
   delete entry.equipped;
   refreshDerived(hero, db);
   return { ok: true };

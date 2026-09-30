@@ -134,7 +134,7 @@ export class GameSession {
 
   /** Tells systems the clock moved (from → current time) and logs what they report. */
   timePassed(from: number): void {
-    for (const e of this.ports.systems?.timeAdvanced(this.current, from, this.current.time) ?? []) this.addLog('system', e.text);
+    for (const e of this.ports.systems?.timeAdvanced(this.current, from, this.current.time, this.msgs) ?? []) this.addLog('system', e.text);
   }
 
   get rng(): Rng {

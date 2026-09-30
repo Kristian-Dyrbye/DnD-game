@@ -20,13 +20,13 @@ export function weatherSystem(lore: Lore, regionOf: RegionResolver): GameSystem<
     id: 'weather',
     version: 1,
     initState: compute,
-    onTimeAdvance(state): SystemEvent[] {
+    onTimeAdvance(state, _from, _to, msgs): SystemEvent[] {
       const prev = currentWeather(state);
       const next = compute(state);
       if (prev && prev.block === next.block && prev.regionId === next.regionId) return [];
       state.extensions.weather = next;
       if (!prev) return []; // First reading (old save): set quietly.
-      const text = weatherChangeText(prev, next);
+      const text = weatherChangeText(prev, next, msgs);
       return text ? [{ systemId: 'weather', text }] : [];
     },
   };

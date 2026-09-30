@@ -4,6 +4,7 @@
  * migrated here) and reacts to time passing and rests. Built-in systems (clock now; weather,
  * factions, shops, companions later) and future ones (crafting, home base) plug in the same way.
  */
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { GameState } from '../session/gameState';
 
 export interface SystemEvent {
@@ -21,9 +22,9 @@ export interface GameSystem<S = unknown> {
   initState?(state: GameState): S;
   /** Upgrades saved data from an older system version. */
   migrate?(data: unknown, fromVersion: number): S;
-  /** Called after the clock moved from `from` to `to` (minutes). */
-  onTimeAdvance?(state: GameState, from: number, to: number): SystemEvent[];
-  onRest?(state: GameState, kind: RestKind): SystemEvent[];
+  /** Called after the clock moved from `from` to `to` (minutes). Event texts use `msgs`' language. */
+  onTimeAdvance?(state: GameState, from: number, to: number, msgs?: Messages): SystemEvent[];
+  onRest?(state: GameState, kind: RestKind, msgs?: Messages): SystemEvent[];
 }
 
 /** Where system versions are recorded inside `state.extensions`. */
@@ -63,20 +64,20 @@ export class SystemRegistry {
   }
 
   /** Moves the clock forward and lets every system react. */
-  advanceTime(state: GameState, minutes: number): SystemEvent[] {
+  advanceTime(state: GameState, minutes: number, msgs: Messages = ENGLISH_MESSAGES): SystemEvent[] {
     if (minutes <= 0) return [];
     const from = state.time;
     state.time += Math.round(minutes);
-    return this.timeAdvanced(state, from, state.time);
+    return this.timeAdvanced(state, from, state.time, msgs);
   }
 
   /** For code that already moved `state.time` (e.g. adventure outcomes): notify systems. */
-  timeAdvanced(state: GameState, from: number, to: number): SystemEvent[] {
+  timeAdvanced(state: GameState, from: number, to: number, msgs: Messages = ENGLISH_MESSAGES): SystemEvent[] {
     if (to <= from) return [];
-    return this.list().flatMap((s) => s.onTimeAdvance?.(state, from, to) ?? []);
+    return this.list().flatMap((s) => s.onTimeAdvance?.(state, from, to, msgs) ?? []);
   }
 
-  rest(state: GameState, kind: RestKind): SystemEvent[] {
-    return this.list().flatMap((s) => s.onRest?.(state, kind) ?? []);
+  rest(state: GameState, kind: RestKind, msgs: Messages = ENGLISH_MESSAGES): SystemEvent[] {
+    return this.list().flatMap((s) => s.onRest?.(state, kind, msgs) ?? []);
   }
 }

@@ -9,6 +9,7 @@
  */
 import type { Character, InventoryItem } from '../core/creature';
 import type { SrdDatabase } from '../data/srd';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
 export const WEAR_MAX = 100;
 export const WEAR_PER_HIT = { armor: 3, shield: 2 } as const;
@@ -57,29 +58,29 @@ export function repairCost(item: InventoryItem, db: SrdDatabase): number {
 export type RepairResult = { ok: true; character: Character; coins: number; minutes: number; text: string } | { ok: false; error: string };
 
 /** Repair at a smith: pay and wait an hour; the item is as good as new. */
-export function repairAtSmith(c: Character, uid: string, db: SrdDatabase): RepairResult {
+export function repairAtSmith(c: Character, uid: string, db: SrdDatabase, { m }: Messages = ENGLISH_MESSAGES): RepairResult {
   const item = c.inventory.find((i) => i.uid === uid);
-  if (!item || !(item.wear ?? 0)) return { ok: false, error: 'That needs no repair.' };
+  if (!item || !(item.wear ?? 0)) return { ok: false, error: m('repair.notNeeded') };
   const cost = repairCost(item, db);
-  if (c.coins < cost) return { ok: false, error: 'You cannot afford the repair.' };
+  if (c.coins < cost) return { ok: false, error: m('repair.cantAfford') };
   return {
     ok: true,
     character: { ...c, coins: c.coins - cost, inventory: c.inventory.map((i) => (i.uid === uid ? { ...i, wear: 0 } : i)) },
     coins: cost,
     minutes: SMITH_MINUTES,
-    text: 'The smith hammers out the dents and patches the straps.',
+    text: m('repair.smith'),
   };
 }
 
 /** Mend it yourself during downtime: 8 hours, removes up to 50 wear, free. */
-export function mendYourself(c: Character, uid: string): RepairResult {
+export function mendYourself(c: Character, uid: string, { m }: Messages = ENGLISH_MESSAGES): RepairResult {
   const item = c.inventory.find((i) => i.uid === uid);
-  if (!item || !(item.wear ?? 0)) return { ok: false, error: 'That needs no mending.' };
+  if (!item || !(item.wear ?? 0)) return { ok: false, error: m('repair.mendNotNeeded') };
   return {
     ok: true,
     character: { ...c, inventory: c.inventory.map((i) => (i.uid === uid ? { ...i, wear: Math.max(0, (i.wear ?? 0) - MEND_AMOUNT) } : i)) },
     coins: 0,
     minutes: MEND_MINUTES,
-    text: 'You spend the day beating out dents and restitching torn straps.',
+    text: m('repair.mend'),
   };
 }

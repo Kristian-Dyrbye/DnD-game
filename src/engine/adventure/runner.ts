@@ -503,7 +503,7 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
   if (o.scar) {
     const scene = findScene(ctx.adventure, getProgress(state)?.sceneId ?? '');
     state.hero = giveScar(state.hero, { description: o.scar.description, ...(o.scar.location && { location: o.scar.location }), ...(o.scar.damageType && { damageType: o.scar.damageType }), origin: `${scene?.name ?? state.location.name}, ${ctx.adventure.name}`, at: state.time }, ctx.rng);
-    result.facts.push(msgs.m('story.scar', { name: state.hero.name, scar: scarText(state.hero.scars.at(-1)!) }));
+    result.facts.push(msgs.m('story.scar', { name: state.hero.name, scar: scarText(state.hero.scars.at(-1)!, msgs) }));
   }
   for (const c of o.conditions) result.facts.push(...applyStoryCondition(state, c, msgs));
   if (o.exhaustion) {

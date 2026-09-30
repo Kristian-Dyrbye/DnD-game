@@ -6,8 +6,8 @@ export function storyConditionSystem(): GameSystem {
   return {
     id: 'storyConditions',
     version: 1,
-    onTimeAdvance(state): SystemEvent[] {
-      return expireStoryConditions(state).map((text) => ({ systemId: 'storyConditions', text }));
+    onTimeAdvance(state, _from, _to, msgs): SystemEvent[] {
+      return expireStoryConditions(state, msgs).map((text) => ({ systemId: 'storyConditions', text }));
     },
   };
 }
