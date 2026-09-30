@@ -104,6 +104,18 @@
                 "flag": "~ch5_hold_fallen"
               },
               "seed": "Lantern Hold has fallen. Its lanterns are out, and the survivors huddle on the causeway."
+            },
+            {
+              "if": {
+                "flag": "~ch5_grell_confessed"
+              },
+              "seed": "The Wardens will not look at Grell, but they have not left the wall."
+            },
+            {
+              "if": {
+                "flag": "~ch5_sally"
+              },
+              "seed": "Smoke still rises from the fen where you and Brask burned the ghouls by the postern."
             }
           ],
           "npcs": [
@@ -174,6 +186,12 @@
                       "eq": "wardens"
                     },
                     "source": "The Wardens trust the one who gave them the Tooth of Want"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_grell_resolve"
+                    },
+                    "source": "Grell's ledger lies open on the gate-house table"
                   }
                 ],
                 "success": {
@@ -187,7 +205,15 @@
                 },
                 "failure": {
                   "text": "They listen, but they are too tired to hope. Grell thanks you, curtly, and goes back to the wall."
-                }
+                },
+                "disadvantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch5_grell_cold"
+                    },
+                    "source": "The Wardens heard what you said to their captain"
+                  }
+                ]
               }
             },
             {
@@ -821,7 +847,15 @@
                 "failure": {
                   "text": "The rot goes deeper than your knife. The heart-tree does not answer yet.",
                   "minutes": 60
-                }
+                },
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch5_wick_advice"
+                    },
+                    "source": "Wick told you to cut low and let Nettle sing"
+                  }
+                ]
               }
             },
             {
@@ -1329,7 +1363,8 @@
               },
               "minutes": 360
             }
-          ]
+          ],
+          "revisitSeed": "The Blightwood again: grey trees, moving paths, and whispers just below hearing."
         },
         {
           "id": "abbey_bells_toll",
@@ -1371,6 +1406,12 @@
                 "eq": true
               },
               "seed": "The bells have rung. Somewhere to the south, the Maw’s song stumbles."
+            },
+            {
+              "if": {
+                "flag": "~ch5_cendric_follows"
+              },
+              "seed": "Abbot Cendric has a hand-bell and a heel of bread in his satchel, ready for the Maw."
             }
           ],
           "npcs": [
@@ -1527,6 +1568,12 @@
                       "eq": "player"
                     },
                     "source": "The Drowned Tooth makes the bells resonate"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_bell_names"
+                    },
+                    "source": "You call the bell by its name before you dive"
                   }
                 ],
                 "success": {
@@ -1612,7 +1659,8 @@
               },
               "minutes": 480
             }
-          ]
+          ],
+          "revisitSeed": "The Drowned Abbey again, the black water still in the undercroft."
         },
         {
           "id": "maw_descent",
@@ -1665,6 +1713,19 @@
                 "eq": "betrayed"
               },
               "seed": "Nettle is gone. You saw her running down the stair ahead of you, toward the song."
+            },
+            {
+              "if": {
+                "any": [
+                  {
+                    "flag": "~ch5_vosk_yielded"
+                  },
+                  {
+                    "flag": "~ch5_vosk_books"
+                  }
+                ]
+              },
+              "seed": "Vosk sits bound on the sanctum steps among his books, waiting."
             }
           ],
           "npcs": [],
@@ -1840,7 +1901,15 @@
                       "value": true
                     }
                   ]
-                }
+                },
+                "advantageIf": [
+                  {
+                    "if": {
+                      "flag": "~ch5_sentry_rota"
+                    },
+                    "source": "Sallow told you where the bone chimes hang"
+                  }
+                ]
               }
             },
             {
@@ -2101,6 +2170,10 @@
               },
               "minutes": 10
             }
+          ],
+          "revisitSeed": [
+            "The Maw's rim again, and the warm breath rising out of the dark.",
+            "Back at the top of the spiral stair, bile on your boots, the Maw breathing below."
           ]
         },
         {
@@ -2721,6 +2794,12 @@
                 "eq": "escaped"
               },
               "seed": "The Jaw-Stone is empty. Her voice comes up out of the Maw’s throat now, from everywhere."
+            },
+            {
+              "if": {
+                "flag": "~ch5_aurek_wavers"
+              },
+              "seed": "Aurek stands beside his aunt, silent. He has stopped singing."
             }
           ],
           "npcs": [
@@ -2857,6 +2936,18 @@
                       "eq": true
                     },
                     "source": "The drowned bells still ring in the Maw"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_song_flaw"
+                    },
+                    "source": "You know which verse the Maw pulls through"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_lead_box"
+                    },
+                    "source": "The Teeth ride in Brask's lead box"
                   }
                 ],
                 "disadvantageIf": [
@@ -2865,6 +2956,12 @@
                       "flag": "~ch5_song_late"
                     },
                     "source": "The Choir’s song is nearly finished"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_cantor_furious"
+                    },
+                    "source": "The Cantor is singing at you alone"
                   }
                 ],
                 "success": {
@@ -2975,6 +3072,24 @@
                       "flag": "~ch5_nettle_confessed"
                     },
                     "source": "Nettle taught you what her whisper sounds like"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_wick_charm"
+                    },
+                    "source": "Wick's briar knot: there is less of you for the Maw to pull on"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_song_flaw"
+                    },
+                    "source": "You know which verse the Maw pulls through"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_sallow_hymn"
+                    },
+                    "source": "You know where the hymn's hooks are"
                   }
                 ],
                 "disadvantageIf": [
@@ -2989,6 +3104,12 @@
                       "flag": "~ch5_whispers_heard"
                     },
                     "source": "Part of you is still listening to the Blightwood’s whispers"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_cantor_furious"
+                    },
+                    "source": "The Cantor is singing at you alone"
                   }
                 ],
                 "success": {
@@ -5504,6 +5625,18 @@
                       "eq": true
                     },
                     "source": "The drowned bells still ring in the Maw"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_song_flaw"
+                    },
+                    "source": "You know which verse the Maw pulls through"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_lead_box"
+                    },
+                    "source": "The Teeth ride in Brask's lead box"
                   }
                 ],
                 "disadvantageIf": [
@@ -5512,6 +5645,12 @@
                       "flag": "~ch5_song_late"
                     },
                     "source": "The Choir’s song is nearly finished"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_cantor_furious"
+                    },
+                    "source": "The Cantor is singing at you alone"
                   }
                 ],
                 "success": {
@@ -5620,6 +5759,24 @@
                       "flag": "~ch5_nettle_confessed"
                     },
                     "source": "Nettle taught you what her whisper sounds like"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_wick_charm"
+                    },
+                    "source": "Wick's briar knot: there is less of you for the Maw to pull on"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_song_flaw"
+                    },
+                    "source": "You know which verse the Maw pulls through"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_sallow_hymn"
+                    },
+                    "source": "You know where the hymn's hooks are"
                   }
                 ],
                 "disadvantageIf": [
@@ -5634,6 +5791,12 @@
                       "flag": "~ch5_whispers_heard"
                     },
                     "source": "Part of you is still listening to the Blightwood’s whispers"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_cantor_furious"
+                    },
+                    "source": "The Cantor is singing at you alone"
                   }
                 ],
                 "success": {
@@ -6606,6 +6769,12 @@
                       "eq": true
                     },
                     "source": "You know what the Dawn Lance did at Cinderdale"
+                  },
+                  {
+                    "if": {
+                      "flag": "~ch5_cantor_shaken"
+                    },
+                    "source": "She has already missed a beat for Cinderdale"
                   }
                 ],
                 "success": {
@@ -7094,7 +7263,8 @@
               },
               "minutes": 10
             }
-          ]
+          ],
+          "revisitSeed": "The Jaw-Stone again, and the song that has not stopped since you left."
         },
         {
           "id": "maw_final_seal",
@@ -7221,6 +7391,34 @@
                 ]
               },
               "seed": "It is not enough. The jaw closes, but not all the way."
+            },
+            {
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch5_wick_below"
+                  },
+                  {
+                    "flag": "arc.main.wick_fate",
+                    "eq": "ally"
+                  }
+                ]
+              },
+              "seed": "Grandmother Wick has climbed onto the Jaw-Stone and sits there, cackling at the dark."
+            },
+            {
+              "if": {
+                "all": [
+                  {
+                    "flag": "~ch5_cendric_follows"
+                  },
+                  {
+                    "flag": "arc.main.abbot_cendric_alive",
+                    "eq": true
+                  }
+                ]
+              },
+              "seed": "Abbot Cendric kneels by the Jaw-Stone with his hand-bell raised."
             }
           ],
           "npcs": [
@@ -7620,7 +7818,492 @@
       "factions": [
         "lantern_wardens"
       ],
-      "attitude": "indifferent"
+      "attitude": "indifferent",
+      "conversations": [
+        {
+          "id": "council",
+          "label": "Talk to Warden-Captain Grell",
+          "if": {
+            "all": [
+              {
+                "not": {
+                  "flag": "~ch5_hold_fallen"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch5_grell_cold"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "grell",
+            "captain",
+            "maud",
+            "warden",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Grell leans on the parapet with her lantern hooded. Out in the fog something is moving, a great many somethings. \"Speak quickly. I do not expect to have much time for conversation after tonight.\"",
+              "options": [
+                {
+                  "id": "ledger",
+                  "label": "\"Every name in your ledger of the burned is watching you tonight, Captain.\" (Persuasion DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_siege_begun"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_grell_resolve"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_grell_resolve_tried"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_grell_cold"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "ledger",
+                    "names",
+                    "burned",
+                    "watching",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~ch1_grell_moved"
+                        },
+                        "source": "You reminded her of the ledger once before, at the tribunal"
+                      }
+                    ],
+                    "success": {
+                      "text": "Grell is quiet for a long moment. Then she takes the ledger from her belt and sets it on the gate-house table, open, where every Warden going up the stair will see it. \"Then we had better be worth them.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_grell_resolve",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The dead do not watch anything,\" says Grell. \"That is rather the point of them.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_grell_resolve_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "pyres",
+                  "label": "\"Hollowmere burned on your order. Say it to their faces, before the dead do.\" (Intimidation DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_siege_begun"
+                        }
+                      },
+                      {
+                        "flag": "arc.main.hollowmere_fate",
+                        "eq": "purged"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_grell_confessed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_grell_cold"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "hollowmere",
+                    "pyres",
+                    "burned",
+                    "order",
+                    "answer",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Grell goes white. Then she climbs onto the gate and says it, loud enough for the whole courtyard: that she gave the order, that she would give it again, and that she is sorry. Nobody cheers. But nobody leaves the wall, either.",
+                      "flags": [
+                        {
+                          "set": "~ch5_grell_confessed",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch5_grell_resolve",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "nettle",
+                          "delta": 10
+                        },
+                        {
+                          "companion": "corwin",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Get off my wall,\" says Grell, very softly. The Wardens nearest you heard every word, and none of them will meet your eye.",
+                      "flags": [
+                        {
+                          "set": "~ch5_grell_cold",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "notice",
+                  "label": "\"You have already written your own death notice, haven't you?\" (Insight DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_notice_found"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_notice_tried"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_grell_cold"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "death",
+                    "notice",
+                    "written",
+                    "die",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 15,
+                    "success": {
+                      "text": "Grell's mouth twists. \"On my desk. Two lines. There did not seem to be much else to say.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_notice_found",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"I have written a great many things,\" says Grell. \"Mostly lists of the dead.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_notice_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "notice",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"To the wall, then.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"What else?\"",
+              "options": [
+                {
+                  "id": "ledger",
+                  "label": "\"Every name in your ledger of the burned is watching you tonight, Captain.\" (Persuasion DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_siege_begun"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_grell_resolve"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_grell_resolve_tried"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_grell_cold"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "ledger",
+                    "names",
+                    "burned",
+                    "watching",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~ch1_grell_moved"
+                        },
+                        "source": "You reminded her of the ledger once before, at the tribunal"
+                      }
+                    ],
+                    "success": {
+                      "text": "Grell is quiet for a long moment. Then she takes the ledger from her belt and sets it on the gate-house table, open, where every Warden going up the stair will see it. \"Then we had better be worth them.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_grell_resolve",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"The dead do not watch anything,\" says Grell. \"That is rather the point of them.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_grell_resolve_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "pyres",
+                  "label": "\"Hollowmere burned on your order. Say it to their faces, before the dead do.\" (Intimidation DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_siege_begun"
+                        }
+                      },
+                      {
+                        "flag": "arc.main.hollowmere_fate",
+                        "eq": "purged"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_grell_confessed"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_grell_cold"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "hollowmere",
+                    "pyres",
+                    "burned",
+                    "order",
+                    "answer",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Grell goes white. Then she climbs onto the gate and says it, loud enough for the whole courtyard: that she gave the order, that she would give it again, and that she is sorry. Nobody cheers. But nobody leaves the wall, either.",
+                      "flags": [
+                        {
+                          "set": "~ch5_grell_confessed",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch5_grell_resolve",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "nettle",
+                          "delta": 10
+                        },
+                        {
+                          "companion": "corwin",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Get off my wall,\" says Grell, very softly. The Wardens nearest you heard every word, and none of them will meet your eye.",
+                      "flags": [
+                        {
+                          "set": "~ch5_grell_cold",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "cold"
+                },
+                {
+                  "id": "notice",
+                  "label": "\"You have already written your own death notice, haven't you?\" (Insight DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_notice_found"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_notice_tried"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_grell_cold"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "death",
+                    "notice",
+                    "written",
+                    "die",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 15,
+                    "success": {
+                      "text": "Grell's mouth twists. \"On my desk. Two lines. There did not seem to be much else to say.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_notice_found",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"I have written a great many things,\" says Grell. \"Mostly lists of the dead.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_notice_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "notice",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"To the wall, then.\""
+                }
+              ]
+            },
+            {
+              "id": "notice",
+              "text": "Grell says nothing more about it. The paper is still on her desk.",
+              "options": [
+                {
+                  "id": "tear",
+                  "label": "\"Tear it up. The fen will need someone to answer for it after tonight, and that is you.\"",
+                  "keywords": [
+                    "tear",
+                    "up",
+                    "after",
+                    "live"
+                  ],
+                  "outcome": {
+                    "text": "Grell looks at you as though you had slapped her. Then she goes into the gate-house, and when she comes out there are two torn halves of paper blowing along the wall.",
+                    "flags": [
+                      {
+                        "set": "~ch5_grell_lives",
+                        "value": true
+                      }
+                    ],
+                    "approval": [
+                      {
+                        "companion": "corwin",
+                        "delta": 5
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "leave",
+                  "label": "\"Then let us make it a short notice.\"",
+                  "next": "more"
+                }
+              ]
+            },
+            {
+              "id": "cold",
+              "text": "Grell turns her back on you and speaks to her sergeants instead."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "odo_brask",
@@ -7634,7 +8317,395 @@
       "factions": [
         "lantern_wardens"
       ],
-      "attitude": "friendly"
+      "attitude": "friendly",
+      "conversations": [
+        {
+          "id": "boxes",
+          "label": "Talk to Sergeant Brask",
+          "if": {
+            "not": {
+              "flag": "~ch5_hold_fallen"
+            }
+          },
+          "keywords": [
+            "brask",
+            "sergeant",
+            "odo",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Brask is counting lead boxes in the vault under the gate-house, lips moving. \"Captain's orders are to hold. Mine are to make sure there is something left worth holding. What do you need?\"",
+              "options": [
+                {
+                  "id": "lead",
+                  "label": "\"Lend me one of your lead boxes for the Teeth, Sergeant.\" (Persuasion DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_lead_box"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_lead_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "lead",
+                    "box",
+                    "boxes",
+                    "teeth",
+                    "lend",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "any": [
+                            {
+                              "flag": "~ch1_brask_confided"
+                            },
+                            {
+                              "flag": "~ch1_brask_witness"
+                            }
+                          ]
+                        },
+                        "source": "Brask remembers what you did for Hollowmere"
+                      }
+                    ],
+                    "disadvantageIf": [
+                      {
+                        "if": {
+                          "flag": "~ch1_brask_cold"
+                        },
+                        "source": "Brask has not forgotten your threats at the gate"
+                      }
+                    ],
+                    "success": {
+                      "text": "Brask weighs you up, then fetches a grey box from the vault, lined with lead and old Warden sigils. \"Keeps them quiet,\" he says. \"Mostly. Bring it back.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_lead_box",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Those boxes are all that stands between this Hold and the Maw,\" says Brask. \"No.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_lead_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "widows",
+                  "label": "\"Twenty gold for the Wardens' widows, and one of your lead boxes.\"",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_lead_box"
+                        }
+                      },
+                      {
+                        "coins": {
+                          "gte": 2000
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "gold",
+                    "widows",
+                    "twenty",
+                    "pay",
+                    "buy",
+                    "bribe"
+                  ],
+                  "outcome": {
+                    "text": "Brask takes the purse without a word and drops it in the widows' chest. Then he fetches a lead-lined box from the vault and puts it in your hands.",
+                    "cost": 2000,
+                    "flags": [
+                      {
+                        "set": "~ch5_lead_box",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "postern",
+                  "label": "\"Your old postern. We slip out and hit the dead from behind before they reach the wall.\" (Stealth DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_siege_begun"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_sally"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_sally_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "postern",
+                    "sally",
+                    "behind",
+                    "slip",
+                    "stealth"
+                  ],
+                  "check": {
+                    "skill": "stealth",
+                    "dc": 14,
+                    "success": {
+                      "text": "You and Brask slip out through the postern with six Wardens and a pot of oil. In the fog you find a knot of ghouls waiting to climb, and you burn them where they crouch before anyone on the other side knows you are there.",
+                      "flags": [
+                        {
+                          "set": "~ch5_sally",
+                          "value": true
+                        }
+                      ],
+                      "minutes": 60
+                    },
+                    "failure": {
+                      "text": "A ghoul hears the postern's hinge. You fight your way back inside with its claws in your back, and Brask bars the door behind you.",
+                      "flags": [
+                        {
+                          "set": "~ch5_sally_tried",
+                          "value": true
+                        }
+                      ],
+                      "minutes": 60,
+                      "damage": {
+                        "dice": "2d8",
+                        "type": "slashing",
+                        "target": "hero"
+                      }
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Keep the lanterns lit, Sergeant.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Anything else?\"",
+              "options": [
+                {
+                  "id": "lead",
+                  "label": "\"Lend me one of your lead boxes for the Teeth, Sergeant.\" (Persuasion DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_lead_box"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_lead_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "lead",
+                    "box",
+                    "boxes",
+                    "teeth",
+                    "lend",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "any": [
+                            {
+                              "flag": "~ch1_brask_confided"
+                            },
+                            {
+                              "flag": "~ch1_brask_witness"
+                            }
+                          ]
+                        },
+                        "source": "Brask remembers what you did for Hollowmere"
+                      }
+                    ],
+                    "disadvantageIf": [
+                      {
+                        "if": {
+                          "flag": "~ch1_brask_cold"
+                        },
+                        "source": "Brask has not forgotten your threats at the gate"
+                      }
+                    ],
+                    "success": {
+                      "text": "Brask weighs you up, then fetches a grey box from the vault, lined with lead and old Warden sigils. \"Keeps them quiet,\" he says. \"Mostly. Bring it back.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_lead_box",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Those boxes are all that stands between this Hold and the Maw,\" says Brask. \"No.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_lead_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "widows",
+                  "label": "\"Twenty gold for the Wardens' widows, and one of your lead boxes.\"",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_lead_box"
+                        }
+                      },
+                      {
+                        "coins": {
+                          "gte": 2000
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "gold",
+                    "widows",
+                    "twenty",
+                    "pay",
+                    "buy",
+                    "bribe"
+                  ],
+                  "outcome": {
+                    "text": "Brask takes the purse without a word and drops it in the widows' chest. Then he fetches a lead-lined box from the vault and puts it in your hands.",
+                    "cost": 2000,
+                    "flags": [
+                      {
+                        "set": "~ch5_lead_box",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "postern",
+                  "label": "\"Your old postern. We slip out and hit the dead from behind before they reach the wall.\" (Stealth DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_siege_begun"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_sally"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_sally_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "postern",
+                    "sally",
+                    "behind",
+                    "slip",
+                    "stealth"
+                  ],
+                  "check": {
+                    "skill": "stealth",
+                    "dc": 14,
+                    "success": {
+                      "text": "You and Brask slip out through the postern with six Wardens and a pot of oil. In the fog you find a knot of ghouls waiting to climb, and you burn them where they crouch before anyone on the other side knows you are there.",
+                      "flags": [
+                        {
+                          "set": "~ch5_sally",
+                          "value": true
+                        }
+                      ],
+                      "minutes": 60
+                    },
+                    "failure": {
+                      "text": "A ghoul hears the postern's hinge. You fight your way back inside with its claws in your back, and Brask bars the door behind you.",
+                      "flags": [
+                        {
+                          "set": "~ch5_sally_tried",
+                          "value": true
+                        }
+                      ],
+                      "minutes": 60,
+                      "damage": {
+                        "dice": "2d8",
+                        "type": "slashing",
+                        "target": "hero"
+                      }
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Keep the lanterns lit, Sergeant.\""
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "mother_sallow",
@@ -7658,6 +8729,391 @@
             "flag": "arc.main.sallow_fate",
             "eq": "escaped"
           }
+        }
+      ],
+      "conversations": [
+        {
+          "id": "last_words",
+          "label": "Question Mother Sallow",
+          "if": {
+            "all": [
+              {
+                "flag": "~ch5_sallow_beaten"
+              },
+              {
+                "flag": "arc.main.sallow_fate",
+                "eq": "escaped"
+              }
+            ]
+          },
+          "keywords": [
+            "sallow",
+            "mother",
+            "question",
+            "ask",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Mother Sallow sits in the ditch-water with her hands folded, as if waiting for tea. \"Well, dear? Ask. I have nothing left but answers.\"",
+              "options": [
+                {
+                  "id": "sentries",
+                  "label": "\"Where does the Cantor post her sentries?\" (Intimidation DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_sentry_rota"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_rota_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "sentries",
+                    "posted",
+                    "guards",
+                    "where",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Sallow's smile slips. \"The gallery. They sing with their eyes shut, the dear things. They only open them when the bone chimes ring.\" She tells you where the chimes hang.",
+                      "flags": [
+                        {
+                          "set": "~ch5_sentry_rota",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Everywhere, darling,\" says Sallow. \"Everywhere there is dark.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_rota_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "rite",
+                  "label": "\"Your drowned children at the Abbey deserve a rite. Tell me their names and they will have one.\" (Religion DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_sallow_names"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_sallow_names_tried"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_abbey_done"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "children",
+                    "names",
+                    "drowned",
+                    "abbey",
+                    "rite",
+                    "religion"
+                  ],
+                  "check": {
+                    "skill": "religion",
+                    "dc": 14,
+                    "success": {
+                      "text": "For the first time Sallow's face softens. She tells you the names of the Abbey's drowned, one by one, the way a mother counts children. \"Say them when you ring the bells. Some of them will listen.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_sallow_names",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "nettle",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"You would only burn them,\" says Sallow.",
+                      "flags": [
+                        {
+                          "set": "~ch5_sallow_names_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "hymn",
+                  "label": "\"The Cantor sent me to bring you home, Mother. Sing me the hymn so I know it is really you.\" (Deception DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_sallow_hymn"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_hymn_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "cantor",
+                    "sent",
+                    "hymn",
+                    "home",
+                    "sing",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 16,
+                    "success": {
+                      "text": "Sallow's eyes shine. She sings you the Choir's hymn, all of it, and you learn exactly where its hooks are. When she finishes and sees your face, she understands. \"Oh,\" she says. \"Oh, that was cruel.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_sallow_hymn",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Sallow laughs until she coughs. \"She would never send you.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_hymn_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "Leave her to the Wardens' chains, or your blade"
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"More?\"",
+              "options": [
+                {
+                  "id": "sentries",
+                  "label": "\"Where does the Cantor post her sentries?\" (Intimidation DC 15)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_sentry_rota"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_rota_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "sentries",
+                    "posted",
+                    "guards",
+                    "where",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 15,
+                    "success": {
+                      "text": "Sallow's smile slips. \"The gallery. They sing with their eyes shut, the dear things. They only open them when the bone chimes ring.\" She tells you where the chimes hang.",
+                      "flags": [
+                        {
+                          "set": "~ch5_sentry_rota",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Everywhere, darling,\" says Sallow. \"Everywhere there is dark.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_rota_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "rite",
+                  "label": "\"Your drowned children at the Abbey deserve a rite. Tell me their names and they will have one.\" (Religion DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_sallow_names"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_sallow_names_tried"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_abbey_done"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "children",
+                    "names",
+                    "drowned",
+                    "abbey",
+                    "rite",
+                    "religion"
+                  ],
+                  "check": {
+                    "skill": "religion",
+                    "dc": 14,
+                    "success": {
+                      "text": "For the first time Sallow's face softens. She tells you the names of the Abbey's drowned, one by one, the way a mother counts children. \"Say them when you ring the bells. Some of them will listen.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_sallow_names",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "nettle",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"You would only burn them,\" says Sallow.",
+                      "flags": [
+                        {
+                          "set": "~ch5_sallow_names_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "hymn",
+                  "label": "\"The Cantor sent me to bring you home, Mother. Sing me the hymn so I know it is really you.\" (Deception DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_sallow_hymn"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_hymn_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "cantor",
+                    "sent",
+                    "hymn",
+                    "home",
+                    "sing",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 16,
+                    "success": {
+                      "text": "Sallow's eyes shine. She sings you the Choir's hymn, all of it, and you learn exactly where its hooks are. When she finishes and sees your face, she understands. \"Oh,\" she says. \"Oh, that was cruel.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_sallow_hymn",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Sallow laughs until she coughs. \"She would never send you.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_hymn_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "Leave her to the Wardens' chains, or your blade"
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -7692,6 +9148,328 @@
             ]
           }
         }
+      ],
+      "conversations": [
+        {
+          "id": "rim_song",
+          "label": "Talk to Grandmother Wick",
+          "keywords": [
+            "wick",
+            "grandmother",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Grandmother Wick sits on an upturned bucket by the gate-house fire, warming her feet, as if the siege were weather. \"Well, little mushroom. Have you come to ask for things?\"",
+              "options": [
+                {
+                  "id": "charm",
+                  "label": "\"Give me something against the Maw's whisper.\" (She will want a memory for it.)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch5_wick_charm"
+                    }
+                  },
+                  "keywords": [
+                    "charm",
+                    "whisper",
+                    "protect",
+                    "memory",
+                    "price"
+                  ],
+                  "outcome": {
+                    "text": "Wick ties a knot of briar and hair around your wrist and presses her thumb to your eyelid. Something warm goes out of you: a summer afternoon, a face you loved. You cannot now remember whose. \"There,\" she says. \"Now you have less for it to pull on.\"",
+                    "flags": [
+                      {
+                        "set": "~ch5_wick_charm",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "below",
+                  "label": "\"Come down with us, Grandmother. Sing the Name at the Jaw-Stone itself.\" (Persuasion DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_wick_below"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_below_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "come",
+                    "down",
+                    "sing",
+                    "jaw",
+                    "name",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 16,
+                    "success": {
+                      "text": "Wick is quiet for so long you think she has fallen asleep. \"I am very old,\" she says at last, \"and I have wanted to spit in that thing's mouth for four hundred years. Yes.\" Nettle, if she is there, turns away and says nothing.",
+                      "flags": [
+                        {
+                          "set": "~ch5_wick_below",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "nettle",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"From the fen,\" says Wick. \"I will sing it from the fen, where I belong.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_below_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "heart",
+                  "label": "\"What does Nettle need, at the heart-tree?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "world.nettle_status",
+                        "eq": "in_party"
+                      },
+                      {
+                        "not": {
+                          "flag": "world.nettle_quest_done",
+                          "eq": true
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_wick_advice"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_advice_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "nettle",
+                    "heart",
+                    "tree",
+                    "need",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Wick glances at Nettle and lowers her voice. \"The rot is at the root, not the bark. Cut low, and let her sing while you do it. Do not tell her I told you.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_wick_advice",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Ask her,\" says Wick. \"She has a mouth.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_advice_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Thank you, Grandmother.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"What else, then?\"",
+              "options": [
+                {
+                  "id": "charm",
+                  "label": "\"Give me something against the Maw's whisper.\" (She will want a memory for it.)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch5_wick_charm"
+                    }
+                  },
+                  "keywords": [
+                    "charm",
+                    "whisper",
+                    "protect",
+                    "memory",
+                    "price"
+                  ],
+                  "outcome": {
+                    "text": "Wick ties a knot of briar and hair around your wrist and presses her thumb to your eyelid. Something warm goes out of you: a summer afternoon, a face you loved. You cannot now remember whose. \"There,\" she says. \"Now you have less for it to pull on.\"",
+                    "flags": [
+                      {
+                        "set": "~ch5_wick_charm",
+                        "value": true
+                      }
+                    ]
+                  },
+                  "next": "more"
+                },
+                {
+                  "id": "below",
+                  "label": "\"Come down with us, Grandmother. Sing the Name at the Jaw-Stone itself.\" (Persuasion DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_wick_below"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_below_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "come",
+                    "down",
+                    "sing",
+                    "jaw",
+                    "name",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 16,
+                    "success": {
+                      "text": "Wick is quiet for so long you think she has fallen asleep. \"I am very old,\" she says at last, \"and I have wanted to spit in that thing's mouth for four hundred years. Yes.\" Nettle, if she is there, turns away and says nothing.",
+                      "flags": [
+                        {
+                          "set": "~ch5_wick_below",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "nettle",
+                          "delta": -5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"From the fen,\" says Wick. \"I will sing it from the fen, where I belong.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_below_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "heart",
+                  "label": "\"What does Nettle need, at the heart-tree?\" (Insight DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "world.nettle_status",
+                        "eq": "in_party"
+                      },
+                      {
+                        "not": {
+                          "flag": "world.nettle_quest_done",
+                          "eq": true
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_wick_advice"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_advice_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "nettle",
+                    "heart",
+                    "tree",
+                    "need",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 14,
+                    "success": {
+                      "text": "Wick glances at Nettle and lowers her voice. \"The rot is at the root, not the bark. Cut low, and let her sing while you do it. Do not tell her I told you.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_wick_advice",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Ask her,\" says Wick. \"She has a mouth.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_advice_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Thank you, Grandmother.\""
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
@@ -7714,6 +9492,392 @@
             "flag": "arc.main.abbot_cendric_alive",
             "eq": true
           }
+        }
+      ],
+      "conversations": [
+        {
+          "id": "vigil",
+          "label": "Talk to Abbot Cendric",
+          "keywords": [
+            "cendric",
+            "abbot",
+            "father",
+            "priest",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Abbot Cendric sits on the dry step above the flooded undercroft with his hands in his sleeves. Below him the water is black and very still. \"At midnight the dead-bells can be rung, if anyone is brave enough to fetch them up. What would you ask me first?\"",
+              "options": [
+                {
+                  "id": "names",
+                  "label": "\"Teach me the bells' names, Father, so I can call them up from the water.\" (Religion DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_abbey_done"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_bell_names"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_bell_names_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "bells",
+                    "names",
+                    "teach",
+                    "call",
+                    "religion"
+                  ],
+                  "check": {
+                    "skill": "religion",
+                    "dc": 13,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~ch1_abbot_blessing"
+                        },
+                        "source": "Cendric blessed you in the flooded nave once before"
+                      }
+                    ],
+                    "success": {
+                      "text": "Cendric teaches you the nine names, one for each bell, in the old tongue of Mireth. \"Say the name before you dive, and the bell will know you.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_bell_names",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The old words slide off your tongue. \"No matter,\" says Cendric gently. \"The bells are patient.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_bell_names_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "drowned",
+                  "label": "\"Who are the drowned in the undercroft, Father?\" (History DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_abbey_done"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_drowned_known"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_drowned_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "drowned",
+                    "undercroft",
+                    "who",
+                    "dead",
+                    "history"
+                  ],
+                  "check": {
+                    "skill": "history",
+                    "dc": 14,
+                    "success": {
+                      "text": "Cendric tells you: the brothers who stayed when the Abbey flooded, rather than leave the bells. \"Some of them are only waiting to be told they may stop. Tell them.\" One fewer of them will rise against you tonight.",
+                      "flags": [
+                        {
+                          "set": "~ch5_drowned_known",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Brothers,\" says Cendric. \"I knew their faces, not their names. I am sorry.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_drowned_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "follow",
+                  "label": "\"When the bells are rung, come down into the Maw with us. The seal will need your voice.\" (Persuasion DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_cendric_follows"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_follow_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "come",
+                    "maw",
+                    "seal",
+                    "voice",
+                    "follow",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "success": {
+                      "text": "Cendric smiles like a man who has been waiting a long time to be asked. \"I am eighty-one years old. I would rather end it singing than in a chair.\" He packs a hand-bell and a heel of bread.",
+                      "flags": [
+                        {
+                          "set": "~ch5_cendric_follows",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"My place is with the bells,\" says Cendric. \"Someone must keep them ringing.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_follow_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Keep the vigil, Father.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Ask.\"",
+              "options": [
+                {
+                  "id": "names",
+                  "label": "\"Teach me the bells' names, Father, so I can call them up from the water.\" (Religion DC 13)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_abbey_done"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_bell_names"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_bell_names_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "bells",
+                    "names",
+                    "teach",
+                    "call",
+                    "religion"
+                  ],
+                  "check": {
+                    "skill": "religion",
+                    "dc": 13,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~ch1_abbot_blessing"
+                        },
+                        "source": "Cendric blessed you in the flooded nave once before"
+                      }
+                    ],
+                    "success": {
+                      "text": "Cendric teaches you the nine names, one for each bell, in the old tongue of Mireth. \"Say the name before you dive, and the bell will know you.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_bell_names",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The old words slide off your tongue. \"No matter,\" says Cendric gently. \"The bells are patient.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_bell_names_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "drowned",
+                  "label": "\"Who are the drowned in the undercroft, Father?\" (History DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_abbey_done"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_drowned_known"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_drowned_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "drowned",
+                    "undercroft",
+                    "who",
+                    "dead",
+                    "history"
+                  ],
+                  "check": {
+                    "skill": "history",
+                    "dc": 14,
+                    "success": {
+                      "text": "Cendric tells you: the brothers who stayed when the Abbey flooded, rather than leave the bells. \"Some of them are only waiting to be told they may stop. Tell them.\" One fewer of them will rise against you tonight.",
+                      "flags": [
+                        {
+                          "set": "~ch5_drowned_known",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Brothers,\" says Cendric. \"I knew their faces, not their names. I am sorry.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_drowned_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "follow",
+                  "label": "\"When the bells are rung, come down into the Maw with us. The seal will need your voice.\" (Persuasion DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_cendric_follows"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_follow_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "come",
+                    "maw",
+                    "seal",
+                    "voice",
+                    "follow",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "success": {
+                      "text": "Cendric smiles like a man who has been waiting a long time to be asked. \"I am eighty-one years old. I would rather end it singing than in a chair.\" He packs a hand-bell and a heel of bread.",
+                      "flags": [
+                        {
+                          "set": "~ch5_cendric_follows",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "corwin",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"My place is with the bells,\" says Cendric. \"Someone must keep them ringing.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_follow_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Keep the vigil, Father.\""
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -7739,6 +9903,397 @@
           "from": 20,
           "to": 24
         }
+      ],
+      "conversations": [
+        {
+          "id": "midnight",
+          "label": "Speak to the grey woman",
+          "if": {
+            "all": [
+              {
+                "flag": "~ch5_hag_came"
+              },
+              {
+                "not": {
+                  "flag": "~ch5_hag_dealt"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "hag",
+            "grey",
+            "woman",
+            "sister",
+            "speak",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "The hag's sister waits between the trees, patient as a heron. \"Well? My sister was always the talker. I prefer to be paid.\"",
+              "options": [
+                {
+                  "id": "false_tooth",
+                  "label": "Hold out a dog's fang wrapped in cloth: \"Here. A Tooth, as you asked.\" (Deception DC 16)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch5_hag_trick_tried"
+                    }
+                  },
+                  "keywords": [
+                    "fang",
+                    "false",
+                    "fake",
+                    "trick",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 16,
+                    "disadvantageIf": [
+                      {
+                        "if": {
+                          "flag": "~ch2_hag_tricked"
+                        },
+                        "source": "Her sister told her about your false year"
+                      }
+                    ],
+                    "success": {
+                      "text": "The hag's sister unwraps the fang, sniffs it, and smiles with all her long teeth. \"Delicious.\" She is gone before the cloth hits the grass. Somewhere, very soon, she is going to be extremely angry.",
+                      "flags": [
+                        {
+                          "set": "~ch5_hag_dealt",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch5_hag_tricked",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "She does not even unwrap it. She only looks at you, and a nightmare you had as a child comes back all at once, and stays.",
+                      "flags": [
+                        {
+                          "set": "~ch5_hag_trick_tried",
+                          "value": true
+                        }
+                      ],
+                      "damage": {
+                        "dice": "3d6",
+                        "type": "psychic",
+                        "target": "hero"
+                      }
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "gold",
+                  "label": "\"Two hundred gold, for your family's trouble, and we go our ways.\" (Persuasion DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_hag_pay_tried"
+                        }
+                      },
+                      {
+                        "coins": {
+                          "gte": 20000
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "gold",
+                    "pay",
+                    "two",
+                    "hundred",
+                    "coin",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~ch2_small_price"
+                        },
+                        "source": "Her sister said you paid your debts politely"
+                      }
+                    ],
+                    "success": {
+                      "text": "She counts the coins twice, bites one, and curtseys. \"Gold is so dull. But my sister likes it.\" She folds into the dark.",
+                      "cost": 20000,
+                      "flags": [
+                        {
+                          "set": "~ch5_hag_dealt",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch5_hag_paid",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"I did not walk out of the sea for gold,\" she says.",
+                      "flags": [
+                        {
+                          "set": "~ch5_hag_pay_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "dawn",
+                  "label": "\"Dawn is four hours off, hag. Sit with me until it comes, if you dare.\" (Intimidation DC 17)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch5_hag_dawn_tried"
+                    }
+                  },
+                  "keywords": [
+                    "dawn",
+                    "wait",
+                    "sit",
+                    "dare",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 17,
+                    "success": {
+                      "text": "You sit down in the dead grass, facing her, and do not look away. Neither does she. Hour after hour. When the sky greys, she spits on the ground at your feet and is gone. You have never been so tired.",
+                      "flags": [
+                        {
+                          "set": "~ch5_hag_dealt",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch5_hag_outwaited",
+                          "value": true
+                        }
+                      ],
+                      "minutes": 240,
+                      "exhaustion": 1
+                    },
+                    "failure": {
+                      "text": "You blink. She laughs.",
+                      "flags": [
+                        {
+                          "set": "~ch5_hag_dawn_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "Step back from her"
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Something else, then?\"",
+              "options": [
+                {
+                  "id": "false_tooth",
+                  "label": "Hold out a dog's fang wrapped in cloth: \"Here. A Tooth, as you asked.\" (Deception DC 16)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch5_hag_trick_tried"
+                    }
+                  },
+                  "keywords": [
+                    "fang",
+                    "false",
+                    "fake",
+                    "trick",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 16,
+                    "disadvantageIf": [
+                      {
+                        "if": {
+                          "flag": "~ch2_hag_tricked"
+                        },
+                        "source": "Her sister told her about your false year"
+                      }
+                    ],
+                    "success": {
+                      "text": "The hag's sister unwraps the fang, sniffs it, and smiles with all her long teeth. \"Delicious.\" She is gone before the cloth hits the grass. Somewhere, very soon, she is going to be extremely angry.",
+                      "flags": [
+                        {
+                          "set": "~ch5_hag_dealt",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch5_hag_tricked",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "She does not even unwrap it. She only looks at you, and a nightmare you had as a child comes back all at once, and stays.",
+                      "flags": [
+                        {
+                          "set": "~ch5_hag_trick_tried",
+                          "value": true
+                        }
+                      ],
+                      "damage": {
+                        "dice": "3d6",
+                        "type": "psychic",
+                        "target": "hero"
+                      }
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "gold",
+                  "label": "\"Two hundred gold, for your family's trouble, and we go our ways.\" (Persuasion DC 14)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_hag_pay_tried"
+                        }
+                      },
+                      {
+                        "coins": {
+                          "gte": 20000
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "gold",
+                    "pay",
+                    "two",
+                    "hundred",
+                    "coin",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~ch2_small_price"
+                        },
+                        "source": "Her sister said you paid your debts politely"
+                      }
+                    ],
+                    "success": {
+                      "text": "She counts the coins twice, bites one, and curtseys. \"Gold is so dull. But my sister likes it.\" She folds into the dark.",
+                      "cost": 20000,
+                      "flags": [
+                        {
+                          "set": "~ch5_hag_dealt",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch5_hag_paid",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"I did not walk out of the sea for gold,\" she says.",
+                      "flags": [
+                        {
+                          "set": "~ch5_hag_pay_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "dawn",
+                  "label": "\"Dawn is four hours off, hag. Sit with me until it comes, if you dare.\" (Intimidation DC 17)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch5_hag_dawn_tried"
+                    }
+                  },
+                  "keywords": [
+                    "dawn",
+                    "wait",
+                    "sit",
+                    "dare",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 17,
+                    "success": {
+                      "text": "You sit down in the dead grass, facing her, and do not look away. Neither does she. Hour after hour. When the sky greys, she spits on the ground at your feet and is gone. You have never been so tired.",
+                      "flags": [
+                        {
+                          "set": "~ch5_hag_dealt",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch5_hag_outwaited",
+                          "value": true
+                        }
+                      ],
+                      "minutes": 240,
+                      "exhaustion": 1
+                    },
+                    "failure": {
+                      "text": "You blink. She laughs.",
+                      "flags": [
+                        {
+                          "set": "~ch5_hag_dawn_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "Step back from her"
+                }
+              ]
+            },
+            {
+              "id": "gone",
+              "text": "The clearing is empty. Only the smell of kelp is left."
+            }
+          ]
+        }
       ]
     },
     {
@@ -7763,6 +10318,391 @@
             "flag": "arc.main.vosk_fate",
             "eq": "escaped"
           }
+        }
+      ],
+      "conversations": [
+        {
+          "id": "gate",
+          "label": "Speak to Vosk at the sanctum gate",
+          "if": {
+            "all": [
+              {
+                "flag": "~ch5_sentries_passed"
+              },
+              {
+                "flag": "arc.main.vosk_fate",
+                "eq": "escaped"
+              },
+              {
+                "not": {
+                  "flag": "~ch5_vosk_beaten"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "vosk",
+            "speak",
+            "talk",
+            "scholar"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Vosk stands in the sanctum gate with his books stacked around him like a wall. \"You came quietly. Good. It would be a shame to end this with shouting. Speak, if you want to.\"",
+              "options": [
+                {
+                  "id": "notes",
+                  "label": "\"You read the old texts. The Maw does not end hunger. It is hunger. Your own notes say so.\" (Persuasion DC 17)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch5_vosk_talk_tried"
+                    }
+                  },
+                  "keywords": [
+                    "notes",
+                    "texts",
+                    "hunger",
+                    "end",
+                    "truth",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 17,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~ch3_vosk_backed_down"
+                        },
+                        "source": "He has backed down from you once before"
+                      },
+                      {
+                        "if": {
+                          "flag": "~ch4_stone_known"
+                        },
+                        "source": "He let slip the song-stone's secret: he has doubts"
+                      }
+                    ],
+                    "success": {
+                      "text": "Vosk is silent. Then he laughs, a small dry sound, and sits down on the sanctum steps. \"I wrote that in the margin,\" he says, \"eleven years ago. I hoped nobody would read it.\" He holds out his hands.",
+                      "flags": [
+                        {
+                          "set": "~ch5_vosk_beaten",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch5_vosk_yielded",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "aurek",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Margins,\" says Vosk, \"are where scholars keep their doubts. I have burned mine.\" He raises his hands, and the air crackles.",
+                      "flags": [
+                        {
+                          "set": "~ch5_vosk_talk_tried",
+                          "value": true
+                        }
+                      ],
+                      "encounter": "vosk_final"
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "fight"
+                },
+                {
+                  "id": "verse",
+                  "label": "\"Before we finish this: tell me the reverse-song's last verse. A scholar should want it written down.\" (Arcana DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_vosk_verse"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_verse_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "verse",
+                    "reverse",
+                    "song",
+                    "last",
+                    "arcana"
+                  ],
+                  "check": {
+                    "skill": "arcana",
+                    "dc": 16,
+                    "success": {
+                      "text": "Vosk tilts his sewn-shut eyes toward you. Then, because he cannot help himself, he recites it: the verse the Choir cut from every copy. You will not forget it.",
+                      "flags": [
+                        {
+                          "set": "~ch5_vosk_verse",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"A scholar should,\" Vosk agrees, \"and I am not one any more.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_verse_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "books",
+                  "label": "\"Your books burn with you, Vosk. Every one. Step aside and I will carry them out.\" (Intimidation DC 16)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch5_books_tried"
+                    }
+                  },
+                  "keywords": [
+                    "books",
+                    "burn",
+                    "aside",
+                    "carry",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 16,
+                    "success": {
+                      "text": "Vosk's hand goes to the stacked books beside him, and stays there. After a long moment he steps aside from the gate. \"Take them,\" he says. \"Take me. Only take them.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_vosk_beaten",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch5_vosk_books",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Then we will burn together,\" says Vosk, and the gate fills with light.",
+                      "flags": [
+                        {
+                          "set": "~ch5_books_tried",
+                          "value": true
+                        }
+                      ],
+                      "encounter": "vosk_final"
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "fight"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Enough.\""
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Go on.\"",
+              "options": [
+                {
+                  "id": "notes",
+                  "label": "\"You read the old texts. The Maw does not end hunger. It is hunger. Your own notes say so.\" (Persuasion DC 17)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch5_vosk_talk_tried"
+                    }
+                  },
+                  "keywords": [
+                    "notes",
+                    "texts",
+                    "hunger",
+                    "end",
+                    "truth",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 17,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~ch3_vosk_backed_down"
+                        },
+                        "source": "He has backed down from you once before"
+                      },
+                      {
+                        "if": {
+                          "flag": "~ch4_stone_known"
+                        },
+                        "source": "He let slip the song-stone's secret: he has doubts"
+                      }
+                    ],
+                    "success": {
+                      "text": "Vosk is silent. Then he laughs, a small dry sound, and sits down on the sanctum steps. \"I wrote that in the margin,\" he says, \"eleven years ago. I hoped nobody would read it.\" He holds out his hands.",
+                      "flags": [
+                        {
+                          "set": "~ch5_vosk_beaten",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch5_vosk_yielded",
+                          "value": true
+                        }
+                      ],
+                      "approval": [
+                        {
+                          "companion": "aurek",
+                          "delta": 5
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Margins,\" says Vosk, \"are where scholars keep their doubts. I have burned mine.\" He raises his hands, and the air crackles.",
+                      "flags": [
+                        {
+                          "set": "~ch5_vosk_talk_tried",
+                          "value": true
+                        }
+                      ],
+                      "encounter": "vosk_final"
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "fight"
+                },
+                {
+                  "id": "verse",
+                  "label": "\"Before we finish this: tell me the reverse-song's last verse. A scholar should want it written down.\" (Arcana DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_vosk_verse"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_verse_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "verse",
+                    "reverse",
+                    "song",
+                    "last",
+                    "arcana"
+                  ],
+                  "check": {
+                    "skill": "arcana",
+                    "dc": 16,
+                    "success": {
+                      "text": "Vosk tilts his sewn-shut eyes toward you. Then, because he cannot help himself, he recites it: the verse the Choir cut from every copy. You will not forget it.",
+                      "flags": [
+                        {
+                          "set": "~ch5_vosk_verse",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"A scholar should,\" Vosk agrees, \"and I am not one any more.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_verse_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "books",
+                  "label": "\"Your books burn with you, Vosk. Every one. Step aside and I will carry them out.\" (Intimidation DC 16)",
+                  "once": true,
+                  "if": {
+                    "not": {
+                      "flag": "~ch5_books_tried"
+                    }
+                  },
+                  "keywords": [
+                    "books",
+                    "burn",
+                    "aside",
+                    "carry",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 16,
+                    "success": {
+                      "text": "Vosk's hand goes to the stacked books beside him, and stays there. After a long moment he steps aside from the gate. \"Take them,\" he says. \"Take me. Only take them.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_vosk_beaten",
+                          "value": true
+                        },
+                        {
+                          "set": "~ch5_vosk_books",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"Then we will burn together,\" says Vosk, and the gate fills with light.",
+                      "flags": [
+                        {
+                          "set": "~ch5_books_tried",
+                          "value": true
+                        }
+                      ],
+                      "encounter": "vosk_final"
+                    }
+                  },
+                  "next": "gone",
+                  "nextOnFail": "fight"
+                },
+                {
+                  "id": "bye",
+                  "label": "\"Enough.\""
+                }
+              ]
+            },
+            {
+              "id": "gone",
+              "text": "Vosk sits on the sanctum steps, waiting for whatever you decide."
+            },
+            {
+              "id": "fight",
+              "text": "The sanctum gate blazes with spell-light."
+            }
+          ]
         }
       ]
     },
@@ -7810,6 +10750,366 @@
             ]
           }
         }
+      ],
+      "conversations": [
+        {
+          "id": "jaw",
+          "label": "Speak to Seraphine Vell",
+          "if": {
+            "all": [
+              {
+                "not": {
+                  "flag": "~ch5_at_bay"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch5_choir_resolved"
+                }
+              },
+              {
+                "flag": "arc.main.cantor_identity_known",
+                "eq": true
+              }
+            ]
+          },
+          "keywords": [
+            "seraphine",
+            "cantor",
+            "vell",
+            "speak",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Seraphine sings with her hand on the Jaw-Stone, and yet somehow she is also speaking to you, warmly, the way she spoke to beggars at the Almonry door. \"You came all this way. Say what you came to say, my dear.\"",
+              "options": [
+                {
+                  "id": "cinderdale",
+                  "label": "\"I know about Cinderdale. Others starved there too, and not one of them wanted this.\" (Persuasion DC 17)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~ch3_cinderdale_known"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_cantor_shaken"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_shaken_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "cinderdale",
+                    "starved",
+                    "others",
+                    "winter",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 17,
+                    "success": {
+                      "text": "The song falters for a single beat. It is the first time you have heard her miss one. \"You do not know what they wanted,\" she says. But she does not sound sure.",
+                      "flags": [
+                        {
+                          "set": "~ch5_cantor_shaken",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"They wanted bread,\" says Seraphine, \"and nobody gave it to them. I am giving it to everyone.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_shaken_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "flaw",
+                  "label": "Listen for the flaw in her song (Arcana DC 17)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_song_flaw"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_flaw_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "listen",
+                    "flaw",
+                    "song",
+                    "arcana",
+                    "hear"
+                  ],
+                  "check": {
+                    "skill": "arcana",
+                    "dc": 17,
+                    "success": {
+                      "text": "You hear it: a place in the third verse where the song bends to fit the Maw instead of the other way round. When the Maw pulls, it will pull through that verse, and you will know it is coming.",
+                      "flags": [
+                        {
+                          "set": "~ch5_song_flaw",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The song is too big to hear the shape of. It fills the cavern and your teeth.",
+                      "flags": [
+                        {
+                          "set": "~ch5_flaw_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "taunt",
+                  "label": "Shout to her fanatics: \"She will feed you to it first. Look at her. Look!\" (Intimidation DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_fanatics_shaken"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_cantor_furious"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "fanatics",
+                    "shout",
+                    "feed",
+                    "look",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 16,
+                    "success": {
+                      "text": "One of the robed singers looks at the Cantor, then at the breathing throat, and bolts for the stair. Nobody stops him.",
+                      "flags": [
+                        {
+                          "set": "~ch5_fanatics_shaken",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Seraphine turns her head, and for the first time she sings at you alone. Your knees go weak.",
+                      "flags": [
+                        {
+                          "set": "~ch5_cantor_furious",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "Say nothing more"
+                }
+              ]
+            },
+            {
+              "id": "more",
+              "text": "\"Is there more?\"",
+              "options": [
+                {
+                  "id": "cinderdale",
+                  "label": "\"I know about Cinderdale. Others starved there too, and not one of them wanted this.\" (Persuasion DC 17)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "flag": "~ch3_cinderdale_known"
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_cantor_shaken"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_shaken_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "cinderdale",
+                    "starved",
+                    "others",
+                    "winter",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 17,
+                    "success": {
+                      "text": "The song falters for a single beat. It is the first time you have heard her miss one. \"You do not know what they wanted,\" she says. But she does not sound sure.",
+                      "flags": [
+                        {
+                          "set": "~ch5_cantor_shaken",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"They wanted bread,\" says Seraphine, \"and nobody gave it to them. I am giving it to everyone.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_shaken_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "flaw",
+                  "label": "Listen for the flaw in her song (Arcana DC 17)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_song_flaw"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_flaw_tried"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "listen",
+                    "flaw",
+                    "song",
+                    "arcana",
+                    "hear"
+                  ],
+                  "check": {
+                    "skill": "arcana",
+                    "dc": 17,
+                    "success": {
+                      "text": "You hear it: a place in the third verse where the song bends to fit the Maw instead of the other way round. When the Maw pulls, it will pull through that verse, and you will know it is coming.",
+                      "flags": [
+                        {
+                          "set": "~ch5_song_flaw",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "The song is too big to hear the shape of. It fills the cavern and your teeth.",
+                      "flags": [
+                        {
+                          "set": "~ch5_flaw_tried",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "taunt",
+                  "label": "Shout to her fanatics: \"She will feed you to it first. Look at her. Look!\" (Intimidation DC 16)",
+                  "once": true,
+                  "if": {
+                    "all": [
+                      {
+                        "not": {
+                          "flag": "~ch5_fanatics_shaken"
+                        }
+                      },
+                      {
+                        "not": {
+                          "flag": "~ch5_cantor_furious"
+                        }
+                      }
+                    ]
+                  },
+                  "keywords": [
+                    "fanatics",
+                    "shout",
+                    "feed",
+                    "look",
+                    "intimidate"
+                  ],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 16,
+                    "success": {
+                      "text": "One of the robed singers looks at the Cantor, then at the breathing throat, and bolts for the stair. Nobody stops him.",
+                      "flags": [
+                        {
+                          "set": "~ch5_fanatics_shaken",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Seraphine turns her head, and for the first time she sings at you alone. Your knees go weak.",
+                      "flags": [
+                        {
+                          "set": "~ch5_cantor_furious",
+                          "value": true
+                        }
+                      ]
+                    }
+                  },
+                  "next": "more",
+                  "nextOnFail": "more"
+                },
+                {
+                  "id": "bye",
+                  "label": "Say nothing more"
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
@@ -7834,6 +11134,162 @@
             "flag": "world.aurek_status",
             "eq": "betrayed"
           }
+        }
+      ],
+      "conversations": [
+        {
+          "id": "aunt",
+          "label": "Speak to Aurek",
+          "if": {
+            "all": [
+              {
+                "flag": "world.aurek_status",
+                "eq": "betrayed"
+              },
+              {
+                "not": {
+                  "flag": "~ch5_choir_resolved"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch5_aurek_wavers"
+                }
+              },
+              {
+                "not": {
+                  "flag": "~ch5_aurek_hard"
+                }
+              }
+            ]
+          },
+          "keywords": [
+            "aurek",
+            "speak",
+            "talk"
+          ],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Aurek stands beside his aunt with a book clutched to his chest like a shield. He will not look at you. \"Please,\" he says. \"Please do not.\"",
+              "options": [
+                {
+                  "id": "father",
+                  "label": "\"Your father wrote the reverse-song to stop this, Aurek. Not to start it.\" (Persuasion DC 17)",
+                  "once": true,
+                  "keywords": [
+                    "father",
+                    "reverse",
+                    "song",
+                    "stop",
+                    "persuade"
+                  ],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 17,
+                    "advantageIf": [
+                      {
+                        "if": {
+                          "flag": "~ch3_aurek_father"
+                        },
+                        "source": "He told you about his father's work in Highcrown"
+                      }
+                    ],
+                    "success": {
+                      "text": "Aurek's face crumples. He does not leave his aunt's side. But when she sings, he does not sing with her.",
+                      "flags": [
+                        {
+                          "set": "~ch5_aurek_wavers",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"You never understood him,\" says Aurek. \"She did.\"",
+                      "flags": [
+                        {
+                          "set": "~ch5_aurek_hard",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "id": "afraid",
+                  "label": "\"You are not loyal to her. You are afraid of her.\" (Insight DC 15)",
+                  "once": true,
+                  "keywords": [
+                    "afraid",
+                    "fear",
+                    "loyal",
+                    "insight"
+                  ],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 15,
+                    "success": {
+                      "text": "Aurek flinches as if you had struck him, and looks at his aunt, and you see that it is true. He stops singing.",
+                      "flags": [
+                        {
+                          "set": "~ch5_aurek_wavers",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "Aurek looks away, and keeps singing.",
+                      "flags": [
+                        {
+                          "set": "~ch5_aurek_hard",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "id": "lie",
+                  "label": "\"She has already sung your name to the Maw, Aurek. You are the first Tooth's price.\" (Deception DC 16)",
+                  "once": true,
+                  "keywords": [
+                    "name",
+                    "price",
+                    "sung",
+                    "lie",
+                    "deceive"
+                  ],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 16,
+                    "success": {
+                      "text": "Aurek stares at his aunt. She does not deny it; she is singing. He takes one step away from her, then another, and stops singing.",
+                      "flags": [
+                        {
+                          "set": "~ch5_aurek_wavers",
+                          "value": true
+                        }
+                      ]
+                    },
+                    "failure": {
+                      "text": "\"She would never,\" says Aurek, and sings louder.",
+                      "flags": [
+                        {
+                          "set": "~ch5_aurek_hard",
+                          "value": true
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "id": "bye",
+                  "label": "Turn away from him"
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -7870,7 +11326,16 @@
       "monsters": [
         {
           "id": "ghoul",
-          "count": 4
+          "count": 3
+        },
+        {
+          "id": "ghoul",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_sally"
+            }
+          }
         },
         {
           "id": "ghast",
@@ -7958,7 +11423,16 @@
       "monsters": [
         {
           "id": "ghoul",
-          "count": 4
+          "count": 3
+        },
+        {
+          "id": "ghoul",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_sally"
+            }
+          }
         },
         {
           "id": "ghast",
@@ -8051,7 +11525,16 @@
       "monsters": [
         {
           "id": "ghoul",
-          "count": 4
+          "count": 3
+        },
+        {
+          "id": "ghoul",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_sally"
+            }
+          }
         },
         {
           "id": "ghast",
@@ -8144,7 +11627,16 @@
       "monsters": [
         {
           "id": "ghoul",
-          "count": 4
+          "count": 3
+        },
+        {
+          "id": "ghoul",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_sally"
+            }
+          }
         },
         {
           "id": "ghast",
@@ -8241,7 +11733,16 @@
       "monsters": [
         {
           "id": "ghoul",
-          "count": 4
+          "count": 3
+        },
+        {
+          "id": "ghoul",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_sally"
+            }
+          }
         },
         {
           "id": "ghast",
@@ -8338,7 +11839,16 @@
       "monsters": [
         {
           "id": "ghoul",
-          "count": 4
+          "count": 3
+        },
+        {
+          "id": "ghoul",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_sally"
+            }
+          }
         },
         {
           "id": "ghast",
@@ -8440,7 +11950,16 @@
       "monsters": [
         {
           "id": "ghoul",
-          "count": 4
+          "count": 3
+        },
+        {
+          "id": "ghoul",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_sally"
+            }
+          }
         },
         {
           "id": "ghast",
@@ -8542,7 +12061,16 @@
       "monsters": [
         {
           "id": "ghoul",
-          "count": 4
+          "count": 3
+        },
+        {
+          "id": "ghoul",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_sally"
+            }
+          }
         },
         {
           "id": "ghast",
@@ -8648,7 +12176,16 @@
       "monsters": [
         {
           "id": "ghoul",
-          "count": 6
+          "count": 5
+        },
+        {
+          "id": "ghoul",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_sally"
+            }
+          }
         },
         {
           "id": "ghast",
@@ -8736,7 +12273,16 @@
       "monsters": [
         {
           "id": "ghoul",
-          "count": 6
+          "count": 5
+        },
+        {
+          "id": "ghoul",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_sally"
+            }
+          }
         },
         {
           "id": "ghast",
@@ -8829,7 +12375,16 @@
       "monsters": [
         {
           "id": "ghoul",
-          "count": 6
+          "count": 5
+        },
+        {
+          "id": "ghoul",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_sally"
+            }
+          }
         },
         {
           "id": "ghast",
@@ -8926,7 +12481,16 @@
       "monsters": [
         {
           "id": "ghoul",
-          "count": 6
+          "count": 5
+        },
+        {
+          "id": "ghoul",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_sally"
+            }
+          }
         },
         {
           "id": "ghast",
@@ -9244,7 +12808,25 @@
       "monsters": [
         {
           "id": "specter",
-          "count": 3
+          "count": 1
+        },
+        {
+          "id": "specter",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_drowned_known"
+            }
+          }
+        },
+        {
+          "id": "specter",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_sallow_names"
+            }
+          }
         },
         {
           "id": "wraith",
@@ -9523,7 +13105,16 @@
         },
         {
           "id": "cultist_fanatic",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_fanatics_shaken"
+            }
+          }
         }
       ],
       "map": "the_maw",
@@ -9584,7 +13175,16 @@
         },
         {
           "id": "cultist_fanatic",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_fanatics_shaken"
+            }
+          }
         },
         {
           "id": "wraith",
@@ -9649,7 +13249,16 @@
         },
         {
           "id": "cultist_fanatic",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_fanatics_shaken"
+            }
+          }
         },
         {
           "id": "mage",
@@ -9715,7 +13324,16 @@
         },
         {
           "id": "cultist_fanatic",
-          "count": 2
+          "count": 1
+        },
+        {
+          "id": "cultist_fanatic",
+          "count": 1,
+          "if": {
+            "not": {
+              "flag": "~ch5_fanatics_shaken"
+            }
+          }
         },
         {
           "id": "wraith",
@@ -14680,8 +18298,17 @@
       "id": "seal_wick",
       "text": "Wick’s Name-Chant binds the seal.",
       "trigger": {
-        "flag": "arc.main.wick_fate",
-        "eq": "ally"
+        "all": [
+          {
+            "flag": "arc.main.wick_fate",
+            "eq": "ally"
+          },
+          {
+            "not": {
+              "flag": "~ch5_wick_below"
+            }
+          }
+        ]
       },
       "scenes": [
         "maw_final_seal"
@@ -16533,6 +20160,1183 @@
       "outcome": {
         "text": "The bards call you “the Unkillable”, and argue about how many times you actually died."
       }
+    },
+    {
+      "id": "seal_wick_below",
+      "text": "Wick sings at the Jaw-Stone.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch5_wick_below"
+          },
+          {
+            "flag": "arc.main.wick_fate",
+            "eq": "ally"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Grandmother Wick climbs onto the Jaw-Stone itself, spits into the dark, and sings the Maw's true name into its mouth. The jaw recoils as if burned.",
+        "flags": [
+          {
+            "inc": "~ch5_seal",
+            "by": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "seal_cendric",
+      "text": "Cendric rings his hand-bell.",
+      "trigger": {
+        "all": [
+          {
+            "flag": "~ch5_cendric_follows"
+          },
+          {
+            "flag": "arc.main.abbot_cendric_alive",
+            "eq": true
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Abbot Cendric rings his little hand-bell in time with the drowned bells far above, and the old rite of Mireth rolls down the Maw's throat.",
+        "flags": [
+          {
+            "inc": "~ch5_seal",
+            "by": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "seal_vosk_verse",
+      "text": "The cut verse.",
+      "trigger": {
+        "flag": "~ch5_vosk_verse"
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "You sing the verse Vosk gave you, the one the Choir cut from every copy, and the Teeth grind deeper into their sockets.",
+        "flags": [
+          {
+            "inc": "~ch5_seal",
+            "by": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "epilogue_grell_lives",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "flag": "~ch5_grell_lives"
+              },
+              {
+                "flag": "arc.main.lantern_hold_held",
+                "eq": true
+              }
+            ]
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Maud Grell lives to see the fen quiet. She never writes another death notice, and she never takes another village's name off the map."
+      }
+    },
+    {
+      "id": "epilogue_grell_confessed",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "~ch5_grell_confessed"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Every year on the night of the siege, Maud Grell walks to the ashes of Hollowmere and reads out the names of the burned, one by one."
+      }
+    },
+    {
+      "id": "epilogue_wick_below",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "flag": "~ch5_wick_below"
+              },
+              {
+                "flag": "arc.main.wick_fate",
+                "eq": "ally"
+              }
+            ]
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Grandmother Wick never climbs out of the Maw. The Briarkin say she is still down there, singing, keeping the jaw shut out of pure spite."
+      }
+    },
+    {
+      "id": "epilogue_cendric_follows",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "flag": "~ch5_cendric_follows"
+              },
+              {
+                "flag": "arc.main.abbot_cendric_alive",
+                "eq": true
+              }
+            ]
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Abbot Cendric rang his last bell at the Jaw-Stone and lay down beside it, smiling. The Drowned Abbey's bells ring for him every midnight now, with no hand on the ropes."
+      }
+    },
+    {
+      "id": "epilogue_wick_charm",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "~ch5_wick_charm"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Sometimes, on summer afternoons, you almost remember a face. Wick's briar knot is still on your wrist."
+      }
+    },
+    {
+      "id": "epilogue_hag_tricked",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "~ch5_hag_tricked"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Two hags now know your name and the taste of your lies. On moonless nights you sleep with a lantern lit."
+      }
+    },
+    {
+      "id": "epilogue_vosk_spared",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "any": [
+              {
+                "flag": "~ch5_vosk_yielded"
+              },
+              {
+                "flag": "~ch5_vosk_books"
+              }
+            ]
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Vosk's books go to the royal library. He is allowed to visit them once a year, under guard, and he weeps each time."
+      }
+    },
+    {
+      "id": "epilogue_aurek_wavers",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "~ch5_aurek_wavers"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "At his trial, Aurek Vell tells the court he stopped singing at the Jaw-Stone. The court believes him, and so, eventually, does he."
+      }
+    },
+    {
+      "id": "epilogue_clerk_exposed",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "arc.starter.clerk_exposed"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "The Brightwater clerk you exposed turns Crown's witness, and the Almonry's ledgers are read aloud in Highcrown for three days."
+      }
+    },
+    {
+      "id": "epilogue_wat_warden",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "arc.starter.wat_turned"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Wat, the frightened lookout from Gallows Hill, takes the Warden's oath and a lantern of his own."
+      }
+    },
+    {
+      "id": "epilogue_ring_ransomed",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "arc.starter.ring_ransomed"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Widow Marrow still tells anyone in Millbrook who will listen exactly what you charged her for her own ring."
+      }
+    },
+    {
+      "id": "epilogue_oath_kept",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "flag": "arc.starter.sworn"
+              },
+              {
+                "flag": "world.maw_state",
+                "eq": "sealed"
+              }
+            ]
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "You kept the oath you swore to Corwin in Millbrook: the Choir never had the Teeth that mattered."
+      }
+    },
+    {
+      "id": "epilogue_ashby_fisher",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "arc.main.ch1_ashby_turned"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Ashby, who walked out of the Choir in the Gloamfen, mends nets on the Brinescatter coast and does not sing any more."
+      }
+    },
+    {
+      "id": "epilogue_healthy_spared",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "arc.main.ch1_healthy_spared"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "The families Grell let walk out of Hollowmere build a new village on higher ground, and name its well after you."
+      }
+    },
+    {
+      "id": "epilogue_name_stolen",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "flag": "arc.main.ch1_name_stolen"
+              },
+              {
+                "not": {
+                  "flag": "arc.main.wick_fate",
+                  "eq": "burned"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Grandmother Wick never quite forgives you for stealing Nettle's name from her shelf, though she admits it was well done."
+      }
+    },
+    {
+      "id": "epilogue_jenny_yielded",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "arc.main.ch2_jenny_yielded"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Iron Jenny, who struck her colors to you without a fight, runs a honest ferry across the Brinescatter straits. Mostly honest."
+      }
+    },
+    {
+      "id": "epilogue_mora_turned",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "arc.main.ch2_mora_turned"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Salt-Eye Mora turns treasure-hunter for the Crown, and finds three wrecks in her first year."
+      }
+    },
+    {
+      "id": "epilogue_vey_spared",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "any": [
+              {
+                "flag": "arc.main.ch2_vey_spared"
+              },
+              {
+                "flag": "arc.main.ch4_vey_spared"
+              },
+              {
+                "flag": "arc.main.ch4_vey_turned"
+              },
+              {
+                "flag": "arc.main.ch4_vey_bought"
+              }
+            ]
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Harrow Vey sails somewhere far south and sends you, once, a bottle of very good rum with no note."
+      }
+    },
+    {
+      "id": "epilogue_tidewrights_shun",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "arc.main.ch2_tull_cowed"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Gullhaven's Tidewrights still spit when your name is mentioned. Harbormaster Tull has a long memory."
+      }
+    },
+    {
+      "id": "epilogue_pip_home",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "flag": "arc.main.ch3_pip_sent_home"
+              },
+              {
+                "not": {
+                  "all": [
+                    {
+                      "flag": "arc.main.dawnbreaker_holder",
+                      "eq": "dawn_lance"
+                    },
+                    {
+                      "flag": "arc.starter.pip_rescued",
+                      "eq": true
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Pip grows up safe in Millbrook, and never quite forgives you for sending him home before the vigil."
+      }
+    },
+    {
+      "id": "epilogue_queen_champion",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "flag": "arc.main.ch3_queen_pledge"
+              },
+              {
+                "flag": "world.queen_alive",
+                "eq": true
+              }
+            ]
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Queen Isolde remembers the pledge you made her in Highcrown, and names you her Champion before the whole court."
+      }
+    },
+    {
+      "id": "epilogue_thane_cinderdale",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "arc.main.ch3_thane_confessed"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Aldric Thane goes to Cinderdale alone and raises a stone for the ones the Dawn Lance left behind."
+      }
+    },
+    {
+      "id": "epilogue_lance_ransomed",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "arc.main.ch3_lance_ransomed"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Scholars still argue whether Dawnbreaker was worth the Sky Tooth you let Vosk keep."
+      }
+    },
+    {
+      "id": "epilogue_millbrook_rebuilt",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "arc.main.ch4_millbrook_rebuilt"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Millbrook is rebuilt in stone on the Crown's coin, and its taxes are forgiven for ten years, as the Queen promised."
+      }
+    },
+    {
+      "id": "epilogue_children_home",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "arc.main.ch4_mb_evacuated"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Millbrook's children come home from Dawnspire in the spring, taller and full of stories about knights."
+      }
+    },
+    {
+      "id": "epilogue_pardon_kept",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "arc.main.ch4_hale_pardon"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Chamberlain Hale's pardon holds. Nobody in Aurelmark will ever call you an outlaw again, at least not to your face."
+      }
+    },
+    {
+      "id": "epilogue_moll_paid",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "flag": "arc.main.ch4_moll_owed"
+              },
+              {
+                "flag": "world.queen_alive",
+                "eq": true
+              }
+            ]
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Master Moll gets her double pay in the end, and tells the whole river it was her idea."
+      }
+    },
+    {
+      "id": "epilogue_corwin_blessed",
+      "text": "Epilogue.",
+      "trigger": {
+        "all": [
+          {
+            "all": [
+              {
+                "flag": "~ch5_sealing_done"
+              },
+              {
+                "any": [
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "sealed"
+                  },
+                  {
+                    "flag": "world.maw_state",
+                    "eq": "stirring"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "flag": "arc.main.ch4_corwin_blessed"
+          }
+        ]
+      },
+      "scenes": [
+        "maw_final_seal"
+      ],
+      "outcome": {
+        "text": "Ser Corwin rides home to the Order with your name on his lips, and his banner flies over Dawnspire for the rest of his life."
+      }
     }
   ],
   "deadlines": [
@@ -17050,6 +21854,334 @@
     {
       "id": "arc.main.ch4_isolde_letter",
       "description": "Queen Isolde’s letter of forgiveness from chapter 4 (redemption key while the Queen lives)."
+    },
+    {
+      "id": "~ch5_grell_resolve",
+      "description": "Grell opened her ledger of the burned on the gate-house table (advantage rallying the Wardens)."
+    },
+    {
+      "id": "~ch5_grell_resolve_tried",
+      "description": "Reminded Grell of her ledger and failed."
+    },
+    {
+      "id": "~ch5_grell_confessed",
+      "description": "Made Grell own the Hollowmere pyres before her Wardens."
+    },
+    {
+      "id": "~ch5_grell_cold",
+      "description": "Grell turned against the hero (disadvantage rallying the Wardens)."
+    },
+    {
+      "id": "~ch5_notice_found",
+      "description": "Learned Grell has written her own death notice."
+    },
+    {
+      "id": "~ch5_notice_tried",
+      "description": "Asked Grell about her death notice and got nothing."
+    },
+    {
+      "id": "~ch5_grell_lives",
+      "description": "Talked Grell into tearing up her death notice (epilogue)."
+    },
+    {
+      "id": "~ch5_lead_box",
+      "description": "Carries one of Brask's lead boxes (advantage on the Strength Hunger Pulls)."
+    },
+    {
+      "id": "~ch5_lead_tried",
+      "description": "Asked Brask for a lead box and was refused."
+    },
+    {
+      "id": "~ch5_sally",
+      "description": "Sallied through Brask's postern before the siege (one ghoul fewer)."
+    },
+    {
+      "id": "~ch5_sally_tried",
+      "description": "Tried the postern sally and was driven back."
+    },
+    {
+      "id": "~ch5_sentry_rota",
+      "description": "Sallow told where the sentries' bone chimes hang (advantage sneaking past)."
+    },
+    {
+      "id": "~ch5_rota_tried",
+      "description": "Asked Sallow about the sentries and got nothing."
+    },
+    {
+      "id": "~ch5_sallow_names",
+      "description": "Sallow named the Abbey's drowned (one specter fewer at the bells)."
+    },
+    {
+      "id": "~ch5_sallow_names_tried",
+      "description": "Asked Sallow for the drowned names and was refused."
+    },
+    {
+      "id": "~ch5_sallow_hymn",
+      "description": "Tricked Sallow into singing the Choir's hymn (advantage on the Wisdom Hunger Pulls)."
+    },
+    {
+      "id": "~ch5_hymn_tried",
+      "description": "Tried to trick Sallow and failed."
+    },
+    {
+      "id": "~ch5_wick_charm",
+      "description": "Paid Wick a memory for a briar knot (advantage on the Wisdom Hunger Pulls)."
+    },
+    {
+      "id": "~ch5_wick_below",
+      "description": "Wick comes down to sing at the Jaw-Stone (+2 seal instead of +1; she never climbs out)."
+    },
+    {
+      "id": "~ch5_below_tried",
+      "description": "Asked Wick to come down into the Maw and she refused."
+    },
+    {
+      "id": "~ch5_wick_advice",
+      "description": "Wick said how to heal the heart-tree (advantage)."
+    },
+    {
+      "id": "~ch5_advice_tried",
+      "description": "Asked Wick about the heart-tree and got nothing."
+    },
+    {
+      "id": "~ch5_bell_names",
+      "description": "Learned the nine bells' names from Cendric (advantage diving for bells)."
+    },
+    {
+      "id": "~ch5_bell_names_tried",
+      "description": "Failed to learn the bells' names."
+    },
+    {
+      "id": "~ch5_drowned_known",
+      "description": "Learned who the Abbey's drowned are (one specter fewer at the bells)."
+    },
+    {
+      "id": "~ch5_drowned_tried",
+      "description": "Asked Cendric about the drowned and got nothing."
+    },
+    {
+      "id": "~ch5_cendric_follows",
+      "description": "Abbot Cendric comes down to the seal (+1 seal; he does not climb out)."
+    },
+    {
+      "id": "~ch5_follow_tried",
+      "description": "Asked Cendric to come to the Maw and he refused."
+    },
+    {
+      "id": "~ch5_hag_tricked",
+      "description": "Fooled the hag's sister with a dog's fang."
+    },
+    {
+      "id": "~ch5_hag_trick_tried",
+      "description": "Tried to fool the hag's sister and failed."
+    },
+    {
+      "id": "~ch5_hag_paid",
+      "description": "Paid the hag's sister 200 gp to leave."
+    },
+    {
+      "id": "~ch5_hag_pay_tried",
+      "description": "Offered the hag's sister gold and was refused."
+    },
+    {
+      "id": "~ch5_hag_outwaited",
+      "description": "Stared the hag's sister down until dawn (1 exhaustion)."
+    },
+    {
+      "id": "~ch5_hag_dawn_tried",
+      "description": "Tried to stare the hag's sister down and blinked."
+    },
+    {
+      "id": "~ch5_vosk_yielded",
+      "description": "Talked Vosk into surrendering at the sanctum gate."
+    },
+    {
+      "id": "~ch5_vosk_talk_tried",
+      "description": "Tried to talk Vosk down and failed (he attacked)."
+    },
+    {
+      "id": "~ch5_vosk_verse",
+      "description": "Vosk recited the reverse-song's cut verse (+1 seal)."
+    },
+    {
+      "id": "~ch5_verse_tried",
+      "description": "Asked Vosk for the cut verse and got nothing."
+    },
+    {
+      "id": "~ch5_vosk_books",
+      "description": "Vosk surrendered to save his books."
+    },
+    {
+      "id": "~ch5_books_tried",
+      "description": "Threatened Vosk's books and failed (he attacked)."
+    },
+    {
+      "id": "~ch5_cantor_shaken",
+      "description": "Seraphine missed a beat over Cinderdale (advantage showing her the locket)."
+    },
+    {
+      "id": "~ch5_shaken_tried",
+      "description": "Spoke to Seraphine about Cinderdale without effect."
+    },
+    {
+      "id": "~ch5_song_flaw",
+      "description": "Heard the flaw in the Cantor's song (advantage on every Hunger Pull)."
+    },
+    {
+      "id": "~ch5_flaw_tried",
+      "description": "Listened for the song's flaw and heard nothing."
+    },
+    {
+      "id": "~ch5_fanatics_shaken",
+      "description": "One of the Cantor's fanatics fled (one fanatic fewer at the Jaw-Stone)."
+    },
+    {
+      "id": "~ch5_cantor_furious",
+      "description": "The Cantor sings at the hero alone (disadvantage on every Hunger Pull)."
+    },
+    {
+      "id": "~ch5_aurek_wavers",
+      "description": "A betrayed Aurek stopped singing beside his aunt (epilogue)."
+    },
+    {
+      "id": "~ch5_aurek_hard",
+      "description": "A betrayed Aurek would not listen."
+    },
+    {
+      "id": "arc.main.ch1_grell_moved",
+      "description": "Chapter 1: reminded Grell of her ledger at the tribunal (advantage reminding her again)."
+    },
+    {
+      "id": "arc.main.ch1_brask_confided",
+      "description": "Chapter 1: Brask admitted he doubts the burning order (advantage asking for a lead box)."
+    },
+    {
+      "id": "arc.main.ch1_brask_witness",
+      "description": "Chapter 1: Brask spoke for Hollowmere (advantage asking for a lead box)."
+    },
+    {
+      "id": "arc.main.ch1_brask_cold",
+      "description": "Chapter 1: threatened Brask at the gate (disadvantage asking for a lead box)."
+    },
+    {
+      "id": "arc.main.ch1_abbot_blessing",
+      "description": "Chapter 1: Abbot Cendric blessed the hero (advantage learning the bells' names)."
+    },
+    {
+      "id": "arc.main.ch1_ashby_turned",
+      "description": "Chapter 1: talked Ashby out of the Choir (epilogue)."
+    },
+    {
+      "id": "arc.main.ch1_healthy_spared",
+      "description": "Chapter 1: Grell let Hollowmere's unmarked walk out (epilogue)."
+    },
+    {
+      "id": "arc.main.ch1_name_stolen",
+      "description": "Chapter 1: stole Nettle's true name from Wick's shelf (epilogue)."
+    },
+    {
+      "id": "arc.main.ch2_hag_tricked",
+      "description": "Chapter 2: tricked Auntie Brackwater (disadvantage fooling her sister)."
+    },
+    {
+      "id": "arc.main.ch2_small_price",
+      "description": "Chapter 2: paid Auntie Brackwater a small price (advantage paying her sister)."
+    },
+    {
+      "id": "arc.main.ch2_jenny_yielded",
+      "description": "Chapter 2: Iron Jenny struck her colors (epilogue)."
+    },
+    {
+      "id": "arc.main.ch2_mora_turned",
+      "description": "Chapter 2: turned Salt-Eye Mora against Vey (epilogue)."
+    },
+    {
+      "id": "arc.main.ch2_vey_spared",
+      "description": "Chapter 2: talked Harrow Vey out of the vault (epilogue)."
+    },
+    {
+      "id": "arc.main.ch2_tull_cowed",
+      "description": "Chapter 2: threatened Harbormaster Tull (epilogue)."
+    },
+    {
+      "id": "arc.main.ch3_cinderdale_known",
+      "description": "Chapter 3: Seraphine let slip she survived Cinderdale (unlocks a Jaw-Stone approach)."
+    },
+    {
+      "id": "arc.main.ch3_vosk_backed_down",
+      "description": "Chapter 3: Vosk backed down from the hero (advantage talking him down)."
+    },
+    {
+      "id": "arc.main.ch3_aurek_father",
+      "description": "Chapter 3: Aurek spoke about his father's research (advantage reaching a betrayed Aurek)."
+    },
+    {
+      "id": "arc.main.ch3_pip_sent_home",
+      "description": "Chapter 3: sent Pip home before the vigil (epilogue)."
+    },
+    {
+      "id": "arc.main.ch3_queen_pledge",
+      "description": "Chapter 3: pledged service to the Queen (epilogue)."
+    },
+    {
+      "id": "arc.main.ch3_thane_confessed",
+      "description": "Chapter 3: Thane confessed abandoning Cinderdale (epilogue)."
+    },
+    {
+      "id": "arc.main.ch3_lance_ransomed",
+      "description": "Chapter 3: let Vosk keep the Sky Tooth for Dawnbreaker (epilogue)."
+    },
+    {
+      "id": "arc.main.ch4_stone_known",
+      "description": "Chapter 4: Vosk let slip the song-stone's secret (advantage talking him down)."
+    },
+    {
+      "id": "arc.main.ch4_vey_spared",
+      "description": "Chapter 4: asked the Queen to spare Harrow Vey (epilogue)."
+    },
+    {
+      "id": "arc.main.ch4_vey_turned",
+      "description": "Chapter 4: talked Harrow Vey out of the coup (epilogue)."
+    },
+    {
+      "id": "arc.main.ch4_vey_bought",
+      "description": "Chapter 4: paid Harrow Vey to sail away (epilogue)."
+    },
+    {
+      "id": "arc.main.ch4_millbrook_rebuilt",
+      "description": "Chapter 4: the Queen ordered Millbrook rebuilt (epilogue)."
+    },
+    {
+      "id": "arc.main.ch4_mb_evacuated",
+      "description": "Chapter 4: Millbrook's children were sent north (epilogue)."
+    },
+    {
+      "id": "arc.main.ch4_hale_pardon",
+      "description": "Chapter 4: Hale burned the hero's warrant (epilogue)."
+    },
+    {
+      "id": "arc.main.ch4_moll_owed",
+      "description": "Chapter 4: promised Master Moll double pay (epilogue)."
+    },
+    {
+      "id": "arc.main.ch4_corwin_blessed",
+      "description": "Chapter 4: parted with Corwin in friendship (epilogue)."
+    },
+    {
+      "id": "arc.starter.clerk_exposed",
+      "description": "Starter: exposed the Choir clerk at Brightwater (epilogue)."
+    },
+    {
+      "id": "arc.starter.wat_turned",
+      "description": "Starter: turned Wat the lookout against the Choir (epilogue)."
+    },
+    {
+      "id": "arc.starter.ring_ransomed",
+      "description": "Starter: made Widow Marrow pay for her own ring (epilogue)."
+    },
+    {
+      "id": "arc.starter.sworn",
+      "description": "Starter: swore to Corwin to keep the Teeth from the Choir (epilogue)."
     }
   ],
   "endings": [

@@ -91,7 +91,12 @@ const begin = (flags: Flags = {}, scene?: string, opts: Opts = {}): RunContext =
 };
 const has = (c: RunContext, item: string) => c.state.hero.inventory.some((i) => i.itemId === item);
 const encounter = (id: string) => ADV.encounters.find((e) => e.id === id)!;
-const counts = (id: string) => Object.fromEntries(encounter(id).monsters.map((m) => [m.id, m.count]));
+/** Monster counts per id, summed over conditional groups (A136 splits some off). */
+const counts = (id: string) => {
+  const out: Record<string, number> = {};
+  for (const m of encounter(id).monsters) out[m.id] = (out[m.id] ?? 0) + m.count;
+  return out;
+};
 const allies = (id: string) => Object.fromEntries(encounter(id).allies.map((a) => [a.id, a.count]));
 const holders = (c: RunContext) => TEETH.map((t) => c.state.flags[H(t)]);
 /** The finale, ready to fight: the Cantor known, the Hunger Pull and Rook settled by the caller. */
@@ -674,7 +679,7 @@ describe('ch5_the_hungering_dark: earlier chapters change the chapter', () => {
     const escaped = begin({ 'arc.main.vosk_fate': 'escaped', [L('maw_map')]: true }, 'maw_descent');
     expect(npcsHere(escaped)).toContain('vosk');
     play(escaped, ['follow_map', 'sneak_sentries']);
-    expect(ids(escaped)).toEqual(['face_vosk']);
+    expect(ids(escaped)).toEqual(['face_vosk', 'talk.vosk.gate']);
     play(escaped, ['face_vosk', 'kill_vosk']);
     expect(escaped.state.flags['arc.main.vosk_fate']).toBe('killed');
     expect(ids(escaped)).toContain('reach_sanctum');
@@ -741,5 +746,235 @@ describe('ch5_the_hungering_dark: earlier chapters change the chapter', () => {
     expect(beats).not.toContain('epilogue_crown_reform');
     play(c, ['end_hollow_throne']);
     expect(getProgress(c.state)?.ending).toBe('ending_hollow_throne');
+  });
+});
+
+describe('ch5_the_hungering_dark: A136 conversations, approaches and consequences', () => {
+  const at = (flags: Flags = {}, scene?: string, opts: Opts = {}, unlucky = false) => {
+    const c = begin(flags, scene, opts);
+    if (unlucky) c.rng = new UnluckyRng();
+    return c;
+  };
+  const adv = (c: RunContext, id: string) => perform(c, id).rolls[0]!.advantage;
+  const dis = (c: RunContext, id: string) => perform(c, id).rolls[0]!.disadvantage;
+  const seal = (flags: Flags) => begin({ ...teeth(5), 'arc.main.cantor_fate': 'killed', ...flags }, 'maw_final_seal').state.flags[L('seal')] as number;
+  const epilogue = (flags: Flags) => {
+    const c = begin({ ...teeth(5), 'arc.main.cantor_fate': 'killed', ...flags }, 'maw_final_seal');
+    play(c, ['close_seal']);
+    return getProgress(c.state)!.beats;
+  };
+
+  it('every key NPC has a conversation with at least 3 approaches that do something; revisited scenes vary', () => {
+    for (const id of ['maud_grell', 'odo_brask', 'mother_sallow', 'grandmother_wick', 'abbot_cendric', 'hag_sister', 'vosk', 'seraphine_vell', 'aurek']) {
+      const npc = ADV.npcs.find((n) => n.id === id)!;
+      const approaches = new Set<string>();
+      for (const conv of npc.conversations) {
+        for (const node of conv.nodes) {
+          for (const o of node.options) {
+            const out = [o.outcome, o.check?.success, o.check?.failure];
+            if (o.check || out.some((x) => x && (x.flags.length || x.cost || x.approval.length || x.encounter))) approaches.add(o.id);
+          }
+        }
+      }
+      expect(approaches.size, id).toBeGreaterThanOrEqual(3);
+    }
+    for (const s of ['blightwood_crossing', 'abbey_bells_toll', 'maw_descent', 'choir_of_teeth']) {
+      expect(allScenes(ADV).find((x) => x.id === s)!.revisitSeed, s).toBeDefined();
+    }
+  });
+
+  it('Grell: her ledger steadies the Wardens, blaming her for the pyres can turn them, and she can be talked out of dying', () => {
+    const c = at({ 'arc.main.ch1_grell_moved': true });
+    perform(c, 'talk.maud_grell.council');
+    expect(adv(c, 'dlg.greet.ledger')).toEqual(['You reminded her of the ledger once before, at the tribunal']);
+    play(c, ['dlg.more.notice', 'dlg.notice.tear', 'dlg.more.bye']);
+    expect(c.state.flags).toMatchObject({ [L('grell_resolve')]: true, [L('notice_found')]: true, [L('grell_lives')]: true });
+    expect(adv(c, 'rally_wardens')).toContain("Grell's ledger lies open on the gate-house table");
+    expect(epilogue({ [L('grell_lives')]: true, 'arc.main.lantern_hold_held': true })).toContain('epilogue_grell_lives');
+
+    const burned = at({ 'arc.main.hollowmere_fate': 'purged', 'world.nettle_status': 'in_party', 'world.nettle_loyalty': 50 });
+    play(burned, ['talk.maud_grell.council', 'dlg.greet.pyres', 'dlg.more.bye']);
+    expect(burned.state.flags).toMatchObject({ [L('grell_confessed')]: true, 'world.nettle_loyalty': 60 });
+    const cold = at({ 'arc.main.hollowmere_fate': 'purged' }, undefined, {}, true);
+    play(cold, ['talk.maud_grell.council', 'dlg.greet.pyres']);
+    expect(ids(cold)).not.toContain('talk.maud_grell.council');
+    expect(dis(cold, 'rally_wardens')).toEqual(['The Wardens heard what you said to their captain']);
+  });
+
+  it('Brask: a lead box (talked or paid for) steadies the Strength Pulls; the postern sally burns a ghoul', () => {
+    const c = at({ 'arc.main.ch1_brask_witness': true });
+    perform(c, 'talk.odo_brask.boxes');
+    expect(adv(c, 'dlg.greet.lead')).toEqual(['Brask remembers what you did for Hollowmere']);
+    play(c, ['dlg.more.postern', 'dlg.more.bye']);
+    expect(c.state.flags).toMatchObject({ [L('lead_box')]: true, [L('sally')]: true });
+    for (const id of ADV.encounters.filter((e) => e.id.startsWith('siege')).map((e) => e.id)) {
+      expect(encounter(id).monsters, id).toContainEqual({ id: 'ghoul', count: 1, if: { not: { flag: L('sally') } } });
+    }
+    const paid = at();
+    paid.state.hero.coins = 5000;
+    play(paid, ['talk.odo_brask.boxes', 'dlg.greet.widows']);
+    expect(paid.state.hero.coins).toBe(3000);
+    expect(paid.state.flags[L('lead_box')]).toBe(true);
+    const pull = begin({ ...FINALE, [H('want')]: 'player', [L('lead_box')]: true }, 'choir_of_teeth');
+    expect(adv(pull, 'brace_body')).toContain("The Teeth ride in Brask's lead box");
+  });
+
+  it("Sallow, beaten: the sentries' chimes, the drowned names and the Choir's hymn", () => {
+    const c = at({ 'arc.main.sallow_fate': 'escaped', [L('sallow_beaten')]: true });
+    play(c, ['talk.mother_sallow.last_words', 'dlg.greet.sentries', 'dlg.more.rite', 'dlg.more.hymn', 'dlg.more.bye']);
+    expect(c.state.flags).toMatchObject({ [L('sentry_rota')]: true, [L('sallow_names')]: true, [L('sallow_hymn')]: true });
+    expect(ids(c)).toEqual(expect.arrayContaining(['capture_sallow', 'kill_sallow']));
+    play(c, ['capture_sallow']);
+    expect(ids(c)).not.toContain('talk.mother_sallow.last_words');
+    const sneak = begin({ [L('maw_map')]: true, [L('sentry_rota')]: true }, 'maw_descent');
+    play(sneak, ['follow_map']);
+    expect(adv(sneak, 'sneak_sentries')).toEqual(['Sallow told you where the bone chimes hang']);
+    expect(encounter('drowned_bells').monsters).toContainEqual({ id: 'specter', count: 1, if: { not: { flag: L('sallow_names') } } });
+    const pull = begin({ ...FINALE, [H('want')]: 'player', [L('sallow_hymn')]: true }, 'choir_of_teeth');
+    expect(adv(pull, 'brace_mind')).toContain("You know where the hymn's hooks are");
+  });
+
+  it('Wick: a charm for a memory, advice for Nettle, or her voice at the Jaw-Stone for her life', () => {
+    const c = at({ 'arc.main.wick_fate': 'ally', 'arc.main.hollowmere_fate': 'cured', 'world.nettle_status': 'in_party', 'world.nettle_loyalty': 70 });
+    expect(npcsHere(c)).toContain('grandmother_wick');
+    play(c, ['talk.grandmother_wick.rim_song', 'dlg.greet.heart', 'dlg.more.charm', 'dlg.more.below', 'dlg.more.bye']);
+    expect(c.state.flags).toMatchObject({ [L('wick_advice')]: true, [L('wick_charm')]: true, [L('wick_below')]: true, 'world.nettle_loyalty': 65 });
+    const tree = begin({ 'world.nettle_status': 'in_party', 'world.nettle_loyalty': 65, [L('heart_reached')]: true, [L('wick_advice')]: true }, 'blightwood_crossing');
+    expect(adv(tree, 'heal_heart_tree')).toEqual(['Wick told you to cut low and let Nettle sing']);
+    const pull = begin({ ...FINALE, [H('want')]: 'player', [L('wick_charm')]: true }, 'choir_of_teeth');
+    expect(adv(pull, 'brace_mind')).toContain("Wick's briar knot: there is less of you for the Maw to pull on");
+    // At the Jaw-Stone she is worth two points of seal instead of one, and never climbs out.
+    expect(seal({ 'arc.main.wick_fate': 'ally', [L('wick_below')]: true }) - seal({ 'arc.main.wick_fate': 'ally' })).toBe(1);
+    const beats = epilogue({ 'arc.main.wick_fate': 'ally', [L('wick_below')]: true, [L('wick_charm')]: true });
+    expect(beats).toEqual(expect.arrayContaining(['seal_wick_below', 'epilogue_wick_below', 'epilogue_wick_charm']));
+    expect(beats).not.toContain('seal_wick');
+  });
+
+  it("Cendric: the bells' names, the drowned brothers, and his voice at the seal", () => {
+    const c = at({ [L('midnight')]: true, 'arc.main.ch1_abbot_blessing': true }, 'abbey_bells_toll');
+    perform(c, 'talk.abbot_cendric.vigil');
+    expect(adv(c, 'dlg.greet.names')).toEqual(['Cendric blessed you in the flooded nave once before']);
+    play(c, ['dlg.more.drowned', 'dlg.more.follow', 'dlg.more.bye', 'cendric_rite']);
+    expect(c.state.flags).toMatchObject({ [L('bell_names')]: true, [L('drowned_known')]: true, [L('cendric_follows')]: true });
+    expect(adv(c, 'dive_bell')).toContain('You call the bell by its name before you dive');
+    expect(encounter('drowned_bells').monsters).toContainEqual({ id: 'specter', count: 1, if: { not: { flag: L('drowned_known') } } });
+    expect(seal({ [L('cendric_follows')]: true }) - seal({})).toBe(1);
+    expect(epilogue({ [L('cendric_follows')]: true })).toContain('epilogue_cendric_follows');
+    expect(seal({ [L('cendric_follows')]: true, 'arc.main.abbot_cendric_alive': false })).toBe(seal({}));
+  });
+
+  it("the hag's sister: fooled with a fang, paid in gold, or stared down till dawn", () => {
+    const night = (flags: Flags = {}, unlucky = false) => at({ [L('heart_reached')]: true, ...flags }, 'blightwood_crossing', { hour: 23 }, unlucky);
+    const trick = night();
+    play(trick, ['talk.hag_sister.midnight', 'dlg.greet.false_tooth']);
+    expect(trick.state.flags).toMatchObject({ [L('hag_dealt')]: true, [L('hag_tricked')]: true });
+    expect(ids(trick)).toContain('exit.to_maw');
+    expect(ids(trick)).not.toContain('fight_hag');
+    const known = night({ 'arc.main.ch2_hag_tricked': true }, true);
+    perform(known, 'talk.hag_sister.midnight');
+    expect(dis(known, 'dlg.greet.false_tooth')).toEqual(['Her sister told her about your false year']);
+    expect(ids(known)).not.toContain('exit.to_maw');
+
+    const gold = night({ 'arc.main.ch2_small_price': true });
+    gold.state.hero.coins = 25000;
+    perform(gold, 'talk.hag_sister.midnight');
+    expect(adv(gold, 'dlg.greet.gold')).toEqual(['Her sister said you paid your debts politely']);
+    expect(gold.state.hero.coins).toBe(5000);
+    expect(gold.state.flags[L('hag_paid')]).toBe(true);
+
+    const stare = night();
+    play(stare, ['talk.hag_sister.midnight', 'dlg.greet.dawn']);
+    expect(stare.state.flags[L('hag_outwaited')]).toBe(true);
+    expect(stare.state.hero.exhaustion).toBe(1);
+  });
+
+  it('Vosk: talked down, bargained with for the cut verse, or frightened for his books; a failed word means a fight', () => {
+    const gate = (flags: Flags = {}, unlucky = false) => {
+      const c = begin({ 'arc.main.vosk_fate': 'escaped', [L('maw_map')]: true, ...flags }, 'maw_descent');
+      play(c, ['follow_map', 'sneak_sentries']);
+      if (unlucky) c.rng = new UnluckyRng();
+      return c;
+    };
+    const c = gate({ 'arc.main.ch3_vosk_backed_down': true });
+    play(c, ['talk.vosk.gate', 'dlg.greet.verse']);
+    expect(adv(c, 'dlg.more.notes')).toEqual(['He has backed down from you once before']);
+    expect(c.state.flags).toMatchObject({ [L('vosk_verse')]: true, [L('vosk_yielded')]: true, [L('vosk_beaten')]: true });
+    expect(ids(c)).toEqual(expect.arrayContaining(['capture_vosk', 'kill_vosk']));
+    expect(ids(c)).not.toContain('face_vosk');
+    expect(seal({ [L('vosk_verse')]: true }) - seal({})).toBe(1);
+
+    const books = gate();
+    play(books, ['talk.vosk.gate', 'dlg.greet.books']);
+    expect(books.state.flags[L('vosk_books')]).toBe(true);
+    expect(epilogue({ [L('vosk_books')]: true })).toContain('epilogue_vosk_spared');
+
+    const fail = gate({}, true);
+    perform(fail, 'talk.vosk.gate');
+    expect(perform(fail, 'dlg.greet.notes').encounter).toBe('vosk_final');
+  });
+
+  it("the Cantor: Cinderdale shakes her, the song's flaw helps against the Pull, a taunt scatters a fanatic or turns her on you", () => {
+    const c = at({ ...FINALE, ...teeth(3, 'wardens'), 'arc.main.ch3_cinderdale_known': true }, 'choir_of_teeth');
+    play(c, ['talk.seraphine_vell.jaw', 'dlg.greet.cinderdale', 'dlg.more.flaw', 'dlg.more.taunt', 'dlg.more.bye']);
+    expect(c.state.flags).toMatchObject({ [L('cantor_shaken')]: true, [L('song_flaw')]: true, [L('fanatics_shaken')]: true });
+    for (const id of ['cantor', 'cantor_wraith', 'cantor_aurek', 'cantor_aurek_wraith']) {
+      expect(encounter(id).monsters, id).toContainEqual({ id: 'cultist_fanatic', count: 1, if: { not: { flag: L('fanatics_shaken') } } });
+    }
+    // Only while she still sings: not once she is at bay, and not before her identity is known.
+    expect(ids(begin({ ...FINALE, ...teeth(3, 'wardens'), [L('at_bay')]: true }, 'choir_of_teeth'))).not.toContain('talk.seraphine_vell.jaw');
+    expect(ids(begin({ [L('reached_jaw')]: true, ...teeth(3, 'wardens') }, 'choir_of_teeth'))).not.toContain('talk.seraphine_vell.jaw');
+
+    const flaw = begin({ ...FINALE, [H('want')]: 'player', [L('song_flaw')]: true }, 'choir_of_teeth');
+    expect(adv(flaw, 'brace_body')).toEqual(['You know which verse the Maw pulls through']);
+    const furious = at({ ...FINALE, [H('want')]: 'player' }, 'choir_of_teeth', {}, true);
+    play(furious, ['talk.seraphine_vell.jaw', 'dlg.greet.taunt', 'dlg.more.bye']);
+    expect(dis(furious, 'brace_mind')).toEqual(['The Cantor is singing at you alone']);
+    const locket = begin({ ...FINALE, ...teeth(3, 'wardens'), [L('at_bay')]: true, 'arc.main.ch3_locket': true, [L('cantor_shaken')]: true }, 'choir_of_teeth');
+    expect(adv(locket, 'parley_locket')).toEqual(['She has already missed a beat for Cinderdale']);
+  });
+
+  it('a betrayed Aurek can be made to stop singing, and the epilogue remembers it', () => {
+    const c = at({ ...FINALE, ...teeth(3, 'wardens'), 'world.aurek_status': 'betrayed', 'arc.main.ch3_aurek_father': true }, 'choir_of_teeth');
+    perform(c, 'talk.aurek.aunt');
+    expect(adv(c, 'dlg.greet.father')).toEqual(["He told you about his father's work in Highcrown"]);
+    expect(c.state.flags[L('aurek_wavers')]).toBe(true);
+    expect(ids(c)).not.toContain('talk.aurek.aunt');
+    expect(epilogue({ 'world.aurek_status': 'betrayed', [L('aurek_wavers')]: true })).toEqual(expect.arrayContaining(['epilogue_aurek_trial', 'epilogue_aurek_wavers']));
+  });
+
+  it('the epilogue reads the choices made in every earlier chapter', () => {
+    const beats = epilogue({
+      'arc.starter.clerk_exposed': true,
+      'arc.starter.wat_turned': true,
+      'arc.starter.ring_ransomed': true,
+      'arc.starter.sworn': true,
+      'arc.main.ch1_ashby_turned': true,
+      'arc.main.ch1_healthy_spared': true,
+      'arc.main.ch1_name_stolen': true,
+      'arc.main.ch2_jenny_yielded': true,
+      'arc.main.ch2_mora_turned': true,
+      'arc.main.ch2_tull_cowed': true,
+      'arc.main.ch4_vey_bought': true,
+      'arc.main.ch3_pip_sent_home': true,
+      'arc.main.ch3_queen_pledge': true,
+      'arc.main.ch3_thane_confessed': true,
+      'arc.main.ch3_lance_ransomed': true,
+      'arc.main.ch4_millbrook_rebuilt': true,
+      'arc.main.ch4_mb_evacuated': true,
+      'arc.main.ch4_hale_pardon': true,
+      'arc.main.ch4_moll_owed': true,
+      'arc.main.ch4_corwin_blessed': true,
+      [L('hag_tricked')]: true,
+      [L('grell_confessed')]: true,
+    });
+    const want = ['clerk_exposed', 'wat_warden', 'ring_ransomed', 'oath_kept', 'ashby_fisher', 'healthy_spared', 'name_stolen', 'jenny_yielded', 'mora_turned', 'tidewrights_shun', 'vey_spared', 'pip_home', 'queen_champion', 'thane_cinderdale', 'lance_ransomed', 'millbrook_rebuilt', 'children_home', 'pardon_kept', 'moll_paid', 'corwin_blessed', 'hag_tricked', 'grell_confessed'];
+    expect(beats).toEqual(expect.arrayContaining(want.map((w) => `epilogue_${w}`)));
+    // None of them without the choice; the oath needs a sealed Maw, Pip's line gives way to his knighthood.
+    const bare = epilogue({});
+    expect(bare.filter((b) => want.some((w) => b === `epilogue_${w}`))).toEqual([]);
+    expect(epilogue({ 'arc.main.ch3_pip_sent_home': true, 'arc.main.dawnbreaker_holder': 'dawn_lance', 'arc.starter.pip_rescued': true })).not.toContain('epilogue_pip_home');
+    const stirring = begin({ ...teeth(2), 'arc.main.cantor_fate': 'killed', 'arc.starter.sworn': true }, 'maw_final_seal');
+    play(stirring, ['seal_falters']);
+    expect(getProgress(stirring.state)!.beats).not.toContain('epilogue_oath_kept');
   });
 });
