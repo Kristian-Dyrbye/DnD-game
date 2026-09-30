@@ -23,6 +23,6 @@ export function llmSummarizer(getLlm: () => LlmProvider): Summarizer {
   return async (previous, lines) => {
     const llm = getLlm();
     if (llm.name === 'mock') throw new Error('mock provider: use template summary');
-    return llm.chat(summaryMessages(previous, lines), { task: 'summarize', temperature: 0.3, maxTokens: 320, timeoutMs: 60_000 });
+    return llm.chat(summaryMessages(previous, lines), { task: 'summarize', temperature: 0.3, maxTokens: 320, timeoutMs: 120_000 });
   };
 }

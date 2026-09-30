@@ -47,7 +47,7 @@ export async function suggestIdeas(provider: LlmProvider, c: NarrationContext, o
     schema: SuggestionsSchema,
     fallback: { suggestions: [] as { label: string; actionId?: string }[] } as z.infer<typeof SuggestionsSchema>,
     task: 'suggest',
-    opts: { temperature: 0.7, maxTokens: 200, timeoutMs: 30_000 },
+    opts: { temperature: 0.7, maxTokens: 200, timeoutMs: 45_000 },
   });
   return res.value.suggestions.map((s) => ({ label: s.label, ...(s.actionId && { actionId: s.actionId }) }));
 }

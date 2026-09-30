@@ -16,7 +16,7 @@ import { LlmError, type ChatOptions, type LlmProvider } from '../llm/types';
 /** Stream settings per narration kind. */
 export const NARRATION_OPTIONS = {
   story: { temperature: 0.8, maxTokens: 220, firstChunkTimeoutMs: 60_000, idleTimeoutMs: 15_000 },
-  combat: { temperature: 0.8, maxTokens: 90, firstChunkTimeoutMs: 30_000, idleTimeoutMs: 10_000 },
+  combat: { temperature: 0.8, maxTokens: 90, firstChunkTimeoutMs: 30_000, idleTimeoutMs: 10_000, queueAs: 'combat_narrate' },
 } satisfies Record<string, ChatOptions>;
 
 export function llmNarrator(getLlm: () => LlmProvider, lore: Lore, db?: SrdDatabase, onError?: (err: unknown) => void): Narrator {

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { buildApp } from './app';
 import { MockLlm } from '../llm/mock';
+import { LlmScheduler } from '../llm/scheduler';
 import { MockTts } from '../tts/mock';
 import { Services } from './services';
 import { SettingsStore } from './settingsStore';
@@ -43,6 +44,15 @@ describe('Services', () => {
     store.update({ llm: { useMock: true } });
     expect(services.llm).not.toBe(first);
     expect(services.llm.name).toBe('mock');
+  });
+
+  it('hands out the LLM behind one scheduler (injected providers too)', () => {
+    const mock = new MockLlm();
+    const services = new Services(new SettingsStore(dir), dir, { llm: mock });
+    expect(services.llm).toBeInstanceOf(LlmScheduler);
+    expect(services.llm).toBe(services.llm);
+    expect((services.llm as LlmScheduler).inner).toBe(mock);
+    expect(new Services(new SettingsStore(dir), dir).llm).toBeInstanceOf(LlmScheduler);
   });
 
   it('reports Piper as missing when not installed', async () => {

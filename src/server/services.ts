@@ -5,6 +5,7 @@
 import os from 'node:os';
 import type { LlmProvider } from '../llm/types';
 import { createLlmProvider } from '../llm/provider';
+import { LlmScheduler } from '../llm/scheduler';
 import type { TtsProvider } from '../tts/types';
 import { createTtsProvider } from '../tts/provider';
 import type { SystemStatus } from '../shared/status';
@@ -17,6 +18,7 @@ export interface ServiceOverrides {
 
 export class Services {
   private llmCache?: { key: string; provider: LlmProvider };
+  private overrideScheduler?: LlmScheduler;
   private ttsCache?: { key: string; provider: TtsProvider };
 
   constructor(
@@ -25,11 +27,15 @@ export class Services {
     private readonly overrides: ServiceOverrides = {},
   ) {}
 
+  /** The LLM behind an LlmScheduler (one request at a time, by priority). */
   get llm(): LlmProvider {
-    if (this.overrides.llm) return this.overrides.llm;
+    if (this.overrides.llm) {
+      this.overrideScheduler ??= new LlmScheduler(this.overrides.llm);
+      return this.overrideScheduler;
+    }
     const cfg = this.settings.get().llm;
     const key = JSON.stringify(cfg);
-    if (this.llmCache?.key !== key) this.llmCache = { key, provider: createLlmProvider(cfg) };
+    if (this.llmCache?.key !== key) this.llmCache = { key, provider: new LlmScheduler(createLlmProvider(cfg)) };
     return this.llmCache.provider;
   }
 

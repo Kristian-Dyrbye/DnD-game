@@ -21,8 +21,13 @@ export type LlmTask =
   | 'backstory'
   | 'generic';
 
+/** Job kinds for the LlmScheduler's priorities: a task, or 'combat_narrate' (narration during a fight). */
+export type LlmJobKind = LlmTask | 'combat_narrate';
+
 export interface ChatOptions {
   task?: LlmTask;
+  /** Queue this call as another kind than its task (LlmScheduler priority). */
+  queueAs?: LlmJobKind;
   /** Overrides the provider's default model. */
   model?: string;
   temperature?: number;
