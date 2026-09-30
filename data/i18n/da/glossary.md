@@ -72,3 +72,35 @@ There is no official Danish D&D 5e. These are the game's own choices; use them i
 | spell slot / Pact Magic slot | plads / pagtplads | "en plads på niveau 3+" |
 | ability check / group check | {ability}-prøve / gruppeprøve | "Gruppeprøve: Stealth SG 12" |
 | area effect; sphere / cone / cube / line / cylinder / emanation | områdeeffekt; kugle / kegle / terning / linje / cylinder / udstråling | |
+
+## Content (A143): skill names in adventure labels
+Adventure labels ("Overtalelse SG 12") use Danish skill names now; A149 should adopt the same for the SRD overlays.
+
+| English | Dansk |
+|---|---|
+| Acrobatics / Animal Handling / Arcana / Athletics | Akrobatik / Dyrehåndtering / Arkana / Atletik |
+| Deception / History / Insight / Intimidation | Bedrag / Historie / Indsigt / Intimidering |
+| Investigation / Medicine / Nature / Perception | Undersøgelse / Lægekunst / Natur / Opmærksomhed |
+| Performance / Persuasion / Religion / Sleight of Hand | Optræden / Overtalelse / Religion / Fingerfærdighed |
+| Stealth / Survival | Snigen / Overlevelse |
+| Strength / Dexterity / Constitution / Intelligence / Wisdom / Charisma | Styrke / Behændighed / Konstitution / Intelligens / Visdom / Karisma |
+
+## Content (A143): world names
+Person, town and region names stay as they are (Millbrook, Ravensgate, Brightwater, Aurelmark, Corwin…). Descriptive names are translated:
+
+| English | Dansk |
+|---|---|
+| Reeve | foged |
+| Gallows Hill / barrow | Galgebakken / gravhøj |
+| the Plough and Lantern | Ploven og Lygten |
+| Dawn Lance (the Lance) | Daggrylansen (Lansen) |
+| Lantern Wardens (Wardens) | Lygtevogterne (vogterne) |
+| Hollow Choir (the Choir) | Det Hule Kor (Koret) |
+| the Cantor | Kantoren |
+| Royal Almonry | Det Kongelige Almisseembede |
+| the Crown / crown writ | Kronen / kongeligt brev |
+| Tooth / Teeth (artifacts) | Tand / Tænder |
+| Hungering Dark | Det Sultne Mørke |
+| Whispering Fen | Den Hviskende Sump |
+| fen | sump |
+| cultist / lookout | kultist / udkig |

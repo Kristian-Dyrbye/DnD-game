@@ -140,8 +140,32 @@ describe('real content', () => {
         expect({ lang, key, stale: r.stale, orphan: r.orphan, broken: r.broken }).toEqual({ lang, key, stale: [], orphan: [], broken: [] });
       }
     }
-    const demo = checkOverlay(BUNDLED_ADVENTURES.find((a) => a.file.includes('millbrook_demo'))!.raw, BUNDLED_TRANSLATIONS.da!.millbrook_demo);
-    expect(demo.missing).toEqual([]);
+    // Complete Danish files (A142 demo, A143 starter arc).
+    for (const key of ['millbrook_demo', 'millbrook_disappearances']) {
+      const r = checkOverlay(BUNDLED_ADVENTURES.find((a) => (a.raw as { id: string }).id === key)!.raw, BUNDLED_TRANSLATIONS.da![key]);
+      expect({ key, missing: r.missing }).toEqual({ key, missing: [] });
+    }
+  });
+
+  it('the Danish starter arc: translated scene, buttons, and Danish free text with æøå keywords (A143)', async () => {
+    const host = createGameHost({ srd: db, adventures, flags: bundledFlagRegistry(), tables, translations: BUNDLED_TRANSLATIONS, startingAdventure: 'millbrook_disappearances', sessionPorts: { newSeed: () => 'a143' } });
+    const events: ServerEvent[] = [];
+    host.on((e) => events.push(e));
+    const labels = () => (events.filter((e) => e.type === 'suggestions').at(-1) as Extract<ServerEvent, { type: 'suggestions' }>).actions.map((a) => a.label);
+    const logText = () => events.flatMap((e) => (e.type === 'log' ? [e.entry.text] : [])).join(' ');
+    const hero = buildCharacter(toBuildInput(quickBuild('fighter', db, Rng.fromSeed(1))), db);
+    await host.send({ type: 'set_language', language: 'da' });
+    await host.send({ type: 'new_game', hero, mode: 'heroic' });
+    await host.idle();
+    expect(events.filter((e) => e.type === 'error')).toEqual([]);
+    expect(labels()).toContain('Undersøg brønden');
+    expect(labels()).toContain('Gå ind på Ploven og Lygten');
+    expect(logText()).toContain('Millbrook');
+    expect(logText()).toContain('skodder smækker');
+    await host.send({ type: 'say', text: 'jeg kigger på kridtet på brønden' });
+    await host.idle();
+    expect(events.filter((e) => e.type === 'error')).toEqual([]);
+    expect(logText()).toContain('en sort mund omkranset af syv tænder');
   });
 
   it('builds the translated content once per language; languages without overlays get English', () => {

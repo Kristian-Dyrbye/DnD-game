@@ -111,8 +111,9 @@ const VERB_ACTIONS: [RegExp, Intent['action']][] = [
   [/\b(drink|use|eat|light|apply|read the scroll)\b/, 'use_item'],
 ];
 
+/** Any letters (not only a–z), so translated keywords like "brønd" match whole words (A143). */
 function words(text: string): string[] {
-  return (text.toLowerCase().match(/[a-z']+/g) ?? []).filter((w) => !STOP.has(w));
+  return (text.toLowerCase().match(/[\p{L}']+/gu) ?? []).filter((w) => !STOP.has(w));
 }
 
 /**

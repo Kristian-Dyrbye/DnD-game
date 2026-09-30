@@ -42,6 +42,13 @@ describe('keyword fallback parser', () => {
     expect(keywordIntent('walk over to the old mill', ictx)).toMatchObject({ action: 'choose_action', actionId: 'exit.to_mill' });
   });
 
+  it('matches whole words with letters beyond a–z (Danish keywords, A143)', () => {
+    const da: IntentContext = { actions: [{ id: 'well.examine', label: 'Undersøg brønden', keywords: ['brønd', 'kridt'] }], npcs: [], pois: [] };
+    expect(keywordIntent('jeg ser på brønd og kridt', da)).toMatchObject({ action: 'choose_action', actionId: 'well.examine' });
+    // "br" + "nd" halves of "brønd" must not count as words.
+    expect(keywordIntent('br nd', da).action).not.toBe('choose_action');
+  });
+
   it('recognises skill checks, attacks and other verbs', () => {
     expect(keywordIntent('I try to persuade Hobb to pay more', ictx)).toMatchObject({ action: 'skill_check', skill: 'persuasion', target: 'mayor_hobb' });
     expect(keywordIntent('sneak behind the stalls', ictx)).toMatchObject({ action: 'skill_check', skill: 'stealth' });

@@ -1,0 +1,3808 @@
+{
+  "$source": "data/adventures/starter/millbrook_disappearances.json",
+  "strings": {
+    "name": {
+      "hash": "6e2d0654",
+      "text": "Forsvindingerne i Millbrook"
+    },
+    "summary": {
+      "hash": "b3ba1b13",
+      "text": "Landsbyboere forsvinder fra Millbrook; en sultkult graver under Galgebakken efter den første af syv Tænder. Lærer dig udforskning, samtaler, færdighedsprøver, kamp på kortet, hvil, butikker, følgesvende og rejser."
+    },
+    "chapters/starter/name": {
+      "hash": "6e2d0654",
+      "text": "Forsvindingerne i Millbrook"
+    },
+    "chapters/starter/summary": {
+      "hash": "417badb8",
+      "text": "Fra kridttegnet ved brønden til alteret under Galgebakken og ud på landevejen."
+    },
+    "chapters/starter/scenes/millbrook_arrival/name": {
+      "hash": "4b406afd",
+      "text": "Millbrooks gadekær"
+    },
+    "chapters/starter/scenes/millbrook_arrival/seed": {
+      "hash": "a11d960f",
+      "text": "Millbrooks gadekær i skumringen: skodder smækker i det ene hus efter det andet, en hund hyler ved den gamle brønd, og kapellets klokke er tavs. Fire landsbyboere er forsvundet på to uger, og ingen bliver ude efter mørkets frembrud."
+    },
+    "chapters/starter/scenes/millbrook_arrival/variants/0/seed": {
+      "hash": "3fdeb9ee",
+      "text": "Ved dagslys lader landsbyen, som om alt er normalt: vogne, høns, duften af brød. Folk kaster stadig et blik mod Galgebakken, før de taler."
+    },
+    "chapters/starter/scenes/millbrook_arrival/variants/1/seed": {
+      "hash": "e6ae7ac9",
+      "text": "Rygtet om gravhøjen har bredt sig. Døre, der var slået i lås, står nu åbne, og folk nikker, når du går forbi."
+    },
+    "chapters/starter/scenes/millbrook_arrival/variants/2/seed": {
+      "hash": "80c38bc9",
+      "text": "Ser Corwin går ved din side, stadig stiv efter lænkerne, og hilser på hvert barn ved navn."
+    },
+    "chapters/starter/scenes/millbrook_arrival/variants/3/seed": {
+      "hash": "511f51c6",
+      "text": "Enken Marrow vender dig ryggen, hver gang du går forbi hendes butik."
+    },
+    "chapters/starter/scenes/millbrook_arrival/variants/4/seed": {
+      "hash": "9d7ed7c4",
+      "text": "Wat, udkiggen du fik over på din side, kløver fogedens brænde som bod og kan ikke se dig i øjnene."
+    },
+    "chapters/starter/scenes/millbrook_arrival/onEnter/text": {
+      "hash": "249a2877",
+      "text": "Du når Millbrook, idet lyset svinder: skodder smækker, en dør slås i lås bag et forskræmt ansigt, og et sted hyler en hund uafbrudt ved brønden."
+    },
+    "chapters/starter/scenes/millbrook_arrival/onEnter/tip": {
+      "hash": "5439193e",
+      "text": "Steder i en scene har deres egne handlinger. Se dig omkring, eller skriv med dine egne ord, hvad du vil gøre."
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/name": {
+      "hash": "ba38fb4c",
+      "text": "Brønden"
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/seed": {
+      "hash": "29d15ac8",
+      "text": "En gammel stenbrønd med en kant, som rebet har slidt glat. Der er tegnet noget med kridt på dæksten."
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/actions/examine/label": {
+      "hash": "110793ad",
+      "text": "Undersøg brønden"
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/actions/examine/keywords": {
+      "hash": "dbbe480e",
+      "text": [
+        "brønd",
+        "brønden",
+        "kridt",
+        "kridtet",
+        "tegn",
+        "tegnet",
+        "symbol",
+        "symbolet"
+      ]
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/actions/examine/outcome/text": {
+      "hash": "930d6e8d",
+      "text": "Tegnet med kridt på dækstenen: en sort mund omkranset af syv tænder. Det er frisk — kridtet tværes stadig ud."
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/actions/examine/outcome/tip": {
+      "hash": "70c70d89",
+      "text": "Spor, du finder, er værd at skrive ned: knappen Dagbog gemmer dine egne noter."
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/actions/sigil_lore/label": {
+      "hash": "fa8d8659",
+      "text": "Husk, hvad tegnet betyder (Religion SG 10)"
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/actions/sigil_lore/check/success/text": {
+      "hash": "d8745a5d",
+      "text": "Munden og de syv tænder: Vashkuls gamle mærke, Det Sultne Mørke fra sumpfortællingerne. Nogen her tilbeder selve sulten."
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/actions/sigil_lore/check/failure/text": {
+      "hash": "67fae2a8",
+      "text": "Det vækker et minde om sumpfortællinger og prædikener, men betydningen glider fra dig."
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/actions/footprints/label": {
+      "hash": "58191b26",
+      "text": "Undersøg de våde fodspor (Undersøgelse SG 12)"
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/actions/footprints/keywords": {
+      "hash": "a2048821",
+      "text": [
+        "fodspor",
+        "spor",
+        "mudder",
+        "aftryk"
+      ]
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/actions/footprints/check/success/text": {
+      "hash": "fe27959a",
+      "text": "Flere mennesker, barfodede, der går i takt. Mudderet på deres hæle er det grå ler fra gravhøjen på Galgebakken."
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/actions/footprints/check/failure/text": {
+      "hash": "a0992755",
+      "text": "Våde fodaftryk fører fra brønden mod Galgebakken, men regnen har udvisket dem."
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/actions/rat/label": {
+      "hash": "77aafc29",
+      "text": "Undersøg pusleriet ved brønden"
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/actions/rat/outcome/text": {
+      "hash": "daed7f94",
+      "text": "Noget stort og gråt farer ud fra brøndens skygge med blottede tænder."
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/well/actions/rat/outcome/tip": {
+      "hash": "d88e9d9c",
+      "text": "I kamp handler du på kampkortet: bevæg dig, angrib, og tryk så Afslut tur. Fjender handler i initiativrækkefølge."
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/chapel/name": {
+      "hash": "4a850bbb",
+      "text": "Solennes kapel"
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/chapel/seed": {
+      "hash": "f30d12f4",
+      "text": "Et lille kapel for morgengudinden, hvor lysene blafrer. En knæleskammel er slidt glat, hvor nogen beder hver aften."
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/chapel/actions/pray/label": {
+      "hash": "adc50ca6",
+      "text": "Bed en bøn for de forsvundne"
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/chapel/actions/pray/outcome/text": {
+      "hash": "204ee023",
+      "text": "Lysene falder til ro et øjeblik. I knæleskamlen har nogen skåret fire navne: Pip, Tobin, Maddy, Moll."
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/shop_front/name": {
+      "hash": "fd4e1709",
+      "text": "Marrows Blandede Varer"
+    },
+    "chapters/starter/scenes/millbrook_arrival/pois/shop_front/seed": {
+      "hash": "7fa21ed3",
+      "text": "En skæv butiksfacade med et håndmalet skilt. Lukket med skodder om natten; om dagen kan man høre enken Marrows stemme helt ud på gaden."
+    },
+    "chapters/starter/scenes/millbrook_arrival/actions/listen/label": {
+      "hash": "c6d2c00b",
+      "text": "Lyt til landsbyen (passiv Opmærksomhed)"
+    },
+    "chapters/starter/scenes/millbrook_arrival/actions/listen/check/success/text": {
+      "hash": "64f533f3",
+      "text": "Bag et skodde hvisker en kvinde: 'bakken tog dem, bakken og den hætteklædte broder'."
+    },
+    "chapters/starter/scenes/millbrook_arrival/actions/listen/check/failure/text": {
+      "hash": "cc619bc0",
+      "text": "Kun hunden og vinden."
+    },
+    "chapters/starter/scenes/millbrook_arrival/actions/wait_evening/label": {
+      "hash": "dea935f0",
+      "text": "Vent til morgen"
+    },
+    "chapters/starter/scenes/millbrook_arrival/actions/wait_evening/outcome/text": {
+      "hash": "7d7c1363",
+      "text": "Du halvsover på kapellets trappe, til solen står op."
+    },
+    "chapters/starter/scenes/millbrook_arrival/actions/wait_night/label": {
+      "hash": "dea935f0",
+      "text": "Vent til morgen"
+    },
+    "chapters/starter/scenes/millbrook_arrival/actions/wait_night/outcome/text": {
+      "hash": "7d7c1363",
+      "text": "Du halvsover på kapellets trappe, til solen står op."
+    },
+    "chapters/starter/scenes/millbrook_arrival/exits/tavern/label": {
+      "hash": "7ddeb8aa",
+      "text": "Gå ind på Ploven og Lygten"
+    },
+    "chapters/starter/scenes/millbrook_arrival/exits/hill/label": {
+      "hash": "5c1ea9fe",
+      "text": "Følg sporene mod Galgebakken"
+    },
+    "chapters/starter/scenes/millbrook_arrival/exits/shop/label": {
+      "hash": "f8917a1f",
+      "text": "Besøg Marrows butik og kapellet"
+    },
+    "chapters/starter/scenes/millbrook_arrival/exits/road/label": {
+      "hash": "38cd1e14",
+      "text": "Tag landevejen sydpå"
+    },
+    "chapters/starter/scenes/millbrook_arrival/revisitSeed": {
+      "hash": "4527653e",
+      "text": [
+        "Millbrooks gadekær igen: den gamle brønd, Solennes kapel, Marrows skæve skilt.",
+        "Tilbage ved gadekæret. Hunden ved brønden løfter hovedet og lader det så falde igen."
+      ]
+    },
+    "chapters/starter/scenes/plough_tavern_talk/name": {
+      "hash": "ac1b4a8a",
+      "text": "Ploven og Lygten"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/seed": {
+      "hash": "2dc01b58",
+      "text": "En lav, røgfyldt skænkestue. Foged Hollis Tamsin drikker alene ved ildstedet. Mølleren Oda Hallard græder i et hjørne og farer sammen, hver gang døren går op."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/variants/0/seed": {
+      "hash": "8ac00920",
+      "text": "En stor mand i en luvslidt våbenkjortel fra Daggrylansen skændes med fogeden: 'Lad mig gennemsøge bakken!' — 'Du blev afskediget fra Lansen, Ashvale. Sæt dig ned.'"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/variants/1/seed": {
+      "hash": "2569473b",
+      "text": "Skænkestuen larmer af lettelse. Nogen har sømmet nøglen til gravhøjen op over disken som et trofæ."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/variants/2/seed": {
+      "hash": "2756e2cc",
+      "text": "Maud Fennick betragter dig over hanerne med åbenlys uvilje."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/onEnter/text": {
+      "hash": "ff2dd13f",
+      "text": "Ridderen — Ser Corwin Ashvale — smækker en mønt i disken og stormer ud i natten mod bakken."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/onEnter/tip": {
+      "hash": "da43ee24",
+      "text": "Du kan tale med knapperne eller med dine egne ord. Færdigheder som Overtalelse og Indsigt bliver slået for dig, og regnestykket vises i terningebakken."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/persuade_reeve/label": {
+      "hash": "730eb5dc",
+      "text": "Bed fogeden om hjælp (Overtalelse SG 12)"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/persuade_reeve/check/success/text": {
+      "hash": "17ab7da2",
+      "text": "For første gang ser fogeden ordentligt på dig. Han skubber en liste over de forsvundne over bordet — og en jernnøgle. 'Den gamle låge til gravhøjen. Gud hjælpe dig.'"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/persuade_reeve/check/success/tip": {
+      "hash": "027d0715",
+      "text": "At vise beviser (som tegnet) kan give dig fordel på en prøve."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/persuade_reeve/check/failure/text": {
+      "hash": "1c237209",
+      "text": "'Jeg har begravet nok fremmedes gode hensigter,' mumler han, men hånden søger mod nøglen i hans bælte."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/persuade_reeve/check/advantageIf/0/source": {
+      "hash": "cad88d10",
+      "text": "viste ham tegnet"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/intimidate_reeve/label": {
+      "hash": "db196451",
+      "text": "Kræv nøglen til gravhøjen (Intimidering SG 10)"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/intimidate_reeve/check/success/text": {
+      "hash": "9fc5a8dd",
+      "text": "Fogedens ansigt bliver hårdt, men han kaster nøglen på bordet. 'Tag den. Og kom ikke tilbage hertil.'"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/intimidate_reeve/check/failure/text": {
+      "hash": "50abc582",
+      "text": "Halvdelen af skænkestuen rejser sig. Fogeden rører sig ikke."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/deposit/label": {
+      "hash": "f0ea0797",
+      "text": "Betal fogeden et 'depositum' på 5 gm for nøglen"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/deposit/outcome/text": {
+      "hash": "238497b7",
+      "text": "Mønterne forsvinder ned i hans frakke. Nøglen klirrer ned på bordet."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/insight_oda/label": {
+      "hash": "2a6ad74d",
+      "text": "Iagttag mølleren Oda (Indsigt SG 13)"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/insight_oda/check/success/text": {
+      "hash": "d36959b2",
+      "text": "Hendes sorg er ægte, men det er hendes skyld også: hun rører hele tiden ved en tom pung."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/insight_oda/check/failure/text": {
+      "hash": "66dcd825",
+      "text": "En mor, der græder over sin søn. Mere er der ikke at se."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/oda_confess/label": {
+      "hash": "677a5407",
+      "text": "Spørg forsigtigt Oda, hvad hun skjuler (Overtalelse SG 11)"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/oda_confess/check/success/text": {
+      "hash": "67ece988",
+      "text": "'En hætteklædt broder kom ned fra bakken. Han betalte mig for at forlade møllen efter mørkets frembrud — han ville have kornet fra mine kværnsten. Jeg vidste ikke, at han ville tage Pip!'"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/oda_confess/check/failure/text": {
+      "hash": "18ae79e5",
+      "text": "Hun ryster på hovedet og skjuler ansigtet."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/brawl/label": {
+      "hash": "7f5f6e33",
+      "text": "Start et slagsmål med stortalerne ved disken"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/brawl/outcome/text": {
+      "hash": "a168e311",
+      "text": "To karle er kun alt for glade for at gøre dig den tjeneste. Kun knytnæver."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/sleep_free/label": {
+      "hash": "ff1f3cd0",
+      "text": "Sov på det værelse, fogeden betaler for (langt hvil)"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/sleep_free/check/success/text": {
+      "hash": "96ed569c",
+      "text": "I natten hvisker den sorte Tand. En kvindestemme, dannet og sørgmodig, synger: 'du skal aldrig mere savne noget.' Du husker hver eneste tone."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/sleep_free/check/success/tip": {
+      "hash": "d8aa93cb",
+      "text": "Et langt hvil giver dig livspoint, livsterninger og besværgelsespladser tilbage. Stig i niveau fra dit figurkort, når du har nok XP."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/sleep_free/check/failure/text": {
+      "hash": "f61ea4e5",
+      "text": "Du vågner før daggry og ryster, med ordene 'aldrig mere savne' stadig i ørerne."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/sleep_paid/label": {
+      "hash": "9c66d8ea",
+      "text": "Lej et værelse for 5 sm og sov (langt hvil)"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/sleep_paid/check/success/text": {
+      "hash": "96ed569c",
+      "text": "I natten hvisker den sorte Tand. En kvindestemme, dannet og sørgmodig, synger: 'du skal aldrig mere savne noget.' Du husker hver eneste tone."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/sleep_paid/check/failure/text": {
+      "hash": "f61ea4e5",
+      "text": "Du vågner før daggry og ryster, med ordene 'aldrig mere savne' stadig i ørerne."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/sleep_barred/label": {
+      "hash": "a906824d",
+      "text": "Betal Maud 2 gm for et værelse og sov (langt hvil)"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/sleep_barred/check/success/text": {
+      "hash": "96ed569c",
+      "text": "I natten hvisker den sorte Tand. En kvindestemme, dannet og sørgmodig, synger: 'du skal aldrig mere savne noget.' Du husker hver eneste tone."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/actions/sleep_barred/check/failure/text": {
+      "hash": "f61ea4e5",
+      "text": "Du vågner før daggry og ryster, med ordene 'aldrig mere savne' stadig i ørerne."
+    },
+    "chapters/starter/scenes/plough_tavern_talk/exits/out/label": {
+      "hash": "ec7c05c6",
+      "text": "Gå ud på gadekæret igen"
+    },
+    "chapters/starter/scenes/plough_tavern_talk/revisitSeed": {
+      "hash": "65b8bb7a",
+      "text": [
+        "Ploven og Lygten igen: røg, dæmpede stemmer, fogeden ved sit ildsted.",
+        "Tilbage i den lave skænkestue, hvor alle hoveder drejer sig, når døren går op."
+      ]
+    },
+    "chapters/starter/scenes/gallows_hill_trail/name": {
+      "hash": "c964e738",
+      "text": "Stien op ad Galgebakken"
+    },
+    "chapters/starter/scenes/gallows_hill_trail/seed": {
+      "hash": "dd94c6a8",
+      "text": "En mudret sti langs den oversvømmede møllebæk, gennem brombærkrat, op til en græsklædt høj kronet af en gammel galge. To hætteklædte skikkelser holder vagt ved gravhøjen."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/variants/0/seed": {
+      "hash": "7f9c926e",
+      "text": "Et klokkespil af knogler rasler på højen. Udkiggene er væk — inde i højen, og de venter."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/variants/1/seed": {
+      "hash": "8588dfa5",
+      "text": "Lygtelys ved vadestedet: fogeden og tre af hans karle med knipler i hænderne venter på dit signal."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/track/label": {
+      "hash": "1117be8c",
+      "text": "Følg de bare fodspor (Overlevelse SG 12)"
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/track/check/success/text": {
+      "hash": "f4392bba",
+      "text": "Sporene fører lige ud, langs møllebækken til et vadested."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/track/check/success/tip": {
+      "hash": "8b4b931d",
+      "text": "Nogle prøver slås med fordel, når du ved mere — listen over de forsvundne nævner, hvor Pip blev taget."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/track/check/failure/text": {
+      "hash": "a6dd0e49",
+      "text": "Du mister sporet i krattet og leder omkring i en time. Noget summer i mørket — stirger."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/track/check/advantageIf/0/source": {
+      "hash": "2ec93edd",
+      "text": "listen over de forsvundne nævner stedet"
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/ford_athletics/label": {
+      "hash": "8a9dc36a",
+      "text": "Vad over møllebækken (Atletik SG 10)"
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/ford_athletics/check/success/text": {
+      "hash": "9b2ebc7d",
+      "text": "Du spænder imod strømmen og når den anden bred."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/ford_athletics/check/failure/text": {
+      "hash": "4d24865b",
+      "text": "Strømmen slår dig mod stenene, før du hiver dig op, drivvåd."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/ford_acrobatics/label": {
+      "hash": "557be771",
+      "text": "Hop over på stenene (Akrobatik SG 12)"
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/ford_acrobatics/check/success/text": {
+      "hash": "c1be3f3f",
+      "text": "Fra sten til sten, tørskoet."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/ford_acrobatics/check/failure/text": {
+      "hash": "0662412c",
+      "text": "En sten ruller; du lander hårdt på det lave vand."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/sneak/label": {
+      "hash": "c0a0e345",
+      "text": "Snig dig ind på gravhøjen (Snigen SG 13)"
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/sneak/check/success/text": {
+      "hash": "b54d6684",
+      "text": "Du smutter forbi udkiggenes rygge hen til døren i gravhøjen. De vender sig aldrig om."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/sneak/check/failure/text": {
+      "hash": "e81b8afe",
+      "text": "En kvist knækker. En udkig ryster et klokkespil af knogler, og begge forsvinder ind i gravhøjen. De ved, at du kommer."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/sneak/check/advantageIf/0/source": {
+      "hash": "cdff7f9b",
+      "text": "du kom ved måneopgang, som kvægdriveren sagde"
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/reeve_men/label": {
+      "hash": "58abf226",
+      "text": "Giv fogedens mænd tegn til at lokke udkiggene væk"
+    },
+    "chapters/starter/scenes/gallows_hill_trail/actions/reeve_men/outcome/text": {
+      "hash": "3d5b27e8",
+      "text": "Lygtelys og råb nede ved vadestedet: udkiggene løber hen for at se, og du går uset op til døren i gravhøjen."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/exits/barrow/label": {
+      "hash": "e29e0e88",
+      "text": "Lås lågen til gravhøjen op og gå ind"
+    },
+    "chapters/starter/scenes/gallows_hill_trail/exits/force/label": {
+      "hash": "85629b6b",
+      "text": "Bryd lågen til gravhøjen op (Atletik SG 14)"
+    },
+    "chapters/starter/scenes/gallows_hill_trail/exits/force/check/success/text": {
+      "hash": "834ffeff",
+      "text": "Den rustne låge giver efter med et hvin."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/exits/force/check/failure/text": {
+      "hash": "c563c04c",
+      "text": "Lågen holder. Måske har fogeden en nøgle."
+    },
+    "chapters/starter/scenes/gallows_hill_trail/exits/back/label": {
+      "hash": "e8479ea3",
+      "text": "Vend tilbage til landsbyen"
+    },
+    "chapters/starter/scenes/gallows_hill_trail/revisitSeed": {
+      "hash": "c5d49605",
+      "text": [
+        "Den mudrede sti op ad Galgebakken endnu en gang, galgen sort mod himlen.",
+        "Tilbage på bakkestien ved møllebækken, hvor brombærkrattet river i dine ærmer."
+      ]
+    },
+    "chapters/starter/scenes/barrow_of_the_first_sheaf/name": {
+      "hash": "613aca5f",
+      "text": "Gravhøjen: Rodhallen"
+    },
+    "chapters/starter/scenes/barrow_of_the_first_sheaf/seed": {
+      "hash": "9968cf22",
+      "text": "En lang hal af stampet jord og gammel sten, kløvet af rødder så tykke som en mand. Rotter på størrelse med hunde flygter fra faklens lys — og vender så om."
+    },
+    "chapters/starter/scenes/barrow_of_the_first_sheaf/onEnter/text": {
+      "hash": "282b2e93",
+      "text": "Tre kæmperotter kommer mod dig gennem rødderne."
+    },
+    "chapters/starter/scenes/barrow_of_the_first_sheaf/onEnter/tip": {
+      "hash": "05852da9",
+      "text": "Rødder er vanskeligt terræn (dobbelt bevægelse). Forlader du en fjendes rækkevidde, udløser det et lejlighedsangreb."
+    },
+    "chapters/starter/scenes/barrow_of_the_first_sheaf/exits/crypt/label": {
+      "hash": "337438d6",
+      "text": "Gå dybere ind, til krypten"
+    },
+    "chapters/starter/scenes/barrow_of_the_first_sheaf/exits/out/label": {
+      "hash": "6150e722",
+      "text": "Forlad gravhøjen"
+    },
+    "chapters/starter/scenes/barrow_of_the_first_sheaf/revisitSeed": {
+      "hash": "880dd302",
+      "text": "Rodhallen igen: rødder som søjler, rotteknogler, lugten af gammel jord."
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/name": {
+      "hash": "1760f6f9",
+      "text": "Gravhøjen: Negkrypten"
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/seed": {
+      "hash": "ddb4f2a0",
+      "text": "Stennicher fulde af gamle kornofre. En stor mand hænger i lænker mod den fjerne væg, slået til blods: Ser Corwin."
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/variants/0/seed": {
+      "hash": "d7aa08f2",
+      "text": "To kultister sidder på hug over et fyrfad med ryggen til dig — de har ikke hørt dig."
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/variants/1/seed": {
+      "hash": "7f6b1aba",
+      "text": "To kultister venter bag en barrikade af kistelåg."
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/variants/2/seed": {
+      "hash": "c12eecc6",
+      "text": "Du er lænket fast ved siden af Corwin. Dit udstyr ligger på et bord på den anden side af rummet."
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/actions/free_corwin/label": {
+      "hash": "c5480859",
+      "text": "Løs ridderen af lænkerne"
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/actions/free_corwin/outcome/text": {
+      "hash": "227bb221",
+      "text": "Corwin synker sammen i dine arme. 'De tog børnene med til alteret. Gå — jeg følger efter, hvis jeg kan stå.'"
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/actions/bind_wounds/label": {
+      "hash": "501ad228",
+      "text": "Forbind jeres sår sammen med Corwin (kort hvil)"
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/actions/bind_wounds/outcome/text": {
+      "hash": "5ec9d1fb",
+      "text": "Corwin river sin våbenkjortel i stykker til forbindinger. 'Igen, så. Sammen.'"
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/actions/slip_chains/label": {
+      "hash": "a9580b53",
+      "text": "Vrid lænkerne løs (Styrke SG 12)"
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/actions/slip_chains/check/success/text": {
+      "hash": "c3387c65",
+      "text": "Den gamle krampe rives ud af væggen."
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/actions/slip_chains/check/failure/text": {
+      "hash": "ddecae3d",
+      "text": "Dine håndled bløder, men efter lang tid får Corwin vredet begge dine lænker løs."
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/exits/altar/label": {
+      "hash": "16b69801",
+      "text": "Stig ned til alteret"
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/exits/hall/label": {
+      "hash": "fd57f3f3",
+      "text": "Tilbage til Rodhallen"
+    },
+    "chapters/starter/scenes/barrow_sheaf_crypt/revisitSeed": {
+      "hash": "46c495ea",
+      "text": "Negkrypten igen, med gammelt korn spildt ud over fliserne."
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/name": {
+      "hash": "b63768a9",
+      "text": "Gravhøjen: Tiendealteret"
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/seed": {
+      "hash": "5ffecd6e",
+      "text": "Et rundt kammer omkring et stenalter hugget som en kæbe. Fire fanger er lænket til det — en dreng i møllerkittel, en hyrde og to små tvillingepiger. I alterets skål ligger en sort, tandformet sten, der drikker faklens lys."
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/variants/0/seed": {
+      "hash": "9c453db9",
+      "text": "Alteret er stille nu. Fangerne stirrer på den sorte Tand, som om den kunne bide."
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/rematch/label": {
+      "hash": "0b9aa0ee",
+      "text": "Mød kultisterne ved alteret igen"
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/rematch/outcome/text": {
+      "hash": "88213d99",
+      "text": "Kulten venter, og det gør alteret også."
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/free_fast/label": {
+      "hash": "3a392f40",
+      "text": "Bryd fangernes lænker, før alteret nærer sig igen (Atletik SG 12)"
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/free_fast/check/success/text": {
+      "hash": "3cc4cc86",
+      "text": "Led efter led giver efter. Alle, der stadig er lænket, går levende ud, med Pip forrest."
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/free_fast/check/failure/text": {
+      "hash": "6c8574d4",
+      "text": "Du befrier Pip og tvillingerne — men hyrden Tobin er holdt op med at trække vejret, da hans lænke brister."
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/free_fast/check/advantageIf/0/source": {
+      "hash": "7c32637b",
+      "text": "Wat advarede dig om, hvilke led der er rustne"
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/free_tools/label": {
+      "hash": "3fda890c",
+      "text": "Dirk håndjernene op med tyveværktøj (Behændighed SG 12)"
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/free_tools/check/success/text": {
+      "hash": "9e8ac637",
+      "text": "Klik, klik, klik, klik. Alle, der stadig er lænket, går levende ud."
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/free_tools/check/failure/text": {
+      "hash": "7e0d2e5a",
+      "text": "Dirkene glider i dine svedige fingre; da den sidste lås springer op, er Tobin borte."
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/chase/label": {
+      "hash": "f3bcc25c",
+      "text": "Forfølg broder Ashby ind i den sammenstyrtende tunnel (Atletik SG 13)"
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/chase/check/success/text": {
+      "hash": "0f61e03f",
+      "text": "Du tackler ham i mørket, mens loftet styrter sammen bag jer. Broder Ashby er din fange."
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/chase/check/failure/text": {
+      "hash": "69fec12c",
+      "text": "Jord vælter ned mellem jer. Hans latter forsvinder ind i bakken."
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/kill_ashby/label": {
+      "hash": "f4f1d8a4",
+      "text": "Hug broder Ashby ned, før han når tunnelen"
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/kill_ashby/outcome/text": {
+      "hash": "ea709614",
+      "text": "Ashby falder over alterets kant. Fangerne ser tavse til."
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/let_go/label": {
+      "hash": "b8a2d7db",
+      "text": "Lad Ashby flygte — fangerne betyder mere"
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/actions/let_go/outcome/text": {
+      "hash": "8d25a687",
+      "text": "Han er forsvundet ind i mørket. Det er fangerne, der betyder noget."
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/exits/shrine/label": {
+      "hash": "8d507670",
+      "text": "Bær de reddede op til den lille helligdom ovenover"
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/exits/crypt/label": {
+      "hash": "d73e4004",
+      "text": "Tilbage til krypten"
+    },
+    "chapters/starter/scenes/barrow_tithe_altar/revisitSeed": {
+      "hash": "c511b862",
+      "text": "Det runde kammer igen og dets alter hugget som en kæbe."
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/name": {
+      "hash": "61407316",
+      "text": "Thalorens helligdom"
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/seed": {
+      "hash": "ae62474a",
+      "text": "En lille helligdom ud til gravhøjens øverste hal: et fyrfad af gevirer, der har været koldt i århundreder, og en udskåret hjort på væggen. De reddede landsbyboere krøber sammen her, for svage til at gå."
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/variants/0/seed": {
+      "hash": "f7c15294",
+      "text": "Gevirfyrfadet brænder med en ren, grøn flamme. Mørket føles længere væk."
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/onEnter/text": {
+      "hash": "a4c09f8a",
+      "text": "Corwin halter ind efter dig og sætter sig tungt op ad væggen."
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/onEnter/tip": {
+      "hash": "5894baf2",
+      "text": "Et kort hvil (1 time) lader dig bruge livsterninger til at hele. Hvil er kun sikre på sikre steder."
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/actions/rekindle/label": {
+      "hash": "ed2b4306",
+      "text": "Tænd gevirfyrfadet igen (Religion SG 10)"
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/actions/rekindle/keywords": {
+      "hash": "40298aab",
+      "text": [
+        "tænd",
+        "genopliv",
+        "flamme",
+        "ild",
+        "fyrfad",
+        "helligdom",
+        "lys"
+      ]
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/actions/rekindle/check/success/text": {
+      "hash": "dd5e014d",
+      "text": "Du siger de gamle høstord, og fyrfadet fænger."
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/actions/rekindle/check/failure/text": {
+      "hash": "faf2551f",
+      "text": "Ordene vil ikke komme; fyrfadet forbliver koldt."
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/actions/rekindle_nature/label": {
+      "hash": "137bf5b7",
+      "text": "Lok en ild frem af det gamle fyrtøj (Natur SG 12)"
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/actions/rekindle_nature/keywords": {
+      "hash": "a311741e",
+      "text": [
+        "fyrtøj",
+        "gnist",
+        "lok",
+        "antænd",
+        "bål"
+      ]
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/actions/rekindle_nature/check/success/text": {
+      "hash": "3f45cc2d",
+      "text": "Tørt mos, tålmodighed, og fyrfadet fænger."
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/actions/rekindle_nature/check/failure/text": {
+      "hash": "cc69d2c7",
+      "text": "Fyrtøjet er gennemrådnet."
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/actions/rest_safe/label": {
+      "hash": "0392d4ed",
+      "text": "Tag et kort hvil ved ilden"
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/actions/rest_safe/outcome/text": {
+      "hash": "900e5637",
+      "text": "En time ved den grønne flamme. Selv tvillingerne sover."
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/actions/rest_cold/label": {
+      "hash": "1d0aeca7",
+      "text": "Tag et kort hvil i mørket"
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/actions/rest_cold/outcome/text": {
+      "hash": "3955a288",
+      "text": "Du slår dig ned i mørket — og rotterne kommer tilbage efter resterne."
+    },
+    "chapters/starter/scenes/barrow_shrine_rest/exits/home/label": {
+      "hash": "f34a6239",
+      "text": "Før alle hjem til Millbrook"
+    },
+    "chapters/starter/scenes/marrows_goods_and_oath/name": {
+      "hash": "4e77bc0a",
+      "text": "Marrows varer og kapellet"
+    },
+    "chapters/starter/scenes/marrows_goods_and_oath/seed": {
+      "hash": "489d7e53",
+      "text": "Enken Agna Marrows rodede butik — eliksirer, reb, en ringbrynje på en dukke — og på den anden side af stræden Solennes kapel, hvor Ser Corwin knæler ved alteret."
+    },
+    "chapters/starter/scenes/marrows_goods_and_oath/onEnter/tip": {
+      "hash": "2ad6b78f",
+      "text": "Åbn butikken fra menulinjen for at købe, sælge og købslå. Lageret er begrænset, og priserne afhænger af dit omdømme."
+    },
+    "chapters/starter/scenes/marrows_goods_and_oath/actions/return_ring/label": {
+      "hash": "47bbce8a",
+      "text": "Giv enken Marrow hendes stjålne ring tilbage"
+    },
+    "chapters/starter/scenes/marrows_goods_and_oath/actions/return_ring/outcome/text": {
+      "hash": "00c80181",
+      "text": "Hun vender og drejer ringen igen og igen og trykker så en eliksir i din hånd. 'Min Harls ring. Hvad du end får brug for, så spørger du mig først.'"
+    },
+    "chapters/starter/scenes/marrows_goods_and_oath/actions/recruit/label": {
+      "hash": "3faa8e08",
+      "text": "Bed Corwin om at drage med dig"
+    },
+    "chapters/starter/scenes/marrows_goods_and_oath/actions/recruit/outcome/text": {
+      "hash": "6272ebeb",
+      "text": "'Koret tog børn lige for næsen af mig. Jeg venter ikke på Lansens tilladelse.' Han rejser sig og rækker dig hånden."
+    },
+    "chapters/starter/scenes/marrows_goods_and_oath/actions/recruit/outcome/tip": {
+      "hash": "4684a0a7",
+      "text": "Følgesvende kæmper ved din side. På deres kort i gruppen kan du skifte, hvem der styrer dem i kamp: AI'en eller dig."
+    },
+    "chapters/starter/scenes/marrows_goods_and_oath/actions/recruit_cruel/label": {
+      "hash": "ebf166ac",
+      "text": "Bed Corwin om at drage med dig (Overtalelse SG 10)"
+    },
+    "chapters/starter/scenes/marrows_goods_and_oath/actions/recruit_cruel/check/success/text": {
+      "hash": "f39d79b0",
+      "text": "Han ser længe på dig. 'Ashby fortjente en rettergang. Men børnene har brug for os.' Han kommer med."
+    },
+    "chapters/starter/scenes/marrows_goods_and_oath/actions/recruit_cruel/check/failure/text": {
+      "hash": "32ad52ab",
+      "text": "'Jeg kommer med. Men jeg holder øje med, hvordan du bruger den klinge.'"
+    },
+    "chapters/starter/scenes/marrows_goods_and_oath/actions/go_alone/label": {
+      "hash": "952d26e0",
+      "text": "Drag af sted alene"
+    },
+    "chapters/starter/scenes/marrows_goods_and_oath/actions/go_alone/outcome/text": {
+      "hash": "ace04ea1",
+      "text": "Vejen er din alene."
+    },
+    "chapters/starter/scenes/marrows_goods_and_oath/exits/green/label": {
+      "hash": "4e38eb93",
+      "text": "Tilbage til gadekæret"
+    },
+    "chapters/starter/scenes/road_south/name": {
+      "hash": "2b27426d",
+      "text": "Den sydlige landevej"
+    },
+    "chapters/starter/scenes/road_south/seed": {
+      "hash": "33b8b1e9",
+      "text": "Fogeden følger dig til milepælen i udkanten af landsbyen. 'Den sorte ting er vanhellig. Nogen må bringe den et sted hen, hvor den kan holdes i forvaring.' To veje: østpå til Ravensgate og Lygtevogterne, som kender til sumpens ondskab; eller sydpå til Brightwater og Kronens magistrat, den rette myndighed."
+    },
+    "chapters/starter/scenes/road_south/variants/0/seed": {
+      "hash": "2a12a3f7",
+      "text": "Fogeden vil ikke komme med. Det er Corwin, der følger dig til milepælen og siger ordene."
+    },
+    "chapters/starter/scenes/road_south/variants/1/seed": {
+      "hash": "adc58593",
+      "text": "Ashbys ord bliver ved med at vende tilbage: en kvindestemme i mørket, Kantoren."
+    },
+    "chapters/starter/scenes/road_south/variants/2/seed": {
+      "hash": "ef71504c",
+      "text": "Corwin rører ved oppakningen med Tanden og nikker til dig: hvad det end koster."
+    },
+    "chapters/starter/scenes/road_south/onEnter/tip": {
+      "hash": "ab864528",
+      "text": "Verdenskortet (knappen Kort) viser kendte steder, ruter og rejsetid efter tempo. Langsomt er sikrere; hurtigt får dig hurtigere frem, men uforsigtigt."
+    },
+    "chapters/starter/scenes/road_south/actions/to_ravensgate/label": {
+      "hash": "ec05b655",
+      "text": "Tag vejen østpå til Ravensgate (30 engelske mil)"
+    },
+    "chapters/starter/scenes/road_south/actions/to_brightwater/label": {
+      "hash": "110fb5f6",
+      "text": "Tag vejen sydpå til Brightwater (25 engelske mil)"
+    },
+    "chapters/starter/scenes/road_ravensgate/name": {
+      "hash": "1b94deb3",
+      "text": "Bygmarker i skumringen"
+    },
+    "chapters/starter/scenes/road_ravensgate/seed": {
+      "hash": "e66abfe8",
+      "text": "Bygget rasler på begge sider af vejen, mens lyset svinder. Noget bevæger sig igennem det, lavt og hurtigt, i cirkler."
+    },
+    "chapters/starter/scenes/road_ravensgate/onEnter/text": {
+      "hash": "60c999ee",
+      "text": "To ulve bryder frem fra bygmarken."
+    },
+    "chapters/starter/scenes/road_ravensgate/actions/arrive/label": {
+      "hash": "8aa25d22",
+      "text": "Gå videre til Ravensgates porte"
+    },
+    "chapters/starter/scenes/road_ravensgate/actions/arrive/outcome/text": {
+      "hash": "2348f41b",
+      "text": "Ravensgates sorte mure rejser sig over den sidste tørre højderyg før sumpen. Portene er lukket mod pesten — og en vogtersergent leder efter udefrakommende, der endnu ikke er syge."
+    },
+    "chapters/starter/scenes/road_brightwater/name": {
+      "hash": "55700d26",
+      "text": "Toldbroen"
+    },
+    "chapters/starter/scenes/road_brightwater/seed": {
+      "hash": "e31e11cb",
+      "text": "En plankebro over Brightwater-floden og to mænd med hårde ansigter og en kæde spændt over den. 'Tolden er fem guld. Vejreparationer.' Der har ikke været nogen reparationer."
+    },
+    "chapters/starter/scenes/road_brightwater/actions/pay/label": {
+      "hash": "39ff9549",
+      "text": "Betal tolden på 5 gm"
+    },
+    "chapters/starter/scenes/road_brightwater/actions/pay/outcome/text": {
+      "hash": "7078df25",
+      "text": "De sænker kæden med spottende buk."
+    },
+    "chapters/starter/scenes/road_brightwater/actions/talk_down/label": {
+      "hash": "b09c1e51",
+      "text": "Tal dem fra det (Overtalelse SG 12)"
+    },
+    "chapters/starter/scenes/road_brightwater/actions/talk_down/check/success/text": {
+      "hash": "4608ce23",
+      "text": "Efter et øjebliks eftertanke om ridderen — eller blikket i dine øjne — beslutter de, at tolden er eftergivet i dag."
+    },
+    "chapters/starter/scenes/road_brightwater/actions/talk_down/check/failure/text": {
+      "hash": "7b90fea3",
+      "text": "'Fem guld, eller floden.'"
+    },
+    "chapters/starter/scenes/road_brightwater/actions/fight/label": {
+      "hash": "7baa4280",
+      "text": "Ryd broen med magt"
+    },
+    "chapters/starter/scenes/road_brightwater/actions/fight/outcome/text": {
+      "hash": "f824620f",
+      "text": "De trækker våben."
+    },
+    "chapters/starter/scenes/road_brightwater/actions/expose_clerk/label": {
+      "hash": "017cdae6",
+      "text": "Sig \"Kantoren\" og iagttag skriverens ansigt (Indsigt SG 12)"
+    },
+    "chapters/starter/scenes/road_brightwater/actions/expose_clerk/keywords": {
+      "hash": "d9e67e61",
+      "text": [
+        "kantor",
+        "kantoren",
+        "skriver",
+        "skriveren",
+        "anklag",
+        "afslør"
+      ]
+    },
+    "chapters/starter/scenes/road_brightwater/actions/expose_clerk/check/success/text": {
+      "hash": "d163a13a",
+      "text": "Ved ordet \"Kantoren\" bliver skriveren hvid og styrter mod bagdøren; magistratens vagter river ham omkuld. Magistraten underskriver selv dit kongelige brev, og den sorte Tand bliver hos dig."
+    },
+    "chapters/starter/scenes/road_brightwater/actions/expose_clerk/check/failure/text": {
+      "hash": "cef1b523",
+      "text": "Skriveren smiler bare. Magistraten kalder det bagvaskelse og underskriver dit brev bare for at blive af med dig. Den sorte Tand bliver hos dig."
+    },
+    "chapters/starter/scenes/road_brightwater/actions/hand_over/label": {
+      "hash": "f2959217",
+      "text": "Giv Tanden til magistratens skriver"
+    },
+    "chapters/starter/scenes/road_brightwater/actions/hand_over/outcome/text": {
+      "hash": "f09a8f00",
+      "text": "Skriveren svøber den sorte Tand i silke, forsegler skrinet med Det Kongelige Almisseembedes hvede-og-krone og 'sender den videre til forvaring'. Han giver dig et kongeligt brev til Ravensgate: pestens kilde skal undersøges."
+    },
+    "chapters/starter/scenes/road_brightwater/actions/keep/label": {
+      "hash": "c4d9ad1f",
+      "text": "Behold Tanden og bed kun om et brev"
+    },
+    "chapters/starter/scenes/road_brightwater/actions/keep/outcome/text": {
+      "hash": "88832477",
+      "text": "Magistraten brummer, men underskriver et kongeligt brev, der sender dig til Ravensgate for at finde pestens kilde."
+    },
+    "chapters/starter/scenes/road_brightwater/variants/0/seed": {
+      "hash": "e63b5a90",
+      "text": "Ashby svor, at Korets Tænder rejser under Det Kongelige Almisseembedes segl. Magistratens skriver bærer dets hvede-og-krone på ærmet."
+    },
+    "maps/barrow/name": {
+      "hash": "babd7903",
+      "text": "Det Første Negs gravhøj"
+    },
+    "maps/barrow/rooms/root_hall/name": {
+      "hash": "d2c462d4",
+      "text": "Rodhallen"
+    },
+    "maps/barrow/rooms/sheaf_crypt/name": {
+      "hash": "19ed3e1e",
+      "text": "Negkrypten"
+    },
+    "maps/barrow/rooms/tithe_altar/name": {
+      "hash": "e8cbfb9e",
+      "text": "Tiendealteret"
+    },
+    "npcs/reeve_tamsin/name": {
+      "hash": "0a93610d",
+      "text": "Foged Hollis Tamsin"
+    },
+    "npcs/reeve_tamsin/personality": {
+      "hash": "cf0bf5aa",
+      "text": "Træt, ærlig og stolt; skammer sig over, at han ikke kan beskytte sin landsby."
+    },
+    "npcs/reeve_tamsin/voice": {
+      "hash": "be310e92",
+      "text": "Langsom bondedialekt, lange pauser."
+    },
+    "npcs/reeve_tamsin/secrets": {
+      "hash": "9efda40d",
+      "text": [
+        "Han har den eneste nøgle til den gamle låge ind til gravhøjen."
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/missing/label": {
+      "hash": "a5e80842",
+      "text": "Sæt dig ned med foged Tamsin"
+    },
+    "npcs/reeve_tamsin/conversations/missing/keywords": {
+      "hash": "5e77f04c",
+      "text": [
+        "foged",
+        "fogeden",
+        "sæt",
+        "tal",
+        "snak"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/text": {
+      "hash": "fb965530",
+      "text": "Er du kommet for at glo på vores sorg, er døren bag dig. Hvis ikke, så sig, hvad du har på hjerte."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/options/names/label": {
+      "hash": "d157eb5f",
+      "text": "\"Hvem er forsvundet?\""
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/options/names/keywords": {
+      "hash": "3b8a1677",
+      "text": [
+        "forsvundet",
+        "forsvundne",
+        "hvem",
+        "navne"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/options/read/label": {
+      "hash": "efce77d5",
+      "text": "Iagttag ham: hvad er han egentlig bange for? (Indsigt SG 11)"
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/options/read/keywords": {
+      "hash": "6a0c23d5",
+      "text": [
+        "iagttag",
+        "bange",
+        "læs",
+        "aflæs"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/options/read/check/success/text": {
+      "hash": "28825d7d",
+      "text": "Det er ikke dig, han er vred på. Hans støvler er dækket af det grå ler fra Galgebakken: han gik derop alene, og han kom tilbage."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/options/read/check/failure/text": {
+      "hash": "d9cd44bb",
+      "text": "En træt, stædig mand. Mere kan du ikke læse i ham."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/options/shame/label": {
+      "hash": "767fd2fd",
+      "text": "\"Du gik selv op ad den bakke. Kom med mig denne gang, og tag dine mænd med.\""
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/options/shame/keywords": {
+      "hash": "10cffc43",
+      "text": [
+        "bakke",
+        "bakken",
+        "selv",
+        "mænd",
+        "kom"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/options/shame/outcome/text": {
+      "hash": "9eef3f07",
+      "text": "Fogeden rækker dig listen over de forsvundne og jernnøglen til lågen ind til gravhøjen."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/options/lie/label": {
+      "hash": "bed54571",
+      "text": "\"Jeg er her i Kronens ærinde. Nøglen, foged.\" (Bedrag SG 13)"
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/options/lie/keywords": {
+      "hash": "62e1b625",
+      "text": [
+        "krone",
+        "kronen",
+        "løgn",
+        "ærinde",
+        "bedrag",
+        "narre"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/options/lie/check/success/text": {
+      "hash": "d70e4f0c",
+      "text": "Fogeden tror på dig. Han rækker dig nøglen til gravhøjen uden et ord mere."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/options/lie/check/failure/text": {
+      "hash": "17076f0f",
+      "text": "Fogeden gennemskuer løgnen med det samme."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/greet/options/bye/label": {
+      "hash": "8beda82d",
+      "text": "\"Jeg klarer mig selv.\""
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/text": {
+      "hash": "2f762dd1",
+      "text": "Pip Hallard, møllerens dreng. Tobin, hyrden. Cobb-tvillingerne, Maddy og Moll. To uger, fire sjæle, og ikke en dråbe blod nogen steder."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/options/names/label": {
+      "hash": "d157eb5f",
+      "text": "\"Hvem er forsvundet?\""
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/options/names/keywords": {
+      "hash": "3b8a1677",
+      "text": [
+        "forsvundet",
+        "forsvundne",
+        "hvem",
+        "navne"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/options/read/label": {
+      "hash": "efce77d5",
+      "text": "Iagttag ham: hvad er han egentlig bange for? (Indsigt SG 11)"
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/options/read/keywords": {
+      "hash": "6a0c23d5",
+      "text": [
+        "iagttag",
+        "bange",
+        "læs",
+        "aflæs"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/options/read/check/success/text": {
+      "hash": "28825d7d",
+      "text": "Det er ikke dig, han er vred på. Hans støvler er dækket af det grå ler fra Galgebakken: han gik derop alene, og han kom tilbage."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/options/read/check/failure/text": {
+      "hash": "d9cd44bb",
+      "text": "En træt, stædig mand. Mere kan du ikke læse i ham."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/options/shame/label": {
+      "hash": "767fd2fd",
+      "text": "\"Du gik selv op ad den bakke. Kom med mig denne gang, og tag dine mænd med.\""
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/options/shame/keywords": {
+      "hash": "10cffc43",
+      "text": [
+        "bakke",
+        "bakken",
+        "selv",
+        "mænd",
+        "kom"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/options/shame/outcome/text": {
+      "hash": "9eef3f07",
+      "text": "Fogeden rækker dig listen over de forsvundne og jernnøglen til lågen ind til gravhøjen."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/options/lie/label": {
+      "hash": "bed54571",
+      "text": "\"Jeg er her i Kronens ærinde. Nøglen, foged.\" (Bedrag SG 13)"
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/options/lie/keywords": {
+      "hash": "62e1b625",
+      "text": [
+        "krone",
+        "kronen",
+        "løgn",
+        "ærinde",
+        "bedrag",
+        "narre"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/options/lie/check/success/text": {
+      "hash": "d70e4f0c",
+      "text": "Fogeden tror på dig. Han rækker dig nøglen til gravhøjen uden et ord mere."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/options/lie/check/failure/text": {
+      "hash": "17076f0f",
+      "text": "Fogeden gennemskuer løgnen med det samme."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/names/options/bye/label": {
+      "hash": "8beda82d",
+      "text": "\"Jeg klarer mig selv.\""
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/text": {
+      "hash": "d94477d5",
+      "text": "Nå? Jeg har ikke hele natten."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/options/names/label": {
+      "hash": "d157eb5f",
+      "text": "\"Hvem er forsvundet?\""
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/options/names/keywords": {
+      "hash": "3b8a1677",
+      "text": [
+        "forsvundet",
+        "forsvundne",
+        "hvem",
+        "navne"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/options/read/label": {
+      "hash": "efce77d5",
+      "text": "Iagttag ham: hvad er han egentlig bange for? (Indsigt SG 11)"
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/options/read/keywords": {
+      "hash": "6a0c23d5",
+      "text": [
+        "iagttag",
+        "bange",
+        "læs",
+        "aflæs"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/options/read/check/success/text": {
+      "hash": "28825d7d",
+      "text": "Det er ikke dig, han er vred på. Hans støvler er dækket af det grå ler fra Galgebakken: han gik derop alene, og han kom tilbage."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/options/read/check/failure/text": {
+      "hash": "d9cd44bb",
+      "text": "En træt, stædig mand. Mere kan du ikke læse i ham."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/options/shame/label": {
+      "hash": "767fd2fd",
+      "text": "\"Du gik selv op ad den bakke. Kom med mig denne gang, og tag dine mænd med.\""
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/options/shame/keywords": {
+      "hash": "10cffc43",
+      "text": [
+        "bakke",
+        "bakken",
+        "selv",
+        "mænd",
+        "kom"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/options/shame/outcome/text": {
+      "hash": "9eef3f07",
+      "text": "Fogeden rækker dig listen over de forsvundne og jernnøglen til lågen ind til gravhøjen."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/options/lie/label": {
+      "hash": "bed54571",
+      "text": "\"Jeg er her i Kronens ærinde. Nøglen, foged.\" (Bedrag SG 13)"
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/options/lie/keywords": {
+      "hash": "62e1b625",
+      "text": [
+        "krone",
+        "kronen",
+        "løgn",
+        "ærinde",
+        "bedrag",
+        "narre"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/options/lie/check/success/text": {
+      "hash": "d70e4f0c",
+      "text": "Fogeden tror på dig. Han rækker dig nøglen til gravhøjen uden et ord mere."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/options/lie/check/failure/text": {
+      "hash": "17076f0f",
+      "text": "Fogeden gennemskuer løgnen med det samme."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/well/options/bye/label": {
+      "hash": "8beda82d",
+      "text": "\"Jeg klarer mig selv.\""
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/brave/text": {
+      "hash": "119e7ca0",
+      "text": "...Ja. Jeg gik derop, og jeg løb min vej. Ikke to gange. Mine karle og jeg er ved vadestedet ved måneopgang. Giv os et tegn, så lokker vi dem væk."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/lied/text": {
+      "hash": "605e7f72",
+      "text": "Kronen. Endelig. Så tag den, og Gud hjælpe dig."
+    },
+    "npcs/reeve_tamsin/conversations/missing/nodes/scorn/text": {
+      "hash": "f57e3a77",
+      "text": "Kronen? Kronen har ikke svaret på mine breve i en måned. Forsvind fra mine øjne."
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/label": {
+      "hash": "681ecb5a",
+      "text": "Fortæl foged Tamsin, hvad du fandt under bakken"
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/keywords": {
+      "hash": "d6503f55",
+      "text": [
+        "foged",
+        "fogeden",
+        "fortæl",
+        "rapport",
+        "berette"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/report/text": {
+      "hash": "5414fe9c",
+      "text": "Så du kom ud af den bakke igen. Sæt dig. Fortæl mig, hvad du fandt."
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/report/options/truth/label": {
+      "hash": "fc4d5272",
+      "text": "Fortæl ham alt, også om den sorte Tand og den syngende stemme"
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/report/options/truth/keywords": {
+      "hash": "bd2c7f23",
+      "text": [
+        "alt",
+        "alting",
+        "sandheden",
+        "tand",
+        "tanden"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/report/options/apologise/label": {
+      "hash": "a2fbc98d",
+      "text": "\"Jeg var hård ved dig før. Undskyld.\" (Overtalelse SG 12)"
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/report/options/apologise/keywords": {
+      "hash": "d527dffb",
+      "text": [
+        "undskyld",
+        "beklager",
+        "tilgiv"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/report/options/ashby/label": {
+      "hash": "d7d6e04b",
+      "text": "Overgiv broder Ashby til Kronens retfærdighed"
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/report/options/ashby/keywords": {
+      "hash": "11dec7fb",
+      "text": [
+        "ashby",
+        "fange",
+        "fangen",
+        "retfærdighed",
+        "overgiv"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/report/options/reward/label": {
+      "hash": "94866bd5",
+      "text": "\"Landsbyen skylder mig. Jeg tager den dusør nu.\""
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/report/options/reward/keywords": {
+      "hash": "5fb29ac5",
+      "text": [
+        "dusør",
+        "dusøren",
+        "skylder",
+        "betal",
+        "betaling"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/report/options/bye/label": {
+      "hash": "8640d8b9",
+      "text": "\"Senere. Jeg har brug for søvn.\""
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/told/text": {
+      "hash": "b391f867",
+      "text": "Syv tænder... Jeg skriver til Kronen i aften. Nu vil de lytte."
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/told/options/truth/label": {
+      "hash": "fc4d5272",
+      "text": "Fortæl ham alt, også om den sorte Tand og den syngende stemme"
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/told/options/truth/keywords": {
+      "hash": "bd2c7f23",
+      "text": [
+        "alt",
+        "alting",
+        "sandheden",
+        "tand",
+        "tanden"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/told/options/apologise/label": {
+      "hash": "a2fbc98d",
+      "text": "\"Jeg var hård ved dig før. Undskyld.\" (Overtalelse SG 12)"
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/told/options/apologise/keywords": {
+      "hash": "d527dffb",
+      "text": [
+        "undskyld",
+        "beklager",
+        "tilgiv"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/told/options/ashby/label": {
+      "hash": "d7d6e04b",
+      "text": "Overgiv broder Ashby til Kronens retfærdighed"
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/told/options/ashby/keywords": {
+      "hash": "11dec7fb",
+      "text": [
+        "ashby",
+        "fange",
+        "fangen",
+        "retfærdighed",
+        "overgiv"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/told/options/reward/label": {
+      "hash": "94866bd5",
+      "text": "\"Landsbyen skylder mig. Jeg tager den dusør nu.\""
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/told/options/reward/keywords": {
+      "hash": "5fb29ac5",
+      "text": [
+        "dusør",
+        "dusøren",
+        "skylder",
+        "betal",
+        "betaling"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/told/options/bye/label": {
+      "hash": "8640d8b9",
+      "text": "\"Senere. Jeg har brug for søvn.\""
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/forgiven/text": {
+      "hash": "e82dd042",
+      "text": "...Ja. Vi var alle bange. Værelset ovenpå er dit, og landsbyen betaler."
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/forgiven/options/truth/label": {
+      "hash": "fc4d5272",
+      "text": "Fortæl ham alt, også om den sorte Tand og den syngende stemme"
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/forgiven/options/truth/keywords": {
+      "hash": "bd2c7f23",
+      "text": [
+        "alt",
+        "alting",
+        "sandheden",
+        "tand",
+        "tanden"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/forgiven/options/apologise/label": {
+      "hash": "a2fbc98d",
+      "text": "\"Jeg var hård ved dig før. Undskyld.\" (Overtalelse SG 12)"
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/forgiven/options/apologise/keywords": {
+      "hash": "d527dffb",
+      "text": [
+        "undskyld",
+        "beklager",
+        "tilgiv"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/forgiven/options/ashby/label": {
+      "hash": "d7d6e04b",
+      "text": "Overgiv broder Ashby til Kronens retfærdighed"
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/forgiven/options/ashby/keywords": {
+      "hash": "11dec7fb",
+      "text": [
+        "ashby",
+        "fange",
+        "fangen",
+        "retfærdighed",
+        "overgiv"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/forgiven/options/reward/label": {
+      "hash": "94866bd5",
+      "text": "\"Landsbyen skylder mig. Jeg tager den dusør nu.\""
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/forgiven/options/reward/keywords": {
+      "hash": "5fb29ac5",
+      "text": [
+        "dusør",
+        "dusøren",
+        "skylder",
+        "betal",
+        "betaling"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/forgiven/options/bye/label": {
+      "hash": "8640d8b9",
+      "text": "\"Senere. Jeg har brug for søvn.\""
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/grudge/text": {
+      "hash": "b2aa9d22",
+      "text": "Ord er billige. Dit værelse betaler du selv."
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/jail/text": {
+      "hash": "50463422",
+      "text": "Broder Ashby. Vores egen graver. Han skal for retten i Brightwater, Gud hjælpe ham."
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/jail/options/truth/label": {
+      "hash": "fc4d5272",
+      "text": "Fortæl ham alt, også om den sorte Tand og den syngende stemme"
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/jail/options/truth/keywords": {
+      "hash": "bd2c7f23",
+      "text": [
+        "alt",
+        "alting",
+        "sandheden",
+        "tand",
+        "tanden"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/jail/options/apologise/label": {
+      "hash": "a2fbc98d",
+      "text": "\"Jeg var hård ved dig før. Undskyld.\" (Overtalelse SG 12)"
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/jail/options/apologise/keywords": {
+      "hash": "d527dffb",
+      "text": [
+        "undskyld",
+        "beklager",
+        "tilgiv"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/jail/options/ashby/label": {
+      "hash": "d7d6e04b",
+      "text": "Overgiv broder Ashby til Kronens retfærdighed"
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/jail/options/ashby/keywords": {
+      "hash": "11dec7fb",
+      "text": [
+        "ashby",
+        "fange",
+        "fangen",
+        "retfærdighed",
+        "overgiv"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/jail/options/reward/label": {
+      "hash": "94866bd5",
+      "text": "\"Landsbyen skylder mig. Jeg tager den dusør nu.\""
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/jail/options/reward/keywords": {
+      "hash": "5fb29ac5",
+      "text": [
+        "dusør",
+        "dusøren",
+        "skylder",
+        "betal",
+        "betaling"
+      ]
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/jail/options/bye/label": {
+      "hash": "8640d8b9",
+      "text": "\"Senere. Jeg har brug for søvn.\""
+    },
+    "npcs/reeve_tamsin/conversations/homecoming/nodes/paid/text": {
+      "hash": "291bf749",
+      "text": "...Selvfølgelig. Hele landsbyen har skillinget sammen. Han tæller det op og nævner ikke værelset ovenpå."
+    },
+    "npcs/oda_hallard/name": {
+      "hash": "099285ba",
+      "text": "Mølleren Oda Hallard"
+    },
+    "npcs/oda_hallard/personality": {
+      "hash": "870546ea",
+      "text": "Forskræmt mor; skyldfølelsen gør hende snerpet og vrissen."
+    },
+    "npcs/oda_hallard/voice": {
+      "hash": "b9b3dc0f",
+      "text": "Hurtig, forpustet, lader sætningerne dø ud."
+    },
+    "npcs/oda_hallard/secrets": {
+      "hash": "38c68e68",
+      "text": [
+        "Hun tog imod penge fra en 'hætteklædt broder' for at forlade sin mølle efter mørkets frembrud."
+      ]
+    },
+    "npcs/agna_marrow/name": {
+      "hash": "cbe4317a",
+      "text": "Enken Agna Marrow"
+    },
+    "npcs/agna_marrow/personality": {
+      "hash": "99095e9c",
+      "text": "Skarp, sladdersyg, en hård købslåer med et blødt hjerte, hun skjuler."
+    },
+    "npcs/agna_marrow/voice": {
+      "hash": "f4960571",
+      "text": "Rask, syngende, kalder alle 'min ven'."
+    },
+    "npcs/agna_marrow/secrets": {
+      "hash": "6db36ecf",
+      "text": [
+        "Kultisterne stjal hendes afdøde mands ring fra butikken."
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/label": {
+      "hash": "5bc4d592",
+      "text": "Tal med enken Marrow"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/keywords": {
+      "hash": "e6552174",
+      "text": [
+        "marrow",
+        "enken",
+        "enke",
+        "agna"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/text": {
+      "hash": "896ba2b1",
+      "text": "Nej, er det ikke helten fra Galgebakken! Kom indenfor, min ven, pas på rebet. Hvad kan gamle Agna gøre for dig?"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/give/label": {
+      "hash": "1657279d",
+      "text": "Giv hende ringen med indgraveringen 'A. & H.'"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/give/keywords": {
+      "hash": "87d2d920",
+      "text": [
+        "giv",
+        "aflever",
+        "tilbage",
+        "ring",
+        "ringen"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/read/label": {
+      "hash": "09246bb9",
+      "text": "Iagttag hende: ved hun, at ringen er væk? (Indsigt SG 10)"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/read/keywords": {
+      "hash": "9d72a385",
+      "text": [
+        "iagttag",
+        "ved",
+        "aflæs"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/read/check/success/text": {
+      "hash": "9c5e942a",
+      "text": "Hun rører hele tiden ved sin bare ringfinger. Hvad end ringen er værd i guld, er den alt værd for hende."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/read/check/failure/text": {
+      "hash": "dd2dca76",
+      "text": "Hun er lutter smil og skarpe øjne; mere kan du ikke læse."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/sell/label": {
+      "hash": "0fcf9118",
+      "text": "\"Jeg fandt noget, der tilhører dig. Femten guld, og så sidder det på din finger igen.\" (Overtalelse SG 12)"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/sell/keywords": {
+      "hash": "88e907cd",
+      "text": [
+        "sælg",
+        "sælge",
+        "femten",
+        "pris"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/sell/check/success/text": {
+      "hash": "6d990ba7",
+      "text": "Med rystende hænder tæller hun femten guld op og tager sin mands ring tilbage."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/sell/check/failure/text": {
+      "hash": "e8bb52c0",
+      "text": "Hun betaler fem guld, alt hvad der er i kassen, og spytter på gulvet foran dine fødder."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/extort/label": {
+      "hash": "06f99a3c",
+      "text": "\"Din ring kom fra en kults alter. Tyve guld, eller den havner hos en pantelåner i Brightwater.\" (Intimidering SG 11)"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/extort/keywords": {
+      "hash": "810b56e3",
+      "text": [
+        "tyve",
+        "pant",
+        "pantelåner",
+        "tru",
+        "true",
+        "intimider"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/extort/check/success/text": {
+      "hash": "8419a722",
+      "text": "Kridhvid i ansigtet tømmer hun sit pengeskrin: tyve guld for sin egen mands ring."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/extort/check/failure/text": {
+      "hash": "8086cec2",
+      "text": "Hun river ringen ud af din hånd og skriger på fogeden. Du går, før han kommer, men hele landsbyen hører om det."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/gossip/label": {
+      "hash": "aab75e5d",
+      "text": "\"Hvad siger folk om Ser Corwin?\""
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/gossip/keywords": {
+      "hash": "2de71df6",
+      "text": [
+        "corwin",
+        "ridder",
+        "ridderen",
+        "folk"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/greet/options/bye/label": {
+      "hash": "bc3cc650",
+      "text": "\"Jeg kigger bare.\""
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/text": {
+      "hash": "1dddc84f",
+      "text": "Var der andet, min ven?"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/give/label": {
+      "hash": "1657279d",
+      "text": "Giv hende ringen med indgraveringen 'A. & H.'"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/give/keywords": {
+      "hash": "87d2d920",
+      "text": [
+        "giv",
+        "aflever",
+        "tilbage",
+        "ring",
+        "ringen"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/read/label": {
+      "hash": "09246bb9",
+      "text": "Iagttag hende: ved hun, at ringen er væk? (Indsigt SG 10)"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/read/keywords": {
+      "hash": "9d72a385",
+      "text": [
+        "iagttag",
+        "ved",
+        "aflæs"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/read/check/success/text": {
+      "hash": "9c5e942a",
+      "text": "Hun rører hele tiden ved sin bare ringfinger. Hvad end ringen er værd i guld, er den alt værd for hende."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/read/check/failure/text": {
+      "hash": "dd2dca76",
+      "text": "Hun er lutter smil og skarpe øjne; mere kan du ikke læse."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/sell/label": {
+      "hash": "0fcf9118",
+      "text": "\"Jeg fandt noget, der tilhører dig. Femten guld, og så sidder det på din finger igen.\" (Overtalelse SG 12)"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/sell/keywords": {
+      "hash": "88e907cd",
+      "text": [
+        "sælg",
+        "sælge",
+        "femten",
+        "pris"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/sell/check/success/text": {
+      "hash": "6d990ba7",
+      "text": "Med rystende hænder tæller hun femten guld op og tager sin mands ring tilbage."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/sell/check/failure/text": {
+      "hash": "e8bb52c0",
+      "text": "Hun betaler fem guld, alt hvad der er i kassen, og spytter på gulvet foran dine fødder."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/extort/label": {
+      "hash": "06f99a3c",
+      "text": "\"Din ring kom fra en kults alter. Tyve guld, eller den havner hos en pantelåner i Brightwater.\" (Intimidering SG 11)"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/extort/keywords": {
+      "hash": "810b56e3",
+      "text": [
+        "tyve",
+        "pant",
+        "pantelåner",
+        "tru",
+        "true",
+        "intimider"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/extort/check/success/text": {
+      "hash": "8419a722",
+      "text": "Kridhvid i ansigtet tømmer hun sit pengeskrin: tyve guld for sin egen mands ring."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/extort/check/failure/text": {
+      "hash": "8086cec2",
+      "text": "Hun river ringen ud af din hånd og skriger på fogeden. Du går, før han kommer, men hele landsbyen hører om det."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/gossip/label": {
+      "hash": "aab75e5d",
+      "text": "\"Hvad siger folk om Ser Corwin?\""
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/gossip/keywords": {
+      "hash": "2de71df6",
+      "text": [
+        "corwin",
+        "ridder",
+        "ridderen",
+        "folk"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/more/options/bye/label": {
+      "hash": "bc3cc650",
+      "text": "\"Jeg kigger bare.\""
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/text": {
+      "hash": "f319e3d6",
+      "text": "Slog en kaptajn, siger de. På grund af en pestlandsby. En god mand, hvis du spørger mig, og det er der aldrig nogen, der gør."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/give/label": {
+      "hash": "1657279d",
+      "text": "Giv hende ringen med indgraveringen 'A. & H.'"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/give/keywords": {
+      "hash": "87d2d920",
+      "text": [
+        "giv",
+        "aflever",
+        "tilbage",
+        "ring",
+        "ringen"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/read/label": {
+      "hash": "09246bb9",
+      "text": "Iagttag hende: ved hun, at ringen er væk? (Indsigt SG 10)"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/read/keywords": {
+      "hash": "9d72a385",
+      "text": [
+        "iagttag",
+        "ved",
+        "aflæs"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/read/check/success/text": {
+      "hash": "9c5e942a",
+      "text": "Hun rører hele tiden ved sin bare ringfinger. Hvad end ringen er værd i guld, er den alt værd for hende."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/read/check/failure/text": {
+      "hash": "dd2dca76",
+      "text": "Hun er lutter smil og skarpe øjne; mere kan du ikke læse."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/sell/label": {
+      "hash": "0fcf9118",
+      "text": "\"Jeg fandt noget, der tilhører dig. Femten guld, og så sidder det på din finger igen.\" (Overtalelse SG 12)"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/sell/keywords": {
+      "hash": "88e907cd",
+      "text": [
+        "sælg",
+        "sælge",
+        "femten",
+        "pris"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/sell/check/success/text": {
+      "hash": "6d990ba7",
+      "text": "Med rystende hænder tæller hun femten guld op og tager sin mands ring tilbage."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/sell/check/failure/text": {
+      "hash": "e8bb52c0",
+      "text": "Hun betaler fem guld, alt hvad der er i kassen, og spytter på gulvet foran dine fødder."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/extort/label": {
+      "hash": "06f99a3c",
+      "text": "\"Din ring kom fra en kults alter. Tyve guld, eller den havner hos en pantelåner i Brightwater.\" (Intimidering SG 11)"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/extort/keywords": {
+      "hash": "810b56e3",
+      "text": [
+        "tyve",
+        "pant",
+        "pantelåner",
+        "tru",
+        "true",
+        "intimider"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/extort/check/success/text": {
+      "hash": "8419a722",
+      "text": "Kridhvid i ansigtet tømmer hun sit pengeskrin: tyve guld for sin egen mands ring."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/extort/check/failure/text": {
+      "hash": "8086cec2",
+      "text": "Hun river ringen ud af din hånd og skriger på fogeden. Du går, før han kommer, men hele landsbyen hører om det."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/gossip/label": {
+      "hash": "aab75e5d",
+      "text": "\"Hvad siger folk om Ser Corwin?\""
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/gossip/keywords": {
+      "hash": "2de71df6",
+      "text": [
+        "corwin",
+        "ridder",
+        "ridderen",
+        "folk"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/gossip/options/bye/label": {
+      "hash": "bc3cc650",
+      "text": "\"Jeg kigger bare.\""
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/sour/text": {
+      "hash": "3b40ea14",
+      "text": "Ud af min butik."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/grateful/text": {
+      "hash": "43c3d5c5",
+      "text": "Min Harls ring... Hvad du end får brug for, min ven, så spørger du mig først."
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/grateful/options/supplies/label": {
+      "hash": "01c103c9",
+      "text": "\"Lidt til vejen ville hjælpe.\""
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/grateful/options/supplies/keywords": {
+      "hash": "29ef69c6",
+      "text": [
+        "forsyninger",
+        "proviant",
+        "vejen",
+        "rejsen"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/grateful/options/nothing/label": {
+      "hash": "9bdd4522",
+      "text": "\"Behold dine varer. Millbrook har mere brug for dem end jeg.\""
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/grateful/options/nothing/keywords": {
+      "hash": "6595c74b",
+      "text": [
+        "behold",
+        "intet",
+        "ingenting"
+      ]
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/packed/text": {
+      "hash": "5552b9b4",
+      "text": "Sådan. Et helbrederkit og brød til tre dage. Du kommer hel tilbage, hører du?"
+    },
+    "npcs/agna_marrow/conversations/shop_talk/nodes/touched/text": {
+      "hash": "bb39e2be",
+      "text": "Nå da. Du er vel nok en sjælden en."
+    },
+    "npcs/corwin_npc/name": {
+      "hash": "f94b0d07",
+      "text": "Ser Corwin Ashvale"
+    },
+    "npcs/corwin_npc/personality": {
+      "hash": "21513433",
+      "text": "Oprigtig, stædig og tørt humoristisk; skammer sig over sin afsked, men surmuler aldrig."
+    },
+    "npcs/corwin_npc/voice": {
+      "hash": "7e53fb55",
+      "text": "Dyb, afmålt, en soldats knappe høflighed."
+    },
+    "npcs/corwin_npc/secrets": {
+      "hash": "baccffeb",
+      "text": [
+        "Han blev afskediget fra Daggrylansen for at slå en kaptajn, der beordrede en pestlandsby opgivet."
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/label": {
+      "hash": "308591e8",
+      "text": "Sæt dig hos Ser Corwin i kapellet"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/keywords": {
+      "hash": "81f1f52a",
+      "text": [
+        "corwin",
+        "sæt",
+        "kapel",
+        "kapellet",
+        "tal",
+        "snak"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/text": {
+      "hash": "59863d05",
+      "text": "Sig, hvad du tænker. Hellere her end på landevejen."
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/lance/label": {
+      "hash": "343297dc",
+      "text": "Spørg, hvorfor Daggrylansen afskedigede ham (Indsigt SG 12)"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/lance/keywords": {
+      "hash": "f2c4881b",
+      "text": [
+        "lansen",
+        "daggrylansen",
+        "afskediget",
+        "afsked",
+        "hvorfor"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/lance/check/advantageIf/0/source": {
+      "hash": "6b35714c",
+      "text": "du har allerede hørt landsbysladderen"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/oath/label": {
+      "hash": "98115d21",
+      "text": "\"Vi holder den Tand ude af deres hænder, hvad det end koster.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/oath/keywords": {
+      "hash": "17decaf1",
+      "text": [
+        "ed",
+        "sværger",
+        "sværg",
+        "løfte",
+        "tand",
+        "tanden"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/trial/label": {
+      "hash": "ae7ab454",
+      "text": "\"Ashby skal stå til regnskab for Kronens retfærdighed.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/trial/keywords": {
+      "hash": "ef1982f7",
+      "text": [
+        "ashby",
+        "retssag",
+        "rettergang",
+        "retfærdighed"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/regret/label": {
+      "hash": "79251323",
+      "text": "\"At dræbe Ashby... det var forkert af mig.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/regret/keywords": {
+      "hash": "14149512",
+      "text": [
+        "forkert",
+        "fortryder",
+        "fortrydelse",
+        "undskyld"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/proud/label": {
+      "hash": "c5502045",
+      "text": "\"Ashby fik, hvad han fortjente.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/proud/keywords": {
+      "hash": "a8eaa733",
+      "text": [
+        "fortjente",
+        "fortjent"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/tooth/label": {
+      "hash": "204086cd",
+      "text": "\"Hvor skal Tanden hen?\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/tooth/keywords": {
+      "hash": "4c5494a3",
+      "text": [
+        "hvor",
+        "hen",
+        "ravensgate",
+        "brightwater"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/mock/label": {
+      "hash": "98bb40d2",
+      "text": "\"En ridder, der ikke kan adlyde ordrer. Vidunderligt.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/mock/keywords": {
+      "hash": "eae243d6",
+      "text": [
+        "hån",
+        "spot",
+        "ordrer",
+        "adlyde"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/start/options/bye/label": {
+      "hash": "72b785de",
+      "text": "\"Lad os komme af sted.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/text": {
+      "hash": "018016f7",
+      "text": "Jeg slog en kaptajn, der beordrede en pestlandsby overladt til sumpen. Jeg ville gøre det igen."
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/lance/label": {
+      "hash": "343297dc",
+      "text": "Spørg, hvorfor Daggrylansen afskedigede ham (Indsigt SG 12)"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/lance/keywords": {
+      "hash": "f2c4881b",
+      "text": [
+        "lansen",
+        "daggrylansen",
+        "afskediget",
+        "afsked",
+        "hvorfor"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/lance/check/advantageIf/0/source": {
+      "hash": "6b35714c",
+      "text": "du har allerede hørt landsbysladderen"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/oath/label": {
+      "hash": "98115d21",
+      "text": "\"Vi holder den Tand ude af deres hænder, hvad det end koster.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/oath/keywords": {
+      "hash": "17decaf1",
+      "text": [
+        "ed",
+        "sværger",
+        "sværg",
+        "løfte",
+        "tand",
+        "tanden"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/trial/label": {
+      "hash": "ae7ab454",
+      "text": "\"Ashby skal stå til regnskab for Kronens retfærdighed.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/trial/keywords": {
+      "hash": "ef1982f7",
+      "text": [
+        "ashby",
+        "retssag",
+        "rettergang",
+        "retfærdighed"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/regret/label": {
+      "hash": "79251323",
+      "text": "\"At dræbe Ashby... det var forkert af mig.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/regret/keywords": {
+      "hash": "14149512",
+      "text": [
+        "forkert",
+        "fortryder",
+        "fortrydelse",
+        "undskyld"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/proud/label": {
+      "hash": "c5502045",
+      "text": "\"Ashby fik, hvad han fortjente.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/proud/keywords": {
+      "hash": "a8eaa733",
+      "text": [
+        "fortjente",
+        "fortjent"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/tooth/label": {
+      "hash": "204086cd",
+      "text": "\"Hvor skal Tanden hen?\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/tooth/keywords": {
+      "hash": "4c5494a3",
+      "text": [
+        "hvor",
+        "hen",
+        "ravensgate",
+        "brightwater"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/mock/label": {
+      "hash": "98bb40d2",
+      "text": "\"En ridder, der ikke kan adlyde ordrer. Vidunderligt.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/mock/keywords": {
+      "hash": "eae243d6",
+      "text": [
+        "hån",
+        "spot",
+        "ordrer",
+        "adlyde"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/lance/options/bye/label": {
+      "hash": "72b785de",
+      "text": "\"Lad os komme af sted.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/text": {
+      "hash": "21fe0eee",
+      "text": "En uenighed om ordrer. Han skifter emne."
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/lance/label": {
+      "hash": "343297dc",
+      "text": "Spørg, hvorfor Daggrylansen afskedigede ham (Indsigt SG 12)"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/lance/keywords": {
+      "hash": "f2c4881b",
+      "text": [
+        "lansen",
+        "daggrylansen",
+        "afskediget",
+        "afsked",
+        "hvorfor"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/lance/check/advantageIf/0/source": {
+      "hash": "6b35714c",
+      "text": "du har allerede hørt landsbysladderen"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/oath/label": {
+      "hash": "98115d21",
+      "text": "\"Vi holder den Tand ude af deres hænder, hvad det end koster.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/oath/keywords": {
+      "hash": "17decaf1",
+      "text": [
+        "ed",
+        "sværger",
+        "sværg",
+        "løfte",
+        "tand",
+        "tanden"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/trial/label": {
+      "hash": "ae7ab454",
+      "text": "\"Ashby skal stå til regnskab for Kronens retfærdighed.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/trial/keywords": {
+      "hash": "ef1982f7",
+      "text": [
+        "ashby",
+        "retssag",
+        "rettergang",
+        "retfærdighed"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/regret/label": {
+      "hash": "79251323",
+      "text": "\"At dræbe Ashby... det var forkert af mig.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/regret/keywords": {
+      "hash": "14149512",
+      "text": [
+        "forkert",
+        "fortryder",
+        "fortrydelse",
+        "undskyld"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/proud/label": {
+      "hash": "c5502045",
+      "text": "\"Ashby fik, hvad han fortjente.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/proud/keywords": {
+      "hash": "a8eaa733",
+      "text": [
+        "fortjente",
+        "fortjent"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/tooth/label": {
+      "hash": "204086cd",
+      "text": "\"Hvor skal Tanden hen?\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/tooth/keywords": {
+      "hash": "4c5494a3",
+      "text": [
+        "hvor",
+        "hen",
+        "ravensgate",
+        "brightwater"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/mock/label": {
+      "hash": "98bb40d2",
+      "text": "\"En ridder, der ikke kan adlyde ordrer. Vidunderligt.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/mock/keywords": {
+      "hash": "eae243d6",
+      "text": [
+        "hån",
+        "spot",
+        "ordrer",
+        "adlyde"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/dodge/options/bye/label": {
+      "hash": "72b785de",
+      "text": "\"Lad os komme af sted.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/text": {
+      "hash": "4702891b",
+      "text": "Så forstår vi hinanden. Han griber om din underarm."
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/lance/label": {
+      "hash": "343297dc",
+      "text": "Spørg, hvorfor Daggrylansen afskedigede ham (Indsigt SG 12)"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/lance/keywords": {
+      "hash": "f2c4881b",
+      "text": [
+        "lansen",
+        "daggrylansen",
+        "afskediget",
+        "afsked",
+        "hvorfor"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/lance/check/advantageIf/0/source": {
+      "hash": "6b35714c",
+      "text": "du har allerede hørt landsbysladderen"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/oath/label": {
+      "hash": "98115d21",
+      "text": "\"Vi holder den Tand ude af deres hænder, hvad det end koster.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/oath/keywords": {
+      "hash": "17decaf1",
+      "text": [
+        "ed",
+        "sværger",
+        "sværg",
+        "løfte",
+        "tand",
+        "tanden"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/trial/label": {
+      "hash": "ae7ab454",
+      "text": "\"Ashby skal stå til regnskab for Kronens retfærdighed.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/trial/keywords": {
+      "hash": "ef1982f7",
+      "text": [
+        "ashby",
+        "retssag",
+        "rettergang",
+        "retfærdighed"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/regret/label": {
+      "hash": "79251323",
+      "text": "\"At dræbe Ashby... det var forkert af mig.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/regret/keywords": {
+      "hash": "14149512",
+      "text": [
+        "forkert",
+        "fortryder",
+        "fortrydelse",
+        "undskyld"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/proud/label": {
+      "hash": "c5502045",
+      "text": "\"Ashby fik, hvad han fortjente.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/proud/keywords": {
+      "hash": "a8eaa733",
+      "text": [
+        "fortjente",
+        "fortjent"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/tooth/label": {
+      "hash": "204086cd",
+      "text": "\"Hvor skal Tanden hen?\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/tooth/keywords": {
+      "hash": "4c5494a3",
+      "text": [
+        "hvor",
+        "hen",
+        "ravensgate",
+        "brightwater"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/mock/label": {
+      "hash": "98bb40d2",
+      "text": "\"En ridder, der ikke kan adlyde ordrer. Vidunderligt.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/mock/keywords": {
+      "hash": "eae243d6",
+      "text": [
+        "hån",
+        "spot",
+        "ordrer",
+        "adlyde"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/oath/options/bye/label": {
+      "hash": "72b785de",
+      "text": "\"Lad os komme af sted.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/text": {
+      "hash": "8b797050",
+      "text": "Godt. Lad loven være bedre, end han var."
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/lance/label": {
+      "hash": "343297dc",
+      "text": "Spørg, hvorfor Daggrylansen afskedigede ham (Indsigt SG 12)"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/lance/keywords": {
+      "hash": "f2c4881b",
+      "text": [
+        "lansen",
+        "daggrylansen",
+        "afskediget",
+        "afsked",
+        "hvorfor"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/lance/check/advantageIf/0/source": {
+      "hash": "6b35714c",
+      "text": "du har allerede hørt landsbysladderen"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/oath/label": {
+      "hash": "98115d21",
+      "text": "\"Vi holder den Tand ude af deres hænder, hvad det end koster.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/oath/keywords": {
+      "hash": "17decaf1",
+      "text": [
+        "ed",
+        "sværger",
+        "sværg",
+        "løfte",
+        "tand",
+        "tanden"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/trial/label": {
+      "hash": "ae7ab454",
+      "text": "\"Ashby skal stå til regnskab for Kronens retfærdighed.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/trial/keywords": {
+      "hash": "ef1982f7",
+      "text": [
+        "ashby",
+        "retssag",
+        "rettergang",
+        "retfærdighed"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/regret/label": {
+      "hash": "79251323",
+      "text": "\"At dræbe Ashby... det var forkert af mig.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/regret/keywords": {
+      "hash": "14149512",
+      "text": [
+        "forkert",
+        "fortryder",
+        "fortrydelse",
+        "undskyld"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/proud/label": {
+      "hash": "c5502045",
+      "text": "\"Ashby fik, hvad han fortjente.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/proud/keywords": {
+      "hash": "a8eaa733",
+      "text": [
+        "fortjente",
+        "fortjent"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/tooth/label": {
+      "hash": "204086cd",
+      "text": "\"Hvor skal Tanden hen?\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/tooth/keywords": {
+      "hash": "4c5494a3",
+      "text": [
+        "hvor",
+        "hen",
+        "ravensgate",
+        "brightwater"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/mock/label": {
+      "hash": "98bb40d2",
+      "text": "\"En ridder, der ikke kan adlyde ordrer. Vidunderligt.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/mock/keywords": {
+      "hash": "eae243d6",
+      "text": [
+        "hån",
+        "spot",
+        "ordrer",
+        "adlyde"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/trial/options/bye/label": {
+      "hash": "72b785de",
+      "text": "\"Lad os komme af sted.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/text": {
+      "hash": "f6eda9bc",
+      "text": "Det kræver mere at sige det end at svinge en klinge. Tak."
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/lance/label": {
+      "hash": "343297dc",
+      "text": "Spørg, hvorfor Daggrylansen afskedigede ham (Indsigt SG 12)"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/lance/keywords": {
+      "hash": "f2c4881b",
+      "text": [
+        "lansen",
+        "daggrylansen",
+        "afskediget",
+        "afsked",
+        "hvorfor"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/lance/check/advantageIf/0/source": {
+      "hash": "6b35714c",
+      "text": "du har allerede hørt landsbysladderen"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/oath/label": {
+      "hash": "98115d21",
+      "text": "\"Vi holder den Tand ude af deres hænder, hvad det end koster.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/oath/keywords": {
+      "hash": "17decaf1",
+      "text": [
+        "ed",
+        "sværger",
+        "sværg",
+        "løfte",
+        "tand",
+        "tanden"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/trial/label": {
+      "hash": "ae7ab454",
+      "text": "\"Ashby skal stå til regnskab for Kronens retfærdighed.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/trial/keywords": {
+      "hash": "ef1982f7",
+      "text": [
+        "ashby",
+        "retssag",
+        "rettergang",
+        "retfærdighed"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/regret/label": {
+      "hash": "79251323",
+      "text": "\"At dræbe Ashby... det var forkert af mig.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/regret/keywords": {
+      "hash": "14149512",
+      "text": [
+        "forkert",
+        "fortryder",
+        "fortrydelse",
+        "undskyld"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/proud/label": {
+      "hash": "c5502045",
+      "text": "\"Ashby fik, hvad han fortjente.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/proud/keywords": {
+      "hash": "a8eaa733",
+      "text": [
+        "fortjente",
+        "fortjent"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/tooth/label": {
+      "hash": "204086cd",
+      "text": "\"Hvor skal Tanden hen?\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/tooth/keywords": {
+      "hash": "4c5494a3",
+      "text": [
+        "hvor",
+        "hen",
+        "ravensgate",
+        "brightwater"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/mock/label": {
+      "hash": "98bb40d2",
+      "text": "\"En ridder, der ikke kan adlyde ordrer. Vidunderligt.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/mock/keywords": {
+      "hash": "eae243d6",
+      "text": [
+        "hån",
+        "spot",
+        "ordrer",
+        "adlyde"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/regret/options/bye/label": {
+      "hash": "72b785de",
+      "text": "\"Lad os komme af sted.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/text": {
+      "hash": "b0388b34",
+      "text": "Måske. Men det var ikke din beslutning at træffe."
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/lance/label": {
+      "hash": "343297dc",
+      "text": "Spørg, hvorfor Daggrylansen afskedigede ham (Indsigt SG 12)"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/lance/keywords": {
+      "hash": "f2c4881b",
+      "text": [
+        "lansen",
+        "daggrylansen",
+        "afskediget",
+        "afsked",
+        "hvorfor"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/lance/check/advantageIf/0/source": {
+      "hash": "6b35714c",
+      "text": "du har allerede hørt landsbysladderen"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/oath/label": {
+      "hash": "98115d21",
+      "text": "\"Vi holder den Tand ude af deres hænder, hvad det end koster.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/oath/keywords": {
+      "hash": "17decaf1",
+      "text": [
+        "ed",
+        "sværger",
+        "sværg",
+        "løfte",
+        "tand",
+        "tanden"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/trial/label": {
+      "hash": "ae7ab454",
+      "text": "\"Ashby skal stå til regnskab for Kronens retfærdighed.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/trial/keywords": {
+      "hash": "ef1982f7",
+      "text": [
+        "ashby",
+        "retssag",
+        "rettergang",
+        "retfærdighed"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/regret/label": {
+      "hash": "79251323",
+      "text": "\"At dræbe Ashby... det var forkert af mig.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/regret/keywords": {
+      "hash": "14149512",
+      "text": [
+        "forkert",
+        "fortryder",
+        "fortrydelse",
+        "undskyld"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/proud/label": {
+      "hash": "c5502045",
+      "text": "\"Ashby fik, hvad han fortjente.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/proud/keywords": {
+      "hash": "a8eaa733",
+      "text": [
+        "fortjente",
+        "fortjent"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/tooth/label": {
+      "hash": "204086cd",
+      "text": "\"Hvor skal Tanden hen?\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/tooth/keywords": {
+      "hash": "4c5494a3",
+      "text": [
+        "hvor",
+        "hen",
+        "ravensgate",
+        "brightwater"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/mock/label": {
+      "hash": "98bb40d2",
+      "text": "\"En ridder, der ikke kan adlyde ordrer. Vidunderligt.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/mock/keywords": {
+      "hash": "eae243d6",
+      "text": [
+        "hån",
+        "spot",
+        "ordrer",
+        "adlyde"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/proud/options/bye/label": {
+      "hash": "72b785de",
+      "text": "\"Lad os komme af sted.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/text": {
+      "hash": "42aa3683",
+      "text": "Vogterne i Ravensgate kender sumpens ondskab. Magistraten i Brightwater kender formularer og segl. Jeg ved, hvem af dem jeg ville stole på."
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/lance/label": {
+      "hash": "343297dc",
+      "text": "Spørg, hvorfor Daggrylansen afskedigede ham (Indsigt SG 12)"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/lance/keywords": {
+      "hash": "f2c4881b",
+      "text": [
+        "lansen",
+        "daggrylansen",
+        "afskediget",
+        "afsked",
+        "hvorfor"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/lance/check/advantageIf/0/source": {
+      "hash": "6b35714c",
+      "text": "du har allerede hørt landsbysladderen"
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/oath/label": {
+      "hash": "98115d21",
+      "text": "\"Vi holder den Tand ude af deres hænder, hvad det end koster.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/oath/keywords": {
+      "hash": "17decaf1",
+      "text": [
+        "ed",
+        "sværger",
+        "sværg",
+        "løfte",
+        "tand",
+        "tanden"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/trial/label": {
+      "hash": "ae7ab454",
+      "text": "\"Ashby skal stå til regnskab for Kronens retfærdighed.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/trial/keywords": {
+      "hash": "ef1982f7",
+      "text": [
+        "ashby",
+        "retssag",
+        "rettergang",
+        "retfærdighed"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/regret/label": {
+      "hash": "79251323",
+      "text": "\"At dræbe Ashby... det var forkert af mig.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/regret/keywords": {
+      "hash": "14149512",
+      "text": [
+        "forkert",
+        "fortryder",
+        "fortrydelse",
+        "undskyld"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/proud/label": {
+      "hash": "c5502045",
+      "text": "\"Ashby fik, hvad han fortjente.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/proud/keywords": {
+      "hash": "a8eaa733",
+      "text": [
+        "fortjente",
+        "fortjent"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/tooth/label": {
+      "hash": "204086cd",
+      "text": "\"Hvor skal Tanden hen?\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/tooth/keywords": {
+      "hash": "4c5494a3",
+      "text": [
+        "hvor",
+        "hen",
+        "ravensgate",
+        "brightwater"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/mock/label": {
+      "hash": "98bb40d2",
+      "text": "\"En ridder, der ikke kan adlyde ordrer. Vidunderligt.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/mock/keywords": {
+      "hash": "eae243d6",
+      "text": [
+        "hån",
+        "spot",
+        "ordrer",
+        "adlyde"
+      ]
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/advice/options/bye/label": {
+      "hash": "72b785de",
+      "text": "\"Lad os komme af sted.\""
+    },
+    "npcs/corwin_npc/conversations/chapel_talk/nodes/stung/text": {
+      "hash": "af894bd3",
+      "text": "...Noteret."
+    },
+    "npcs/brother_ashby/name": {
+      "hash": "dc065c28",
+      "text": "Broder Ashby"
+    },
+    "npcs/brother_ashby/personality": {
+      "hash": "d9443db8",
+      "text": "Blød i mælet, glødende tidligere graver; tror, at sulten kan få en ende."
+    },
+    "npcs/brother_ashby/voice": {
+      "hash": "ffe7443e",
+      "text": "Mild, nærmest venlig, citerer salmer."
+    },
+    "npcs/brother_ashby/conversations/parley/label": {
+      "hash": "a36c0b03",
+      "text": "Tal til broder Ashby, før han når tunnelen"
+    },
+    "npcs/brother_ashby/conversations/parley/keywords": {
+      "hash": "871d3c01",
+      "text": [
+        "ashby",
+        "tal",
+        "forhandl",
+        "forhandle",
+        "snak"
+      ]
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/text": {
+      "hash": "8ea9a0e4",
+      "text": "Sulten ender, min ven. Hun lovede det. Syv Tænder, og intet barn i Aurelmark skal nogensinde sulte igen."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/who/label": {
+      "hash": "b4881ddf",
+      "text": "\"Hvem lovede dig det?\""
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/who/keywords": {
+      "hash": "21e901e0",
+      "text": [
+        "hvem",
+        "lovede",
+        "hun"
+      ]
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/surrender/label": {
+      "hash": "64b73318",
+      "text": "\"Det er forbi, Ashby. Kom med uden modstand, så får du en retfærdig rettergang.\" (Overtalelse SG 13)"
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/surrender/keywords": {
+      "hash": "0da2700d",
+      "text": [
+        "overgiv",
+        "rettergang",
+        "retssag",
+        "stille",
+        "overtal"
+      ]
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/surrender/check/advantageIf/0/source": {
+      "hash": "da7c803d",
+      "text": "du nævner de børn, han tog"
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/surrender/check/success/text": {
+      "hash": "5f9d24f3",
+      "text": "Ashby taber sin segl og knæler på alterets trin. Han er din fange."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/surrender/check/failure/text": {
+      "hash": "04b44e5b",
+      "text": "Ashby ler sagte og smutter ind i den sammenstyrtende tunnel. Jord vælter ned bag ham."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/threaten/label": {
+      "hash": "fba8b178",
+      "text": "Ret dit våben mod ham: \"Ét skridt mere, og du dør.\" (Intimidering SG 12)"
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/threaten/keywords": {
+      "hash": "c2cd623a",
+      "text": [
+        "tru",
+        "true",
+        "skridt",
+        "dør",
+        "intimider"
+      ]
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/threaten/check/success/text": {
+      "hash": "02384623",
+      "text": "Ashby stivner og lader dig så binde hans hænder. Han er din fange."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/threaten/check/failure/text": {
+      "hash": "04b44e5b",
+      "text": "Ashby ler sagte og smutter ind i den sammenstyrtende tunnel. Jord vælter ned bag ham."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/bluff/label": {
+      "hash": "6b5beb8a",
+      "text": "\"Kantoren sendte mig for at hente Tanden, broder.\" (Bedrag SG 12)"
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/bluff/keywords": {
+      "hash": "b4fc8d54",
+      "text": [
+        "kantor",
+        "kantoren",
+        "sendte",
+        "bluff",
+        "narre",
+        "bedrag"
+      ]
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/bluff/check/advantageIf/0/source": {
+      "hash": "29ed9ca8",
+      "text": "du bruger det navn, han gav dig"
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/bluff/check/success/text": {
+      "hash": "f487b69e",
+      "text": "Ashby tror, at du er en af dem. Han knæler og hvisker, at Tænderne rejser under Det Kongelige Almisseembedes segl. Så binder du hans hænder."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/bluff/check/failure/text": {
+      "hash": "04b44e5b",
+      "text": "Ashby ler sagte og smutter ind i den sammenstyrtende tunnel. Jord vælter ned bag ham."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/hymn/options/silence/label": {
+      "hash": "2aef51d1",
+      "text": "Sig intet og iagttag ham"
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/text": {
+      "hash": "0b0292ab",
+      "text": "Kantoren. Du har allerede hørt hende, ikke? I mørket, syngende."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/who/label": {
+      "hash": "b4881ddf",
+      "text": "\"Hvem lovede dig det?\""
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/who/keywords": {
+      "hash": "21e901e0",
+      "text": [
+        "hvem",
+        "lovede",
+        "hun"
+      ]
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/surrender/label": {
+      "hash": "64b73318",
+      "text": "\"Det er forbi, Ashby. Kom med uden modstand, så får du en retfærdig rettergang.\" (Overtalelse SG 13)"
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/surrender/keywords": {
+      "hash": "0da2700d",
+      "text": [
+        "overgiv",
+        "rettergang",
+        "retssag",
+        "stille",
+        "overtal"
+      ]
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/surrender/check/advantageIf/0/source": {
+      "hash": "da7c803d",
+      "text": "du nævner de børn, han tog"
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/surrender/check/success/text": {
+      "hash": "5f9d24f3",
+      "text": "Ashby taber sin segl og knæler på alterets trin. Han er din fange."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/surrender/check/failure/text": {
+      "hash": "04b44e5b",
+      "text": "Ashby ler sagte og smutter ind i den sammenstyrtende tunnel. Jord vælter ned bag ham."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/threaten/label": {
+      "hash": "fba8b178",
+      "text": "Ret dit våben mod ham: \"Ét skridt mere, og du dør.\" (Intimidering SG 12)"
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/threaten/keywords": {
+      "hash": "c2cd623a",
+      "text": [
+        "tru",
+        "true",
+        "skridt",
+        "dør",
+        "intimider"
+      ]
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/threaten/check/success/text": {
+      "hash": "02384623",
+      "text": "Ashby stivner og lader dig så binde hans hænder. Han er din fange."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/threaten/check/failure/text": {
+      "hash": "04b44e5b",
+      "text": "Ashby ler sagte og smutter ind i den sammenstyrtende tunnel. Jord vælter ned bag ham."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/bluff/label": {
+      "hash": "6b5beb8a",
+      "text": "\"Kantoren sendte mig for at hente Tanden, broder.\" (Bedrag SG 12)"
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/bluff/keywords": {
+      "hash": "b4fc8d54",
+      "text": [
+        "kantor",
+        "kantoren",
+        "sendte",
+        "bluff",
+        "narre",
+        "bedrag"
+      ]
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/bluff/check/advantageIf/0/source": {
+      "hash": "29ed9ca8",
+      "text": "du bruger det navn, han gav dig"
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/bluff/check/success/text": {
+      "hash": "f487b69e",
+      "text": "Ashby tror, at du er en af dem. Han knæler og hvisker, at Tænderne rejser under Det Kongelige Almisseembedes segl. Så binder du hans hænder."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/bluff/check/failure/text": {
+      "hash": "04b44e5b",
+      "text": "Ashby ler sagte og smutter ind i den sammenstyrtende tunnel. Jord vælter ned bag ham."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/she/options/silence/label": {
+      "hash": "2aef51d1",
+      "text": "Sig intet og iagttag ham"
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/yield/text": {
+      "hash": "c5ce88c2",
+      "text": "Tror du, det her ender noget som helst? Hun synger allerede i Brightwater."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/confess/text": {
+      "hash": "58116aca",
+      "text": "Tilgiv mig, Korets tjener. Jeg ville bare holde den lidt længere. Almisseembedet vil passe godt på den for hende."
+    },
+    "npcs/brother_ashby/conversations/parley/nodes/gone/text": {
+      "hash": "d66c9274",
+      "text": "Aldrig mere savne!"
+    },
+    "npcs/maud_fennick/name": {
+      "hash": "877eb278",
+      "text": "Maud Fennick"
+    },
+    "npcs/maud_fennick/personality": {
+      "hash": "91a2a931",
+      "text": "Værtinde på Ploven og Lygten: rask, vågen, holder af fogeden, hører alt og gentager lidt."
+    },
+    "npcs/maud_fennick/voice": {
+      "hash": "f3eee9dd",
+      "text": "Lav og tør; svarer på spørgsmål med spørgsmål."
+    },
+    "npcs/maud_fennick/secrets": {
+      "hash": "e95b8d9e",
+      "text": [
+        "Hun har set Oda Hallard betale for drinks med kultsølv."
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/label": {
+      "hash": "7d77ac23",
+      "text": "Tal med Maud bag disken"
+    },
+    "npcs/maud_fennick/conversations/rumours/keywords": {
+      "hash": "fbff667e",
+      "text": [
+        "maud",
+        "værtinde",
+        "værtinden",
+        "disk",
+        "disken",
+        "rygter",
+        "sladder"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/bar/text": {
+      "hash": "c6568ed2",
+      "text": "Hvad skal det være? Øllet er tyndt, gryderetten tyndere, og ingen snakker i aften."
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/bar/options/round/label": {
+      "hash": "72fc3ed8",
+      "text": "Giv en omgang til hele stuen (1 gm)"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/bar/options/round/keywords": {
+      "hash": "27031d7a",
+      "text": [
+        "omgang",
+        "køb",
+        "give",
+        "drinks",
+        "øl"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/bar/options/round/outcome/text": {
+      "hash": "fc5ece68",
+      "text": "Tungerne løsnes. En kvægdriver sværger på, at de hætteklædte på bakken skifter vagt ved måneopgang, når udkiggene går ned for at spise."
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/bar/options/charm/label": {
+      "hash": "1adcbf4d",
+      "text": "Udveksl historier med hende, til hun tør op (Overtalelse SG 11)"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/bar/options/charm/keywords": {
+      "hash": "192a6455",
+      "text": [
+        "historier",
+        "charme",
+        "charmer",
+        "snak",
+        "sludre"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/bar/options/charm/check/success/text": {
+      "hash": "388ea028",
+      "text": "Maud læner sig ind: de hætteklædte på bakken skifter vagt ved måneopgang, når udkiggene går ned for at spise."
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/bar/options/lean/label": {
+      "hash": "55a113c2",
+      "text": "\"Nogen i denne stue fodrer den bakke. Hvem?\" (Intimidering SG 12)"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/bar/options/lean/keywords": {
+      "hash": "d130f640",
+      "text": [
+        "hvem",
+        "fodrer",
+        "tru",
+        "true",
+        "pres",
+        "presse"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/bar/options/knight/label": {
+      "hash": "8c0c0d1b",
+      "text": "\"Hvem var ridderen, der stormede ud?\""
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/bar/options/knight/keywords": {
+      "hash": "923ca050",
+      "text": [
+        "ridder",
+        "ridderen",
+        "corwin"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/bar/options/bye/label": {
+      "hash": "329f99d3",
+      "text": "Lad hende passe sine haner"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/warm/text": {
+      "hash": "6070d823",
+      "text": "Andet, mens jeg har tålmodigheden?"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/warm/options/round/label": {
+      "hash": "72fc3ed8",
+      "text": "Giv en omgang til hele stuen (1 gm)"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/warm/options/round/keywords": {
+      "hash": "27031d7a",
+      "text": [
+        "omgang",
+        "køb",
+        "give",
+        "drinks",
+        "øl"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/warm/options/round/outcome/text": {
+      "hash": "fc5ece68",
+      "text": "Tungerne løsnes. En kvægdriver sværger på, at de hætteklædte på bakken skifter vagt ved måneopgang, når udkiggene går ned for at spise."
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/warm/options/charm/label": {
+      "hash": "1adcbf4d",
+      "text": "Udveksl historier med hende, til hun tør op (Overtalelse SG 11)"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/warm/options/charm/keywords": {
+      "hash": "192a6455",
+      "text": [
+        "historier",
+        "charme",
+        "charmer",
+        "snak",
+        "sludre"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/warm/options/charm/check/success/text": {
+      "hash": "388ea028",
+      "text": "Maud læner sig ind: de hætteklædte på bakken skifter vagt ved måneopgang, når udkiggene går ned for at spise."
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/warm/options/lean/label": {
+      "hash": "55a113c2",
+      "text": "\"Nogen i denne stue fodrer den bakke. Hvem?\" (Intimidering SG 12)"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/warm/options/lean/keywords": {
+      "hash": "d130f640",
+      "text": [
+        "hvem",
+        "fodrer",
+        "tru",
+        "true",
+        "pres",
+        "presse"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/warm/options/knight/label": {
+      "hash": "8c0c0d1b",
+      "text": "\"Hvem var ridderen, der stormede ud?\""
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/warm/options/knight/keywords": {
+      "hash": "923ca050",
+      "text": [
+        "ridder",
+        "ridderen",
+        "corwin"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/warm/options/bye/label": {
+      "hash": "329f99d3",
+      "text": "Lad hende passe sine haner"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/busy/text": {
+      "hash": "097b8baf",
+      "text": "Travl aften, fremmede. Hun vender sig tilbage til hanerne."
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/oda/text": {
+      "hash": "7e7c02de",
+      "text": "...Oda Hallard. Betaler for sine drinks med sølv på det seneste, og den møllerkone har aldrig haft sølv i sit liv."
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/oda/options/round/label": {
+      "hash": "72fc3ed8",
+      "text": "Giv en omgang til hele stuen (1 gm)"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/oda/options/round/keywords": {
+      "hash": "27031d7a",
+      "text": [
+        "omgang",
+        "køb",
+        "give",
+        "drinks",
+        "øl"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/oda/options/round/outcome/text": {
+      "hash": "fc5ece68",
+      "text": "Tungerne løsnes. En kvægdriver sværger på, at de hætteklædte på bakken skifter vagt ved måneopgang, når udkiggene går ned for at spise."
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/oda/options/charm/label": {
+      "hash": "1adcbf4d",
+      "text": "Udveksl historier med hende, til hun tør op (Overtalelse SG 11)"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/oda/options/charm/keywords": {
+      "hash": "192a6455",
+      "text": [
+        "historier",
+        "charme",
+        "charmer",
+        "snak",
+        "sludre"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/oda/options/charm/check/success/text": {
+      "hash": "388ea028",
+      "text": "Maud læner sig ind: de hætteklædte på bakken skifter vagt ved måneopgang, når udkiggene går ned for at spise."
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/oda/options/lean/label": {
+      "hash": "55a113c2",
+      "text": "\"Nogen i denne stue fodrer den bakke. Hvem?\" (Intimidering SG 12)"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/oda/options/lean/keywords": {
+      "hash": "d130f640",
+      "text": [
+        "hvem",
+        "fodrer",
+        "tru",
+        "true",
+        "pres",
+        "presse"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/oda/options/knight/label": {
+      "hash": "8c0c0d1b",
+      "text": "\"Hvem var ridderen, der stormede ud?\""
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/oda/options/knight/keywords": {
+      "hash": "923ca050",
+      "text": [
+        "ridder",
+        "ridderen",
+        "corwin"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/oda/options/bye/label": {
+      "hash": "329f99d3",
+      "text": "Lad hende passe sine haner"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/barred/text": {
+      "hash": "816d865b",
+      "text": "Ud. Og vil du have en seng under mit tag, koster det dig fire gange prisen."
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/knight/text": {
+      "hash": "2f1129e5",
+      "text": "Ser Corwin Ashvale. Drikker vand, betaler med mønt, sover i min stald. Afskediget fra Daggrylansen, og han vil ikke sige hvorfor."
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/knight/options/round/label": {
+      "hash": "72fc3ed8",
+      "text": "Giv en omgang til hele stuen (1 gm)"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/knight/options/round/keywords": {
+      "hash": "27031d7a",
+      "text": [
+        "omgang",
+        "køb",
+        "give",
+        "drinks",
+        "øl"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/knight/options/round/outcome/text": {
+      "hash": "fc5ece68",
+      "text": "Tungerne løsnes. En kvægdriver sværger på, at de hætteklædte på bakken skifter vagt ved måneopgang, når udkiggene går ned for at spise."
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/knight/options/charm/label": {
+      "hash": "1adcbf4d",
+      "text": "Udveksl historier med hende, til hun tør op (Overtalelse SG 11)"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/knight/options/charm/keywords": {
+      "hash": "192a6455",
+      "text": [
+        "historier",
+        "charme",
+        "charmer",
+        "snak",
+        "sludre"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/knight/options/charm/check/success/text": {
+      "hash": "388ea028",
+      "text": "Maud læner sig ind: de hætteklædte på bakken skifter vagt ved måneopgang, når udkiggene går ned for at spise."
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/knight/options/lean/label": {
+      "hash": "55a113c2",
+      "text": "\"Nogen i denne stue fodrer den bakke. Hvem?\" (Intimidering SG 12)"
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/knight/options/lean/keywords": {
+      "hash": "d130f640",
+      "text": [
+        "hvem",
+        "fodrer",
+        "tru",
+        "true",
+        "pres",
+        "presse"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/knight/options/knight/label": {
+      "hash": "8c0c0d1b",
+      "text": "\"Hvem var ridderen, der stormede ud?\""
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/knight/options/knight/keywords": {
+      "hash": "923ca050",
+      "text": [
+        "ridder",
+        "ridderen",
+        "corwin"
+      ]
+    },
+    "npcs/maud_fennick/conversations/rumours/nodes/knight/options/bye/label": {
+      "hash": "329f99d3",
+      "text": "Lad hende passe sine haner"
+    },
+    "npcs/choir_lookouts/name": {
+      "hash": "d4c29077",
+      "text": "De hætteklædte udkigge"
+    },
+    "npcs/choir_lookouts/personality": {
+      "hash": "65ca17f8",
+      "text": "To udkigge fra Det Hule Kor: en høj, glødende fanatiker og en forskræmt landsbydreng i en lånt hætte."
+    },
+    "npcs/choir_lookouts/voice": {
+      "hash": "74078c5f",
+      "text": "Den høje hvæser skriftsteder; drengen stammer bare."
+    },
+    "npcs/choir_lookouts/secrets": {
+      "hash": "eb139ae3",
+      "text": [
+        "Drengen er Wat, bødkerens søn, lokket af løfter om, at sulten ville få en ende."
+      ]
+    },
+    "npcs/choir_lookouts/conversations/hail/label": {
+      "hash": "e44b470e",
+      "text": "Gå hen til de hætteklædte udkigge"
+    },
+    "npcs/choir_lookouts/conversations/hail/keywords": {
+      "hash": "372148cf",
+      "text": [
+        "udkigge",
+        "udkiggene",
+        "hætteklædte",
+        "råb",
+        "gå"
+      ]
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/text": {
+      "hash": "3e2e3911",
+      "text": "Holdt. Bakken er lukket for de sultne. Den høje griber om en segl; den mindste ryster."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/watch/label": {
+      "hash": "d1176912",
+      "text": "Iagttag dem: er de begge sande troende? (Indsigt SG 10)"
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/watch/keywords": {
+      "hash": "c5220bd6",
+      "text": [
+        "iagttag",
+        "troende",
+        "studer"
+      ]
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/watch/check/success/text": {
+      "hash": "e3c7157c",
+      "text": "Den mindste udkig er en dreng i en lånt hætte, og han kæmper for ikke at græde."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/watch/check/failure/text": {
+      "hash": "dbe7e314",
+      "text": "To hætter, to segle. Mere kan du ikke se."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/believer/label": {
+      "hash": "4ab6809f",
+      "text": "\"Sulten ender. Broderen venter mig.\" (Bedrag SG 13)"
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/believer/keywords": {
+      "hash": "3ea050a5",
+      "text": [
+        "sulten",
+        "broder",
+        "broderen",
+        "lad",
+        "foregiv",
+        "bedrag"
+      ]
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/believer/check/success/text": {
+      "hash": "0b527f90",
+      "text": "Udkiggene bøjer deres hætter og lader dig passere hen til døren i gravhøjen."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/believer/check/failure/text": {
+      "hash": "6de72d0d",
+      "text": "Den høje ryster et klokkespil af knogler, og begge forsvinder ind i gravhøjen. De ved, at du kommer."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/scare/label": {
+      "hash": "48403415",
+      "text": "\"Løb. Nu. Og kom aldrig tilbage til Millbrook.\" (Intimidering SG 13)"
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/scare/keywords": {
+      "hash": "7d611397",
+      "text": [
+        "løb",
+        "skræm",
+        "tru",
+        "true",
+        "intimider"
+      ]
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/scare/check/success/text": {
+      "hash": "fcb31c3a",
+      "text": "Begge udkigge taber klokkespillet og løber ud i mørket. Ingen advarer gravhøjen."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/scare/check/failure/text": {
+      "hash": "6de72d0d",
+      "text": "Den høje ryster et klokkespil af knogler, og begge forsvinder ind i gravhøjen. De ved, at du kommer."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/turn/label": {
+      "hash": "d9646a6a",
+      "text": "\"Der sidder børn i lænker under den bakke. Er det, hvad jeres gud vil have?\" (Overtalelse SG 14)"
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/turn/keywords": {
+      "hash": "82d3614d",
+      "text": [
+        "børn",
+        "børnene",
+        "gud",
+        "overtal",
+        "fornuft"
+      ]
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/turn/check/advantageIf/0/source": {
+      "hash": "f613c1e0",
+      "text": "du taler til den forskræmte dreng"
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/turn/check/success/text": {
+      "hash": "7d386330",
+      "text": "Drengen, Wat, bødkerens søn, river sin hætte af og kaster sig over den høje. Sammen binder I fanatikeren til galgen, og Wat giver dig sin nøgle til lågen ind til gravhøjen."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/turn/check/failure/text": {
+      "hash": "6de72d0d",
+      "text": "Den høje ryster et klokkespil af knogler, og begge forsvinder ind i gravhøjen. De ved, at du kommer."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/rush/label": {
+      "hash": "afd3dd55",
+      "text": "Træk blankt og storm dem, før de kan ringe med klokkespillet"
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/rush/keywords": {
+      "hash": "b1a28e57",
+      "text": [
+        "angrib",
+        "storm",
+        "løb",
+        "kæmp",
+        "slås"
+      ]
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/challenge/options/back/label": {
+      "hash": "dd846516",
+      "text": "Træk dig tilbage ind i krattet"
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/text": {
+      "hash": "86426e20",
+      "text": "Nå? Tal, eller gå ned ad bakken igen."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/watch/label": {
+      "hash": "d1176912",
+      "text": "Iagttag dem: er de begge sande troende? (Indsigt SG 10)"
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/watch/keywords": {
+      "hash": "c5220bd6",
+      "text": [
+        "iagttag",
+        "troende",
+        "studer"
+      ]
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/watch/check/success/text": {
+      "hash": "e3c7157c",
+      "text": "Den mindste udkig er en dreng i en lånt hætte, og han kæmper for ikke at græde."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/watch/check/failure/text": {
+      "hash": "dbe7e314",
+      "text": "To hætter, to segle. Mere kan du ikke se."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/believer/label": {
+      "hash": "4ab6809f",
+      "text": "\"Sulten ender. Broderen venter mig.\" (Bedrag SG 13)"
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/believer/keywords": {
+      "hash": "3ea050a5",
+      "text": [
+        "sulten",
+        "broder",
+        "broderen",
+        "lad",
+        "foregiv",
+        "bedrag"
+      ]
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/believer/check/success/text": {
+      "hash": "0b527f90",
+      "text": "Udkiggene bøjer deres hætter og lader dig passere hen til døren i gravhøjen."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/believer/check/failure/text": {
+      "hash": "6de72d0d",
+      "text": "Den høje ryster et klokkespil af knogler, og begge forsvinder ind i gravhøjen. De ved, at du kommer."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/scare/label": {
+      "hash": "48403415",
+      "text": "\"Løb. Nu. Og kom aldrig tilbage til Millbrook.\" (Intimidering SG 13)"
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/scare/keywords": {
+      "hash": "7d611397",
+      "text": [
+        "løb",
+        "skræm",
+        "tru",
+        "true",
+        "intimider"
+      ]
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/scare/check/success/text": {
+      "hash": "fcb31c3a",
+      "text": "Begge udkigge taber klokkespillet og løber ud i mørket. Ingen advarer gravhøjen."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/scare/check/failure/text": {
+      "hash": "6de72d0d",
+      "text": "Den høje ryster et klokkespil af knogler, og begge forsvinder ind i gravhøjen. De ved, at du kommer."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/turn/label": {
+      "hash": "d9646a6a",
+      "text": "\"Der sidder børn i lænker under den bakke. Er det, hvad jeres gud vil have?\" (Overtalelse SG 14)"
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/turn/keywords": {
+      "hash": "82d3614d",
+      "text": [
+        "børn",
+        "børnene",
+        "gud",
+        "overtal",
+        "fornuft"
+      ]
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/turn/check/advantageIf/0/source": {
+      "hash": "f613c1e0",
+      "text": "du taler til den forskræmte dreng"
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/turn/check/success/text": {
+      "hash": "7d386330",
+      "text": "Drengen, Wat, bødkerens søn, river sin hætte af og kaster sig over den høje. Sammen binder I fanatikeren til galgen, og Wat giver dig sin nøgle til lågen ind til gravhøjen."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/turn/check/failure/text": {
+      "hash": "6de72d0d",
+      "text": "Den høje ryster et klokkespil af knogler, og begge forsvinder ind i gravhøjen. De ved, at du kommer."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/rush/label": {
+      "hash": "afd3dd55",
+      "text": "Træk blankt og storm dem, før de kan ringe med klokkespillet"
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/rush/keywords": {
+      "hash": "b1a28e57",
+      "text": [
+        "angrib",
+        "storm",
+        "løb",
+        "kæmp",
+        "slås"
+      ]
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wait/options/back/label": {
+      "hash": "dd846516",
+      "text": "Træk dig tilbage ind i krattet"
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/pass/text": {
+      "hash": "9188a30b",
+      "text": "Gå så ned. Alteret er sultent i aften."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/fled/text": {
+      "hash": "bbe03095",
+      "text": "Ikke for det her! Ikke for hende! Deres fodtrin brager væk gennem krattet."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/wat/text": {
+      "hash": "3a6ff74f",
+      "text": "De sagde, at ingen ville komme til skade. De sagde, at hun ville få sulten til at holde op."
+    },
+    "npcs/choir_lookouts/conversations/hail/nodes/alarm/text": {
+      "hash": "36e72d9a",
+      "text": "Løgner! Brødre, til døren!"
+    },
+    "encounters/well_rat/name": {
+      "hash": "3c5b16b2",
+      "text": "Rotte ved brønden"
+    },
+    "encounters/well_rat/win/text": {
+      "hash": "e91f5422",
+      "text": "Rotten hviner og forsvinder ned i brøndskakten."
+    },
+    "encounters/well_rat/lose/text": {
+      "hash": "1dfaae13",
+      "text": "Du kommer til dig selv ved brøndkanten med en bidt ankel; rotten er for længst væk."
+    },
+    "encounters/tavern_brawl/name": {
+      "hash": "e328e41b",
+      "text": "Slagsmål på kroen"
+    },
+    "encounters/tavern_brawl/win/text": {
+      "hash": "9b8409d3",
+      "text": "Karlene giver dig en drink bagefter. Millbrook respekterer et godt slagsmål."
+    },
+    "encounters/tavern_brawl/lose/text": {
+      "hash": "df6c3d17",
+      "text": "Du vågner i kroens stald, lettere med et par mønter og al din værdighed."
+    },
+    "encounters/stirge_nest/name": {
+      "hash": "fd60988d",
+      "text": "Stirgereden"
+    },
+    "encounters/stirge_nest/win/text": {
+      "hash": "366fd8d2",
+      "text": "Den sidste stirge falder ned i krattet."
+    },
+    "encounters/stirge_nest/lose/text": {
+      "hash": "5b979058",
+      "text": "Fogedens eftersøgningshold finder dig ved daggry, bleg og forbidt. Kultisterne har flyttet en af fangerne længere ned."
+    },
+    "encounters/root_hall_rats/name": {
+      "hash": "35d1f80a",
+      "text": "Rodhallens rotter"
+    },
+    "encounters/root_hall_rats/win/text": {
+      "hash": "bd10bd4d",
+      "text": "Den sidste rotte vrider sig og ligger så stille mellem rødderne."
+    },
+    "encounters/root_hall_rats/lose/text": {
+      "hash": "e5a23e48",
+      "text": "Du kravler blødende ud af gravhøjen igen til galgen. Børnene er stadig dernede."
+    },
+    "encounters/crypt_cultists/name": {
+      "hash": "49067532",
+      "text": "Kryptens kultister"
+    },
+    "encounters/crypt_cultists/win/text": {
+      "hash": "d01377d5",
+      "text": "Den anden kultist falder mod nicherne og spilder korn."
+    },
+    "encounters/crypt_cultists/lose/text": {
+      "hash": "1c826535",
+      "text": "Du vågner lænket ved siden af Ser Corwin. Dit udstyr ligger på et bord på den anden side af rummet."
+    },
+    "encounters/altar_fight/name": {
+      "hash": "e8cbfb9e",
+      "text": "Tiendealteret"
+    },
+    "encounters/altar_fight/win/text": {
+      "hash": "6e32e653",
+      "text": "Broder Ashby bakker blødende mod en sammenstyrtende tunnel bag alteret. Blandt kultens ting: 25 guld, en helbredende eliksir, en segl — og en kvindes ring med indgraveringen 'A. & H.'"
+    },
+    "encounters/altar_fight/lose/text": {
+      "hash": "8ba347f3",
+      "text": "Du vågner lænket i krypten ved siden af Corwin. Ashby er flygtet med en af fangerne."
+    },
+    "encounters/altar_fight_alerted/name": {
+      "hash": "b8718974",
+      "text": "Tiendealteret (advaret)"
+    },
+    "encounters/altar_fight_alerted/win/text": {
+      "hash": "6e32e653",
+      "text": "Broder Ashby bakker blødende mod en sammenstyrtende tunnel bag alteret. Blandt kultens ting: 25 guld, en helbredende eliksir, en segl — og en kvindes ring med indgraveringen 'A. & H.'"
+    },
+    "encounters/altar_fight_alerted/lose/text": {
+      "hash": "8ba347f3",
+      "text": "Du vågner lænket i krypten ved siden af Corwin. Ashby er flygtet med en af fangerne."
+    },
+    "encounters/shrine_rats/name": {
+      "hash": "e7583fa6",
+      "text": "Rotter i helligdommen"
+    },
+    "encounters/shrine_rats/win/text": {
+      "hash": "2a8f3737",
+      "text": "Med rotterne væk kan du endelig hvile."
+    },
+    "encounters/shrine_rats/lose/text": {
+      "hash": "6e5c3032",
+      "text": "Til sidst driver du dem væk, blodig, og hviler, hvor du falder."
+    },
+    "encounters/barley_wolves/name": {
+      "hash": "d7f83c3c",
+      "text": "Ulve i bygmarken"
+    },
+    "encounters/barley_wolves/win/text": {
+      "hash": "c66af553",
+      "text": "Ulvene halter tilbage ind i bygget."
+    },
+    "encounters/barley_wolves/flee/text": {
+      "hash": "8139494e",
+      "text": "Du løber mod vejen, og ulvene mister interessen ved grøften."
+    },
+    "encounters/barley_wolves/lose/text": {
+      "hash": "640e2aff",
+      "text": "Du vågner i vejkanten ved daggry; din pung er lettere, men den sorte Tand ligger urørt, hvor den faldt — røverne, der fandt dig, flygtede fra den."
+    },
+    "encounters/toll_bandits/name": {
+      "hash": "0a81f624",
+      "text": "Afpresning ved toldbroen"
+    },
+    "encounters/toll_bandits/win/text": {
+      "hash": "42da1bef",
+      "text": "Kæden rasler ned i floden efter dem."
+    },
+    "encounters/toll_bandits/lose/text": {
+      "hash": "ea4bdf82",
+      "text": "Du vågner på bredden ved daggry, udplyndret. De lod den sorte Tand ligge — ingen af dem ville røre den."
+    },
+    "encounters/lookout_fight/name": {
+      "hash": "c8defc2a",
+      "text": "Udkigge på Galgebakken"
+    },
+    "encounters/lookout_fight/win/text": {
+      "hash": "f7e1add2",
+      "text": "Den sidste udkig falder i krattet. Ingen nåede at ringe med klokkespillet."
+    },
+    "encounters/lookout_fight/lose/text": {
+      "hash": "62d1c4f1",
+      "text": "Du kommer til dig selv i krattet. Udkiggene er gået ned for at advare gravhøjen."
+    },
+    "beats/altar_calm/text": {
+      "hash": "99cd2a21",
+      "text": "Fangerne er lænket til alteret, og det nærer sig."
+    },
+    "beats/altar_alerted/text": {
+      "hash": "4cdb55e2",
+      "text": "De ventede: rotterne vælter ud af alterets kæbe."
+    },
+    "beats/captives_all/text": {
+      "hash": "3800ccc3",
+      "text": "Fire børn og en hyrde går ud af gravhøjen."
+    },
+    "beats/captives_three/text": {
+      "hash": "147c01ef",
+      "text": "Tre fanger er reddet."
+    },
+    "beats/captives_two/text": {
+      "hash": "8755f779",
+      "text": "Kun to fanger er reddet."
+    },
+    "beats/village_thanks/text": {
+      "hash": "ec8f1692",
+      "text": "Fogedens rapport til Kronen vil tale godt om dig."
+    },
+    "beats/corwin_all_saved/text": {
+      "hash": "21d7733e",
+      "text": "Corwin kan ikke holde op med at tale om de børn, du bragte hjem."
+    },
+    "beats/corwin_ransom/text": {
+      "hash": "fae08a15",
+      "text": "Corwin har hørt, hvordan du solgte en enke hendes egen ring. Han er meget stille."
+    },
+    "beats/corwin_lie/text": {
+      "hash": "e4b0f25f",
+      "text": "Corwin hører, hvordan du fik nøglen til gravhøjen \"i Kronens ærinde\". Han ler ikke."
+    },
+    "beats/wat_penance/text": {
+      "hash": "2a3b86b0",
+      "text": "Wat, udkiggen du fik over på din side, fortæller hele landsbyen, hvem der bragte børnene hjem."
+    },
+    "quests/millbrook_disappearances/name": {
+      "hash": "6e2d0654",
+      "text": "Forsvindingerne i Millbrook"
+    },
+    "quests/millbrook_disappearances/objectives/clues/text": {
+      "hash": "0d2e6d5c",
+      "text": "Find ud af, hvad der tager landsbyboerne"
+    },
+    "quests/millbrook_disappearances/objectives/key/text": {
+      "hash": "43398442",
+      "text": "Kom ind i gravhøjen på Galgebakken"
+    },
+    "quests/millbrook_disappearances/objectives/altar/text": {
+      "hash": "5e6bcb99",
+      "text": "Nå frem til alteret og stop næringen"
+    },
+    "quests/millbrook_disappearances/objectives/free/text": {
+      "hash": "58ec7f73",
+      "text": "Befri fangerne"
+    },
+    "quests/millbrook_disappearances/objectives/rest/text": {
+      "hash": "e6c5b2df",
+      "text": "Hvil på kroen"
+    },
+    "quests/millbrook_disappearances/objectives/oath/text": {
+      "hash": "5f439f76",
+      "text": "Besøg enken Marrow og Ser Corwin i landsbyen om dagen"
+    },
+    "quests/millbrook_disappearances/objectives/road/text": {
+      "hash": "0dd03c80",
+      "text": "Bring Tanden et sted hen, hvor den kan holdes i forvaring"
+    },
+    "endings/starter_ravensgate/name": {
+      "hash": "c431be7c",
+      "text": "Til Ravensgate"
+    },
+    "endings/starter_ravensgate/text": {
+      "hash": "8fde2342",
+      "text": "Vogtersergent Odo Brask har brug for udefrakommende, der endnu ikke er syge, til at gå ind i Hollowmere, hvor de syge hører den samme stemme, som du hørte i gravhøjen. Den Hviskende Sump venter."
+    },
+    "endings/starter_brightwater/name": {
+      "hash": "a3e06bb4",
+      "text": "Sendt til Ravensgate"
+    },
+    "endings/starter_brightwater/text": {
+      "hash": "54c03ddf",
+      "text": "Med et kongeligt brev i oppakningen tager du sumpvejen til Ravensgate, hvor pesten siges at begynde. Den Hviskende Sump venter."
+    }
+  }
+}
