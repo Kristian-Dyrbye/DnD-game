@@ -19,6 +19,7 @@ import daFeats from '../../../data/i18n/da/srd/feats.json';
 import daWeapons from '../../../data/i18n/da/srd/weapons.json';
 import daArmor from '../../../data/i18n/da/srd/armor.json';
 import daSpells from '../../../data/i18n/da/srd/spells.json';
+import daMonsters from '../../../data/i18n/da/srd/monsters.json';
 
 export const SRD_NAME_KINDS = [
   'rules', 'conditions', 'classes', 'subclasses', 'species', 'backgrounds', 'feats',
@@ -39,6 +40,7 @@ export const SRD_NAME_OVERLAYS: Partial<Record<Language, Partial<Record<SrdNameK
     weapons: daWeapons,
     armor: daArmor,
     spells: daSpells,
+    monsters: daMonsters,
   },
 };
 

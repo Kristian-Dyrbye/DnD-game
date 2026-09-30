@@ -49,7 +49,8 @@ describe('SRD name overlays (A149)', () => {
   it('looks names up with English fallback', () => {
     expect(srdName('da', 'classes', 'fighter', 'Fighter')).toBe('Kriger');
     expect(srdName('en', 'classes', 'fighter', 'Fighter')).toBe('Fighter');
-    expect(srdName('da', 'monsters', 'goblin_warrior', 'Goblin Warrior')).toBe('Goblin Warrior'); // not translated yet
+    expect(srdName('da', 'monsters', 'goblin_warrior', 'Goblin Warrior')).toBe('Goblinkriger');
+    expect(srdName('da', 'gear', 'rope_hempen', 'Rope')).toBe('Rope'); // no gear overlay yet (A149d)
     expect(srdName('da', 'classes', 'no_such_class', 'Nope')).toBe('Nope');
     expect(abilityName('da', 'dex')).toBe('Behændighed');
     expect(abilityShort('da', 'con')).toBe('Kon');

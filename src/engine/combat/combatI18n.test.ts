@@ -94,7 +94,7 @@ describe('combat log (A141c)', () => {
     expect(log).toMatch(/angriber .+ med .+: d20/);
     expect(log).toMatch(/ tager \d+ skade/);
     // A141f: AI plans, moves, shared initiative and crit damage too.
-    expect(log).toMatch(/^Goblin Warrior \d (angriber|rykker ind på) \S+\.$/m);
+    expect(log).toMatch(/^Goblinkriger \d (angriber|rykker ind på) \S+\.$/m); // A149c: Danish monster names
     expect(log).toMatch(/ bevæger sig \d+ fod/);
     expect(log).not.toMatch(/ attacks | takes \d+ damage|'s turn|Round \d+ begins| vs (DC|AC) | — (Hit|Miss|Success|Failure)\b| initiative: | moves \d+ ft|closes in on|Critical! /);
     if (enc.status === 'won') expect(enc.log.at(-1)).toBe('Sejr!');

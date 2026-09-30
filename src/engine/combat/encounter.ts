@@ -27,7 +27,7 @@ import { canPlace, createGrid, distanceFt, placeToken, setCell, type Grid, type 
 import { rollInitiativeOrder, toEntries } from './initiative';
 import { currentId, livingSides, nextTurn, startCombat } from './turns';
 import { zonesAtTurn } from './zones';
-import { spellName } from '../i18n/srdNames';
+import { spellName, srdName } from '../i18n/srdNames';
 
 export type EncounterStatus = 'ongoing' | 'won' | 'lost';
 
@@ -143,19 +143,23 @@ export function mergeMonsterGroups(list: readonly { id: string; count: number }[
 /** Places everyone, rolls initiative and runs AI turns until the hero is up (or it's over). */
 export function setupEncounter(setup: EncounterSetup, ctx: CombatContext): Encounter {
   const grid = setup.grid ?? defaultArena(ctx.rng);
-  const spawn = (list: { id: string; count: number }[], prefix = '', label = '') =>
+  const msgs = msgsOf(ctx);
+  // Names are set once in the session language (A149c): the log, map and scars read creature names.
+  const spawn = (list: { id: string; count: number }[], prefix = '', ally = false) =>
     mergeMonsterGroups(list).flatMap((m) => {
       const data = setup.db.monsters.get(m.id);
       if (!data) throw new Error(`Unknown monster ${m.id}`);
       const o = setup.overrides?.[m.id];
+      const base = o?.name ?? srdName(msgs.lang, 'monsters', data.id, data.name);
       return Array.from({ length: m.count }, (_, i) => {
-        const c = monsterToCreature(data, `${prefix}${m.id}_${i + 1}`, `${label}${o?.name ?? data.name}${m.count > 1 ? ` ${i + 1}` : ''}`);
+        const name = `${base}${m.count > 1 ? ` ${i + 1}` : ''}`;
+        const c = monsterToCreature(data, `${prefix}${m.id}_${i + 1}`, ally ? msgs.m('combat.allyName', { name }) : name);
         if (!o) return c;
         const maxHp = o.hp ?? (o.hpPercent ? Math.max(1, Math.round((c.maxHp * o.hpPercent) / 100)) : c.maxHp);
         return { ...c, maxHp, hp: maxHp, ...(o.ac && { ac: o.ac }) };
       });
     });
-  const allies = spawn(setup.allies ?? [], 'ally_', 'Allied ');
+  const allies = spawn(setup.allies ?? [], 'ally_', true);
   const party: Creature[] = [setup.hero, ...(setup.companions ?? []), ...allies];
   const foes: Creature[] = spawn(setup.monsters);
   const spawnAt = (c: Creature, spots: readonly Point[] | undefined, cols: number[]) => {

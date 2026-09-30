@@ -1,0 +1,1325 @@
+{
+  "$source": "data/srd/monsters.json",
+  "strings": {
+    "aboleth": {
+      "hash": "127d6e68",
+      "text": "Aboleth"
+    },
+    "air_elemental": {
+      "hash": "f7da8d1a",
+      "text": "Luftelementar"
+    },
+    "animated_armor": {
+      "hash": "72521863",
+      "text": "Levende rustning"
+    },
+    "animated_flying_sword": {
+      "hash": "17761472",
+      "text": "Levende flyvende sværd"
+    },
+    "animated_rug_of_smothering": {
+      "hash": "a1f50157",
+      "text": "Levende kvælertæppe"
+    },
+    "ankheg": {
+      "hash": "0dbe586d",
+      "text": "Ankheg"
+    },
+    "assassin": {
+      "hash": "45812504",
+      "text": "Snigmorder"
+    },
+    "awakened_shrub": {
+      "hash": "00fb6003",
+      "text": "Vakt busk"
+    },
+    "awakened_tree": {
+      "hash": "6e63de85",
+      "text": "Vakt træ"
+    },
+    "axe_beak": {
+      "hash": "f707560c",
+      "text": "Øksenæb"
+    },
+    "azer_sentinel": {
+      "hash": "555bbd33",
+      "text": "Azer-vagtpost"
+    },
+    "balor": {
+      "hash": "b9b8625d",
+      "text": "Balor"
+    },
+    "bandit": {
+      "hash": "aacb77cb",
+      "text": "Bandit"
+    },
+    "bandit_captain": {
+      "hash": "55c46b6f",
+      "text": "Banditkaptajn"
+    },
+    "barbed_devil": {
+      "hash": "23984bdf",
+      "text": "Pigdjævel"
+    },
+    "basilisk": {
+      "hash": "9a1c25b9",
+      "text": "Basilisk"
+    },
+    "bearded_devil": {
+      "hash": "ea58b00e",
+      "text": "Skægdjævel"
+    },
+    "behir": {
+      "hash": "acf38003",
+      "text": "Behir"
+    },
+    "berserker": {
+      "hash": "115ee95e",
+      "text": "Bersærk"
+    },
+    "black_dragon_wyrmling": {
+      "hash": "45e08334",
+      "text": "Sort dragehvalp"
+    },
+    "young_black_dragon": {
+      "hash": "06a6ada3",
+      "text": "Ung sort drage"
+    },
+    "adult_black_dragon": {
+      "hash": "f24c710f",
+      "text": "Voksen sort drage"
+    },
+    "ancient_black_dragon": {
+      "hash": "d31b9d3f",
+      "text": "Ældgammel sort drage"
+    },
+    "black_pudding": {
+      "hash": "fc918a75",
+      "text": "Sort budding"
+    },
+    "blink_dog": {
+      "hash": "0725e263",
+      "text": "Blinkhund"
+    },
+    "blue_dragon_wyrmling": {
+      "hash": "8b4daa45",
+      "text": "Blå dragehvalp"
+    },
+    "young_blue_dragon": {
+      "hash": "f425a2e4",
+      "text": "Ung blå drage"
+    },
+    "adult_blue_dragon": {
+      "hash": "0bc401c8",
+      "text": "Voksen blå drage"
+    },
+    "ancient_blue_dragon": {
+      "hash": "2e000fb8",
+      "text": "Ældgammel blå drage"
+    },
+    "bone_devil": {
+      "hash": "01330961",
+      "text": "Knogledjævel"
+    },
+    "brass_dragon_wyrmling": {
+      "hash": "9613633a",
+      "text": "Messingdragehvalp"
+    },
+    "young_brass_dragon": {
+      "hash": "24780e15",
+      "text": "Ung messingdrage"
+    },
+    "adult_brass_dragon": {
+      "hash": "29082f19",
+      "text": "Voksen messingdrage"
+    },
+    "ancient_brass_dragon": {
+      "hash": "b660d5a9",
+      "text": "Ældgammel messingdrage"
+    },
+    "bronze_dragon_wyrmling": {
+      "hash": "ada694b1",
+      "text": "Bronzedragehvalp"
+    },
+    "young_bronze_dragon": {
+      "hash": "b0614120",
+      "text": "Ung bronzedrage"
+    },
+    "adult_bronze_dragon": {
+      "hash": "54112904",
+      "text": "Voksen bronzedrage"
+    },
+    "ancient_bronze_dragon": {
+      "hash": "79b30d54",
+      "text": "Ældgammel bronzedrage"
+    },
+    "bugbear_stalker": {
+      "hash": "72b431bf",
+      "text": "Bugbjørn-snigjæger"
+    },
+    "bugbear_warrior": {
+      "hash": "3da67555",
+      "text": "Bugbjørnkriger"
+    },
+    "bulette": {
+      "hash": "042ac462",
+      "text": "Bulette"
+    },
+    "centaur_trooper": {
+      "hash": "4e4e42fe",
+      "text": "Kentaursoldat"
+    },
+    "chain_devil": {
+      "hash": "57eb0e34",
+      "text": "Kædedjævel"
+    },
+    "chimera": {
+      "hash": "84f72aaa",
+      "text": "Kimære"
+    },
+    "chuul": {
+      "hash": "2201d950",
+      "text": "Chuul"
+    },
+    "clay_golem": {
+      "hash": "829367a4",
+      "text": "Lergolem"
+    },
+    "cloaker": {
+      "hash": "8b395d90",
+      "text": "Kappelurer"
+    },
+    "cloud_giant": {
+      "hash": "0d6fc6bb",
+      "text": "Skyjætte"
+    },
+    "cockatrice": {
+      "hash": "04ba77d5",
+      "text": "Kokatrice"
+    },
+    "commoner": {
+      "hash": "92b269c3",
+      "text": "Menigmand"
+    },
+    "copper_dragon_wyrmling": {
+      "hash": "03d4ff64",
+      "text": "Kobberdragehvalp"
+    },
+    "young_copper_dragon": {
+      "hash": "339abe63",
+      "text": "Ung kobberdrage"
+    },
+    "adult_copper_dragon": {
+      "hash": "19e5d57f",
+      "text": "Voksen kobberdrage"
+    },
+    "ancient_copper_dragon": {
+      "hash": "88acd9af",
+      "text": "Ældgammel kobberdrage"
+    },
+    "couatl": {
+      "hash": "311bd34d",
+      "text": "Couatl"
+    },
+    "swarm_of_crawling_claws": {
+      "hash": "ea93111d",
+      "text": "Sværm af kravlende kløer"
+    },
+    "cultist": {
+      "hash": "2a559d5b",
+      "text": "Kultist"
+    },
+    "cultist_fanatic": {
+      "hash": "7ebbaac7",
+      "text": "Kultistfanatiker"
+    },
+    "darkmantle": {
+      "hash": "45d0a816",
+      "text": "Mørkekappe"
+    },
+    "death_dog": {
+      "hash": "227f852f",
+      "text": "Dødshund"
+    },
+    "deva": {
+      "hash": "1fe9a807",
+      "text": "Deva"
+    },
+    "djinni": {
+      "hash": "fb63f941",
+      "text": "Djinni"
+    },
+    "doppelganger": {
+      "hash": "c6b21bbd",
+      "text": "Dobbeltgænger"
+    },
+    "dragon_turtle": {
+      "hash": "5b2e02d0",
+      "text": "Dragesildpadde"
+    },
+    "dretch": {
+      "hash": "cb7598e1",
+      "text": "Dretch"
+    },
+    "drider": {
+      "hash": "d69e1b89",
+      "text": "Drider"
+    },
+    "druid": {
+      "hash": "60a1b4bf",
+      "text": "Druide"
+    },
+    "dryad": {
+      "hash": "22eb6d8b",
+      "text": "Dryade"
+    },
+    "earth_elemental": {
+      "hash": "eefb935a",
+      "text": "Jordelementar"
+    },
+    "efreeti": {
+      "hash": "90d420a5",
+      "text": "Efreeti"
+    },
+    "erinyes": {
+      "hash": "9cad0184",
+      "text": "Erinye"
+    },
+    "ettercap": {
+      "hash": "69968c9d",
+      "text": "Ettercap"
+    },
+    "ettin": {
+      "hash": "27c2e197",
+      "text": "Ettin"
+    },
+    "fire_elemental": {
+      "hash": "954553f8",
+      "text": "Ildelementar"
+    },
+    "fire_giant": {
+      "hash": "8b0e5d40",
+      "text": "Ildjætte"
+    },
+    "flesh_golem": {
+      "hash": "03d3393d",
+      "text": "Kødgolem"
+    },
+    "frost_giant": {
+      "hash": "a1a8925c",
+      "text": "Frostjætte"
+    },
+    "shrieker_fungus": {
+      "hash": "5a5e81de",
+      "text": "Skrigesvamp"
+    },
+    "violet_fungus": {
+      "hash": "929d4cf8",
+      "text": "Violet svamp"
+    },
+    "gargoyle": {
+      "hash": "5cfecf61",
+      "text": "Gargoyle"
+    },
+    "gelatinous_cube": {
+      "hash": "5bce7fbf",
+      "text": "Geléterning"
+    },
+    "ghast": {
+      "hash": "af6cc956",
+      "text": "Ghast"
+    },
+    "ghost": {
+      "hash": "1dfb7570",
+      "text": "Spøgelse"
+    },
+    "ghoul": {
+      "hash": "39f59156",
+      "text": "Ghoul"
+    },
+    "gibbering_mouther": {
+      "hash": "30306132",
+      "text": "Pludrende mund"
+    },
+    "glabrezu": {
+      "hash": "8d0e6399",
+      "text": "Glabrezu"
+    },
+    "gladiator": {
+      "hash": "7e59d902",
+      "text": "Gladiator"
+    },
+    "gnoll_warrior": {
+      "hash": "bb3abe5b",
+      "text": "Gnollkriger"
+    },
+    "goblin_minion": {
+      "hash": "fa2ba8b0",
+      "text": "Goblinhåndlanger"
+    },
+    "goblin_warrior": {
+      "hash": "c553c84c",
+      "text": "Goblinkriger"
+    },
+    "goblin_boss": {
+      "hash": "a6c4a143",
+      "text": "Goblinhøvding"
+    },
+    "gold_dragon_wyrmling": {
+      "hash": "768a8f2b",
+      "text": "Gulddragehvalp"
+    },
+    "young_gold_dragon": {
+      "hash": "b643cffe",
+      "text": "Ung gulddrage"
+    },
+    "adult_gold_dragon": {
+      "hash": "e2115fea",
+      "text": "Voksen gulddrage"
+    },
+    "ancient_gold_dragon": {
+      "hash": "fe0cc83a",
+      "text": "Ældgammel gulddrage"
+    },
+    "gorgon": {
+      "hash": "08dea63d",
+      "text": "Gorgon"
+    },
+    "gray_ooze": {
+      "hash": "d417c4dd",
+      "text": "Grå slim"
+    },
+    "green_dragon_wyrmling": {
+      "hash": "ff6dfd5c",
+      "text": "Grøn dragehvalp"
+    },
+    "young_green_dragon": {
+      "hash": "8242cc53",
+      "text": "Ung grøn drage"
+    },
+    "adult_green_dragon": {
+      "hash": "56a05c87",
+      "text": "Voksen grøn drage"
+    },
+    "ancient_green_dragon": {
+      "hash": "330fb2d7",
+      "text": "Ældgammel grøn drage"
+    },
+    "green_hag": {
+      "hash": "562bba78",
+      "text": "Grøn heks"
+    },
+    "grick": {
+      "hash": "d96d01fd",
+      "text": "Grick"
+    },
+    "griffon": {
+      "hash": "044ac4f2",
+      "text": "Grif"
+    },
+    "grimlock": {
+      "hash": "47bcb631",
+      "text": "Grimlock"
+    },
+    "guardian_naga": {
+      "hash": "a85ed1fb",
+      "text": "Vogternaga"
+    },
+    "guard": {
+      "hash": "d18e660e",
+      "text": "Vagt"
+    },
+    "guard_captain": {
+      "hash": "99ed0822",
+      "text": "Vagtkaptajn"
+    },
+    "half_dragon": {
+      "hash": "c814c1f4",
+      "text": "Halvdrage"
+    },
+    "harpy": {
+      "hash": "62149ffb",
+      "text": "Harpy"
+    },
+    "hell_hound": {
+      "hash": "bcb6e2f0",
+      "text": "Helvedeshund"
+    },
+    "hezrou": {
+      "hash": "02d37246",
+      "text": "Hezrou"
+    },
+    "hill_giant": {
+      "hash": "ae0a4eef",
+      "text": "Bakkejætte"
+    },
+    "hippogriff": {
+      "hash": "27ca088d",
+      "text": "Hippogrif"
+    },
+    "hobgoblin_warrior": {
+      "hash": "f997aa13",
+      "text": "Hobgoblinkriger"
+    },
+    "hobgoblin_captain": {
+      "hash": "f7e51f79",
+      "text": "Hobgoblinkaptajn"
+    },
+    "homunculus": {
+      "hash": "e2fb657c",
+      "text": "Homunkulus"
+    },
+    "horned_devil": {
+      "hash": "7016d797",
+      "text": "Horndjævel"
+    },
+    "hydra": {
+      "hash": "82e3e04b",
+      "text": "Hydra"
+    },
+    "ice_devil": {
+      "hash": "5dcfa232",
+      "text": "Isdjævel"
+    },
+    "imp": {
+      "hash": "f671d441",
+      "text": "Imp"
+    },
+    "incubus": {
+      "hash": "585ed368",
+      "text": "Incubus"
+    },
+    "invisible_stalker": {
+      "hash": "00dc3750",
+      "text": "Usynlig forfølger"
+    },
+    "iron_golem": {
+      "hash": "0f5ff343",
+      "text": "Jerngolem"
+    },
+    "knight": {
+      "hash": "cd17325c",
+      "text": "Ridder"
+    },
+    "kobold_warrior": {
+      "hash": "183e0efa",
+      "text": "Koboldkriger"
+    },
+    "kraken": {
+      "hash": "1d1e9803",
+      "text": "Kraken"
+    },
+    "lamia": {
+      "hash": "b7c714b3",
+      "text": "Lamia"
+    },
+    "lemure": {
+      "hash": "74b61139",
+      "text": "Lemur"
+    },
+    "lich": {
+      "hash": "9900a815",
+      "text": "Lich"
+    },
+    "mage": {
+      "hash": "488a02e3",
+      "text": "Magiker"
+    },
+    "archmage": {
+      "hash": "54aa73af",
+      "text": "Ærkemagiker"
+    },
+    "magmin": {
+      "hash": "7ff29328",
+      "text": "Magmin"
+    },
+    "manticore": {
+      "hash": "1a72d6f7",
+      "text": "Mantikor"
+    },
+    "marilith": {
+      "hash": "ae470ba1",
+      "text": "Marilith"
+    },
+    "medusa": {
+      "hash": "4faacd5c",
+      "text": "Medusa"
+    },
+    "dust_mephit": {
+      "hash": "0e59f13c",
+      "text": "Støvmefit"
+    },
+    "ice_mephit": {
+      "hash": "717ed803",
+      "text": "Ismefit"
+    },
+    "magma_mephit": {
+      "hash": "83287685",
+      "text": "Magmamefit"
+    },
+    "steam_mephit": {
+      "hash": "1c75a216",
+      "text": "Dampmefit"
+    },
+    "merfolk_skirmisher": {
+      "hash": "9a59de10",
+      "text": "Havfolkskriger"
+    },
+    "merrow": {
+      "hash": "334a6afd",
+      "text": "Merrow"
+    },
+    "mimic": {
+      "hash": "50d9794e",
+      "text": "Efterligner"
+    },
+    "minotaur_of_baphomet": {
+      "hash": "c7e8a99f",
+      "text": "Baphomets minotaur"
+    },
+    "mummy": {
+      "hash": "93ef4860",
+      "text": "Mumie"
+    },
+    "mummy_lord": {
+      "hash": "166b42c7",
+      "text": "Mumiefyrste"
+    },
+    "nalfeshnee": {
+      "hash": "9554c892",
+      "text": "Nalfeshnee"
+    },
+    "night_hag": {
+      "hash": "bfb74a25",
+      "text": "Natheks"
+    },
+    "nightmare": {
+      "hash": "826389d6",
+      "text": "Mareridt"
+    },
+    "noble": {
+      "hash": "399fad0b",
+      "text": "Adelsperson"
+    },
+    "ochre_jelly": {
+      "hash": "3dfc18d0",
+      "text": "Okkergelé"
+    },
+    "ogre": {
+      "hash": "eb79736a",
+      "text": "Ogre"
+    },
+    "oni": {
+      "hash": "20b1b7db",
+      "text": "Oni"
+    },
+    "otyugh": {
+      "hash": "5f1d0d47",
+      "text": "Otyugh"
+    },
+    "owlbear": {
+      "hash": "bbcf3513",
+      "text": "Uglebjørn"
+    },
+    "pegasus": {
+      "hash": "646e6f3f",
+      "text": "Pegasus"
+    },
+    "phase_spider": {
+      "hash": "3c5ca6f9",
+      "text": "Faseedderkop"
+    },
+    "pirate": {
+      "hash": "cdfd1700",
+      "text": "Pirat"
+    },
+    "pirate_captain": {
+      "hash": "2ec70eb4",
+      "text": "Piratkaptajn"
+    },
+    "pit_fiend": {
+      "hash": "dc93e1c8",
+      "text": "Afgrundsdjævel"
+    },
+    "planetar": {
+      "hash": "c4ee284c",
+      "text": "Planetar"
+    },
+    "priest_acolyte": {
+      "hash": "4c906e5b",
+      "text": "Tempeltjener"
+    },
+    "priest": {
+      "hash": "95af077a",
+      "text": "Præst"
+    },
+    "pseudodragon": {
+      "hash": "4effcdc0",
+      "text": "Pseudodrage"
+    },
+    "purple_worm": {
+      "hash": "8192011a",
+      "text": "Purpurorm"
+    },
+    "quasit": {
+      "hash": "4487e44a",
+      "text": "Quasit"
+    },
+    "rakshasa": {
+      "hash": "66385e11",
+      "text": "Rakshasa"
+    },
+    "red_dragon_wyrmling": {
+      "hash": "ee4d207c",
+      "text": "Rød dragehvalp"
+    },
+    "young_red_dragon": {
+      "hash": "64ddadc3",
+      "text": "Ung rød drage"
+    },
+    "adult_red_dragon": {
+      "hash": "8474c7d7",
+      "text": "Voksen rød drage"
+    },
+    "ancient_red_dragon": {
+      "hash": "322efd27",
+      "text": "Ældgammel rød drage"
+    },
+    "remorhaz": {
+      "hash": "8c21f0d9",
+      "text": "Remorhaz"
+    },
+    "roc": {
+      "hash": "9a98a237",
+      "text": "Rok"
+    },
+    "roper": {
+      "hash": "30c70d2d",
+      "text": "Roper"
+    },
+    "rust_monster": {
+      "hash": "6da6cd11",
+      "text": "Rustmonster"
+    },
+    "sahuagin_warrior": {
+      "hash": "07c2630b",
+      "text": "Sahuaginkriger"
+    },
+    "salamander": {
+      "hash": "e7884ad1",
+      "text": "Salamander"
+    },
+    "satyr": {
+      "hash": "bcb798e8",
+      "text": "Satyr"
+    },
+    "scout": {
+      "hash": "68dfb1a5",
+      "text": "Spejder"
+    },
+    "sea_hag": {
+      "hash": "be0f3b08",
+      "text": "Havheks"
+    },
+    "shadow": {
+      "hash": "82d1a881",
+      "text": "Skygge"
+    },
+    "shambling_mound": {
+      "hash": "ebb93fe7",
+      "text": "Slæbende høj"
+    },
+    "shield_guardian": {
+      "hash": "b2c2feb3",
+      "text": "Skjoldvogter"
+    },
+    "silver_dragon_wyrmling": {
+      "hash": "e98697d8",
+      "text": "Sølvdragehvalp"
+    },
+    "young_silver_dragon": {
+      "hash": "0fc8e12f",
+      "text": "Ung sølvdrage"
+    },
+    "adult_silver_dragon": {
+      "hash": "7f8a45b3",
+      "text": "Voksen sølvdrage"
+    },
+    "ancient_silver_dragon": {
+      "hash": "a58f5463",
+      "text": "Ældgammel sølvdrage"
+    },
+    "skeleton": {
+      "hash": "7ea6568e",
+      "text": "Skelet"
+    },
+    "warhorse_skeleton": {
+      "hash": "879a0051",
+      "text": "Stridshesteskelet"
+    },
+    "minotaur_skeleton": {
+      "hash": "6cea5b33",
+      "text": "Minotaurskelet"
+    },
+    "solar": {
+      "hash": "34e82f56",
+      "text": "Solar"
+    },
+    "specter": {
+      "hash": "40303ba9",
+      "text": "Genfærd"
+    },
+    "sphinx_of_wonder": {
+      "hash": "b1429c53",
+      "text": "Undrenes sfinks"
+    },
+    "sphinx_of_lore": {
+      "hash": "e9edc0ac",
+      "text": "Visdommens sfinks"
+    },
+    "sphinx_of_valor": {
+      "hash": "67fa10de",
+      "text": "Tapperhedens sfinks"
+    },
+    "spirit_naga": {
+      "hash": "70fa6a21",
+      "text": "Åndenaga"
+    },
+    "sprite": {
+      "hash": "f434e33c",
+      "text": "Sprite"
+    },
+    "spy": {
+      "hash": "37cd8cbd",
+      "text": "Spion"
+    },
+    "stirge": {
+      "hash": "dd260f2d",
+      "text": "Stirge"
+    },
+    "stone_giant": {
+      "hash": "15978adf",
+      "text": "Stenjætte"
+    },
+    "stone_golem": {
+      "hash": "c99f7e76",
+      "text": "Stengolem"
+    },
+    "storm_giant": {
+      "hash": "1b51a5d3",
+      "text": "Stormjætte"
+    },
+    "succubus": {
+      "hash": "f06eef64",
+      "text": "Succubus"
+    },
+    "tarrasque": {
+      "hash": "5e8e391f",
+      "text": "Tarrasque"
+    },
+    "tough": {
+      "hash": "174f956c",
+      "text": "Bølle"
+    },
+    "tough_boss": {
+      "hash": "f740a2fd",
+      "text": "Bøllebas"
+    },
+    "treant": {
+      "hash": "b8521223",
+      "text": "Træhyrde"
+    },
+    "troll": {
+      "hash": "5c45825c",
+      "text": "Trold"
+    },
+    "troll_limb": {
+      "hash": "54fe5a28",
+      "text": "Troldelem"
+    },
+    "unicorn": {
+      "hash": "4466e477",
+      "text": "Enhjørning"
+    },
+    "vampire_familiar": {
+      "hash": "e0a97678",
+      "text": "Vampyrtjener"
+    },
+    "vampire_spawn": {
+      "hash": "411896f2",
+      "text": "Vampyryngel"
+    },
+    "vampire": {
+      "hash": "14a21f8d",
+      "text": "Vampyr"
+    },
+    "vrock": {
+      "hash": "cf701600",
+      "text": "Vrock"
+    },
+    "warrior_infantry": {
+      "hash": "c6f9a2c6",
+      "text": "Fodsoldat"
+    },
+    "warrior_veteran": {
+      "hash": "7a3b074a",
+      "text": "Veteran"
+    },
+    "water_elemental": {
+      "hash": "1c16c7f5",
+      "text": "Vandelementar"
+    },
+    "werebear": {
+      "hash": "ce118fb2",
+      "text": "Varbjørn"
+    },
+    "wereboar": {
+      "hash": "93d1b8b8",
+      "text": "Varorne"
+    },
+    "wererat": {
+      "hash": "86821ecf",
+      "text": "Varrotte"
+    },
+    "weretiger": {
+      "hash": "682b15eb",
+      "text": "Vartiger"
+    },
+    "werewolf": {
+      "hash": "b57f6c9c",
+      "text": "Varulv"
+    },
+    "white_dragon_wyrmling": {
+      "hash": "4821c3ae",
+      "text": "Hvid dragehvalp"
+    },
+    "young_white_dragon": {
+      "hash": "56bed8c1",
+      "text": "Ung hvid drage"
+    },
+    "adult_white_dragon": {
+      "hash": "4e5e60ed",
+      "text": "Voksen hvid drage"
+    },
+    "ancient_white_dragon": {
+      "hash": "a1fca15d",
+      "text": "Ældgammel hvid drage"
+    },
+    "wight": {
+      "hash": "ade4c062",
+      "text": "Genganger"
+    },
+    "will_o_wisp": {
+      "hash": "87b4990a",
+      "text": "Lygtemand"
+    },
+    "winter_wolf": {
+      "hash": "e63965b4",
+      "text": "Vinterulv"
+    },
+    "worg": {
+      "hash": "e7c53164",
+      "text": "Varg"
+    },
+    "wraith": {
+      "hash": "a77974c6",
+      "text": "Dødsånd"
+    },
+    "wyvern": {
+      "hash": "68922dcc",
+      "text": "Lindorm"
+    },
+    "xorn": {
+      "hash": "5df7b950",
+      "text": "Xorn"
+    },
+    "zombie": {
+      "hash": "835720ff",
+      "text": "Zombie"
+    },
+    "ogre_zombie": {
+      "hash": "96f65aa4",
+      "text": "Ogrezombie"
+    },
+    "allosaurus": {
+      "hash": "f909992e",
+      "text": "Allosaurus"
+    },
+    "ankylosaurus": {
+      "hash": "55d8b2f8",
+      "text": "Ankylosaurus"
+    },
+    "ape": {
+      "hash": "8ef52f43",
+      "text": "Abe"
+    },
+    "archelon": {
+      "hash": "3f5efe61",
+      "text": "Archelon"
+    },
+    "baboon": {
+      "hash": "3968e2fa",
+      "text": "Bavian"
+    },
+    "badger": {
+      "hash": "eb48d0de",
+      "text": "Grævling"
+    },
+    "bat": {
+      "hash": "d5bc7448",
+      "text": "Flagermus"
+    },
+    "black_bear": {
+      "hash": "d00174b2",
+      "text": "Sortbjørn"
+    },
+    "blood_hawk": {
+      "hash": "d681cbec",
+      "text": "Blodhøg"
+    },
+    "boar": {
+      "hash": "4996e78d",
+      "text": "Vildsvin"
+    },
+    "brown_bear": {
+      "hash": "c2831e2b",
+      "text": "Brunbjørn"
+    },
+    "camel": {
+      "hash": "471fd7a5",
+      "text": "Kamel"
+    },
+    "cat": {
+      "hash": "68fef3a7",
+      "text": "Kat"
+    },
+    "constrictor_snake": {
+      "hash": "24525d6f",
+      "text": "Kvælerslange"
+    },
+    "crab": {
+      "hash": "12e72983",
+      "text": "Krabbe"
+    },
+    "crocodile": {
+      "hash": "1113ed6b",
+      "text": "Krokodille"
+    },
+    "deer": {
+      "hash": "02c926b5",
+      "text": "Hjort"
+    },
+    "dire_wolf": {
+      "hash": "0b167bdd",
+      "text": "Urulv"
+    },
+    "draft_horse": {
+      "hash": "6e4b62c1",
+      "text": "Arbejdshest"
+    },
+    "eagle": {
+      "hash": "20ac7b8f",
+      "text": "Ørn"
+    },
+    "elephant": {
+      "hash": "8d91d924",
+      "text": "Elefant"
+    },
+    "elk": {
+      "hash": "ca8ef13d",
+      "text": "Elg"
+    },
+    "flying_snake": {
+      "hash": "880933f2",
+      "text": "Flyvende slange"
+    },
+    "frog": {
+      "hash": "1e743f07",
+      "text": "Frø"
+    },
+    "giant_ape": {
+      "hash": "65900122",
+      "text": "Kæmpeabe"
+    },
+    "giant_badger": {
+      "hash": "79cd5b29",
+      "text": "Kæmpegrævling"
+    },
+    "giant_bat": {
+      "hash": "2143251d",
+      "text": "Kæmpeflagermus"
+    },
+    "giant_boar": {
+      "hash": "f09f9a6a",
+      "text": "Kæmpevildsvin"
+    },
+    "giant_centipede": {
+      "hash": "7a916b6f",
+      "text": "Kæmpeskolopender"
+    },
+    "giant_constrictor_snake": {
+      "hash": "617ce002",
+      "text": "Kæmpekvælerslange"
+    },
+    "giant_crab": {
+      "hash": "c3e19904",
+      "text": "Kæmpekrabbe"
+    },
+    "giant_crocodile": {
+      "hash": "5be5e4f2",
+      "text": "Kæmpekrokodille"
+    },
+    "giant_eagle": {
+      "hash": "3537cf8e",
+      "text": "Kæmpeørn"
+    },
+    "giant_elk": {
+      "hash": "fc71ef98",
+      "text": "Kæmpeelg"
+    },
+    "giant_fire_beetle": {
+      "hash": "c1ab79f1",
+      "text": "Kæmpeildbille"
+    },
+    "giant_frog": {
+      "hash": "3f2633f0",
+      "text": "Kæmpefrø"
+    },
+    "giant_goat": {
+      "hash": "c049b7ed",
+      "text": "Kæmpeged"
+    },
+    "giant_hyena": {
+      "hash": "083da3b9",
+      "text": "Kæmpehyæne"
+    },
+    "giant_lizard": {
+      "hash": "fc537c16",
+      "text": "Kæmpeøgle"
+    },
+    "giant_octopus": {
+      "hash": "40bab88f",
+      "text": "Kæmpeblæksprutte"
+    },
+    "giant_owl": {
+      "hash": "db16697c",
+      "text": "Kæmpeugle"
+    },
+    "giant_rat": {
+      "hash": "ee7285ed",
+      "text": "Kæmperotte"
+    },
+    "giant_scorpion": {
+      "hash": "3bf5581b",
+      "text": "Kæmpeskorpion"
+    },
+    "giant_seahorse": {
+      "hash": "9122116a",
+      "text": "Kæmpesøhest"
+    },
+    "giant_shark": {
+      "hash": "356820cf",
+      "text": "Kæmpehaj"
+    },
+    "giant_spider": {
+      "hash": "450fc6d3",
+      "text": "Kæmpeedderkop"
+    },
+    "giant_toad": {
+      "hash": "f1251d8a",
+      "text": "Kæmpetudse"
+    },
+    "giant_venomous_snake": {
+      "hash": "57c435b4",
+      "text": "Kæmpegiftslange"
+    },
+    "giant_vulture": {
+      "hash": "845a67f7",
+      "text": "Kæmpegrib"
+    },
+    "giant_wasp": {
+      "hash": "e90ae499",
+      "text": "Kæmpehveps"
+    },
+    "giant_weasel": {
+      "hash": "e8cdbcab",
+      "text": "Kæmpevæsel"
+    },
+    "giant_wolf_spider": {
+      "hash": "2df0bb73",
+      "text": "Kæmpeulveedderkop"
+    },
+    "goat": {
+      "hash": "8e9ba7fe",
+      "text": "Ged"
+    },
+    "hawk": {
+      "hash": "53fc592c",
+      "text": "Høg"
+    },
+    "hippopotamus": {
+      "hash": "513238cc",
+      "text": "Flodhest"
+    },
+    "hunter_shark": {
+      "hash": "a08a23de",
+      "text": "Jagthaj"
+    },
+    "hyena": {
+      "hash": "ef8eb1d8",
+      "text": "Hyæne"
+    },
+    "jackal": {
+      "hash": "e5603357",
+      "text": "Sjakal"
+    },
+    "killer_whale": {
+      "hash": "04cda553",
+      "text": "Spækhugger"
+    },
+    "lion": {
+      "hash": "730af99f",
+      "text": "Løve"
+    },
+    "lizard": {
+      "hash": "cd69f1b9",
+      "text": "Øgle"
+    },
+    "mammoth": {
+      "hash": "818b248a",
+      "text": "Mammut"
+    },
+    "mastiff": {
+      "hash": "c743bd5f",
+      "text": "Mastiff"
+    },
+    "mule": {
+      "hash": "0f9c7e0c",
+      "text": "Muldyr"
+    },
+    "octopus": {
+      "hash": "ef6886ae",
+      "text": "Blæksprutte"
+    },
+    "owl": {
+      "hash": "09a04a85",
+      "text": "Ugle"
+    },
+    "panther": {
+      "hash": "18f8b8f7",
+      "text": "Panter"
+    },
+    "piranha": {
+      "hash": "3c3ad454",
+      "text": "Piratfisk"
+    },
+    "plesiosaurus": {
+      "hash": "ba80674e",
+      "text": "Plesiosaurus"
+    },
+    "polar_bear": {
+      "hash": "e06ace63",
+      "text": "Isbjørn"
+    },
+    "pony": {
+      "hash": "e7bab749",
+      "text": "Pony"
+    },
+    "pteranodon": {
+      "hash": "6c29e94f",
+      "text": "Pteranodon"
+    },
+    "rat": {
+      "hash": "a389a5d8",
+      "text": "Rotte"
+    },
+    "raven": {
+      "hash": "4106b2bd",
+      "text": "Ravn"
+    },
+    "reef_shark": {
+      "hash": "7f9b2eb6",
+      "text": "Revhaj"
+    },
+    "rhinoceros": {
+      "hash": "8e4e3be3",
+      "text": "Næsehorn"
+    },
+    "riding_horse": {
+      "hash": "a4be8c9d",
+      "text": "Ridehest"
+    },
+    "saber_toothed_tiger": {
+      "hash": "81ecf443",
+      "text": "Sabeltandstiger"
+    },
+    "scorpion": {
+      "hash": "84e9e508",
+      "text": "Skorpion"
+    },
+    "seahorse": {
+      "hash": "34afea39",
+      "text": "Søhest"
+    },
+    "spider": {
+      "hash": "db6aea28",
+      "text": "Edderkop"
+    },
+    "swarm_of_bats": {
+      "hash": "b1a8e130",
+      "text": "Sværm af flagermus"
+    },
+    "swarm_of_insects": {
+      "hash": "d96b7c6d",
+      "text": "Sværm af insekter"
+    },
+    "swarm_of_piranhas": {
+      "hash": "68fb1508",
+      "text": "Stime af piratfisk"
+    },
+    "swarm_of_rats": {
+      "hash": "ffe69680",
+      "text": "Sværm af rotter"
+    },
+    "swarm_of_ravens": {
+      "hash": "0edd8ee7",
+      "text": "Flok af ravne"
+    },
+    "swarm_of_venomous_snakes": {
+      "hash": "4463b3bb",
+      "text": "Sværm af giftslanger"
+    },
+    "tiger": {
+      "hash": "7edf6d58",
+      "text": "Tiger"
+    },
+    "triceratops": {
+      "hash": "af0fc18f",
+      "text": "Triceratops"
+    },
+    "tyrannosaurus_rex": {
+      "hash": "35123d30",
+      "text": "Tyrannosaurus rex"
+    },
+    "venomous_snake": {
+      "hash": "a5700c4b",
+      "text": "Giftslange"
+    },
+    "vulture": {
+      "hash": "d65e7e02",
+      "text": "Grib"
+    },
+    "warhorse": {
+      "hash": "3754b186",
+      "text": "Stridshest"
+    },
+    "weasel": {
+      "hash": "f941b610",
+      "text": "Væsel"
+    },
+    "wolf": {
+      "hash": "f8e7de69",
+      "text": "Ulv"
+    }
+  }
+}

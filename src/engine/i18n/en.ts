@@ -260,6 +260,7 @@ export const en = {
 
   // Combat log (combatNarration.ts finds moments by these texts: keep "{attacker} attacks …" and the fates distinct)
   'combat.initiative': 'Roll for initiative!',
+  'combat.allyName': 'Allied {name}',
   'combat.initiativeRoll': '{name} initiative: {roll}',
   'combat.initiativeShared': '{name} initiative: {n} (shared group roll)',
   'combat.victory': 'Victory!',

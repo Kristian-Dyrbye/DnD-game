@@ -244,3 +244,21 @@ All 339 in data/i18n/da/srd/spells.json. Patterns to reuse:
 | Find Familiar / Find Steed | Find tjenerånd / Find ganger |
 | Web / Misty Step / Counterspell | Spind / Tågeskridt / Modbesværgelse |
 | kept: Alarm, Blink, Geas, Shillelagh, Symbol, Tsunami, Clairvoyance, Suggestion | same |
+
+## SRD monster names (A149c)
+
+All 330 in data/i18n/da/srd/monsters.json. Patterns to reuse:
+
+| English | Danish |
+|---|---|
+| X Dragon Wyrmling / Young / Adult / Ancient X Dragon | X dragehvalp / Ung / Voksen / Ældgammel X drage (metals compound: Gulddragehvalp, Ung gulddrage) |
+| Giant X (beasts) | KæmpeX (Kæmpeedderkop, Kæmperotte) |
+| X Giant / X Devil / X Elemental / X Golem | Xjætte / Xdjævel / Xelementar / Xgolem |
+| Goblin/Gnoll/Kobold/Hobgoblin Warrior, Goblin Boss, Goblin Minion | Goblinkriger …, Goblinhøvding, Goblinhåndlanger |
+| Swarm of X | Sværm af X (Stime af piratfisk, Flok af ravne) |
+| Guard / Guard Captain / Knight / Noble / Commoner / Tough / Tough Boss | Vagt / Vagtkaptajn / Ridder / Adelsperson / Menigmand / Bølle / Bøllebas |
+| Priest Acolyte / Cultist Fanatic | Tempeltjener / Kultistfanatiker |
+| Owlbear / Will-o'-Wisp / Wight / Wraith / Specter / Treant / Wyvern / Worg | Uglebjørn / Lygtemand / Genganger / Dødsånd / Genfærd / Træhyrde / Lindorm / Varg |
+| Werewolf etc. | Varulv, Varbjørn, Varrotte, Varorne, Vartiger |
+| Allied X (fight allies) | X (allieret) |
+| kept: Ogre, Imp, Ghoul, Ghast, Merrow, Grimlock, Gargoyle, Sprite, Roper, Stirge, Bulette … (proper monster names) | same |

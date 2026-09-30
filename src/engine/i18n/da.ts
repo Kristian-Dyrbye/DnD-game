@@ -259,6 +259,7 @@ export const da: Partial<Record<EngineKey, string>> = {
 
   // Kamplog
   'combat.initiative': 'Slå for initiativ!',
+  'combat.allyName': '{name} (allieret)',
   'combat.initiativeRoll': '{name} initiativ: {roll}',
   'combat.initiativeShared': '{name} initiativ: {n} (fælles gruppeslag)',
   'combat.victory': 'Sejr!',
