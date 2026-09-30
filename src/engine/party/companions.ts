@@ -17,6 +17,7 @@ import type { Ability, Skill } from '../rules/basics';
 import { SKILLS } from '../rules/basics';
 import type { GameState } from '../session/gameState';
 import { AppearanceSchema } from '../appearance/appearance';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
 export const MAX_COMPANIONS = 3;
 
@@ -111,13 +112,14 @@ export interface RecruitResult {
 }
 
 /** Recruits a companion (built at the hero's level). Party full → they wait instead. */
-export function recruitCompanion(state: GameState, def: CompanionDef, db: SrdDatabase): RecruitResult {
+export function recruitCompanion(state: GameState, def: CompanionDef, db: SrdDatabase, msgs: Messages = ENGLISH_MESSAGES): RecruitResult {
+  const name = { name: def.name };
   const status = companionStatus(state, def);
-  if (status === 'in_party') return { joined: false, waiting: false, message: `${def.name} is already with you.` };
-  if (status === 'dead' || status === 'betrayed') return { joined: false, waiting: false, message: `${def.name} cannot join you.` };
+  if (status === 'in_party') return { joined: false, waiting: false, message: msgs.m('companion.already', name) };
+  if (status === 'dead' || status === 'betrayed') return { joined: false, waiting: false, message: msgs.m('companion.cannotJoin', name) };
   if (state.companions.length >= MAX_COMPANIONS) {
     state.flags[def.statusFlag] = 'waiting';
-    return { joined: false, waiting: true, message: `${def.name} will wait for you at the nearest safe house (your party is full).` };
+    return { joined: false, waiting: true, message: msgs.m('companion.partyFull', name) };
   }
   const existing = state.extensions.companionSheets as Record<string, Character> | undefined;
   const sheet = existing?.[def.id] ?? buildCompanion(def, totalLevel(state.hero), db);
@@ -125,25 +127,26 @@ export function recruitCompanion(state: GameState, def: CompanionDef, db: SrdDat
   state.companions = [...state.companions, leveled];
   state.flags[def.statusFlag] = 'in_party';
   if (state.flags[def.loyaltyFlag] === undefined) state.flags[def.loyaltyFlag] = 50;
-  return { joined: true, waiting: false, message: `${def.name} joins your party.` };
+  return { joined: true, waiting: false, message: msgs.m('companion.joins', name) };
 }
 
 /**
  * Recruit without building a sheet (no rules data, e.g. the solver): only the status/loyalty flags
  * change, with the same party-size rule as recruitCompanion.
  */
-export function recruitFlagsOnly(state: GameState, def: CompanionDef, roster: CompanionRoster): RecruitResult {
+export function recruitFlagsOnly(state: GameState, def: CompanionDef, roster: CompanionRoster, msgs: Messages = ENGLISH_MESSAGES): RecruitResult {
+  const name = { name: def.name };
   const status = companionStatus(state, def);
-  if (status === 'in_party') return { joined: false, waiting: false, message: `${def.name} is already with you.` };
-  if (status === 'dead' || status === 'betrayed') return { joined: false, waiting: false, message: `${def.name} cannot join you.` };
+  if (status === 'in_party') return { joined: false, waiting: false, message: msgs.m('companion.already', name) };
+  if (status === 'dead' || status === 'betrayed') return { joined: false, waiting: false, message: msgs.m('companion.cannotJoin', name) };
   const inParty = roster.companions.filter((d) => companionStatus(state, d) === 'in_party').length;
   if (inParty >= MAX_COMPANIONS) {
     state.flags[def.statusFlag] = 'waiting';
-    return { joined: false, waiting: true, message: `${def.name} will wait for you at the nearest safe house (your party is full).` };
+    return { joined: false, waiting: true, message: msgs.m('companion.partyFull', name) };
   }
   state.flags[def.statusFlag] = 'in_party';
   if (state.flags[def.loyaltyFlag] === undefined) state.flags[def.loyaltyFlag] = 50;
-  return { joined: true, waiting: false, message: `${def.name} joins your party.` };
+  return { joined: true, waiting: false, message: msgs.m('companion.joins', name) };
 }
 
 /**
@@ -151,15 +154,16 @@ export function recruitFlagsOnly(state: GameState, def: CompanionDef, roster: Co
  * (levelled to the hero; built fresh if none was kept), loyalty rises to at least `loyalty`. The
  * dead never return. Without `db` (the solver) only the flags change. Party full → they wait.
  */
-export function returnCompanion(state: GameState, def: CompanionDef, roster: CompanionRoster, loyalty: number, db?: SrdDatabase): RecruitResult {
+export function returnCompanion(state: GameState, def: CompanionDef, roster: CompanionRoster, loyalty: number, db?: SrdDatabase, msgs: Messages = ENGLISH_MESSAGES): RecruitResult {
+  const name = { name: def.name };
   const status = companionStatus(state, def);
-  if (status === 'in_party') return { joined: false, waiting: false, message: `${def.name} is already with you.` };
-  if (status === 'dead') return { joined: false, waiting: false, message: `${def.name} cannot come back.` };
+  if (status === 'in_party') return { joined: false, waiting: false, message: msgs.m('companion.already', name) };
+  if (status === 'dead') return { joined: false, waiting: false, message: msgs.m('companion.cannotReturn', name) };
   const inParty = db ? state.companions.length : roster.companions.filter((d) => companionStatus(state, d) === 'in_party').length;
   state.flags[def.loyaltyFlag] = Math.max(loyaltyOf(state, def), loyalty);
   if (inParty >= MAX_COMPANIONS) {
     state.flags[def.statusFlag] = 'waiting';
-    return { joined: false, waiting: true, message: `${def.name} is back on your side and will wait for you at the nearest safe house (your party is full).` };
+    return { joined: false, waiting: true, message: msgs.m('companion.backPartyFull', name) };
   }
   if (db) {
     const kept = (state.extensions.companionSheets as Record<string, Character> | undefined)?.[def.id];
@@ -167,12 +171,12 @@ export function returnCompanion(state: GameState, def: CompanionDef, roster: Com
     state.companions = [...state.companions, totalLevel(sheet) < totalLevel(state.hero) ? autoLevelTo(sheet, totalLevel(state.hero), db, def.subclassId) : sheet];
   }
   state.flags[def.statusFlag] = 'in_party';
-  return { joined: true, waiting: false, message: status === 'betrayed' || status === 'left' ? `${def.name} returns to your side.` : `${def.name} rejoins your party.` };
+  return { joined: true, waiting: false, message: msgs.m(status === 'betrayed' || status === 'left' ? 'companion.returns' : 'companion.rejoins', name) };
 }
 
 /** Log line for a companion parting with the given status. */
-export function partingLine(def: CompanionDef, status: Exclude<CompanionStatus, 'in_party' | 'unmet' | 'met'>): string {
-  return status === 'waiting' ? `${def.name} will wait for you.` : status === 'left' ? `${def.name} leaves the party.` : status === 'betrayed' ? `${def.name} has betrayed you!` : `${def.name} is dead.`;
+export function partingLine(def: CompanionDef, status: Exclude<CompanionStatus, 'in_party' | 'unmet' | 'met'>, msgs: Messages = ENGLISH_MESSAGES): string {
+  return msgs.m(status === 'waiting' ? 'companion.waits' : status === 'left' ? 'companion.leaves' : status === 'betrayed' ? 'companion.betrayed' : 'companion.dead', { name: def.name });
 }
 
 /** A companion leaves the party (to wait, or for good with status left/betrayed/dead). Their sheet is kept. */
@@ -184,13 +188,13 @@ export function partWithCompanion(state: GameState, def: CompanionDef, status: E
 }
 
 /** Companions level with the hero (spec §6). */
-export function levelCompanionsWithHero(state: GameState, roster: CompanionRoster, db: SrdDatabase): string[] {
+export function levelCompanionsWithHero(state: GameState, roster: CompanionRoster, db: SrdDatabase, msgs: Messages = ENGLISH_MESSAGES): string[] {
   const target = totalLevel(state.hero);
   const out: string[] = [];
   state.companions = state.companions.map((c) => {
     if (totalLevel(c) >= target) return c;
     const def = roster.companions.find((d) => d.id === c.id);
-    out.push(`${c.name} reaches level ${target}.`);
+    out.push(msgs.m('companion.levels', { name: c.name, level: target }));
     return autoLevelTo(c, target, db, def?.subclassId);
   });
   return out;
@@ -216,14 +220,14 @@ export function loyaltyOf(state: GameState, def: CompanionDef): number {
  * Applies an approval change for a companion who is with the party (others don't see it).
  * Loyalty is clamped to 0–100. Returns the log line, or undefined if nothing changed.
  */
-export function changeApproval(state: GameState, def: CompanionDef, delta: number): string | undefined {
+export function changeApproval(state: GameState, def: CompanionDef, delta: number, msgs: Messages = ENGLISH_MESSAGES): string | undefined {
   if (companionStatus(state, def) !== 'in_party' || delta === 0) return undefined;
   const before = loyaltyOf(state, def);
   const after = Math.max(0, Math.min(100, before + delta));
   state.flags[def.loyaltyFlag] = after;
-  const mood = delta >= 20 ? 'strongly approves' : delta > 0 ? 'approves' : delta <= -20 ? 'strongly disapproves' : 'disapproves';
-  const warn = after <= LOYALTY_LOW && before > LOYALTY_LOW ? ' Their patience is wearing thin.' : '';
-  return `${shortName(def.name)} ${mood}. (${delta > 0 ? '+' : ''}${delta})${warn}`;
+  const mood = delta >= 20 ? 'companion.approvesStrongly' : delta > 0 ? 'companion.approves' : delta <= -20 ? 'companion.disapprovesStrongly' : 'companion.disapproves';
+  const line = msgs.m(mood, { name: shortName(def.name), delta: `${delta > 0 ? '+' : ''}${delta}` });
+  return after <= LOYALTY_LOW && before > LOYALTY_LOW ? `${line} ${msgs.m('companion.patience')}` : line;
 }
 
 // ---------------------------------------------------------------- control toggle (A087)
@@ -236,8 +240,8 @@ export function playerControlled(state: GameState): string[] {
   return state.companions.filter((c) => control[c.id] === 'player').map((c) => c.id);
 }
 
-export function setControl(state: GameState, companionId: string, control: Control): void {
-  if (!state.companions.some((c) => c.id === companionId)) throw new Error('That companion is not in your party.');
+export function setControl(state: GameState, companionId: string, control: Control, msgs: Messages = ENGLISH_MESSAGES): void {
+  if (!state.companions.some((c) => c.id === companionId)) throw new Error(msgs.m('companion.notInParty'));
   const party = (state.extensions.party as { control?: Record<string, Control> } | undefined) ?? {};
   state.extensions.party = { ...party, control: { ...(party.control ?? {}), [companionId]: control } };
 }

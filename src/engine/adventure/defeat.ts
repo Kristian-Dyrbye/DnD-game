@@ -17,6 +17,7 @@ import { arriveAt, getMap } from '../world/travel';
 import { applyFlagWrites, evalCondition } from './conditions';
 import { conditionContext, getProgress } from './runner';
 import { ConditionSchema, FlagWriteSchema, type Condition } from './schema';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
 type When = { locations?: string[]; regions?: string[]; enemyTypes?: string[]; enemyTags?: string[]; if?: Condition; any?: When[] };
 const WhenSchema: z.ZodType<When> = z.lazy(() =>
@@ -83,7 +84,7 @@ export interface DefeatResult {
 }
 
 /** Applies a Heroic defeat outcome to the state (hero, clock, map, flags). */
-export function applyDefeat(state: GameState, o: DefeatOutcome, deps: { lore?: Lore; rng: Rng; flags?: FlagRegistry; regionId?: string }): DefeatResult {
+export function applyDefeat(state: GameState, o: DefeatOutcome, deps: { lore?: Lore; rng: Rng; flags?: FlagRegistry; regionId?: string; msgs?: Messages }): DefeatResult {
   const hero = state.hero;
   hero.hp = Math.max(1, hero.hp);
   hero.dead = false;
@@ -116,7 +117,8 @@ export function applyDefeat(state: GameState, o: DefeatOutcome, deps: { lore?: L
       movedTo = target;
     }
   }
-  const facts = [o.text, ...(coinsLost ? [`You lost ${Math.floor(coinsLost / 100)} gp.`] : []), ...(itemLost ? ['Something of yours is gone.'] : [])];
+  const { m } = deps.msgs ?? ENGLISH_MESSAGES;
+  const facts = [o.text, ...(coinsLost ? [m('defeat.coinsLost', { coins: m('coins.gp', { n: Math.floor(coinsLost / 100) }) })] : []), ...(itemLost ? [m('defeat.itemLost')] : [])];
   return { outcome: o, facts, coinsLost, ...(itemLost && { itemLost }), ...(movedTo && { movedTo }) };
 }
 

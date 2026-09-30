@@ -26,7 +26,7 @@ import { activeFight, fightAct, finishFight, startFight, type FightEnd } from '.
 import type { DefeatTable } from './defeat';
 import { canLevelUp, levelUp } from '../character/leveling';
 import { banterDue, speakBanter, type BanterGenerator } from '../party/banter';
-import { changeApproval, levelCompanionsWithHero, partWithCompanion, recruitCompanion, returnCompanion, setControl, type CompanionRoster } from '../party/companions';
+import { changeApproval, levelCompanionsWithHero, partingLine, partWithCompanion,recruitCompanion, returnCompanion, setControl, type CompanionRoster } from '../party/companions';
 import { totalLevel } from '../core/creature';
 import type { Ability, Skill } from '../rules/basics';
 import { acceptOffer, activeSideQuest, finishActive, offerSources, offersAt, refreshOffers, roadOffer, sideQuestState, type SideQuestDeps } from './sideQuests';
@@ -123,22 +123,22 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     for (const id of r.recruits ?? []) {
       const def = opts.companions?.companions.find((c) => c.id === id);
       if (!def || !db) continue;
-      session.addLog('system', recruitCompanion(session.current, def, db).message);
+      session.addLog('system', recruitCompanion(session.current, def, db, session.msgs).message);
     }
     for (const a of r.approvals ?? []) {
       const def = opts.companions?.companions.find((c) => c.id === a.companion);
-      const line = def && changeApproval(session.current, def, a.delta);
+      const line = def && changeApproval(session.current, def, a.delta, session.msgs);
       if (line) session.addLog('system', line);
     }
     for (const p of r.partings ?? []) {
       const def = opts.companions?.companions.find((c) => c.id === p.id);
       if (!def) continue;
       partWithCompanion(session.current, def, p.status);
-      session.addLog('system', m(p.status === 'waiting' ? 'companion.waits' : p.status === 'left' ? 'companion.leaves' : p.status === 'betrayed' ? 'companion.betrayed' : 'companion.dead', { name: def.name }));
+      session.addLog('system', partingLine(def, p.status, session.msgs));
     }
     for (const back of r.returns ?? []) {
       const def = opts.companions?.companions.find((c) => c.id === back.id);
-      if (def) session.addLog('system', returnCompanion(session.current, def, opts.companions!, back.loyalty, db).message);
+      if (def) session.addLog('system', returnCompanion(session.current, def, opts.companions!, back.loyalty, db, session.msgs).message);
     }
     for (const c of r.reputation ?? []) if (!c.ripple || c.newTier) session.addLog('system', describeChange(c, opts.lore));
     for (const tip of r.tips ?? []) {
@@ -367,7 +367,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       const { m, coins } = session.msgs;
       if (cmd.type === 'companion_control') {
         if (activeFight(session.current)) throw new Error(m('companion.controlOutsideCombat'));
-        setControl(session.current, cmd.companionId, cmd.control);
+        setControl(session.current, cmd.companionId, cmd.control, session.msgs);
         const c = session.current.companions.find((x) => x.id === cmd.companionId)!;
         session.addLog('system', m(cmd.control === 'player' ? 'companion.controlPlayer' : 'companion.controlAi', { name: c.name }));
         return;
@@ -389,7 +389,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
         });
         session.current.hero = res.character;
         session.addLog('system', res.features.length ? m('level.upNew', { level: before + 1, hp: res.hpGained, features: res.features.join(', ') }) : m('level.up', { level: before + 1, hp: res.hpGained }));
-        if (opts.companions) for (const line of levelCompanionsWithHero(session.current, opts.companions, db)) session.addLog('system', line);
+        if (opts.companions) for (const line of levelCompanionsWithHero(session.current, opts.companions, db, session.msgs)) session.addLog('system', line);
         return;
       }
       if (cmd.type === 'combat_act' || cmd.type === 'combat_flee') {
@@ -403,7 +403,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
           await endFight(session, ctx, 'flee');
         } else {
           const seq = f.enc.logSeq ?? f.enc.log.length;
-          const err = fightAct(session.current, cmd.action, session.rng, db);
+          const err = fightAct(session.current, cmd.action, session.rng, db, session.msgs);
           if (err) throw new Error(err);
           const now = activeFight(session.current);
           if (now) narrateCombat(session, ctx, logSince(now.enc, seq));

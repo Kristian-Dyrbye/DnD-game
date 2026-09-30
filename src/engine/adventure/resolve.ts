@@ -9,6 +9,7 @@ import type { ValidatedIntent } from './intent';
 import { availableActions, currentScene, getProgress, npcsHere, perform, type RunContext, type StepResult } from './runner';
 import type { Check, DifficultyTier } from './schema';
 import { TIME_COSTS } from '../world/clock';
+import { ENGLISH_MESSAGES } from '../i18n';
 
 /** Used when the SRD rules tables aren't loaded (tests without a db). */
 const DC_FALLBACK: Record<DifficultyTier, number> = { very_easy: 5, easy: 10, medium: 15, hard: 20, very_hard: 25, nearly_impossible: 30 };
@@ -39,6 +40,7 @@ export function resolveIntent(ctx: RunContext, v: ValidatedIntent, text: string)
   const scene = currentScene(ctx);
   const npcName = (id?: string) => ctx.adventure.npcs.find((n) => n.id === id)?.name;
   const facts = (via: Resolution['via'], ...f: string[]): Resolution => ({ result: { ...empty(), facts: f }, via, playerAction: text });
+  const { m } = ctx.msgs ?? ENGLISH_MESSAGES;
 
   switch (intent.action) {
     case 'skill_check': {
@@ -50,53 +52,52 @@ export function resolveIntent(ctx: RunContext, v: ValidatedIntent, text: string)
     }
     case 'look':
       ctx.state.time += TIME_COSTS.quick_action;
-      return facts('look', 'You take a careful look around.');
+      return facts('look', m('resolve.look'));
     case 'talk': {
       const here = npcsHere(ctx);
       const who = (v.targetId && here.includes(v.targetId) ? npcName(v.targetId) : undefined) ?? (here.length === 1 ? npcName(here[0]) : undefined);
-      if (!who) return facts('nothing', here.length ? 'You need to say who you are talking to.' : 'There is nobody here to talk to.');
+      if (!who) return facts('nothing', m(here.length ? 'resolve.whoTalk' : 'resolve.nobody'));
       const npc = ctx.adventure.npcs.find((n) => n.name === who)!;
       // An authored conversation with them opens the dialogue.
       const talk = offered.find((a) => a.kind === 'talk' && a.id.startsWith(`talk.${npc.id}.`));
       if (talk) return run(talk.id);
       ctx.state.time += TIME_COSTS.explore_action;
-      return facts('talk', `You speak with ${who}, who seems ${npc.attitude}. They answer in character but reveal nothing new.`);
+      return facts('talk', m('resolve.talk', { name: who, attitude: npc.attitude }));
     }
     case 'move': {
       const exits = offered.filter((a) => a.kind === 'exit');
-      return facts('move', exits.length ? `From here you can go: ${exits.map((e) => e.label.toLowerCase()).join('; ')}.` : 'There is no obvious way onward from here.');
+      return facts('move', exits.length ? m('resolve.exits', { list: exits.map((e) => e.label.toLowerCase()).join('; ') }) : m('resolve.noExits'));
     }
     case 'attack': {
       const fight = offered.find((a) => actionDef(ctx, a.id)?.outcome?.encounter);
       if (fight) return run(fight.id);
       const who = npcName(v.targetId);
-      return facts('refused', who ? `You think better of attacking ${who}; there is no fight to be had here.` : 'There is nothing here to fight.');
+      return facts('refused', who ? m('resolve.noAttack', { name: who }) : m('resolve.nothingToFight'));
     }
     case 'rest':
-      return facts('refused', 'This is no place for a proper rest.');
+      return facts('refused', m('resolve.noRest'));
     case 'use_item':
     case 'cast_spell':
-      return facts('nothing', 'You try, but nothing comes of it here.');
+      return facts('nothing', m('resolve.useNothing'));
     default:
-      return facts('nothing', 'Nothing obvious comes of that.');
+      return facts('nothing', m('resolve.nothing'));
   }
 }
 
 /** One improvised attempt per skill + target per scene visit: no rerolling until it works. */
 function improvise(ctx: RunContext, skill: Skill, targetId: string | undefined, text: string): Resolution {
+  const { m } = ctx.msgs ?? ENGLISH_MESSAGES;
   const p = getProgress(ctx.state)!;
   const key = `${p.sceneId}/improv:${skill}:${targetId ?? '-'}:${p.entries ?? 0}`;
   if (p.done.includes(key)) {
-    return { result: { ...empty(), facts: [`You already tried that (${SKILL_NAMES[skill]}); a second attempt won't go differently right now.`] }, via: 'already_tried', playerAction: text };
+    return { result: { ...empty(), facts: [m('resolve.alreadyTried', { skill: SKILL_NAMES[skill] })] }, via: 'already_tried', playerAction: text };
   }
   p.done.push(key);
   ctx.state.time += TIME_COSTS.quick_action;
   const dc = improvisedDc(ctx);
   const roll = skillCheck(ctx.state.hero, skill, { rng: ctx.rng, dc });
   const what = SKILL_NAMES[skill];
-  const fact = roll.success
-    ? `The ${what} attempt succeeds: it goes about as well as the player hoped, but it changes nothing beyond the moment.`
-    : `The ${what} attempt fails, without lasting harm.`;
+  const fact = m(roll.success ? 'resolve.improvSuccess' : 'resolve.improvFail', { skill: what });
   return { result: { ...empty(), rolls: [roll], facts: [fact] }, via: 'improvised_check', playerAction: text };
 }
 

@@ -10,6 +10,7 @@
  */
 import type { Character, Scar, ScarLocation } from '../core/creature';
 import type { Rng } from '../core/rng';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
 export const SCAR_LABEL: Record<ScarLocation, string> = {
   left_cheek: 'Left cheek',
@@ -86,7 +87,7 @@ export function giveScar(c: Character, o: { description: string; location?: Scar
  * After a fight: each party member with marks gets at most one scar (the most dramatic mark: a
  * drop to 0 HP beats a crit). Returns the updated characters and one log line per new scar.
  */
-export function rollScars(party: Character[], marks: readonly ScarMark[], rng: Rng, origin: string, at: number): { party: Character[]; lines: string[] } {
+export function rollScars(party: Character[], marks: readonly ScarMark[], rng: Rng, origin: string, at: number, msgs: Messages = ENGLISH_MESSAGES): { party: Character[]; lines: string[] } {
   const lines: string[] = [];
   const out = party.map((c) => {
     const mine = marks.filter((m) => m.targetId === c.id);
@@ -95,7 +96,7 @@ export function rollScars(party: Character[], marks: readonly ScarMark[], rng: R
     if (rng.next() >= SCAR_CHANCE[best.cause]) return c;
     const location = scarLocation(best.damageType, rng, c.scars.map((s) => s.location));
     const next = add(c, { location, cause: best.cause, description: scarDescription(best), origin, at });
-    lines.push(`${c.name} will carry a scar: ${scarText(next.scars.at(-1)!)}.`);
+    lines.push(msgs.m('story.scar', { name: c.name, scar: scarText(next.scars.at(-1)!) }));
     return next;
   });
   return { party: out, lines };

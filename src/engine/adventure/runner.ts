@@ -478,9 +478,9 @@ function enterScene(ctx: RunContext, sceneId: string, result: StepResult, depth 
 export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, depth = 0): void {
   if (depth > 8) throw new AdventureError('Outcome chain too deep (goto/beat loop?)');
   const { state } = ctx;
+  const msgs = ctx.msgs ?? ENGLISH_MESSAGES;
   if (o.cost > 0) {
     if (state.hero.coins < o.cost) {
-      const msgs = ctx.msgs ?? ENGLISH_MESSAGES;
       result.facts.push(msgs.m('story.cantAfford', { coins: msgs.coins(o.cost) }));
       return;
     }
@@ -503,12 +503,12 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
   if (o.scar) {
     const scene = findScene(ctx.adventure, getProgress(state)?.sceneId ?? '');
     state.hero = giveScar(state.hero, { description: o.scar.description, ...(o.scar.location && { location: o.scar.location }), ...(o.scar.damageType && { damageType: o.scar.damageType }), origin: `${scene?.name ?? state.location.name}, ${ctx.adventure.name}`, at: state.time }, ctx.rng);
-    result.facts.push(`${state.hero.name} will carry a scar: ${scarText(state.hero.scars.at(-1)!)}.`);
+    result.facts.push(msgs.m('story.scar', { name: state.hero.name, scar: scarText(state.hero.scars.at(-1)!) }));
   }
-  for (const c of o.conditions) result.facts.push(...applyStoryCondition(state, c));
+  for (const c of o.conditions) result.facts.push(...applyStoryCondition(state, c, msgs));
   if (o.exhaustion) {
     for (const c of [state.hero, ...state.companions]) c.exhaustion = Math.max(0, Math.min(6, c.exhaustion + o.exhaustion));
-    result.facts.push(o.exhaustion > 0 ? `Exhaustion +${o.exhaustion}.` : `Exhaustion ${o.exhaustion}.`);
+    result.facts.push(msgs.m('story.exhaustion', { n: o.exhaustion > 0 ? `+${o.exhaustion}` : String(o.exhaustion) }));
   }
   for (const it of o.items) giveItem(state.hero, it.itemId, it.quantity, ctx.db, result);
   for (const it of o.removeItems) takeItem(state.hero, it.itemId, it.quantity, result);
@@ -560,7 +560,7 @@ function storyDamage(ctx: RunContext, d: NonNullable<Outcome['damage']>, result:
     const next: Character = { ...hit, hp, dead: false, deathSaves: hp === 0 ? { successes: 0, failures: 0, stable: true } : hit.deathSaves };
     if (c === state.hero) state.hero = next;
     else state.companions = state.companions.map((x) => (x.id === c.id ? next : x));
-    result.facts.push(`${c.name} takes ${c.hp - hp} ${d.type} damage${hp === 0 ? ' and falls unconscious' : ''}.`);
+    result.facts.push((ctx.msgs ?? ENGLISH_MESSAGES).m(hp === 0 ? 'story.damageDown' : 'story.damage', { name: c.name, amount: c.hp - hp, type: d.type }));
   }
 }
 
@@ -602,10 +602,9 @@ function storyRest(ctx: RunContext, kind: 'short' | 'long', result: StepResult):
   state.hero = rest(state.hero);
   state.companions = state.companions.map(rest);
   state.time += kind === 'short' ? TIME_COSTS.short_rest : TIME_COSTS.long_rest;
+  const { m } = ctx.msgs ?? ENGLISH_MESSAGES;
   result.facts.push(
-    kind === 'short'
-      ? `The party takes a short rest (1 hour).${state.hero.hp > before ? ` ${state.hero.name} recovers ${state.hero.hp - before} HP.` : ''}`
-      : 'The party takes a long rest (8 hours) and wakes restored.',
+    kind === 'long' ? m('story.longRest') : state.hero.hp > before ? m('story.shortRestHeal', { name: state.hero.name, hp: state.hero.hp - before }) : m('story.shortRest'),
   );
 }
 
@@ -622,27 +621,28 @@ export function recountTeeth(flags: GameState['flags']): void {
 /** Recruit / approval / parting outcomes applied straight away (lines go to `result.partyLog`). */
 function applyParty(ctx: RunContext, roster: CompanionRoster, o: Outcome, result: StepResult): void {
   const def = (id: string) => roster.companions.find((c) => c.id === id);
+  const msgs = ctx.msgs ?? ENGLISH_MESSAGES;
   const log = (line: string | undefined) => {
     if (line) (result.partyLog ??= []).push(line);
   };
   if (o.recruit) {
     const d = def(o.recruit);
-    if (d) log((ctx.db ? recruitCompanion(ctx.state, d, ctx.db) : recruitFlagsOnly(ctx.state, d, roster)).message);
+    if (d) log((ctx.db ? recruitCompanion(ctx.state, d, ctx.db, msgs) : recruitFlagsOnly(ctx.state, d, roster, msgs)).message);
   }
   for (const a of o.approval) {
     const d = def(a.companion);
-    if (d) log(changeApproval(ctx.state, d, a.delta));
+    if (d) log(changeApproval(ctx.state, d, a.delta, msgs));
   }
   if (o.companionLeaves) {
     const d = def(o.companionLeaves.id);
     if (d) {
       partWithCompanion(ctx.state, d, o.companionLeaves.status);
-      log(partingLine(d, o.companionLeaves.status));
+      log(partingLine(d, o.companionLeaves.status, msgs));
     }
   }
   if (o.companionReturns) {
     const d = def(o.companionReturns.id);
-    if (d) log(returnCompanion(ctx.state, d, roster, o.companionReturns.loyalty, ctx.db).message);
+    if (d) log(returnCompanion(ctx.state, d, roster, o.companionReturns.loyalty, ctx.db, msgs).message);
   }
 }
 
@@ -674,7 +674,7 @@ export function checkDeadlines(ctx: RunContext, result: StepResult, depth = 0): 
       applyOutcome(ctx, d.missed, result, depth + 1);
     } else if (d.warnAt !== undefined && left <= d.warnAt && !rec.warned) {
       rec.warned = true;
-      result.facts.push(d.warning ?? `Time is running short: ${d.text}`);
+      result.facts.push(d.warning ?? (ctx.msgs ?? ENGLISH_MESSAGES).m('story.deadline', { text: d.text }));
     }
   }
 }

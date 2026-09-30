@@ -22,6 +22,7 @@ import { applyDefeat, pickDefeatOutcome, recordFallen, type DefeatResult, type D
 import { activeGroups, getProgress, resolveEncounter, type RunContext, type StepResult } from './runner';
 import { scaleMonsters } from './encounters';
 import { playerControlled } from '../party/companions';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
 /** Bosses of an encounter: authored `bosses`, else its single most expensive monster type (if it outranks the rest). */
 export function bossesOf(def: AdventureEncounter, db: SrdDatabase): string[] {
@@ -87,9 +88,9 @@ export function startFight(ctx: RunContext, encounterId: string, rng: Rng, db: S
 }
 
 /** One hero action. Returns an error message when refused. */
-export function fightAct(state: GameState, action: PlayerAction, rng: Rng, db: SrdDatabase): string | undefined {
+export function fightAct(state: GameState, action: PlayerAction, rng: Rng, db: SrdDatabase, msgs: Messages = ENGLISH_MESSAGES): string | undefined {
   const f = activeFight(state);
-  if (!f) return 'There is no fight going on.';
+  if (!f) return msgs.m('fight.none');
   return playerAct(f.enc, { rng, db }, action);
 }
 
@@ -124,6 +125,7 @@ export function finishFight(ctx: RunContext, how: FightEnd, deps: { db: SrdDatab
   const f = activeFight(ctx.state);
   if (!f) throw new Error('There is no fight going on.');
   const { state } = ctx;
+  const msgs = ctx.msgs ?? ENGLISH_MESSAGES;
   syncParty(state, f.enc);
   delete state.extensions.combat;
   // Armor wear from the hits taken (A092).
@@ -135,7 +137,7 @@ export function finishFight(ctx: RunContext, how: FightEnd, deps: { db: SrdDatab
   let scarLines: string[] = [];
   if (marks.length) {
     const scene = ctx.adventure.chapters.flatMap((c) => c.scenes).find((s) => s.id === getProgress(state)?.sceneId);
-    const r = rollScars([state.hero, ...state.companions], marks, deps.rng, `${scene?.name ?? state.location.name}, ${ctx.adventure.name}`, state.time);
+    const r = rollScars([state.hero, ...state.companions], marks, deps.rng, `${scene?.name ?? state.location.name}, ${ctx.adventure.name}`, state.time, msgs);
     state.hero = r.party[0]!;
     state.companions = r.party.slice(1);
     scarLines = r.lines;
@@ -154,7 +156,7 @@ export function finishFight(ctx: RunContext, how: FightEnd, deps: { db: SrdDatab
     state.hero.dead = true;
     state.hero.hp = 0;
     recordFallen(state, state.hero, f.enc.log.at(-2) ?? 'fell in battle');
-    return { how, xp, step: { facts: [`${state.hero.name} has fallen.`], rolls: [], entered: [], items: [], coins: 0, xp: 0 }, heroDied: true, ...(scarLines.length && { scars: scarLines }) };
+    return { how, xp, step: { facts: [msgs.m('fight.fallen', { name: state.hero.name })], rolls: [], entered: [], items: [], coins: 0, xp: 0 }, heroDied: true, ...(scarLines.length && { scars: scarLines }) };
   }
 
   const def = ctx.adventure.encounters.find((e) => e.id === f.encounterId);
@@ -166,7 +168,7 @@ export function finishFight(ctx: RunContext, how: FightEnd, deps: { db: SrdDatab
     const regionId = deps.lore?.locations.find((l) => l.id === loc)?.regionId ?? ctx.adventure.regionId;
     const enemies = Object.values(f.enc.state.creatures).filter((c) => f.enc.roster[c.id] === 'enemy').map((c) => c.statBlockId ?? '');
     if (deps.defeats && !authoredLoss) {
-      defeat = applyDefeat(state, pickDefeatOutcome(deps.defeats, { ...(loc && { locationId: loc }), ...(regionId && { regionId }), enemies }, deps.db, state, deps.flags), { rng: deps.rng, ...(deps.lore && { lore: deps.lore }), ...(deps.flags && { flags: deps.flags }), ...(regionId && { regionId }) });
+      defeat = applyDefeat(state, pickDefeatOutcome(deps.defeats, { ...(loc && { locationId: loc }), ...(regionId && { regionId }), enemies }, deps.db, state, deps.flags), { rng: deps.rng, msgs, ...(deps.lore && { lore: deps.lore }), ...(deps.flags && { flags: deps.flags }), ...(regionId && { regionId }) });
     } else {
       // Authored defeat: the adventure says what happens; the hero still survives at 1 HP.
       state.hero.hp = Math.max(1, state.hero.hp);

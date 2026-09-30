@@ -58,3 +58,7 @@ There is no official Danish D&D 5e. These are the game's own choices; use them i
 | scar | ar | |
 | subclass | underklasse | |
 | Study / Influence | undersøg / påvirk | |
+| short rest / long rest | kort hvil / langt hvil | |
+| safe house | skjulested | companions wait there |
+| unconscious (prose) | bevidstløs | condition names stay SRD English until A149 |
+| approves / disapproves | bifalder / misbilliger | companion approval lines |

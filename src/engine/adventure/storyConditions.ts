@@ -8,6 +8,7 @@
 import type { Character } from '../core/creature';
 import type { Condition } from '../rules/basics';
 import type { GameState } from '../session/gameState';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
 export const STORY_SOURCE = 'story';
 
@@ -37,7 +38,9 @@ function update(state: GameState, id: string, fn: (c: Character) => Character): 
 const without = (condition: Condition) => (c: Character): Character => ({ ...c, conditions: c.conditions.filter((x) => !(x.condition === condition && x.sourceId === STORY_SOURCE)) });
 
 /** Applies one outcome condition change. Returns fact lines ("Mara is poisoned for 1 hour."). */
-export function applyStoryCondition(state: GameState, change: StoryConditionChange): string[] {
+export function applyStoryCondition(state: GameState, change: StoryConditionChange, msgs: Messages = ENGLISH_MESSAGES): string[] {
+  const { m } = msgs;
+  const condition = change.condition;
   const targets = change.target === 'party' ? [state.hero, ...state.companions] : [state.hero];
   const lines: string[] = [];
   let list = entries(state);
@@ -48,23 +51,23 @@ export function applyStoryCondition(state: GameState, change: StoryConditionChan
     if (change.remove) {
       if (!has) continue;
       update(state, t.id, without(change.condition));
-      lines.push(`${t.name} is no longer ${change.condition}.`);
+      lines.push(m('condition.off', { name: t.name, condition }));
       continue;
     }
     if (t.conditionImmunities.includes(change.condition)) {
-      lines.push(`${t.name} is immune to being ${change.condition}.`);
+      lines.push(m('condition.immune', { name: t.name, condition }));
       continue;
     }
     if (!has) update(state, t.id, (c) => ({ ...c, conditions: [...c.conditions, { condition: change.condition, sourceId: STORY_SOURCE }] }));
     if (change.minutes) list.push({ creatureId: t.id, condition: change.condition, until: state.time + change.minutes });
-    lines.push(`${t.name} is ${change.condition}${change.minutes ? ` for ${duration(change.minutes)}` : ''}.`);
+    lines.push(change.minutes ? m('condition.onFor', { name: t.name, condition, duration: duration(change.minutes, msgs) }) : m('condition.on', { name: t.name, condition }));
   }
   state.extensions.storyConditions = list;
   return lines;
 }
 
 /** Ends timed story conditions whose time is up. Returns one line per ended condition. */
-export function expireStoryConditions(state: GameState): string[] {
+export function expireStoryConditions(state: GameState, msgs: Messages = ENGLISH_MESSAGES): string[] {
   const list = entries(state);
   if (!list.length) return [];
   const lines: string[] = [];
@@ -77,17 +80,16 @@ export function expireStoryConditions(state: GameState): string[] {
     const who = state.hero.id === e.creatureId ? state.hero : state.companions.find((c) => c.id === e.creatureId);
     if (who?.conditions.some((x) => x.condition === e.condition && x.sourceId === STORY_SOURCE)) {
       update(state, e.creatureId, without(e.condition));
-      lines.push(`${who.name} is no longer ${e.condition}.`);
+      lines.push(msgs.m('condition.off', { name: who.name, condition: e.condition }));
     }
   }
   state.extensions.storyConditions = keep;
   return lines;
 }
 
-/** 90 → "1 hour 30 minutes". */
-export function duration(minutes: number): string {
+/** 90 → "1 hour 30 minutes" (Danish "1 time 30 minutter"). */
+export function duration(minutes: number, msgs: Messages = ENGLISH_MESSAGES): string {
   const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  const part = (n: number, unit: string) => `${n} ${unit}${n === 1 ? '' : 's'}`;
-  return [h && part(h, 'hour'), m && part(m, 'minute')].filter(Boolean).join(' ');
+  const min = minutes % 60;
+  return [h && msgs.mn('time.hours', h), min && msgs.mn('time.minutes', min)].filter(Boolean).join(' ');
 }
