@@ -1,0 +1,4592 @@
+{
+  "$source": "data/adventures/arc1/ch3_the_gilded_lie.json",
+  "strings": {
+    "name": {
+      "hash": "e165c76b",
+      "text": "Den forgyldte løgn"
+    },
+    "summary": {
+      "hash": "fcef9182",
+      "text": "Kapitel 3 af Vashkuls Syv Tænder. Sporet af pestkorn fører til Highcrowns gyldne saloner og Den Kongelige Almisseforvalter, lady Seraphine Vell. Helten må samle beviser mod hende, nå Himmeltanden og den tabte lanse Daggrybryderen i Gamle Vaelthorn før Vosk den Hule, overleve Korets snigmordere på Dawnspire og afsløre Kantoren ved hendes egen midsommermaskerade – og derefter vælge mellem at redde den forgiftede dronning og at forfølge Kantoren."
+    },
+    "chapters/gilded_lie/name": {
+      "hash": "e165c76b",
+      "text": "Den forgyldte løgn"
+    },
+    "chapters/gilded_lie/summary": {
+      "hash": "41a21aaf",
+      "text": "Hofintriger i Aurelmark: almisseforvalteren, lansen, maskeraden og den forgiftede dronning."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/name": {
+      "hash": "81cbe460",
+      "text": "Audiens i Tårnhallen"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/seed": {
+      "hash": "401b1ba8",
+      "text": "Highcrown klatrer op ad sin bakke i hvide terrasser med den gyldne krones bannere på hvert tårn. I Tårnhallen holder dronning Isolde Varannis audiens under et loft, der er malet med Daggrylansens gamle sejre. Ved hendes side står lady Seraphine Vell, Den Kongelige Almisseforvalter, i enkel grå dragt, elsket af hver eneste tigger i den nedre by."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/0/seed": {
+      "hash": "bc390469",
+      "text": "Efterlysningsplakater med dit ansigt er klistret op ved Dronningeporten, og en ridder fra vagten kigger på hvert ansigt i køen."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/1/seed": {
+      "hash": "6d072f55",
+      "text": "Du er inden for murene, men du er stadig et efterlyst ansigt i Highcrown."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/2/seed": {
+      "hash": "c53bb3a4",
+      "text": "Sumpflygtninge fra det brændte Hollowmere lejrer sig under den nedre port, og Almisseembedet bespiser dem først."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/3/seed": {
+      "hash": "0e3706bb",
+      "text": "Råbere på torvet gentager nyheden fra sumpen: Hollowmere blev kureret, ikke brændt."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/4/seed": {
+      "hash": "87da31ad",
+      "text": "En vimpel fra Saltwind-kompagniet vajer over havnelaugets hal; Kompagniet har skrevet i forvejen for at rose dig."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/5/seed": {
+      "hash": "f0526342",
+      "text": "Hofmændene hvisker, at du har sejlet med Red Gull-pirater. Kammerherre Hale har ikke taget øjnene fra dig."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/6/seed": {
+      "hash": "5462b355",
+      "text": "Flyveblade på torvet fortæller, hvordan guvernør Pell blev afsløret i Port Sorrel, og nogle af dem nævner dit navn."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/7/seed": {
+      "hash": "57069dd7",
+      "text": "Et rygte på kajen siger, at Harrow Veys grå skib er set på floden neden for byen."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/8/seed": {
+      "hash": "a1622074",
+      "text": "Du har hørt Korets hymne nynnet i den nedre by to gange i dag. Koret står stærkere her, end nogen vil indrømme."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/9/seed": {
+      "hash": "e7a7a441",
+      "text": "Ser Corwin retter på sin afskedigede riddervåbenkjortel, hver gang et af Daggrylansens bannere kommer forbi."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/10/seed": {
+      "hash": "adee4158",
+      "text": "Nettle stirrer vredt på marmoret, som om det skylder sumpen penge."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/11/seed": {
+      "hash": "f39057d4",
+      "text": "Rook beundrer hofmændenes pengepunge med faglig interesse."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/12/seed": {
+      "hash": "e5a96620",
+      "text": "Det kongelige brev i dit bælte åbner døre over hele byen."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/13/seed": {
+      "hash": "c38f0747",
+      "text": "Kammerherre Hale har fået dit navn skrevet på listen over personer, der skal holdes øje med."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/14/seed": {
+      "hash": "b8f5c77a",
+      "text": "Kammerherre Hale nikker til dig tværs over hallen som en mand, der er blevet betalt – eller smigret."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/15/seed": {
+      "hash": "c88e256a",
+      "text": "En smager står nu bag dronningens stol, og hoffet hvisker om det."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/variants/16/seed": {
+      "hash": "acac86f5",
+      "text": "Døren til Almisseembedets bibliotek forbliver lukket. Aurek er ikke kommet ned, siden du skræmte ham."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/onEnter/text": {
+      "hash": "3c3bc00b",
+      "text": "Dronning Isoldes tilsigelse har bragt dig til Highcrown, den hvide hovedstad. Hoffet vil modtage dig i Tårnhallen."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/gate_bluff/label": {
+      "hash": "95220c93",
+      "text": "Bluf dig forbi portvagten"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/gate_bluff/keywords": {
+      "hash": "8e5b6483",
+      "text": [
+        "bluf",
+        "bluffe",
+        "lyv",
+        "lyve",
+        "porten",
+        "port",
+        "bedrag",
+        "forklædning",
+        "forklæd"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/gate_bluff/check/success/text": {
+      "hash": "59ebca90",
+      "text": "Du er uldhandler fra Brightwater med en slem hoste, og ridderen vinker dig igennem, før du når at hoste på ham."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/gate_bluff/check/failure/text": {
+      "hash": "cff2c070",
+      "text": "Ridderen sammenligner dit ansigt med plakaten – to gange. \"Grib dem.\""
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/gate_sneak/label": {
+      "hash": "9f9ad758",
+      "text": "Smut ind med en vinvogn"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/gate_sneak/keywords": {
+      "hash": "a3fc63af",
+      "text": [
+        "snig",
+        "snige",
+        "snigen",
+        "vogn",
+        "vognen",
+        "vinvogn",
+        "porten",
+        "gem",
+        "skjul"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/gate_sneak/check/success/text": {
+      "hash": "ae743663",
+      "text": "Du kører ind i Highcrown under en presenning og tre fade Brightwater-rødvin."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/gate_sneak/check/failure/text": {
+      "hash": "08656dc9",
+      "text": "En vagt prikker til presenningen med sin hellebard og finder dig under den."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/gate_corwin/label": {
+      "hash": "8ee5f677",
+      "text": "Lad ser Corwin gå i god for dig"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/gate_corwin/keywords": {
+      "hash": "cc65d3f4",
+      "text": [
+        "corwin",
+        "god",
+        "ridder",
+        "ridderen",
+        "porten"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/gate_corwin/outcome/text": {
+      "hash": "64a074ef",
+      "text": "Corwin giver vagtridderen sit navn og sit ord. Ridderen tjente engang under ham, og porten åbnes."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/gate_fight/label": {
+      "hash": "a0212fc8",
+      "text": "Kæmp dig vej gennem Dronningeporten"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/gate_fight/keywords": {
+      "hash": "b5fb56bd",
+      "text": [
+        "kæmp",
+        "kæmpe",
+        "angrib",
+        "slås",
+        "tving",
+        "porten",
+        "gennembrud"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/gate_fight/outcome/text": {
+      "hash": "0b7f4c16",
+      "text": "Du trækker blankt i Dronningeporten. Vagten rykker ind på dig."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/jail_bribe/label": {
+      "hash": "5557b7f8",
+      "text": "Bestik en slutter (150 gm)"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/jail_bribe/keywords": {
+      "hash": "98709c47",
+      "text": [
+        "bestik",
+        "bestikke",
+        "betal",
+        "slutter",
+        "slutteren",
+        "guld"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/jail_bribe/outcome/text": {
+      "hash": "0c168515",
+      "text": "Hundrede og halvtreds guldmønter køber en glemt dør og en slutter med dårlig hukommelse."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/jail_break/label": {
+      "hash": "b5ddaa74",
+      "text": "Bryd ud af Highcrowns fangehuller"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/jail_break/keywords": {
+      "hash": "7c6ff9d4",
+      "text": [
+        "bryd",
+        "flygt",
+        "undslip",
+        "tremmer",
+        "tremmerne",
+        "atletik"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/jail_break/check/success/text": {
+      "hash": "25827ae1",
+      "text": "Du vrider en rusten tremme løs og kravler ud gennem et afløb til den nedre by."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/jail_break/check/failure/text": {
+      "hash": "4e3bb1c2",
+      "text": "Tremmerne holder. En vagt slår sine nøgler mod dem for at være sikker på, at du ved det."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/jail_wait/label": {
+      "hash": "143400e0",
+      "text": "Vent på, at dronningen hører din sag"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/jail_wait/keywords": {
+      "hash": "efc355f4",
+      "text": [
+        "vent",
+        "vente",
+        "høring",
+        "rettergang",
+        "dronningen",
+        "dronning"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/jail_wait/outcome/text": {
+      "hash": "f28e1466",
+      "text": "Tre dage i en celle i Highcrown, og så fører to vagter dig til Tårnhallen for at forsvare din sag i lænker."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/attend_audience/label": {
+      "hash": "b7e57008",
+      "text": "Deltag i dronningens audiens"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/attend_audience/keywords": {
+      "hash": "bcd09ae7",
+      "text": [
+        "audiens",
+        "audiensen",
+        "dronningen",
+        "isolde",
+        "hoffet",
+        "hallen"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/attend_audience/outcome/text": {
+      "hash": "e34cf90a",
+      "text": "Dronning Isolde hører din beretning om Koret og Tænderne uden at afbryde én eneste gang. Lady Seraphine tilbyder \"Almisseembedets fulde hjælp\" og spørger meget blidt, om du ville lade Almisseembedet opbevare nogle af Tænderne \"i sikker forvaring\". Dronningens spejdere melder om Korets klatrere på himmeltårnene i Gamle Vaelthorn, hvor lansen Daggrybryderen gik tabt."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/request_warrant/label": {
+      "hash": "ac7c2809",
+      "text": "Bed dronningen om et kongeligt brev til at efterforske"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/request_warrant/keywords": {
+      "hash": "92b8a9f9",
+      "text": [
+        "brev",
+        "brevet",
+        "fuldmagt",
+        "efterforsk",
+        "efterforske",
+        "overtal",
+        "myndighed"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/request_warrant/check/success/text": {
+      "hash": "c600d374",
+      "text": "Isolde underskriver og forsegler med egen hånd et kongeligt brev: hver dør i riget skal åbnes for dig, så længe denne undersøgelse varer."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/request_warrant/check/failure/text": {
+      "hash": "d55d5912",
+      "text": "Kammerherre Hale minder dronningen om, at kongelige breve \"ikke er for fremmede\", og din anmodning sendes til et udvalg."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/request_warrant/check/advantageIf/0/source": {
+      "hash": "1ee6affa",
+      "text": "Kammerherre Hale taler for dig"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/request_warrant/check/advantageIf/1/source": {
+      "hash": "d917d6df",
+      "text": "Kammerherre Hale holder sin mund"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/request_warrant/check/disadvantageIf/0/source": {
+      "hash": "3e15ea7e",
+      "text": "Kammerherre Hale taler imod dig"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/request_warrant_suspect/label": {
+      "hash": "648ec88c",
+      "text": "Bed dronningen om et kongeligt brev trods piratrygterne"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/request_warrant_suspect/keywords": {
+      "hash": "92b8a9f9",
+      "text": [
+        "brev",
+        "brevet",
+        "fuldmagt",
+        "efterforsk",
+        "efterforske",
+        "overtal",
+        "myndighed"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/request_warrant_suspect/check/success/text": {
+      "hash": "f2b80209",
+      "text": "Dronningen betragter dig længe og underskriver så brevet alligevel. \"Red Gull-folkene skylder mig en flåde. Måske bliver det dig, der inddriver den.\""
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/request_warrant_suspect/check/failure/text": {
+      "hash": "8bd719ca",
+      "text": "\"En pirateven beder mig om et kongeligt brev,\" siger Hale ud i luften. Dronningen afslår."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/request_warrant_suspect/check/advantageIf/0/source": {
+      "hash": "1ee6affa",
+      "text": "Kammerherre Hale taler for dig"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/request_warrant_suspect/check/advantageIf/1/source": {
+      "hash": "d917d6df",
+      "text": "Kammerherre Hale holder sin mund"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/request_warrant_suspect/check/disadvantageIf/0/source": {
+      "hash": "3e15ea7e",
+      "text": "Kammerherre Hale taler imod dig"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/plead_pardon/label": {
+      "hash": "3ed8e3b2",
+      "text": "Bed dronningen om benådning"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/plead_pardon/keywords": {
+      "hash": "58595746",
+      "text": [
+        "benådning",
+        "bønfald",
+        "nåde",
+        "fredløs",
+        "overtal"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/plead_pardon/check/success/text": {
+      "hash": "d0414202",
+      "text": "Isolde stryger dit navn af efterlysningslisterne med ét pennestrøg. \"Gør dig fortjent til det,\" siger hun."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/plead_pardon/check/failure/text": {
+      "hash": "d32b2200",
+      "text": "Dronningen vil ikke benåde dig, men hun lader dig gå ud af sin hal. Én gang."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/plead_pardon/check/advantageIf/0/source": {
+      "hash": "1ee6affa",
+      "text": "Kammerherre Hale taler for dig"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/plead_pardon/check/advantageIf/1/source": {
+      "hash": "d917d6df",
+      "text": "Kammerherre Hale holder sin mund"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/plead_pardon/check/disadvantageIf/0/source": {
+      "hash": "3e15ea7e",
+      "text": "Kammerherre Hale taler imod dig"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/plead_pardon_suspect/label": {
+      "hash": "8e82a9ed",
+      "text": "Bed dronningen om benådning trods piratrygterne"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/plead_pardon_suspect/keywords": {
+      "hash": "58595746",
+      "text": [
+        "benådning",
+        "bønfald",
+        "nåde",
+        "fredløs",
+        "overtal"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/plead_pardon_suspect/check/success/text": {
+      "hash": "9fc67a6c",
+      "text": "Mod alle kammerherrens råd stryger Isolde dit navn af efterlysningslisterne. \"Gør dig fortjent til det.\""
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/plead_pardon_suspect/check/failure/text": {
+      "hash": "012138a7",
+      "text": "En fredløs, der sejler med pirater, beder om nåde? Dronningen lader dig gå ud af sin hal. Én gang."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/plead_pardon_suspect/check/advantageIf/0/source": {
+      "hash": "1ee6affa",
+      "text": "Kammerherre Hale taler for dig"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/plead_pardon_suspect/check/advantageIf/1/source": {
+      "hash": "d917d6df",
+      "text": "Kammerherre Hale holder sin mund"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/plead_pardon_suspect/check/disadvantageIf/0/source": {
+      "hash": "3e15ea7e",
+      "text": "Kammerherre Hale taler imod dig"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/study_seraphine/label": {
+      "hash": "93615ffe",
+      "text": "Hold nøje øje med lady Seraphine"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/study_seraphine/keywords": {
+      "hash": "987c8db6",
+      "text": [
+        "indsigt",
+        "iagttag",
+        "betragt",
+        "seraphine",
+        "almisseforvalteren",
+        "studer"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/study_seraphine/check/success/text": {
+      "hash": "4c24cc67",
+      "text": "Seraphines blik glider hen på din oppakning, hver gang Tænderne nævnes, og hendes venlighed når aldrig helt op i øjnene. Hun er alt for interesseret i Tænderne."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/study_seraphine/check/failure/text": {
+      "hash": "ec39fd9a",
+      "text": "Du ser kun en træt, venlig kvinde, der har bespist halvdelen af riget."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/entrust_tooth/label": {
+      "hash": "31979592",
+      "text": "Betro Almisseembedet en Tand til sikker forvaring"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/entrust_tooth/keywords": {
+      "hash": "a462c51b",
+      "text": [
+        "betro",
+        "giv",
+        "tand",
+        "tanden",
+        "almisseembedet",
+        "forvaring"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/entrust_tooth/outcome/text": {
+      "hash": "6d4efe3c",
+      "text": "Seraphine tager imod Tanden med begge hænder, som var den et barn, og en skriver bærer den bort til Almisseembedets hvælvinger. \"Den vil være helt i sikkerhed hos mig,\" siger hun."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/talk_aurek/label": {
+      "hash": "785b7231",
+      "text": "Lyt til den unge lærde Aurek Vell"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/talk_aurek/keywords": {
+      "hash": "784f8929",
+      "text": [
+        "aurek",
+        "lærde",
+        "lærd",
+        "målinger",
+        "tal",
+        "snak",
+        "overtal",
+        "hverv"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/talk_aurek/check/success/text": {
+      "hash": "9e999bb1",
+      "text": "Aurek taler i fodnoter om \"mærkelige målinger\" i sin tantes bibliotek, og til sidst har han meget høfligt spurgt, om han må tage med dig."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/talk_aurek/check/failure/text": {
+      "hash": "6953168f",
+      "text": "Aurek mister modet midt i en sætning, undskylder og trækker sig tilbage til Almisseembedets bibliotek. Måske kan han overtales af noget, han kan studere."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/talk_aurek_suspect/label": {
+      "hash": "785b7231",
+      "text": "Lyt til den unge lærde Aurek Vell"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/talk_aurek_suspect/keywords": {
+      "hash": "784f8929",
+      "text": [
+        "aurek",
+        "lærde",
+        "lærd",
+        "målinger",
+        "tal",
+        "snak",
+        "overtal",
+        "hverv"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/talk_aurek_suspect/check/success/text": {
+      "hash": "38aa8c99",
+      "text": "Aurek har hørt, at du sejler med pirater, og har besluttet, at det er \"ganske spændende\". Han spørger, om han må tage med dig."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/talk_aurek_suspect/check/failure/text": {
+      "hash": "b2b74564",
+      "text": "Aurek er for nervøs for en piratven til at sige ret meget. Måske kan han overtales af noget, han kan studere."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/show_tooth_aurek/label": {
+      "hash": "8ddee949",
+      "text": "Vis Aurek en Tand"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/show_tooth_aurek/keywords": {
+      "hash": "7854abd2",
+      "text": [
+        "vis",
+        "tand",
+        "tanden",
+        "aurek"
+      ]
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/actions/show_tooth_aurek/outcome/text": {
+      "hash": "f2cf8dae",
+      "text": "\"Den står i min tantes bøger!\" Aurek glemmer helt at være genert. Nu vil han ikke slippe Tanden af syne, og han tager med dig."
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/exits/to_deepanvil/label": {
+      "hash": "3d05f7e0",
+      "text": "Tag bjergvejen til Deepanvil Hold"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/exits/to_vaelthorn/label": {
+      "hash": "3a340949",
+      "text": "Rid mod Ruinerne af Gamle Vaelthorn"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/exits/to_dawnspire/label": {
+      "hash": "e9eaed86",
+      "text": "Rid til Dawnspire-borgen"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/exits/to_masque/label": {
+      "hash": "00ee8494",
+      "text": "Gå til almisseforvalterens midsommermaskerade"
+    },
+    "chapters/gilded_lie/scenes/highcrown_audience/revisitSeed": {
+      "hash": "3d37ac6f",
+      "text": [
+        "Tårnhallen igen, lys af bannere og hviskende hofmænd.",
+        "Tilbage mellem Highcrowns hvide terrasser, hvor hvert ansigt i Tårnhallen synes at huske dit."
+      ]
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/name": {
+      "hash": "3c04c385",
+      "text": "Deepanvils tællehaller"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/seed": {
+      "hash": "e621f2a5",
+      "text": "Deepanvil Hold genlyder af hammerslag og klapren fra kugleramme. I Jernhvælv-konsortiets tællehal fører laugsmester Brunhild Ashgrove Kronens gæld i jernbeslåede regnskabsbøger, og hun holder dem lukkede."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/variants/0/seed": {
+      "hash": "6d963081",
+      "text": "Ashgrove har en liste over Red Gull-plyndringer af konsortiets malmskibe, og dit navn står nederst på den."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/variants/1/seed": {
+      "hash": "76d5d613",
+      "text": "En faktor fra Saltwind står ved Ashgroves albue, og han hilser dig som en ven af Kompagniet."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/variants/2/seed": {
+      "hash": "ed38ac38",
+      "text": "Laugsmesteren betragter dit kongelige brev, som en smed betragter en revnet klinge."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/variants/3/seed": {
+      "hash": "705dd4b2",
+      "text": "Minearbejderne skåler for dig i kroen: den forseglede dybe mine er åben igen."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/variants/4/seed": {
+      "hash": "b9eb3fe8",
+      "text": "Almisseembedets gæld ligger åben på bordet, opgjort med din håndskrift."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/variants/5/seed": {
+      "hash": "38f3f8eb",
+      "text": "Skriverne bliver tavse, når du kommer ind; de hørte alle laugsmesteren smide dig ud."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/onEnter/text": {
+      "hash": "e80f8da9",
+      "text": "Ashgrove vil gerne tale om Almisseembedets lån, men hun åbner kun regnskabsbøgerne, hvis Kronens forfaldne gæld bliver betalt – eller for en tjeneste: \"gravere i sort\" er brudt ind i den forseglede dybe mine, og konsortiet vil have den tilbage."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/pay_restitution/label": {
+      "hash": "e4c4300b",
+      "text": "Betal konsortiet 300 gm i erstatning for Red Gull-plyndringerne"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/pay_restitution/keywords": {
+      "hash": "20323784",
+      "text": [
+        "betal",
+        "erstatning",
+        "guld",
+        "gæld",
+        "gælden"
+      ]
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/pay_restitution/outcome/text": {
+      "hash": "7470514f",
+      "text": "Tre hundrede guldmønter, talt to gange. Ashgrove skriver \"afregnet\" i marginen, og nu vil hun handle med dig."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/argue_restitution/label": {
+      "hash": "8c1d8741",
+      "text": "Argumentér for, at du intet skylder konsortiet"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/argue_restitution/keywords": {
+      "hash": "540422ed",
+      "text": [
+        "argumentér",
+        "diskuter",
+        "overtal",
+        "erstatning",
+        "skylder"
+      ]
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/argue_restitution/check/success/text": {
+      "hash": "53a052e1",
+      "text": "Du påpeger, at Red Gull-folkene sænkede Korets skibe, ikke konsortiets, og beviser det. Ashgrove brummer og stryger linjen."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/argue_restitution/check/failure/text": {
+      "hash": "6554b17d",
+      "text": "\"Mønt først, snak bagefter,\" siger laugsmesteren og vender sig mod sine regnskabsbøger igen."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/argue_restitution/check/advantageIf/0/source": {
+      "hash": "f17942ac",
+      "text": "Du bærer dronningens eget brev"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/saltwind_credit/label": {
+      "hash": "7645fb64",
+      "text": "Fremvis Saltwind-kompagniets kreditbrev"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/saltwind_credit/keywords": {
+      "hash": "8a8a64b4",
+      "text": [
+        "saltwind",
+        "kredit",
+        "kreditbrev",
+        "brev",
+        "kompagniet",
+        "gæld"
+      ]
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/saltwind_credit/outcome/text": {
+      "hash": "71f84e67",
+      "text": "Kompagniet garanterer for Kronens restancer i dit navn. Ashgrove, som aldrig siger nej til godt papir, låser regnskabsbøgerne op."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/clear_mine/label": {
+      "hash": "087caa9f",
+      "text": "Ryd den forseglede dybe mine for konsortiet"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/clear_mine/keywords": {
+      "hash": "8a46f02a",
+      "text": [
+        "mine",
+        "minen",
+        "tjeneste",
+        "ryd",
+        "gravere",
+        "kæmp"
+      ]
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/clear_mine/outcome/text": {
+      "hash": "7b146329",
+      "text": "Minearbejdere fire dig ned i den forseglede dybe mine. Væsner uden øjne venter i mørket, og noget æder af skinnerne."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/persuade_books/label": {
+      "hash": "a997bd65",
+      "text": "Overtal Ashgrove til at åbne regnskabsbøgerne"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/persuade_books/keywords": {
+      "hash": "02ee0cf6",
+      "text": [
+        "overtal",
+        "regnskabsbøgerne",
+        "bøgerne",
+        "bøger",
+        "åbn"
+      ]
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/persuade_books/check/success/text": {
+      "hash": "94ad124f",
+      "text": "Du overbeviser Ashgrove om, at Almisseembedets gæld også er en fare for konsortiet. Hun åbner selv regnskabsbøgerne."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/persuade_books/check/failure/text": {
+      "hash": "cc88da50",
+      "text": "\"Konsortiets bøger er konsortiets sag,\" siger Ashgrove."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/persuade_books/check/advantageIf/0/source": {
+      "hash": "e124915c",
+      "text": "Ashgrove er bange for Almisseembedets lån"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/persuade_books/check/advantageIf/1/source": {
+      "hash": "f17942ac",
+      "text": "Du bærer dronningens eget brev"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/persuade_books/check/disadvantageIf/0/source": {
+      "hash": "01264b6c",
+      "text": "Ashgrove har allerede smidt dig ud én gang"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/warrant_books/label": {
+      "hash": "aada0edf",
+      "text": "Åbn regnskabsbøgerne med det kongelige brev"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/warrant_books/keywords": {
+      "hash": "17f3f649",
+      "text": [
+        "brev",
+        "brevet",
+        "regnskabsbøgerne",
+        "bøgerne",
+        "ordre",
+        "kronen"
+      ]
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/warrant_books/check/success/text": {
+      "hash": "8827053e",
+      "text": "Dronningens segl åbner regnskabsbøgerne. Ashgrove vil ikke glemme, at du brugte det mod hende."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/warrant_books/check/failure/text": {
+      "hash": "616d3c5e",
+      "text": "Ashgrove læser brevet og spørger, hvilken paragraf der forpligter et dværgelaug til noget som helst. Du kan ikke finde nogen."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/warrant_books/check/advantageIf/0/source": {
+      "hash": "f17942ac",
+      "text": "Du bærer dronningens eget brev"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/take_thrower/label": {
+      "hash": "7d8c04f1",
+      "text": "Tag konsortiets belønning: en dværgisk krigshammer"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/take_thrower/keywords": {
+      "hash": "d5cf0e15",
+      "text": [
+        "kastehammer",
+        "hammer",
+        "hammeren",
+        "krigshammer",
+        "belønning",
+        "belønningen"
+      ]
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/take_thrower/outcome/text": {
+      "hash": "8cc87dd2",
+      "text": "Ashgrove overrækker dig en dværgisk kastehammer fra Jernhvælvets rustkammer med runer, der stadig er varme fra essen."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/take_armor/label": {
+      "hash": "e00cee98",
+      "text": "Tag konsortiets belønning: en rustning af adamantin"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/take_armor/keywords": {
+      "hash": "1c968c1d",
+      "text": [
+        "rustning",
+        "rustningen",
+        "adamantin",
+        "belønning",
+        "belønningen"
+      ]
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/take_armor/outcome/text": {
+      "hash": "dc8ce311",
+      "text": "Ashgroves smede tilpasser dig en rustning af adamantin, lige så fin som noget andet i Jernhvælvet."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/study_ledgers/label": {
+      "hash": "46fb9c79",
+      "text": "Gennemgå Almisseembedets regnskabsbøger"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/study_ledgers/keywords": {
+      "hash": "e485b35f",
+      "text": [
+        "studer",
+        "gennemgå",
+        "regnskabsbøgerne",
+        "bøgerne",
+        "undersøg",
+        "penge",
+        "pengene",
+        "spor",
+        "sporet"
+      ]
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/study_ledgers/check/success/text": {
+      "hash": "88ef0290",
+      "text": "Når du først ser det, fortæller regnskabsbøgerne det ligeud: Almisseembedet har lånt en formue med det kongelige segl som sikkerhed, og pengene går til kornfaktorer i Port Sorrel og til \"udgravninger i de dybe miner\" foretaget af mænd i sort. Almisseforvalterens egen underskrift står på hver eneste veksel."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/study_ledgers/check/failure/text": {
+      "hash": "62bf624c",
+      "text": "Regnskabsbøgerne er et krat af dværgisk bogholderi. Du får brug for hjælp til at læse dem."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/study_ledgers/check/advantageIf/0/source": {
+      "hash": "32f06c51",
+      "text": "Du sammenholder med Korets regnskabsbog"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/study_ledgers_warrant/label": {
+      "hash": "eb7f32b3",
+      "text": "Revidér Almisseembedets regnskabsbøger med det kongelige brev"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/study_ledgers_warrant/keywords": {
+      "hash": "799bed1a",
+      "text": [
+        "studer",
+        "gennemgå",
+        "regnskabsbøgerne",
+        "bøgerne",
+        "undersøg",
+        "penge",
+        "pengene",
+        "spor",
+        "sporet",
+        "revidér",
+        "revision"
+      ]
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/study_ledgers_warrant/check/success/text": {
+      "hash": "88ef0290",
+      "text": "Når du først ser det, fortæller regnskabsbøgerne det ligeud: Almisseembedet har lånt en formue med det kongelige segl som sikkerhed, og pengene går til kornfaktorer i Port Sorrel og til \"udgravninger i de dybe miner\" foretaget af mænd i sort. Almisseforvalterens egen underskrift står på hver eneste veksel."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/study_ledgers_warrant/check/failure/text": {
+      "hash": "62bf624c",
+      "text": "Regnskabsbøgerne er et krat af dværgisk bogholderi. Du får brug for hjælp til at læse dem."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/study_ledgers_warrant/check/advantageIf/0/source": {
+      "hash": "32f06c51",
+      "text": "Du sammenholder med Korets regnskabsbog"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/clerk_help/label": {
+      "hash": "f69e621d",
+      "text": "Hyr en skriver fra konsortiet til at føre dig gennem regnskabsbøgerne"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/clerk_help/keywords": {
+      "hash": "83e6845d",
+      "text": [
+        "skriver",
+        "skriveren",
+        "hjælp",
+        "hyr",
+        "regnskabsbøgerne"
+      ]
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/actions/clerk_help/outcome/text": {
+      "hash": "2d91b2bc",
+      "text": "En tålmodig gammel skriver bruger det meste af en dag på det. Når du først ser det, fortæller regnskabsbøgerne det ligeud: Almisseembedet har lånt en formue med det kongelige segl som sikkerhed, og pengene går til kornfaktorer i Port Sorrel og til \"udgravninger i de dybe miner\" foretaget af mænd i sort. Almisseforvalterens egen underskrift står på hver eneste veksel."
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/exits/to_highcrown/label": {
+      "hash": "f75b2f03",
+      "text": "Vend tilbage til Highcrown"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/exits/to_vaelthorn/label": {
+      "hash": "b9c1eaa3",
+      "text": "Tag den gamle kejservej til Vaelthorn"
+    },
+    "chapters/gilded_lie/scenes/deepanvil_ledgers/revisitSeed": {
+      "hash": "a0c6a20e",
+      "text": "Deepanvils tællehaller igen: klapren fra kuglerammer og lugten af lampeolie."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/name": {
+      "hash": "0fb7e637",
+      "text": "Himmeltårnene i Gamle Vaelthorn"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/seed": {
+      "hash": "d125d013",
+      "text": "Det gamle kejserriges knækkede himmeltårne læner sig ind over en dal af hvid murbrokker, forbundet af broer, der ikke længere helt mødes. Konstrukter vandrer stadig på terrasserne i ærinder, der har været kolde i århundreder. Øverst venter Edernes Hvælving, hvor de første edsriddere forseglede en Tand under deres hellige lanse."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/variants/0/seed": {
+      "hash": "3b7b3dc5",
+      "text": "En rebstige dingler fra det vestlige tårn: Vosk den Hule og hans kultister klatrer allerede."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/variants/1/seed": {
+      "hash": "95edb1d6",
+      "text": "Du kommer for sent. Edernes Hvælving står åben og tom, og Korets hymnetegn er tegnet med kridt på døren."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/variants/2/seed": {
+      "hash": "80d12b4f",
+      "text": "Tårnenes værn er mørke nu, og runerne er blevet grå."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/variants/3/seed": {
+      "hash": "3215207e",
+      "text": "Vosks kultister har smadret konstrukterne og brudt Himmeltanden og den store lanse ud af hvælvingen med kæder."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/variants/4/seed": {
+      "hash": "98de8ff8",
+      "text": "Ser Corwin er meget stille. Han kender hver udskæring på disse tårne fra Ordenens sange."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/variants/5/seed": {
+      "hash": "5db35820",
+      "text": "Aurek skitserer værnerunerne, så hurtigt han kan klatre."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/onEnter/text": {
+      "hash": "a85a8586",
+      "text": "Du når foden af himmeltårnene. Vejen op er en klatring op ad to knækkede tårne og over en bro imellem dem."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/climb_first/label": {
+      "hash": "7decab7b",
+      "text": "Klatr op til den første himmelbro"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/climb_first/keywords": {
+      "hash": "9d95fa29",
+      "text": [
+        "klatr",
+        "klatre",
+        "tårn",
+        "tårnet",
+        "atletik",
+        "bro",
+        "broen"
+      ]
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/climb_first/check/success/text": {
+      "hash": "0a969f84",
+      "text": "Du hiver dig op ad efeuen og ud på den første himmelbro. Langt nede kan du høre Korets klatrere."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/climb_first/check/failure/text": {
+      "hash": "6a41036f",
+      "text": "Et greb smuldrer, og du falder to etager ned på broen nedenunder. Faldet flækker dit øjenbryn; det vil give ar. Vosks klatrere kommer forbi dig."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/climb_first/check/failure/scar/description": {
+      "hash": "756b3159",
+      "text": "et fald fra Vaelthorns himmeltårne"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/climb_second/label": {
+      "hash": "83de471f",
+      "text": "Klatr op ad det sidste knækkede tårn til Edernes Hvælving"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/climb_second/keywords": {
+      "hash": "9d95fa29",
+      "text": [
+        "klatr",
+        "klatre",
+        "tårn",
+        "tårnet",
+        "atletik",
+        "bro",
+        "broen"
+      ]
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/climb_second/check/success/text": {
+      "hash": "fd8ea3e4",
+      "text": "Du når Edernes Hvælving før Koret. Intet har forstyrret støvet her i århundreder."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/climb_second/check/failure/text": {
+      "hash": "9d083e1c",
+      "text": "Tårnet ryster dig af ned på en afsats. Da du når hvælvingen, er Vosk den Hule allerede inde."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/disable_wards/label": {
+      "hash": "0cf75b1a",
+      "text": "Uskadeliggør tårnenes værn"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/disable_wards/keywords": {
+      "hash": "c45962b9",
+      "text": [
+        "værn",
+        "værnene",
+        "arkana",
+        "runer",
+        "runerne",
+        "uskadeliggør",
+        "bryd"
+      ]
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/disable_wards/check/success/text": {
+      "hash": "c0086b0d",
+      "text": "Du pirker værnerunerne op én efter én. Dybt inde i hvælvingen falder noget kæmpestort til ro i søvnen igen."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/disable_wards/check/failure/text": {
+      "hash": "06c4f7ff",
+      "text": "En rune blusser op under dine fingre. Dybt inde i hvælvingen vågner noget kæmpestort."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/disable_wards/check/advantageIf/0/source": {
+      "hash": "28422565",
+      "text": "Aurek læser værnerunerne"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/enter_vault/label": {
+      "hash": "b6624106",
+      "text": "Gå ind i Edernes Hvælving"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/enter_vault/keywords": {
+      "hash": "e95ae8ed",
+      "text": [
+        "gå",
+        "ind",
+        "hvælving",
+        "hvælvingen",
+        "kæmp",
+        "konstrukter",
+        "konstrukterne"
+      ]
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/enter_vault/outcome/text": {
+      "hash": "cf2396fb",
+      "text": "Tre tomme rustninger vender hjelmene mod dig og løfter deres sværd."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/enter_vault_warded/label": {
+      "hash": "b6624106",
+      "text": "Gå ind i Edernes Hvælving"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/enter_vault_warded/keywords": {
+      "hash": "e95ae8ed",
+      "text": [
+        "gå",
+        "ind",
+        "hvælving",
+        "hvælvingen",
+        "kæmp",
+        "konstrukter",
+        "konstrukterne"
+      ]
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/enter_vault_warded/outcome/text": {
+      "hash": "2d3e55ec",
+      "text": "Tre tomme rustninger vender hjelmene mod dig, og bag dem folder en skjoldvogter sig ud af væggen."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/recite_oath/label": {
+      "hash": "d8eafc52",
+      "text": "Fremsig Den Første Ed og løft Daggrybryderen"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/recite_oath/keywords": {
+      "hash": "bec54fe2",
+      "text": [
+        "ed",
+        "eden",
+        "religion",
+        "lanse",
+        "lansen",
+        "løft",
+        "daggrybryderen"
+      ]
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/recite_oath/check/success/text": {
+      "hash": "102b8c4b",
+      "text": "Du fremsiger Daggrylansens Første Ed, og Daggrybryderen glider ud af stenen, som om den havde ventet på dig. Lansen er din at bære."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/recite_oath/check/failure/text": {
+      "hash": "1142e19c",
+      "text": "Du snubler over de gamle ord, og lansen rører sig ikke."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/recite_oath_corwin/label": {
+      "hash": "44dd92ff",
+      "text": "Lad ser Corwin fremsige Den Første Ed"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/recite_oath_corwin/keywords": {
+      "hash": "47f23fd9",
+      "text": [
+        "ed",
+        "eden",
+        "corwin",
+        "lanse",
+        "lansen",
+        "løft",
+        "daggrybryderen"
+      ]
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/recite_oath_corwin/outcome/text": {
+      "hash": "2ebf22d6",
+      "text": "Corwin knæler og fremsiger Den Første Ed uden at snuble. Daggrybryderen glider ud af stenen og ind i hans hænder, og han giver den meget forsigtigt til dig at bære. Han har ventet hele sit liv på dette."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/face_vosk/label": {
+      "hash": "234250d1",
+      "text": "Stil dig op mod Vosk den Hule"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/face_vosk/keywords": {
+      "hash": "11d4ae85",
+      "text": [
+        "vosk",
+        "kæmp",
+        "konfronter",
+        "magiker",
+        "magikeren"
+      ]
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/face_vosk/outcome/text": {
+      "hash": "97644341",
+      "text": "Vosk den Hule klatrer ind gennem hvælvingens dør med to fanatikere i ryggen. Hans øjne er syet til, og han ser dig udmærket. \"Tanden, tak. Lansen må du beholde; den er alt for tung.\""
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/confront_vosk/label": {
+      "hash": "82a16180",
+      "text": "Tag Himmeltanden tilbage fra Vosk"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/confront_vosk/keywords": {
+      "hash": "55dcbde1",
+      "text": [
+        "vosk",
+        "kæmp",
+        "konfronter",
+        "tand",
+        "tanden"
+      ]
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/confront_vosk/outcome/text": {
+      "hash": "072e0f56",
+      "text": "Vosk vender sig fra den lænkede lanse med Himmeltanden glødende i næven. \"Sent,\" siger han, \"men velkommen.\""
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/capture_vosk/label": {
+      "hash": "a9468036",
+      "text": "Bind Vosk og tag ham levende"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/capture_vosk/keywords": {
+      "hash": "2c98963c",
+      "text": [
+        "fang",
+        "tilfangetag",
+        "bind",
+        "skån",
+        "vosk",
+        "fange"
+      ]
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/capture_vosk/outcome/text": {
+      "hash": "83f2b677",
+      "text": "Du binder Vosks hænder og knebler ham mod besværgelser. Han nynner Korets melodi gennem kneblen."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/kill_vosk/label": {
+      "hash": "43f4cce0",
+      "text": "Dræb Vosk den Hule"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/kill_vosk/keywords": {
+      "hash": "dbd159af",
+      "text": [
+        "dræb",
+        "henret",
+        "vosk"
+      ]
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/kill_vosk/outcome/text": {
+      "hash": "d33efee3",
+      "text": "Vosk dør smilende, og hans sidste åndedrag er en tone af Korets hymne."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/search_notes/label": {
+      "hash": "d61fbaa5",
+      "text": "Gennemsøg Vosks notater"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/search_notes/keywords": {
+      "hash": "89f1dd56",
+      "text": [
+        "gennemsøg",
+        "søg",
+        "notater",
+        "notaterne",
+        "undersøg",
+        "brev",
+        "brevet",
+        "vosk"
+      ]
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/search_notes/check/success/text": {
+      "hash": "918781c2",
+      "text": "Blandt Vosks chifrerede notater ligger et brev i en fin, velkendt håndskrift: \"Bring mig Himmeltanden før midsommer. Maskeraden vil dække over alt. S.\" Skriften er lady Seraphines."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/search_notes/check/failure/text": {
+      "hash": "83bf9baa",
+      "text": "Vosks notater er Korets chiffer oven på kejserlig stenografi, og de overgår dig."
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/search_notes/check/advantageIf/0/source": {
+      "hash": "77e177dc",
+      "text": "Aurek læser veyransk stenografi"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/actions/search_notes/check/advantageIf/1/source": {
+      "hash": "2e7d2e28",
+      "text": "Du så, hvor Vosk gemmer sine breve"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/exits/to_highcrown/label": {
+      "hash": "39540034",
+      "text": "Rid tilbage til Highcrown"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/exits/to_dawnspire/label": {
+      "hash": "d0331f33",
+      "text": "Bring nyheden til Dawnspire-borgen"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/exits/to_deepanvil/label": {
+      "hash": "b6dbbbbb",
+      "text": "Tag den gamle kejservej til Deepanvil Hold"
+    },
+    "chapters/gilded_lie/scenes/vaelthorn_sky_towers/revisitSeed": {
+      "hash": "26f0ee79",
+      "text": "Gamle Vaelthorns knækkede himmeltårne igen, med vinden syngende gennem dem."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/name": {
+      "hash": "cbcf252d",
+      "text": "Nattevagten på Dawnspire"
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/seed": {
+      "hash": "ce9d15ef",
+      "text": "Dawnspire-borgen fanger det første lys på sit høje spir, men dens haller har været halvtomme siden Askefaldsvinteren. Øverstbefalende Aldric Thane, arret og grå, tager imod dig i Lansens kapel under det tomme stativ, hvor Daggrybryderen engang hang."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/variants/0/seed": {
+      "hash": "20345e7b",
+      "text": "Hver ridder i kapellet stirrer på lansen i dine hænder."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/variants/1/seed": {
+      "hash": "5d78ea61",
+      "text": "Du må fortælle Thane, at Koret bar Daggrybryderen bort."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/variants/2/seed": {
+      "hash": "71fdb231",
+      "text": "Daggrybryderen hænger på sit stativ igen, og ridderne holder nattevagt under den."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/variants/3/seed": {
+      "hash": "f96282ff",
+      "text": "En fregnet page i en alt for stor våbenkjortel løber dig i møde: Pip Hallard fra Millbrook, nu page i Daggrylansen."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/variants/4/seed": {
+      "hash": "97f8928e",
+      "text": "Corwin står rank som et spyd foran sin gamle læremester, og Thane ser ikke på ham."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/variants/5/seed": {
+      "hash": "758ffa4f",
+      "text": "Ser Corwin bærer Lansens våbenkjortel igen."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/variants/6/seed": {
+      "hash": "df2eb2e1",
+      "text": "Pips alt for store våbenkjortel hænger på en knage ved porten. Han red mod Millbrook ved første lys."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/variants/7/seed": {
+      "hash": "d1ef4330",
+      "text": "To riddere sadler deres heste til Highcrown på Thanes ord."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/onEnter/text": {
+      "hash": "69b6a85e",
+      "text": "Thane lytter tavs til din beretning. Da du er færdig, siger han kun: \"Bliv natten over. Koret ved, hvor du er, nu.\""
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/return_lance/label": {
+      "hash": "6f448941",
+      "text": "Giv Daggrybryderen tilbage til Ordenen"
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/return_lance/keywords": {
+      "hash": "a647b2c7",
+      "text": [
+        "giv",
+        "tilbage",
+        "aflever",
+        "lanse",
+        "lansen",
+        "daggrybryderen",
+        "ordenen"
+      ]
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/return_lance/outcome/text": {
+      "hash": "c8ab18e3",
+      "text": "Du lægger Daggrybryderen på alteret. Thanes hænder ryster, da han løfter den. \"Ordenen vil huske dette,\" siger han, \"og det vil jeg også.\" Lansen vil ride med dig, når dragen kommer."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/keep_lance/label": {
+      "hash": "ce1856d7",
+      "text": "Behold Daggrybryderen til den kamp, der venter"
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/keep_lance/keywords": {
+      "hash": "00580f9d",
+      "text": [
+        "behold",
+        "lanse",
+        "lansen",
+        "daggrybryderen",
+        "afslå",
+        "nægt"
+      ]
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/keep_lance/outcome/text": {
+      "hash": "ac8f5f28",
+      "text": "Du beholder lansen. Thane siger ingenting, og det er værre end alt, hvad han kunne have sagt. Ridderne vil ikke møde dit blik."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/keep_lance_defy/label": {
+      "hash": "4f7c1c1f",
+      "text": "Afvis Corwin og behold Daggrybryderen"
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/keep_lance_defy/keywords": {
+      "hash": "00580f9d",
+      "text": [
+        "behold",
+        "lanse",
+        "lansen",
+        "daggrybryderen",
+        "afslå",
+        "nægt"
+      ]
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/keep_lance_defy/outcome/text": {
+      "hash": "cdabe9ec",
+      "text": "Corwin kræver lansen tilbage i Ordenens navn foran hele kapellet. Du afviser ham. Ordenen vil ikke tilgive dette."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/report_loss/label": {
+      "hash": "e3cf74df",
+      "text": "Fortæl Thane, at Koret har Daggrybryderen"
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/report_loss/keywords": {
+      "hash": "43c2058c",
+      "text": [
+        "meld",
+        "rapportér",
+        "lanse",
+        "lansen",
+        "tabt",
+        "koret",
+        "fortæl"
+      ]
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/report_loss/outcome/text": {
+      "hash": "5b4eced3",
+      "text": "Thane hører det stående. \"Så tager vi den tilbage fra dem,\" siger han, \"eller dør i forsøget, som Ordenen altid har gjort.\""
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/plead_for_corwin/label": {
+      "hash": "67ac7a76",
+      "text": "Bed Thane om at genindsætte ser Corwin"
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/plead_for_corwin/keywords": {
+      "hash": "5be39e64",
+      "text": [
+        "corwin",
+        "genindsæt",
+        "genindsætte",
+        "bønfald",
+        "overtal",
+        "ridder"
+      ]
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/plead_for_corwin/check/success/text": {
+      "hash": "de122248",
+      "text": "Thane hører dig til ende, trækker så sit sværd og lægger det på Corwins skulder. \"Rejs dig, ser Corwin af Daggrylansen. Igen.\""
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/plead_for_corwin/check/failure/text": {
+      "hash": "1b57fa46",
+      "text": "\"Ordenen afskedigede ham med god grund,\" siger Thane. Corwin siger slet ingenting."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/plead_for_corwin/check/advantageIf/0/source": {
+      "hash": "8d43d4cd",
+      "text": "Thane har allerede hørt Corwin til ende"
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/plead_for_corwin/check/advantageIf/1/source": {
+      "hash": "c0252f65",
+      "text": "Thane har betroet dig sit eget svigt"
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/pip_wakes/label": {
+      "hash": "7c4358a5",
+      "text": "Sov med Pip på vagt"
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/pip_wakes/keywords": {
+      "hash": "c9c1f1c6",
+      "text": [
+        "sov",
+        "sove",
+        "hvil",
+        "pip",
+        "nat",
+        "natten",
+        "nattevagt"
+      ]
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/pip_wakes/outcome/text": {
+      "hash": "d8bd44ff",
+      "text": "Pip ryster dig vågen i mørket: \"Der er mænd på kapellets tag, og skyggerne er forkerte.\" Du er på benene, før snigmorderne når døren."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/keep_watch/label": {
+      "hash": "b890a54b",
+      "text": "Hold vagt natten igennem"
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/keep_watch/keywords": {
+      "hash": "266065a5",
+      "text": [
+        "vagt",
+        "vågn",
+        "nat",
+        "natten",
+        "opmærksomhed",
+        "nattevagt",
+        "sov"
+      ]
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/keep_watch/check/success/text": {
+      "hash": "6106ac5a",
+      "text": "I de små timer hører du en tagsten glide på kapellets tag, og skyggerne begynder at bevæge sig uden deres ejere. Du er klar."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/keep_watch/check/failure/text": {
+      "hash": "7d6edd64",
+      "text": "Du vågner med en forgiftet klinge allerede i skulderen. Såret vil efterlade sorte årer, der aldrig blegner."
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/actions/keep_watch/check/failure/scar/description": {
+      "hash": "58ea4964",
+      "text": "en forgiftet klinge fra Koret"
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/exits/to_highcrown/label": {
+      "hash": "39540034",
+      "text": "Rid tilbage til Highcrown"
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/exits/to_masque/label": {
+      "hash": "09b3d1dc",
+      "text": "Rid til almisseforvalterens midsommermaskerade"
+    },
+    "chapters/gilded_lie/scenes/dawnspire_vigil/revisitSeed": {
+      "hash": "ebc9730d",
+      "text": "Dawnspire-borgen igen, hvor kapelklokken slår nattevagtens timer."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/name": {
+      "hash": "5bfdc455",
+      "text": "Almisseforvalterens midsommermaskerade"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/seed": {
+      "hash": "d5efca30",
+      "text": "Almisseembedets haver glitrer af tusind lygter. Adelige i gyldne masker danser under midsommerstjernerne, og dronningen selv sidder i en løvhytte af hvide roser. Lady Seraphine, maskeret som en due, rejser sig for at synge for sine gæster."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/variants/0/seed": {
+      "hash": "a394d627",
+      "text": "Din maske skjuler et ansigt, der sidder på hver efterlysningsplakat i byen."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/variants/1/seed": {
+      "hash": "b70c0d6a",
+      "text": "Den første tone i Seraphines sang får dit hjerte til at stå stille. Du har hørt denne stemme før, i drømmen under gravhøjen ved Millbrook."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/variants/2/seed": {
+      "hash": "ec0a3b39",
+      "text": "En høj gæst i en skibskaptajns frakke og en mågemaske holder øje med dig. Harrow Vey er Almisseembedets gæst i aften."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/variants/3/seed": {
+      "hash": "6484bd0f",
+      "text": "De beviser, du bærer på, ville kunne hænge enhver adelig i riget."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/variants/4/seed": {
+      "hash": "3544bb57",
+      "text": "Aurek griber din arm, da hans tante begynder at synge. Han ryster."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/variants/5/seed": {
+      "hash": "5f314fcd",
+      "text": "Pip er kommet med som din \"page\" med en maske, der er tre numre for stor."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/variants/6/seed": {
+      "hash": "16251d33",
+      "text": "Pip traver i hælene på dig med din kappe over armen og er ved at revne af vigtighed."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/variants/7/seed": {
+      "hash": "821f6c74",
+      "text": "Seraphine vinker kærligt til dig tværs over haven som til en gammel ven."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/variants/8/seed": {
+      "hash": "d27494f9",
+      "text": "Kammerherre Hale fanger dit blik og banker på regnskabsbogen under sin arm."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/onEnter/text": {
+      "hash": "086a7e3d",
+      "text": "Du bliver lukket ind til maskeraden i lånt stads. Et sted blandt de gyldne masker er Koret, og et sted blandt dets hymner er stemmen fra dine drømme."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/blend_perform/label": {
+      "hash": "ef783d08",
+      "text": "Dans og syng dig ind i mængden"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/blend_perform/keywords": {
+      "hash": "6d7a688c",
+      "text": [
+        "dans",
+        "danse",
+        "syng",
+        "synge",
+        "optræden",
+        "glid",
+        "blend"
+      ]
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/blend_perform/check/success/text": {
+      "hash": "d3f7d92c",
+      "text": "Du danser tre danse og synger ét omkvæd, og Korets maskerede vagtposter holder op med at kigge på dig."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/blend_perform/check/failure/text": {
+      "hash": "8c037f36",
+      "text": "Du træder en hertuginde over tæerne. Tre masker holder øje med dig resten af natten."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/blend_perform/check/advantageIf/0/source": {
+      "hash": "7ac328ed",
+      "text": "Pip gør et stort nummer ud af dig som en rigtig page"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/blend_deceive/label": {
+      "hash": "a584865e",
+      "text": "Giv dig ud for at være en mindre adelsmand"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/blend_deceive/keywords": {
+      "hash": "6a5659a5",
+      "text": [
+        "bedrag",
+        "lyv",
+        "adelig",
+        "adelsmand",
+        "glid",
+        "lad",
+        "foregiv"
+      ]
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/blend_deceive/check/success/text": {
+      "hash": "b267b2b1",
+      "text": "Du er baron af et sted, ingen har hørt om, og ingen vil indrømme det. Korets vagtposter mister interessen."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/blend_deceive/check/failure/text": {
+      "hash": "713769ad",
+      "text": "Ingen tror på dit baroni. Tre masker holder øje med dig resten af natten."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/blend_deceive/check/advantageIf/0/source": {
+      "hash": "7ac328ed",
+      "text": "Pip gør et stort nummer ud af dig som en rigtig page"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice/label": {
+      "hash": "5ec33795",
+      "text": "Lyt til Seraphines sang"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice/keywords": {
+      "hash": "b61feb44",
+      "text": [
+        "lyt",
+        "sang",
+        "sangen",
+        "stemme",
+        "stemmen",
+        "indsigt",
+        "seraphine"
+      ]
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice/check/success/text": {
+      "hash": "c55fdccb",
+      "text": "Under sødmen er det den samme stemme, som synger i Korets hymner: *du skal aldrig mere savne noget*. Seraphine Vell er Kantoren."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice/check/failure/text": {
+      "hash": "b2e82fd9",
+      "text": "Det er en smuk sang, og den fortæller dig intet."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice/check/advantageIf/0/source": {
+      "hash": "a77ce4f1",
+      "text": "Tæt på scenen"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice/check/advantageIf/1/source": {
+      "hash": "1efe78af",
+      "text": "Du havde allerede mistanke til hende"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice/check/advantageIf/2/source": {
+      "hash": "151574df",
+      "text": "Du ved, hvad Askefaldsvinteren gjorde ved hende"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice/check/disadvantageIf/0/source": {
+      "hash": "e0a8b0a6",
+      "text": "Korets øjne hviler på dig"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice_dream/label": {
+      "hash": "8b94fa46",
+      "text": "Lyt til stemmen fra din drøm"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice_dream/keywords": {
+      "hash": "621be96d",
+      "text": [
+        "lyt",
+        "sang",
+        "sangen",
+        "stemme",
+        "stemmen",
+        "indsigt",
+        "drøm",
+        "drømmen",
+        "seraphine"
+      ]
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice_dream/check/success/text": {
+      "hash": "4b1d51ba",
+      "text": "Det er stemmen fra gravhøjen ved Millbrook, den der lovede, at du aldrig mere skulle savne noget. Seraphine Vell er Kantoren."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice_dream/check/failure/text": {
+      "hash": "4c9e062c",
+      "text": "Et øjeblik er du sikker, og så slutter sangen, og det er du ikke længere."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice_dream/check/advantageIf/0/source": {
+      "hash": "a77ce4f1",
+      "text": "Tæt på scenen"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice_dream/check/advantageIf/1/source": {
+      "hash": "1efe78af",
+      "text": "Du havde allerede mistanke til hende"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice_dream/check/advantageIf/2/source": {
+      "hash": "151574df",
+      "text": "Du ved, hvad Askefaldsvinteren gjorde ved hende"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/listen_voice_dream/check/disadvantageIf/0/source": {
+      "hash": "e0a8b0a6",
+      "text": "Korets øjne hviler på dig"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/tell_aurek/label": {
+      "hash": "de1e4319",
+      "text": "Fortæl Aurek, hvad du ved om hans tante, før nogen anden gør"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/tell_aurek/keywords": {
+      "hash": "6592c299",
+      "text": [
+        "fortæl",
+        "aurek",
+        "tante",
+        "tanten",
+        "sandhed",
+        "sandheden"
+      ]
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/tell_aurek/outcome/text": {
+      "hash": "256d151b",
+      "text": "Aurek lytter med masken i hænderne. \"Jeg vidste det,\" siger han til sidst. \"Jeg tror, jeg har vidst det i et år. Tak, fordi du fortalte mig det først.\""
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/accuse_proven/label": {
+      "hash": "c3cfcbd5",
+      "text": "Anklag lady Seraphine for hoffet"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/accuse_proven/keywords": {
+      "hash": "d0a4fc8e",
+      "text": [
+        "anklag",
+        "afslør",
+        "afmasker",
+        "hoffet",
+        "beviser",
+        "beviserne"
+      ]
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/accuse_proven/outcome/text": {
+      "hash": "a455fa71",
+      "text": "Du standser musikken og lægger beviserne frem, stykke for stykke, for dronningen. Hoffet vender sig mod Seraphine, og et øjeblik glider Kantorens maske: hun smiler. Så går lygterne ud, og hun er væk."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/accuse_contested/label": {
+      "hash": "c3cfcbd5",
+      "text": "Anklag lady Seraphine for hoffet"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/accuse_contested/keywords": {
+      "hash": "e095e946",
+      "text": [
+        "anklag",
+        "afslør",
+        "afmasker",
+        "hoffet",
+        "overtal"
+      ]
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/accuse_contested/check/success/text": {
+      "hash": "123ad02f",
+      "text": "Dine beviser er tynde, men du får hoffet til at lytte. Dronningen vender sig mod sin gudmor og beder hende svare. Seraphine smiler, lygterne går ud, og hun er væk."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/accuse_contested/check/failure/text": {
+      "hash": "d50aac5e",
+      "text": "Hoffet ler, og så holder det op med at le. Kammerherre Hale kalder paladsvagten til at gribe den galning, der bagtalte almisseforvalteren."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/accuse_contested/check/advantageIf/0/source": {
+      "hash": "9750d869",
+      "text": "Kammerherre Hale står ved din side"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/accuse_contested/check/advantageIf/1/source": {
+      "hash": "14a045e3",
+      "text": "Dronningen tvivlede allerede"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/accuse_contested/check/disadvantageIf/0/source": {
+      "hash": "3e15ea7e",
+      "text": "Kammerherre Hale taler imod dig"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/accuse_weak/label": {
+      "hash": "c3cfcbd5",
+      "text": "Anklag lady Seraphine for hoffet"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/accuse_weak/keywords": {
+      "hash": "d8cf1b2f",
+      "text": [
+        "anklag",
+        "afslør",
+        "afmasker",
+        "hoffet"
+      ]
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/accuse_weak/outcome/text": {
+      "hash": "5cd9b703",
+      "text": "Du har en fornemmelse og intet bevis. Seraphine ser såret ud, dronningen ser vred ud, og kammerherre Hale kalder paladsvagten til at gribe dig."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/confront_private/label": {
+      "hash": "075955f9",
+      "text": "Konfronter Seraphine under fire øjne i rosenhaven"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/confront_private/keywords": {
+      "hash": "ffd9af4d",
+      "text": [
+        "konfronter",
+        "alene",
+        "privat",
+        "have",
+        "haven",
+        "rosenhaven",
+        "seraphine"
+      ]
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/confront_private/outcome/text": {
+      "hash": "a35359da",
+      "text": "Du finder hende alene blandt roserne. Hun benægter det ikke. \"Du har set sumpen og feberstuerne,\" siger hun. \"Kan du virkelig sige mig, at sulten skal fortsætte for evigt?\" Så træder hun tilbage i havens mørke, og hun er væk."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/play_along_known/label": {
+      "hash": "3c0d81a8",
+      "text": "Sig ingenting, og hold øje med hende"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/play_along_known/keywords": {
+      "hash": "8934e9e5",
+      "text": [
+        "spil",
+        "med",
+        "vent",
+        "iagttag",
+        "ingenting",
+        "tavs"
+      ]
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/play_along_known/outcome/text": {
+      "hash": "7d0f91ea",
+      "text": "Du siger ingenting og danser videre. Men Seraphine møder dit blik tværs over haven og ved, at du ved det. Før midnat er hun væk, og dronningen er faldet om i sin løvhytte af roser."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/play_along/label": {
+      "hash": "5136385d",
+      "text": "Nyd maskeraden"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/play_along/keywords": {
+      "hash": "abb8d9fb",
+      "text": [
+        "spil",
+        "med",
+        "vent",
+        "dans",
+        "danse",
+        "nyd"
+      ]
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/play_along/outcome/text": {
+      "hash": "d9e1887c",
+      "text": "Maskeraden fortsætter til midnat. Så et skrig: dronningen er faldet om i sin løvhytte af roser, og almisseforvalteren er ingen steder at finde."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/aurek_frees/label": {
+      "hash": "e0585a2b",
+      "text": "Vent på Aurek"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/aurek_frees/keywords": {
+      "hash": "fd715319",
+      "text": [
+        "aurek",
+        "vent",
+        "befri",
+        "redning",
+        "red"
+      ]
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/aurek_frees/outcome/text": {
+      "hash": "1038472a",
+      "text": "Ved midnatstid kommer Aurek ned ad fangehullets trappe med en stjålet nøgle og en meget dårlig undskyldning til vagterne. \"Dronningen er faldet om,\" hvisker han. \"Min tante er væk. Jeg har brug for dig.\""
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/masque_break_out/label": {
+      "hash": "b5ddaa74",
+      "text": "Bryd ud af Highcrowns fangehuller"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/masque_break_out/keywords": {
+      "hash": "7c6ff9d4",
+      "text": [
+        "bryd",
+        "flygt",
+        "undslip",
+        "tremmer",
+        "tremmerne",
+        "atletik"
+      ]
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/masque_break_out/check/success/text": {
+      "hash": "d6087b61",
+      "text": "Du river et rustent gitter ud af cellegulvet og følger afløbet op i paladsets katakomber, hvor hele paladset råber, at dronningen er faldet."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/masque_break_out/check/failure/text": {
+      "hash": "4dc92804",
+      "text": "Gitteret holder, og vagten ler."
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/masque_wait/label": {
+      "hash": "1b1b8ae6",
+      "text": "Vent natten ud i cellerne"
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/masque_wait/keywords": {
+      "hash": "19a425b9",
+      "text": [
+        "vent",
+        "celle",
+        "cellerne",
+        "sid"
+      ]
+    },
+    "chapters/gilded_lie/scenes/almoners_masque/actions/masque_wait/outcome/text": {
+      "hash": "5a2de144",
+      "text": "Der går tre dage, før en skræmt kammerherre Hale låser din celle op. Dronningen er blevet forgiftet, almisseforvalteren er forsvundet, og pludselig lyder din bagtalelse ikke så gal."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/name": {
+      "hash": "acefbdbe",
+      "text": "Paladsets krypt"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/seed": {
+      "hash": "5df2fc48",
+      "text": "Under paladset løber Varannis-kongernes gamle katakomber ned i bakken. Ovenover ringer klokkerne: dronning Isolde er faldet om, med grå læber, nynnende en melodi, hun aldrig har lært. Nedenunder dækker Koret over sin herskerindes flugt."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/variants/0/seed": {
+      "hash": "0a1872e9",
+      "text": "Seraphine blev advaret. Hun forlod maskeraden en time, før du slog til, og katakomberne er allerede fulde af hendes bagtrop."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/variants/1/seed": {
+      "hash": "57d77c38",
+      "text": "Tre dage for sent er sporet koldt, og noget har bygget rede i katakomberne."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/variants/2/seed": {
+      "hash": "623e6e60",
+      "text": "Hele hoffet så almisseforvalteren blive afsløret, og paladsvagten følger dig ned ad trappen."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/variants/3/seed": {
+      "hash": "0ae4f4ae",
+      "text": "Du er stadig fredløs i disse haller, og vagterne jager dig lige så ihærdigt som Koret."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/variants/4/seed": {
+      "hash": "d03a42ec",
+      "text": "Du kender denne sygdom, og du kender dens kur."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/variants/5/seed": {
+      "hash": "5473c37c",
+      "text": "Liesels medaljon er kold i din hånd: en lille piges ansigt og navnet \"Liesel, Cinderdale\"."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/variants/6/seed": {
+      "hash": "86c13623",
+      "text": "Thanes to riddere kommer klirrende ned ad trappen bag dig med draget sværd."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/variants/7/seed": {
+      "hash": "c53dda28",
+      "text": "Flasken med udrensningsmiddel, du pressede dronningen til at have ved hånden, står stadig ved hendes seng."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/onEnter/text": {
+      "hash": "f9e32f1d",
+      "text": "Seraphines afskedsgave var et kys på sin guddatters kind og en koncentreret dosis af Den Hviskende Syge. Du kan redde dronningen eller jage Kantoren ind i mørket, mens sporet er varmt; du får ikke tid til begge dele."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/fight_rearguard/label": {
+      "hash": "d3873469",
+      "text": "Hug dig gennem Korets bagtrop"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/fight_rearguard/keywords": {
+      "hash": "2f2b4158",
+      "text": [
+        "kæmp",
+        "bagtrop",
+        "bagtroppen",
+        "katakomber",
+        "katakomberne",
+        "koret"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/fight_rearguard/outcome/text": {
+      "hash": "a7aadb26",
+      "text": "Ghaster i Almisseembedets livré og Korets fanatikere spærrer katakombetrappen, og skyggerne på væggene bevæger sig uden deres ejere."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/fight_ambush/label": {
+      "hash": "b9da8434",
+      "text": "Kæmp dig gennem Korets baghold"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/fight_ambush/keywords": {
+      "hash": "243763e9",
+      "text": [
+        "kæmp",
+        "baghold",
+        "bagholdet",
+        "katakomber",
+        "katakomberne",
+        "koret"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/fight_ambush/outcome/text": {
+      "hash": "4dbb2e31",
+      "text": "Bagtroppen ventede på dig: ghaster falder ned fra benhusets hylder, og skyggerne lukker sig om dig."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/save_queen_cure/label": {
+      "hash": "f14825ed",
+      "text": "Behandl dronningen med sumpens kur"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/save_queen_cure/keywords": {
+      "hash": "3195d3c3",
+      "text": [
+        "kur",
+        "kuren",
+        "dronningen",
+        "helbred",
+        "red",
+        "lægekunst"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/save_queen_cure/outcome/text": {
+      "hash": "27f9759f",
+      "text": "Du kender denne sygdom. Klokkeaske, bitterrod og en Briarkin-sang: ved daggry holder dronningen op med at nynne og beder om vand."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/save_queen/label": {
+      "hash": "67ba87c1",
+      "text": "Kæmp for dronningens liv"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/save_queen/keywords": {
+      "hash": "ceac0396",
+      "text": [
+        "dronningen",
+        "helbred",
+        "red",
+        "lægekunst",
+        "behandl"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/save_queen/check/success/text": {
+      "hash": "8b33ee8a",
+      "text": "Du årelader sporerne ud af hende og holder liv i hendes vejrtrækning gennem nattens værste timer. Ved daggry åbner Isolde øjnene."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/save_queen/check/failure/text": {
+      "hash": "b0e1088d",
+      "text": "Du bremser giften, men du kan ikke standse den. Isolde svinder hen, grå og nynnende. Hoffets læger siger, at hun måske holder til næste nymåne."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/save_queen/check/advantageIf/0/source": {
+      "hash": "8d79c90d",
+      "text": "Nettle kender Sygen"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/save_queen/check/advantageIf/1/source": {
+      "hash": "ca9206bd",
+      "text": "Dronningen havde udrensningsmidlet ved sin seng, som du rådede hende til"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/pursue/label": {
+      "hash": "99e2a32f",
+      "text": "Forfølg Kantoren ind i katakomberne"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/pursue/keywords": {
+      "hash": "614a6400",
+      "text": [
+        "forfølg",
+        "jag",
+        "følg",
+        "kantoren",
+        "seraphine"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/pursue/outcome/text": {
+      "hash": "88e085ef",
+      "text": "Du overlader dronningen til hendes læger og løber ind i mørket efter hendes gudmor. Bag dig begynder Isolde at nynne."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_1_athletics/label": {
+      "hash": "3afcd6a9",
+      "text": "Spurt ned ad benhusets trappe"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_1_athletics/keywords": {
+      "hash": "966980b7",
+      "text": [
+        "jagt",
+        "jag",
+        "løb",
+        "atletik",
+        "forfølg"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_1_athletics/check/success/text": {
+      "hash": "d296b421",
+      "text": "Du tager benhusets trappe tre trin ad gangen og hører hendes skridt forude."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_1_athletics/check/failure/text": {
+      "hash": "d7bff8f1",
+      "text": "Du glider på gamle knogler og mister lyden af hendes skridt."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_1_acrobatics/label": {
+      "hash": "219368b5",
+      "text": "Spring over den sammenstyrtede gravkrypt"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_1_acrobatics/keywords": {
+      "hash": "ac7193c9",
+      "text": [
+        "jagt",
+        "jag",
+        "løb",
+        "akrobatik",
+        "forfølg",
+        "spring"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_1_acrobatics/check/success/text": {
+      "hash": "03e94c40",
+      "text": "Du springer over de væltede gravlåg og lander i løb."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_1_acrobatics/check/failure/text": {
+      "hash": "f220d561",
+      "text": "Gravlågene skrider under dig, og du falder hårdt."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_2_athletics/label": {
+      "hash": "1eca77db",
+      "text": "Tving den oversvømmede port op"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_2_athletics/keywords": {
+      "hash": "966980b7",
+      "text": [
+        "jagt",
+        "jag",
+        "løb",
+        "atletik",
+        "forfølg"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_2_athletics/check/success/text": {
+      "hash": "ddc31935",
+      "text": "Du hiver den oversvømmede port op mod vandet, og dér er hendes lygte."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_2_athletics/check/failure/text": {
+      "hash": "b9e7d7b7",
+      "text": "Den oversvømmede port rokker sig ikke; du mister minutter på at finde en anden vej."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_2_acrobatics/label": {
+      "hash": "247b22dc",
+      "text": "Løb ad afsatsen over cisternen"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_2_acrobatics/keywords": {
+      "hash": "ac7193c9",
+      "text": [
+        "jagt",
+        "jag",
+        "løb",
+        "akrobatik",
+        "forfølg",
+        "spring"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_2_acrobatics/check/success/text": {
+      "hash": "d80546a8",
+      "text": "Du løber ad cisternens afsats uden at se ned, og dér er hendes lygte."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_2_acrobatics/check/failure/text": {
+      "hash": "7f7e1e38",
+      "text": "Du falder i cisternen og mister minutter på at kravle op."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_3_athletics/label": {
+      "hash": "710408f8",
+      "text": "Klatr efter hende op ad brøndskakten"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_3_athletics/keywords": {
+      "hash": "966980b7",
+      "text": [
+        "jagt",
+        "jag",
+        "løb",
+        "atletik",
+        "forfølg"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_3_athletics/check/success/text": {
+      "hash": "2770d8dc",
+      "text": "Du griber hendes kappe øverst i brøndskakten."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_3_athletics/check/failure/text": {
+      "hash": "02700a51",
+      "text": "Dine hænder glider på brøndskaktens våde sten."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_3_acrobatics/label": {
+      "hash": "9c5a3c59",
+      "text": "Spring efter hende over den knækkede bro"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_3_acrobatics/keywords": {
+      "hash": "ac7193c9",
+      "text": [
+        "jagt",
+        "jag",
+        "løb",
+        "akrobatik",
+        "forfølg",
+        "spring"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_3_acrobatics/check/success/text": {
+      "hash": "02c22d34",
+      "text": "Du springer over den knækkede bro og griber hendes kappe."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/chase_3_acrobatics/check/failure/text": {
+      "hash": "8da38476",
+      "text": "Du springer mod den knækkede bro og når ikke over."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/end_unmasked/label": {
+      "hash": "a4eeed7f",
+      "text": "Stå frem for hoffet som den, der afslørede Kantoren"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/end_unmasked/keywords": {
+      "hash": "6f4e6f30",
+      "text": [
+        "slut",
+        "afslut",
+        "hoffet",
+        "kapitel",
+        "kapitlet",
+        "daggry"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/end_unmasked/outcome/text": {
+      "hash": "9994f595",
+      "text": "Ved daggry findes en seddel fæstnet til almisseforvalterens tomme stol: \"Dragen vil gøre, hvad Koret ikke kan. Sultne ting kommer altid hjem.\" I øst ryger det fra Emberpeaks. (Milepæl: kapitlet er fuldført.)"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/end_hunted/label": {
+      "hash": "fa4bac59",
+      "text": "Smut ud af Highcrown, før vagten finder dig"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/end_hunted/keywords": {
+      "hash": "f9688cea",
+      "text": [
+        "slut",
+        "afslut",
+        "flygt",
+        "undslip",
+        "kapitel",
+        "kapitlet"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/end_hunted/outcome/text": {
+      "hash": "8caf006e",
+      "text": "Du kravler over paladsmuren ved daggry med vagten i hælene. Bag dig findes en seddel på almisseforvalterens tomme stol: \"Dragen vil gøre, hvad Koret ikke kan. Sultne ting kommer altid hjem.\" I øst ryger det fra Emberpeaks."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/end_secret/label": {
+      "hash": "93ee8112",
+      "text": "Behold, hvad du ved, og forbered dig"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/end_secret/keywords": {
+      "hash": "957c16ea",
+      "text": [
+        "slut",
+        "afslut",
+        "hemmelig",
+        "hemmelighed",
+        "forbered",
+        "kapitel",
+        "kapitlet"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/end_secret/outcome/text": {
+      "hash": "0a52383b",
+      "text": "Hoffet siger, at almisseforvalteren blev taget af Koret. Du ved bedre. På hendes tomme stol ligger en seddel: \"Dragen vil gøre, hvad Koret ikke kan. Sultne ting kommer altid hjem.\" I øst ryger det fra Emberpeaks."
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/end_vanished/label": {
+      "hash": "bea829fd",
+      "text": "Overlad paladset til dets sorg"
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/end_vanished/keywords": {
+      "hash": "5b63fd9d",
+      "text": [
+        "slut",
+        "afslut",
+        "forlad",
+        "sorg",
+        "sorgen",
+        "kapitel",
+        "kapitlet"
+      ]
+    },
+    "chapters/gilded_lie/scenes/palace_undercroft/actions/end_vanished/outcome/text": {
+      "hash": "09c88baf",
+      "text": "Hoffet sørger over sin forsvundne almisseforvalter – taget af Koret, siger alle. En seddel på hendes tomme stol lyder kun: \"Dragen vil gøre, hvad Koret ikke kan. Sultne ting kommer altid hjem.\" I øst ryger det fra Emberpeaks."
+    },
+    "npcs/queen_isolde/name": {
+      "hash": "1859901d",
+      "text": "Dronning Isolde Varannis"
+    },
+    "npcs/queen_isolde/personality": {
+      "hash": "c5aef049",
+      "text": "En ung, skarpsindig dronning, der har arvet en tom statskasse og stoler på for få rådgivere. Stolt, gavmild mod sine allierede og indædt loyal mod sin gudmor."
+    },
+    "npcs/queen_isolde/secrets": {
+      "hash": "3f1aa52c",
+      "text": [
+        "Skylder Jernhvælv-konsortiet mere, end Kronen kan betale.",
+        "Seraphine opdrog hende, efter at hendes mor døde; hun kan ikke forestille sig, at hendes gudmor lyver for hende."
+      ]
+    },
+    "npcs/queen_isolde/voice": {
+      "hash": "7c3f3649",
+      "text": "Skarp og hurtig, lidt for formel, med pludselige glimt af tør humor."
+    },
+    "npcs/queen_isolde/conversations/petition/label": {
+      "hash": "b98120c0",
+      "text": "Bed om et ord under fire øjne med dronningen"
+    },
+    "npcs/queen_isolde/conversations/petition/keywords": {
+      "hash": "0ce616f9",
+      "text": [
+        "dronningen",
+        "dronning",
+        "isolde",
+        "majestæt",
+        "alene",
+        "ord"
+      ]
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/text": {
+      "hash": "cec10fd3",
+      "text": "Isolde vifter sine hofdamer et par skridt tilbage. \"De har et kvarter. Hale vil sige, at jeg ikke har tid til det.\""
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/godmother/label": {
+      "hash": "7110da6e",
+      "text": "\"Hvor godt kender Deres Majestæt lady Seraphine?\" (Indsigt SG 14)"
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/godmother/keywords": {
+      "hash": "b226bd28",
+      "text": [
+        "gudmor",
+        "gudmoren",
+        "seraphine",
+        "kender",
+        "indsigt"
+      ]
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/godmother/check/success/text": {
+      "hash": "c73e7c20",
+      "text": "Isolde taler kærligt om sin gudmor – og så, uden at ville det, om de nætter, hvor Seraphine er \"ude blandt de fattige\" og ikke er til at finde. Hun standser og rynker panden. Tvivlen er hendes egen nu, ikke din."
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/godmother/check/failure/text": {
+      "hash": "8cb22780",
+      "text": "\"Hun opdrog mig,\" siger dronningen, og dermed er den sag slut."
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/debt/label": {
+      "hash": "cbed65fe",
+      "text": "\"Kronen skylder Jernhvælvet penge, Majestæt. Lad mig bringe dem Deres ord.\" (Overtalelse SG 15)"
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/debt/keywords": {
+      "hash": "ee7eca8f",
+      "text": [
+        "gæld",
+        "gælden",
+        "jernhvælvet",
+        "brev",
+        "deepanvil",
+        "overtal"
+      ]
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/debt/check/success/text": {
+      "hash": "9aae4cfd",
+      "text": "Isolde rødmer og skriver så med egen hånd et kort brev til laugsmester Ashgrove: Kronen vil indfri sin gæld, og overbringeren taler på Kronens vegne."
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/debt/check/failure/text": {
+      "hash": "4c532fe4",
+      "text": "Dronningens ansigt lukker sig. \"Kronens gæld er Kronens sag.\" Hoffet hørte dig spørge."
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/warn/label": {
+      "hash": "3599acf0",
+      "text": "\"En af Deres nærmeste tjener Koret, Majestæt. Vogt Deres bæger.\" (Overtalelse SG 16)"
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/warn/keywords": {
+      "hash": "876d1b08",
+      "text": [
+        "advar",
+        "bæger",
+        "bægeret",
+        "gift",
+        "giften",
+        "vogt",
+        "koret",
+        "overtal"
+      ]
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/warn/check/success/text": {
+      "hash": "fa4e6b0f",
+      "text": "Isolde tror dig ikke – ikke helt. Men hun beordrer en smager til sit bæger og en flaske med hofflægernes stærkeste udrensningsmiddel ved sin seng."
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/warn/check/failure/text": {
+      "hash": "6c1622b4",
+      "text": "Dronningen ler og gentager spøgen for sin gudmor samme aften. Fra nu af holder almisseforvalterens folk øje med dig."
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/pledge/label": {
+      "hash": "d456e0ff",
+      "text": "\"Befal over mig, Majestæt.\""
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/pledge/keywords": {
+      "hash": "05a66592",
+      "text": [
+        "sværg",
+        "befal",
+        "tjen",
+        "tjene",
+        "løfte"
+      ]
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/pledge/outcome/text": {
+      "hash": "78581263",
+      "text": "Isolde smiler for første gang. \"Så find Koret til mig, og bring mig dets Tænder.\" Hoffet ser dronningens gunst falde på dig."
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/greet/options/bye/label": {
+      "hash": "94c5b234",
+      "text": "Buk og træk dig tilbage"
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/text": {
+      "hash": "3f45358d",
+      "text": "\"Er der mere?\""
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/godmother/label": {
+      "hash": "7110da6e",
+      "text": "\"Hvor godt kender Deres Majestæt lady Seraphine?\" (Indsigt SG 14)"
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/godmother/keywords": {
+      "hash": "b226bd28",
+      "text": [
+        "gudmor",
+        "gudmoren",
+        "seraphine",
+        "kender",
+        "indsigt"
+      ]
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/godmother/check/success/text": {
+      "hash": "c73e7c20",
+      "text": "Isolde taler kærligt om sin gudmor – og så, uden at ville det, om de nætter, hvor Seraphine er \"ude blandt de fattige\" og ikke er til at finde. Hun standser og rynker panden. Tvivlen er hendes egen nu, ikke din."
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/godmother/check/failure/text": {
+      "hash": "8cb22780",
+      "text": "\"Hun opdrog mig,\" siger dronningen, og dermed er den sag slut."
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/debt/label": {
+      "hash": "cbed65fe",
+      "text": "\"Kronen skylder Jernhvælvet penge, Majestæt. Lad mig bringe dem Deres ord.\" (Overtalelse SG 15)"
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/debt/keywords": {
+      "hash": "ee7eca8f",
+      "text": [
+        "gæld",
+        "gælden",
+        "jernhvælvet",
+        "brev",
+        "deepanvil",
+        "overtal"
+      ]
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/debt/check/success/text": {
+      "hash": "9aae4cfd",
+      "text": "Isolde rødmer og skriver så med egen hånd et kort brev til laugsmester Ashgrove: Kronen vil indfri sin gæld, og overbringeren taler på Kronens vegne."
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/debt/check/failure/text": {
+      "hash": "4c532fe4",
+      "text": "Dronningens ansigt lukker sig. \"Kronens gæld er Kronens sag.\" Hoffet hørte dig spørge."
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/warn/label": {
+      "hash": "3599acf0",
+      "text": "\"En af Deres nærmeste tjener Koret, Majestæt. Vogt Deres bæger.\" (Overtalelse SG 16)"
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/warn/keywords": {
+      "hash": "876d1b08",
+      "text": [
+        "advar",
+        "bæger",
+        "bægeret",
+        "gift",
+        "giften",
+        "vogt",
+        "koret",
+        "overtal"
+      ]
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/warn/check/success/text": {
+      "hash": "fa4e6b0f",
+      "text": "Isolde tror dig ikke – ikke helt. Men hun beordrer en smager til sit bæger og en flaske med hofflægernes stærkeste udrensningsmiddel ved sin seng."
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/warn/check/failure/text": {
+      "hash": "6c1622b4",
+      "text": "Dronningen ler og gentager spøgen for sin gudmor samme aften. Fra nu af holder almisseforvalterens folk øje med dig."
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/pledge/label": {
+      "hash": "d456e0ff",
+      "text": "\"Befal over mig, Majestæt.\""
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/pledge/keywords": {
+      "hash": "05a66592",
+      "text": [
+        "sværg",
+        "befal",
+        "tjen",
+        "tjene",
+        "løfte"
+      ]
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/pledge/outcome/text": {
+      "hash": "78581263",
+      "text": "Isolde smiler for første gang. \"Så find Koret til mig, og bring mig dets Tænder.\" Hoffet ser dronningens gunst falde på dig."
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/more/options/bye/label": {
+      "hash": "94c5b234",
+      "text": "Buk og træk dig tilbage"
+    },
+    "npcs/queen_isolde/conversations/petition/nodes/cold/text": {
+      "hash": "df8281fc",
+      "text": "Dronningen vender sig mod den næste ansøger."
+    },
+    "npcs/seraphine_vell/name": {
+      "hash": "42411429",
+      "text": "Lady Seraphine Vell"
+    },
+    "npcs/seraphine_vell/personality": {
+      "hash": "8470cb01",
+      "text": "Den Kongelige Almisseforvalter: varm, utrættelig, elsket af de fattige, dronningens gudmor. I virkeligheden er hun Kantoren for Det Hule Kor, en fanatiker, der tror, at Vashkul vil fortære selve sulten."
+    },
+    "npcs/seraphine_vell/secrets": {
+      "hash": "b1ff1d93",
+      "text": [
+        "Hun er Kantoren.",
+        "Hun sultede i Cinderdale under Askefaldsvinteren; hendes lillesøster Liesel døde i hendes arme.",
+        "Hun elsker oprigtigt Isolde og vil \"skåne\" hende ved at omvende hende."
+      ]
+    },
+    "npcs/seraphine_vell/voice": {
+      "hash": "f3b82fec",
+      "text": "Blød, dyb og venlig; hæver aldrig stemmen; hendes sangstemme er Korets stemme."
+    },
+    "npcs/seraphine_vell/conversations/almoner/label": {
+      "hash": "2bc59be8",
+      "text": "Tal med lady Seraphine"
+    },
+    "npcs/seraphine_vell/conversations/almoner/keywords": {
+      "hash": "7381d8c0",
+      "text": [
+        "seraphine",
+        "almisseforvalteren",
+        "lady",
+        "tal",
+        "snak"
+      ]
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/text": {
+      "hash": "b4d6284b",
+      "text": "\"De må være så træt efter Øerne. Sid ned, vær så venlig. Hvordan kan Almisseembedet hjælpe Dem?\""
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/almonry/label": {
+      "hash": "78e92dd5",
+      "text": "\"Fortæl mig om Almisseembedets arbejde, frue.\" (Indsigt SG 15)"
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/almonry/keywords": {
+      "hash": "ecfa615c",
+      "text": [
+        "almisseembedet",
+        "arbejde",
+        "arbejdet",
+        "velgørenhed",
+        "fattige",
+        "indsigt"
+      ]
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/almonry/check/success/text": {
+      "hash": "5a13488f",
+      "text": "Hun fortæller om suppekøkkener og feberstuer, og det er alt sammen sandt. Men hvert spørgsmål, hun stiller tilbage, handler om Tænderne: hvor, hvor mange, hvem der har dem."
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/almonry/check/failure/text": {
+      "hash": "20f57608",
+      "text": "Hun fortæller om suppekøkkener og feberstuer, og du tror på hvert ord."
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/winter/label": {
+      "hash": "a5539d1a",
+      "text": "\"Hvor var De under Askefaldsvinteren, frue?\" (Historie SG 14)"
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/winter/keywords": {
+      "hash": "2fafa416",
+      "text": [
+        "vinter",
+        "vinteren",
+        "askefald",
+        "askefaldsvinteren",
+        "cinderdale",
+        "historie",
+        "fortid"
+      ]
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/winter/check/success/text": {
+      "hash": "4f839452",
+      "text": "\"Cinderdale,\" siger hun efter et øjeblik. \"Ordenen red bort og efterlod os. Min søster var seks.\" Hun smiler, som om hun intet havde sagt. Det navn vil du huske."
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/winter/check/failure/text": {
+      "hash": "59ad2b94",
+      "text": "\"Å, her og der,\" siger hun, \"og gjorde, hvad jeg kunne.\""
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/grateful/label": {
+      "hash": "db067817",
+      "text": "Spil den taknemmelige helt: \"Kunne Almisseembedet mon støtte min jagt?\" (Bedrag SG 15)"
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/grateful/keywords": {
+      "hash": "7215ddf6",
+      "text": [
+        "støtte",
+        "finansier",
+        "hjælp",
+        "taknemmelig",
+        "penge",
+        "bedrag",
+        "narre"
+      ]
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/grateful/check/success/text": {
+      "hash": "984240d4",
+      "text": "Seraphine trykker halvtreds guldmønter i dine hænder og klapper dem. Hun har besluttet, at du er en enkel, nyttig slags helt. Hun vil sende færre knive efter en enkel helt."
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/grateful/check/failure/text": {
+      "hash": "e975f066",
+      "text": "Seraphines smil bliver siddende, men hendes blik hviler et øjeblik for længe på dig. Hun har besluttet, at du er farlig."
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/refuse/label": {
+      "hash": "f94a72ef",
+      "text": "\"Tænderne bliver hos mig, frue. Dem alle sammen.\""
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/refuse/keywords": {
+      "hash": "70fc4040",
+      "text": [
+        "afslå",
+        "nægt",
+        "behold",
+        "tænderne",
+        "nej",
+        "bliver"
+      ]
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/refuse/outcome/text": {
+      "hash": "14e0bfbd",
+      "text": "\"Naturligvis,\" siger Seraphine varmt. \"De kunne ikke være i bedre hænder.\" Hun spørger ikke igen."
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/bye/label": {
+      "hash": "ee6d75a2",
+      "text": "\"Tak, frue.\""
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/text": {
+      "hash": "e38470c4",
+      "text": "\"Hvad vil De ellers gerne vide, min kære?\""
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/almonry/label": {
+      "hash": "78e92dd5",
+      "text": "\"Fortæl mig om Almisseembedets arbejde, frue.\" (Indsigt SG 15)"
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/almonry/keywords": {
+      "hash": "ecfa615c",
+      "text": [
+        "almisseembedet",
+        "arbejde",
+        "arbejdet",
+        "velgørenhed",
+        "fattige",
+        "indsigt"
+      ]
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/almonry/check/success/text": {
+      "hash": "5a13488f",
+      "text": "Hun fortæller om suppekøkkener og feberstuer, og det er alt sammen sandt. Men hvert spørgsmål, hun stiller tilbage, handler om Tænderne: hvor, hvor mange, hvem der har dem."
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/almonry/check/failure/text": {
+      "hash": "20f57608",
+      "text": "Hun fortæller om suppekøkkener og feberstuer, og du tror på hvert ord."
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/winter/label": {
+      "hash": "a5539d1a",
+      "text": "\"Hvor var De under Askefaldsvinteren, frue?\" (Historie SG 14)"
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/winter/keywords": {
+      "hash": "2fafa416",
+      "text": [
+        "vinter",
+        "vinteren",
+        "askefald",
+        "askefaldsvinteren",
+        "cinderdale",
+        "historie",
+        "fortid"
+      ]
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/winter/check/success/text": {
+      "hash": "4f839452",
+      "text": "\"Cinderdale,\" siger hun efter et øjeblik. \"Ordenen red bort og efterlod os. Min søster var seks.\" Hun smiler, som om hun intet havde sagt. Det navn vil du huske."
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/winter/check/failure/text": {
+      "hash": "59ad2b94",
+      "text": "\"Å, her og der,\" siger hun, \"og gjorde, hvad jeg kunne.\""
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/grateful/label": {
+      "hash": "db067817",
+      "text": "Spil den taknemmelige helt: \"Kunne Almisseembedet mon støtte min jagt?\" (Bedrag SG 15)"
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/grateful/keywords": {
+      "hash": "7215ddf6",
+      "text": [
+        "støtte",
+        "finansier",
+        "hjælp",
+        "taknemmelig",
+        "penge",
+        "bedrag",
+        "narre"
+      ]
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/grateful/check/success/text": {
+      "hash": "984240d4",
+      "text": "Seraphine trykker halvtreds guldmønter i dine hænder og klapper dem. Hun har besluttet, at du er en enkel, nyttig slags helt. Hun vil sende færre knive efter en enkel helt."
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/grateful/check/failure/text": {
+      "hash": "e975f066",
+      "text": "Seraphines smil bliver siddende, men hendes blik hviler et øjeblik for længe på dig. Hun har besluttet, at du er farlig."
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/refuse/label": {
+      "hash": "f94a72ef",
+      "text": "\"Tænderne bliver hos mig, frue. Dem alle sammen.\""
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/refuse/keywords": {
+      "hash": "70fc4040",
+      "text": [
+        "afslå",
+        "nægt",
+        "behold",
+        "tænderne",
+        "nej",
+        "bliver"
+      ]
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/refuse/outcome/text": {
+      "hash": "14e0bfbd",
+      "text": "\"Naturligvis,\" siger Seraphine varmt. \"De kunne ikke være i bedre hænder.\" Hun spørger ikke igen."
+    },
+    "npcs/seraphine_vell/conversations/almoner/nodes/more/options/bye/label": {
+      "hash": "ee6d75a2",
+      "text": "\"Tak, frue.\""
+    },
+    "npcs/chamberlain_hale/name": {
+      "hash": "c0ebb87e",
+      "text": "Kammerherre Oberin Hale"
+    },
+    "npcs/chamberlain_hale/personality": {
+      "hash": "5ac23647",
+      "text": "Opblæst, loyal mod Kronen helt ind til benet og dybt mistænksom over for eventyrere, der ankommer med piratvenner og ældgamle relikvier."
+    },
+    "npcs/chamberlain_hale/secrets": {
+      "hash": "e329d8c9",
+      "text": [
+        "Har to gange advaret dronningen om, at Almisseembedet bruger for mange penge, og er blevet leet ad."
+      ]
+    },
+    "npcs/chamberlain_hale/voice": {
+      "hash": "fc061fad",
+      "text": "Fed og langsom; omtaler sig selv som \"kammerherren\"."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/label": {
+      "hash": "af4fd23e",
+      "text": "Veksl et ord med kammerherre Hale"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/keywords": {
+      "hash": "a4995343",
+      "text": [
+        "hale",
+        "kammerherre",
+        "kammerherren",
+        "ord",
+        "tal",
+        "snak"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/text": {
+      "hash": "37e0521a",
+      "text": "\"Kammerherren fører dronningens kalender, og dronningens kalender er fuld. Frem med Deres ærinde.\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/flatter/label": {
+      "hash": "59695cb9",
+      "text": "\"Kammerherrens sunde fornuft omtales selv på Øerne.\" (Overtalelse SG 13)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/flatter/keywords": {
+      "hash": "0729adbc",
+      "text": [
+        "smiger",
+        "smigre",
+        "ros",
+        "fornuft",
+        "overtal"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/flatter/check/success/text": {
+      "hash": "d7b90d76",
+      "text": "Hale puster sig op som en due. \"Det glæder kammerherren, at nogen har bemærket det.\" Fra nu af mumler han i dronningens øre for dig, ikke imod dig."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/flatter/check/failure/text": {
+      "hash": "2a3e76b7",
+      "text": "\"Kammerherren,\" siger Hale, \"er blevet smigret af bedre løgnere.\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/almonry/label": {
+      "hash": "98a814a0",
+      "text": "\"De tvivler på Almisseembedets forbrug, gør De ikke?\" (Indsigt SG 14)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/almonry/keywords": {
+      "hash": "e284a658",
+      "text": [
+        "almisseembedet",
+        "forbrug",
+        "tvivl",
+        "indsigt",
+        "penge"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/almonry/check/success/text": {
+      "hash": "0c43f191",
+      "text": "Hale sænker stemmen. Han har to gange advaret dronningen om, at Almisseembedet bruger penge som i krig, og er blevet leet ad to gange. \"Hvis De finder beviser til kammerherren,\" siger han, \"vil kammerherren stå ved Deres side, når De fremlægger dem.\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/almonry/check/failure/text": {
+      "hash": "4d38b992",
+      "text": "\"Almisseembedets regnskaber er et anliggende for Kronen,\" siger Hale stift."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/threaten/label": {
+      "hash": "f12ee138",
+      "text": "\"Bliv De ved med at hviske om mine piratvenner, kammerherre, så kommer de måske på besøg.\" (Intimidering SG 15)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/threaten/keywords": {
+      "hash": "603158bb",
+      "text": [
+        "tru",
+        "true",
+        "pirat",
+        "pirater",
+        "hvisk",
+        "intimider"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/threaten/check/success/text": {
+      "hash": "2c9c7022",
+      "text": "Hale bliver samme farve som sin pibekrave og holder mund resten af dagen. Halvdelen af hoffet så dig gøre det."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/threaten/check/failure/text": {
+      "hash": "d1da9631",
+      "text": "Hale retter sig op. \"Kammerherren vil huske dette.\" Nu vil han tale imod dig ved enhver lejlighed."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/bribe/label": {
+      "hash": "b0d3e34a",
+      "text": "Tilbyd \"en gave til kammerherrens husholdning\" (25 gm)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/bribe/keywords": {
+      "hash": "1ab3bedd",
+      "text": [
+        "gave",
+        "bestik",
+        "bestikke",
+        "guld",
+        "betal"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/bribe/outcome/text": {
+      "hash": "10e7eee8",
+      "text": "Pungen forsvinder ind i Hales ærme, uden at et ord bliver sagt. Fra nu af mumler han i dronningens øre for dig."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/bye/label": {
+      "hash": "049807dc",
+      "text": "\"Farvel, kammerherre.\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/text": {
+      "hash": "d5985777",
+      "text": "\"Er der andet, eller må kammerherren vende tilbage til sine pligter?\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/flatter/label": {
+      "hash": "59695cb9",
+      "text": "\"Kammerherrens sunde fornuft omtales selv på Øerne.\" (Overtalelse SG 13)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/flatter/keywords": {
+      "hash": "0729adbc",
+      "text": [
+        "smiger",
+        "smigre",
+        "ros",
+        "fornuft",
+        "overtal"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/flatter/check/success/text": {
+      "hash": "d7b90d76",
+      "text": "Hale puster sig op som en due. \"Det glæder kammerherren, at nogen har bemærket det.\" Fra nu af mumler han i dronningens øre for dig, ikke imod dig."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/flatter/check/failure/text": {
+      "hash": "2a3e76b7",
+      "text": "\"Kammerherren,\" siger Hale, \"er blevet smigret af bedre løgnere.\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/almonry/label": {
+      "hash": "98a814a0",
+      "text": "\"De tvivler på Almisseembedets forbrug, gør De ikke?\" (Indsigt SG 14)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/almonry/keywords": {
+      "hash": "e284a658",
+      "text": [
+        "almisseembedet",
+        "forbrug",
+        "tvivl",
+        "indsigt",
+        "penge"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/almonry/check/success/text": {
+      "hash": "0c43f191",
+      "text": "Hale sænker stemmen. Han har to gange advaret dronningen om, at Almisseembedet bruger penge som i krig, og er blevet leet ad to gange. \"Hvis De finder beviser til kammerherren,\" siger han, \"vil kammerherren stå ved Deres side, når De fremlægger dem.\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/almonry/check/failure/text": {
+      "hash": "4d38b992",
+      "text": "\"Almisseembedets regnskaber er et anliggende for Kronen,\" siger Hale stift."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/threaten/label": {
+      "hash": "f12ee138",
+      "text": "\"Bliv De ved med at hviske om mine piratvenner, kammerherre, så kommer de måske på besøg.\" (Intimidering SG 15)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/threaten/keywords": {
+      "hash": "603158bb",
+      "text": [
+        "tru",
+        "true",
+        "pirat",
+        "pirater",
+        "hvisk",
+        "intimider"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/threaten/check/success/text": {
+      "hash": "2c9c7022",
+      "text": "Hale bliver samme farve som sin pibekrave og holder mund resten af dagen. Halvdelen af hoffet så dig gøre det."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/threaten/check/failure/text": {
+      "hash": "d1da9631",
+      "text": "Hale retter sig op. \"Kammerherren vil huske dette.\" Nu vil han tale imod dig ved enhver lejlighed."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/bribe/label": {
+      "hash": "b0d3e34a",
+      "text": "Tilbyd \"en gave til kammerherrens husholdning\" (25 gm)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/bribe/keywords": {
+      "hash": "1ab3bedd",
+      "text": [
+        "gave",
+        "bestik",
+        "bestikke",
+        "guld",
+        "betal"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/bribe/outcome/text": {
+      "hash": "10e7eee8",
+      "text": "Pungen forsvinder ind i Hales ærme, uden at et ord bliver sagt. Fra nu af mumler han i dronningens øre for dig."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/bye/label": {
+      "hash": "049807dc",
+      "text": "\"Farvel, kammerherre.\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/text": {
+      "hash": "a0e8d218",
+      "text": "\"Kammerherren vil se, hvad der kan gøres.\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/flatter/label": {
+      "hash": "59695cb9",
+      "text": "\"Kammerherrens sunde fornuft omtales selv på Øerne.\" (Overtalelse SG 13)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/flatter/keywords": {
+      "hash": "0729adbc",
+      "text": [
+        "smiger",
+        "smigre",
+        "ros",
+        "fornuft",
+        "overtal"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/flatter/check/success/text": {
+      "hash": "d7b90d76",
+      "text": "Hale puster sig op som en due. \"Det glæder kammerherren, at nogen har bemærket det.\" Fra nu af mumler han i dronningens øre for dig, ikke imod dig."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/flatter/check/failure/text": {
+      "hash": "2a3e76b7",
+      "text": "\"Kammerherren,\" siger Hale, \"er blevet smigret af bedre løgnere.\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/almonry/label": {
+      "hash": "98a814a0",
+      "text": "\"De tvivler på Almisseembedets forbrug, gør De ikke?\" (Indsigt SG 14)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/almonry/keywords": {
+      "hash": "e284a658",
+      "text": [
+        "almisseembedet",
+        "forbrug",
+        "tvivl",
+        "indsigt",
+        "penge"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/almonry/check/success/text": {
+      "hash": "0c43f191",
+      "text": "Hale sænker stemmen. Han har to gange advaret dronningen om, at Almisseembedet bruger penge som i krig, og er blevet leet ad to gange. \"Hvis De finder beviser til kammerherren,\" siger han, \"vil kammerherren stå ved Deres side, når De fremlægger dem.\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/almonry/check/failure/text": {
+      "hash": "4d38b992",
+      "text": "\"Almisseembedets regnskaber er et anliggende for Kronen,\" siger Hale stift."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/threaten/label": {
+      "hash": "f12ee138",
+      "text": "\"Bliv De ved med at hviske om mine piratvenner, kammerherre, så kommer de måske på besøg.\" (Intimidering SG 15)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/threaten/keywords": {
+      "hash": "603158bb",
+      "text": [
+        "tru",
+        "true",
+        "pirat",
+        "pirater",
+        "hvisk",
+        "intimider"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/threaten/check/success/text": {
+      "hash": "2c9c7022",
+      "text": "Hale bliver samme farve som sin pibekrave og holder mund resten af dagen. Halvdelen af hoffet så dig gøre det."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/threaten/check/failure/text": {
+      "hash": "d1da9631",
+      "text": "Hale retter sig op. \"Kammerherren vil huske dette.\" Nu vil han tale imod dig ved enhver lejlighed."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/bribe/label": {
+      "hash": "b0d3e34a",
+      "text": "Tilbyd \"en gave til kammerherrens husholdning\" (25 gm)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/bribe/keywords": {
+      "hash": "1ab3bedd",
+      "text": [
+        "gave",
+        "bestik",
+        "bestikke",
+        "guld",
+        "betal"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/bribe/outcome/text": {
+      "hash": "10e7eee8",
+      "text": "Pungen forsvinder ind i Hales ærme, uden at et ord bliver sagt. Fra nu af mumler han i dronningens øre for dig."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/bye/label": {
+      "hash": "049807dc",
+      "text": "\"Farvel, kammerherre.\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/text": {
+      "hash": "c1e9f073",
+      "text": "\"Nå, er der andet?\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/flatter/label": {
+      "hash": "59695cb9",
+      "text": "\"Kammerherrens sunde fornuft omtales selv på Øerne.\" (Overtalelse SG 13)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/flatter/keywords": {
+      "hash": "0729adbc",
+      "text": [
+        "smiger",
+        "smigre",
+        "ros",
+        "fornuft",
+        "overtal"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/flatter/check/success/text": {
+      "hash": "d7b90d76",
+      "text": "Hale puster sig op som en due. \"Det glæder kammerherren, at nogen har bemærket det.\" Fra nu af mumler han i dronningens øre for dig, ikke imod dig."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/flatter/check/failure/text": {
+      "hash": "2a3e76b7",
+      "text": "\"Kammerherren,\" siger Hale, \"er blevet smigret af bedre løgnere.\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/almonry/label": {
+      "hash": "98a814a0",
+      "text": "\"De tvivler på Almisseembedets forbrug, gør De ikke?\" (Indsigt SG 14)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/almonry/keywords": {
+      "hash": "e284a658",
+      "text": [
+        "almisseembedet",
+        "forbrug",
+        "tvivl",
+        "indsigt",
+        "penge"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/almonry/check/success/text": {
+      "hash": "0c43f191",
+      "text": "Hale sænker stemmen. Han har to gange advaret dronningen om, at Almisseembedet bruger penge som i krig, og er blevet leet ad to gange. \"Hvis De finder beviser til kammerherren,\" siger han, \"vil kammerherren stå ved Deres side, når De fremlægger dem.\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/almonry/check/failure/text": {
+      "hash": "4d38b992",
+      "text": "\"Almisseembedets regnskaber er et anliggende for Kronen,\" siger Hale stift."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/threaten/label": {
+      "hash": "f12ee138",
+      "text": "\"Bliv De ved med at hviske om mine piratvenner, kammerherre, så kommer de måske på besøg.\" (Intimidering SG 15)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/threaten/keywords": {
+      "hash": "603158bb",
+      "text": [
+        "tru",
+        "true",
+        "pirat",
+        "pirater",
+        "hvisk",
+        "intimider"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/threaten/check/success/text": {
+      "hash": "2c9c7022",
+      "text": "Hale bliver samme farve som sin pibekrave og holder mund resten af dagen. Halvdelen af hoffet så dig gøre det."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/threaten/check/failure/text": {
+      "hash": "d1da9631",
+      "text": "Hale retter sig op. \"Kammerherren vil huske dette.\" Nu vil han tale imod dig ved enhver lejlighed."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/bribe/label": {
+      "hash": "b0d3e34a",
+      "text": "Tilbyd \"en gave til kammerherrens husholdning\" (25 gm)"
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/bribe/keywords": {
+      "hash": "1ab3bedd",
+      "text": [
+        "gave",
+        "bestik",
+        "bestikke",
+        "guld",
+        "betal"
+      ]
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/bribe/outcome/text": {
+      "hash": "10e7eee8",
+      "text": "Pungen forsvinder ind i Hales ærme, uden at et ord bliver sagt. Fra nu af mumler han i dronningens øre for dig."
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/bye/label": {
+      "hash": "049807dc",
+      "text": "\"Farvel, kammerherre.\""
+    },
+    "npcs/chamberlain_hale/conversations/protocol/nodes/cold/text": {
+      "hash": "e249aa94",
+      "text": "Hale vender dig ryggen."
+    },
+    "npcs/aurek/name": {
+      "hash": "48c5bf90",
+      "text": "Aurek Vell"
+    },
+    "npcs/aurek/personality": {
+      "hash": "8177b1cb",
+      "text": "En strålende begavet, ængstelig ung veyransk lærd, venlig til det overdrevne, som tørster efter sin tantes anerkendelse og mistænker hende for noget, han ikke kan bære at sætte navn på."
+    },
+    "npcs/aurek/secrets": {
+      "hash": "afeb2aca",
+      "text": [
+        "Hans tante forsvinder de nætter, hvor Koret synger.",
+        "Hans afdøde far studerede, hvordan man \"synger Tænderne baglæns\"; forskningen er gemt i Almisseembedets bibliotek."
+      ]
+    },
+    "npcs/aurek/voice": {
+      "hash": "afa64e30",
+      "text": "Hurtig, præcis og undskyldende, med hang til fodnoter."
+    },
+    "npcs/aurek/conversations/readings/label": {
+      "hash": "c43aaab6",
+      "text": "Tal med Aurek om hans tantes bibliotek"
+    },
+    "npcs/aurek/conversations/readings/keywords": {
+      "hash": "0ca4e28a",
+      "text": [
+        "aurek",
+        "bibliotek",
+        "biblioteket",
+        "lærde",
+        "tal",
+        "snak"
+      ]
+    },
+    "npcs/aurek/conversations/readings/nodes/greet/text": {
+      "hash": "d56a8580",
+      "text": "\"Undskyld, at jeg trænger mig på. Fodnote: Jeg undskylder altid. Må jeg spørge dig om Tænderne? Eller du kunne spørge mig om noget. Enten-eller.\""
+    },
+    "npcs/aurek/conversations/readings/nodes/greet/options/father/label": {
+      "hash": "29a07685",
+      "text": "\"Din far studerede Tænderne, ikke?\" (Historie SG 13)"
+    },
+    "npcs/aurek/conversations/readings/nodes/greet/options/father/keywords": {
+      "hash": "e4988cfe",
+      "text": [
+        "far",
+        "faren",
+        "forskning",
+        "studier",
+        "historie",
+        "sang"
+      ]
+    },
+    "npcs/aurek/conversations/readings/nodes/greet/options/father/check/success/text": {
+      "hash": "40b8a0c2",
+      "text": "Aurek lyser op. Hans far troede, at Tænderne kunne \"synges baglæns\", og ingen har spurgt ham om det i årevis. Da I er færdige, er han ved at pakke en skuldertaske for at tage med dig."
+    },
+    "npcs/aurek/conversations/readings/nodes/greet/options/father/check/failure/text": {
+      "hash": "5568347f",
+      "text": "Du blander to veyranske lærde sammen, og Aurek retter dig så høfligt, at I begge ønsker at synke gennem gulvet."
+    },
+    "npcs/aurek/conversations/readings/nodes/greet/options/aunt/label": {
+      "hash": "f4a6faa6",
+      "text": "\"Ved din tante, at du taler med mig?\" (Indsigt SG 14)"
+    },
+    "npcs/aurek/conversations/readings/nodes/greet/options/aunt/keywords": {
+      "hash": "e6ea9b53",
+      "text": [
+        "tante",
+        "tanten",
+        "ved",
+        "seraphine",
+        "indsigt"
+      ]
+    },
+    "npcs/aurek/conversations/readings/nodes/greet/options/aunt/check/success/text": {
+      "hash": "0c61fa9e",
+      "text": "Aurek bliver bleg og siger nej, for hurtigt. Der er noget om hans tante, han gerne vil fortælle nogen. Vind hans tillid, så fortæller han dig det."
+    },
+    "npcs/aurek/conversations/readings/nodes/greet/options/aunt/check/failure/text": {
+      "hash": "641d0570",
+      "text": "\"Å, hun ved alting,\" siger Aurek og ler, og du kan ikke afgøre, om det er en spøg."
+    },
+    "npcs/aurek/conversations/readings/nodes/greet/options/scare/label": {
+      "hash": "5323465d",
+      "text": "\"Din tante er Kantoren, knægt. Vælg side.\" (Intimidering SG 12)"
+    },
+    "npcs/aurek/conversations/readings/nodes/greet/options/scare/keywords": {
+      "hash": "fe30bded",
+      "text": [
+        "kantoren",
+        "side",
+        "vælg",
+        "tru",
+        "true",
+        "intimider"
+      ]
+    },
+    "npcs/aurek/conversations/readings/nodes/greet/options/scare/check/success/text": {
+      "hash": "17e8260a",
+      "text": "Aurek stirrer på dig, hvid helt ud til læberne. Så nikker han. \"Jeg tager med. For at bevise, at du tager fejl.\" Han har ikke tilgivet dig, at du sagde det."
+    },
+    "npcs/aurek/conversations/readings/nodes/greet/options/scare/check/failure/text": {
+      "hash": "2b3cac87",
+      "text": "Aurek viger tilbage fra dig, og så løber han – lige op ad trappen til Almisseembedet. Du har en ret god idé om, hvem han vil fortælle det."
+    },
+    "npcs/aurek/conversations/readings/nodes/greet/options/bye/label": {
+      "hash": "628454e3",
+      "text": "\"En anden gang, Aurek.\""
+    },
+    "npcs/aurek/conversations/readings/nodes/more/text": {
+      "hash": "e3b2a711",
+      "text": "\"Var der, øh, andet?\""
+    },
+    "npcs/aurek/conversations/readings/nodes/more/options/father/label": {
+      "hash": "29a07685",
+      "text": "\"Din far studerede Tænderne, ikke?\" (Historie SG 13)"
+    },
+    "npcs/aurek/conversations/readings/nodes/more/options/father/keywords": {
+      "hash": "e4988cfe",
+      "text": [
+        "far",
+        "faren",
+        "forskning",
+        "studier",
+        "historie",
+        "sang"
+      ]
+    },
+    "npcs/aurek/conversations/readings/nodes/more/options/father/check/success/text": {
+      "hash": "40b8a0c2",
+      "text": "Aurek lyser op. Hans far troede, at Tænderne kunne \"synges baglæns\", og ingen har spurgt ham om det i årevis. Da I er færdige, er han ved at pakke en skuldertaske for at tage med dig."
+    },
+    "npcs/aurek/conversations/readings/nodes/more/options/father/check/failure/text": {
+      "hash": "5568347f",
+      "text": "Du blander to veyranske lærde sammen, og Aurek retter dig så høfligt, at I begge ønsker at synke gennem gulvet."
+    },
+    "npcs/aurek/conversations/readings/nodes/more/options/aunt/label": {
+      "hash": "f4a6faa6",
+      "text": "\"Ved din tante, at du taler med mig?\" (Indsigt SG 14)"
+    },
+    "npcs/aurek/conversations/readings/nodes/more/options/aunt/keywords": {
+      "hash": "e6ea9b53",
+      "text": [
+        "tante",
+        "tanten",
+        "ved",
+        "seraphine",
+        "indsigt"
+      ]
+    },
+    "npcs/aurek/conversations/readings/nodes/more/options/aunt/check/success/text": {
+      "hash": "0c61fa9e",
+      "text": "Aurek bliver bleg og siger nej, for hurtigt. Der er noget om hans tante, han gerne vil fortælle nogen. Vind hans tillid, så fortæller han dig det."
+    },
+    "npcs/aurek/conversations/readings/nodes/more/options/aunt/check/failure/text": {
+      "hash": "641d0570",
+      "text": "\"Å, hun ved alting,\" siger Aurek og ler, og du kan ikke afgøre, om det er en spøg."
+    },
+    "npcs/aurek/conversations/readings/nodes/more/options/scare/label": {
+      "hash": "5323465d",
+      "text": "\"Din tante er Kantoren, knægt. Vælg side.\" (Intimidering SG 12)"
+    },
+    "npcs/aurek/conversations/readings/nodes/more/options/scare/keywords": {
+      "hash": "fe30bded",
+      "text": [
+        "kantoren",
+        "side",
+        "vælg",
+        "tru",
+        "true",
+        "intimider"
+      ]
+    },
+    "npcs/aurek/conversations/readings/nodes/more/options/scare/check/success/text": {
+      "hash": "17e8260a",
+      "text": "Aurek stirrer på dig, hvid helt ud til læberne. Så nikker han. \"Jeg tager med. For at bevise, at du tager fejl.\" Han har ikke tilgivet dig, at du sagde det."
+    },
+    "npcs/aurek/conversations/readings/nodes/more/options/scare/check/failure/text": {
+      "hash": "2b3cac87",
+      "text": "Aurek viger tilbage fra dig, og så løber han – lige op ad trappen til Almisseembedet. Du har en ret god idé om, hvem han vil fortælle det."
+    },
+    "npcs/aurek/conversations/readings/nodes/more/options/bye/label": {
+      "hash": "628454e3",
+      "text": "\"En anden gang, Aurek.\""
+    },
+    "npcs/aurek/conversations/readings/nodes/joined/text": {
+      "hash": "4f17bd0c",
+      "text": "Aurek slutter sig til dig med skuldertasken knuget ind til sig."
+    },
+    "npcs/aurek/conversations/readings/nodes/fled/text": {
+      "hash": "c73320d3",
+      "text": "Almisseembedets dør smækker i bag ham."
+    },
+    "npcs/vosk/name": {
+      "hash": "70e895ea",
+      "text": "Vosk den Hule"
+    },
+    "npcs/vosk/personality": {
+      "hash": "e733f051",
+      "text": "En frafalden veyransk lærd og Korets arkivar-magiker med sammensyede øjne, høflig og fuldstændig uden medlidenhed."
+    },
+    "npcs/vosk/secrets": {
+      "hash": "b15879b0",
+      "text": [
+        "Bærer breve fra Kantoren skrevet med Seraphines egen hånd."
+      ]
+    },
+    "npcs/vosk/voice": {
+      "hash": "8acf6276",
+      "text": "Tør og lærd; nynner Korets melodi mellem sætningerne."
+    },
+    "npcs/vosk/conversations/parley/label": {
+      "hash": "e00ab367",
+      "text": "Forhandl med Vosk den Hule"
+    },
+    "npcs/vosk/conversations/parley/keywords": {
+      "hash": "2cde0f88",
+      "text": [
+        "vosk",
+        "forhandl",
+        "parlamentér",
+        "tal",
+        "snak",
+        "hule"
+      ]
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/text": {
+      "hash": "c4ddd2ef",
+      "text": "Vosk bøjer hovedet mod dig, skønt hans øjne er syet til. \"Skal vi tale sammen først? Vold er så uordentligt i et bibliotek.\""
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/read/label": {
+      "hash": "c3133b7f",
+      "text": "\"Hvorfor tjener en lærd sulten, Vosk?\" (Indsigt SG 15)"
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/read/keywords": {
+      "hash": "cbb92a4c",
+      "text": [
+        "hvorfor",
+        "lærd",
+        "lærde",
+        "sult",
+        "sulten",
+        "indsigt"
+      ]
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/read/check/success/text": {
+      "hash": "b9a8a75f",
+      "text": "Vosk taler om en sult, der ender al sult, og mens han taler, går hans hånd igen og igen til en taske med breve ved hans hofte. Det, han ville dø for, ligger derinde."
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/read/check/failure/text": {
+      "hash": "bb8f6494",
+      "text": "Vosk nynner Korets melodi og svarer intet."
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/fanatics/label": {
+      "hash": "1455c349",
+      "text": "Tal forbi ham til hans fanatikere: \"Han fodrer den med jer først.\" (Overtalelse SG 16)"
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/fanatics/keywords": {
+      "hash": "8079c1ee",
+      "text": [
+        "fanatikere",
+        "fanatikerne",
+        "kultister",
+        "kultisterne",
+        "fodre",
+        "overtal"
+      ]
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/fanatics/check/success/text": {
+      "hash": "4e5d2d50",
+      "text": "En af fanatikerne sænker sin klinge, ser på Vosk og går baglæns ud af hvælvingen. Vosk standser ham ikke."
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/fanatics/check/failure/text": {
+      "hash": "2ae631b6",
+      "text": "Fanatikerne nynner med på deres herres melodi."
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/walk/label": {
+      "hash": "16575c25",
+      "text": "\"Du kan ikke løfte lansen, og du får ikke Tanden. Gå din vej.\" (Intimidering SG 17)"
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/walk/keywords": {
+      "hash": "c4d3765f",
+      "text": [
+        "gå",
+        "væk",
+        "forsvind",
+        "forlad",
+        "intimider"
+      ]
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/walk/check/success/text": {
+      "hash": "8a9f537d",
+      "text": "Vosk vejer lansen i dine hænder mod faldet bag sin ryg. \"En anden dag, så,\" siger han og klatrer ud gennem den sønderbrudte mur med sine fanatikere. Du beholder Tanden og lansen, og han beholder sine hemmeligheder."
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/walk/check/failure/text": {
+      "hash": "bf44ca59",
+      "text": "\"Nej,\" siger Vosk høfligt og løfter hænderne."
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/trade/label": {
+      "hash": "f62862c5",
+      "text": "\"Så behold Tanden. Lad lansen blive.\" (Overtalelse SG 14)"
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/trade/keywords": {
+      "hash": "20b67cb5",
+      "text": [
+        "byt",
+        "handel",
+        "lanse",
+        "lansen",
+        "behold",
+        "efterlad",
+        "overtal"
+      ]
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/trade/check/success/text": {
+      "hash": "3a56d5eb",
+      "text": "Vosk overvejer den lænkede lanse, som seks af hans folk knap kunne slæbe. \"Den er alligevel alt for tung.\" Han efterlader Daggrybryderen ved dine fødder og tager Himmeltanden med ned ad tårnet."
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/trade/check/failure/text": {
+      "hash": "ff3bd080",
+      "text": "\"Jeg tror, jeg beholder begge,\" siger Vosk."
+    },
+    "npcs/vosk/conversations/parley/nodes/greet/options/bye/label": {
+      "hash": "30efb085",
+      "text": "\"Nok snak.\""
+    },
+    "npcs/vosk/conversations/parley/nodes/more/text": {
+      "hash": "abe8c69d",
+      "text": "\"Andet?\" Vosk nynner en takt af hymnen."
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/read/label": {
+      "hash": "c3133b7f",
+      "text": "\"Hvorfor tjener en lærd sulten, Vosk?\" (Indsigt SG 15)"
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/read/keywords": {
+      "hash": "cbb92a4c",
+      "text": [
+        "hvorfor",
+        "lærd",
+        "lærde",
+        "sult",
+        "sulten",
+        "indsigt"
+      ]
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/read/check/success/text": {
+      "hash": "b9a8a75f",
+      "text": "Vosk taler om en sult, der ender al sult, og mens han taler, går hans hånd igen og igen til en taske med breve ved hans hofte. Det, han ville dø for, ligger derinde."
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/read/check/failure/text": {
+      "hash": "bb8f6494",
+      "text": "Vosk nynner Korets melodi og svarer intet."
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/fanatics/label": {
+      "hash": "1455c349",
+      "text": "Tal forbi ham til hans fanatikere: \"Han fodrer den med jer først.\" (Overtalelse SG 16)"
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/fanatics/keywords": {
+      "hash": "8079c1ee",
+      "text": [
+        "fanatikere",
+        "fanatikerne",
+        "kultister",
+        "kultisterne",
+        "fodre",
+        "overtal"
+      ]
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/fanatics/check/success/text": {
+      "hash": "4e5d2d50",
+      "text": "En af fanatikerne sænker sin klinge, ser på Vosk og går baglæns ud af hvælvingen. Vosk standser ham ikke."
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/fanatics/check/failure/text": {
+      "hash": "2ae631b6",
+      "text": "Fanatikerne nynner med på deres herres melodi."
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/walk/label": {
+      "hash": "16575c25",
+      "text": "\"Du kan ikke løfte lansen, og du får ikke Tanden. Gå din vej.\" (Intimidering SG 17)"
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/walk/keywords": {
+      "hash": "c4d3765f",
+      "text": [
+        "gå",
+        "væk",
+        "forsvind",
+        "forlad",
+        "intimider"
+      ]
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/walk/check/success/text": {
+      "hash": "8a9f537d",
+      "text": "Vosk vejer lansen i dine hænder mod faldet bag sin ryg. \"En anden dag, så,\" siger han og klatrer ud gennem den sønderbrudte mur med sine fanatikere. Du beholder Tanden og lansen, og han beholder sine hemmeligheder."
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/walk/check/failure/text": {
+      "hash": "bf44ca59",
+      "text": "\"Nej,\" siger Vosk høfligt og løfter hænderne."
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/trade/label": {
+      "hash": "f62862c5",
+      "text": "\"Så behold Tanden. Lad lansen blive.\" (Overtalelse SG 14)"
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/trade/keywords": {
+      "hash": "20b67cb5",
+      "text": [
+        "byt",
+        "handel",
+        "lanse",
+        "lansen",
+        "behold",
+        "efterlad",
+        "overtal"
+      ]
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/trade/check/success/text": {
+      "hash": "3a56d5eb",
+      "text": "Vosk overvejer den lænkede lanse, som seks af hans folk knap kunne slæbe. \"Den er alligevel alt for tung.\" Han efterlader Daggrybryderen ved dine fødder og tager Himmeltanden med ned ad tårnet."
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/trade/check/failure/text": {
+      "hash": "ff3bd080",
+      "text": "\"Jeg tror, jeg beholder begge,\" siger Vosk."
+    },
+    "npcs/vosk/conversations/parley/nodes/more/options/bye/label": {
+      "hash": "30efb085",
+      "text": "\"Nok snak.\""
+    },
+    "npcs/vosk/conversations/parley/nodes/gone/text": {
+      "hash": "a96f3661",
+      "text": "Vinden jamrer gennem den sønderbrudte mur, hvor Vosk klatrede ud."
+    },
+    "npcs/vosk/conversations/parley/nodes/fight/text": {
+      "hash": "6b75abd2",
+      "text": "Is samler sig i Vosks åbne hænder."
+    },
+    "npcs/aldric_thane/name": {
+      "hash": "4b6a9792",
+      "text": "Øverstbefalende Aldric Thane"
+    },
+    "npcs/aldric_thane/personality": {
+      "hash": "b80578dc",
+      "text": "En arret veteran fra Askefaldsvinteren, der mistede sin lanse og halvdelen af sine riddere. Hæderlig til det overdrevne og sen til at tilgive."
+    },
+    "npcs/aldric_thane/secrets": {
+      "hash": "0160ad6f",
+      "text": [
+        "Det var ham, der gav ordre til at opgive Cinderdale under Askefaldsvinteren."
+      ]
+    },
+    "npcs/aldric_thane/voice": {
+      "hash": "9e6e4b3e",
+      "text": "Grus og tavshed; siger ikke meget, men mener det hele."
+    },
+    "npcs/aldric_thane/conversations/vigil/label": {
+      "hash": "4b4aaf5b",
+      "text": "Tal med øverstbefalende Thane"
+    },
+    "npcs/aldric_thane/conversations/vigil/keywords": {
+      "hash": "413185da",
+      "text": [
+        "thane",
+        "øverstbefalende",
+        "befalingsmand",
+        "tal",
+        "snak"
+      ]
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/text": {
+      "hash": "8e700268",
+      "text": "Thane løfter ikke blikket fra alteret. \"Tal.\""
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/winter/label": {
+      "hash": "1fc4c93c",
+      "text": "\"Fortæl mig om Askefaldsvinteren, øverstbefalende.\" (Indsigt SG 15)"
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/winter/keywords": {
+      "hash": "d1088b78",
+      "text": [
+        "vinter",
+        "vinteren",
+        "askefald",
+        "askefaldsvinteren",
+        "cinderdale",
+        "indsigt"
+      ]
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/winter/check/success/text": {
+      "hash": "18bf119b",
+      "text": "Thane er tavs længe. \"Det var mig, der gav ordre til at forlade Cinderdale,\" siger han til sidst. \"Vi havde mad til ridderne eller til byen. Ikke til begge.\" Han har aldrig sagt det højt før."
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/winter/check/failure/text": {
+      "hash": "b920a905",
+      "text": "\"Det var en hård vinter,\" siger Thane, og intet mere."
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/corwin/label": {
+      "hash": "e57582bb",
+      "text": "\"Ser Corwin gjorde, hvad Ordenen ikke ville. Hør ham til ende.\" (Overtalelse SG 14)"
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/corwin/keywords": {
+      "hash": "554f04c9",
+      "text": [
+        "corwin",
+        "hør",
+        "genindsæt",
+        "overtal"
+      ]
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/corwin/check/success/text": {
+      "hash": "690fff41",
+      "text": "Thane ser ordentligt på Corwin for første gang. \"Måske,\" siger han. Det er mere, end Corwin har fået fra ham i årevis."
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/corwin/check/failure/text": {
+      "hash": "f932bb04",
+      "text": "\"Ser Corwin kan tale for sig selv,\" siger Thane. Det gør Corwin ikke."
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/muster/label": {
+      "hash": "9d23a579",
+      "text": "\"Når Koret slår til, vil Lansen så ride med mig?\" (Overtalelse SG 15)"
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/muster/keywords": {
+      "hash": "e0cce4a9",
+      "text": [
+        "mønstring",
+        "mønstre",
+        "rid",
+        "ride",
+        "riddere",
+        "ridderne",
+        "hjælp",
+        "overtal"
+      ]
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/muster/check/advantageIf/0/source": {
+      "hash": "e252cbde",
+      "text": "Du bragte Daggrybryderen hjem"
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/muster/check/disadvantageIf/0/source": {
+      "hash": "374cd6a6",
+      "text": "Du beholdt Ordenens lanse"
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/muster/check/success/text": {
+      "hash": "00c5e427",
+      "text": "Thane udpeger to riddere, der skal ride i ryggen på dig til Highcrown. \"Send bud efter dem, når Koret viser sit ansigt.\""
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/muster/check/failure/text": {
+      "hash": "fc9e9f25",
+      "text": "\"Ordenen rider for Ordenen,\" siger Thane."
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/rebuke/label": {
+      "hash": "dc4ab61a",
+      "text": "\"De lod Cinderdale sulte. Lad ikke Highcrown i stikken.\" (Intimidering SG 14)"
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/rebuke/keywords": {
+      "hash": "2c23f0d2",
+      "text": [
+        "irettesæt",
+        "skam",
+        "skamme",
+        "sulte",
+        "intimider"
+      ]
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/rebuke/check/success/text": {
+      "hash": "867cd9c2",
+      "text": "Ordene rammer som et slag. Thane udpeger to riddere, der skal ride med dig, og ser ikke på dig igen. Hans riddere vil ikke glemme, hvordan du talte til ham."
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/rebuke/check/failure/text": {
+      "hash": "7a4bfbde",
+      "text": "Thanes hånd går til hans sværd og bliver der. \"De er gæst i denne borg. Husk det.\" Hele kapellet hørte det."
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/greet/options/bye/label": {
+      "hash": "a656822e",
+      "text": "\"Godnat, øverstbefalende.\""
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/text": {
+      "hash": "548a1868",
+      "text": "\"Var det alt?\""
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/winter/label": {
+      "hash": "1fc4c93c",
+      "text": "\"Fortæl mig om Askefaldsvinteren, øverstbefalende.\" (Indsigt SG 15)"
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/winter/keywords": {
+      "hash": "d1088b78",
+      "text": [
+        "vinter",
+        "vinteren",
+        "askefald",
+        "askefaldsvinteren",
+        "cinderdale",
+        "indsigt"
+      ]
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/winter/check/success/text": {
+      "hash": "18bf119b",
+      "text": "Thane er tavs længe. \"Det var mig, der gav ordre til at forlade Cinderdale,\" siger han til sidst. \"Vi havde mad til ridderne eller til byen. Ikke til begge.\" Han har aldrig sagt det højt før."
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/winter/check/failure/text": {
+      "hash": "b920a905",
+      "text": "\"Det var en hård vinter,\" siger Thane, og intet mere."
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/corwin/label": {
+      "hash": "e57582bb",
+      "text": "\"Ser Corwin gjorde, hvad Ordenen ikke ville. Hør ham til ende.\" (Overtalelse SG 14)"
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/corwin/keywords": {
+      "hash": "554f04c9",
+      "text": [
+        "corwin",
+        "hør",
+        "genindsæt",
+        "overtal"
+      ]
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/corwin/check/success/text": {
+      "hash": "690fff41",
+      "text": "Thane ser ordentligt på Corwin for første gang. \"Måske,\" siger han. Det er mere, end Corwin har fået fra ham i årevis."
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/corwin/check/failure/text": {
+      "hash": "f932bb04",
+      "text": "\"Ser Corwin kan tale for sig selv,\" siger Thane. Det gør Corwin ikke."
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/muster/label": {
+      "hash": "9d23a579",
+      "text": "\"Når Koret slår til, vil Lansen så ride med mig?\" (Overtalelse SG 15)"
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/muster/keywords": {
+      "hash": "e0cce4a9",
+      "text": [
+        "mønstring",
+        "mønstre",
+        "rid",
+        "ride",
+        "riddere",
+        "ridderne",
+        "hjælp",
+        "overtal"
+      ]
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/muster/check/advantageIf/0/source": {
+      "hash": "e252cbde",
+      "text": "Du bragte Daggrybryderen hjem"
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/muster/check/disadvantageIf/0/source": {
+      "hash": "374cd6a6",
+      "text": "Du beholdt Ordenens lanse"
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/muster/check/success/text": {
+      "hash": "00c5e427",
+      "text": "Thane udpeger to riddere, der skal ride i ryggen på dig til Highcrown. \"Send bud efter dem, når Koret viser sit ansigt.\""
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/muster/check/failure/text": {
+      "hash": "fc9e9f25",
+      "text": "\"Ordenen rider for Ordenen,\" siger Thane."
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/rebuke/label": {
+      "hash": "dc4ab61a",
+      "text": "\"De lod Cinderdale sulte. Lad ikke Highcrown i stikken.\" (Intimidering SG 14)"
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/rebuke/keywords": {
+      "hash": "2c23f0d2",
+      "text": [
+        "irettesæt",
+        "skam",
+        "skamme",
+        "sulte",
+        "intimider"
+      ]
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/rebuke/check/success/text": {
+      "hash": "867cd9c2",
+      "text": "Ordene rammer som et slag. Thane udpeger to riddere, der skal ride med dig, og ser ikke på dig igen. Hans riddere vil ikke glemme, hvordan du talte til ham."
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/rebuke/check/failure/text": {
+      "hash": "7a4bfbde",
+      "text": "Thanes hånd går til hans sværd og bliver der. \"De er gæst i denne borg. Husk det.\" Hele kapellet hørte det."
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/more/options/bye/label": {
+      "hash": "a656822e",
+      "text": "\"Godnat, øverstbefalende.\""
+    },
+    "npcs/aldric_thane/conversations/vigil/nodes/cold/text": {
+      "hash": "e42c22b8",
+      "text": "Thane vender sig mod alteret igen."
+    },
+    "npcs/pip_hallard/name": {
+      "hash": "a113d0a2",
+      "text": "Pip Hallard"
+    },
+    "npcs/pip_hallard/personality": {
+      "hash": "ddb489e1",
+      "text": "Møllerens søn fra Millbrook, reddet fra gravhøjen, nu page i Daggrylansen og helt og aldeles hengiven over for helten."
+    },
+    "npcs/pip_hallard/voice": {
+      "hash": "04836c7b",
+      "text": "Forpustet og ivrig; kalder helten \"herre\" eller \"frue\", uanset hvad de siger."
+    },
+    "npcs/pip_hallard/conversations/page/label": {
+      "hash": "37e9480d",
+      "text": "Tal med Pip"
+    },
+    "npcs/pip_hallard/conversations/page/keywords": {
+      "hash": "56386d01",
+      "text": [
+        "pip",
+        "page",
+        "pagen",
+        "tal",
+        "snak",
+        "dreng",
+        "drengen"
+      ]
+    },
+    "npcs/pip_hallard/conversations/page/nodes/greet/text": {
+      "hash": "dc95d4a7",
+      "text": "\"Herre! Frue! Hvad De end er! Er det sandt, at De fandt Daggrybryderen? Hvad kan jeg gøre? Jeg kan gøre hvad som helst!\""
+    },
+    "npcs/pip_hallard/conversations/page/nodes/greet/options/scout/label": {
+      "hash": "1e1e1526",
+      "text": "\"Pip, har du set noget mærkeligt omkring borgen?\""
+    },
+    "npcs/pip_hallard/conversations/page/nodes/greet/options/scout/keywords": {
+      "hash": "7de4969c",
+      "text": [
+        "set",
+        "mærkeligt",
+        "borgen",
+        "spejd",
+        "kig"
+      ]
+    },
+    "npcs/pip_hallard/conversations/page/nodes/greet/options/scout/outcome/text": {
+      "hash": "1ddeab5c",
+      "text": "\"To pilgrimme spurgte, hvilket vindue der hørte til gæstecellen, herre! Og den ene af dem havde ingen skygge.\" Pip viser dig det tag, de kiggede på. Du spærrer tagvinduet: én vej ind færre."
+    },
+    "npcs/pip_hallard/conversations/page/nodes/greet/options/masque/label": {
+      "hash": "9c658363",
+      "text": "\"Hvad siger du til at være min page ved en kongelig maskerade?\""
+    },
+    "npcs/pip_hallard/conversations/page/nodes/greet/options/masque/keywords": {
+      "hash": "da4eb8c9",
+      "text": [
+        "maskerade",
+        "maskeraden",
+        "page",
+        "kom",
+        "highcrown"
+      ]
+    },
+    "npcs/pip_hallard/conversations/page/nodes/greet/options/masque/outcome/text": {
+      "hash": "2bb514af",
+      "text": "Pip er ved at besvime af glæde. Han vil bære din maske, hente din vin og gøre et stort nummer ud af dig som en rigtig page – hvilket er et fremragende dække."
+    },
+    "npcs/pip_hallard/conversations/page/nodes/greet/options/home/label": {
+      "hash": "89b7d001",
+      "text": "\"Tag hjem til Millbrook, Pip. Det her er ikke noget sted for dig.\""
+    },
+    "npcs/pip_hallard/conversations/page/nodes/greet/options/home/keywords": {
+      "hash": "a07f499f",
+      "text": [
+        "hjem",
+        "millbrook",
+        "gå",
+        "tag",
+        "sikker",
+        "forlad"
+      ]
+    },
+    "npcs/pip_hallard/conversations/page/nodes/greet/options/home/outcome/text": {
+      "hash": "5aa28eed",
+      "text": "Pip protesterer, græder og tager så af sted. Han rider mod Millbrook ved første lys med et brev til sin mor. Hvor end Koret slår til næste gang, bliver det ikke mod ham."
+    },
+    "npcs/pip_hallard/conversations/page/nodes/greet/options/bye/label": {
+      "hash": "9f9a8192",
+      "text": "\"Gå nu i seng, Pip.\""
+    },
+    "npcs/pip_hallard/conversations/page/nodes/more/text": {
+      "hash": "6d10e86b",
+      "text": "\"Andet, herre? Overhovedet noget?\""
+    },
+    "npcs/pip_hallard/conversations/page/nodes/more/options/scout/label": {
+      "hash": "1e1e1526",
+      "text": "\"Pip, har du set noget mærkeligt omkring borgen?\""
+    },
+    "npcs/pip_hallard/conversations/page/nodes/more/options/scout/keywords": {
+      "hash": "7de4969c",
+      "text": [
+        "set",
+        "mærkeligt",
+        "borgen",
+        "spejd",
+        "kig"
+      ]
+    },
+    "npcs/pip_hallard/conversations/page/nodes/more/options/scout/outcome/text": {
+      "hash": "1ddeab5c",
+      "text": "\"To pilgrimme spurgte, hvilket vindue der hørte til gæstecellen, herre! Og den ene af dem havde ingen skygge.\" Pip viser dig det tag, de kiggede på. Du spærrer tagvinduet: én vej ind færre."
+    },
+    "npcs/pip_hallard/conversations/page/nodes/more/options/masque/label": {
+      "hash": "9c658363",
+      "text": "\"Hvad siger du til at være min page ved en kongelig maskerade?\""
+    },
+    "npcs/pip_hallard/conversations/page/nodes/more/options/masque/keywords": {
+      "hash": "da4eb8c9",
+      "text": [
+        "maskerade",
+        "maskeraden",
+        "page",
+        "kom",
+        "highcrown"
+      ]
+    },
+    "npcs/pip_hallard/conversations/page/nodes/more/options/masque/outcome/text": {
+      "hash": "2bb514af",
+      "text": "Pip er ved at besvime af glæde. Han vil bære din maske, hente din vin og gøre et stort nummer ud af dig som en rigtig page – hvilket er et fremragende dække."
+    },
+    "npcs/pip_hallard/conversations/page/nodes/more/options/home/label": {
+      "hash": "89b7d001",
+      "text": "\"Tag hjem til Millbrook, Pip. Det her er ikke noget sted for dig.\""
+    },
+    "npcs/pip_hallard/conversations/page/nodes/more/options/home/keywords": {
+      "hash": "a07f499f",
+      "text": [
+        "hjem",
+        "millbrook",
+        "gå",
+        "tag",
+        "sikker",
+        "forlad"
+      ]
+    },
+    "npcs/pip_hallard/conversations/page/nodes/more/options/home/outcome/text": {
+      "hash": "5aa28eed",
+      "text": "Pip protesterer, græder og tager så af sted. Han rider mod Millbrook ved første lys med et brev til sin mor. Hvor end Koret slår til næste gang, bliver det ikke mod ham."
+    },
+    "npcs/pip_hallard/conversations/page/nodes/more/options/bye/label": {
+      "hash": "9f9a8192",
+      "text": "\"Gå nu i seng, Pip.\""
+    },
+    "npcs/pip_hallard/conversations/page/nodes/home/text": {
+      "hash": "f0800b59",
+      "text": "Pip gør honnør for dig med sit træøvelsessværd, meget klodset, og går for at pakke."
+    },
+    "npcs/brunhild_ashgrove/name": {
+      "hash": "41e14021",
+      "text": "Laugsmester Brunhild Ashgrove"
+    },
+    "npcs/brunhild_ashgrove/personality": {
+      "hash": "284e6dfa",
+      "text": "En skarp dværg, der måler enhver tjeneste i mønt og aldrig glemmer en gæld. Ærlig, men aldrig gavmild."
+    },
+    "npcs/brunhild_ashgrove/secrets": {
+      "hash": "95be3f66",
+      "text": [
+        "Almisseembedets lån skræmmer hende: ingen velgørenhed låner på den måde."
+      ]
+    },
+    "npcs/brunhild_ashgrove/voice": {
+      "hash": "9b0d2981",
+      "text": "Direkte, kort for hovedet, tæller på fingrene, mens hun taler."
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/label": {
+      "hash": "d95752df",
+      "text": "Tal forretninger med laugsmester Ashgrove"
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/keywords": {
+      "hash": "9fc7a57d",
+      "text": [
+        "ashgrove",
+        "laugsmester",
+        "laugsmesteren",
+        "forretninger",
+        "tal",
+        "snak"
+      ]
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/text": {
+      "hash": "95519365",
+      "text": "\"Tal hurtigt. Tid er penge, og du bruger af mine.\""
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/fear/label": {
+      "hash": "a109dadd",
+      "text": "\"Almisseembedets lån skræmmer dig. Hvorfor?\" (Indsigt SG 14)"
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/fear/keywords": {
+      "hash": "c6dba785",
+      "text": [
+        "lån",
+        "lånene",
+        "frygt",
+        "skræmmer",
+        "indsigt",
+        "almisseembedet"
+      ]
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/fear/check/success/text": {
+      "hash": "9e5c941f",
+      "text": "Ashgrove tæller på fingrene og løber tør for fingre. \"Ingen velgørenhed låner på den måde. Ingen låner på den måde, medmindre de aldrig har tænkt sig at betale.\" Hun er bange, og nu lytter hun."
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/fear/check/failure/text": {
+      "hash": "dcee7cf3",
+      "text": "\"Frygt er dårligt for forretningen,\" siger Ashgrove. \"Det samme er sladder.\""
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/haggle/label": {
+      "hash": "3bee967b",
+      "text": "\"At rydde en mine er det dobbelte værd, laugsmester.\" (Overtalelse SG 15)"
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/haggle/keywords": {
+      "hash": "4eeb1087",
+      "text": [
+        "dobbelt",
+        "dobbelte",
+        "belønning",
+        "prut",
+        "prutte",
+        "pris",
+        "overtal"
+      ]
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/haggle/check/success/text": {
+      "hash": "7102fe30",
+      "text": "Ashgrove brummer, hvilket er et ja på dværgisk. \"Ryd den, så lægger Jernhvælvet hundrede guldmønter oven i belønningen. Skriftligt.\""
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/haggle/check/failure/text": {
+      "hash": "61d49bc5",
+      "text": "\"Et job er det værd, jeg betaler for det,\" siger Ashgrove."
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/bluff/label": {
+      "hash": "9325c0ca",
+      "text": "\"Dronningen har sendt mig for at revidere konsortiet.\" (Bedrag SG 16)"
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/bluff/keywords": {
+      "hash": "ac1dccd2",
+      "text": [
+        "revision",
+        "revidere",
+        "dronningen",
+        "sendt",
+        "bluf",
+        "bedrag",
+        "narre"
+      ]
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/bluff/check/success/text": {
+      "hash": "ec0e0436",
+      "text": "Ashgrove har aldrig set en så ung kongelig revisor og siger det, men hun låser alligevel regnskabsbøgerne op. Konsortiet skændes ikke med Kronen foran skriverne."
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/bluff/check/failure/text": {
+      "hash": "a7ea140f",
+      "text": "Ashgrove beder om at se din bestalling. Du har ingen. \"Ud,\" siger hun, og hver eneste skriver i hallen hører det."
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/mine/label": {
+      "hash": "bf66b73b",
+      "text": "\"Hvad er der nede i den mine?\""
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/mine/keywords": {
+      "hash": "8c2cb054",
+      "text": [
+        "mine",
+        "minen",
+        "nede",
+        "dyb",
+        "hvad"
+      ]
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/mine/outcome/text": {
+      "hash": "f01a0b05",
+      "text": "Ashgrove ruller et minekort ud og banker på en sidegang. \"Grimlocks har rede dér. Gå ind ad den gamle malmskakt, så slipper du for de værste af dem. Pas på rustmonsteret: det æder sværd.\""
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/bye/label": {
+      "hash": "4862da63",
+      "text": "\"Farvel, laugsmester.\""
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/text": {
+      "hash": "df76dc45",
+      "text": "\"Hvad ellers?\""
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/fear/label": {
+      "hash": "a109dadd",
+      "text": "\"Almisseembedets lån skræmmer dig. Hvorfor?\" (Indsigt SG 14)"
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/fear/keywords": {
+      "hash": "c6dba785",
+      "text": [
+        "lån",
+        "lånene",
+        "frygt",
+        "skræmmer",
+        "indsigt",
+        "almisseembedet"
+      ]
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/fear/check/success/text": {
+      "hash": "9e5c941f",
+      "text": "Ashgrove tæller på fingrene og løber tør for fingre. \"Ingen velgørenhed låner på den måde. Ingen låner på den måde, medmindre de aldrig har tænkt sig at betale.\" Hun er bange, og nu lytter hun."
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/fear/check/failure/text": {
+      "hash": "dcee7cf3",
+      "text": "\"Frygt er dårligt for forretningen,\" siger Ashgrove. \"Det samme er sladder.\""
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/haggle/label": {
+      "hash": "3bee967b",
+      "text": "\"At rydde en mine er det dobbelte værd, laugsmester.\" (Overtalelse SG 15)"
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/haggle/keywords": {
+      "hash": "4eeb1087",
+      "text": [
+        "dobbelt",
+        "dobbelte",
+        "belønning",
+        "prut",
+        "prutte",
+        "pris",
+        "overtal"
+      ]
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/haggle/check/success/text": {
+      "hash": "7102fe30",
+      "text": "Ashgrove brummer, hvilket er et ja på dværgisk. \"Ryd den, så lægger Jernhvælvet hundrede guldmønter oven i belønningen. Skriftligt.\""
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/haggle/check/failure/text": {
+      "hash": "61d49bc5",
+      "text": "\"Et job er det værd, jeg betaler for det,\" siger Ashgrove."
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/bluff/label": {
+      "hash": "9325c0ca",
+      "text": "\"Dronningen har sendt mig for at revidere konsortiet.\" (Bedrag SG 16)"
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/bluff/keywords": {
+      "hash": "ac1dccd2",
+      "text": [
+        "revision",
+        "revidere",
+        "dronningen",
+        "sendt",
+        "bluf",
+        "bedrag",
+        "narre"
+      ]
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/bluff/check/success/text": {
+      "hash": "ec0e0436",
+      "text": "Ashgrove har aldrig set en så ung kongelig revisor og siger det, men hun låser alligevel regnskabsbøgerne op. Konsortiet skændes ikke med Kronen foran skriverne."
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/bluff/check/failure/text": {
+      "hash": "a7ea140f",
+      "text": "Ashgrove beder om at se din bestalling. Du har ingen. \"Ud,\" siger hun, og hver eneste skriver i hallen hører det."
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/mine/label": {
+      "hash": "bf66b73b",
+      "text": "\"Hvad er der nede i den mine?\""
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/mine/keywords": {
+      "hash": "8c2cb054",
+      "text": [
+        "mine",
+        "minen",
+        "nede",
+        "dyb",
+        "hvad"
+      ]
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/mine/outcome/text": {
+      "hash": "f01a0b05",
+      "text": "Ashgrove ruller et minekort ud og banker på en sidegang. \"Grimlocks har rede dér. Gå ind ad den gamle malmskakt, så slipper du for de værste af dem. Pas på rustmonsteret: det æder sværd.\""
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/bye/label": {
+      "hash": "4862da63",
+      "text": "\"Farvel, laugsmester.\""
+    },
+    "npcs/brunhild_ashgrove/conversations/counting/nodes/out/text": {
+      "hash": "bd4dc131",
+      "text": "To af konsortiets vagter viser dig hen til døren fra hendes tællestue."
+    },
+    "encounters/gate_arrest/name": {
+      "hash": "9c340d29",
+      "text": "Anholdelse ved Dronningeporten"
+    },
+    "encounters/gate_arrest/terrain": {
+      "hash": "918c9c6a",
+      "text": [
+        "portbuen",
+        "markedsvogne (halvt dække)",
+        "en flok tilskuere"
+      ]
+    },
+    "encounters/gate_arrest/win/text": {
+      "hash": "0dba97cf",
+      "text": "Du kæmper dig fri af vagten og forsvinder ind i den nedre by."
+    },
+    "encounters/gate_arrest/lose/text": {
+      "hash": "e4df023e",
+      "text": "Du vågner i Highcrowns fangehuller. En slutter fortæller dig, at dronningen måske hører din sag om tre dage – eller måske ikke."
+    },
+    "encounters/gate_arrest/flee/text": {
+      "hash": "40fc877c",
+      "text": "Du river dig løs og forsvinder i mængden uden for murene. Porten er stadig lukket for dig."
+    },
+    "encounters/deep_mine/name": {
+      "hash": "eece94c5",
+      "text": "Den forseglede dybe mine"
+    },
+    "encounters/deep_mine/terrain": {
+      "hash": "159b0342",
+      "text": [
+        "mineskinner",
+        "en sammenstyrtet gang (vanskeligt terræn)",
+        "totalt mørke"
+      ]
+    },
+    "encounters/deep_mine/win/text": {
+      "hash": "e6e82722",
+      "text": "Minen er ryddet. På grimlockernes lig finder du Almisseembedets lønsedler: \"graverne i sort\" var minearbejdere, som Koret havde blindet og sat til at grave. Ashgrove betaler sin gæld: regnskabsbøgerne er dine, og det samme er en belønning fra Jernhvælvet."
+    },
+    "encounters/deep_mine/lose/text": {
+      "hash": "2e03af09",
+      "text": "Dværgiske minearbejdere trækker dig ud af mørket i anklerne. Minen er stadig tabt."
+    },
+    "encounters/deep_mine/flee/text": {
+      "hash": "7a818a95",
+      "text": "Du trækker dig op ad skakten med grimlockernes tuden bag dig."
+    },
+    "encounters/vault_constructs/name": {
+      "hash": "f4f1344e",
+      "text": "Vogterne af Edernes Hvælving"
+    },
+    "encounters/vault_constructs/terrain": {
+      "hash": "96b21297",
+      "text": [
+        "hvælvingens gulv",
+        "edssøjler (halvt dække)",
+        "den forseglede lanse"
+      ]
+    },
+    "encounters/vault_constructs/win/text": {
+      "hash": "7fc84d26",
+      "text": "Den sidste rustning knæler, som for en ridder, og falder fra hinanden."
+    },
+    "encounters/vault_constructs/lose/text": {
+      "hash": "1b9ec1d5",
+      "text": "Du vågner i murbrokkerne otte timer senere. Konstrukterne er smadret, hvælvingen står åben, og Himmeltanden er væk: Vosk tog den, mens du lå der. Lansen sidder stadig i stenen."
+    },
+    "encounters/vault_constructs/flee/text": {
+      "hash": "05ff3501",
+      "text": "Du trækker dig ned ad tårntrappen. Konstrukterne følger ikke efter; det har de aldrig gjort."
+    },
+    "encounters/vault_constructs_guardian/name": {
+      "hash": "c9a88429",
+      "text": "Den værnede Edernes Hvælving"
+    },
+    "encounters/vault_constructs_guardian/terrain": {
+      "hash": "449613a5",
+      "text": [
+        "hvælvingens gulv",
+        "edssøjler (halvt dække)",
+        "den forseglede lanse",
+        "aktive værneruner"
+      ]
+    },
+    "encounters/vault_constructs_guardian/win/text": {
+      "hash": "37823fff",
+      "text": "Skjoldvogteren folder sig tilbage ind i væggen, og den sidste rustning falder fra hinanden."
+    },
+    "encounters/vault_constructs_guardian/lose/text": {
+      "hash": "1b9ec1d5",
+      "text": "Du vågner i murbrokkerne otte timer senere. Konstrukterne er smadret, hvælvingen står åben, og Himmeltanden er væk: Vosk tog den, mens du lå der. Lansen sidder stadig i stenen."
+    },
+    "encounters/vault_constructs_guardian/flee/text": {
+      "hash": "05ff3501",
+      "text": "Du trækker dig ned ad tårntrappen. Konstrukterne følger ikke efter; det har de aldrig gjort."
+    },
+    "encounters/vosk_fight/name": {
+      "hash": "70e895ea",
+      "text": "Vosk den Hule"
+    },
+    "encounters/vosk_fight/terrain": {
+      "hash": "32e874e2",
+      "text": [
+        "Edernes Hvælving",
+        "den åbne himmel bag den sønderbrudte mur",
+        "edssøjler (halvt dække)"
+      ]
+    },
+    "encounters/vosk_fight/win/text": {
+      "hash": "bf24d350",
+      "text": "Vosks fanatikere falder, og Vosk knæler udmattet på hvælvingens gulv med åbne hænder."
+    },
+    "encounters/vosk_fight/lose/text": {
+      "hash": "a2a037e3",
+      "text": "Du vågner med lansen stadig i armene: Vosk kunne ikke løfte den og prøvede ikke. Himmeltanden er væk med ham."
+    },
+    "encounters/vosk_fight/flee/text": {
+      "hash": "9e216200",
+      "text": "Du river dig løs og flygter ned gennem tårnene med Daggrybryderen og Himmeltanden. Vosk lader dig gå; han har andre ærinder."
+    },
+    "encounters/vosk_at_vault/name": {
+      "hash": "50434256",
+      "text": "Vosk ved Edernes Hvælving"
+    },
+    "encounters/vosk_at_vault/terrain": {
+      "hash": "487a8be3",
+      "text": [
+        "Edernes Hvælving",
+        "den lænkede lanse",
+        "den åbne himmel bag den sønderbrudte mur"
+      ]
+    },
+    "encounters/vosk_at_vault/win/text": {
+      "hash": "1e73ee19",
+      "text": "Vosk falder på knæ mellem kæderne, og Himmeltanden triller ud af hans hånd. Daggrybryderen ligger fri i sine kæder: du tager dem begge."
+    },
+    "encounters/vosk_at_vault/lose/text": {
+      "hash": "53c978a5",
+      "text": "Du vågner alene i den ødelagte hvælving. Vosks kultister har slæbt Daggrybryderen bort i dens kæder, og Vosk har Himmeltanden."
+    },
+    "encounters/vosk_at_vault/flee/text": {
+      "hash": "af2636f8",
+      "text": "Du trækker dig ned gennem tårnene. Da du ser dig tilbage, er Vosks kultister ved at slæbe Daggrybryderen bort i dens kæder, og Vosk har Himmeltanden."
+    },
+    "encounters/vigil_assassins/name": {
+      "hash": "8922aba2",
+      "text": "Korets snigmordere på Dawnspire"
+    },
+    "encounters/vigil_assassins/terrain": {
+      "hash": "69eee06e",
+      "text": [
+        "Lansens kapel",
+        "kirkestole (halvt dække)",
+        "måneskin og dybe skygger"
+      ]
+    },
+    "encounters/vigil_assassins/win/text": {
+      "hash": "2503983c",
+      "text": "Den sidste snigmorder dør på kapeltrappen. Syet ind i hans krave er et adgangsmærke til Almisseembedets maskerade."
+    },
+    "encounters/vigil_assassins/lose/text": {
+      "hash": "b5e59322",
+      "text": "Ridderne bærer dig ind i kapellet. Snigmorderne flygtede, da klokkerne ringede."
+    },
+    "encounters/vigil_assassins/flee/text": {
+      "hash": "d12d65f3",
+      "text": "Du trækker dig ind i borgen og slår slå for dørene, til ridderne kommer. Snigmorderne opløses i natten."
+    },
+    "encounters/vigil_assassins_surprise/name": {
+      "hash": "4182293c",
+      "text": "Korets snigmordere på Dawnspire (overraskelsesrunde)"
+    },
+    "encounters/vigil_assassins_surprise/terrain": {
+      "hash": "4c58203c",
+      "text": [
+        "din sovecelle",
+        "kapelgangen",
+        "måneskin og dybe skygger",
+        "snigmorderne handler først"
+      ]
+    },
+    "encounters/vigil_assassins_surprise/win/text": {
+      "hash": "2503983c",
+      "text": "Den sidste snigmorder dør på kapeltrappen. Syet ind i hans krave er et adgangsmærke til Almisseembedets maskerade."
+    },
+    "encounters/vigil_assassins_surprise/lose/text": {
+      "hash": "b5e59322",
+      "text": "Ridderne bærer dig ind i kapellet. Snigmorderne flygtede, da klokkerne ringede."
+    },
+    "encounters/vigil_assassins_surprise/flee/text": {
+      "hash": "d12d65f3",
+      "text": "Du trækker dig ind i borgen og slår slå for dørene, til ridderne kommer. Snigmorderne opløses i natten."
+    },
+    "encounters/masque_guards/name": {
+      "hash": "3d7faac1",
+      "text": "Paladsvagten (ikke-dødbringende)"
+    },
+    "encounters/masque_guards/terrain": {
+      "hash": "66011954",
+      "text": [
+        "lygtehaven",
+        "rosenløvhytter (halvt dække)",
+        "flygtende gæster",
+        "vagterne slår for at uskadeliggøre"
+      ]
+    },
+    "encounters/masque_guards/win/text": {
+      "hash": "05f5d54d",
+      "text": "Du kæmper dig fri af vagten uden at dræbe nogen. Så et skrig: dronningen er faldet om i sin løvhytte, og almisseforvalteren er væk. Du følger hendes spor ned i paladsets katakomber."
+    },
+    "encounters/masque_guards/lose/text": {
+      "hash": "d15f0e95",
+      "text": "Du vågner i Highcrowns fangehuller, forslået, afvæbnet og stemplet som bagtaler."
+    },
+    "encounters/masque_guards/flee/text": {
+      "hash": "205fd3d1",
+      "text": "Du river dig løs og forsvinder i havens mørke. Så et skrig: dronningen er faldet om, og almisseforvalteren er væk. Du følger hendes spor ned i katakomberne."
+    },
+    "encounters/undercroft_rearguard/name": {
+      "hash": "9bff32fc",
+      "text": "Korets bagtrop"
+    },
+    "encounters/undercroft_rearguard/terrain": {
+      "hash": "88385d5f",
+      "text": [
+        "katakombetrappen",
+        "benhushylder (halvt dække)",
+        "mørke"
+      ]
+    },
+    "encounters/undercroft_rearguard/win/text": {
+      "hash": "748698a7",
+      "text": "Bagtroppen er slået. Hendes skridt giver stadig genlyd nedenunder; ovenpå svigter dronningens vejrtrækning."
+    },
+    "encounters/undercroft_rearguard/lose/text": {
+      "hash": "231dba5e",
+      "text": "Du vågner i paladskapellet. Kantoren er for længst væk."
+    },
+    "encounters/undercroft_rearguard/flee/text": {
+      "hash": "4cbb08c7",
+      "text": "Du trækker dig op ad trappen og slår slå for katakombedøren. Kantoren er for længst væk."
+    },
+    "encounters/undercroft_ambush/name": {
+      "hash": "1e777615",
+      "text": "Korets baghold"
+    },
+    "encounters/undercroft_ambush/terrain": {
+      "hash": "57fe0016",
+      "text": [
+        "katakombetrappen",
+        "benhushylder (halvt dække)",
+        "mørke",
+        "bagholdet slår til først"
+      ]
+    },
+    "encounters/undercroft_ambush/win/text": {
+      "hash": "8daf5e39",
+      "text": "Bagholdet er slået, men Kantoren er for længst væk. Ovenpå svigter dronningens vejrtrækning."
+    },
+    "encounters/undercroft_ambush/lose/text": {
+      "hash": "231dba5e",
+      "text": "Du vågner i paladskapellet. Kantoren er for længst væk."
+    },
+    "encounters/undercroft_ambush/flee/text": {
+      "hash": "4cbb08c7",
+      "text": "Du trækker dig op ad trappen og slår slå for katakombedøren. Kantoren er for længst væk."
+    },
+    "beats/aurek_confides/text": {
+      "hash": "648fc7b2",
+      "text": "Aurek trækker dig til side, hvid i ansigtet. \"Min tante går ud de nætter, hvor Koret synger. Hver gang. Jeg har bildt mig selv ind, at det er velgørenhed.\""
+    },
+    "beats/clues_two/text": {
+      "hash": "00ca40fd",
+      "text": "To spor fører nu til Almisseembedet. Hvis du bare kunne høre Kantorens stemme, ville du være sikker."
+    },
+    "beats/clues_three/text": {
+      "hash": "d2a5de5d",
+      "text": "Du har nu beviser nok til at anklage Den Kongelige Almisseforvalter for hoffet."
+    },
+    "beats/identity_known/text": {
+      "hash": "5ffe1049",
+      "text": "Stemmen og beviserne stemmer overens. Lady Seraphine Vell, Den Kongelige Almisseforvalter, er Kantoren for Det Hule Kor."
+    },
+    "beats/aurek_approaches/text": {
+      "hash": "5a0e693b",
+      "text": "Da hoffet bryder op, kommer en ung veyransk lærd med blækplettede manchetter hen til dig: Aurek Vell, almisseforvalterens nevø, med \"mærkelige målinger\" fra sin tantes bibliotek."
+    },
+    "beats/seraphine_we_have_met/text": {
+      "hash": "1831f08e",
+      "text": "Seraphine tager din hånd i begge sine. \"Vi har mødtes, på en måde,\" siger hun og smiler, og et øjeblik synes Savnets Tand at summe et sted langt borte."
+    },
+    "beats/queen_commends/text": {
+      "hash": "61b70c7e",
+      "text": "Dronningen roser dig for hele hoffet, fordi du afslørede guvernør Pell."
+    },
+    "beats/saltwind_warrant/text": {
+      "hash": "40bac58a",
+      "text": "På baggrund af Saltwind-kompagniets rosende brev giver dronningen dig uopfordret et kongeligt brev til at efterforske."
+    },
+    "beats/red_gull_suspect/text": {
+      "hash": "1b743467",
+      "text": "Kammerherre Hale minder hoffet om, at du har sejlet med Red Gull-pirater. Hver anmodning, du fremsætter her, vil blive vejet to gange."
+    },
+    "beats/entrusted_want/text": {
+      "hash": "fe99f50d",
+      "text": "Almisseembedets skriver bærer Savnets Tand bort. Du ser den ikke igen foreløbig."
+    },
+    "beats/entrusted_abbey/text": {
+      "hash": "04a3cbc3",
+      "text": "Almisseembedets skriver bærer Den Druknede Tand bort. Du ser den ikke igen foreløbig."
+    },
+    "beats/entrusted_wick/text": {
+      "hash": "eab09b60",
+      "text": "Almisseembedets skriver bærer Tornetanden bort. Du ser den ikke igen foreløbig."
+    },
+    "beats/entrusted_parrot/text": {
+      "hash": "48b0ecb9",
+      "text": "Almisseembedets skriver bærer Messingtanden bort. Du ser den ikke igen foreløbig."
+    },
+    "beats/entrusted_reef/text": {
+      "hash": "35073b4d",
+      "text": "Almisseembedets skriver bærer Den Syngende Tand bort. Du ser den ikke igen foreløbig."
+    },
+    "beats/sky_tooth_claimed/text": {
+      "hash": "c52aa452",
+      "text": "Under stedet, hvor lansen stod, ligger Himmeltanden og summer som en anslået klokke. Du tager den."
+    },
+    "beats/vaelthorn_done/text": {
+      "hash": "0238f2cb",
+      "text": "Gamle Vaelthorn har givet slip på sine hemmeligheder, på den ene eller den anden måde."
+    },
+    "beats/level_six/text": {
+      "hash": "8eeaadd5",
+      "text": "Vaelthorns himmeltårne har sat dig på prøve. (Milepæl: niveau 6.)"
+    },
+    "beats/corwin_leaves/text": {
+      "hash": "c8890760",
+      "text": "Corwin knæler for Thane og beder om at blive taget tilbage i Ordenen, her og nu, væk fra dig. \"Jeg kan ikke følge dig længere,\" siger han. Han bliver på Dawnspire."
+    },
+    "beats/corwin_knighted/text": {
+      "hash": "6da608cc",
+      "text": "Thane løfter Daggrybryderen og lægger den så på Corwins skulder. \"Lansen kom hjem i dine hænder, ser Corwin. Rejs dig som ridder af Daggrylansen, igen.\""
+    },
+    "beats/pip_wounded/text": {
+      "hash": "087527de",
+      "text": "Pip tog imod en kniv, der var ment til dig. Kapellanen siger, at han vil overleve, og han vil bære arret med stolthed."
+    },
+    "beats/aurek_betrays/text": {
+      "hash": "6ffe1cee",
+      "text": "Aurek glider væk fra din side under den anden dans. For sent ser du ham hviske i sin tantes øre. Da du ser igen, holder Seraphine øje med dig, og Aurek er væk. Han har advaret hende."
+    },
+    "beats/aurek_humiliated/text": {
+      "hash": "8cb0848b",
+      "text": "Aurek står stivnet, mens hoffet stirrer på hans familie. \"Du kunne have fortalt mig det først,\" siger han og vil ikke se på dig."
+    },
+    "beats/queen_lost_no_cure/text": {
+      "hash": "654c40cf",
+      "text": "Uden en kur kan hoffets læger kun bremse Sygen. Dronningen svinder hen, grå og nynnende."
+    },
+    "beats/queen_saved_by_physicians/text": {
+      "hash": "7cbadaa0",
+      "text": "Hoffets læger kender sumpens kur nu, og de bruger den. Dronningen vil leve."
+    },
+    "beats/chase_won/text": {
+      "hash": "3d73e61f",
+      "text": "Du indhenter Seraphine ved katakombernes munding over floden. Hun river sig løs og forsvinder i det mørke vand, men hendes kappe bliver i dine hænder, og noget falder ud af den: et barns medaljon med indgraveringen \"Liesel, Cinderdale\"."
+    },
+    "beats/chase_lost/text": {
+      "hash": "ffe4bd4c",
+      "text": "Hendes lygte slukkes forude, og katakomberne er tavse. Kantoren er undsluppet."
+    },
+    "beats/retake_sky/text": {
+      "hash": "4d7ec41e",
+      "text": "I Kantorens efterladte taske finder du Himmeltanden. Du har taget den tilbage."
+    },
+    "beats/retake_reef/text": {
+      "hash": "2e3b55f2",
+      "text": "I Kantorens efterladte taske finder du Den Syngende Tand, den Tand, du betroede hende."
+    },
+    "beats/retake_parrot/text": {
+      "hash": "80186d3e",
+      "text": "I Kantorens efterladte taske finder du Messingtanden, den Tand, du betroede hende."
+    },
+    "beats/retake_wick/text": {
+      "hash": "a417a209",
+      "text": "I Kantorens efterladte taske finder du Tornetanden, den Tand, du betroede hende."
+    },
+    "beats/retake_abbey/text": {
+      "hash": "8b07659c",
+      "text": "I Kantorens efterladte taske finder du Den Druknede Tand, den Tand, du betroede hende."
+    },
+    "beats/retake_want/text": {
+      "hash": "28e6e41a",
+      "text": "I Kantorens efterladte taske finder du Savnets Tand, den Tand, du betroede hende."
+    },
+    "beats/retake_old_reef/text": {
+      "hash": "354b1efe",
+      "text": "I Kantorens efterladte taske finder du Den Syngende Tand. Du har taget den tilbage fra Koret."
+    },
+    "beats/retake_old_parrot/text": {
+      "hash": "8b93aab2",
+      "text": "I Kantorens efterladte taske finder du Messingtanden. Du har taget den tilbage fra Koret."
+    },
+    "beats/retake_old_wick/text": {
+      "hash": "95993b83",
+      "text": "I Kantorens efterladte taske finder du Tornetanden. Du har taget den tilbage fra Koret."
+    },
+    "beats/retake_old_abbey/text": {
+      "hash": "4c5ad7a8",
+      "text": "I Kantorens efterladte taske finder du Den Druknede Tand. Du har taget den tilbage fra Koret."
+    },
+    "beats/retake_old_want/text": {
+      "hash": "f2f5a336",
+      "text": "I Kantorens efterladte taske finder du Savnets Tand. Du har taget den tilbage fra Koret."
+    },
+    "beats/level_seven/text": {
+      "hash": "5daa2001",
+      "text": "Du har stået ansigt til ansigt med Kantoren i hendes eget hus. (Milepæl: niveau 7.)"
+    },
+    "beats/aurek_father/text": {
+      "hash": "06f21da9",
+      "text": "Aurek fortæller om sin fars forskning halvdelen af natten. Ingen har lyttet til ham sådan i årevis."
+    },
+    "beats/aurek_scared/text": {
+      "hash": "63303f64",
+      "text": "Aurek holder en forsigtig afstand til dig. \"Vælg side,\" mumler han, når han tror, du ikke kan høre det."
+    },
+    "beats/aurek_confides_early/text": {
+      "hash": "2bd87e9b",
+      "text": "Aurek trækker dig til side, hvid i ansigtet. \"Du spurgte, om min tante vidste det. Hun går ud de nætter, hvor Koret synger. Hver gang.\""
+    },
+    "beats/ashgrove_double/text": {
+      "hash": "bb83d40c",
+      "text": "Et bud fra konsortiet bringer en forseglet pung: de hundrede guldmønter, Ashgrove lovede skriftligt."
+    },
+    "deadlines/race_vosk/text": {
+      "hash": "692150c8",
+      "text": "Nå Edernes Hvælving i Gamle Vaelthorn før Vosk den Hule"
+    },
+    "deadlines/race_vosk/warning": {
+      "hash": "7a9428f5",
+      "text": "Én dag tilbage: Vosks klatrere når Edernes Hvælving i morgen."
+    },
+    "deadlines/race_vosk/missed/text": {
+      "hash": "4eb559da",
+      "text": "For sent: Vosk den Hule har nået Edernes Hvælving. Hans kultister har slæbt Daggrybryderen bort i kæder, og Vosk har Himmeltanden."
+    },
+    "quests/the_gilded_lie/name": {
+      "hash": "e165c76b",
+      "text": "Den forgyldte løgn"
+    },
+    "quests/the_gilded_lie/objectives/gate/text": {
+      "hash": "50069cca",
+      "text": "Kom forbi Dronningeporten og ind i Highcrown"
+    },
+    "quests/the_gilded_lie/objectives/audience/text": {
+      "hash": "1f1b0503",
+      "text": "Deltag i dronning Isoldes audiens i Tårnhallen"
+    },
+    "quests/the_gilded_lie/objectives/vaelthorn/text": {
+      "hash": "4b32b567",
+      "text": "Nå Himmeltanden og Daggrybryderen i Gamle Vaelthorn før Vosk den Hule"
+    },
+    "quests/the_gilded_lie/objectives/ledgers/text": {
+      "hash": "eb8963a1",
+      "text": "Følg Almisseembedets penge i Jernhvælvets regnskabsbøger i Deepanvil Hold"
+    },
+    "quests/the_gilded_lie/objectives/dawnspire/text": {
+      "hash": "a95dd700",
+      "text": "Bring øverstbefalende Thane nyt om Daggrybryderen på Dawnspire-borgen"
+    },
+    "quests/the_gilded_lie/objectives/masque/text": {
+      "hash": "3d206d03",
+      "text": "Afslør Kantoren ved almisseforvalterens midsommermaskerade"
+    },
+    "quests/the_gilded_lie/objectives/undercroft/text": {
+      "hash": "720dd50c",
+      "text": "Red dronningen, eller forfølg Kantoren"
+    },
+    "endings/court_unmasked/name": {
+      "hash": "3dd755ba",
+      "text": "Masken falder"
+    },
+    "endings/court_unmasked/text": {
+      "hash": "aa13d200",
+      "text": "Du afslørede Kantoren for hele hoffet. Kronen kender nu sin fjende og vil mønstre åbent imod hende."
+    },
+    "endings/court_secret/name": {
+      "hash": "83162744",
+      "text": "Hvad helten ved"
+    },
+    "endings/court_secret/text": {
+      "hash": "21940f5e",
+      "text": "Du ved, hvem Kantoren er, men det ved hoffet ikke. Hvad der end kommer, må du samle allierede i stilhed."
+    },
+    "endings/court_hunted/name": {
+      "hash": "c0f48c0b",
+      "text": "Jaget i Highcrown"
+    },
+    "endings/court_hunted/text": {
+      "hash": "4b29ee43",
+      "text": "Kantoren er fri, og det er dig, Kronen jager. Kun hendes egen flugt kan rense dit navn nu."
+    },
+    "endings/court_vanished/name": {
+      "hash": "0c2a5829",
+      "text": "Almisseforvalteren forsvinder"
+    },
+    "endings/court_vanished/text": {
+      "hash": "fbd032b6",
+      "text": "Almisseforvalteren er væk, og hoffet tror, at Koret tog hende. Sandheden venter stadig på, at nogen finder den."
+    }
+  }
+}

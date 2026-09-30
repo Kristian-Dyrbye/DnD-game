@@ -147,3 +147,23 @@ Port Sorrel, Fort Kestrel, Gullhaven, Highcrown, Saltwind, Red Gull(s), Tidewrig
 | commission / letter of marque / ledger / chart | bestalling / kaperbrev / regnskabsbog / søkort |
 | "darling" (Vey) / "darling" (Mora), "dearie" (the hag) | "min kære" / "skat" |
 | Milestone: level N | Milepæl: niveau N |
+
+## Content (A146): chapter 3 names
+Highcrown, Deepanvil Hold, Dawnspire (Keep = "Dawnspire-borgen"), Emberpeaks, Cinderdale, Veyran (veyransk) and person names stay English.
+
+| English | Dansk |
+|---|---|
+| The Gilded Lie | Den forgyldte løgn |
+| Royal Almoner (the Almoner) | Den Kongelige Almisseforvalter (almisseforvalteren) |
+| Chamberlain / Guildmistress / Lord-Commander | kammerherre / laugsmester / øverstbefalende |
+| Ironvault (Consortium) | Jernhvælvet (Jernhvælv-konsortiet, konsortiet) |
+| Tower Hall / Queen's Gate | Tårnhallen / Dronningeporten |
+| royal warrant | kongeligt brev |
+| masque | maskerade |
+| Sky Tooth / Dawnbreaker (the lance) | Himmeltanden / Daggrybryderen |
+| Old Vaelthorn / sky-towers / Vault of Oaths / First Oath | Gamle Vaelthorn / himmeltårne / Edernes Hvælving / Den Første Ed |
+| Vosk the Hollow | Vosk den Hule |
+| Ashfall Winter | Askefaldsvinteren |
+| undercroft / catacombs / ossuary | krypt / katakomber / benhus |
+| purge (medicine) | udrensningsmiddel |
+| "my lady" (to Seraphine) / "my lord/my lady" (Pip) | "frue" / "herre"/"frue" |
