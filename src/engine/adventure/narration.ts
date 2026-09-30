@@ -6,6 +6,7 @@
  * nothing, template narration built from the scene seed and the fixed facts is used instead, so
  * the game never stalls on the model.
  */
+import { ENGLISH_MESSAGES } from '../i18n';
 import type { GameSession } from '../session/GameSession';
 import { describeScene, type RunContext } from './runner';
 
@@ -29,9 +30,10 @@ export type Narrator = (job: NarrationJob, signal?: AbortSignal) => AsyncIterabl
 
 /** Deterministic narration from data: facts on the way, the scene description, then arrival facts. */
 export function templateNarration(job: NarrationJob): string {
-  if (job.kind === 'outcome' || job.kind === 'combat') return job.facts.join(' ') || 'Nothing much happens.';
+  const { m } = job.ctx.msgs ?? ENGLISH_MESSAGES;
+  if (job.kind === 'outcome' || job.kind === 'combat') return job.facts.join(' ') || m('tpl.nothingHappens');
   const d = describeScene(job.ctx, job.visit);
-  const scene = [d.seed, ...d.pois.map((p) => p.seed), ...(d.npcs.length ? [`Here: ${d.npcs.join(', ')}.`] : [])].join(' ');
+  const scene = [d.seed, ...d.pois.map((p) => p.seed), ...(d.npcs.length ? [m('tpl.here', { list: d.npcs.join(', ') })] : [])].join(' ');
   const cut = job.arrivalIndex ?? 0;
   return [...job.facts.slice(0, cut), scene, ...job.facts.slice(cut)].join(' ');
 }

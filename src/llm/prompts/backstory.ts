@@ -3,6 +3,8 @@
  * from the character summary; if the LLM is unavailable a template backstory is used instead.
  * The result is plain prose the player can edit; it is stored for later narration.
  */
+import { messages, type EngineKey } from '../../engine/i18n';
+import { isLanguage, type Language } from '../../shared/i18nCore';
 import type { ChatMessage } from '../types';
 
 export interface BackstorySummary {
@@ -16,6 +18,8 @@ export interface BackstorySummary {
   flaws?: string;
   /** Region/tone hint from the world lore (optional). */
   homeland?: string;
+  /** Language of the template story (the player's setting); the LLM prompt stays English until A150. */
+  language?: Language;
 }
 
 export function backstoryMessages(s: BackstorySummary): ChatMessage[] {
@@ -42,18 +46,17 @@ export function backstoryMessages(s: BackstorySummary): ChatMessage[] {
   ];
 }
 
-/** Deterministic fallback when no LLM is available. */
+const HOOKS = { soldier: 'backstory.soldier', criminal: 'backstory.criminal', sage: 'backstory.sage', acolyte: 'backstory.acolyte' } as const satisfies Record<string, EngineKey>;
+
+/** Deterministic fallback when no LLM is available, in the summary's language (default English). */
 export function templateBackstory(s: BackstorySummary): string {
-  const bg = s.background.toLowerCase();
-  const hook =
-    bg === 'soldier'
-      ? 'You marched with a company that no longer exists, and you still count the names of those who did not come home.'
-      : bg === 'criminal'
-        ? 'You learned early that locks, lies and loyalties can all be broken, and one job went wrong enough to force you onto the road.'
-        : bg === 'sage'
-          ? 'You spent years among dusty books until a single torn page hinted at a truth no one else wanted found.'
-          : bg === 'acolyte'
-            ? 'You served a quiet temple until a vision — or a warning — sent you out beyond its walls.'
-            : 'Something in your past still pulls at you, a question only the road can answer.';
-  return `You are ${s.name || 'a wanderer'}, a ${s.species.toLowerCase()} ${s.className.toLowerCase()} raised in ${s.homeland ?? 'a small town at the edge of the known lands'}. ${hook} Now you seek adventure, coin and perhaps a purpose worth the risk.`;
+  const { m } = messages(isLanguage(s.language) ? s.language : 'en'); // the server gets it from a request body
+  const hook = m(HOOKS[s.background.toLowerCase() as keyof typeof HOOKS] ?? 'backstory.other');
+  const intro = m('backstory.intro', {
+    name: s.name || m('backstory.wanderer'),
+    species: s.species.toLowerCase(),
+    className: s.className.toLowerCase(),
+    homeland: s.homeland ?? m('backstory.homeland'),
+  });
+  return `${intro} ${hook} ${m('backstory.outro')}`;
 }

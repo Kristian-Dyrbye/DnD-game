@@ -393,6 +393,7 @@ export const da: Partial<Record<MessageKey, string>> = {
   'creator.identity.writing': 'Skriver…',
   'creator.identity.suggest': 'Foreslå en baggrundshistorie',
   'creator.identity.noteTemplate': 'Et udgangspunkt: ret den frit.',
+  'creator.identity.homeland': 'Millbrook, en landsby i Aurelmark',
   'creator.identity.noteOffline': 'AI-spillederen er offline, så dette er en skabelonhistorie. Ret den frit.',
   'creator.identity.noteNoServer': 'Kunne ikke nå spilserveren.',
 

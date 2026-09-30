@@ -652,6 +652,28 @@ export const en = {
   'feat.strokeOfLuck': '{text} → Stroke of Luck: natural 20 ({n})',
   'feat.tacticalMind': '{text} → + {n} (Tactical Mind) = {total} — {outcome}',
   'feat.failureRefunded': 'Failure (use refunded)',
+
+  // Fallback templates (A141d): narration/summary glue, buttons, check labels, template backstory
+  'tpl.nothingHappens': 'Nothing much happens.',
+  'tpl.here': 'Here: {list}.',
+  'summary.hero': 'The hero: {text}',
+  'summary.someone': 'Someone',
+  'suggest.look': 'Look around',
+  'suggest.lookSay': 'I look around carefully.',
+  'dialogue.end': 'End the conversation',
+  'check.save': '{ability} save',
+  'check.ability': '{ability} check',
+  'check.dc': '{name} DC {dc}',
+  'check.group': 'Group {name}',
+  'backstory.intro': 'You are {name}, a {species} {className} raised in {homeland}.',
+  'backstory.wanderer': 'a wanderer',
+  'backstory.homeland': 'a small town at the edge of the known lands',
+  'backstory.soldier': 'You marched with a company that no longer exists, and you still count the names of those who did not come home.',
+  'backstory.criminal': 'You learned early that locks, lies and loyalties can all be broken, and one job went wrong enough to force you onto the road.',
+  'backstory.sage': 'You spent years among dusty books until a single torn page hinted at a truth no one else wanted found.',
+  'backstory.acolyte': 'You served a quiet temple until a vision — or a warning — sent you out beyond its walls.',
+  'backstory.other': 'Something in your past still pulls at you, a question only the road can answer.',
+  'backstory.outro': 'Now you seek adventure, coin and perhaps a purpose worth the risk.',
 } as const;
 
 export type EngineKey = keyof typeof en;

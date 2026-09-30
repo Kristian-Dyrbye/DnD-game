@@ -104,7 +104,8 @@ const VERB_ACTIONS: [RegExp, Intent['action']][] = [
   [/\b(attack|hit|stab|strike|slash|shoot|fight|kill|punch)\b/, 'attack'],
   [/\b(talk|speak|ask|say|tell|greet|chat|question)\b/, 'talk'],
   [/\b(go|walk|head|leave|enter|return|travel|move|run)\b/, 'move'],
-  [/\b(look|glance|observe|survey)\b/, 'look'],
+  // "ser mig omkring": the Danish Look around button (A141d); full Danish keywords come with A150.
+  [/\b(look|glance|observe|survey)\b|\bser mig\b/, 'look'],
   [/\b(rest|sleep|camp|nap)\b/, 'rest'],
   [/\b(cast)\b/, 'cast_spell'],
   [/\b(drink|use|eat|light|apply|read the scroll)\b/, 'use_item'],

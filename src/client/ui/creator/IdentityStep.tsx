@@ -6,7 +6,7 @@ import { Rng } from '../../../engine/core/rng';
 import { templateBackstory } from '../../../llm/prompts/backstory';
 import { db } from '../../data';
 import { WEB_EDITION } from '../../edition';
-import { t } from '../i18n';
+import { language, t } from '../i18n';
 import { creator } from './creatorState';
 
 const FIELDS = ['traits', 'ideals', 'bonds', 'flaws'] as const;
@@ -23,7 +23,8 @@ export function IdentityStep() {
       species: db.species.get(s.speciesId ?? '')?.name ?? 'Human',
       className: db.classes.get(s.classId ?? '')?.name ?? 'Adventurer',
       background: db.backgrounds.get(s.backgroundId ?? '')?.name ?? 'Wanderer',
-      homeland: 'Millbrook, a village in Aurelmark',
+      homeland: t('creator.identity.homeland'),
+      language: language.value,
       ...s.personality,
     };
     if (WEB_EDITION) {

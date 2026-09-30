@@ -5,6 +5,7 @@
  * intent parsing like typed text). Offered exits and actions are never hidden by the model.
  */
 import type { SuggestedAction } from '../../shared/protocol';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { AvailableAction } from './runner';
 
 export interface SuggestionIdea {
@@ -22,9 +23,9 @@ const MAX_LABEL = 60;
 const button = (a: AvailableAction): SuggestedAction => ({ id: a.id, label: a.check ? `${a.label} (${a.check})` : a.label });
 
 /** Offered actions first (non-exits, then exits), padded with "Look around" when there are fewer than 3. */
-export function dataSuggestions(offered: AvailableAction[]): SuggestedAction[] {
+export function dataSuggestions(offered: AvailableAction[], msgs: Messages = ENGLISH_MESSAGES): SuggestedAction[] {
   const ordered = [...offered.filter((a) => a.kind !== 'exit'), ...offered.filter((a) => a.kind === 'exit')].map(button);
-  if (ordered.length < 3) ordered.push({ id: 'say:look', label: 'Look around', say: 'I look around carefully.' });
+  if (ordered.length < 3) ordered.push({ id: 'say:look', label: msgs.m('suggest.look'), say: msgs.m('suggest.lookSay') });
   return ordered;
 }
 

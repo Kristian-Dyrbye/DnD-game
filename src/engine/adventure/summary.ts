@@ -4,6 +4,7 @@
  * The condensing is done by an injected Summarizer (the LLM); if it is missing or fails, a
  * deterministic template keeps the first sentence of each new narration line.
  */
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { GameState, LogEntry } from '../session/gameState';
 
 /** (previous summary, new story lines) → new summary. */
@@ -11,9 +12,10 @@ export type Summarizer = (previous: string, lines: string[]) => Promise<string>;
 
 export const SUMMARY_MAX_CHARS = 1500;
 
-export function linesSince(state: GameState): { lines: string[]; lastId: number } {
+export function linesSince(state: GameState, msgs: Messages = ENGLISH_MESSAGES): { lines: string[]; lastId: number } {
+  const { m } = msgs;
   const fresh = state.log.filter((e) => e.id > state.summaryUpTo && (e.kind === 'narration' || e.kind === 'player' || e.kind === 'dialogue'));
-  const label = (e: LogEntry) => (e.kind === 'player' ? `The hero: ${e.text}` : e.kind === 'dialogue' ? `${e.speaker ?? 'Someone'}: ${e.text}` : e.text);
+  const label = (e: LogEntry) => (e.kind === 'player' ? m('summary.hero', { text: e.text }) : e.kind === 'dialogue' ? `${e.speaker ?? m('summary.someone')}: ${e.text}` : e.text);
   return { lines: fresh.map(label), lastId: state.log.at(-1)?.id ?? state.summaryUpTo };
 }
 
@@ -38,8 +40,8 @@ export function clampSummary(text: string, max = SUMMARY_MAX_CHARS): string {
 }
 
 /** Folds new log lines into the summary. Never throws; a bad summarizer result falls back to the template. */
-export async function updateSummary(state: GameState, summarizer?: Summarizer): Promise<void> {
-  const { lines, lastId } = linesSince(state);
+export async function updateSummary(state: GameState, summarizer?: Summarizer, msgs: Messages = ENGLISH_MESSAGES): Promise<void> {
+  const { lines, lastId } = linesSince(state, msgs);
   if (lines.length === 0) {
     state.summaryUpTo = lastId;
     return;

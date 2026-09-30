@@ -391,6 +391,7 @@ export const en = {
   'creator.identity.writing': 'Writing…',
   'creator.identity.suggest': 'Suggest a backstory',
   'creator.identity.noteTemplate': 'A starting point: edit it freely.',
+  'creator.identity.homeland': 'Millbrook, a village in Aurelmark',
   'creator.identity.noteOffline': 'The AI Dungeon Master is offline, so this is a template story. Edit it freely.',
   'creator.identity.noteNoServer': 'Could not reach the game server.',
 

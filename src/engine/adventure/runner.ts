@@ -231,23 +231,24 @@ export function availableActions(ctx: RunContext): AvailableAction[] {
   if (!p || p.ending || p.away) return [];
   const s = currentScene(ctx);
   const cc = conditionContext(ctx.state, p, flagsFor(ctx));
+  const msgs = ctx.msgs ?? ENGLISH_MESSAGES;
   if (p.talk) {
     // In a conversation: its options, plus a way out.
-    const opts = openOptions(ctx.adventure, p.talk, cc).map(({ id, option }): AvailableAction => ({ id, label: option.label, kind: 'dialogue', ...(option.check && { check: checkLabel(option.check) }) }));
-    return [...opts, { id: LEAVE_TALK, label: 'End the conversation', kind: 'dialogue' }];
+    const opts = openOptions(ctx.adventure, p.talk, cc).map(({ id, option }): AvailableAction => ({ id, label: option.label, kind: 'dialogue', ...(option.check && { check: checkLabel(option.check, msgs) }) }));
+    return [...opts, { id: LEAVE_TALK, label: msgs.m('dialogue.end'), kind: 'dialogue' }];
   }
   const open = (a: Action, id: string) => evalCondition(a.if, cc) && !(a.once && p.done.includes(`${s.id}/${id}`));
   const out: AvailableAction[] = [];
-  for (const a of s.actions) if (open(a, a.id)) out.push({ id: a.id, label: a.label, kind: 'action', ...(a.check && { check: checkLabel(a.check) }) });
+  for (const a of s.actions) if (open(a, a.id)) out.push({ id: a.id, label: a.label, kind: 'action', ...(a.check && { check: checkLabel(a.check, msgs) }) });
   for (const poi of s.pois) {
     if (!evalCondition(poi.if, cc)) continue;
     for (const a of poi.actions) {
       const id = `${poi.id}.${a.id}`;
-      if (open(a, id)) out.push({ id, label: a.label, kind: 'poi', ...(a.check && { check: checkLabel(a.check) }) });
+      if (open(a, id)) out.push({ id, label: a.label, kind: 'poi', ...(a.check && { check: checkLabel(a.check, msgs) }) });
     }
   }
   for (const t of conversationOffers(ctx.adventure, npcsHere(ctx), cc, p.done)) out.push({ id: t.id, label: t.label, kind: 'talk' });
-  for (const e of s.exits) if (evalCondition(e.if, cc)) out.push({ id: `exit.${e.id}`, label: e.label, kind: 'exit', ...(e.check && { check: checkLabel(e.check) }) });
+  for (const e of s.exits) if (evalCondition(e.if, cc)) out.push({ id: `exit.${e.id}`, label: e.label, kind: 'exit', ...(e.check && { check: checkLabel(e.check, msgs) }) });
   return out;
 }
 
@@ -409,9 +410,12 @@ export function activeGroups<T extends { id: string; count: number; if?: Conditi
   return groups.filter((g) => evalCondition(g.if, cc)).map((g) => ({ id: g.id, count: g.count }));
 }
 
-export function checkLabel(c: Check): string {
-  const name = c.save ? `${cap(c.save)} save` : c.skill ? cap(c.skill.replace(/_/g, ' ')) : `${cap(c.ability ?? 'str')} check`;
-  return `${c.group ? 'Group ' : ''}${name} DC ${c.dc}`;
+export function checkLabel(c: Check, msgs: Messages = ENGLISH_MESSAGES): string {
+  const { m } = msgs;
+  // Skill/ability names stay SRD English until A149.
+  const name = c.save ? m('check.save', { ability: cap(c.save) }) : c.skill ? cap(c.skill.replace(/_/g, ' ')) : m('check.ability', { ability: cap(c.ability ?? 'str') });
+  const label = m('check.dc', { name, dc: c.dc });
+  return c.group ? m('check.group', { name: label }) : label;
 }
 
 function cap(s: string): string {

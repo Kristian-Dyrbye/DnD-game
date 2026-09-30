@@ -239,7 +239,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     // In a conversation the options stay authored: no job buttons, no model ideas.
     if (talk) return session.suggest(offered.map((a) => ({ id: a.id, label: a.check ? `${a.label} (${a.check})` : a.label })));
     const jobs = jobButtons(session);
-    session.suggest([...dataSuggestions(offered), ...jobs]);
+    session.suggest([...dataSuggestions(offered, session.msgs), ...jobs]);
     if (!opts.suggester || offered.length === 0) return;
     const stamp = session.current.nextId;
     pendingIdeas = opts
@@ -279,7 +279,8 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       session.autosave();
       // Condense the finished scene in the background (chained so updates never overlap).
       const state = session.current;
-      pendingSummary = pendingSummary.then(() => updateSummary(state, opts.summarizer)).catch(() => undefined);
+      const msgs = session.msgs;
+      pendingSummary = pendingSummary.then(() => updateSummary(state, opts.summarizer, msgs)).catch(() => undefined);
     }
   };
 

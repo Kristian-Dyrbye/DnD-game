@@ -70,4 +70,5 @@ There is no official Danish D&D 5e. These are the game's own choices; use them i
 | temporary HP | midlertidige LP | |
 | spell attack | besværgelsesangreb | |
 | spell slot / Pact Magic slot | plads / pagtplads | "en plads på niveau 3+" |
+| ability check / group check | {ability}-prøve / gruppeprøve | "Gruppeprøve: Stealth SG 12" |
 | area effect; sphere / cone / cube / line / cylinder / emanation | områdeeffekt; kugle / kegle / terning / linje / cylinder / udstråling | |
