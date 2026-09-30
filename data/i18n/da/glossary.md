@@ -186,3 +186,24 @@ Emberpeak, Gloamfen, Silverrun, Brightwater, Deepanvil and person names stay Eng
 | Choir of Teeth | Tændernes Kor |
 | royal envoy / royal guard / draft (on the treasury) | kongeligt sendebud / kongelig garde / anvisning |
 | "duck" (Moll) / "small thing", "little thief" (Pyrraxis) | "lille due" / "lille ting", "lille tyv" |
+
+## Content (A148): chapter 5 names
+Gloamfen, Mireth, Cinderdale, Orrimar and person names stay English. Vosk addresses the hero with "De"; Seraphine, Grell, Brask, Wick, Rook and Aurek use "du".
+
+| English | Dansk |
+|---|---|
+| The Hungering Dark (chapter) / Vashkul | Det Sultne Mørke / Vashkul |
+| Blightwood / heart-tree / shambling mound | Visneskoven / hjertetræet / den slæbende høj |
+| Jaw-Stone / the jaw / socket | Kæbestenen / kæben / hul |
+| Hunger Pull / reverse-song / Name-Chant | Sultens Træk / den omvendte sang / Navnesangen |
+| dead-bells / bell-well / hand-bell | de døde klokker / klokkebrønden / håndklokke |
+| bile-pools / delvers' ledge / spiral stair | galdepøler / minearbejderhylde / vindeltrappe |
+| sanctum gate / sentry gallery / rim | helligdommens port / vagtgalleriet / kanten |
+| lead box (Brask) / death notice (Grell) | blyskrin / dødsannonce |
+| thorn-charm, thorn-token / briar knot (Wick) | tornamulet / tornknude |
+| the hag's sister / night hag | heksens søster / natheks |
+| mouthers (gibbering mouthers, prose) | de pludrende munde |
+| regency council / royal charter | regentskabsrådet / kongeligt privilegium |
+| "partner", "boss" (Rook) / "little mushroom" (Wick) / "my dear" (Seraphine) | "makker", "chef" / "lille svamp" / "min kære" |
+| endings: Hungering Dawn / Pale Mother's Mercy / Hollow Throne / Dawn over Orrimar / A Quiet Hunger | Den Sultne Daggry / Den Blege Moders Nåde / Den Tomme Trone / Daggry over Orrimar / En Stille Sult |
+| "the Unkillable" | "den Udræbelige" |

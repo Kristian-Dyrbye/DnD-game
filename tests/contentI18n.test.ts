@@ -140,8 +140,8 @@ describe('real content', () => {
         expect({ lang, key, stale: r.stale, orphan: r.orphan, broken: r.broken }).toEqual({ lang, key, stale: [], orphan: [], broken: [] });
       }
     }
-    // Complete Danish files (A142 demo, A143 starter arc, A144 ch1, A145 ch2, A146 ch3, A147 ch4).
-    for (const key of ['millbrook_demo', 'millbrook_disappearances', 'ch1_whispering_fen', 'ch2_salt_and_treason', 'ch3_the_gilded_lie', 'ch4_wyrmfire']) {
+    // Complete Danish files (A142 demo, A143 starter arc, A144 ch1, A145 ch2, A146 ch3, A147 ch4, A148 ch5).
+    for (const key of ['millbrook_demo', 'millbrook_disappearances', 'ch1_whispering_fen', 'ch2_salt_and_treason', 'ch3_the_gilded_lie', 'ch4_wyrmfire', 'ch5_the_hungering_dark']) {
       const r = checkOverlay(BUNDLED_ADVENTURES.find((a) => (a.raw as { id: string }).id === key)!.raw, BUNDLED_TRANSLATIONS.da![key]);
       expect({ key, missing: r.missing }).toEqual({ key, missing: [] });
     }
@@ -252,14 +252,37 @@ describe('real content', () => {
     expect(logText()).toMatch(/begynder at lytte|for skrigene/);
   });
 
+  it('the Danish ch5: translated siege, buttons, and a Danish free-text check (A148)', async () => {
+    const host = createGameHost({ srd: db, adventures, flags: bundledFlagRegistry(), tables, translations: BUNDLED_TRANSLATIONS, startingAdventure: 'ch5_the_hungering_dark', sessionPorts: { newSeed: () => 'a148' } });
+    const events: ServerEvent[] = [];
+    host.on((e) => events.push(e));
+    const labels = () => (events.filter((e) => e.type === 'suggestions').at(-1) as Extract<ServerEvent, { type: 'suggestions' }>).actions.map((a) => a.label);
+    const logText = () => events.flatMap((e) => (e.type === 'log' ? [e.entry.text] : [])).join(' ');
+    const hero = buildCharacter(toBuildInput(quickBuild('cleric', db, Rng.fromSeed(1))), db);
+    await host.send({ type: 'set_language', language: 'da' });
+    await host.send({ type: 'new_game', hero, mode: 'heroic' });
+    await host.idle();
+    expect(events.filter((e) => e.type === 'error')).toEqual([]);
+    expect(labels().some((l) => l.startsWith('Saml de udmattede vogtere'))).toBe(true);
+    expect(labels()).toContain('Forsvar murene mod de døde');
+    expect(logText()).toContain('pestens døde');
+    const rolls = events.filter((e) => e.type === 'roll').length;
+    await host.send({ type: 'say', text: 'jeg samler vogterne med en tale' });
+    await host.idle();
+    expect(events.filter((e) => e.type === 'error')).toEqual([]);
+    expect(events.filter((e) => e.type === 'roll').length).toBe(rolls + 1);
+    expect(logText()).toMatch(/løfter en lygte|for trætte til at håbe/);
+  });
+
   it('builds the translated content once per language; languages without overlays get English', () => {
     const content = contentByLanguage(adventures, tables, BUNDLED_TRANSLATIONS);
     expect(content('en').adventures).toBe(adventures);
     expect(content('da')).toBe(content('da'));
     expect(content('da').adventures.get('millbrook_demo')!.name).toBe('Rotter i den gamle mølle');
     expect(adventures.get('millbrook_demo')!.name).toBe('Rats in the Old Mill');
-    // Untranslated files stay the very same objects' content.
-    expect(content('da').adventures.get('ch5_the_hungering_dark')!.name).toBe(adventures.get('ch5_the_hungering_dark')!.name);
+    // Untranslated files keep the English content (every adventure is translated since A148; the
+    // shops table has no bundled overlay until A143b lands — then pick another untranslated file).
+    expect(content('da').tables.shops).toEqual(tables.shops);
   });
 
   it('a session in Danish plays the translated adventure; switching back gives English again', async () => {

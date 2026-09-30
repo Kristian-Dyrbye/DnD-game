@@ -22,6 +22,7 @@ import daCh1 from '../../data/i18n/da/ch1_whispering_fen.json';
 import daCh2 from '../../data/i18n/da/ch2_salt_and_treason.json';
 import daCh3 from '../../data/i18n/da/ch3_the_gilded_lie.json';
 import daCh4 from '../../data/i18n/da/ch4_wyrmfire.json';
+import daCh5 from '../../data/i18n/da/ch5_the_hungering_dark.json';
 
 /** Bundled adventure files, keyed by their path under data/adventures/. */
 export const BUNDLED_ADVENTURES: AdventureSource[] = [
@@ -44,6 +45,7 @@ export const BUNDLED_TRANSLATIONS: ContentTranslations = {
     ch2_salt_and_treason: parseOverlay(daCh2),
     ch3_the_gilded_lie: parseOverlay(daCh3),
     ch4_wyrmfire: parseOverlay(daCh4),
+    ch5_the_hungering_dark: parseOverlay(daCh5),
   },
 };
 
