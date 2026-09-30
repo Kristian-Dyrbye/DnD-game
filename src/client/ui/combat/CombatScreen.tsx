@@ -26,7 +26,7 @@ import { BattleMap } from './BattleMap';
 import { BattleMap3D } from '../../three/LazyBattleMap3D';
 import { settings } from '../settingsState';
 import { language, t } from '../i18n';
-import { srdText } from '../srdText';
+import { itemText, srdText } from '../srdText';
 import { messages } from '../../../engine/i18n';
 
 type Mode =
@@ -208,7 +208,7 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
               </button>
               {profiles.map((pr) => (
                 <button key={pr.id} type="button" class={mode.kind === 'attack' && mode.profile.id === pr.id ? 'selected' : ''} disabled={!budget.action && !(budget.attacksLeft ?? 0)} onClick={() => setMode({ kind: 'attack', profile: pr })}>
-                  {pr.name}
+                  {pr.weaponId && !pr.unarmed && hero && 'inventory' in hero ? itemText(pr.weaponId, hero.inventory.find((i) => i.uid === pr.uid)?.magicItemId) : pr.name}
                 </button>
               ))}
               {knownSpells.map((sp) => {
@@ -285,7 +285,7 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
                 {items.map((it) => (
                   <span key={it.uid} class="item-use">
                     <button type="button" disabled={it.bonusAction ? !budget.bonusAction : !budget.action} onClick={() => run({ kind: 'use_item', uid: it.uid })}>
-                      ⚗ {it.name}
+                      ⚗ {itemText(it.itemId)}
                     </button>
                     {it.bonusAction && (
                       <button type="button" class={mode.kind === 'item' && mode.uid === it.uid ? 'selected' : ''} disabled={!budget.bonusAction} title={t('combat.giveTitle')} onClick={() => setMode({ kind: 'item', uid: it.uid })}>

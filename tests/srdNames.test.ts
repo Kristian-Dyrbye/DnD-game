@@ -50,7 +50,8 @@ describe('SRD name overlays (A149)', () => {
     expect(srdName('da', 'classes', 'fighter', 'Fighter')).toBe('Kriger');
     expect(srdName('en', 'classes', 'fighter', 'Fighter')).toBe('Fighter');
     expect(srdName('da', 'monsters', 'goblin_warrior', 'Goblin Warrior')).toBe('Goblinkriger');
-    expect(srdName('da', 'gear', 'rope_hempen', 'Rope')).toBe('Rope'); // no gear overlay yet (A149d)
+    expect(srdName('da', 'gear', 'rope', 'Rope')).toBe('Reb');
+    expect(srdName('da', 'gear', 'rope_hempen', 'Rope')).toBe('Rope'); // unknown id → English
     expect(srdName('da', 'classes', 'no_such_class', 'Nope')).toBe('Nope');
     expect(abilityName('da', 'dex')).toBe('Behændighed');
     expect(abilityShort('da', 'con')).toBe('Kon');
@@ -79,6 +80,14 @@ describe('SRD name overlays (A149)', () => {
       const src = fs.readFileSync(path.join(process.cwd(), f), 'utf8');
       expect(src, f).toMatch(/srdText\('spells'/);
       expect(src, f).not.toMatch(/\{sp\.name\}|name: s\.name/);
+    }
+  });
+
+  it('item screens show item names through itemText (A149d)', () => {
+    for (const f of ['src/client/ui/game/InventoryPanel.tsx', 'src/client/ui/game/ShopPanel.tsx', 'src/client/ui/game/CharacterScreen.tsx', 'src/client/ui/creator/EquipmentStep.tsx', 'src/client/ui/creator/BackgroundStep.tsx', 'src/client/ui/creator/ReviewStep.tsx', 'src/client/ui/combat/CombatScreen.tsx']) {
+      const src = fs.readFileSync(path.join(process.cwd(), f), 'utf8');
+      expect(src, f).toMatch(/itemText\(/);
+      expect(src, f).not.toMatch(/db\.item\([^)]*\)\?\.name|itemName\([^)]*db\)|\{(l|o|it)\.name\}/);
     }
   });
 

@@ -5,7 +5,6 @@
  */
 import { useState } from 'preact/hooks';
 import { armorWear } from '../../../engine/character/armorWear';
-import { itemName } from '../../../engine/character/inventory';
 import { equipmentLook } from '../../../engine/appearance/equipmentVisuals';
 import { woundLevel } from '../../../engine/appearance/wounds';
 import { totalLevel, type Character, type ScarLocation } from '../../../engine/core/creature';
@@ -14,7 +13,7 @@ import { CharacterPreview } from '../../three/LazyCharacterPreview';
 import { db } from '../../data';
 import { t } from '../i18n';
 import { scarLabel, scarLine, wearText, woundText } from './labels';
-import { srdText } from '../srdText';
+import { itemText, srdText } from '../srdText';
 
 const signed = (n: number) => (n >= 0 ? `+${n}` : `−${Math.abs(n)}`);
 
@@ -90,7 +89,7 @@ export function CharacterScreen({ c, onClose }: { c: Character; onClose: () => v
             <ul class="plain-list">
               {c.inventory.filter((i) => i.equipped).map((i) => (
                 <li key={i.uid}>
-                  {itemName(i.itemId, db)}
+                  {itemText(i.itemId, i.magicItemId)}
                   {(i.wear ?? 0) > 0 && <span class="tag tag-wear">{wearText(i.wear ?? 0)}</span>}
                 </li>
               ))}

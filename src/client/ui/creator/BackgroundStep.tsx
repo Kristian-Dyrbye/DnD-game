@@ -6,7 +6,7 @@ import { db } from '../../data';
 import { coins, t } from '../i18n';
 import { creator } from './creatorState';
 import { firstSentence, itemDisplayName } from '../text';
-import { srdText, abilityText, skillText } from '../srdText';
+import { srdText, abilityText, itemText, skillText } from '../srdText';
 
 const CHOICE_KEYS: Record<string, MessageKey> = {
   holy_symbol: 'creator.item.holySymbol',
@@ -17,7 +17,7 @@ const CHOICE_KEYS: Record<string, MessageKey> = {
 const choiceLabel = (tag: string) => (CHOICE_KEYS[tag] ? t(CHOICE_KEYS[tag]) : tag);
 
 function itemName(id: string): string {
-  return itemDisplayName(db.item(id)?.name ?? id);
+  return itemDisplayName(itemText(id));
 }
 
 function packageText(opt: Background['equipment']['a']): string {

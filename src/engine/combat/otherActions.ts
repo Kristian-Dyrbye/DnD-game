@@ -14,6 +14,7 @@
  */
 import type { Character, Creature } from '../core/creature';
 import { removeItem } from '../character/inventory';
+import { srdName } from '../i18n/srdNames';
 import type { Skill } from '../rules/basics';
 import { canAct } from '../rules/conditions';
 import { createEffectContext, executeEffects } from '../rules/effects';
@@ -104,15 +105,16 @@ export function useMagicItem(state: CombatState, ctx: CombatContext, id: string,
   const entry = (user as Character).inventory.find((i) => i.uid === uid);
   const item = entry ? dbOf(ctx).magicItems.get(entry.itemId) : undefined;
   if (!entry || !item) return fail(state, m('other.noItem'));
-  if (!item.effects?.length) return fail(state, m('other.noEffect', { item: item.name }));
+  const name = srdName(msgsOf(ctx).lang, 'magic-items', item.id, item.name);
+  if (!item.effects?.length) return fail(state, m('other.noEffect', { item: name }));
   const potion = item.category === 'potion';
   const target = state.creatures[targetId];
   if (!target || target.dead) return fail(state, m('act.invalidTarget'));
   if (targetId !== id) {
     const a = state.grid.tokens[id];
     const b = state.grid.tokens[targetId];
-    if (!potion) return fail(state, m('other.selfOnly', { item: item.name }));
-    if (!a || !b || distanceFt(a, b) > 5) return fail(state, m('other.giveWithin', { name: target.name, item: item.name }));
+    if (!potion) return fail(state, m('other.selfOnly', { item: name }));
+    if (!a || !b || distanceFt(a, b) > 5) return fail(state, m('other.giveWithin', { name: target.name, item: name }));
   }
   const p = payFor(state, ctx, id, potion ? 'bonusAction' : 'action');
   if (!p.ok) return p;
@@ -126,10 +128,10 @@ export function useMagicItem(state: CombatState, ctx: CombatContext, id: string,
   const creatures = { ...p.state.creatures };
   for (const [cid, c] of ectx.creatures) creatures[cid] = c;
   const line = !potion
-    ? m('other.uses', { name: user.name, what: item.name })
+    ? m('other.uses', { name: user.name, what: name })
     : targetId === id
-      ? m('other.drinks', { name: user.name, item: item.name })
-      : m('other.gives', { name: user.name, target: target.name, item: item.name });
+      ? m('other.drinks', { name: user.name, item: name })
+      : m('other.gives', { name: user.name, target: target.name, item: name });
   const events: CombatEvent[] = [
     { kind: 'action', actorId: id, ...(targetId !== id && { targetId }), text: line },
     ...ectx.log.map((l): CombatEvent => ({ kind: 'effect', actorId: id, ...(l.targetId && { targetId: l.targetId }), text: l.text })),

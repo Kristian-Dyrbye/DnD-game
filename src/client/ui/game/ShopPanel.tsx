@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'preact/hooks';
 import { gameState, send, shopView } from '../../net/gameSocket';
 import { coins, t } from '../i18n';
+import { itemText } from '../srdText';
 
 export function ShopPanel({ shopId, onClose }: { shopId: string; onClose: () => void }) {
   const [tab, setTab] = useState<'buy' | 'sell'>('buy');
@@ -55,7 +56,7 @@ export function ShopPanel({ shopId, onClose }: { shopId: string; onClose: () => 
                 view.stock.map((l) => (
                   <li key={l.itemId}>
                     <span class="item-name">
-                      {l.name} <span class="muted">{t('shop.left', { n: l.qty })}</span>
+                      {itemText(l.itemId)} <span class="muted">{t('shop.left', { n: l.qty })}</span>
                     </span>
                     <span class="item-actions">
                       <span class="price">{coins(l.price)}</span>
@@ -71,7 +72,7 @@ export function ShopPanel({ shopId, onClose }: { shopId: string; onClose: () => 
                   <li key={o.uid}>
                     <span class="item-name">
                       {o.qty > 1 && <span class="muted">{o.qty} × </span>}
-                      {o.name}
+                      {itemText(o.itemId)}
                     </span>
                     <span class="item-actions">
                       <span class="price">{coins(o.price)}</span>

@@ -1,5 +1,6 @@
 /** Inventory (spec §11.5 UI): carried items grouped by kind, equip/unequip, coins, AC and speed. */
-import { equipSlots, itemName, type EquipSlot } from '../../../engine/character/inventory';
+import { equipSlots, type EquipSlot } from '../../../engine/character/inventory';
+import { itemText } from '../srdText';
 import { db, shops } from '../../data';
 import { repairCost } from '../../../engine/character/armorWear';
 import { shopsAt } from '../../../engine/world/shops';
@@ -48,7 +49,7 @@ export function InventoryPanel({ onClose }: { onClose: () => void }) {
                     <li key={i.uid} class={i.equipped ? 'equipped' : ''}>
                       <span class="item-name">
                         {i.quantity > 1 && <span class="muted">{i.quantity} × </span>}
-                        {itemName(i.itemId, db)}
+                        {itemText(i.itemId, i.magicItemId)}
                         {i.equipped && <span class="tag tag-equipped">{slotLabel(i.equipped)}</span>}
                         {(i.wear ?? 0) > 0 && (
                           <span class="tag tag-wear" title={t('inv.wearTitle', { n: i.wear ?? 0 })}>

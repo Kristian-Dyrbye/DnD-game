@@ -113,8 +113,10 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     }
     // Authored conversation lines, verbatim (TTS voices them as dialogue).
     for (const d of r.dialogue ?? []) session.addLog('dialogue', d.text, d.speaker);
-    const { m, coins } = session.msgs;
-    const itemLine = (i: { quantity: number; itemId: string }) => m('story.item', { qty: i.quantity, item: i.itemId.replace(/_/g, ' ') });
+    const { m, coins, lang } = session.msgs;
+    // English keeps its lower-case id words ("potion of healing"); other languages show the SRD name overlay.
+    const itemLine = (i: { quantity: number; itemId: string }) =>
+      m('story.item', { qty: i.quantity, item: db && lang !== 'en' ? itemName(i.itemId, db, lang) : i.itemId.replace(/_/g, ' ') });
     if (r.items.length || r.coins > 0) session.addLog('system', m('story.received', { list: [...r.items.map(itemLine), ...(r.coins > 0 ? [coins(r.coins)] : [])].join(', ') }));
     if (r.coins < 0) session.addLog('system', m('story.paid', { coins: coins(-r.coins) }));
     if (r.removed?.length) session.addLog('system', m('story.handedOver', { list: r.removed.map(itemLine).join(', ') }));
@@ -449,12 +451,12 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       if (cmd.type === 'shop_buy') {
         const r = buy(sctx, cmd.shopId, cmd.itemId, cmd.qty);
         if (!r.ok) throw new Error(r.error);
-        session.addLog('system', m('shop.bought', { qty: cmd.qty, item: itemName(cmd.itemId, db), coins: coins(-r.coins) }));
+        session.addLog('system', m('shop.bought', { qty: cmd.qty, item: itemName(cmd.itemId, db, session.msgs.lang), coins: coins(-r.coins) }));
       } else if (cmd.type === 'shop_sell') {
         const entry = hero.inventory.find((i) => i.uid === cmd.uid);
         const r = sell(sctx, cmd.shopId, cmd.uid, cmd.qty);
         if (!r.ok) throw new Error(r.error);
-        session.addLog('system', m('shop.sold', { qty: cmd.qty, item: entry ? itemName(entry.itemId, db) : m('shop.item'), coins: coins(r.coins) }));
+        session.addLog('system', m('shop.sold', { qty: cmd.qty, item: entry ? itemName(entry.itemId, db, session.msgs.lang) : m('shop.item'), coins: coins(r.coins) }));
       } else if (cmd.type === 'shop_haggle') {
         const r = haggle({ ...sctx, rng: session.rng }, cmd.shopId);
         if (!r.ok) throw new Error(r.error);

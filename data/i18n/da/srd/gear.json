@@ -1,0 +1,605 @@
+{
+  "$source": "data/srd/gear.json",
+  "strings": {
+    "acid": {
+      "hash": "d532cfc8",
+      "text": "Syre"
+    },
+    "alchemists_fire": {
+      "hash": "096eebeb",
+      "text": "Alkymistild"
+    },
+    "antitoxin": {
+      "hash": "6590e643",
+      "text": "Modgift"
+    },
+    "backpack": {
+      "hash": "73f4c1eb",
+      "text": "Rygsæk"
+    },
+    "ball_bearings": {
+      "hash": "39c06fe7",
+      "text": "Kugleleje-kugler"
+    },
+    "barrel": {
+      "hash": "ff9965f1",
+      "text": "Tønde"
+    },
+    "basket": {
+      "hash": "320260b3",
+      "text": "Kurv"
+    },
+    "bedroll": {
+      "hash": "eae3e7cf",
+      "text": "Sovepose"
+    },
+    "bell": {
+      "hash": "e94dad58",
+      "text": "Klokke"
+    },
+    "blanket": {
+      "hash": "b1db7b28",
+      "text": "Tæppe"
+    },
+    "block_and_tackle": {
+      "hash": "d50c2ec7",
+      "text": "Talje"
+    },
+    "book": {
+      "hash": "28742158",
+      "text": "Bog"
+    },
+    "bottle_glass": {
+      "hash": "7e6433d3",
+      "text": "Glasflaske"
+    },
+    "bucket": {
+      "hash": "e34e3557",
+      "text": "Spand"
+    },
+    "burglars_pack": {
+      "hash": "5352931d",
+      "text": "Indbrudstyvens pakke"
+    },
+    "caltrops": {
+      "hash": "090a9f7f",
+      "text": "Fodangler"
+    },
+    "candle": {
+      "hash": "fba1c3b8",
+      "text": "Stearinlys"
+    },
+    "case_crossbow_bolt": {
+      "hash": "3303eed4",
+      "text": "Pilekogger til armbrøst"
+    },
+    "case_map_or_scroll": {
+      "hash": "3d382477",
+      "text": "Kort- eller rullehylster"
+    },
+    "chain": {
+      "hash": "08ec1176",
+      "text": "Kæde"
+    },
+    "chest": {
+      "hash": "3e0553f6",
+      "text": "Kiste"
+    },
+    "climbers_kit": {
+      "hash": "8fcfa8d7",
+      "text": "Klatreudstyr"
+    },
+    "clothes_fine": {
+      "hash": "23540307",
+      "text": "Fine klæder"
+    },
+    "clothes_travelers": {
+      "hash": "c1b04a42",
+      "text": "Rejseklæder"
+    },
+    "component_pouch": {
+      "hash": "cab2079b",
+      "text": "Komponentpung"
+    },
+    "costume": {
+      "hash": "c80fa431",
+      "text": "Kostume"
+    },
+    "crowbar": {
+      "hash": "3c478667",
+      "text": "Koben"
+    },
+    "diplomats_pack": {
+      "hash": "696b8a8a",
+      "text": "Diplomatens pakke"
+    },
+    "dungeoneers_pack": {
+      "hash": "652f55fe",
+      "text": "Hulegængerens pakke"
+    },
+    "entertainers_pack": {
+      "hash": "4f7b0d65",
+      "text": "Gøglerens pakke"
+    },
+    "explorers_pack": {
+      "hash": "d0acb325",
+      "text": "Opdagelsesrejsendes pakke"
+    },
+    "flask": {
+      "hash": "52411a10",
+      "text": "Lommelærke"
+    },
+    "grappling_hook": {
+      "hash": "8e3d9c5a",
+      "text": "Entrehage"
+    },
+    "healers_kit": {
+      "hash": "9c5c79a2",
+      "text": "Lægetaske"
+    },
+    "holy_water": {
+      "hash": "59fbb1f8",
+      "text": "Vievand"
+    },
+    "hunting_trap": {
+      "hash": "9d7f8aa7",
+      "text": "Jagtfælde"
+    },
+    "ink": {
+      "hash": "0374274f",
+      "text": "Blæk"
+    },
+    "ink_pen": {
+      "hash": "37a17cc8",
+      "text": "Pen"
+    },
+    "jug": {
+      "hash": "4fc1400d",
+      "text": "Kande"
+    },
+    "ladder": {
+      "hash": "467435c9",
+      "text": "Stige"
+    },
+    "lamp": {
+      "hash": "ec1d3b5b",
+      "text": "Lampe"
+    },
+    "lantern_bullseye": {
+      "hash": "36c3e964",
+      "text": "Blændlygte"
+    },
+    "lantern_hooded": {
+      "hash": "4aee9230",
+      "text": "Skærmlygte"
+    },
+    "lock": {
+      "hash": "71b42d62",
+      "text": "Lås"
+    },
+    "magnifying_glass": {
+      "hash": "02083c04",
+      "text": "Forstørrelsesglas"
+    },
+    "manacles": {
+      "hash": "b6f84329",
+      "text": "Håndjern"
+    },
+    "map": {
+      "hash": "44a7f051",
+      "text": "Kort"
+    },
+    "mirror": {
+      "hash": "1d247ee2",
+      "text": "Spejl"
+    },
+    "net": {
+      "hash": "882428f8",
+      "text": "Net"
+    },
+    "oil": {
+      "hash": "25c308db",
+      "text": "Olie"
+    },
+    "paper": {
+      "hash": "fea8bfd9",
+      "text": "Papir"
+    },
+    "parchment": {
+      "hash": "1876dfff",
+      "text": "Pergament"
+    },
+    "perfume": {
+      "hash": "9e470cab",
+      "text": "Parfume"
+    },
+    "poison_basic": {
+      "hash": "98de4e7d",
+      "text": "Simpel gift"
+    },
+    "pole": {
+      "hash": "cfb61453",
+      "text": "Stang"
+    },
+    "pot_iron": {
+      "hash": "6ad859c6",
+      "text": "Jerngryde"
+    },
+    "potion_of_healing": {
+      "hash": "8cdddcf5",
+      "text": "Helbredende drik"
+    },
+    "pouch": {
+      "hash": "ec1f8c44",
+      "text": "Pung"
+    },
+    "priests_pack": {
+      "hash": "573fe415",
+      "text": "Præstens pakke"
+    },
+    "quiver": {
+      "hash": "f4b2d887",
+      "text": "Kogger"
+    },
+    "ram_portable": {
+      "hash": "46727ec8",
+      "text": "Bærbar murbrækker"
+    },
+    "rations": {
+      "hash": "cca6c077",
+      "text": "Rationer"
+    },
+    "robe": {
+      "hash": "8c450fd3",
+      "text": "Kåbe"
+    },
+    "rope": {
+      "hash": "c070ee4d",
+      "text": "Reb"
+    },
+    "sack": {
+      "hash": "2b476b5f",
+      "text": "Sæk"
+    },
+    "scholars_pack": {
+      "hash": "4e5164f4",
+      "text": "Den lærdes pakke"
+    },
+    "shovel": {
+      "hash": "b7636316",
+      "text": "Skovl"
+    },
+    "signal_whistle": {
+      "hash": "daa19a9b",
+      "text": "Signalfløjte"
+    },
+    "spell_scroll_cantrip": {
+      "hash": "a02dd086",
+      "text": "Besværgelsesrulle (småbesværgelse)"
+    },
+    "spell_scroll_level_1": {
+      "hash": "838fddd6",
+      "text": "Besværgelsesrulle (niveau 1)"
+    },
+    "spikes_iron": {
+      "hash": "1e425140",
+      "text": "Jernsøm"
+    },
+    "spyglass": {
+      "hash": "a3c91223",
+      "text": "Kikkert"
+    },
+    "string": {
+      "hash": "604f4858",
+      "text": "Snor"
+    },
+    "tent": {
+      "hash": "2a3f9a80",
+      "text": "Telt"
+    },
+    "tinderbox": {
+      "hash": "d507481c",
+      "text": "Fyrtøj"
+    },
+    "torch": {
+      "hash": "566a6fc1",
+      "text": "Fakkel"
+    },
+    "vial": {
+      "hash": "6942c10d",
+      "text": "Glasampul"
+    },
+    "waterskin": {
+      "hash": "905dbff9",
+      "text": "Vandsæk"
+    },
+    "arrows": {
+      "hash": "b7cbdecf",
+      "text": "Pile"
+    },
+    "bolts": {
+      "hash": "3e78bd0f",
+      "text": "Armbrøstbolte"
+    },
+    "bullets_firearm": {
+      "hash": "b53117f8",
+      "text": "Geværkugler"
+    },
+    "bullets_sling": {
+      "hash": "6c349183",
+      "text": "Slyngesten"
+    },
+    "needles": {
+      "hash": "f7797443",
+      "text": "Blæserørspile"
+    },
+    "arcane_focus_crystal": {
+      "hash": "02449e2a",
+      "text": "Krystal (magisk fokus)"
+    },
+    "arcane_focus_orb": {
+      "hash": "79484ef7",
+      "text": "Kugle (magisk fokus)"
+    },
+    "arcane_focus_rod": {
+      "hash": "62da95c3",
+      "text": "Scepter (magisk fokus)"
+    },
+    "arcane_focus_staff": {
+      "hash": "8b260ea2",
+      "text": "Stav (magisk fokus)"
+    },
+    "arcane_focus_wand": {
+      "hash": "14a262e0",
+      "text": "Tryllestav (magisk fokus)"
+    },
+    "druidic_focus_sprig_of_mistletoe": {
+      "hash": "b57aa06c",
+      "text": "Mistelteinkvist (druidefokus)"
+    },
+    "druidic_focus_wooden_staff": {
+      "hash": "b5a93332",
+      "text": "Træstav (druidefokus)"
+    },
+    "druidic_focus_yew_wand": {
+      "hash": "29dbf1b5",
+      "text": "Takstav (druidefokus)"
+    },
+    "holy_symbol_amulet": {
+      "hash": "caf9d6f6",
+      "text": "Amulet (helligt symbol)"
+    },
+    "holy_symbol_emblem": {
+      "hash": "05214376",
+      "text": "Emblem (helligt symbol)"
+    },
+    "holy_symbol_reliquary": {
+      "hash": "353628bc",
+      "text": "Relikvieskrin (helligt symbol)"
+    },
+    "alchemists_supplies": {
+      "hash": "06cf95d0",
+      "text": "Alkymistudstyr"
+    },
+    "brewers_supplies": {
+      "hash": "c0a20713",
+      "text": "Bryggerudstyr"
+    },
+    "calligraphers_supplies": {
+      "hash": "6d1e0438",
+      "text": "Kalligrafudstyr"
+    },
+    "carpenters_tools": {
+      "hash": "56307bf2",
+      "text": "Tømrerværktøj"
+    },
+    "cartographers_tools": {
+      "hash": "a8f89f46",
+      "text": "Kartografværktøj"
+    },
+    "cobblers_tools": {
+      "hash": "dba7b837",
+      "text": "Skomagerværktøj"
+    },
+    "cooks_utensils": {
+      "hash": "2732d99a",
+      "text": "Køkkengrej"
+    },
+    "glassblowers_tools": {
+      "hash": "10cdc431",
+      "text": "Glaspusterværktøj"
+    },
+    "jewelers_tools": {
+      "hash": "26ca36ee",
+      "text": "Guldsmedeværktøj"
+    },
+    "leatherworkers_tools": {
+      "hash": "35a47931",
+      "text": "Læderarbejderværktøj"
+    },
+    "masons_tools": {
+      "hash": "2725c858",
+      "text": "Murerværktøj"
+    },
+    "painters_supplies": {
+      "hash": "1858b4e1",
+      "text": "Malerudstyr"
+    },
+    "potters_tools": {
+      "hash": "a0f359ba",
+      "text": "Pottemagerværktøj"
+    },
+    "smiths_tools": {
+      "hash": "ecd1c769",
+      "text": "Smedeværktøj"
+    },
+    "tinkers_tools": {
+      "hash": "ab2cc227",
+      "text": "Kobberslagerværktøj"
+    },
+    "weavers_tools": {
+      "hash": "29bd759c",
+      "text": "Væverværktøj"
+    },
+    "woodcarvers_tools": {
+      "hash": "26e90482",
+      "text": "Træskærerværktøj"
+    },
+    "disguise_kit": {
+      "hash": "5ea4dc2a",
+      "text": "Forklædningssæt"
+    },
+    "forgery_kit": {
+      "hash": "3dd48889",
+      "text": "Forfalskningssæt"
+    },
+    "dice_set": {
+      "hash": "d460c5b2",
+      "text": "Terningesæt"
+    },
+    "dragonchess_set": {
+      "hash": "589d8bb2",
+      "text": "Drageskak"
+    },
+    "playing_cards_set": {
+      "hash": "1a86940a",
+      "text": "Spillekort"
+    },
+    "three_dragon_ante_set": {
+      "hash": "c1c9cb2b",
+      "text": "Tre-drage-ante"
+    },
+    "herbalism_kit": {
+      "hash": "f2968b6a",
+      "text": "Urtesæt"
+    },
+    "bagpipes": {
+      "hash": "f5ebed5a",
+      "text": "Sækkepibe"
+    },
+    "drum": {
+      "hash": "294f320d",
+      "text": "Tromme"
+    },
+    "dulcimer": {
+      "hash": "c7bb85da",
+      "text": "Hakkebræt"
+    },
+    "flute": {
+      "hash": "5ba8b931",
+      "text": "Fløjte"
+    },
+    "horn": {
+      "hash": "2828a660",
+      "text": "Horn"
+    },
+    "lute": {
+      "hash": "6521dfbd",
+      "text": "Lut"
+    },
+    "lyre": {
+      "hash": "481d2dab",
+      "text": "Lyre"
+    },
+    "pan_flute": {
+      "hash": "c81b948e",
+      "text": "Panfløjte"
+    },
+    "shawm": {
+      "hash": "4b789b99",
+      "text": "Skalmeje"
+    },
+    "viol": {
+      "hash": "65654d03",
+      "text": "Gambe"
+    },
+    "navigators_tools": {
+      "hash": "18bb8f93",
+      "text": "Navigatørudstyr"
+    },
+    "poisoners_kit": {
+      "hash": "4228f0b8",
+      "text": "Giftblandersæt"
+    },
+    "thieves_tools": {
+      "hash": "54739b37",
+      "text": "Tyveværktøj"
+    },
+    "camel": {
+      "hash": "471fd7a5",
+      "text": "Kamel"
+    },
+    "elephant": {
+      "hash": "8d91d924",
+      "text": "Elefant"
+    },
+    "horse_draft": {
+      "hash": "f89079e9",
+      "text": "Arbejdshest"
+    },
+    "horse_riding": {
+      "hash": "8a7ea2bb",
+      "text": "Ridehest"
+    },
+    "mastiff": {
+      "hash": "c743bd5f",
+      "text": "Mastiff"
+    },
+    "mule": {
+      "hash": "0f9c7e0c",
+      "text": "Muldyr"
+    },
+    "pony": {
+      "hash": "e7bab749",
+      "text": "Pony"
+    },
+    "warhorse": {
+      "hash": "3754b186",
+      "text": "Stridshest"
+    },
+    "carriage": {
+      "hash": "67036fbb",
+      "text": "Karet"
+    },
+    "cart": {
+      "hash": "185551af",
+      "text": "Kærre"
+    },
+    "chariot": {
+      "hash": "62a75be7",
+      "text": "Stridsvogn"
+    },
+    "feed_per_day": {
+      "hash": "3d9fe878",
+      "text": "Foder pr. dag"
+    },
+    "saddle_exotic": {
+      "hash": "b95292dc",
+      "text": "Eksotisk sadel"
+    },
+    "saddle_military": {
+      "hash": "8f54a9b1",
+      "text": "Krigssadel"
+    },
+    "saddle_riding": {
+      "hash": "75895393",
+      "text": "Ridesadel"
+    },
+    "sled": {
+      "hash": "fcd9ab5b",
+      "text": "Slæde"
+    },
+    "stabling_per_day": {
+      "hash": "1c44a324",
+      "text": "Staldplads pr. dag"
+    },
+    "wagon": {
+      "hash": "2e4a4f6f",
+      "text": "Vogn"
+    },
+    "spellbook": {
+      "hash": "8ea4b78c",
+      "text": "Besværgelsesbog"
+    }
+  }
+}

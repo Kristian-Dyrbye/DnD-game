@@ -67,7 +67,7 @@ import { distanceFt, footprintSize, moveToken, type Grid } from './grid';
 import { computeCover, hasLineOfSight } from './los';
 import { planMove } from './movement';
 import { budgetOf, currentId, setAttacksLeft, spend, type TurnState } from './turns';
-import { spellName } from '../i18n/srdNames';
+import { spellName, srdName } from '../i18n/srdNames';
 
 // ---------------------------------------------------------------- attack profiles
 
@@ -95,6 +95,19 @@ export interface AttackProfile {
 }
 
 const isCharacter = (c: Creature): c is Character => c.kind === 'character' && 'classes' in c;
+
+/** Profile name for log lines in the session language: spells (A149b), weapons + their magic item (A149d); monster actions stay English. */
+function profileLabel(ctx: CombatContext, attacker: Creature, profile: AttackProfile): string {
+  const { lang } = msgsOf(ctx);
+  if (lang === 'en') return profile.name;
+  if (profile.id.startsWith('spell:')) return spellName(lang, { id: profile.id.slice(6), name: profile.name });
+  const db = dbOf(ctx);
+  const w = profile.weaponId && !profile.unarmed ? db.weapons.get(profile.weaponId) : undefined;
+  if (!w) return profile.name;
+  const name = srdName(lang, 'weapons', w.id, w.name);
+  const magicId = isCharacter(attacker) ? attacker.inventory.find((i) => i.uid === profile.uid)?.magicItemId : undefined;
+  return magicId ? `${name} (${srdName(lang, 'magic-items', magicId, db.magicItems.get(magicId)?.name ?? magicId)})` : name;
+}
 
 function fromWeaponAttack(id: string, w: WeaponAttack, melee: boolean, twoHanded: boolean): AttackProfile {
   const damage = twoHanded && w.versatileDice ? [{ ...w.damage[0]!, dice: w.versatileDice }, ...w.damage.slice(1)] : w.damage;
@@ -371,7 +384,7 @@ export function spendAttack(
       return r.ok ? { ok: true, turns: r.state, attacker } : { ok: false, error: r.error };
     }
     case 'light_bonus': {
-      if (profile && !profile.properties.includes('light')) return { ok: false, error: m('atk.notLight', { weapon: profile.name }) };
+      if (profile && !profile.properties.includes('light')) return { ok: false, error: m('atk.notLight', { weapon: profileLabel(ctx, attacker, profile) }) };
       const needs = lightExtraAttackError(attacker, profile, ctx);
       if (needs) return { ok: false, error: needs };
       const r = spend(turns, attacker.id, 'bonusAction', attacker, ctx.table, msgsOf(ctx));
@@ -649,7 +662,7 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
     kind: 'attack',
     actorId: attacker.id,
     targetId: target.id,
-    text: `${m('combat.attack', { attacker: attacker.name, target: target.name, weapon: profile.id.startsWith('spell:') ? spellName(msgsOf(ctx).lang, { id: profile.id.slice(6), name: profile.name }) : profile.name, roll: res.text })}${coverNote}${modeNote ? ` [${modeNote}]` : ''}`,
+    text: `${m('combat.attack', { attacker: attacker.name, target: target.name, weapon: profileLabel(ctx, attacker, profile), roll: res.text })}${coverNote}${modeNote ? ` [${modeNote}]` : ''}`,
   });
 
   // Things used up or broken by making an attack roll.

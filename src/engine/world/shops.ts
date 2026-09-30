@@ -7,7 +7,7 @@
  * unit of the same item sold to a shop lowers what it pays next time (no flooding one shop).
  */
 import { z } from 'zod';
-import { addItem, removeItem } from '../character/inventory';
+import { addItem, itemName, removeItem } from '../character/inventory';
 import { Rng } from '../core/rng';
 import type { SrdDatabase } from '../data/srd';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
@@ -269,7 +269,7 @@ export function shopView(ctx: ShopContext, shopId: string): ShopView | undefined
   if (!def) return undefined;
   const s = shopState(def, ctx);
   const day = Math.floor(ctx.state.time / MINUTES_PER_DAY);
-  const name = (id: string) => ctx.db.item(id)?.name ?? ctx.db.magicItems.get(id)?.name ?? id;
+  const name = (id: string) => itemName(id, ctx.db, (ctx.msgs ?? ENGLISH_MESSAGES).lang);
   return {
     id: def.id,
     name: def.name,

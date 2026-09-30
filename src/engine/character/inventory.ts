@@ -7,6 +7,8 @@
 import type { Character, InventoryItem } from '../core/creature';
 import type { SrdDatabase } from '../data/srd';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
+import { srdName } from '../i18n/srdNames';
+import type { Language } from '../../shared/i18nCore';
 import { armorClass, baseSpeed } from './derived';
 
 export function isUniqueItem(itemId: string, db?: SrdDatabase): boolean {
@@ -106,6 +108,15 @@ export function unequipItem(hero: Character, uid: string, db: SrdDatabase, { m }
   return { ok: true };
 }
 
-export function itemName(itemId: string, db: SrdDatabase): string {
-  return db.item(itemId)?.name ?? db.magicItems.get(itemId)?.name ?? itemId.replace(/_/g, ' ');
+/** Item name in `lang` (A149d: SRD name overlays); unknown ids read as words. */
+export function itemName(itemId: string, db: SrdDatabase, lang: Language = 'en'): string {
+  const w = db.weapons.get(itemId);
+  if (w) return srdName(lang, 'weapons', itemId, w.name);
+  const a = db.armor.get(itemId);
+  if (a) return srdName(lang, 'armor', itemId, a.name);
+  const g = db.gear.get(itemId);
+  if (g) return srdName(lang, 'gear', itemId, g.name);
+  const mi = db.magicItems.get(itemId);
+  if (mi) return srdName(lang, 'magic-items', itemId, mi.name);
+  return itemId.replace(/_/g, ' ');
 }

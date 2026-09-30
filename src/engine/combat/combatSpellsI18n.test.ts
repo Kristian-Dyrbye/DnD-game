@@ -114,7 +114,7 @@ describe('spells and zones (A141g)', () => {
     expect(text(study(s, ctx(da), 'me', { skill: 'arcana' }))).toMatch(/^Brenna undersøger fjenderne og slagmarken — d20/);
     expect(text(study(s, ctx(), 'me', { skill: 'arcana' }))).toMatch(/^Brenna studies the foes and the battlefield — d20/);
     const pot = useMagicItem(s, ctx(da), 'me', 'pot');
-    expect(text(pot)).toMatch(/^Brenna drikker en Potion of Healing\.\nBrenna får \d+ LP igen/);
+    expect(text(pot)).toMatch(/^Brenna drikker en Helbredende drik\.\nBrenna får \d+ LP igen/);
   });
 
   it('weapon masteries and end-of-turn spell effects in Danish', () => {

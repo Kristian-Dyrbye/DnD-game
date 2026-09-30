@@ -7,7 +7,7 @@ import { db } from '../../data';
 import { coins, t } from '../i18n';
 import { creator } from './creatorState';
 import { groupNames, itemDisplayName } from '../text';
-import { srdText, abilityAbbr, skillText } from '../srdText';
+import { srdText, abilityAbbr, itemText, skillText } from '../srdText';
 
 export function ReviewStep() {
   const s = creator.value;
@@ -99,7 +99,7 @@ export function ReviewStep() {
         <div class="sheet-block">
           <h3>{t('creator.review.gear')}</h3>
           <p>
-            {groupNames(c.inventory.map((i) => ({ name: itemDisplayName(db.item(i.itemId)?.name ?? i.itemId), quantity: i.quantity, ...(i.equipped && { note: t('creator.review.equipped') }) }))).join(', ')}
+            {groupNames(c.inventory.map((i) => ({ name: itemDisplayName(itemText(i.itemId, i.magicItemId)), quantity: i.quantity, ...(i.equipped && { note: t('creator.review.equipped') }) }))).join(', ')}
           </p>
           <p>{t('creator.review.coins', { coins: coins(c.coins) })}</p>
           {c.spellcasting && (

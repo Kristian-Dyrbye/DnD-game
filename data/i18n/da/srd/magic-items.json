@@ -1,0 +1,1089 @@
+{
+  "$source": "data/srd/magic-items.json",
+  "strings": {
+    "adamantine_armor": {
+      "hash": "63a9918c",
+      "text": "Adamantrustning"
+    },
+    "ammunition_1": {
+      "hash": "6fded2a2",
+      "text": "Ammunition +1"
+    },
+    "ammunition_2": {
+      "hash": "6eded10f",
+      "text": "Ammunition +2"
+    },
+    "ammunition_3": {
+      "hash": "6ddecf7c",
+      "text": "Ammunition +3"
+    },
+    "ammunition_of_slaying": {
+      "hash": "f399a068",
+      "text": "Drabsammunition"
+    },
+    "amulet_of_health": {
+      "hash": "788011ca",
+      "text": "Sundhedens amulet"
+    },
+    "amulet_of_proof_against_detection_and_location": {
+      "hash": "904d1e6e",
+      "text": "Amulet mod opsporing og lokalisering"
+    },
+    "amulet_of_the_planes": {
+      "hash": "e034edfa",
+      "text": "Planernes amulet"
+    },
+    "animated_shield": {
+      "hash": "fbce6c35",
+      "text": "Levende skjold"
+    },
+    "apparatus_of_the_crab": {
+      "hash": "2dc3e792",
+      "text": "Krabbeapparatet"
+    },
+    "armor_1": {
+      "hash": "30eb9c48",
+      "text": "Rustning +1"
+    },
+    "armor_2": {
+      "hash": "33eba101",
+      "text": "Rustning +2"
+    },
+    "armor_3": {
+      "hash": "32eb9f6e",
+      "text": "Rustning +3"
+    },
+    "armor_of_invulnerability": {
+      "hash": "945edaee",
+      "text": "Usårlighedens rustning"
+    },
+    "armor_of_resistance": {
+      "hash": "e3427b66",
+      "text": "Modstandsrustning"
+    },
+    "armor_of_vulnerability": {
+      "hash": "24bf7ea7",
+      "text": "Sårbarhedens rustning"
+    },
+    "arrow_catching_shield": {
+      "hash": "7a9b6319",
+      "text": "Pilefangende skjold"
+    },
+    "bag_of_beans": {
+      "hash": "26ee228d",
+      "text": "Bønnepose"
+    },
+    "bag_of_devouring": {
+      "hash": "77ec7a6b",
+      "text": "Slugepose"
+    },
+    "bag_of_holding": {
+      "hash": "b7e5274d",
+      "text": "Rummelig pose"
+    },
+    "bag_of_tricks": {
+      "hash": "affb0f4e",
+      "text": "Trickpose"
+    },
+    "bead_of_force": {
+      "hash": "588b22dd",
+      "text": "Kraftperle"
+    },
+    "bead_of_nourishment": {
+      "hash": "bd21ab06",
+      "text": "Næringsperle"
+    },
+    "belt_of_dwarvenkind": {
+      "hash": "c5f64110",
+      "text": "Dværgebælte"
+    },
+    "belt_of_giant_strength": {
+      "hash": "01f8d1a9",
+      "text": "Jættestyrkens bælte"
+    },
+    "berserker_axe": {
+      "hash": "fdce32ba",
+      "text": "Bersærkøkse"
+    },
+    "boots_of_elvenkind": {
+      "hash": "cf15d6c3",
+      "text": "Elverstøvler"
+    },
+    "boots_of_levitation": {
+      "hash": "0cca30f2",
+      "text": "Svævestøvler"
+    },
+    "boots_of_speed": {
+      "hash": "408fa160",
+      "text": "Fartstøvler"
+    },
+    "boots_of_striding_and_springing": {
+      "hash": "100ac435",
+      "text": "Skridt- og springstøvler"
+    },
+    "boots_of_the_winterlands": {
+      "hash": "7a15e525",
+      "text": "Vinterlandenes støvler"
+    },
+    "bowl_of_commanding_water_elementals": {
+      "hash": "0f86f1a0",
+      "text": "Skål til at styre vandelementarer"
+    },
+    "bracers_of_archery": {
+      "hash": "c7a30a0a",
+      "text": "Bueskytteskinner"
+    },
+    "bracers_of_defense": {
+      "hash": "d2fe3e14",
+      "text": "Forsvarsskinner"
+    },
+    "brazier_of_commanding_fire_elementals": {
+      "hash": "161711bc",
+      "text": "Fyrfad til at styre ildelementarer"
+    },
+    "brooch_of_shielding": {
+      "hash": "99796fbe",
+      "text": "Skjoldbroche"
+    },
+    "broom_of_flying": {
+      "hash": "51d38956",
+      "text": "Flyvekost"
+    },
+    "candle_of_invocation": {
+      "hash": "8a52cab1",
+      "text": "Påkaldelseslys"
+    },
+    "cape_of_the_mountebank": {
+      "hash": "139b5b9a",
+      "text": "Gøglerkappen"
+    },
+    "carpet_of_flying": {
+      "hash": "258622de",
+      "text": "Flyvende tæppe"
+    },
+    "censer_of_controlling_air_elementals": {
+      "hash": "45f0da83",
+      "text": "Røgelseskar til at styre luftelementarer"
+    },
+    "chime_of_opening": {
+      "hash": "73fea428",
+      "text": "Åbningsklokke"
+    },
+    "circlet_of_blasting": {
+      "hash": "83f61bde",
+      "text": "Sprængdiadem"
+    },
+    "cloak_of_arachnida": {
+      "hash": "bfaa30fb",
+      "text": "Edderkoppekappe"
+    },
+    "cloak_of_displacement": {
+      "hash": "58a4f74f",
+      "text": "Forskydningskappe"
+    },
+    "cloak_of_elvenkind": {
+      "hash": "47904038",
+      "text": "Elverkappe"
+    },
+    "cloak_of_invisibility": {
+      "hash": "fc46614f",
+      "text": "Usynlighedskappe"
+    },
+    "cloak_of_protection": {
+      "hash": "803e9f1f",
+      "text": "Beskyttelseskappe"
+    },
+    "cloak_of_the_bat": {
+      "hash": "b88d9f88",
+      "text": "Flagermuskappe"
+    },
+    "cloak_of_the_manta_ray": {
+      "hash": "e62a9564",
+      "text": "Djævlerokkekappe"
+    },
+    "crystal_ball": {
+      "hash": "7340dbae",
+      "text": "Krystalkugle"
+    },
+    "crystal_ball_of_mind_reading": {
+      "hash": "2e391d7d",
+      "text": "Tankelæsningens krystalkugle"
+    },
+    "crystal_ball_of_telepathy": {
+      "hash": "80295311",
+      "text": "Telepatiens krystalkugle"
+    },
+    "crystal_ball_of_true_seeing": {
+      "hash": "e00fe29a",
+      "text": "Det sande syns krystalkugle"
+    },
+    "cube_of_force": {
+      "hash": "16b1dafe",
+      "text": "Kraftterning"
+    },
+    "cubic_gate": {
+      "hash": "0c279cf8",
+      "text": "Terningportal"
+    },
+    "dagger_of_venom": {
+      "hash": "ce554c31",
+      "text": "Giftdolk"
+    },
+    "dancing_sword": {
+      "hash": "9ccfb46e",
+      "text": "Dansende sværd"
+    },
+    "decanter_of_endless_water": {
+      "hash": "67e8bbb3",
+      "text": "Karaffel med endeløst vand"
+    },
+    "deck_of_illusions": {
+      "hash": "836bcd89",
+      "text": "Illusionernes kortspil"
+    },
+    "defender": {
+      "hash": "d2ee4e1a",
+      "text": "Forsvarer"
+    },
+    "demon_armor": {
+      "hash": "0322842f",
+      "text": "Dæmonrustning"
+    },
+    "dimensional_shackles": {
+      "hash": "6e7629be",
+      "text": "Dimensionslænker"
+    },
+    "dragon_orb": {
+      "hash": "1d98b8df",
+      "text": "Dragekugle"
+    },
+    "dragon_scale_mail": {
+      "hash": "d1f63457",
+      "text": "Drageskælsbrynje"
+    },
+    "dragon_slayer": {
+      "hash": "d2376824",
+      "text": "Dragedræber"
+    },
+    "dust_of_disappearance": {
+      "hash": "3db7f930",
+      "text": "Forsvindingsstøv"
+    },
+    "dust_of_dryness": {
+      "hash": "ce8e7e80",
+      "text": "Tørkestøv"
+    },
+    "dust_of_sneezing_and_choking": {
+      "hash": "1f010ca9",
+      "text": "Nyse- og kvælestøv"
+    },
+    "dwarven_plate": {
+      "hash": "30766f10",
+      "text": "Dværgeplade"
+    },
+    "dwarven_thrower": {
+      "hash": "a6c8d6bb",
+      "text": "Dværgekaster"
+    },
+    "efficient_quiver": {
+      "hash": "4a3f4b4a",
+      "text": "Rummeligt kogger"
+    },
+    "efreeti_bottle": {
+      "hash": "8da5f983",
+      "text": "Efreetiflaske"
+    },
+    "elemental_gem": {
+      "hash": "e776cf35",
+      "text": "Elementarsten"
+    },
+    "elixir_of_health": {
+      "hash": "05a22a67",
+      "text": "Sundhedseliksir"
+    },
+    "elven_chain": {
+      "hash": "54251d94",
+      "text": "Elverbrynje"
+    },
+    "energy_bow": {
+      "hash": "c44600ed",
+      "text": "Energibue"
+    },
+    "eversmoking_bottle": {
+      "hash": "3c26dbbf",
+      "text": "Evigt rygende flaske"
+    },
+    "eyes_of_charming": {
+      "hash": "1ea28ae9",
+      "text": "Forhekselsens øjne"
+    },
+    "eyes_of_minute_seeing": {
+      "hash": "76048c59",
+      "text": "Nærsynets øjne"
+    },
+    "eyes_of_the_eagle": {
+      "hash": "7957a8a7",
+      "text": "Ørneøjne"
+    },
+    "feather_token": {
+      "hash": "c653d2ad",
+      "text": "Fjertegn"
+    },
+    "figurine_of_wondrous_power": {
+      "hash": "f8f38125",
+      "text": "Figur med underfuld kraft"
+    },
+    "flame_tongue": {
+      "hash": "74a15404",
+      "text": "Flammetunge"
+    },
+    "folding_boat": {
+      "hash": "10e3e620",
+      "text": "Foldebåd"
+    },
+    "frost_brand": {
+      "hash": "227f3c50",
+      "text": "Frostklinge"
+    },
+    "gauntlets_of_ogre_power": {
+      "hash": "eb3b610d",
+      "text": "Ogrekraftens handsker"
+    },
+    "gem_of_brightness": {
+      "hash": "34cd45c4",
+      "text": "Lysets ædelsten"
+    },
+    "gem_of_seeing": {
+      "hash": "d47c107e",
+      "text": "Synets ædelsten"
+    },
+    "giant_slayer": {
+      "hash": "4e5eac14",
+      "text": "Jættedræber"
+    },
+    "glamoured_studded_leather": {
+      "hash": "131374b1",
+      "text": "Forhekset nittet læder"
+    },
+    "gloves_of_missile_snaring": {
+      "hash": "67d5cc56",
+      "text": "Projektilfangende handsker"
+    },
+    "gloves_of_swimming_and_climbing": {
+      "hash": "109d2dd3",
+      "text": "Svømme- og klatrehandsker"
+    },
+    "gloves_of_thievery": {
+      "hash": "039609fa",
+      "text": "Tyvehandsker"
+    },
+    "goggles_of_night": {
+      "hash": "0ca2c98e",
+      "text": "Natbriller"
+    },
+    "hammer_of_thunderbolts": {
+      "hash": "435cbf72",
+      "text": "Tordenkilehammer"
+    },
+    "handy_haversack": {
+      "hash": "12c5339d",
+      "text": "Praktisk skulderpose"
+    },
+    "hat_of_disguise": {
+      "hash": "81acc072",
+      "text": "Forklædningshat"
+    },
+    "hat_of_many_spells": {
+      "hash": "90509ce9",
+      "text": "De mange besværgelsers hat"
+    },
+    "headband_of_intellect": {
+      "hash": "19c06431",
+      "text": "Intellektets pandebånd"
+    },
+    "helm_of_brilliance": {
+      "hash": "ceae762f",
+      "text": "Glansens hjelm"
+    },
+    "helm_of_comprehending_languages": {
+      "hash": "3548b660",
+      "text": "Sprogforståelsens hjelm"
+    },
+    "helm_of_telepathy": {
+      "hash": "708af768",
+      "text": "Telepatiens hjelm"
+    },
+    "helm_of_teleportation": {
+      "hash": "1796b796",
+      "text": "Teleportationens hjelm"
+    },
+    "holy_avenger": {
+      "hash": "ba3c15e1",
+      "text": "Hellig hævner"
+    },
+    "horn_of_blasting": {
+      "hash": "adca38b5",
+      "text": "Sprænghorn"
+    },
+    "horn_of_valhalla": {
+      "hash": "483bfcc4",
+      "text": "Valhalhorn"
+    },
+    "horseshoes_of_a_zephyr": {
+      "hash": "970719d6",
+      "text": "Vestenvindens hestesko"
+    },
+    "horseshoes_of_speed": {
+      "hash": "58911be4",
+      "text": "Fartens hestesko"
+    },
+    "immovable_rod": {
+      "hash": "9d47bd06",
+      "text": "Urokkelig stav"
+    },
+    "instant_fortress": {
+      "hash": "0960d718",
+      "text": "Øjeblikkelig fæstning"
+    },
+    "ioun_stone": {
+      "hash": "2de1a56f",
+      "text": "Iounsten"
+    },
+    "iron_bands": {
+      "hash": "a90b7083",
+      "text": "Jernbånd"
+    },
+    "iron_flask": {
+      "hash": "3d61f314",
+      "text": "Jernflaske"
+    },
+    "javelin_of_lightning": {
+      "hash": "b0045de3",
+      "text": "Lynkastespyd"
+    },
+    "lantern_of_revealing": {
+      "hash": "6a4c90fb",
+      "text": "Afsløringens lygte"
+    },
+    "luck_blade": {
+      "hash": "6995d3da",
+      "text": "Lykkeklinge"
+    },
+    "mace_of_disruption": {
+      "hash": "e8a48899",
+      "text": "Opløsningens stridskølle"
+    },
+    "mace_of_smiting": {
+      "hash": "e57ba4c7",
+      "text": "Knusende stridskølle"
+    },
+    "mace_of_terror": {
+      "hash": "dd508ea2",
+      "text": "Rædslens stridskølle"
+    },
+    "mantle_of_spell_resistance": {
+      "hash": "f6220d66",
+      "text": "Besværgelsesmodstandens kappe"
+    },
+    "manual_of_bodily_health": {
+      "hash": "9c79273f",
+      "text": "Håndbog i legemlig sundhed"
+    },
+    "manual_of_gainful_exercise": {
+      "hash": "960d492c",
+      "text": "Håndbog i gavnlig træning"
+    },
+    "manual_of_golems": {
+      "hash": "026d4699",
+      "text": "Håndbog om golemmer"
+    },
+    "manual_of_quickness_of_action": {
+      "hash": "9af741f5",
+      "text": "Håndbog i handlingens hurtighed"
+    },
+    "marvelous_pigments": {
+      "hash": "19c5fd2c",
+      "text": "Vidunderlige farver"
+    },
+    "medallion_of_thoughts": {
+      "hash": "5487a90f",
+      "text": "Tankemedaljon"
+    },
+    "mirror_of_life_trapping": {
+      "hash": "1c2ef4b2",
+      "text": "Livsfangende spejl"
+    },
+    "mithral_armor": {
+      "hash": "95f1d645",
+      "text": "Mithrilrustning"
+    },
+    "mysterious_deck": {
+      "hash": "51bb04c4",
+      "text": "Mystisk kortspil"
+    },
+    "necklace_of_adaptation": {
+      "hash": "8849811f",
+      "text": "Tilpasningens halskæde"
+    },
+    "necklace_of_fireballs": {
+      "hash": "296f3fc4",
+      "text": "Ildkuglehalskæde"
+    },
+    "necklace_of_prayer_beads": {
+      "hash": "431eb210",
+      "text": "Bedekrans"
+    },
+    "nine_lives_stealer": {
+      "hash": "3899a16a",
+      "text": "Ni livs tyv"
+    },
+    "oathbow": {
+      "hash": "62474417",
+      "text": "Edsbue"
+    },
+    "oil_of_etherealness": {
+      "hash": "9fa622e5",
+      "text": "Æterisk olie"
+    },
+    "oil_of_sharpness": {
+      "hash": "01e4d183",
+      "text": "Skarphedens olie"
+    },
+    "oil_of_slipperiness": {
+      "hash": "922ac7db",
+      "text": "Glatheds olie"
+    },
+    "pearl_of_power": {
+      "hash": "f0c475fd",
+      "text": "Kraftens perle"
+    },
+    "periapt_of_health": {
+      "hash": "3fb2674b",
+      "text": "Sundhedsamulet"
+    },
+    "periapt_of_proof_against_poison": {
+      "hash": "b1f4d006",
+      "text": "Amulet mod gift"
+    },
+    "periapt_of_wound_closure": {
+      "hash": "a037cdd1",
+      "text": "Sårlukkende amulet"
+    },
+    "philter_of_love": {
+      "hash": "b5c8e384",
+      "text": "Elskovsdrik"
+    },
+    "pipes_of_haunting": {
+      "hash": "c56f9a0d",
+      "text": "Hjemsøgelsens fløjter"
+    },
+    "pipes_of_the_sewers": {
+      "hash": "c14307f3",
+      "text": "Kloakfløjter"
+    },
+    "plate_armor_of_etherealness": {
+      "hash": "d847a15e",
+      "text": "Æterisk pladerustning"
+    },
+    "portable_hole": {
+      "hash": "3b92628c",
+      "text": "Bærbart hul"
+    },
+    "potion_of_animal_friendship": {
+      "hash": "f4ec9d59",
+      "text": "Dyrevenskabsdrik"
+    },
+    "potion_of_clairvoyance": {
+      "hash": "09c8c357",
+      "text": "Fjernsynsdrik"
+    },
+    "potion_of_climbing": {
+      "hash": "a1b9634e",
+      "text": "Klatredrik"
+    },
+    "potion_of_diminution": {
+      "hash": "e7c823b7",
+      "text": "Formindskelsesdrik"
+    },
+    "potion_of_flying": {
+      "hash": "e937ce86",
+      "text": "Flyvedrik"
+    },
+    "potion_of_gaseous_form": {
+      "hash": "b6a3fe3c",
+      "text": "Gasformsdrik"
+    },
+    "potion_of_giant_strength": {
+      "hash": "7ef08473",
+      "text": "Jættestyrkedrik"
+    },
+    "potion_of_growth": {
+      "hash": "4c39f76e",
+      "text": "Vækstdrik"
+    },
+    "potion_of_healing": {
+      "hash": "8cdddcf5",
+      "text": "Helbredende drik"
+    },
+    "potion_of_healing_greater": {
+      "hash": "a402c5d0",
+      "text": "Helbredende drik (større)"
+    },
+    "potion_of_healing_superior": {
+      "hash": "ea6968b5",
+      "text": "Helbredende drik (overlegen)"
+    },
+    "potion_of_healing_supreme": {
+      "hash": "8e99e2ff",
+      "text": "Helbredende drik (ypperste)"
+    },
+    "potion_of_heroism": {
+      "hash": "cf291094",
+      "text": "Heltemodseliksir"
+    },
+    "potion_of_invisibility": {
+      "hash": "0a5e2336",
+      "text": "Usynlighedsdrik"
+    },
+    "potion_of_invulnerability": {
+      "hash": "1a5bee14",
+      "text": "Usårlighedsdrik"
+    },
+    "potion_of_longevity": {
+      "hash": "13702a10",
+      "text": "Levetidsdrik"
+    },
+    "potion_of_mind_reading": {
+      "hash": "df4c98f1",
+      "text": "Tankelæsningsdrik"
+    },
+    "potion_of_poison": {
+      "hash": "db13f2f9",
+      "text": "Giftdrik"
+    },
+    "potion_of_resistance": {
+      "hash": "1223ebc8",
+      "text": "Modstandsdrik"
+    },
+    "potion_of_speed": {
+      "hash": "b30a9df8",
+      "text": "Fartdrik"
+    },
+    "potion_of_vitality": {
+      "hash": "1e0e5bff",
+      "text": "Livskraftdrik"
+    },
+    "potion_of_water_breathing": {
+      "hash": "8b77fbe6",
+      "text": "Vandåndingsdrik"
+    },
+    "quarterstaff_of_the_acrobat": {
+      "hash": "b9a37e89",
+      "text": "Akrobatens stav"
+    },
+    "ring_of_animal_influence": {
+      "hash": "98c2a82b",
+      "text": "Dyreindflydelsens ring"
+    },
+    "ring_of_djinni_summoning": {
+      "hash": "8d1cc7e9",
+      "text": "Djinnipåkaldelsens ring"
+    },
+    "ring_of_elemental_command": {
+      "hash": "a2c8a2a8",
+      "text": "Elementarherredømmets ring"
+    },
+    "ring_of_evasion": {
+      "hash": "1886fe97",
+      "text": "Undvigelsens ring"
+    },
+    "ring_of_feather_falling": {
+      "hash": "ba338b14",
+      "text": "Fjerfaldets ring"
+    },
+    "ring_of_free_action": {
+      "hash": "2ce7a41c",
+      "text": "Den frie bevægelses ring"
+    },
+    "ring_of_invisibility": {
+      "hash": "6f07a437",
+      "text": "Usynlighedens ring"
+    },
+    "ring_of_jumping": {
+      "hash": "96f3d3a0",
+      "text": "Springets ring"
+    },
+    "ring_of_mind_shielding": {
+      "hash": "1eec568b",
+      "text": "Sindsskjoldets ring"
+    },
+    "ring_of_protection": {
+      "hash": "b9807c47",
+      "text": "Beskyttelsens ring"
+    },
+    "ring_of_regeneration": {
+      "hash": "b18c96ef",
+      "text": "Regenerationens ring"
+    },
+    "ring_of_resistance": {
+      "hash": "e21b2511",
+      "text": "Modstandens ring"
+    },
+    "ring_of_shooting_stars": {
+      "hash": "3c96a698",
+      "text": "Stjerneskuddenes ring"
+    },
+    "ring_of_spell_storing": {
+      "hash": "45614f54",
+      "text": "Besværgelseslagerets ring"
+    },
+    "ring_of_spell_turning": {
+      "hash": "f0a8af9f",
+      "text": "Besværgelsesvendingens ring"
+    },
+    "ring_of_swimming": {
+      "hash": "f811a959",
+      "text": "Svømningens ring"
+    },
+    "ring_of_telekinesis": {
+      "hash": "2684d66a",
+      "text": "Telekinesens ring"
+    },
+    "ring_of_the_ram": {
+      "hash": "fc83b13b",
+      "text": "Vædderens ring"
+    },
+    "ring_of_three_wishes": {
+      "hash": "89dc14bb",
+      "text": "De tre ønskers ring"
+    },
+    "ring_of_warmth": {
+      "hash": "75bd8fd5",
+      "text": "Varmens ring"
+    },
+    "ring_of_water_walking": {
+      "hash": "49d06f6c",
+      "text": "Vandgangens ring"
+    },
+    "ring_of_x_ray_vision": {
+      "hash": "cd789f13",
+      "text": "Røntgensynets ring"
+    },
+    "robe_of_eyes": {
+      "hash": "9ffe4946",
+      "text": "Øjnenes kåbe"
+    },
+    "robe_of_scintillating_colors": {
+      "hash": "0fbd6607",
+      "text": "De funklende farvers kåbe"
+    },
+    "robe_of_stars": {
+      "hash": "3e2741bd",
+      "text": "Stjernekåben"
+    },
+    "robe_of_the_archmagi": {
+      "hash": "a86505fb",
+      "text": "Ærkemagikernes kåbe"
+    },
+    "robe_of_useful_items": {
+      "hash": "7703aaf2",
+      "text": "De nyttige tings kåbe"
+    },
+    "rod_of_absorption": {
+      "hash": "21d743fc",
+      "text": "Absorptionens scepter"
+    },
+    "rod_of_alertness": {
+      "hash": "a0f8bb5a",
+      "text": "Årvågenhedens scepter"
+    },
+    "rod_of_lordly_might": {
+      "hash": "b173583a",
+      "text": "Herskermagtens scepter"
+    },
+    "rod_of_resurrection": {
+      "hash": "546d7242",
+      "text": "Genopstandelsens scepter"
+    },
+    "rod_of_rulership": {
+      "hash": "ebbe76d5",
+      "text": "Herredømmets scepter"
+    },
+    "rod_of_security": {
+      "hash": "44a13bff",
+      "text": "Sikkerhedens scepter"
+    },
+    "rope_of_climbing": {
+      "hash": "79859bb1",
+      "text": "Klatrereb"
+    },
+    "rope_of_entanglement": {
+      "hash": "ab7d3a6a",
+      "text": "Indfiltringsreb"
+    },
+    "scarab_of_protection": {
+      "hash": "4e9f13db",
+      "text": "Beskyttelsens skarabæ"
+    },
+    "scimitar_of_speed": {
+      "hash": "2da19e8b",
+      "text": "Fartens krumsabel"
+    },
+    "sending_stones": {
+      "hash": "bc98a181",
+      "text": "Budsten"
+    },
+    "sentinel_shield": {
+      "hash": "195109c6",
+      "text": "Vagtpostskjold"
+    },
+    "shield_1": {
+      "hash": "f8e2330c",
+      "text": "Skjold +1"
+    },
+    "shield_2": {
+      "hash": "fbe237c5",
+      "text": "Skjold +2"
+    },
+    "shield_3": {
+      "hash": "fae23632",
+      "text": "Skjold +3"
+    },
+    "shield_of_missile_attraction": {
+      "hash": "ddfbc582",
+      "text": "Projektiltiltrækkende skjold"
+    },
+    "shield_of_the_cavalier": {
+      "hash": "d35b078b",
+      "text": "Kavalerens skjold"
+    },
+    "slippers_of_spider_climbing": {
+      "hash": "482b7f68",
+      "text": "Edderkoppeklatrende tøfler"
+    },
+    "sovereign_glue": {
+      "hash": "7bede020",
+      "text": "Suveræn lim"
+    },
+    "spellguard_shield": {
+      "hash": "4de25a9b",
+      "text": "Besværgelsesværnets skjold"
+    },
+    "spell_scroll": {
+      "hash": "19c2d132",
+      "text": "Besværgelsesrulle"
+    },
+    "sphere_of_annihilation": {
+      "hash": "e0086e27",
+      "text": "Tilintetgørelsens kugle"
+    },
+    "staff_of_charming": {
+      "hash": "eca8f3cf",
+      "text": "Forhekselsens stav"
+    },
+    "staff_of_fire": {
+      "hash": "3d15c3c6",
+      "text": "Ildstav"
+    },
+    "staff_of_frost": {
+      "hash": "aa2d21f0",
+      "text": "Froststav"
+    },
+    "staff_of_healing": {
+      "hash": "da13ed64",
+      "text": "Helbredelsens stav"
+    },
+    "staff_of_power": {
+      "hash": "f2440883",
+      "text": "Kraftens stav"
+    },
+    "staff_of_striking": {
+      "hash": "1b38bd73",
+      "text": "Slagets stav"
+    },
+    "staff_of_swarming_insects": {
+      "hash": "c956dde7",
+      "text": "Insektsværmens stav"
+    },
+    "staff_of_the_magi": {
+      "hash": "24211251",
+      "text": "Magikernes stav"
+    },
+    "staff_of_the_python": {
+      "hash": "29dc2bb5",
+      "text": "Pytonstaven"
+    },
+    "staff_of_the_woodlands": {
+      "hash": "ffa09e68",
+      "text": "Skovenes stav"
+    },
+    "staff_of_thunder_and_lightning": {
+      "hash": "be83d1b7",
+      "text": "Torden og lyns stav"
+    },
+    "staff_of_withering": {
+      "hash": "b4d0cab7",
+      "text": "Visnens stav"
+    },
+    "stone_of_controlling_earth_elementals": {
+      "hash": "e83a9580",
+      "text": "Sten til at styre jordelementarer"
+    },
+    "stone_of_good_luck_luckstone": {
+      "hash": "cf10ac50",
+      "text": "Lykkesten"
+    },
+    "sun_blade": {
+      "hash": "e734b94f",
+      "text": "Solklinge"
+    },
+    "sword_of_life_stealing": {
+      "hash": "191ab0ec",
+      "text": "Livsrøverens sværd"
+    },
+    "sword_of_sharpness": {
+      "hash": "c6466f34",
+      "text": "Skarphedens sværd"
+    },
+    "sword_of_wounding": {
+      "hash": "723017fc",
+      "text": "Sårenes sværd"
+    },
+    "talisman_of_pure_good": {
+      "hash": "d4774ca0",
+      "text": "Det rene godes talisman"
+    },
+    "talisman_of_the_sphere": {
+      "hash": "0ea57355",
+      "text": "Kuglens talisman"
+    },
+    "talisman_of_ultimate_evil": {
+      "hash": "74e8dd80",
+      "text": "Den yderste ondskabs talisman"
+    },
+    "thunderous_greatclub": {
+      "hash": "0820f83f",
+      "text": "Tordnende stor kølle"
+    },
+    "tome_of_clear_thought": {
+      "hash": "aefaf32f",
+      "text": "Den klare tankes bog"
+    },
+    "tome_of_leadership_and_influence": {
+      "hash": "f1e99c3c",
+      "text": "Lederskabets og indflydelsens bog"
+    },
+    "tome_of_understanding": {
+      "hash": "874bcf25",
+      "text": "Forståelsens bog"
+    },
+    "trident_of_fish_command": {
+      "hash": "230b8f7b",
+      "text": "Fiskeherredømmets trefork"
+    },
+    "universal_solvent": {
+      "hash": "c580771b",
+      "text": "Universelt opløsningsmiddel"
+    },
+    "vicious_weapon": {
+      "hash": "82139123",
+      "text": "Ondskabsfuldt våben"
+    },
+    "vorpal_sword": {
+      "hash": "4f2a1e54",
+      "text": "Vorpalsværd"
+    },
+    "wand_of_binding": {
+      "hash": "7ccad801",
+      "text": "Bindingens tryllestav"
+    },
+    "wand_of_enemy_detection": {
+      "hash": "6674801f",
+      "text": "Fjendesporingens tryllestav"
+    },
+    "wand_of_fear": {
+      "hash": "a48b3d2a",
+      "text": "Frygtens tryllestav"
+    },
+    "wand_of_fireballs": {
+      "hash": "141a74ce",
+      "text": "Ildkuglernes tryllestav"
+    },
+    "wand_of_lightning_bolts": {
+      "hash": "f812de36",
+      "text": "Lynenes tryllestav"
+    },
+    "wand_of_magic_detection": {
+      "hash": "27fad130",
+      "text": "Magisporingens tryllestav"
+    },
+    "wand_of_magic_missiles": {
+      "hash": "61413f8c",
+      "text": "Magiske projektilers tryllestav"
+    },
+    "wand_of_paralysis": {
+      "hash": "b2d56dc6",
+      "text": "Lammelsens tryllestav"
+    },
+    "wand_of_polymorph": {
+      "hash": "91c37788",
+      "text": "Forvandlingens tryllestav"
+    },
+    "wand_of_secrets": {
+      "hash": "9790152d",
+      "text": "Hemmelighedernes tryllestav"
+    },
+    "wand_of_the_war_mage_1": {
+      "hash": "ffceec0d",
+      "text": "Krigsmagikerens tryllestav +1"
+    },
+    "wand_of_the_war_mage_2": {
+      "hash": "fccee754",
+      "text": "Krigsmagikerens tryllestav +2"
+    },
+    "wand_of_the_war_mage_3": {
+      "hash": "fdcee8e7",
+      "text": "Krigsmagikerens tryllestav +3"
+    },
+    "wand_of_web": {
+      "hash": "c99abfb6",
+      "text": "Spindets tryllestav"
+    },
+    "wand_of_wonder": {
+      "hash": "012263bb",
+      "text": "Undrenes tryllestav"
+    },
+    "weapon_1": {
+      "hash": "decd7851",
+      "text": "Våben +1"
+    },
+    "weapon_2": {
+      "hash": "dbcd7398",
+      "text": "Våben +2"
+    },
+    "weapon_3": {
+      "hash": "dccd752b",
+      "text": "Våben +3"
+    },
+    "weapon_of_warning": {
+      "hash": "2012524e",
+      "text": "Varslingens våben"
+    },
+    "well_of_many_worlds": {
+      "hash": "7cde5e72",
+      "text": "De mange verdeners brønd"
+    },
+    "wind_fan": {
+      "hash": "467c9b52",
+      "text": "Vindvifte"
+    },
+    "winged_boots": {
+      "hash": "e138e58e",
+      "text": "Vingede støvler"
+    },
+    "wings_of_flying": {
+      "hash": "dedc9bf3",
+      "text": "Flyvevinger"
+    }
+  }
+}

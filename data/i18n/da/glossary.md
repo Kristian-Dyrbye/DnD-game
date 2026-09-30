@@ -262,3 +262,17 @@ All 330 in data/i18n/da/srd/monsters.json. Patterns to reuse:
 | Werewolf etc. | Varulv, Varbjørn, Varrotte, Varorne, Vartiger |
 | Allied X (fight allies) | X (allieret) |
 | kept: Ogre, Imp, Ghoul, Ghast, Merrow, Grimlock, Gargoyle, Sprite, Roper, Stirge, Bulette … (proper monster names) | same |
+
+## SRD gear + magic items (A149d)
+
+| English | Danish |
+|---|---|
+| Potion of X | Xdrik (Flyvedrik, Usynlighedsdrik); Potion of Healing = Helbredende drik (Greater/Superior/Supreme = større/overlegen/ypperste); Potion of Heroism = Heltemodseliksir |
+| Weapon/Armor/Shield/Ammunition, +N | Våben/Rustning/Skjold/Ammunition +N (no comma); a magic weapon shows "Langsværd (Våben +1)" |
+| Ring/Cloak/Staff/Wand/Rod/Robe of X | Xens ring/kappe/stav/tryllestav/scepter/kåbe (genitive) or a compound (Usynlighedskappe, Ildstav) |
+| X's Pack (equipment packs) | Xens pakke (Opdagelsesrejsendes pakke, Hulegængerens pakke) |
+| X's Tools / Supplies / Kit | Xværktøj / Xudstyr / Xsæt (Tyveværktøj, Forklædningssæt, Lægetaske = Healer's Kit) |
+| Arcane Focus / Druidic Focus / Holy Symbol (in names) | (magisk fokus) / (druidefokus) / (helligt symbol) |
+| Spell Scroll / Spellbook | Besværgelsesrulle / Besværgelsesbog |
+| Bag of Holding / Handy Haversack / Portable Hole | Rummelig pose / Praktisk skulderpose / Bærbart hul |
+| kept: Net, Horn, Pony, Mastiff, Kamel … (same word) | same |

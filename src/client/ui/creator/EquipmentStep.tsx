@@ -6,7 +6,7 @@ import { db } from '../../data';
 import { coins, t } from '../i18n';
 import { creator } from './creatorState';
 import { itemDisplayName } from '../text';
-import { srdText } from '../srdText';
+import { itemText, srdText } from '../srdText';
 
 type Pkg = ClassData['startingEquipment'][number];
 
@@ -24,7 +24,7 @@ const letter = (i: number) => String.fromCharCode(65 + i);
 const choiceLabel = (tag: string) => (CHOICE_OPTIONS[tag] ? t(CHOICE_OPTIONS[tag].label) : tag);
 
 function PackageText({ pkg }: { pkg: Pkg }) {
-  const items = pkg.items.map(([id, n]) => `${n > 1 ? `${n} × ` : ''}${itemDisplayName(db.item(id)?.name ?? id)}`);
+  const items = pkg.items.map(([id, n]) => `${n > 1 ? `${n} × ` : ''}${itemDisplayName(itemText(id))}`);
   const choices = pkg.choices.map(choiceLabel);
   const parts = [...items, ...choices];
   return <span>{parts.length ? `${parts.join(', ')}${pkg.cost ? `, ${coins(pkg.cost)}` : ''}` : coins(pkg.cost)}</span>;
@@ -77,7 +77,7 @@ export function EquipmentStep() {
                   <option value="">{t('creator.equipment.default')}</option>
                   {opt.ids().map((id) => (
                     <option key={id} value={id}>
-                      {itemDisplayName(db.item(id)?.name ?? id)}
+                      {itemDisplayName(itemText(id))}
                     </option>
                   ))}
                 </select>
