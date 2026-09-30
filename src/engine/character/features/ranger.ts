@@ -10,6 +10,7 @@ import { applyCondition } from '../../rules/conditions';
 import { grantTempHp } from '../../rules/damage';
 import { classLevel } from '../derived';
 import type { FeatureImpl } from './types';
+import { ENGLISH_MESSAGES } from '../../i18n';
 
 const level = (c: Character) => classLevel(c, 'ranger');
 const wisUses = (c: Character) => Math.max(1, abilityModifier(c.abilities.wis));
@@ -49,10 +50,10 @@ export const rangerFeatures: FeatureImpl[] = [
         name: 'Tireless',
         cost: 'action',
         resource: 'tireless',
-        problem: (c) => ((c.resources.tireless?.current ?? 0) < 1 ? 'No uses left' : undefined),
-        use: (c, _db, { rng }) => {
+        problem: (c, msgs) => ((c.resources.tireless?.current ?? 0) < 1 ? msgs.m('feat.noUses') : undefined),
+        use: (c, _db, { rng, msgs = ENGLISH_MESSAGES }) => {
           const amount = Math.max(1, roll('1d8', rng).total + abilityModifier(c.abilities.wis));
-          return { character: grantTempHp(spend(c, 'tireless'), amount), log: [`${c.name} gains ${amount} temporary HP (Tireless).`] };
+          return { character: grantTempHp(spend(c, 'tireless'), amount), log: [msgs.m('feat.tireless', { name: c.name, n: amount })] };
         },
       },
     ],
@@ -67,11 +68,11 @@ export const rangerFeatures: FeatureImpl[] = [
         name: "Nature's Veil",
         cost: 'bonus_action',
         resource: 'natures_veil',
-        problem: (c) => ((c.resources.natures_veil?.current ?? 0) < 1 ? 'No uses left' : undefined),
-        use: (c) => ({
+        problem: (c, msgs) => ((c.resources.natures_veil?.current ?? 0) < 1 ? msgs.m('feat.noUses') : undefined),
+        use: (c, _db, { msgs = ENGLISH_MESSAGES }) => ({
           // Invisible until the end of the ranger's next turn (2 end-of-turn ticks counting this one).
           character: applyCondition(spend(c, 'natures_veil'), { condition: 'invisible', sourceId: `${c.id}:natures_veil`, roundsLeft: 2 }).creature,
-          log: [`${c.name} fades from sight (Nature's Veil).`],
+          log: [msgs.m('feat.naturesVeil', { name: c.name })],
         }),
       },
     ],

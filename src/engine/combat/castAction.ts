@@ -210,7 +210,7 @@ export function featureInCombat(state: CombatState, ctx: CombatContext, o: Featu
   const actor = state.creatures[o.actorId];
   const msgs = msgsOf(ctx);
   if (!isCharacter(actor)) return fail(state, msgs.m('cast.noFeatures', { name: actor?.name ?? o.actorId }));
-  const found = featureActions(actor, db).find((a) => a.action.id === o.actionId);
+  const found = featureActions(actor, db, msgs).find((a) => a.action.id === o.actionId);
   if (!found) return fail(state, msgs.m('cast.noFeature', { name: actor.name, feature: o.actionId }));
   if (found.problem) return fail(state, found.problem);
   const target = o.targetId ? state.creatures[o.targetId] : undefined;
@@ -226,7 +226,7 @@ export function featureInCombat(state: CombatState, ctx: CombatContext, o: Featu
     if (!paid.ok) return fail(state, paid.error);
     turns = paid.state;
   }
-  const r = useFeatureAction(actor, db, o.actionId, { rng: ctx.rng, ...(target && { target }), ...(o.choice && { choice: o.choice }) });
+  const r = useFeatureAction(actor, db, o.actionId, { rng: ctx.rng, msgs, ...(target && { target }), ...(o.choice && { choice: o.choice }) });
   const next = merge({ ...state, turns }, [r.character, ...(r.others ?? [])]);
   return { ok: true, state: next, events: r.log.map((text) => ({ kind: 'action' as const, actorId: o.actorId, ...(o.targetId && { targetId: o.targetId }), text })) };
 }

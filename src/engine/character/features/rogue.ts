@@ -11,6 +11,7 @@ import { savingThrow, type D20TestResult } from '../../rules/checks';
 import { applyCondition, saveModes } from '../../rules/conditions';
 import { classLevel } from '../derived';
 import type { FeatureImpl } from './types';
+import { ENGLISH_MESSAGES, type Messages } from '../../i18n';
 
 const level = (c: Character) => classLevel(c, 'rogue');
 
@@ -39,11 +40,11 @@ export const rogueFeatures: FeatureImpl[] = [
         id: 'steady_aim',
         name: 'Steady Aim',
         cost: 'bonus_action',
-        problem: (c) => (c.effects.some((e) => e.key === 'steady_aim') ? 'Already aiming' : undefined),
-        use: (c) => ({
+        problem: (c, msgs) => (c.effects.some((e) => e.key === 'steady_aim') ? msgs.m('feat.alreadyAiming') : undefined),
+        use: (c, _db, { msgs = ENGLISH_MESSAGES }) => ({
           // Advantage on the next attack this turn; Speed 0 until the end of the turn (combat enforces the speed).
           character: addEffect(c, { key: 'steady_aim', sourceId: c.id, consumeOn: 'own_attack', expires: { on: 'end_of_turn', creatureId: c.id, skip: 0 } }),
-          log: [`${c.name} takes careful aim (Advantage on the next attack, can't move this turn).`],
+          log: [msgs.m('feat.steadyAim', { name: c.name })],
         }),
       },
     ],
@@ -83,44 +84,46 @@ export function cunningStrike(
   target: Creature,
   option: CunningStrikeOption,
   rng: Rng,
+  msgs: Messages = ENGLISH_MESSAGES,
 ): { rogue: Character; target: Creature; diceCost: number; save?: D20TestResult; text: string } | undefined {
   const def = CUNNING_STRIKES[option];
   if (level(rogue) < def.level || def.cost > sneakAttackDice(rogue)) return undefined;
   const dc = cunningStrikeDc(rogue);
-  const save = (ability: 'con' | 'dex') => savingThrow(target, ability, { rng, dc, ...saveModes(target, ability) });
+  const save = (ability: 'con' | 'dex') => savingThrow(target, ability, { rng, dc, ...saveModes(target, ability), msgs });
   const src = `${rogue.id}:cunning_strike`;
+  const n = { name: target.name };
   switch (option) {
     case 'poison': {
       const s = save('con');
       const t = s.success ? target : applyCondition(target, { condition: 'poisoned', sourceId: src, roundsLeft: 10, endSave: { ability: 'con', dc } }).creature;
-      return { rogue, target: t, diceCost: def.cost, save: s, text: s.success ? `${target.name} resists the poison` : `${target.name} is Poisoned` };
+      return { rogue, target: t, diceCost: def.cost, save: s, text: msgs.m(s.success ? 'feat.cs.resistPoison' : 'feat.cs.poisoned', n) };
     }
     case 'trip': {
-      if (SIZES.indexOf(target.size) > SIZES.indexOf('large')) return { rogue, target, diceCost: def.cost, text: `${target.name} is too big to trip` };
+      if (SIZES.indexOf(target.size) > SIZES.indexOf('large')) return { rogue, target, diceCost: def.cost, text: msgs.m('feat.cs.tooBig', n) };
       const s = save('dex');
-      return { rogue, target: s.success ? target : applyCondition(target, { condition: 'prone' }).creature, diceCost: def.cost, save: s, text: s.success ? `${target.name} keeps its footing` : `${target.name} is knocked Prone` };
+      return { rogue, target: s.success ? target : applyCondition(target, { condition: 'prone' }).creature, diceCost: def.cost, save: s, text: msgs.m(s.success ? 'feat.cs.footing' : 'feat.cs.prone', n) };
     }
     case 'withdraw':
       return {
         rogue: addEffect(rogue, { key: 'withdraw', sourceId: rogue.id, expires: { on: 'end_of_turn', creatureId: rogue.id, skip: 0 } }),
         target,
         diceCost: def.cost,
-        text: `${rogue.name} can move half their Speed without provoking Opportunity Attacks`,
+        text: msgs.m('feat.cs.withdraw', { name: rogue.name }),
       };
     case 'daze': {
       const s = save('con');
       const t = s.success ? target : addEffect(target, { key: 'dazed', sourceId: rogue.id, expires: { on: 'end_of_turn', creatureId: target.id, skip: 0 } });
-      return { rogue, target: t, diceCost: def.cost, save: s, text: s.success ? `${target.name} shakes it off` : `${target.name} is Dazed (only one of move, action or bonus action next turn)` };
+      return { rogue, target: t, diceCost: def.cost, save: s, text: msgs.m(s.success ? 'feat.cs.shakes' : 'feat.cs.dazed', n) };
     }
     case 'knock_out': {
       const s = save('con');
       const t = s.success ? target : applyCondition(target, { condition: 'unconscious', sourceId: src, roundsLeft: 10, endSave: { ability: 'con', dc } }).creature;
-      return { rogue, target: t, diceCost: def.cost, save: s, text: s.success ? `${target.name} stays conscious` : `${target.name} is knocked Unconscious` };
+      return { rogue, target: t, diceCost: def.cost, save: s, text: msgs.m(s.success ? 'feat.cs.conscious' : 'feat.cs.knockedOut', n) };
     }
     case 'obscure': {
       const s = save('dex');
       const t = s.success ? target : applyCondition(target, { condition: 'blinded', sourceId: src, roundsLeft: 1 }).creature;
-      return { rogue, target: t, diceCost: def.cost, save: s, text: s.success ? `${target.name} blinks it away` : `${target.name} is Blinded until the end of its next turn` };
+      return { rogue, target: t, diceCost: def.cost, save: s, text: msgs.m(s.success ? 'feat.cs.blinks' : 'feat.cs.blinded', n) };
     }
   }
 }
@@ -131,20 +134,20 @@ export function uncannyDodge(damage: number): number {
 }
 
 /** Reliable Talent (7): a d20 of 9 or lower counts as 10 on checks using a proficiency. */
-export function reliableTalent(c: Character, result: D20TestResult, proficient: boolean): D20TestResult {
+export function reliableTalent(c: Character, result: D20TestResult, proficient: boolean, msgs: Messages = ENGLISH_MESSAGES): D20TestResult {
   if (level(c) < 7 || !proficient || result.d20.natural >= 10) return result;
   const total = result.total + (10 - result.d20.natural);
   const success = result.target ? total >= result.target.value : result.success;
-  return { ...result, total, ...(success !== undefined && { success }), text: `${result.text} (Reliable Talent: d20 counts as 10 → ${total})` };
+  return { ...result, total, ...(success !== undefined && { success }), text: msgs.m('feat.reliableTalent', { text: result.text, n: total }) };
 }
 
 /** Stroke of Luck (20): turn a failed D20 Test into a natural 20. */
-export function strokeOfLuck(c: Character, result: D20TestResult): { character: Character; result: D20TestResult } | undefined {
+export function strokeOfLuck(c: Character, result: D20TestResult, msgs: Messages = ENGLISH_MESSAGES): { character: Character; result: D20TestResult } | undefined {
   const r = c.resources.stroke_of_luck;
   if (!r || r.current < 1 || result.success !== false) return undefined;
   const total = result.total + (20 - result.d20.natural);
   return {
     character: { ...c, resources: { ...c.resources, stroke_of_luck: { ...r, current: 0 } } },
-    result: { ...result, total, success: result.target ? total >= result.target.value : true, text: `${result.text} → Stroke of Luck: natural 20 (${total})` },
+    result: { ...result, total, success: result.target ? total >= result.target.value : true, text: msgs.m('feat.strokeOfLuck', { text: result.text, n: total }) },
   };
 }

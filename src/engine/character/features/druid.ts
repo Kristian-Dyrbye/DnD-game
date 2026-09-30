@@ -11,6 +11,7 @@ import { createEffectContext, executeEffects } from '../../rules/effects';
 import { spellSaveDc } from '../../rules/spellcasting';
 import { classLevel } from '../derived';
 import type { FeatureImpl } from './types';
+import { ENGLISH_MESSAGES } from '../../i18n';
 import { wildShapeActions } from './wildShape';
 
 const level = (c: Character) => classLevel(c, 'druid');
@@ -78,20 +79,20 @@ export const druidFeatures: FeatureImpl[] = [
         name: "Land's Aid",
         cost: 'action',
         resource: 'wild_shape',
-        problem: (c) => ((c.resources.wild_shape?.current ?? 0) < 1 ? 'No Wild Shape uses left' : undefined),
-        use: (c, _db, { rng, targets = [], target }) => {
+        problem: (c, msgs) => ((c.resources.wild_shape?.current ?? 0) < 1 ? msgs.m('feat.noWildShape') : undefined),
+        use: (c, _db, { rng, targets = [], target, msgs = ENGLISH_MESSAGES }) => {
           // 10-ft sphere: enemies (targets) make a Con save vs 2d6 necrotic (half on success); one creature (target) heals 2d6.
           const dice = level(c) >= 14 ? '4d6' : level(c) >= 10 ? '3d6' : '2d6';
           const ws = c.resources.wild_shape!;
           const spent: Character = { ...c, resources: { ...c.resources, wild_shape: { ...ws, current: ws.current - 1 } } };
           const all: Creature[] = [...targets, ...(target && !targets.some((t) => t.id === target.id) ? [target] : [])];
-          const ctx = createEffectContext({ rng, source: spent, targets: all, saveDc: spellSaveDc(spent, 'wis') });
+          const ctx = createEffectContext({ rng, source: spent, targets: all, saveDc: spellSaveDc(spent, 'wis'), msgs });
           executeEffects([{ kind: 'save', ability: 'con', onFail: [{ kind: 'damage', damage: [{ dice, type: 'necrotic' }] }], onSuccess: 'half' }], targets.map((t) => t.id), ctx);
           if (target) executeEffects([{ kind: 'heal', dice, addSpellMod: false }], [target.id], ctx);
           return {
             character: (ctx.creatures.get(c.id) as Character) ?? spent,
             others: all.map((t) => ctx.creatures.get(t.id)!),
-            log: [`${c.name} calls on the land (${dice}).`, ...ctx.log.map((l) => l.text)],
+            log: [msgs.m('feat.landsAid', { name: c.name, dice }), ...ctx.log.map((l) => l.text)],
           };
         },
       },

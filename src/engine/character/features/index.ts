@@ -10,6 +10,7 @@ import type { Spell } from '../../data/schemas';
 import type { Ability, Condition, DamageType, Skill } from '../../rules/basics';
 import type { WeaponAttack } from '../derived';
 import { featureLevels } from '../featureLevels';
+import { ENGLISH_MESSAGES, type Messages } from '../../i18n';
 import { barbarianFeatures } from './barbarian';
 import { bardFeatures } from './bard';
 import { clericFeatures } from './cleric';
@@ -154,10 +155,11 @@ export interface AvailableAction {
   problem?: string;
 }
 
-export function featureActions(c: Character, db: SrdDatabase): AvailableAction[] {
+/** Feature actions the character has; `problem` texts are in `msgs`' language (default English). */
+export function featureActions(c: Character, db: SrdDatabase, msgs: Messages = ENGLISH_MESSAGES): AvailableAction[] {
   return activeFeatures(c, db).flatMap((f) =>
     (f.actions ?? []).map((a) => {
-      const problem = a.problem?.(c);
+      const problem = a.problem?.(c, msgs);
       return { action: a, featureId: f.id, ...(problem && { problem }) };
     }),
   );
@@ -171,8 +173,9 @@ export class FeatureError extends Error {
 }
 
 export function useFeatureAction(c: Character, db: SrdDatabase, actionId: string, params: FeatureActionParams): FeatureActionResult {
-  const found = featureActions(c, db).find((a) => a.action.id === actionId);
-  if (!found) throw new FeatureError(`${c.name} doesn't have ${actionId}`);
+  const msgs = params.msgs ?? ENGLISH_MESSAGES;
+  const found = featureActions(c, db, msgs).find((a) => a.action.id === actionId);
+  if (!found) throw new FeatureError(msgs.m('feat.notHave', { name: c.name, feature: actionId }));
   if (found.problem) throw new FeatureError(found.problem);
   return found.action.use(c, db, params);
 }

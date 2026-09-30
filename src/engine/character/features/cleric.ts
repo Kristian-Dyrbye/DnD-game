@@ -8,7 +8,7 @@ import type { Character, Creature } from '../../core/creature';
 import type { Effect } from '../../data/common';
 import type { Rng } from '../../core/rng';
 import { roll } from '../../core/dice';
-import { abilityModifier } from '../../rules/basics';
+import { ABILITY_NAMES, abilityModifier } from '../../rules/basics';
 import { applyCondition } from '../../rules/conditions';
 import { createEffectContext, executeEffects } from '../../rules/effects';
 import { spellSaveDc } from '../../rules/spellcasting';
@@ -16,6 +16,7 @@ import { savingThrow } from '../../rules/checks';
 import { applyDamage, isBloodied } from '../../rules/damage';
 import { classLevel } from '../derived';
 import type { FeatureActionResult, FeatureImpl } from './types';
+import { ENGLISH_MESSAGES, type Messages } from '../../i18n';
 
 const level = (c: Character) => classLevel(c, 'cleric');
 const wis = (c: Character) => abilityModifier(c.abilities.wis);
@@ -26,7 +27,7 @@ function spendChannel(c: Character): Character {
   return { ...c, resources: { ...c.resources, channel_divinity: { ...r, current: r.current - 1 } } };
 }
 
-const noChannel = (c: Character) => ((c.resources.channel_divinity?.current ?? 0) < 1 ? 'No Channel Divinity uses left' : undefined);
+const noChannel = (c: Character, msgs: Messages) => ((c.resources.channel_divinity?.current ?? 0) < 1 ? msgs.m('feat.noChannel') : undefined);
 
 /** Divine Spark dice: 1d8, 2d8 at 7, 3d8 at 13, 4d8 at 18. */
 export function divineSparkDice(c: Character): number {
@@ -34,8 +35,8 @@ export function divineSparkDice(c: Character): number {
   return l >= 18 ? 4 : l >= 13 ? 3 : l >= 7 ? 2 : 1;
 }
 
-function runEffects(c: Character, targets: Creature[], effects: Effect[], rng: Rng): FeatureActionResult {
-  const ctx = createEffectContext({ rng, source: c, targets, saveDc: spellSaveDc(c, 'wis'), spellMod: wis(c) });
+function runEffects(c: Character, targets: Creature[], effects: Effect[], rng: Rng, msgs: Messages): FeatureActionResult {
+  const ctx = createEffectContext({ rng, source: c, targets, saveDc: spellSaveDc(c, 'wis'), spellMod: wis(c), msgs });
   executeEffects(effects, targets.map((t) => t.id), ctx);
   return {
     character: (ctx.creatures.get(c.id) as Character) ?? c,
@@ -78,16 +79,16 @@ export const clericFeatures: FeatureImpl[] = [
         cost: 'action',
         resource: 'channel_divinity',
         problem: noChannel,
-        use: (c, _db, { rng, target, choice: mode }) => {
-          if (!target) return { character: c, log: ['Choose a creature within 30 feet.'] };
+        use: (c, _db, { rng, target, choice: mode, msgs = ENGLISH_MESSAGES }) => {
+          if (!target) return { character: c, log: [msgs.m('feat.sparkTarget')] };
           const dice = `${divineSparkDice(c)}d8${wis(c) >= 0 ? '+' : ''}${wis(c)}`;
           const spent = spendChannel(c);
           const effects: Effect[] =
             mode === 'heal'
               ? [{ kind: 'heal', dice, addSpellMod: false }]
               : [{ kind: 'save', ability: 'con', onFail: [{ kind: 'damage', damage: [{ dice, type: mode === 'necrotic' ? 'necrotic' : 'radiant' }] }], onSuccess: 'half' }];
-          const r = runEffects(spent, target.id === c.id ? [spent] : [target], effects, rng);
-          return { ...r, log: [`${c.name} channels a Divine Spark.`, ...r.log] };
+          const r = runEffects(spent, target.id === c.id ? [spent] : [target], effects, rng, msgs);
+          return { ...r, log: [msgs.m('feat.spark', { name: c.name }), ...r.log] };
         },
       },
       {
@@ -96,24 +97,24 @@ export const clericFeatures: FeatureImpl[] = [
         cost: 'action',
         resource: 'channel_divinity',
         problem: noChannel,
-        use: (c, _db, { rng, targets = [] }) => {
+        use: (c, _db, { rng, targets = [], msgs = ENGLISH_MESSAGES }) => {
           const spent = spendChannel(c);
           const dc = spellSaveDc(c, 'wis');
           const sear = level(c) >= 5 ? roll(`${Math.max(1, wis(c))}d8`, rng).total : 0;
-          const log = [`${c.name} presents their holy symbol: Turn Undead (DC ${dc}).`];
+          const log = [msgs.m('feat.turnUndead', { name: c.name, dc })];
           const others: Creature[] = [];
           for (const t of targets.filter((x) => x.creatureType === 'undead' && !x.dead)) {
-            const save = savingThrow(t, 'wis', { rng, dc });
-            log.push(`${t.name} Wisdom save: ${save.text}`);
+            const save = savingThrow(t, 'wis', { rng, dc, msgs });
+            log.push(msgs.m('eff.save', { name: t.name, ability: ABILITY_NAMES.wis, roll: save.text }));
             if (save.success) continue;
             const source = `${c.id}:turn_undead`;
             let turned = applyCondition(t, { condition: 'frightened', sourceId: source, roundsLeft: 10 }).creature;
             turned = applyCondition(turned, { condition: 'incapacitated', sourceId: source, roundsLeft: 10 }).creature;
             if (sear) {
               turned = applyDamage(turned, [{ amount: sear, type: 'radiant' }]).creature;
-              log.push(`Sear Undead: ${t.name} takes ${sear} Radiant damage.`);
+              log.push(msgs.m('feat.sear', { name: t.name, n: sear }));
             }
-            log.push(`${t.name} is turned for 1 minute.`);
+            log.push(msgs.m('feat.turned', { name: t.name }));
             others.push(turned);
           }
           return { character: spent, others, log };
@@ -151,10 +152,10 @@ export const clericFeatures: FeatureImpl[] = [
         cost: 'action',
         resource: 'channel_divinity',
         problem: noChannel,
-        use: (c, _db, { targets = [] }) => {
+        use: (c, _db, { targets = [], msgs = ENGLISH_MESSAGES }) => {
           let pool = 5 * level(c);
           const others: Creature[] = [];
-          const log = [`${c.name} channels Preserve Life (${pool} HP).`];
+          const log = [msgs.m('feat.preserveLife', { name: c.name, n: pool })];
           for (const t of targets) {
             if (pool <= 0 || t.dead || !isBloodied(t)) continue;
             const cap = Math.max(0, Math.floor(t.maxHp / 2) - t.hp);
@@ -162,7 +163,7 @@ export const clericFeatures: FeatureImpl[] = [
             if (amount <= 0) continue;
             pool -= amount;
             others.push({ ...t, hp: t.hp + amount });
-            log.push(`${t.name} regains ${amount} HP.`);
+            log.push(msgs.m('feat.regains', { name: t.name, n: amount }));
           }
           return { character: spendChannel(c), others, log };
         },

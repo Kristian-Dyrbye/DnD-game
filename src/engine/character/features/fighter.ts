@@ -11,6 +11,7 @@ import type { Ability } from '../../rules/basics';
 import { heal } from '../../rules/damage';
 import { classLevel } from '../derived';
 import type { FeatureImpl } from './types';
+import { ENGLISH_MESSAGES, type Messages } from '../../i18n';
 
 const level = (c: Character) => classLevel(c, 'fighter');
 const champion = (c: Character) => c.classes.some((x) => x.subclassId === 'champion');
@@ -34,11 +35,11 @@ export const fighterFeatures: FeatureImpl[] = [
         name: 'Second Wind',
         cost: 'bonus_action',
         resource: 'second_wind',
-        problem: (c) => ((c.resources.second_wind?.current ?? 0) < 1 ? 'No Second Wind left' : undefined),
-        use: (c, _db, { rng }) => {
+        problem: (c, msgs) => ((c.resources.second_wind?.current ?? 0) < 1 ? msgs.m('feat.noSecondWind') : undefined),
+        use: (c, _db, { rng, msgs = ENGLISH_MESSAGES }) => {
           const rolled = roll('1d10', rng).total;
           const { creature, healed } = heal(spend(c, 'second_wind'), rolled + level(c));
-          return { character: creature as Character, log: [`${c.name} uses Second Wind and regains ${healed} HP (1d10: ${rolled} + ${level(c)}).`] };
+          return { character: creature as Character, log: [msgs.m('feat.secondWind', { name: c.name, n: healed, roll: rolled, level: level(c) })] };
         },
       },
     ],
@@ -56,11 +57,11 @@ export const fighterFeatures: FeatureImpl[] = [
         name: 'Action Surge',
         cost: 'free',
         resource: 'action_surge',
-        problem: (c) =>
-          (c.resources.action_surge?.current ?? 0) < 1 ? 'No Action Surge left' : c.effects.some((e) => e.key === 'action_surge') ? 'Only once per turn' : undefined,
-        use: (c) => ({
+        problem: (c, msgs) =>
+          (c.resources.action_surge?.current ?? 0) < 1 ? msgs.m('feat.noActionSurge') : c.effects.some((e) => e.key === 'action_surge') ? msgs.m('feat.oncePerTurn') : undefined,
+        use: (c, _db, { msgs = ENGLISH_MESSAGES }) => ({
           character: addEffect(spend(c, 'action_surge'), { key: 'action_surge', sourceId: c.id, expires: { on: 'end_of_turn', creatureId: c.id, skip: 0 } }),
-          log: [`${c.name} surges into action: one extra action this turn (not Magic).`],
+          log: [msgs.m('feat.actionSurge', { name: c.name })],
         }),
       },
     ],
@@ -84,21 +85,21 @@ export const fighterFeatures: FeatureImpl[] = [
 ];
 
 /** Indomitable: reroll a failed save with a bonus equal to the Fighter level (must use the new roll). */
-export function indomitable(c: Character, failed: D20TestResult, ability: Ability, rng: Rng): { character: Character; result: D20TestResult } | undefined {
+export function indomitable(c: Character, failed: D20TestResult, ability: Ability, rng: Rng, msgs: Messages = ENGLISH_MESSAGES): { character: Character; result: D20TestResult } | undefined {
   if (failed.success !== false || (c.resources.indomitable?.current ?? 0) < 1 || !failed.target) return undefined;
-  const result = savingThrow(c, ability, { rng, dc: failed.target.value, bonuses: [{ value: level(c), label: 'Indomitable' }] });
+  const result = savingThrow(c, ability, { rng, dc: failed.target.value, bonuses: [{ value: level(c), label: 'Indomitable' }], msgs });
   return { character: spend(c, 'indomitable'), result };
 }
 
 /** Tactical Mind (2): after a failed ability check, spend Second Wind to add 1d10; refunded if it still fails. */
-export function tacticalMind(c: Character, failed: D20TestResult, rng: Rng): { character: Character; result: D20TestResult } | undefined {
+export function tacticalMind(c: Character, failed: D20TestResult, rng: Rng, msgs: Messages = ENGLISH_MESSAGES): { character: Character; result: D20TestResult } | undefined {
   if (level(c) < 2 || failed.success !== false || !failed.target || (c.resources.second_wind?.current ?? 0) < 1) return undefined;
   const bonus = roll('1d10', rng).total;
   const total = failed.total + bonus;
   const success = total >= failed.target.value;
   return {
     character: success ? spend(c, 'second_wind') : c,
-    result: { ...failed, total, success, modifiers: [...failed.modifiers, { value: bonus, label: 'Tactical Mind' }], text: `${failed.text} → + ${bonus} (Tactical Mind) = ${total}${success ? ' — Success' : ' — Failure (use refunded)'}` },
+    result: { ...failed, total, success, modifiers: [...failed.modifiers, { value: bonus, label: 'Tactical Mind' }], text: msgs.m('feat.tacticalMind', { text: failed.text, n: bonus, total, outcome: msgs.m(success ? 'roll.success' : 'feat.failureRefunded') }) },
   };
 }
 

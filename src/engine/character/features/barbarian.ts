@@ -12,6 +12,7 @@ import { canAct } from '../../rules/conditions';
 import type { Rng } from '../../core/rng';
 import { classLevel, equipped } from '../derived';
 import type { FeatureImpl } from './types';
+import { ENGLISH_MESSAGES, type Messages } from '../../i18n';
 
 const raging = (c: Character) => hasEffect(c, 'rage');
 const level = (c: Character) => classLevel(c, 'barbarian');
@@ -39,16 +40,16 @@ export const barbarianFeatures: FeatureImpl[] = [
         name: 'Rage',
         cost: 'bonus_action',
         resource: 'rage',
-        problem: (c) => (raging(c) ? 'Already raging' : (c.resources.rage?.current ?? 0) < 1 ? 'No Rage uses left' : undefined),
-        use: (c, db) => {
-          if (wearsHeavyArmor(c, db)) return { character: c, log: ["You can't rage in Heavy armor."] };
+        problem: (c, msgs) => (raging(c) ? msgs.m('feat.alreadyRaging') : (c.resources.rage?.current ?? 0) < 1 ? msgs.m('feat.noRage') : undefined),
+        use: (c, db, { msgs = ENGLISH_MESSAGES }) => {
+          if (wearsHeavyArmor(c, db)) return { character: c, log: [msgs.m('feat.heavyRage')] };
           const rage = c.resources.rage!;
           let next = addEffect({ ...c, resources: { ...c.resources, rage: { ...rage, current: rage.current - 1 } } }, { key: 'rage', sourceId: c.id, roundsLeft: 100, data: { damage: rageDamage(c, db) } });
-          const log = [`${c.name} flies into a Rage! (+${rageDamage(c, db)} damage, resistance to Bludgeoning, Piercing and Slashing)`];
+          const log = [msgs.m('feat.rage', { name: c.name, n: rageDamage(c, db) })];
           if (next.spellcasting?.concentration) {
             const { concentration, ...rest } = next.spellcasting;
             next = { ...next, spellcasting: rest };
-            log.push(`${c.name} loses concentration on ${concentration.spellId}.`);
+            log.push(msgs.m('feat.rageConc', { name: c.name, spell: concentration.spellId }));
           }
           return { character: next, log };
         },
@@ -57,8 +58,8 @@ export const barbarianFeatures: FeatureImpl[] = [
         id: 'end_rage',
         name: 'End Rage',
         cost: 'free',
-        problem: (c) => (raging(c) ? undefined : 'Not raging'),
-        use: (c) => ({ character: removeEffects(c, (e) => e.key === 'rage'), log: [`${c.name}'s Rage ends.`] }),
+        problem: (c, msgs) => (raging(c) ? undefined : msgs.m('feat.notRaging')),
+        use: (c, _db, { msgs = ENGLISH_MESSAGES }) => ({ character: removeEffects(c, (e) => e.key === 'rage'), log: [msgs.m('feat.rageEnds', { name: c.name })] }),
       },
     ],
     resistances: (c) => (raging(c) ? ['bludgeoning', 'piercing', 'slashing'] : []),
@@ -80,10 +81,10 @@ export const barbarianFeatures: FeatureImpl[] = [
         id: 'reckless_attack',
         name: 'Reckless Attack',
         cost: 'free',
-        problem: (c) => (hasEffect(c, 'reckless') ? 'Already reckless this turn' : undefined),
-        use: (c) => ({
+        problem: (c, msgs) => (hasEffect(c, 'reckless') ? msgs.m('feat.alreadyReckless') : undefined),
+        use: (c, _db, { msgs = ENGLISH_MESSAGES }) => ({
           character: addEffect(c, { key: 'reckless', sourceId: c.id, expires: { on: 'start_of_turn', creatureId: c.id, skip: 0 } }),
-          log: [`${c.name} attacks recklessly: Advantage on Strength attacks, but attacks against them have Advantage.`],
+          log: [msgs.m('feat.reckless', { name: c.name })],
         }),
       },
     ],
@@ -118,10 +119,10 @@ export function brutalStrikeDice(c: Character): string | undefined {
  * Relentless Rage (level 11): dropping to 0 HP while raging → DC 10 Con save (+5 per use until a
  * rest) to drop to twice the Barbarian level instead. Uses are counted in resources.relentless_rage.
  */
-export function relentlessRage(c: Character, rng: Rng): { character: Character; save?: D20TestResult } {
+export function relentlessRage(c: Character, rng: Rng, msgs: Messages = ENGLISH_MESSAGES): { character: Character; save?: D20TestResult } {
   if (level(c) < 11 || !raging(c) || c.hp > 0 || c.dead) return { character: c };
   const uses = c.resources.relentless_rage?.current ?? 0;
-  const save = savingThrow(c, 'con', { rng, dc: 10 + 5 * uses });
+  const save = savingThrow(c, 'con', { rng, dc: 10 + 5 * uses, msgs });
   // Counter resource: max 0 so a Short/Long Rest resets it to 0 uses.
   const resources = { ...c.resources, relentless_rage: { current: uses + 1, max: 0, recharge: 'short' as const } };
   if (!save.success) return { character: { ...c, resources }, save };

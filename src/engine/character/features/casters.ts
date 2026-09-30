@@ -11,6 +11,7 @@ import { addEffect, hasEffect } from '../../rules/activeEffects';
 import { grantTempHp } from '../../rules/damage';
 import { classLevel } from '../derived';
 import type { FeatureImpl } from './types';
+import { ENGLISH_MESSAGES } from '../../i18n';
 
 const lvl = (c: Character, cls: string) => classLevel(c, cls);
 const mod = (c: Character, a: 'int' | 'cha') => abilityModifier(c.abilities[a]);
@@ -46,12 +47,12 @@ const sorcererFeatures: FeatureImpl[] = [
         name: 'Innate Sorcery',
         cost: 'bonus_action',
         resource: 'innate_sorcery',
-        problem: (c) => ((c.resources.innate_sorcery?.current ?? 0) < 1 ? 'No uses left' : hasEffect(c, 'innate_sorcery') ? 'Already active' : undefined),
-        use: (c) => {
+        problem: (c, msgs) => ((c.resources.innate_sorcery?.current ?? 0) < 1 ? msgs.m('feat.noUses') : hasEffect(c, 'innate_sorcery') ? msgs.m('feat.alreadyActive') : undefined),
+        use: (c, _db, { msgs = ENGLISH_MESSAGES }) => {
           const r = c.resources.innate_sorcery!;
           return {
             character: addEffect({ ...c, resources: { ...c.resources, innate_sorcery: { ...r, current: r.current - 1 } } }, { key: 'innate_sorcery', sourceId: c.id, roundsLeft: 10 }),
-            log: [`${c.name} unleashes Innate Sorcery (+1 spell save DC, Advantage on Sorcerer spell attacks).`],
+            log: [msgs.m('feat.innateSorcery', { name: c.name })],
           };
         },
       },
@@ -72,16 +73,16 @@ const sorcererFeatures: FeatureImpl[] = [
         cost: 'bonus_action',
         resource: 'sorcery_points',
         // choice: slot level 1–5
-        use: (c, _db, { choice: level }) => {
+        use: (c, _db, { choice: level, msgs = ENGLISH_MESSAGES }) => {
           const n = Number(level);
           const cost = SLOT_COST[n];
           const sp = c.resources.sorcery_points;
-          if (!cost || !sp || sp.current < cost || !c.spellcasting) return { character: c, log: ['Not enough Sorcery Points.'] };
+          if (!cost || !sp || sp.current < cost || !c.spellcasting) return { character: c, log: [msgs.m('feat.noSorceryPoints')] };
           const slots = [...c.spellcasting.slots];
           slots[n - 1] = (slots[n - 1] ?? 0) + 1;
           return {
             character: { ...c, spellcasting: { ...c.spellcasting, slots }, resources: { ...c.resources, sorcery_points: { ...sp, current: sp.current - cost } } },
-            log: [`${c.name} shapes ${cost} Sorcery Points into a level ${n} spell slot.`],
+            log: [msgs.m('feat.createSlot', { name: c.name, cost, n })],
           };
         },
       },
@@ -89,15 +90,15 @@ const sorcererFeatures: FeatureImpl[] = [
         id: 'convert_spell_slot',
         name: 'Convert Spell Slot',
         cost: 'free',
-        use: (c, _db, { choice: level }) => {
+        use: (c, _db, { choice: level, msgs = ENGLISH_MESSAGES }) => {
           const n = Number(level);
           const sp = c.resources.sorcery_points;
-          if (!sp || !c.spellcasting || (c.spellcasting.slots[n - 1] ?? 0) < 1) return { character: c, log: ['No slot of that level.'] };
+          if (!sp || !c.spellcasting || (c.spellcasting.slots[n - 1] ?? 0) < 1) return { character: c, log: [msgs.m('feat.noSlot')] };
           const slots = [...c.spellcasting.slots];
           slots[n - 1]! -= 1;
           return {
             character: { ...c, spellcasting: { ...c.spellcasting, slots }, resources: { ...c.resources, sorcery_points: { ...sp, current: Math.min(sp.max, sp.current + n) } } },
-            log: [`${c.name} converts a level ${n} slot into ${n} Sorcery Points.`],
+            log: [msgs.m('feat.convertSlot', { name: c.name, n })],
           };
         },
       },
@@ -154,8 +155,8 @@ const warlockFeatures: FeatureImpl[] = [
         name: 'Magical Cunning',
         cost: 'free',
         resource: 'magical_cunning',
-        problem: (c) => ((c.resources.magical_cunning?.current ?? 0) < 1 ? 'Already used' : !c.spellcasting?.pact ? 'No Pact Magic' : undefined),
-        use: (c) => {
+        problem: (c, msgs) => ((c.resources.magical_cunning?.current ?? 0) < 1 ? msgs.m('feat.alreadyUsed') : !c.spellcasting?.pact ? msgs.m('feat.noPact') : undefined),
+        use: (c, _db, { msgs = ENGLISH_MESSAGES }) => {
           const pact = c.spellcasting!.pact!;
           const regained = Math.min(Math.ceil(pact.max / 2), pact.max - pact.current);
           return {
@@ -164,7 +165,7 @@ const warlockFeatures: FeatureImpl[] = [
               spellcasting: { ...c.spellcasting!, pact: { ...pact, current: pact.current + regained } },
               resources: { ...c.resources, magical_cunning: { ...c.resources.magical_cunning!, current: 0 } },
             },
-            log: [`${c.name} performs an eldritch rite and regains ${regained} Pact Magic slot(s).`],
+            log: [msgs.mn('feat.magicalCunning', regained, { name: c.name })],
           };
         },
       },

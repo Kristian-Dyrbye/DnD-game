@@ -9,6 +9,7 @@ import { canAct, removeCondition } from '../../rules/conditions';
 import { healFromZero } from '../../rules/death';
 import { classLevel } from '../derived';
 import type { FeatureImpl } from './types';
+import { ENGLISH_MESSAGES } from '../../i18n';
 
 const level = (c: Character) => classLevel(c, 'paladin');
 const cha = (c: Character) => abilityModifier(c.abilities.cha);
@@ -29,25 +30,25 @@ export const paladinFeatures: FeatureImpl[] = [
         name: 'Lay On Hands',
         cost: 'bonus_action',
         resource: 'lay_on_hands',
-        problem: (c) => ((c.resources.lay_on_hands?.current ?? 0) < 1 ? 'Lay On Hands pool is empty' : undefined),
+        problem: (c, msgs) => ((c.resources.lay_on_hands?.current ?? 0) < 1 ? msgs.m('feat.layEmpty') : undefined),
         // choice: number of HP to restore, or 'cure_poison' (costs 5, removes Poisoned).
-        use: (c, _db, { target, choice }) => {
+        use: (c, _db, { target, choice, msgs = ENGLISH_MESSAGES }) => {
           const pool = c.resources.lay_on_hands!;
           const who = target ?? c;
           const cure = choice === 'cure_poison';
           const want = cure ? 5 : Math.max(1, Number(choice ?? pool.current));
           const spend = Math.min(pool.current, want);
-          if (cure && spend < 5) return { character: c, log: ['Curing poison costs 5 points.'] };
+          if (cure && spend < 5) return { character: c, log: [msgs.m('feat.cureCost')] };
           const payer: Character = { ...c, resources: { ...c.resources, lay_on_hands: { ...pool, current: pool.current - spend } } };
           let patient: Creature = who.id === c.id ? payer : who;
           let text: string;
           if (cure) {
             patient = removeCondition(patient, 'poisoned');
-            text = `${c.name} cures ${who.name}'s poison.`;
+            text = msgs.m('feat.curePoison', { name: c.name, target: who.name });
           } else {
             const r = healFromZero(patient, spend); // at 0 HP: wakes up (SRD: any healing)
             patient = r.creature;
-            text = `${c.name} lays hands on ${who.name}: +${r.healed} HP.`;
+            text = msgs.m('feat.layOnHands', { name: c.name, target: who.name, n: r.healed });
           }
           return who.id === c.id ? { character: patient as Character, log: [text] } : { character: payer, others: [patient], log: [text] };
         },
@@ -89,12 +90,12 @@ export const paladinFeatures: FeatureImpl[] = [
         name: 'Sacred Weapon',
         cost: 'free',
         resource: 'channel_divinity',
-        problem: (c) => ((c.resources.channel_divinity?.current ?? 0) < 1 ? 'No Channel Divinity uses left' : undefined),
-        use: (c) => {
+        problem: (c, msgs) => ((c.resources.channel_divinity?.current ?? 0) < 1 ? msgs.m('feat.noChannel') : undefined),
+        use: (c, _db, { msgs = ENGLISH_MESSAGES }) => {
           const r = c.resources.channel_divinity!;
           const spent: Character = { ...c, resources: { ...c.resources, channel_divinity: { ...r, current: r.current - 1 } } };
           const cleared: Character = { ...spent, effects: spent.effects.filter((e) => e.key !== 'sacred_weapon') };
-          return { character: addEffect(cleared, { key: 'sacred_weapon', sourceId: c.id, roundsLeft: 100 }), log: [`${c.name}'s weapon blazes with holy light (+${Math.max(1, cha(c))} to hit, Radiant).`] };
+          return { character: addEffect(cleared, { key: 'sacred_weapon', sourceId: c.id, roundsLeft: 100 }), log: [msgs.m('feat.sacredWeapon', { name: c.name, n: Math.max(1, cha(c)) })] };
         },
       },
     ],

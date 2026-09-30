@@ -25,7 +25,8 @@ import { db } from '../../data';
 import { BattleMap } from './BattleMap';
 import { BattleMap3D } from '../../three/LazyBattleMap3D';
 import { settings } from '../settingsState';
-import { t } from '../i18n';
+import { language, t } from '../i18n';
+import { messages } from '../../../engine/i18n';
 
 type Mode =
   | { kind: 'move' }
@@ -85,7 +86,7 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
   }, [state, mode, myTurn]);
 
   const knownSpells = hero ? [...new Set([...(hero.spellcasting?.cantrips ?? []), ...(hero.spellcasting?.prepared ?? []).map((p) => p.spellId)])].map((id) => db.spells.get(id)).filter((s): s is NonNullable<typeof s> => !!s && !!spellEconomy(s) && (s.effects?.length ?? 0) > 0) : [];
-  const features = hero ? featureActions(hero, db).filter((f) => f.action.cost !== 'reaction') : [];
+  const features = hero ? featureActions(hero, db, messages(language.value)).filter((f) => f.action.cost !== 'reaction') : [];
   const aoe = useMemo(() => {
     if (mode.kind !== 'area' || !hover) return undefined;
     const spell = db.spells.get(mode.spellId);

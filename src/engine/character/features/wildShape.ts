@@ -14,6 +14,7 @@ import { canAct } from '../../rules/conditions';
 import { grantTempHp } from '../../rules/damage';
 import { classLevel } from '../derived';
 import type { FeatureAction } from './types';
+import { ENGLISH_MESSAGES } from '../../i18n';
 
 const level = (c: Character) => classLevel(c, 'druid');
 
@@ -52,25 +53,25 @@ export const wildShapeActions: FeatureAction[] = [
     name: 'Wild Shape',
     cost: 'bonus_action',
     resource: 'wild_shape',
-    problem: (c) => ((c.resources.wild_shape?.current ?? 0) < 1 ? 'No Wild Shape uses left' : !canAct(c) ? 'Incapacitated' : undefined),
-    use: (c, db, { choice: beastId }) => {
+    problem: (c, msgs) => ((c.resources.wild_shape?.current ?? 0) < 1 ? msgs.m('feat.noWildShape') : !canAct(c) ? msgs.m('feat.incapacitated') : undefined),
+    use: (c, db, { choice: beastId, msgs = ENGLISH_MESSAGES }) => {
       const beast = beastId ? db.monsters.get(beastId) : undefined;
       const known = c.choices.wild_shape_forms ?? [];
-      if (!beast || !known.includes(beast.id)) return { character: c, log: ['Choose one of your known forms.'] };
-      if (!isEligibleForm(beast, level(c))) return { character: c, log: [`${beast.name} is not an eligible form.`] };
+      if (!beast || !known.includes(beast.id)) return { character: c, log: [msgs.m('feat.chooseForm')] };
+      if (!isEligibleForm(beast, level(c))) return { character: c, log: [msgs.m('feat.notEligible', { beast: beast.name })] };
       const ws = c.resources.wild_shape!;
       let next: Character = { ...removeEffects(c, (e) => e.key === 'wild_shape'), resources: { ...c.resources, wild_shape: { ...ws, current: ws.current - 1 } } };
       next = addEffect(next, { key: 'wild_shape', sourceId: c.id, roundsLeft: Math.max(1, Math.floor(level(c) / 2)) * 600, data: { beastId: beast.id } });
       next = grantTempHp(next, level(c));
-      return { character: next, log: [`${c.name} shifts into a ${beast.name} (+${level(c)} temporary HP).`] };
+      return { character: next, log: [msgs.m('feat.shift', { name: c.name, beast: beast.name, n: level(c) })] };
     },
   },
   {
     id: 'revert_form',
     name: 'Leave Wild Shape',
     cost: 'bonus_action',
-    problem: (c) => (c.effects.some((e) => e.key === 'wild_shape') ? undefined : 'Not in Wild Shape'),
-    use: (c) => ({ character: removeEffects(c, (e) => e.key === 'wild_shape'), log: [`${c.name} returns to their true form.`] }),
+    problem: (c, msgs) => (c.effects.some((e) => e.key === 'wild_shape') ? undefined : msgs.m('feat.notWildShaped')),
+    use: (c, _db, { msgs = ENGLISH_MESSAGES }) => ({ character: removeEffects(c, (e) => e.key === 'wild_shape'), log: [msgs.m('feat.revert', { name: c.name })] }),
   },
 ];
 

@@ -10,6 +10,7 @@ import type { Damage } from '../../data/common';
 import type { SrdDatabase } from '../../data/srd';
 import type { Ability, Condition, DamageType, Skill } from '../../rules/basics';
 import type { WeaponAttack } from '../derived';
+import type { Messages } from '../../i18n';
 
 export interface Modes {
   advantage: string[];
@@ -52,6 +53,8 @@ export interface FeatureActionParams {
   /** Several targets (Turn Undead, Land's Aid area). */
   targets?: Creature[];
   choice?: string;
+  /** Language of the log lines (default English). */
+  msgs?: Messages;
 }
 
 /** Spell modifiers a feature adds when casting (see spellcasting.castSpell options). */
@@ -83,7 +86,7 @@ export interface FeatureAction {
   /** Resource spent (key in character.resources). */
   resource?: string;
   /** Why it can't be used right now, or undefined if usable. */
-  problem?(c: Character): string | undefined;
+  problem?(c: Character, msgs: Messages): string | undefined;
   use(c: Character, db: SrdDatabase, params: FeatureActionParams): FeatureActionResult;
 }
 

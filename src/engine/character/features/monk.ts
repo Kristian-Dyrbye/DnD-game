@@ -15,6 +15,7 @@ import { applyCondition, saveModes } from '../../rules/conditions';
 import { heal } from '../../rules/damage';
 import { classLevel, equipped, type WeaponAttack } from '../derived';
 import type { FeatureAction, FeatureImpl } from './types';
+import { ENGLISH_MESSAGES, type EngineKey, type Messages } from '../../i18n';
 
 const level = (c: Character) => classLevel(c, 'monk');
 const wis = (c: Character) => abilityModifier(c.abilities.wis);
@@ -45,18 +46,18 @@ const spendFocus = (c: Character, n = 1): Character => {
   const r = c.resources.focus_points!;
   return { ...c, resources: { ...c.resources, focus_points: { ...r, current: r.current - n } } };
 };
-const needFocus = (n: number) => (c: Character) => ((c.resources.focus_points?.current ?? 0) < n ? 'Not enough Focus Points' : undefined);
+const needFocus = (n: number) => (c: Character, msgs: Messages) => ((c.resources.focus_points?.current ?? 0) < n ? msgs.m('feat.noFocus') : undefined);
 
-function focusAction(id: string, name: string, effectKey: string, text: string): FeatureAction {
+function focusAction(id: string, name: string, effectKey: string, text: EngineKey): FeatureAction {
   return {
     id,
     name,
     cost: 'bonus_action',
     resource: 'focus_points',
     problem: needFocus(1),
-    use: (c) => ({
+    use: (c, _db, { msgs = ENGLISH_MESSAGES }) => ({
       character: addEffect(spendFocus(c), { key: effectKey, sourceId: c.id, expires: { on: 'start_of_turn', creatureId: c.id, skip: 0 } }),
-      log: [`${c.name}: ${text}`],
+      log: [msgs.m(text, { name: c.name })],
     }),
   };
 }
@@ -94,9 +95,9 @@ export const monkFeatures: FeatureImpl[] = [
       return { focus_points: { current: max, max, recharge: 'short' } };
     },
     actions: [
-      focusAction('flurry_of_blows', 'Flurry of Blows', 'flurry_of_blows', 'Flurry of Blows — two Unarmed Strikes as a Bonus Action.'),
-      focusAction('patient_defense', 'Patient Defense', 'patient_defense', 'Patient Defense — Disengage and Dodge.'),
-      focusAction('step_of_the_wind', 'Step of the Wind', 'step_of_the_wind', 'Step of the Wind — Disengage and Dash, jump distance doubled.'),
+      focusAction('flurry_of_blows', 'Flurry of Blows', 'flurry_of_blows', 'feat.flurry'),
+      focusAction('patient_defense', 'Patient Defense', 'patient_defense', 'feat.patientDefense'),
+      focusAction('step_of_the_wind', 'Step of the Wind', 'step_of_the_wind', 'feat.stepOfTheWind'),
     ],
   },
   {
@@ -133,12 +134,12 @@ export const monkFeatures: FeatureImpl[] = [
         name: 'Wholeness of Body',
         cost: 'bonus_action',
         resource: 'wholeness_of_body',
-        problem: (c) => ((c.resources.wholeness_of_body?.current ?? 0) < 1 ? 'No uses left' : undefined),
-        use: (c, db, { rng }) => {
+        problem: (c, msgs) => ((c.resources.wholeness_of_body?.current ?? 0) < 1 ? msgs.m('feat.noUses') : undefined),
+        use: (c, db, { rng, msgs = ENGLISH_MESSAGES }) => {
           const r = c.resources.wholeness_of_body!;
           const rolled = roll(martialArtsDie(c, db), rng).total;
           const { creature, healed } = heal({ ...c, resources: { ...c.resources, wholeness_of_body: { ...r, current: r.current - 1 } } }, rolled + wis(c));
-          return { character: creature as Character, log: [`${c.name} regains ${healed} HP (Wholeness of Body).`] };
+          return { character: creature as Character, log: [msgs.m('feat.wholeness', { name: c.name, n: healed })] };
         },
       },
     ],
@@ -160,9 +161,9 @@ export function deflectAmount(c: Character, rng: Rng): number {
 }
 
 /** Stunning Strike (5): after a hit, 1 Focus: Con save or Stunned until the start of the monk's next turn; on a success, Speed halved and the next attack against it has Advantage. */
-export function stunningStrike(c: Character, target: Creature, rng: Rng): { monk: Character; target: Creature; save: D20TestResult } | undefined {
+export function stunningStrike(c: Character, target: Creature, rng: Rng, msgs: Messages = ENGLISH_MESSAGES): { monk: Character; target: Creature; save: D20TestResult } | undefined {
   if (level(c) < 5 || (c.resources.focus_points?.current ?? 0) < 1) return undefined;
-  const save = savingThrow(target, 'con', { rng, dc: focusSaveDc(c), ...saveModes(target, 'con') });
+  const save = savingThrow(target, 'con', { rng, dc: focusSaveDc(c), ...saveModes(target, 'con'), msgs });
   const monk = spendFocus(c);
   if (!save.success) {
     return { monk, target: applyCondition(target, { condition: 'stunned', sourceId: `${c.id}:stunning_strike`, roundsLeft: 1 }).creature, save };
@@ -171,10 +172,10 @@ export function stunningStrike(c: Character, target: Creature, rng: Rng): { monk
 }
 
 /** Open Hand Technique (3): a Flurry of Blows hit can Addle (no reactions), Push 15 ft (Str save), or Topple (Dex save → Prone). */
-export function openHandTechnique(c: Character, target: Creature, technique: 'addle' | 'push' | 'topple', rng: Rng): { target: Creature; pushFt?: number; save?: D20TestResult } {
+export function openHandTechnique(c: Character, target: Creature, technique: 'addle' | 'push' | 'topple', rng: Rng, msgs: Messages = ENGLISH_MESSAGES): { target: Creature; pushFt?: number; save?: D20TestResult } {
   if (technique === 'addle') return { target: addEffect(target, { key: 'no_reactions', sourceId: c.id, expires: { on: 'start_of_turn', creatureId: c.id, skip: 0 } }) };
   const ability = technique === 'push' ? 'str' : 'dex';
-  const save = savingThrow(target, ability, { rng, dc: focusSaveDc(c), ...saveModes(target, ability) });
+  const save = savingThrow(target, ability, { rng, dc: focusSaveDc(c), ...saveModes(target, ability), msgs });
   if (save.success) return { target, save };
   return technique === 'push' ? { target, pushFt: 15, save } : { target: applyCondition(target, { condition: 'prone' }).creature, save };
 }

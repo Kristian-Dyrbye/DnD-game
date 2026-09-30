@@ -13,6 +13,7 @@ import { addEffect, removeEffects } from '../../rules/activeEffects';
 import type { D20TestResult } from '../../rules/checks';
 import { classLevel } from '../derived';
 import type { FeatureImpl } from './types';
+import { ENGLISH_MESSAGES, type Messages } from '../../i18n';
 
 const level = (c: Character) => classLevel(c, 'bard');
 
@@ -37,16 +38,16 @@ export const bardFeatures: FeatureImpl[] = [
         name: 'Bardic Inspiration',
         cost: 'bonus_action',
         resource: 'bardic_inspiration',
-        problem: (c) => ((c.resources.bardic_inspiration?.current ?? 0) < 1 ? 'No Bardic Inspiration left' : undefined),
-        use: (c, db, { target }) => {
-          if (!target || target.id === c.id) return { character: c, log: ['Choose another creature to inspire.'] };
-          if (target.effects.some((e) => e.key === 'bardic_inspiration')) return { character: c, log: [`${target.name} is already inspired.`] };
+        problem: (c, msgs) => ((c.resources.bardic_inspiration?.current ?? 0) < 1 ? msgs.m('feat.noInspiration') : undefined),
+        use: (c, db, { target, msgs = ENGLISH_MESSAGES }) => {
+          if (!target || target.id === c.id) return { character: c, log: [msgs.m('feat.inspireWho')] };
+          if (target.effects.some((e) => e.key === 'bardic_inspiration')) return { character: c, log: [msgs.m('feat.alreadyInspired', { name: target.name })] };
           const die = bardicDie(c, db);
           const res = c.resources.bardic_inspiration!;
           return {
             character: { ...c, resources: { ...c.resources, bardic_inspiration: { ...res, current: res.current - 1 } } },
             others: [addEffect(target, { key: 'bardic_inspiration', sourceId: c.id, roundsLeft: 600, data: { die } })],
-            log: [`${c.name} inspires ${target.name} (1${die}).`],
+            log: [msgs.m('feat.inspires', { name: c.name, target: target.name, die })],
           };
         },
       },
@@ -80,7 +81,7 @@ export interface InspirationUse {
 }
 
 /** After a failed D20 Test: roll the Bardic Inspiration die and add it (the die is used up). */
-export function useInspiration(c: Creature, result: D20TestResult, rng: Rng): InspirationUse | undefined {
+export function useInspiration(c: Creature, result: D20TestResult, rng: Rng, msgs: Messages = ENGLISH_MESSAGES): InspirationUse | undefined {
   const insp = c.effects.find((e) => e.key === 'bardic_inspiration');
   if (!insp || result.success !== false || result.autoFail) return undefined;
   const die = String(insp.data.die ?? 'd6');
@@ -95,7 +96,7 @@ export function useInspiration(c: Creature, result: D20TestResult, rng: Rng): In
       total,
       ...(success !== undefined && { success }),
       modifiers: [...result.modifiers, { value: rolled, label: 'Bardic Inspiration' }],
-      text: `${result.text} → + ${rolled} (Bardic Inspiration) = ${total}${success ? ' — Success' : ' — Failure'}`,
+      text: msgs.m('feat.inspiration', { text: result.text, n: rolled, total, outcome: msgs.m(success ? 'roll.success' : 'roll.failure') }),
     },
   };
 }
