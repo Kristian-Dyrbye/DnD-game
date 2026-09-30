@@ -8,6 +8,7 @@
       "Grep",
       "WebSearch",
       "WebFetch",
+      "Bash(cd *)",
       "Bash(npm *)",
       "Bash(npx *)",
       "Bash(node *)",

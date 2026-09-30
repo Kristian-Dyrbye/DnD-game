@@ -24,9 +24,9 @@ These rules **override** anything in the Build Prompt that conflicts with them.
 
 ## 3. Session Protocol (follow it in order, every session)
 
-1. **Load memory.** Read `brain.md` completely. Do not read the whole Build Prompt every session: read only the sections listed in the current assignment's `Spec refs`.
+1. **Load memory.** Read `brain.md` completely, **in chunks**: the Read tool refuses files over 25,000 tokens and `brain.md` is bigger. Use `limit: 150` with `offset` 1, 151, 301, … until a read returns fewer than 150 lines. Never try to read it in one call. Do not read the whole Build Prompt every session: read only the sections listed in the current assignment's `Spec refs`.
 2. **Check for a stop signal.** If `brain.md` → Status says `DONE`, write `DONE` to `loop_status.txt` and end the session.
-3. **Pick the assignment.** Take the first item in the Assignment Queue whose status is `todo`. Mark it `in-progress` in `brain.md` immediately.
+3. **Pick the assignment.** If an item is already `in-progress` (not `in-progress (helper)`), an earlier session was interrupted: resume that one. Check `git status` / `git diff` first and keep its uncommitted work if it is sound, else revert it with `git checkout -- <files>` and start over. Otherwise take the first item in the Assignment Queue whose status is `todo`. Mark it `in-progress` in `brain.md` immediately.
 4. **Orient cheaply.** Use the File Map in `brain.md` to open only the files you need. Don't scan the whole repo.
 5. **Do the work.** Write the code, content, or data for this assignment only. Don't drift into other assignments; note ideas in the queue instead.
 6. **Verify.** Run the relevant tests and type checks (and the build, if the assignment touches the frontend). The assignment isn't done until they pass. See §6 for failures.
@@ -85,6 +85,7 @@ At the very end of every session, overwrite `loop_status.txt` in the project roo
 - The target is Windows 10/11 with 8 GB of RAM. Use cross-platform Node APIs (`path.join`) rather than hard-coded separators. Launchers are `.bat` files with CRLF line endings.
 - Ollama runs as a local service on `http://localhost:11434`. Never assume a model is loaded; check first, and use the mock LLM for tests.
 - Tests must not require Ollama or TTS to be running. Use mocks.
+- **Shell commands:** the session already starts in the project root. Never prefix commands with `cd "<project>" &&`, and don't chain several commands with `&&`/`;` unless each one is allowed. In unattended runs, a compound command with any unapproved part is refused outright, and `grep`/`cat` after a `cd` is always refused. Run commands one per call, with paths relative to the project root.
 
 ## 10. Code Quality Standards
 
