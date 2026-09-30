@@ -128,3 +128,22 @@ Hollowmere, Ravensgate, Thornwife Hollow, Mirefold, Port Sorrel, Briarkin, Miret
 | gibbet / causeway / postern / landing | galge / dæmning / bagport / anløbsbro |
 | stilt-house / walkway | pælehus / gangbro |
 | "lamb", "dearie" (terms of address) | "lam", "skat" |
+
+## Content (A145): chapter 2 names
+Port Sorrel, Fort Kestrel, Gullhaven, Highcrown, Saltwind, Red Gull(s), Tidewright(s) and person names stay English.
+
+| English | Dansk |
+|---|---|
+| Saltwind Company (the Company) / Company House / the board | Saltwind-kompagniet (Kompagniet) / Kompagnihuset / bestyrelsen |
+| Red Gull Brotherhood (the Brotherhood) | Red Gull-broderskabet (Broderskabet) |
+| Almonry (grain, seal) | Almisseembedet (korn, segl) |
+| Brass Parrot / Isle of Brass Parrots / Brass Tooth | Messingpapegøjen / Messingpapegøjernes Ø / Messingtanden |
+| Singing Reef / Singing Tooth | Det Syngende Rev / Den Syngende Tand |
+| Grinning Coin / Fennick's Rest / Wreckers' Cove | Den Grinende Mønt / Fennicks Hvile / Vragplyndrerbugten |
+| the Isles | Øerne |
+| knucklebones | knoklespil |
+| Governor / Commander / Factor / Harbormaster / Quartermaster | guvernør / kommandant / faktor / havnefoged / kvartermester |
+| Auntie Brackwater / Old Sal Brine / Iron Jenny / Salt-Eye Mora / "Two-Hats" | Tante Brackwater / Gamle Sal Brine / Jern-Jenny / Saltøje Mora / "To-Hatte" |
+| commission / letter of marque / ledger / chart | bestalling / kaperbrev / regnskabsbog / søkort |
+| "darling" (Vey) / "darling" (Mora), "dearie" (the hag) | "min kære" / "skat" |
+| Milestone: level N | Milepæl: niveau N |

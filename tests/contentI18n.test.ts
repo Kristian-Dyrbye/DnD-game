@@ -140,8 +140,8 @@ describe('real content', () => {
         expect({ lang, key, stale: r.stale, orphan: r.orphan, broken: r.broken }).toEqual({ lang, key, stale: [], orphan: [], broken: [] });
       }
     }
-    // Complete Danish files (A142 demo, A143 starter arc, A144 ch1).
-    for (const key of ['millbrook_demo', 'millbrook_disappearances', 'ch1_whispering_fen']) {
+    // Complete Danish files (A142 demo, A143 starter arc, A144 ch1, A145 ch2).
+    for (const key of ['millbrook_demo', 'millbrook_disappearances', 'ch1_whispering_fen', 'ch2_salt_and_treason']) {
       const r = checkOverlay(BUNDLED_ADVENTURES.find((a) => (a.raw as { id: string }).id === key)!.raw, BUNDLED_TRANSLATIONS.da![key]);
       expect({ key, missing: r.missing }).toEqual({ key, missing: [] });
     }
@@ -188,6 +188,27 @@ describe('real content', () => {
     expect(events.filter((e) => e.type === 'error')).toEqual([]);
     expect(events.filter((e) => e.type === 'roll').length).toBe(rolls + 1);
     expect(logText()).toMatch(/sporer|forbandelse/);
+  });
+
+  it('the Danish ch2: translated docks scene, buttons, and Danish free text (A145)', async () => {
+    const host = createGameHost({ srd: db, adventures, flags: bundledFlagRegistry(), tables, translations: BUNDLED_TRANSLATIONS, startingAdventure: 'ch2_salt_and_treason', sessionPorts: { newSeed: () => 'a145' } });
+    const events: ServerEvent[] = [];
+    host.on((e) => events.push(e));
+    const labels = () => (events.filter((e) => e.type === 'suggestions').at(-1) as Extract<ServerEvent, { type: 'suggestions' }>).actions.map((a) => a.label);
+    const logText = () => events.flatMap((e) => (e.type === 'log' ? [e.entry.text] : [])).join(' ');
+    const hero = buildCharacter(toBuildInput(quickBuild('rogue', db, Rng.fromSeed(1))), db);
+    await host.send({ type: 'set_language', language: 'da' });
+    await host.send({ type: 'new_game', hero, mode: 'heroic' });
+    await host.idle();
+    expect(events.filter((e) => e.type === 'error')).toEqual([]);
+    expect(labels()).toContain('Tal med de indespærrede "pirater"');
+    expect(labels()).toContain('Tag en fiskerbåd til Fennicks Hvile');
+    expect(labels().some((l) => l.startsWith('Undersøg kornkasserne'))).toBe(true);
+    expect(logText()).toContain('Rook Marrowby hænges ved Fort Kestrel');
+    await host.send({ type: 'say', text: 'jeg snakker med fangerne' });
+    await host.idle();
+    expect(events.filter((e) => e.type === 'error')).toEqual([]);
+    expect(logText()).toContain('fiskere, der ikke kunne betale tolden');
   });
 
   it('builds the translated content once per language; languages without overlays get English', () => {
