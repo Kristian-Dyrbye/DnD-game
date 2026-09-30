@@ -27,7 +27,7 @@ import { saveModifiers } from '../rules/checks';
 import type { ConditionTable } from '../rules/conditions';
 import { dodgeActive } from './actionEffects';
 import { targetAc, type AttackCheck, type AttackProfile } from './attack';
-import { areHostile, sideOf, type CombatContext, type CombatState } from './combatState';
+import { areHostile, msgsOf, sideOf, type CombatContext, type CombatState } from './combatState';
 
 /** Tunable AI thresholds (data, not code). */
 export const AI_TUNING = {
@@ -216,7 +216,7 @@ export function moraleCheck(state: CombatState, ctx: CombatContext, actorId: str
   if (!c || !rule.enabled || c.kind === 'character') return { flee: false, reason: 'holds' };
   if (isFearless(c, rule)) return { flee: false, reason: 'fearless' };
   const frac = c.hp / Math.max(1, c.maxHp);
-  if (frac <= rule.desperateFraction && c.abilities.int >= rule.desperateMinInt) return { flee: true, reason: 'badly wounded' };
+  if (frac <= rule.desperateFraction && c.abilities.int >= rule.desperateMinInt) return { flee: true, reason: msgsOf(ctx).m('ai.morale.wounded') };
   if (frac > rule.bloodiedFraction) return { flee: false, reason: 'holds' };
   const members = sideMembers(state, ctx, actorId, opts.roster);
   const lost = (id: string) => {
@@ -224,8 +224,8 @@ export function moraleCheck(state: CombatState, ctx: CombatContext, actorId: str
     return !m || isDown(m);
   };
   const leaders = opts.leaderIds ?? members.filter((id) => rule.leaderPattern.test(state.creatures[id]?.statBlockId ?? ''));
-  if (leaders.some((id) => id !== actorId && lost(id))) return { flee: true, reason: 'its leader has fallen' };
+  if (leaders.some((id) => id !== actorId && lost(id))) return { flee: true, reason: msgsOf(ctx).m('ai.morale.leader') };
   const others = members.filter((id) => id !== actorId);
-  if (others.length > 0 && others.filter(lost).length >= Math.ceil(members.length * rule.sideLossFraction)) return { flee: true, reason: 'its side is breaking' };
+  if (others.length > 0 && others.filter(lost).length >= Math.ceil(members.length * rule.sideLossFraction)) return { flee: true, reason: msgsOf(ctx).m('ai.morale.breaking') };
   return { flee: false, reason: 'holds' };
 }

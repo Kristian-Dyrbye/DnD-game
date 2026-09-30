@@ -18,7 +18,7 @@ import type { Skill } from '../rules/basics';
 import { canAct } from '../rules/conditions';
 import { createEffectContext, executeEffects } from '../rules/effects';
 import { combatCheck } from './actions';
-import { dbOf, fail, type ActionResult, type CombatContext, type CombatEvent, type CombatState } from './combatState';
+import { dbOf, fail, type ActionResult, type CombatContext, type CombatEvent, type CombatState, msgsOf } from './combatState';
 import { distanceFt } from './grid';
 import { spend, type EconomyKind } from './turns';
 
@@ -33,7 +33,7 @@ function payFor(state: CombatState, ctx: CombatContext, id: string, kind: Econom
   const actor = state.creatures[id];
   if (!actor || actor.dead) return fail(state, `Unknown creature ${id}`);
   if (!canAct(actor, ctx.table)) return fail(state, `${actor.name} can't act (Incapacitated)`);
-  const r = spend(state.turns, id, kind, actor, ctx.table);
+  const r = spend(state.turns, id, kind, actor, ctx.table, msgsOf(ctx));
   if (!r.ok) return fail(state, r.error);
   return { ok: true, state: { ...state, turns: r.state }, events: [], actor };
 }

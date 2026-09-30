@@ -8,7 +8,7 @@
  */
 import { formatD20Test, parseDice, roll, type DiceExpr, type Modifier, type RollResult } from '../core/dice';
 import type { Rng } from '../core/rng';
-import { ENGLISH_MESSAGES } from '../i18n';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import type { Creature } from '../core/creature';
 import type { Damage } from '../data/common';
 import type { DamageType } from './basics';
@@ -76,7 +76,7 @@ export function doubleDice(expr: DiceExpr): DiceExpr {
  * Rolls each damage entry; flat modifiers (ability mod, magic bonus) are added to the first entry.
  * Damage never goes below 0 per entry.
  */
-export function rollDamage(rng: Rng, damage: Damage[], opts: { crit?: boolean; modifiers?: Modifier[] } = {}): DamageRollResult {
+export function rollDamage(rng: Rng, damage: Damage[], opts: { crit?: boolean; modifiers?: Modifier[]; msgs?: Messages } = {}): DamageRollResult {
   const crit = opts.crit ?? false;
   const flat = (opts.modifiers ?? []).reduce((s, m) => s + m.value, 0);
   const parts = damage.map((d, i): DamageRollPart => {
@@ -94,7 +94,7 @@ export function rollDamage(rng: Rng, damage: Damage[], opts: { crit?: boolean; m
       return `${p.roll.notation} ${p.type}: ${dice}${mods} = ${p.total}`;
     })
     .join('; ');
-  return { parts, total, crit, text: `${crit ? 'Critical! ' : ''}${text}` };
+  return { parts, total, crit, text: `${crit ? (opts.msgs ?? ENGLISH_MESSAGES).m('roll.critPrefix') : ''}${text}` };
 }
 
 // ---------------------------------------------------------------- applying damage

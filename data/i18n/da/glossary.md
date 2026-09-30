@@ -62,3 +62,7 @@ There is no official Danish D&D 5e. These are the game's own choices; use them i
 | safe house | skjulested | companions wait there |
 | unconscious (prose) | bevidstløs | condition names stay SRD English until A149 |
 | approves / disapproves | bifalder / misbilliger | companion approval lines |
+| Opportunity Attack | lejlighedsangreb | |
+| cover (half / three-quarters / total) | dække (halvt / trekvart / fuldt) | |
+| long range | lang afstand | |
+| Hide / Search / Help | gemme sig / lede efter / hjælpe | |

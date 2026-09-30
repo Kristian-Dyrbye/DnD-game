@@ -14,7 +14,7 @@ import { rollDamage } from '../rules/damage';
 import { actionAvailable, actionRiders, isSingleTargetSave, multiattackSequence, saveActionRange, spendAction } from '../rules/monsters';
 import { dealCombatDamage, spendAttack } from './attack';
 import { reachProblem } from './castAction';
-import { dbOf, fail, withCreature, type ActionResult, type CombatContext, type CombatEvent, type CombatState } from './combatState';
+import { dbOf, fail, withCreature, type ActionResult, type CombatContext, type CombatEvent, type CombatState, msgsOf } from './combatState';
 import { applyActionRiders, combatSave } from './saves';
 import { setAttacksLeft, spend } from './turns';
 
@@ -70,7 +70,7 @@ export function monsterSaveAction(state: CombatState, ctx: CombatContext, actorI
     if (!paid.ok) return fail(state, paid.error);
     next = { ...withCreature(state, paid.attacker), turns: paid.turns };
   } else {
-    const paid = spend(state.turns, actorId, 'action', actor, ctx.table);
+    const paid = spend(state.turns, actorId, 'action', actor, ctx.table, msgsOf(ctx));
     if (!paid.ok) return fail(state, paid.error);
     next = { ...state, turns: setAttacksLeft(paid.state, actorId, 0) };
   }

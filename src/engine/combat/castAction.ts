@@ -16,7 +16,7 @@ import { spellInfo, spellOptions, useFeatureAction, featureActions } from '../ch
 import type { Ability } from '../rules/basics';
 import type { LogEntry } from '../rules/effects';
 import { castSpell, SpellError, type SlotChoice } from '../rules/spellcasting';
-import { dbOf, fail, type ActionResult, type CombatContext, type CombatEvent, type CombatEventKind, type CombatState } from './combatState';
+import { dbOf, fail, type ActionResult, type CombatContext, type CombatEvent, type CombatEventKind, type CombatState, msgsOf } from './combatState';
 import { distanceFt, type Point } from './grid';
 import { addZone, createZone, zoneStrike } from './zones';
 import { hasLineOfSight } from './los';
@@ -147,7 +147,7 @@ export function castInCombat(state: CombatState, ctx: CombatContext, o: CastInCo
     const b = state.grid.tokens[id];
     distances.set(id, a && b ? distanceFt(a, b) : 5);
   }
-  const paid = spend(state.turns, o.casterId, o.economy ?? economy, caster, ctx.table);
+  const paid = spend(state.turns, o.casterId, o.economy ?? economy, caster, ctx.table, msgsOf(ctx));
   if (!paid.ok) return fail(state, paid.error);
   const src = spellcastingSource(caster, spell, db);
   const level = spell.level === 0 ? 0 : slot.kind === 'slot' ? slot.level : slot.kind === 'pact' ? (caster.spellcasting?.pact?.level ?? spell.level) : spell.level;
@@ -217,7 +217,7 @@ export function featureInCombat(state: CombatState, ctx: CombatContext, o: Featu
   const cost = found.action.cost;
   let turns = state.turns;
   if (cost !== 'free') {
-    const paid = spend(state.turns, o.actorId, cost === 'bonus_action' ? 'bonusAction' : cost, actor, ctx.table);
+    const paid = spend(state.turns, o.actorId, cost === 'bonus_action' ? 'bonusAction' : cost, actor, ctx.table, msgsOf(ctx));
     if (!paid.ok) return fail(state, paid.error);
     turns = paid.state;
   }

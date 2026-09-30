@@ -24,6 +24,7 @@
  */
 import { SIZES, type Size } from '../rules/basics';
 import type { Creature } from '../core/creature';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 import { effectiveSpeed, type ConditionTable } from '../rules/conditions';
 import { canPlace, canStep, cellKey, footprintSize, isDifficult, moveToken, withinReach, type Grid, type GridToken, type Point } from './grid';
 
@@ -217,6 +218,8 @@ export interface MoveContext extends PathOptions {
   canReact?: (id: string) => boolean;
   /** Can the attacker see the mover? Opportunity attacks need sight. Default true. */
   canSee?: (attackerId: string, targetId: string) => boolean;
+  /** Language of the error texts (default English). */
+  msgs?: Messages;
 }
 
 export interface MoveStep {
@@ -268,16 +271,17 @@ export function planMove(grid: Grid, tokenId: string, path: readonly Point[], ct
   let at: Point = { x: m.token.x, y: m.token.y };
   let total = 0;
   const fail = (error: string): MovePlan => ({ ok: false, error, steps, costFt: total, triggers });
+  const msg = (ctx.msgs ?? ENGLISH_MESSAGES).m;
   for (const [i, to] of path.entries()) {
     const cost = stepCost(grid, m, at, to);
-    if (cost === null) return fail(`Step ${i} to (${to.x},${to.y}) is blocked`);
-    if (!ctx.forced && total + cost > ctx.budgetFt) return fail(`Not enough movement for step ${i}`);
+    if (cost === null) return fail(msg('move.blocked', { i, x: to.x, y: to.y }));
+    if (!ctx.forced && total + cost > ctx.budgetFt) return fail(msg('move.tooFar', { i }));
     triggers.push(...stepTriggers(m, ctx, at, to, i));
     total += cost;
     steps.push({ from: at, to, costFt: cost, totalFt: total });
     at = to;
   }
-  if (steps.length > 0 && !canEnd(grid, m, at)) return fail(`Can't end a move at (${at.x},${at.y})`);
+  if (steps.length > 0 && !canEnd(grid, m, at)) return fail(msg('move.cantEnd', { x: at.x, y: at.y }));
   return { ok: true, steps, costFt: total, triggers };
 }
 

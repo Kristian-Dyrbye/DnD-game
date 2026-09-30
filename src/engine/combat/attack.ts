@@ -252,22 +252,23 @@ export function checkAttack(state: CombatState, ctx: CombatContext, attackerId: 
   const at = state.grid.tokens[attackerId];
   const tt = state.grid.tokens[targetId];
   const bad = (error: string): AttackCheck => ({ ok: false, error, distanceFt: 0, coverBonus: 0, cover: 'none', advantage: [], disadvantage: [], ac: 0 });
+  const { m } = msgsOf(ctx);
   if (!attacker || !target) return bad('Unknown creature');
-  if (!at || !tt) return bad('Both creatures must be on the battle map');
-  if (attackerId === targetId) return bad("Can't attack yourself");
-  if (target.dead) return bad(`${target.name} is dead`);
-  if (!mayHarm(attacker, targetId, ctx.table)) return bad(`${attacker.name} is Charmed by ${target.name}`);
+  if (!at || !tt) return bad(m('atk.notOnMap'));
+  if (attackerId === targetId) return bad(m('atk.self'));
+  if (target.dead) return bad(m('atk.dead', { name: target.name }));
+  if (!mayHarm(attacker, targetId, ctx.table)) return bad(m('atk.charmed', { name: attacker.name, target: target.name }));
 
   const dist = distanceFt(at, tt);
   const advantage: string[] = [];
   const disadvantage: string[] = [];
   if (profile.melee) {
-    if (dist > profile.reach) return bad(`${target.name} is out of reach (${dist} ft > ${profile.reach} ft)`);
+    if (dist > profile.reach) return bad(m('atk.outOfReach', { name: target.name, ft: dist, max: profile.reach }));
   } else {
     const normal = profile.range?.normal ?? 5;
     const long = profile.range?.long ?? normal;
-    if (dist > long) return bad(`${target.name} is out of range (${dist} ft > ${long} ft)`);
-    if (dist > normal) disadvantage.push('Long range');
+    if (dist > long) return bad(m('atk.outOfRange', { name: target.name, ft: dist, max: long }));
+    if (dist > normal) disadvantage.push(m('atk.longRange'));
     const threat = Object.values(state.grid.tokens).find((t) => {
       if (t.id === attackerId) return false;
       const c = state.creatures[t.id];
@@ -281,11 +282,11 @@ export function checkAttack(state: CombatState, ctx: CombatContext, attackerId: 
         canSee(state, ctx, c, attacker)
       );
     });
-    if (threat) disadvantage.push(`Enemy within 5 ft (${state.creatures[threat.id]?.name ?? threat.id})`);
+    if (threat) disadvantage.push(m('atk.enemyNear', { name: state.creatures[threat.id]?.name ?? threat.id }));
   }
 
   const cover = computeCover(state.grid, attackerId, targetId);
-  if (!cover.los) return bad(`${target.name} has Total Cover`);
+  if (!cover.los) return bad(m('atk.totalCover', { name: target.name }));
 
   const modes = attackModes(
     {
@@ -309,7 +310,7 @@ export function checkAttack(state: CombatState, ctx: CombatContext, attackerId: 
     disadvantage.push(...f.disadvantage);
     if (profile.properties.includes('heavy')) {
       const score = profile.melee ? attacker.abilities.str : attacker.abilities.dex;
-      if (score < 13) disadvantage.push(`Heavy weapon (${profile.melee ? 'Str' : 'Dex'} < 13)`);
+      if (score < 13) disadvantage.push(m('atk.heavy', { ability: profile.melee ? 'Str' : 'Dex' }));
     }
   }
   if (isCharacter(target)) {
@@ -317,9 +318,9 @@ export function checkAttack(state: CombatState, ctx: CombatContext, attackerId: 
     advantage.push(...f.advantage);
     disadvantage.push(...f.disadvantage);
   }
-  if (dodgeActive(target, ctx.table) && canSee(state, ctx, target, attacker)) disadvantage.push('Dodge');
+  if (dodgeActive(target, ctx.table) && canSee(state, ctx, target, attacker)) disadvantage.push(m('atk.dodge'));
   const helperId = helpAttackSource(target, (h) => h !== attackerId && !areHostile(state, ctx, attackerId, h));
-  if (helperId) advantage.push(`Help (${state.creatures[helperId]?.name ?? helperId})`);
+  if (helperId) advantage.push(m('atk.help', { name: state.creatures[helperId]?.name ?? helperId }));
 
   return {
     ok: true,
@@ -359,33 +360,34 @@ export function spendAttack(
   profile?: AttackProfile,
 ): { ok: true; turns: TurnState; attacker: Creature } | { ok: false; error: string } {
   const db = dbOf(ctx);
+  const { m } = msgsOf(ctx);
   switch (kind) {
     case 'free':
       return { ok: true, turns, attacker };
     case 'opportunity':
     case 'reaction': {
-      const r = spend(turns, attacker.id, 'reaction', attacker, ctx.table);
+      const r = spend(turns, attacker.id, 'reaction', attacker, ctx.table, msgsOf(ctx));
       return r.ok ? { ok: true, turns: r.state, attacker } : { ok: false, error: r.error };
     }
     case 'light_bonus': {
-      if (profile && !profile.properties.includes('light')) return { ok: false, error: `${profile.name} isn't a Light weapon` };
-      const needs = lightExtraAttackError(attacker, profile);
+      if (profile && !profile.properties.includes('light')) return { ok: false, error: m('atk.notLight', { weapon: profile.name }) };
+      const needs = lightExtraAttackError(attacker, profile, ctx);
       if (needs) return { ok: false, error: needs };
-      const r = spend(turns, attacker.id, 'bonusAction', attacker, ctx.table);
+      const r = spend(turns, attacker.id, 'bonusAction', attacker, ctx.table, msgsOf(ctx));
       return r.ok ? { ok: true, turns: r.state, attacker } : { ok: false, error: r.error };
     }
     case 'nick': {
-      if (!onOwnTurn(turns, attacker.id)) return { ok: false, error: `It isn't ${attacker.id}'s turn` };
-      if (!profile || profile.mastery !== 'nick' || !profile.properties.includes('light')) return { ok: false, error: 'Nick needs a Light weapon with the Nick mastery' };
-      const needs = lightExtraAttackError(attacker, profile);
+      if (!onOwnTurn(turns, attacker.id)) return { ok: false, error: m('turn.notYours', { name: attacker.name }) };
+      if (!profile || profile.mastery !== 'nick' || !profile.properties.includes('light')) return { ok: false, error: m('atk.nickNeeds') };
+      const needs = lightExtraAttackError(attacker, profile, ctx);
       if (needs) return { ok: false, error: needs };
-      if (budgetOf(turns, attacker.id).action) return { ok: false, error: 'Nick attacks are part of the Attack action' };
-      if (hasOncePerTurnMarker(attacker, 'nick_used')) return { ok: false, error: 'Nick already used this turn' };
+      if (budgetOf(turns, attacker.id).action) return { ok: false, error: m('atk.nickInAction') };
+      if (hasOncePerTurnMarker(attacker, 'nick_used')) return { ok: false, error: m('atk.nickUsed') };
       const marked = addEffect(attacker, { key: 'nick_used', sourceId: attacker.id, expires: { on: 'end_of_turn', creatureId: attacker.id, skip: 0 } });
       return { ok: true, turns, attacker: marked };
     }
     case 'cleave': {
-      if (hasOncePerTurnMarker(attacker, 'cleave_used')) return { ok: false, error: 'Cleave already used this turn' };
+      if (hasOncePerTurnMarker(attacker, 'cleave_used')) return { ok: false, error: m('atk.cleaveUsed') };
       const endsOn = currentId(turns) ?? attacker.id;
       const marked = addEffect(attacker, { key: 'cleave_used', sourceId: attacker.id, expires: { on: 'end_of_turn', creatureId: endsOn, skip: 0 } });
       return { ok: true, turns, attacker: marked };
@@ -393,10 +395,10 @@ export function spendAttack(
     case 'action': {
       const left = turns.budgets[attacker.id]?.attacksLeft ?? 0;
       if (left > 0 && onOwnTurn(turns, attacker.id)) {
-        if (!canAct(attacker, ctx.table)) return { ok: false, error: `${attacker.name} can't act (Incapacitated)` };
+        if (!canAct(attacker, ctx.table)) return { ok: false, error: m('turn.incapacitated', { name: attacker.name }) };
         return { ok: true, turns: setAttacksLeft(turns, attacker.id, left - 1), attacker: markLightAttack(attacker, profile) };
       }
-      const r = spend(turns, attacker.id, 'action', attacker, ctx.table);
+      const r = spend(turns, attacker.id, 'action', attacker, ctx.table, msgsOf(ctx));
       if (!r.ok) return { ok: false, error: r.error };
       return { ok: true, turns: setAttacksLeft(r.state, attacker.id, attacksPerActionOf(attacker, db) - 1), attacker: markLightAttack(attacker, profile) };
     }
@@ -417,10 +419,10 @@ function markLightAttack(attacker: Creature, profile: AttackProfile | undefined)
 }
 
 /** The Light extra attack needs a prior Attack with a Light weapon this turn, made with a different weapon. */
-function lightExtraAttackError(attacker: Creature, profile: AttackProfile | undefined): string | undefined {
+function lightExtraAttackError(attacker: Creature, profile: AttackProfile | undefined, ctx: CombatContext): string | undefined {
   const mark = attacker.effects.find((e) => e.key === 'light_attacked');
-  if (!mark) return 'The Light extra attack needs an Attack with a Light weapon first this turn';
-  if (profile && mark.data.weapon === weaponKey(profile)) return 'The Light extra attack must use a different Light weapon';
+  if (!mark) return msgsOf(ctx).m('atk.lightFirst');
+  if (profile && mark.data.weapon === weaponKey(profile)) return msgsOf(ctx).m('atk.lightOther');
   return undefined;
 }
 
@@ -456,7 +458,7 @@ export function dealCombatDamage(
     const r = resistanceCantripReduction(target, inst.type, ctx.rng);
     target = r.creature;
     reduced.push(r.reduction > 0 ? { ...inst, amount: Math.max(0, inst.amount - r.reduction) } : inst);
-    if (r.reduction > 0) events.push({ kind: 'effect', targetId, text: `Resistance reduces the ${inst.type} damage by ${r.reduction}` });
+    if (r.reduction > 0) events.push({ kind: 'effect', targetId, text: msgsOf(ctx).m('atk.resistance', { type: inst.type, n: r.reduction }) });
   }
   const before = target;
   const extra = [...effectResistances(target), ...(isCharacter(target) ? featureResistances(target, db) : [])];
@@ -477,7 +479,7 @@ export function dealCombatDamage(
     after = endControlOnHarm(after, sourceId);
     const dom = dominationDamageSave(after, ctx.rng);
     after = dom.creature;
-    if (dom.save) events.push({ kind: 'save', targetId, text: `${after.name} fights the domination: ${dom.save.text}` });
+    if (dom.save) events.push({ kind: 'save', targetId, text: m('atk.domination', { name: after.name, roll: dom.save.text }) });
   }
   let next = withCreature(state, after);
 
@@ -590,18 +592,19 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
   let attacker = state.creatures[o.attackerId];
   let target = state.creatures[o.targetId];
   if (!attacker || !target) return fail(state, 'Unknown creature');
+  const { m } = msgsOf(ctx);
   const profile = findProfile(attacker, db, o.profile, { ...(o.twoHanded && { twoHanded: true }) });
-  if (!profile) return fail(state, `${attacker.name} has no such attack`);
-  if (kind === 'opportunity' && !profile.melee) return fail(state, 'Opportunity Attacks are melee attacks');
+  if (!profile) return fail(state, m('atk.noSuchAttack', { name: attacker.name }));
+  if (kind === 'opportunity' && !profile.melee) return fail(state, m('atk.oaMelee'));
   if (kind === 'cleave') {
     const first = o.cleaveFromId ? state.grid.tokens[o.cleaveFromId] : undefined;
     const second = state.grid.tokens[o.targetId];
-    if (profile.mastery !== 'cleave' || !profile.melee) return fail(state, 'Cleave needs a melee weapon with the Cleave mastery');
-    if (!first || !second || o.cleaveFromId === o.targetId || distanceFt(first, second) > 5) return fail(state, 'The second target must be within 5 ft of the first');
+    if (profile.mastery !== 'cleave' || !profile.melee) return fail(state, m('atk.cleaveNeeds'));
+    if (!first || !second || o.cleaveFromId === o.targetId || distanceFt(first, second) > 5) return fail(state, m('atk.cleaveNear'));
   }
 
   const check = checkAttack(state, ctx, o.attackerId, o.targetId, profile);
-  if (!check.ok) return fail(state, check.error ?? 'Invalid attack');
+  if (!check.ok) return fail(state, check.error ?? m('atk.invalid'));
 
   const paid = spendAttack(state.turns, ctx, attacker, kind, profile);
   if (!paid.ok) return fail(state, paid.error);
@@ -613,7 +616,7 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
   // Sanctuary: the attacker must succeed on the save or lose the attack.
   const sanctuary = sanctuaryCheck(target, attacker, ctx.rng);
   if (!sanctuary.allowed) {
-    events.push({ kind: 'save', actorId: attacker.id, targetId: target.id, text: `${attacker.name} is turned aside by Sanctuary: ${sanctuary.save?.text ?? ''}` });
+    events.push({ kind: 'save', actorId: attacker.id, targetId: target.id, text: m('atk.sanctuary', { name: attacker.name, roll: sanctuary.save?.text ?? '' }) });
     return { ok: true, state: next, events, hit: false, crit: false, damage: 0, attacksLeft: attacksLeft() };
   }
 
@@ -639,7 +642,6 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
     ...(check.autoCrit && { autoCrit: check.autoCrit }),
     ...(ctx.msgs && { msgs: ctx.msgs }),
   });
-  const { m } = msgsOf(ctx);
   const modeNote = [advantage.length ? m('combat.advantage', { list: advantage.join(', ') }) : '', disadvantage.length ? m('combat.disadvantage', { list: disadvantage.join(', ') }) : ''].filter(Boolean).join('; ');
   const coverNote = check.coverBonus ? ` (${m(check.cover === 'half' ? 'combat.cover.half' : 'combat.cover.three_quarters', { n: check.coverBonus })})` : '';
   events.push({
@@ -662,7 +664,7 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
       hit = false;
       target = mirror.creature;
       next = withCreature(next, target);
-      events.push({ kind: 'effect', targetId: target.id, text: `The attack strikes one of ${target.name}'s illusory duplicates instead.` });
+      events.push({ kind: 'effect', targetId: target.id, text: m('atk.mirror', { name: target.name }) });
     }
   }
 
@@ -672,7 +674,7 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
     if (mastery === 'graze' && useMastery && !mirrorMiss(res, hit)) {
       const amount = grazeDamage(abilityMod);
       if (amount > 0) {
-        const d = dealCombatDamage(next, ctx, attacker.id, target.id, [{ amount, type: profile.damage[0]?.type ?? 'slashing' }], { text: `Graze: ${amount}` });
+        const d = dealCombatDamage(next, ctx, attacker.id, target.id, [{ amount, type: profile.damage[0]?.type ?? 'slashing' }], { text: m('atk.graze', { n: amount }) });
         next = d.state;
         events.push(...d.events);
         return { ok: true, state: next, events, hit: false, crit: false, damage: d.dealt, roll: res, attacksLeft: attacksLeft() };
@@ -726,7 +728,7 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
     }
   }
 
-  const rolled = rollDamage(ctx.rng, dice, { crit: res.crit, modifiers: damageMods });
+  const rolled = rollDamage(ctx.rng, dice, { crit: res.crit, modifiers: damageMods, msgs: msgsOf(ctx) });
   const dealt = dealCombatDamage(
     next,
     ctx,
@@ -775,7 +777,7 @@ export function resolveAttack(state: CombatState, ctx: CombatContext, o: AttackO
       if (m.pushFt) {
         const pushed = pushAway(next.grid, attacker.id, target.id, Math.min(m.pushFt, pushWanted));
         next = { ...next, grid: pushed.grid };
-        events.push({ kind: 'move', actorId: attacker.id, targetId: target.id, text: `Push: ${target.name} is pushed ${pushed.movedFt} ft` });
+        events.push({ kind: 'move', actorId: attacker.id, targetId: target.id, text: msgsOf(ctx).m('atk.pushed', { name: target.name, ft: pushed.movedFt }) });
       }
     }
   } else if (mastery === 'cleave' && useMastery) {

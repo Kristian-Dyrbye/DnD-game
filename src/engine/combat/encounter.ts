@@ -409,14 +409,14 @@ function otherAction(enc: Encounter, ctx: CombatContext, id: string, a: PlayerAc
     case 'use_item':
       return useMagicItem(s, ctx, id, a.uid, a.targetId);
     case 'ready':
-      if (a.spellId) return ready(s, ctx, id, 'an enemy comes within range', { kind: 'spell', spellId: a.spellId });
-      return ready(s, ctx, id, 'an enemy comes within reach', { kind: 'attack', ...(a.attackProfileId && { profileId: a.attackProfileId }) });
+      if (a.spellId) return ready(s, ctx, id, msgsOf(ctx).m('act.trigger.range'), { kind: 'spell', spellId: a.spellId });
+      return ready(s, ctx, id, msgsOf(ctx).m('act.trigger.reach'), { kind: 'attack', ...(a.attackProfileId && { profileId: a.attackProfileId }) });
     case 'escape_zone':
       return escapeZone(s, ctx, id, a.zoneId);
     case 'stand': {
       const c = s.creatures[id];
       if (!c) return undefined;
-      const r = standUp(s.turns, id, c, ctx.table);
+      const r = standUp(s.turns, id, c, ctx.table, msgsOf(ctx));
       if (!r.ok) return { ok: false, error: r.error, state: s, events: [] };
       return { ok: true, state: { ...s, turns: r.state, creatures: { ...s.creatures, [id]: r.creature } }, events: [{ kind: 'move', actorId: id, text: msgsOf(ctx).m('combat.standsUp', { name: c.name, ft: r.costFt }) }] };
     }

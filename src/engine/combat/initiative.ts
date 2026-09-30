@@ -144,7 +144,7 @@ export function rollInitiativeOrder(participants: readonly InitiativeParticipant
         side: p.side,
         dexMod: abilityModifier(p.creature.abilities.dex),
         sharedRoll: true,
-        text: `${p.creature.name} initiative: ${shared.initiative} (shared group roll)`,
+        text: (opts.msgs ?? ENGLISH_MESSAGES).m('combat.initiativeShared', { name: p.creature.name, n: shared.initiative }),
       });
       continue;
     }

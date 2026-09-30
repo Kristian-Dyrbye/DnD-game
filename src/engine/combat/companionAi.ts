@@ -67,7 +67,7 @@ import {
 import { averageDamage, expectedAttackDamage, expectedSaveDamage, isDown, rankTargets } from './aiScore';
 import { attackProfiles, canSee, checkAttack, type AttackProfile } from './attack';
 import { knowsSpell, lowestSlotFor, reachProblem, slotsLeft, spellcastingSource, spellEconomy, spellRangeFt } from './castAction';
-import { areHostile, dbOf, type ActionResult, type CombatContext, type CombatState } from './combatState';
+import { areHostile, dbOf, msgsOf, type ActionResult, type CombatContext, type CombatState } from './combatState';
 import { distanceFt, type GridToken, type Point } from './grid';
 import { computeCover } from './los';
 
@@ -305,7 +305,7 @@ function healOptions(p: Planner, dest: Point, sources: readonly HealSource[], ne
       const target = p.state.creatures[need.id]!;
       const value = healValue(src, need, target.maxHp);
       const amount = need.down ? Math.min(src.expected, target.maxHp) : Math.min(src.expected, need.missing);
-      out.push({ value, steps: [src.step(need.id, amount)], usesSlot: src.usesSlot, kind: 'heal', targetId: need.id, label: `${src.name} on ${target.name}` });
+      out.push({ value, steps: [src.step(need.id, amount)], usesSlot: src.usesSlot, kind: 'heal', targetId: need.id, label: msgsOf(p.ctx).m('ai.healOn', { spell: src.name, target: target.name }) });
     }
   }
   return out;
@@ -335,7 +335,8 @@ export function planCompanionTurn(state: CombatState, ctx: CombatContext, actorI
   const actor = p.actor as Character;
   const base = p.state;
   const b = base.turns.budgets[actorId]!;
-  if (!b.action && !b.bonusAction) return { ...idle(actorId, 'has already acted'), steps: prefix };
+  const { m } = msgsOf(ctx);
+  if (!b.action && !b.bonusAction) return { ...idle(actorId, m('ai.acted')), steps: prefix };
   const role = opts.role ?? companionRole(actor, db);
   const keepAway = role === 'ranged' || role === 'healer';
   const liveHostiles = p.hostiles.filter((h) => !isDown(base.creatures[h]!));
@@ -405,18 +406,18 @@ export function planCompanionTurn(state: CombatState, ctx: CombatContext, actorI
       const target = base.creatures[h]!;
       if (slots.length) {
         const a = attackAt(p, h, dest, slots);
-        if (a) out.push({ value: targetBonus(h, a.expected), steps: a.attacks.map((x): AiStep => ({ kind: 'attack', profileId: x.profileId, targetId: h })), usesSlot: false, kind: 'attack', targetId: h, label: `attacks ${target.name}` });
+        if (a) out.push({ value: targetBonus(h, a.expected), steps: a.attacks.map((x): AiStep => ({ kind: 'attack', profileId: x.profileId, targetId: h })), usesSlot: false, kind: 'attack', targetId: h, label: m('ai.attacks', { target: target.name }) });
       }
       for (const ct of cantrips) {
         const check = checkAttack(hyp, ctx, actorId, h, ct.profile);
         if (!check.ok) continue;
         const e = ct.kind === 'attack' ? expectedAttackDamage(ct.profile, check, target) * ct.beams : expectedSaveDamage(ct.damage, target, ct.save!.ability, ct.save!.dc, ct.save!.half);
-        if (e > 0) out.push({ value: targetBonus(h, e), steps: [{ kind: 'cast', spellId: ct.spell.id, targetIds: [h] }], usesSlot: false, kind: 'cantrip', targetId: h, label: `casts ${ct.spell.name} at ${target.name}` });
+        if (e > 0) out.push({ value: targetBonus(h, e), steps: [{ kind: 'cast', spellId: ct.spell.id, targetIds: [h] }], usesSlot: false, kind: 'cantrip', targetId: h, label: m('ai.castsAt', { spell: ct.spell.name, target: target.name }) });
       }
     }
     out.push(...healOptions(p, dest, sources, needs, 'action', lastSlot));
     const threats = threatsAt(p, dest);
-    if (threats > 0) out.push({ value: threats * T.dodgePerThreat, steps: [{ kind: 'dodge' }], usesSlot: false, kind: 'dodge', label: 'Dodges' });
+    if (threats > 0) out.push({ value: threats * T.dodgePerThreat, steps: [{ kind: 'dodge' }], usesSlot: false, kind: 'dodge', label: m('ai.dodges') });
     return out;
   };
 
@@ -472,7 +473,7 @@ export function planCompanionTurn(state: CombatState, ctx: CombatContext, actorI
       if (!bo) continue;
       const total = bo.value + positional(dest) - oaCost(p, dest.path, dashFt, b.disengaged);
       if (!best || total > best.total + 1e-9) {
-        best = { total, dest, action: { value: 0, steps: [{ kind: 'dash' }], usesSlot: false, kind: 'dash', label: 'Dashes' }, bonus: bo, bonusDisengage: false, guard: 0 };
+        best = { total, dest, action: { value: 0, steps: [{ kind: 'dash' }], usesSlot: false, kind: 'dash', label: m('ai.dashes') }, bonus: bo, bonusDisengage: false, guard: 0 };
       }
     }
   }
@@ -486,13 +487,13 @@ export function planCompanionTurn(state: CombatState, ctx: CombatContext, actorI
         intent: 'protect',
         ...(wardId && { targetId: wardId }),
         steps: [...prefix, ...(best.dest.path.length ? [{ kind: 'move', path: best.dest.path } as AiStep] : []), { kind: 'dodge' }],
-        reason: `guards ${base.creatures[wardId!]!.name}`,
+        reason: m('ai.guards', { name: base.creatures[wardId!]!.name }),
       };
     }
     if (best?.action?.kind === 'dodge') {
-      return { actorId, intent: 'defend', steps: [...prefix, ...(best.dest.path.length ? [{ kind: 'move', path: best.dest.path } as AiStep] : []), { kind: 'dodge' }], reason: 'Dodges' };
+      return { actorId, intent: 'defend', steps: [...prefix, ...(best.dest.path.length ? [{ kind: 'move', path: best.dest.path } as AiStep] : []), { kind: 'dodge' }], reason: m('ai.dodges') };
     }
-    if (!b.action) return { ...idle(actorId, 'has already used its action'), steps: prefix };
+    if (!b.action) return { ...idle(actorId, m('ai.usedAction')), steps: prefix };
     const cantripProfiles = cantrips.map((c) => c.profile);
     const approachSlots = cantripProfiles.length ? [[...cantripProfiles, ...slots.flat()]] : slots;
     return planApproach(p, prefix, budgetFt, keepAway || prefersRange(approachSlots.flat()), approachSlots);
@@ -509,13 +510,13 @@ export function planCompanionTurn(state: CombatState, ctx: CombatContext, actorI
   if (best.action && best.action.kind !== 'dash') steps.push(...best.action.steps);
   const healStep = [best.bonus, best.action].find((o) => o?.kind === 'heal');
   const offense = best.action && (best.action.kind === 'attack' || best.action.kind === 'cantrip') ? best.action : undefined;
-  const parts = [best.bonus?.label && best.bonus.kind === 'heal' ? `uses ${best.bonus.label}` : undefined, best.action?.kind === 'heal' ? `uses ${best.action.label}` : best.action?.kind === 'dash' ? 'Dashes' : best.action?.label].filter((x): x is string => !!x);
+  const parts = [best.bonus?.label && best.bonus.kind === 'heal' ? m('ai.uses', { label: best.bonus.label }) : undefined, best.action?.kind === 'heal' ? m('ai.uses', { label: best.action.label }) : best.action?.kind === 'dash' ? m('ai.dashes') : best.action?.label].filter((x): x is string => !!x);
   return {
     actorId,
     intent: healStep ? 'heal' : offense ? 'attack' : best.guard > 0 ? 'protect' : 'defend',
     ...((healStep?.targetId ?? offense?.targetId) && { targetId: (healStep?.targetId ?? offense?.targetId)! }),
     steps,
-    reason: `${parts.join(' and ') || 'repositions'}${best.bonusDisengage ? ' (Cunning Action: Disengage)' : ''}`,
+    reason: `${parts.join(m('ai.and')) || m('ai.repositions')}${best.bonusDisengage ? m('ai.cunning') : ''}`,
     ...(offense && { expected: offense.value }),
   };
 }

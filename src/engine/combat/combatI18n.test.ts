@@ -93,8 +93,10 @@ describe('combat log (A141c)', () => {
     expect(log).toMatch(/^Tur: .+ \(runde 1\)\.$/m);
     expect(log).toMatch(/angriber .+ med .+: d20/);
     expect(log).toMatch(/ tager \d+ skade/);
-    // AI plan lines ("Goblin attacks Rowan.", "moves 10 ft.") are A141f's.
-    expect(log).not.toMatch(/ attacks .+ with | takes \d+ damage|'s turn|Round \d+ begins| vs (DC|AC) | — (Hit|Miss|Success|Failure)\b/);
+    // A141f: AI plans, moves, shared initiative and crit damage too.
+    expect(log).toMatch(/^Goblin Warrior \d (angriber|rykker ind på) \S+\.$/m);
+    expect(log).toMatch(/ bevæger sig \d+ fod/);
+    expect(log).not.toMatch(/ attacks | takes \d+ damage|'s turn|Round \d+ begins| vs (DC|AC) | — (Hit|Miss|Success|Failure)\b| initiative: | moves \d+ ft|closes in on|Critical! /);
     if (enc.status === 'won') expect(enc.log.at(-1)).toBe('Sejr!');
     expect(playerAct({ ...enc, status: 'won' }, ctx, { kind: 'end_turn' })).toBe('Kampen er slut.');
   });

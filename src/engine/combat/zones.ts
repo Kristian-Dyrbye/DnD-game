@@ -34,7 +34,7 @@ import { spellAttackBonus, spellSaveDc } from '../rules/spellcasting';
 import { removeCondition } from '../rules/conditions';
 import { affectedSquares, templateFromArea, templateFromCaster, type AoeTemplate } from './aoe';
 import { resolveAreaEffect } from './aoeResolve';
-import { areHostile, dbOf, fail, withCreature, type ActionResult, type CombatContext, type CombatEvent, type CombatState } from './combatState';
+import { areHostile, dbOf, fail, withCreature, type ActionResult, type CombatContext, type CombatEvent, type CombatState, msgsOf } from './combatState';
 import { combatCheck } from './saves';
 import { cellKey, distanceFt, getCell, setCell, tokenSquares, type Point } from './grid';
 import { currentId, spend, type EconomyKind } from './turns';
@@ -367,7 +367,7 @@ export function escapeZone(state: CombatState, ctx: CombatContext, id: string, z
   const z = zonesOf(state).find((o) => o.id === zoneId);
   const c = state.creatures[id];
   if (!z || !c || !z.condition || !c.conditions.some((x) => x.condition === z.condition && x.sourceId === z.sourceId)) return fail(state, `${c?.name ?? id} isn't held by that`);
-  const paid = spend(state.turns, id, 'action', c, ctx.table);
+  const paid = spend(state.turns, id, 'action', c, ctx.table, msgsOf(ctx));
   if (!paid.ok) return fail(state, paid.error);
   const r = combatCheck({ ...state, turns: paid.state }, ctx, id, 'str', 'athletics', z.escapeDc ?? 10);
   const success = r.result.success === true;
@@ -391,7 +391,7 @@ export function zoneAct(state: CombatState, ctx: CombatContext, casterId: string
   if (currentId(state.turns) !== casterId || !state.turns.turnActive) return fail(state, `It isn't ${caster.name}'s turn`);
   const economy = z.bolt?.economy ?? z.move?.economy;
   if (!economy) return fail(state, `${z.name} can't be moved`);
-  const paid = spend(state.turns, casterId, economy, caster, ctx.table);
+  const paid = spend(state.turns, casterId, economy, caster, ctx.table, msgsOf(ctx));
   if (!paid.ok) return fail(state, paid.error);
   let cur: CombatState = { ...state, turns: paid.state };
   const events: CombatEvent[] = [];

@@ -184,13 +184,6 @@ export function removeCombatant(state: TurnState, id: string): TurnState {
 
 export type EconomyKind = 'action' | 'bonusAction' | 'reaction' | 'objectInteraction';
 
-const KIND_NAME: Record<EconomyKind, string> = {
-  action: 'action',
-  bonusAction: 'Bonus Action',
-  reaction: 'Reaction',
-  objectInteraction: 'object interaction',
-};
-
 export type SpendResult = { ok: true; state: TurnState } | { ok: false; error: string; state: TurnState };
 
 /**
@@ -198,13 +191,13 @@ export type SpendResult = { ok: true; state: TurnState } | { ok: false; error: s
  * the creature's own turn; Reactions any time (once per round, regained on own turn). Passing the
  * creature also checks it can act (not Incapacitated, not dead or at 0 HP).
  */
-export function spend(state: TurnState, id: string, kind: EconomyKind, creature?: Creature, table?: ConditionTable): SpendResult {
+export function spend(state: TurnState, id: string, kind: EconomyKind, creature?: Creature, table?: ConditionTable, { m }: Messages = ENGLISH_MESSAGES): SpendResult {
   const fail = (error: string): SpendResult => ({ ok: false, error, state });
   const b = state.budgets[id];
   if (!b) return fail(`${id} is not in this encounter`);
-  if (kind !== 'reaction' && (currentId(state) !== id || !state.turnActive)) return fail(`It isn't ${id}'s turn`);
-  if (creature && !creatureCanAct(creature, table)) return fail(`${creature.name} can't act (Incapacitated)`);
-  if (!b[kind]) return fail(`${KIND_NAME[kind]} already used this ${kind === 'reaction' ? 'round' : 'turn'}`);
+  if (kind !== 'reaction' && (currentId(state) !== id || !state.turnActive)) return fail(m('turn.notYours', { name: creature?.name ?? id }));
+  if (creature && !creatureCanAct(creature, table)) return fail(m('turn.incapacitated', { name: creature.name }));
+  if (!b[kind]) return fail(m(`turn.used.${kind}`));
   return { ok: true, state: withBudget(state, id, { [kind]: false }) };
 }
 
@@ -225,11 +218,12 @@ export function movementLeft(state: TurnState, id: string, creature: Creature, o
 }
 
 /** Record movement spent (e.g. `moveAlong(...).costFt`). Fails if it exceeds what's left. */
-export function spendMovement(state: TurnState, id: string, feet: number, creature: Creature, opts: { mode?: MoveMode; table?: ConditionTable } = {}): SpendResult {
+export function spendMovement(state: TurnState, id: string, feet: number, creature: Creature, opts: { mode?: MoveMode; table?: ConditionTable; msgs?: Messages } = {}): SpendResult {
+  const { m } = opts.msgs ?? ENGLISH_MESSAGES;
   if (feet < 0) return { ok: false, error: 'Negative movement', state };
-  if (currentId(state) !== id || !state.turnActive) return { ok: false, error: `It isn't ${id}'s turn`, state };
+  if (currentId(state) !== id || !state.turnActive) return { ok: false, error: m('turn.notYours', { name: creature.name }), state };
   const left = movementLeft(state, id, creature, opts);
-  if (feet > left) return { ok: false, error: `Only ${left} ft of movement left`, state };
+  if (feet > left) return { ok: false, error: m('turn.movementLeft', { ft: left }), state };
   return { ok: true, state: withBudget(state, id, { movementSpentFt: budgetOf(state, id).movementSpentFt + feet }) };
 }
 
@@ -257,12 +251,14 @@ export function standUp(
   id: string,
   creature: Creature,
   table?: ConditionTable,
+  msgs: Messages = ENGLISH_MESSAGES,
 ): { ok: true; state: TurnState; creature: Creature; costFt: number } | { ok: false; error: string } {
-  if (!hasCondition(creature, 'prone', table)) return { ok: false, error: `${creature.name} isn't Prone` };
-  if (hasCondition(creature, 'unconscious', table)) return { ok: false, error: `${creature.name} is Unconscious` };
+  const { m } = msgs;
+  if (!hasCondition(creature, 'prone', table)) return { ok: false, error: m('turn.notProne', { name: creature.name }) };
+  if (hasCondition(creature, 'unconscious', table)) return { ok: false, error: m('turn.isUnconscious', { name: creature.name }) };
   const cost = standUpCost(creature, table);
-  if (cost === null) return { ok: false, error: `${creature.name}'s Speed is 0` };
-  const r = spendMovement(state, id, cost, creature, table ? { table } : {});
+  if (cost === null) return { ok: false, error: m('turn.speedZero', { name: creature.name }) };
+  const r = spendMovement(state, id, cost, creature, { ...(table && { table }), msgs });
   if (!r.ok) return { ok: false, error: r.error };
   return { ok: true, state: r.state, creature: removeCondition(creature, 'prone'), costFt: cost };
 }

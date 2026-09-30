@@ -36,7 +36,7 @@ import { attackProfiles, attacksPerActionOf, canSee, checkAttack, meleeReach, re
 import { AI_TUNING, averageDamage, expectedAttackDamage, expectedSaveDamage, isDown, moraleCheck, rankTargets, roughAttackDamage, type MoraleOptions, type TargetCandidate } from './aiScore';
 import { previewArea, templateFromCaster } from './aoe';
 import { resolveAreaEffect } from './aoeResolve';
-import { areHostile, cloneGridTokens, dbOf, withCreature, type ActionResult, type CombatContext, type CombatEvent, type CombatState } from './combatState';
+import { areHostile, cloneGridTokens, dbOf, withCreature, type ActionResult, type CombatContext, type CombatEvent, type CombatState, msgsOf } from './combatState';
 import { distanceFt, footprintSize, moveToken, type GridToken, type Point } from './grid';
 import { planMove, reachableSquares, standUpCost, type PathOptions } from './movement';
 import { addDash, canReact, movementLeft, spend, standUp } from './turns';
@@ -329,7 +329,7 @@ function planFlee(p: Planner, prefix: AiStep[], budgetFt: number, reason: string
     }
   }
   if (!best || -best.key[1]! <= here) return undefined;
-  return { actorId: p.id, intent: 'flee', steps: [...prefix, ...best.steps], reason: `flees (${reason})` };
+  return { actorId: p.id, intent: 'flee', steps: [...prefix, ...best.steps], reason: msgsOf(p.ctx).m('ai.flees', { reason }) };
 }
 
 export function lexLess(a: readonly number[], b: readonly number[]): boolean {
@@ -345,7 +345,7 @@ export function planApproach(p: Planner, prefix: AiStep[], budgetFt: number, ran
     .map((h) => ({ id: h, creature: p.state.creatures[h]!, distanceFt: distanceFt(p.token, p.state.grid.tokens[h]!) }));
   const pool = cands.length ? cands : p.hostiles.map((h) => ({ id: h, creature: p.state.creatures[h]!, distanceFt: distanceFt(p.token, p.state.grid.tokens[h]!) }));
   const target = rankTargets(p.actor, pool, { db, ...(p.ctx.table && { table: p.ctx.table }) })[0];
-  const defend: AiPlan = { actorId: p.id, intent: 'defend', steps: b.action ? [...prefix, { kind: 'dodge' }] : prefix, reason: 'no way to reach an enemy: Dodges' };
+  const defend: AiPlan = { actorId: p.id, intent: 'defend', steps: b.action ? [...prefix, { kind: 'dodge' }] : prefix, reason: msgsOf(p.ctx).m('ai.noWay') };
   if (!target) return defend;
   const tt = p.state.grid.tokens[target.id]!;
   const dashFt = b.action ? movementLeft(addDash(p.state.turns, p.id), p.id, p.actor, { ...(p.ctx.table && { table: p.ctx.table }) }) - (movementLeft(p.state.turns, p.id, p.actor, { ...(p.ctx.table && { table: p.ctx.table }) }) - budgetFt) : budgetFt;
@@ -364,7 +364,7 @@ export function planApproach(p: Planner, prefix: AiStep[], budgetFt: number, ran
     intent: 'approach',
     targetId: target.id,
     steps: [...prefix, ...(needDash ? [{ kind: 'dash' } as AiStep] : []), { kind: 'move', path: best.d.path }],
-    reason: `closes in on ${target.creature.name}${needDash ? ' (Dash)' : ''}`,
+    reason: msgsOf(p.ctx).m(needDash ? 'ai.closesInDash' : 'ai.closesIn', { target: target.creature.name }),
   };
 }
 
@@ -388,12 +388,13 @@ export function setupTurn(state: CombatState, ctx: CombatContext, actorId: strin
   let actor = state.creatures[actorId];
   const token = state.grid.tokens[actorId];
   const b = state.turns.budgets[actorId];
-  if (!actor || !token || !b || isDown(actor)) return idle(actorId, 'is down');
-  if (!canAct(actor, ctx.table)) return idle(actorId, "can't act");
+  const { m } = msgsOf(ctx);
+  if (!actor || !token || !b || isDown(actor)) return idle(actorId, m('ai.down'));
+  if (!canAct(actor, ctx.table)) return idle(actorId, m('ai.cantAct'));
   const hostiles = Object.keys(state.creatures)
     .filter((h) => areHostile(state, ctx, actorId, h) && !state.creatures[h]!.dead && state.grid.tokens[h])
     .sort();
-  if (hostiles.length === 0) return idle(actorId, 'has no enemies left');
+  if (hostiles.length === 0) return idle(actorId, m('ai.noEnemies'));
 
   const tableOpt = ctx.table ? { table: ctx.table } : {};
   let budgetFt = movementLeft(state.turns, actorId, actor, tableOpt);
@@ -442,7 +443,8 @@ export function planTurn(state: CombatState, ctx: CombatContext, actorId: string
     const f = planFlee(p, prefix, budgetFt, morale.reason);
     if (f) return f;
   }
-  if (!b.action) return { ...idle(actorId, 'has already used its action'), steps: prefix };
+  const { m } = msgsOf(ctx);
+  if (!b.action) return { ...idle(actorId, m('ai.usedAction')), steps: prefix };
 
   const slots = attackSlots(actor, ctx);
   const rangedMind = prefersRange(slots.flat());
@@ -469,7 +471,7 @@ export function planTurn(state: CombatState, ctx: CombatContext, actorId: string
       intent: 'area',
       targetId: area.hostiles[0]!,
       steps: [...prefix, ...(area.dest.path.length ? [{ kind: 'move', path: area.dest.path } as AiStep] : []), { kind: 'area', actionName: area.action.name, aim: area.aim }],
-      reason: `uses ${area.action.name} on ${area.hostiles.map((h) => base.creatures[h]!.name).join(', ')}`,
+      reason: m('ai.usesOn', { action: area.action.name, targets: area.hostiles.map((h) => base.creatures[h]!.name).join(', ') }),
       expected: area.expected,
     };
   }
@@ -489,7 +491,7 @@ export function planTurn(state: CombatState, ctx: CombatContext, actorId: string
           .filter((n) => saveActions(actor, ctx).some((a) => a.name === n))
           .map((n): AiStep => ({ kind: 'monster_action', actionName: n, targetId: attack.targetId })),
       ],
-      reason: `attacks ${target.name}`,
+      reason: m('ai.attacks', { target: target.name }),
       expected: attack.expected,
     };
   }
@@ -536,12 +538,12 @@ function useArea(state: CombatState, ctx: CombatContext, id: string, actionName:
   const tpl = save.area.shape === 'emanation' ? templateFromCaster(state.grid, id, save.area) : templateFromCaster(state.grid, id, save.area, aim);
   const ids = previewArea(state.grid, tpl, { excludeIds: [id] }).creatureIds.filter((x) => state.creatures[x] && !state.creatures[x]!.dead);
   if (ids.length === 0 || ids.some((x) => !areHostile(state, ctx, id, x))) return undefined;
-  const paid = spend(state.turns, id, 'action', actor, ctx.table);
+  const paid = spend(state.turns, id, 'action', actor, ctx.table, msgsOf(ctx));
   if (!paid.ok) return undefined;
   const next = { ...withCreature(state, spendAction(actor, action)), turns: paid.state };
   const r = resolveAreaEffect(next, ctx, { casterId: id, template: tpl, label: action.name, save: { ability: save.ability, dc: save.dc }, damage: save.damage, halfOnSave: save.halfOnSuccess, excludeIds: [id] });
   if (!r.ok) return undefined;
-  return { ok: true, state: r.state, events: [{ kind: 'action', actorId: id, text: `${actor.name} uses ${action.name}!` }, ...r.events] };
+  return { ok: true, state: r.state, events: [{ kind: 'action', actorId: id, text: msgsOf(ctx).m('ai.usesArea', { name: actor.name, action: action.name }) }, ...r.events] };
 }
 
 function oaProfileFor(state: CombatState, ctx: CombatContext, moverId: string) {
@@ -565,7 +567,9 @@ function oaProfileFor(state: CombatState, ctx: CombatContext, moverId: string) {
 export function executePlan(state: CombatState, ctx: CombatContext, plan: AiPlan, opts: AiOptions = {}): ActionResult<{ plan: AiPlan; halted: boolean }> {
   const id = plan.actorId;
   const name = state.creatures[id]?.name ?? id;
-  const events: CombatEvent[] = [{ kind: 'info', actorId: id, text: `${name} ${plan.reason}.` }];
+  const msgs = msgsOf(ctx);
+  const { m } = msgs;
+  const events: CombatEvent[] = [{ kind: 'info', actorId: id, text: m('ai.line', { name, reason: plan.reason }) }];
   let cur = state;
   let halted = false;
   const note = (text: string) => events.push({ kind: 'info', actorId: id, text });
@@ -573,16 +577,16 @@ export function executePlan(state: CombatState, ctx: CombatContext, plan: AiPlan
     const actor = cur.creatures[id];
     if (!actor || isDown(actor) || !canAct(actor, ctx.table)) {
       halted = true;
-      note(`${name} can no longer act.`);
+      note(m('ai.noLongerAct', { name }));
       break;
     }
     switch (step.kind) {
       case 'stand': {
-        const r = standUp(cur.turns, id, actor, ctx.table);
+        const r = standUp(cur.turns, id, actor, ctx.table, msgsOf(ctx));
         if (!r.ok) note(r.error);
         else {
           cur = { ...withCreature(cur, r.creature), turns: r.state };
-          events.push({ kind: 'move', actorId: id, text: `${name} stands up (${r.costFt} ft).` });
+          events.push({ kind: 'move', actorId: id, text: m('combat.standsUp', { name, ft: r.costFt }) });
         }
         break;
       }
@@ -613,7 +617,7 @@ export function executePlan(state: CombatState, ctx: CombatContext, plan: AiPlan
           const alt = fallbackAttack(cur, ctx, id);
           r = alt ? resolveAttack(cur, ctx, { attackerId: id, targetId: alt.targetId, profile: alt.profileId, kind: 'action' }) : r;
         }
-        if (!r) note(`${name} has no one to attack.`);
+        if (!r) note(m('ai.noOneToAttack', { name }));
         else if (!r.ok) note(r.error);
         else {
           events.push(...r.events);
@@ -639,7 +643,7 @@ export function executePlan(state: CombatState, ctx: CombatContext, plan: AiPlan
         const ok = (t: string) => !isDown(cur.creatures[t]!) && areHostile(cur, ctx, id, t) && !saveActionProblem(cur, ctx, id, action, t);
         const targetId = cur.creatures[step.targetId] && ok(step.targetId) ? step.targetId : Object.keys(cur.creatures).find((t) => t !== id && ok(t));
         if (!targetId) {
-          note(`${name} has no one in reach of ${step.actionName}.`);
+          note(m('ai.noOneInReach', { name, action: step.actionName }));
           break;
         }
         const r = monsterSaveAction(cur, ctx, id, step.actionName, targetId);
@@ -658,7 +662,7 @@ export function executePlan(state: CombatState, ctx: CombatContext, plan: AiPlan
           break;
         }
         // The area would now catch an ally or nothing: fall back to the Attack action.
-        note(`${name} holds its ${step.actionName}.`);
+        note(m('ai.holds', { name, action: step.actionName }));
         const n = Math.max(1, attackSlots(actor, ctx).length);
         for (let i = 0; i < n; i++) {
           const alt = fallbackAttack(cur, ctx, id);
