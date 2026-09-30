@@ -2,6 +2,8 @@
 setlocal EnableDelayedExpansion
 title Solo DnD Build Loop
 cd /d "%~dp0"
+REM UTF-8 console so the live feed's symbols render
+chcp 65001 >nul
 
 REM ============ SETTINGS ============
 REM Max assignments to run before stopping (safety cap)
@@ -44,18 +46,21 @@ set /a RUN+=1
 REM Mark as RUNNING so a crash without a status write is detectable
 >loop_status.txt echo RUNNING
 
-for /f "tokens=1-3 delims=/:. " %%a in ("%time%") do set STAMP=%%a%%b%%c
-set STAMP=!STAMP: =0!
-set LOG=logs\run_!RUN!_!STAMP!.log
+REM Locale-independent timestamp (the %time% format differs per region)
+for /f %%t in ('powershell -NoProfile -Command "Get-Date -Format yyyyMMdd_HHmmss"') do set STAMP=%%t
+set LOG=logs\run_!RUN!_!STAMP!
 
 echo.
 echo ================================================
-echo  Session !RUN! / %MAX_RUNS%   ^(log: !LOG!^)
+echo  Session !RUN! / %MAX_RUNS%   ^(log: !LOG!.log^)
 echo  Create STOP.txt in this folder to stop after this session.
 echo ================================================
+node scripts\loop-watch.mjs --next
+echo.
 
 REM Each call is a brand-new session = fresh, cleared context.
-claude -p "Follow CLAUDE.md exactly: read brain.md, complete exactly ONE assignment using the Session Protocol, update brain.md, commit, and write loop_status.txt. At most one helper subagent at a time (CLAUDE.md section 2)." --permission-mode acceptEdits --max-turns %MAX_TURNS% > "!LOG!" 2>&1
+REM stream-json emits every step as it happens; loop-watch.mjs prints it live and writes the logs.
+claude -p "Follow CLAUDE.md exactly: read brain.md, complete exactly ONE assignment using the Session Protocol, update brain.md, commit, and write loop_status.txt. At most one helper subagent at a time (CLAUDE.md section 2)." --permission-mode acceptEdits --max-turns %MAX_TURNS% --output-format stream-json --verbose 2>&1 | node scripts\loop-watch.mjs "!LOG!"
 
 set STATUS=
 set /p STATUS=<loop_status.txt
@@ -80,7 +85,7 @@ if /i "!STATUS!"=="BLOCKED" (
 
 REM Anything else = crash, usage limit, or max-turns hit without a status write
 set /a CRASHES+=1
-echo [WARN] Session ended without a valid status ^(crash !CRASHES!/%MAX_CRASHES%^). Last log: !LOG!
+echo [WARN] Session ended without a valid status ^(crash !CRASHES!/%MAX_CRASHES%^). Last log: !LOG!.log
 if !CRASHES! GEQ %MAX_CRASHES% (
   echo Too many consecutive failures. Check the latest logs, then run again.
   goto end

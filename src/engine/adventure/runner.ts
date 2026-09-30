@@ -118,8 +118,16 @@ export function currentScene(ctx: Pick<RunContext, 'state' | 'adventure'>): Scen
   return s;
 }
 
+/** Scene lookup per chapters array (shared by `{ ...adv }` copies); rebuilt on a miss so added scenes are found. */
+const sceneIndex = new WeakMap<Adventure['chapters'], Map<string, Scene>>();
+
 export function findScene(adv: Adventure, id: string): Scene | undefined {
-  return allScenes(adv).find((s) => s.id === id);
+  let index = sceneIndex.get(adv.chapters);
+  if (!index?.has(id)) {
+    index = new Map(allScenes(adv).map((s) => [s.id, s]));
+    sceneIndex.set(adv.chapters, index);
+  }
+  return index.get(id);
 }
 
 const merged = new WeakMap<Adventure, { base: FlagRegistry | undefined; reg: FlagRegistry }>();
@@ -136,6 +144,9 @@ export function flagsFor(ctx: Pick<RunContext, 'adventure' | 'flags'>): FlagRegi
 
 export function conditionContext(state: GameState, progress?: AdventureProgress, registry?: FlagRegistry): ConditionContext {
   const weather = (state.extensions.weather as { kind?: string } | undefined)?.kind;
+  // The sets are built on first read (most conditions never look at them; the solver builds many contexts).
+  let visited: Set<string> | undefined;
+  let items: Set<string> | undefined;
   return {
     flags: state.flags,
     ...(registry && { defaults: registry.defaults() }),
@@ -144,9 +155,13 @@ export function conditionContext(state: GameState, progress?: AdventureProgress,
     ...(weather && { weather }),
     reputation: (state.extensions.reputation as Record<string, number> | undefined) ?? {},
     level: totalLevel(state.hero),
-    visited: new Set(progress?.visited ?? []),
+    get visited() {
+      return (visited ??= new Set(progress?.visited ?? []));
+    },
     coins: state.hero.coins,
-    items: new Set(state.hero.inventory.filter((i) => i.quantity > 0).map((i) => i.itemId)),
+    get items() {
+      return (items ??= new Set(state.hero.inventory.filter((i) => i.quantity > 0).map((i) => i.itemId)));
+    },
     now: state.time,
     flagTimes: (state.extensions.flagTimes as Record<string, number> | undefined) ?? {},
   };
@@ -211,11 +226,29 @@ export function availableActions(ctx: RunContext): AvailableAction[] {
   return out;
 }
 
+/** Whether one action id is offered now (same rules as availableActions, without building the list). */
+function isAvailable(ctx: RunContext, actionId: string): boolean {
+  const p = getProgress(ctx.state);
+  if (!p || p.ending || p.away) return false;
+  const s = currentScene(ctx);
+  const cc = () => conditionContext(ctx.state, p, flagsFor(ctx));
+  if (actionId.startsWith('exit.')) {
+    const e = s.exits.find((x) => `exit.${x.id}` === actionId);
+    return !!e && evalCondition(e.if, cc());
+  }
+  const dot = actionId.indexOf('.');
+  const poi = dot >= 0 ? s.pois.find((x) => x.id === actionId.slice(0, dot)) : undefined;
+  const a = dot >= 0 ? poi?.actions.find((x) => x.id === actionId.slice(dot + 1)) : s.actions.find((x) => x.id === actionId);
+  if (!a || (a.once && p.done.includes(`${s.id}/${actionId}`))) return false;
+  const c = cc();
+  return (!poi || evalCondition(poi.if, c)) && evalCondition(a.if, c);
+}
+
 /** Performs one available action. Throws AdventureError for unknown or unavailable ids. */
 export function perform(ctx: RunContext, actionId: string): StepResult {
   const p = getProgress(ctx.state);
   if (!p) throw new AdventureError('No adventure is running');
-  if (!availableActions(ctx).some((a) => a.id === actionId)) throw new AdventureError(`"${actionId}" is not possible here`);
+  if (!isAvailable(ctx, actionId)) throw new AdventureError(`"${actionId}" is not possible here`);
   const s = currentScene(ctx);
   const result = emptyResult();
 
@@ -548,12 +581,16 @@ const BEAT_PASSES = 5;
 
 function fireBeats(ctx: RunContext, result: StepResult, depth = 0): void {
   const p = getProgress(ctx.state)!;
+  const registry = flagsFor(ctx);
   for (let pass = 0; pass < BEAT_PASSES; pass++) {
     let fired = false;
+    // Rebuilt only after a beat fires (its outcome may change flags, coins, items, time).
+    let cc: ConditionContext | undefined;
     for (const b of ctx.adventure.beats) {
       if (p.beats.includes(b.id)) continue;
       if (b.scenes.length && !b.scenes.includes(getProgress(ctx.state)!.sceneId)) continue;
-      if (!evalCondition(b.trigger, conditionContext(ctx.state, p, flagsFor(ctx)))) continue;
+      if (!evalCondition(b.trigger, (cc ??= conditionContext(ctx.state, p, registry)))) continue;
+      cc = undefined;
       p.beats.push(b.id);
       result.facts.push(b.text);
       applyOutcome(ctx, b.outcome, result, depth + 1);

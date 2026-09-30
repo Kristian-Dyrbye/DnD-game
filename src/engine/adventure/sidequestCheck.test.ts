@@ -14,7 +14,8 @@ import { LoreSchema } from '../world/lore';
 import { checkSideQuest, generateValidSideQuest } from './sidequestCheck';
 import { generateSideQuest } from './sidequestGen';
 import { SideQuestTablesSchema } from './sidequestTables';
-import { LuckyRng, solveAdventure } from './solver';
+import { availableActions, getProgress, perform, resolveEncounter, startAdventure } from './runner';
+import { clonePlain, LuckyRng, solveAdventure } from './solver';
 import { validateAdventure } from './validate';
 
 const db = loadSrd();
@@ -50,6 +51,50 @@ describe('solver', () => {
     const adventure = validateAdventure(raw, db).adventure!;
     const res = solveAdventure({ state: state(), adventure, db }, 'rats_cleared');
     expect(res).toMatchObject({ ok: false, reason: 'ending "rats_cleared" is unreachable' });
+  });
+
+  it('leaves the base state untouched and returns a path that replays', () => {
+    const adventure = validateAdventure(structuredClone(demo), db).adventure!;
+    const base = state();
+    const before = JSON.stringify(base);
+    const res = solveAdventure({ state: base, adventure, db }, 'rats_cleared');
+    expect(JSON.stringify(base)).toBe(before);
+    const c = { state: structuredClone(base), adventure, db, rng: new LuckyRng() };
+    startAdventure(c);
+    for (const id of res.path!) {
+      let r = perform(c, id);
+      for (let g = 0; r.encounter && g < 5; g++) r = resolveEncounter(c, r.encounter, 'win');
+    }
+    expect(getProgress(c.state)?.ending).toBe('rats_cleared');
+  });
+
+  it('clonePlain deep-copies plain data', () => {
+    const src = { a: [1, { b: 'x' }], n: null, s: new Set([1]), o: { deep: { v: true } } };
+    const copy = clonePlain(src);
+    expect(copy).toEqual(src);
+    expect(copy.a[1]).not.toBe(src.a[1]);
+    expect(copy.o.deep).not.toBe(src.o.deep);
+    expect(copy.s).not.toBe(src.s);
+    expect([...copy.s]).toEqual([1]);
+  });
+});
+
+describe('runner: perform checks only the chosen action', () => {
+  it('refuses unknown, used-up and gated actions like availableActions does', () => {
+    const adventure = validateAdventure(structuredClone(demo), db).adventure!;
+    const c = { state: state(), adventure, db, rng: new LuckyRng() };
+    startAdventure(c);
+    expect(() => perform(c, 'no_such_action')).toThrow(/not possible/);
+    expect(() => perform(c, 'exit.no_such_exit')).toThrow(/not possible/);
+    expect(() => perform(c, 'no_poi.look')).toThrow(/not possible/);
+    const offered = availableActions(c).map((a) => a.id);
+    expect(offered.length).toBeGreaterThan(0);
+    const onceId = adventure.chapters[0]!.scenes[0]!.actions.find((a) => a.once && offered.includes(a.id))?.id;
+    if (onceId) {
+      perform(c, onceId);
+      expect(availableActions(c).map((a) => a.id)).not.toContain(onceId);
+      expect(() => perform(c, onceId)).toThrow(/not possible/);
+    }
   });
 });
 

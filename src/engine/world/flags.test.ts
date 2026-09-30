@@ -99,6 +99,16 @@ describe('FlagRegistry', () => {
     expect(flags).toEqual({ 'world.loyal': 100, 'arc.a.mood': 'angry' });
   });
 
+  it('caches defaults() and refreshes the cache when a definition is added', () => {
+    const reg = new FlagRegistry().add({ id: 'world.a', type: 'number', default: 1, description: '', setBy: [], readBy: [] });
+    const first = reg.defaults();
+    expect(reg.defaults()).toBe(first);
+    expect(Object.isFrozen(first)).toBe(true);
+    reg.add({ id: 'world.b', type: 'string', default: 'x', description: '', setBy: [], readBy: [] });
+    expect(reg.defaults()).toEqual({ 'world.a': 1, 'world.b': 'x' });
+    expect(reg.clone().defaults()).toEqual({ 'world.a': 1, 'world.b': 'x' });
+  });
+
   it('conditions read registry defaults for unset flags', () => {
     const reg = registry();
     const ctx = { flags: {}, defaults: reg.defaults(), timeOfDay: 'day' as const, reputation: {}, level: 1, visited: new Set<string>() };

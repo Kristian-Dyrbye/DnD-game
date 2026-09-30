@@ -3,6 +3,8 @@
  * states, assuming the best case — every check rolls a 20 and every encounter is won — so it finds
  * adventures that are impossible even with perfect luck (a missing exit, a flag nobody sets, a gate
  * that can never open). Used to reject broken generated side quests and as an authoring check.
+ * Hot path: states are copied with clonePlain (not structuredClone) and the queue is an array with a
+ * cursor; the runner caches scene lookups and flag defaults for it.
  */
 import { Rng } from '../core/rng';
 import type { GameState } from '../session/gameState';
@@ -26,17 +28,43 @@ export interface SolveResult {
   reason?: string;
 }
 
+/** Deep copy of plain JSON-like data (GameState is saved as JSON); much faster than structuredClone. */
+export function clonePlain<T>(v: T): T {
+  if (typeof v !== 'object' || v === null) return v;
+  if (Array.isArray(v)) {
+    const arr = new Array(v.length);
+    for (let i = 0; i < v.length; i++) arr[i] = clonePlain(v[i]);
+    return arr as T;
+  }
+  if (Object.getPrototypeOf(v) !== Object.prototype && Object.getPrototypeOf(v) !== null) return structuredClone(v);
+  const src = v as Record<string, unknown>;
+  const out: Record<string, unknown> = {};
+  for (const k of Object.keys(src)) out[k] = clonePlain(src[k]);
+  return out as T;
+}
+
+function flagsKey(flags: GameState['flags']): string {
+  const keys = Object.keys(flags).sort();
+  let s = '';
+  for (const k of keys) s += `${k}=${typeof flags[k] === 'string' ? JSON.stringify(flags[k]) : String(flags[k])};`;
+  return s;
+}
+
+type Node = { state: GameState; path: string[] };
+
 /**
  * Searches for a path to `endingId` (or any ending when omitted). `base` is the starting game state
  * (hero, flags); it is not modified.
  */
 export function solveAdventure(base: Omit<RunContext, 'rng'>, endingId?: string, limits = { depth: 30, nodes: 2000 }): SolveResult {
   const rng = new LuckyRng();
-  const start = structuredClone(base.state);
+  const start = clonePlain(base.state);
   const ctx0: RunContext = { ...base, state: start, rng };
   startAdventure(ctx0);
-  const key = (s: GameState) => `${getProgress(s)?.sceneId}|${JSON.stringify(Object.entries(s.flags).sort())}|${getProgress(s)?.done.length}`;
-  const queue: { state: GameState; path: string[] }[] = [{ state: start, path: [] }];
+  const key = (s: GameState) => `${getProgress(s)?.sceneId}|${flagsKey(s.flags)}|${getProgress(s)?.done.length}`;
+  // FIFO queue; a cursor instead of shift() (O(n) on big queues).
+  const queue: Node[] = [{ state: start, path: [] }];
+  let head = 0;
   const seen = new Set([key(start)]);
   let explored = 0;
   const done = (s: GameState) => {
@@ -44,13 +72,14 @@ export function solveAdventure(base: Omit<RunContext, 'rng'>, endingId?: string,
     return e !== undefined && (endingId === undefined || e === endingId);
   };
   if (done(start)) return { ok: true, path: [], explored };
-  while (queue.length) {
-    const { state, path } = queue.shift()!;
+  while (head < queue.length) {
+    const { state, path } = queue[head]!;
+    queue[head++] = undefined as unknown as Node; // let processed states be collected
     if (path.length >= limits.depth) continue;
     const ctx: RunContext = { ...base, state, rng };
     for (const a of availableActions(ctx)) {
       if (++explored > limits.nodes) return { ok: false, explored, reason: 'search limit reached' };
-      const next = structuredClone(state);
+      const next = clonePlain(state);
       const c: RunContext = { ...base, state: next, rng };
       let r = perform(c, a.id);
       // Win every fight (chained fights too).

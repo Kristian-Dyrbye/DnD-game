@@ -77,6 +77,8 @@ export function resolveAdventureFlags<T extends { id: string; arcId?: string | u
 
 export class FlagRegistry {
   private readonly defs = new Map<string, FlagDef>();
+  /** Cached defaults() result; reset whenever a definition changes. */
+  private defaultsCache: Flags | undefined;
 
   static fromJson(json: unknown): FlagRegistry {
     const reg = new FlagRegistry();
@@ -88,7 +90,10 @@ export class FlagRegistry {
   add(def: FlagDef): this {
     const existing = this.defs.get(def.id);
     // Registry entries win over adventure docs (which only carry a description).
-    if (!existing || (existing.type === 'boolean' && existing.default === undefined && !existing.values)) this.defs.set(def.id, def);
+    if (!existing || (existing.type === 'boolean' && existing.default === undefined && !existing.values)) {
+      this.defs.set(def.id, def);
+      this.defaultsCache = undefined;
+    }
     return this;
   }
 
@@ -120,11 +125,12 @@ export class FlagRegistry {
     return this.defs.size;
   }
 
-  /** Default values for flags that declare one (conditions read these for unset flags). */
-  defaults(): Flags {
+  /** Default values for flags that declare one (conditions read these for unset flags). Shared and frozen: don't mutate. */
+  defaults(): Readonly<Flags> {
+    if (this.defaultsCache) return this.defaultsCache;
     const out: Flags = {};
     for (const d of this.defs.values()) if (d.default !== undefined) out[d.id] = d.default;
-    return out;
+    return (this.defaultsCache = Object.freeze(out));
   }
 
   /** Why a write is invalid, or undefined if fine. Unknown flags are allowed (documented elsewhere). */
