@@ -21,6 +21,7 @@ import { loadSrd } from '../src/engine/data/srdBundle';
 import { CompanionRosterSchema } from '../src/engine/party/companions';
 import { newGameState } from '../src/engine/session/GameSession';
 import { FlagRegistry } from '../src/engine/world/flags';
+import { loadBundledAdventures } from '../src/host/bundled';
 
 const db = loadSrd();
 const roster = CompanionRosterSchema.parse(companionsJson);
@@ -136,5 +137,33 @@ describe('intent prompt', () => {
     const crypt = intentContext(at('barrow_sheaf_crypt', 'slip_chains'));
     expect(crypt.actions.find((a) => a.id === 'slip_chains')).toMatchObject({ ability: 'str' });
     expect(intentMessages('x', { ...crypt, actions: [{ id: 'a', label: 'Lift the gate', keywords: [], skill: 'athletics' }] })[1]!.content).toContain('a: Lift the gate [skill: athletics]');
+  });
+});
+
+/** B013: talk intents from the arc 2 real-model playtest (userdata/playtest-llm-hollow_crown.json). */
+describe('refineIntent: talking to a present NPC (B013)', () => {
+  const { adventures } = loadBundledAdventures(db, registry(), roster);
+  const arc2 = (adventureId: string, sceneId: string): RunContext => {
+    const hero = buildCharacter(toBuildInput(quickBuild('fighter', db, Rng.fromSeed('refine'))), db);
+    const c: RunContext = { state: newGameState(hero, 'heroic', 'refine'), adventure: adventures.get(adventureId)!, rng: Rng.fromSeed(5), db, flags: registry(), companions: roster };
+    startAdventure(c);
+    getProgress(c.state)!.sceneId = sceneId;
+    return c;
+  };
+
+  it("opens the NPC's only offered conversation", () => {
+    const c = arc2('arc2_ch1_faces', 'counting_house');
+    const v = refined(c, { action: 'talk', target: 'clerk_orrin', approach: 'quietly' }, 'I ask the clerk Orrin quietly what he has noticed');
+    expect(v.actionId).toBe('talk.clerk_orrin.whisper');
+  });
+
+  it('picks the action naming an NPC without a conversation', () => {
+    const c = arc2('arc2_ch0_hollow_coin', 'brightwater_market');
+    expect(refined(c, { action: 'talk', target: 'hetty_weir' }, 'I ask Hetty what is wrong with the old mill').actionId).toBe('weir_stall.ask_hetty');
+  });
+
+  it('leaves a talk alone when nothing names the NPC', () => {
+    const c = arc2('arc2_ch0_hollow_coin', 'brightwater_market');
+    expect(refined(c, { action: 'talk', target: 'oswin_harl' }, 'I chat with Oswin about the weather').actionId).toBeUndefined();
   });
 });

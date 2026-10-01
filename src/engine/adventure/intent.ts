@@ -262,6 +262,8 @@ const GENERIC: ReadonlySet<Intent['action']> = new Set(['look', 'talk', 'move', 
  *     examine-type action (or its only plain action);
  *  3b. a talk/other intent whose text asks someone to join ("come with me") → the offered recruit
  *     action for that companion (A123);
+ *  3c. a talk aimed at a present NPC → that NPC's only offered conversation, else the only offered
+ *     action naming the NPC in its keywords (B013);
  *  4. a skill (the intent's, else a skill verb in the text): the offered action rolling that skill,
  *     or a plain check of the skill's ability whose label shares a word with the text.
  * Anything else is returned unchanged; validateIntent/resolveIntent handle it as before.
@@ -276,6 +278,9 @@ export function refineIntent(intent: Intent, text: string, ictx: IntentContext):
 
   const join = intent.action === 'talk' || intent.action === 'other' ? recruitAction(intent.target, text, ictx) : undefined;
   if (join) return choose(join.id);
+
+  const talkTo = intent.action === 'talk' ? talkAction(intent.target, ictx) : undefined;
+  if (talkTo) return choose(talkTo.id);
 
   const skill = intent.action === 'skill_check' ? intent.skill : undefined;
   const poi = poiOf(intent.target, ictx) ?? poiOf(findTarget(text, ictx), ictx);
@@ -311,6 +316,21 @@ function recruitAction(target: string | undefined, text: string, ictx: IntentCon
   const named = offers.find((a) => said.has(a.recruits!.toLowerCase()));
   if (named) return named;
   return new Set(offers.map((a) => a.recruits)).size === 1 ? offers[0] : undefined;
+}
+
+/**
+ * The offered action a talk aimed at a present NPC means (B013): that NPC's only offered
+ * conversation (`talk.<npc>.<conv>`), else the only offered action naming the NPC in its keywords
+ * ("ask Hetty…" → weir_stall.ask_hetty). Ambiguous or nothing → undefined (plain talk).
+ */
+function talkAction(target: string | undefined, ictx: IntentContext): IntentOption | undefined {
+  const npc = ictx.npcs.find((n) => n.id === target);
+  if (!npc) return undefined;
+  const convs = ictx.actions.filter((a) => a.id.startsWith(`${TALK_PREFIX}${npc.id}.`));
+  if (convs.length) return convs.length === 1 ? convs[0] : undefined;
+  const name = new Set(words(npc.name, ictx.lang).filter((w) => w.length > 2));
+  const naming = ictx.actions.filter((a) => !a.id.startsWith(TALK_PREFIX) && a.keywords.some((k) => name.has(k.toLowerCase())));
+  return naming.length === 1 ? naming[0] : undefined;
 }
 
 function poiOf(target: string | undefined, ictx: IntentContext): string | undefined {

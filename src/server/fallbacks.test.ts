@@ -109,4 +109,15 @@ describe('notices', () => {
     expect(lines[2]).toMatch(/voice is missing/);
     expect(llmNoticeText(new LlmError('http', 'model "x" not found, try pulling it first'))).toMatch(/not installed/);
   });
+
+  it('stay silent for aborts the game chose itself (B013)', () => {
+    const session = new GameSession();
+    session.start({ campaignId: 'c', mode: 'heroic', rng: [1, 2, 3, 4], hero: buildCharacter(toBuildInput(quickBuild('wizard', loadSrd(), Rng.fromSeed(2))), loadSrd()), location: { name: 'x' } });
+    const n = new Notices(session);
+    n.report('llm', new LlmError('aborted', 'Request aborted'));
+    n.report('tts', new TtsError('aborted', 'TTS aborted'));
+    expect(session.current.log).toHaveLength(0);
+    n.report('llm', new LlmError('timeout', 'slow'));
+    expect(session.current.log).toHaveLength(1);
+  });
 });

@@ -6,11 +6,13 @@
  * call is recorded (RecordingLlm) and the run waits for background calls (suggestions, summary,
  * banter) before the next command, like a player reading the text.
  *
- *   npx tsx scripts/playtest-llm.ts [model] [--ch1-steps=10] [--lang=da]
+ *   npx tsx scripts/playtest-llm.ts [model] [--ch1-steps=10] [--lang=da] [--campaign=hollow_crown]
  *
  * Writes userdata/playtest-llm.json (summary + every call) and userdata/playtest-llm.md (transcript);
  * with --lang=da (A150) the session plays in Danish (Danish probes, the language's default model) and
- * writes userdata/playtest-llm-da.{json,md}.
+ * writes userdata/playtest-llm-da.{json,md}. --campaign (B013; campaign id or first adventure id)
+ * plays another campaign's first chapter + the start of its second (hollow_crown: ch0 + ch1 with the
+ * arc 2 test policy and level-ups) and adds the campaign id to the file names.
  * Needs Ollama on http://127.0.0.1:11434. Takes 30–60 minutes on a laptop CPU.
  */
 import fs from 'node:fs';
@@ -42,6 +44,8 @@ import { scoreProbe } from './playtest-score';
 import type { GameSession } from '../src/engine/session/GameSession';
 import type { Flags } from '../src/engine/world/flags';
 import { combatStep } from '../tests/helpers/combatPolicy';
+import { arc2Player, autoLevelUp } from '../tests/helpers/arc2Policy';
+import { CAMPAIGNS, DEFAULT_CAMPAIGN } from '../src/host/campaigns';
 
 const args = process.argv.slice(2);
 const model = args.find((a) => !a.startsWith('--'));
@@ -49,7 +53,11 @@ const ch1Steps = Number(args.find((a) => a.startsWith('--ch1-steps='))?.split('=
 const langArg = args.find((a) => a.startsWith('--lang='))?.split('=')[1] ?? 'en';
 if (!isLanguage(langArg)) throw new Error(`Unknown --lang=${langArg}`);
 const lang: Language = langArg;
-const suffix = lang === 'en' ? '' : `-${lang}`;
+const campaignArg = args.find((a) => a.startsWith('--campaign='))?.split('=')[1];
+const found = campaignArg === undefined ? DEFAULT_CAMPAIGN : CAMPAIGNS.find((c) => c.id === campaignArg || c.adventure === campaignArg);
+if (!found) throw new Error(`Unknown --campaign=${campaignArg}`);
+const campaign = found;
+const suffix = `${campaign === DEFAULT_CAMPAIGN ? '' : `-${campaign.id}`}${lang === 'en' ? '' : `-${lang}`}`;
 const db = loadSrd();
 const S = 'arc.starter.';
 
@@ -85,6 +93,29 @@ const PROBES_DA: typeof PROBES = {
   marrows_goods_and_oath: [{ text: 'Jeg spørger Ser Corwin, om han vil drage med mig mod syd', expect: ['recruit', 'recruit_cruel'] }],
 };
 
+/** Hollow Crown probes (B013): the new NPCs and places of ch0 and the start of ch1. */
+const PROBES_CROWN: typeof PROBES = {
+  brightwater_market: [
+    { text: 'I hand the moneychanger my gold crown and ask him to change it into silver', expect: ['moneychanger.change_coin'] },
+    { text: 'I ask Hetty what is wrong with the old mill', expect: ['weir_stall.ask_hetty'] },
+  ],
+  assay_house: [
+    { text: 'I ask Mistress Dunmore to help me test the ash', expect: ['talk.mistress_dunmore.assay'] },
+    { text: 'I peer at the ash under the loupe, looking for a die mark', expect: ['assay_bench.assay_eye', 'talk.mistress_dunmore.assay'] },
+  ],
+  korrath_shrine_oath: [{ text: 'I ask the dwarf priest to come with me and help', expect: ['talk.brannoc_npc.scales'] }],
+  mill_cellars: [{ text: 'I creep quietly along the shelves past the rats', expect: ['sneak_past'] }],
+  wererat_den_rest: [
+    { text: 'I unchain the poor clerk', expect: ['free_clerk'] },
+    { text: 'I lean on Skeet until he tells me the name of the courier', expect: ['question_rat', 'let_go'] },
+  ],
+  deepanvil_gate: [{ text: 'I show the gatewarden my papers and ask to be let into the Hold', expect: ['talk.warden_brekka.papers'] }],
+  counting_house: [
+    { text: 'I turn over the little portrait on the desk', expect: ['hesk_desk.portrait'] },
+    { text: 'I ask the clerk Orrin quietly what he has noticed', expect: ['talk.clerk_orrin.whisper'] },
+  ],
+};
+
 /** Same story policy as tests/starterSmoke.test.ts. */
 function nextChoice(scene: string, flags: Flags, offered: string[]): string | undefined {
   const f = (k: string) => flags[`${S}${k}`];
@@ -118,6 +149,31 @@ function nextChoice(scene: string, flags: Flags, offered: string[]): string | un
       return first('pay', 'talk_down', 'fight', 'hand_over', 'keep');
   }
   return undefined;
+}
+
+/** How a campaign is played: the chapter played to its end, its probes and story policy. */
+interface CampaignPlan {
+  /** Played fully by `choose`; any later chapter gets `--ch1-steps` steps. */
+  main: string;
+  probes: typeof PROBES;
+  choose(adventureId: string, scene: string, state: GameSession['current'], offered: string[]): string | undefined;
+  /** Policy for the later chapter; undefined = the first offered action not taken yet. */
+  later?: CampaignPlan['choose'];
+  levelUps: boolean;
+}
+
+function campaignPlan(): CampaignPlan {
+  if (campaign.id === 'hollow_crown') {
+    const player = arc2Player();
+    const choose: CampaignPlan['choose'] = (adv, scene, state, offered) => player.next(adv, scene, state.hero, state.flags, offered) ?? offered.find((id) => id === 'dlg.bye');
+    return { main: campaign.adventure, probes: lang === 'en' ? PROBES_CROWN : {}, choose, later: choose, levelUps: true };
+  }
+  return {
+    main: 'millbrook_disappearances',
+    probes: lang === 'da' ? PROBES_DA : PROBES,
+    choose: (_adv, scene, state, offered) => nextChoice(scene, state.flags, offered) ?? offered.find((id) => id === 'dlg.bye'),
+    levelUps: false,
+  };
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -182,8 +238,9 @@ async function main(): Promise<void> {
   };
 
   const hero = buildCharacter(toBuildInput(quickBuild('fighter', db, Rng.fromSeed('smoke'))), db);
+  const plan = campaignPlan();
   if (lang !== 'en') await session.handle({ type: 'set_language', language: lang });
-  await run({ type: 'new_game', hero, mode: 'heroic' }, 'new_game');
+  await run({ type: 'new_game', hero, mode: 'heroic', ...(campaign !== DEFAULT_CAMPAIGN && { campaign: campaign.adventure }) }, 'new_game');
   await settle('start');
 
   const probed = new Set<string>();
@@ -195,11 +252,16 @@ async function main(): Promise<void> {
       await run(combatStep(session, db), 'combat');
       continue;
     }
+    const levelUp = plan.levelUps ? autoLevelUp(session.current.hero, db) : undefined;
+    if (levelUp) {
+      await run(levelUp, 'level_up');
+      continue;
+    }
     const scene = p.sceneId;
     if (!probed.has(scene)) {
       probed.add(scene);
       const generic = lang === 'da' ? 'Jeg ser mig grundigt omkring og spørger dem, der er her, hvad der foregår' : 'I look around carefully and ask whoever is here what is going on';
-      for (const probe of (lang === 'da' ? PROBES_DA : PROBES)[scene] ?? (p.adventureId !== 'millbrook_disappearances' ? [{ text: generic, expect: [] }] : [])) {
+      for (const probe of plan.probes[scene] ?? (p.adventureId !== plan.main ? [{ text: generic, expect: [] }] : [])) {
         const before = llm.calls.length;
         const ictx = probeContext();
         const ms = await run({ type: 'say', text: probe.text }, `say: ${probe.text}`);
@@ -216,11 +278,11 @@ async function main(): Promise<void> {
     const offered = ([...events].reverse().find((e): e is Extract<ServerEvent, { type: 'suggestions' }> => e.type === 'suggestions')?.actions ?? []).filter((a) => !a.say).map((a) => a.id!);
     let choice: string | undefined;
     // A probe may open a conversation (A131): leave it when the policy has nothing to pick there.
-    if (p.adventureId === 'millbrook_disappearances') choice = nextChoice(scene, session.current.flags, offered) ?? offered.find((id) => id === 'dlg.bye');
+    if (p.adventureId === plan.main) choice = plan.choose(p.adventureId, scene, session.current, offered);
     else {
       if (ch1Taken >= ch1Steps) break;
       ch1Taken++;
-      choice = offered.find((id) => !id.startsWith('exit.') && !chosenInCh1.has(id)) ?? offered.find((id) => !chosenInCh1.has(id)) ?? offered[0];
+      choice = plan.later?.(p.adventureId, scene, session.current, offered) ?? offered.find((id) => !id.startsWith('exit.') && !chosenInCh1.has(id)) ?? offered.find((id) => !chosenInCh1.has(id)) ?? offered[0];
       if (choice) chosenInCh1.add(choice);
     }
     if (!choice) {
@@ -242,6 +304,7 @@ async function main(): Promise<void> {
   const report = {
     model: status.model,
     lang,
+    campaign: campaign.id,
     minutes: Math.round((performance.now() - t0) / 600) / 100,
     reachedAdventure: getProgress(session.current)?.adventureId,
     errors: events.filter((e) => e.type === 'error'),

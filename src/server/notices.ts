@@ -34,6 +34,8 @@ export class Notices {
   ) {}
 
   report(kind: NoticeKind, err: unknown): void {
+    // Aborts are the game's own choice (fight end, stale or preempted jobs, Skip voice), not a failure (B013).
+    if ((err instanceof LlmError || err instanceof TtsError) && err.kind === 'aborted') return;
     const t = this.now();
     if (t - (this.last.get(kind) ?? -Infinity) < this.intervalMs) return;
     if (!this.session.running) return;
