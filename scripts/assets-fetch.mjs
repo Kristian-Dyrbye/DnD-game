@@ -9,6 +9,9 @@
  *
  * - Idempotent: files already cached with the recorded size/sha256 are not re-downloaded.
  * - Verified: each download is checked against the manifest's `bytes` and `sha256`.
+ * - Mirror: packs whose host refuses CI servers (Poly Pizza answers GitHub Actions with HTTP 403)
+ *   have a committed CC0 copy in assets/mirror/<packId>/ (same layout as the cache); it is used
+ *   instead of downloading when present and verified (`--force` ignores it).
  * - Manual packs (`download.manual: true`) are never scraped; the script prints the
  *   instructions and copies the files if the owner has placed them in assets/_packs/<packId>/.
  *
@@ -31,6 +34,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const MANIFEST = path.join(ROOT, 'assets', 'manifest.json');
 const PACKS_DIR = path.join(ROOT, 'assets', '_packs');
 const MODELS_DIR = path.join(ROOT, 'assets', 'models');
+const MIRROR_DIR = path.join(ROOT, 'assets', 'mirror');
 const CONCURRENCY = 4;
 const RETRIES = 3;
 const USER_AGENT = 'solo-dnd-assets-fetch/1.0 (+CC0 asset setup)';
@@ -89,6 +93,17 @@ async function processFile(pack, file) {
     const existing = await readFile(cache);
     if (!verify(existing, file)) buf = existing;
   }
+  // Committed CC0 copy (assets/mirror/<packId>/...) for hosts that refuse CI servers (Poly Pizza → HTTP 403).
+  const mirror = path.join(MIRROR_DIR, path.relative(PACKS_DIR, cache));
+  if (!buf && !FORCE && existsSync(mirror)) {
+    const copy = await readFile(mirror);
+    if (!verify(copy, file)) {
+      buf = copy;
+      await mkdir(path.dirname(cache), { recursive: true });
+      await copyFile(mirror, cache);
+      action = 'mirrored';
+    }
+  }
   if (!buf) {
     if (pack.download.manual) return { status: 'missing', file, note: `place it at ${path.relative(ROOT, cache)}` };
     buf = await download(sourceUrl(pack, file));
@@ -143,7 +158,7 @@ async function main() {
       continue;
     }
     const results = await runPool(pack.files.map((f) => () => processFile(pack, f)), CONCURRENCY);
-    const counts = { downloaded: 0, cached: 0, failed: 0, missing: 0 };
+    const counts = { downloaded: 0, cached: 0, mirrored: 0, failed: 0, missing: 0 };
     let packBytes = 0;
     results.forEach((r, i) => {
       const f = pack.files[i];
@@ -161,6 +176,7 @@ async function main() {
     failures += counts.failed;
     console.log(
       `   ${counts.downloaded} downloaded, ${counts.cached} already cached` +
+        (counts.mirrored ? `, ${counts.mirrored} from assets/mirror` : '') +
         (counts.missing ? `, ${counts.missing} awaiting manual download` : '') +
         (counts.failed ? `, ${counts.failed} FAILED` : '') +
         ` (${mb(packBytes)})`,

@@ -34,6 +34,8 @@ All 3D models are downloaded on the player's machine by `scripts/assets-fetch.mj
 - **License:** CC0 1.0. Quote from LICENSE.txt: "License: (Creative Commons Zero, CC0) http://creativecommons.org/publicdomain/zero/1.0/ — This content is free to use in personal, educational and commercial projects."
 - **Used for:** battle-map floors, walls, doors, stairs, pillars, traps and props.
 
+> **Repository copy of the Quaternius models:** Poly Pizza refuses downloads from GitHub's build servers (HTTP 403), so the 36 Quaternius files the game uses are also committed unchanged in `assets/mirror/` (CC0 allows redistribution). `scripts/assets-fetch.mjs` uses that copy after checking each file's sha256 against `assets/manifest.json`.
+
 ### Quaternius Ultimate Monsters
 - **Author:** Quaternius, https://quaternius.com
 - **Source:** https://quaternius.com/packs/ultimatemonsters.html · models uploaded by Quaternius at https://poly.pizza/bundle/Ultimate-Monsters-Bundle-5oyGWAmOB6
