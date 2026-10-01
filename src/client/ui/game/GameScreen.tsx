@@ -18,7 +18,7 @@ import { DungeonPanel } from './DungeonPanel';
 /** Previews (reachable squares, attack checks) need a context; they never roll. */
 const previewCtx = { rng: Rng.fromSeed('preview'), db };
 import { loadSettings, settings, updateSettings } from '../settingsState';
-import { continueWorldNext, hero, screen, settingsOpen, startNewCharacter } from '../state';
+import { continueWorldNext, hero, screen, settingsOpen, startAddingHero, startNewCharacter } from '../state';
 import { CombatScreen } from '../combat/CombatScreen';
 import { Rng } from '../../../engine/core/rng';
 import { db } from '../../data';
@@ -51,7 +51,9 @@ export function GameScreen() {
   const voiceOn = settings.value?.tts.enabled ?? false;
   const [journalOpen, setJournalOpen] = useState(false);
   const [inventoryOpen, setInventoryOpen] = useState(false);
-  const [levelUpOpen, setLevelUpOpen] = useState(false);
+  /** Id of the hero whose level-up dialog is open. */
+  const [levelUpFor, setLevelUpFor] = useState<string | null>(null);
+  const levelling = levelUpFor === null || !h ? undefined : levelUpFor === h.id ? h : state?.companions.find((c) => c.id === levelUpFor);
   const [characterOpen, setCharacterOpen] = useState(false);
   const [savesOpen, setSavesOpen] = useState(false);
   const [shopId, setShopId] = useState<string | null>(null);
@@ -158,8 +160,8 @@ export function GameScreen() {
           <span class="muted">{t('game.objective')}</span> {objective.value}
         </p>
       )}
-      {h && <PartyPanel hero={h} companions={state?.companions ?? []} onLevelUp={() => setLevelUpOpen(true)} loyalty={Object.fromEntries((state?.companions ?? []).map((c) => [c.id, Number(state?.flags[`world.${c.id}_loyalty`] ?? 50)]))} controls={(state?.extensions.party as { control?: Record<string, 'ai' | 'player'> } | undefined)?.control ?? {}} />}
-      {levelUpOpen && h && <LevelUpPanel hero={h} onClose={() => setLevelUpOpen(false)} />}
+      {h && <PartyPanel hero={h} companions={state?.companions ?? []} origins={state?.origins ?? {}} onLevelUp={setLevelUpFor} {...(state && { onAddHero: startAddingHero })} loyalty={Object.fromEntries((state?.companions ?? []).map((c) => [c.id, Number(state?.flags[`world.${c.id}_loyalty`] ?? 50)]))} controls={(state?.extensions.party as { control?: Record<string, 'ai' | 'player'> } | undefined)?.control ?? {}} />}
+      {levelling && h && <LevelUpPanel key={levelling.id} hero={levelling} main={levelling.id === h.id} onClose={() => setLevelUpFor(null)} />}
       <main class="game-main">
         {connection.value !== 'open' && <p class="connection-note">{t(connection.value === 'connecting' ? (WEB_EDITION ? 'game.startingWeb' : 'game.connecting') : 'game.disconnected')}</p>}
         <StoryLog />

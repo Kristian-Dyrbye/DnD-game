@@ -189,12 +189,12 @@ export function partWithCompanion(state: GameState, def: CompanionDef, status: E
   state.flags[def.statusFlag] = status;
 }
 
-/** Companions level with the hero (spec §6). */
+/** Companions level with the hero (spec §6). Player-made heroes (C002) level by hand instead. */
 export function levelCompanionsWithHero(state: GameState, roster: CompanionRoster, db: SrdDatabase, msgs: Messages = ENGLISH_MESSAGES): string[] {
   const target = totalLevel(state.hero);
   const out: string[] = [];
   state.companions = state.companions.map((c) => {
-    if (totalLevel(c) >= target) return c;
+    if (totalLevel(c) >= target || state.origins?.[c.id] === 'hero') return c;
     const def = roster.companions.find((d) => d.id === c.id);
     out.push(msgs.m('companion.levels', { name: c.name, level: target }));
     return autoLevelTo(c, target, db, def?.subclassId);

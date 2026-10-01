@@ -14,8 +14,9 @@ import type { Language } from '../../shared/i18nCore';
 import { messages, type Messages } from '../i18n';
 import { MINUTES_PER_DAY } from '../world/clock';
 import { deletePage, reorderPages, savePage } from './journal';
-import { allows, HOST_SEAT, seatOf, soloTable, type SeatId, type Table } from './table';
-import { GameStateSchema, LOG_LIMIT, ROLL_LIMIT, type GameState, type LogEntry, type RollRecord } from './gameState';
+import { MAX_COMPANIONS, setControl } from '../party/companions';
+import { allows, HOST_SEAT, ownerOf, seatOf, soloTable, type SeatId, type Table } from './table';
+import { extraHeroes, GameStateSchema, LOG_LIMIT, ROLL_LIMIT, type GameState, type LogEntry, type RollRecord } from './gameState';
 
 /** Metadata the session provides for a save; the store adds slot id, kind and timestamp. */
 export interface SessionSaveMeta {
@@ -303,6 +304,13 @@ export class GameSession {
           await this.ports.actions?.begin?.(this);
           return;
         }
+        case 'add_hero':
+          if (!this.running) return this.fail(this.msgs.m('session.noGame'), reqId);
+          this.addHero(cmd.hero, seat);
+          this.emit(this.snapshot());
+          this.emit({ type: 'ack', command: cmd.type, ...(reqId && { reqId }) });
+          this.autosave();
+          return;
         case 'travel':
           if (!this.running) return this.fail(this.msgs.m('session.noGame'), reqId);
           if (!this.ports.actions?.travel) return this.fail(this.msgs.m('session.noTravel'), reqId);
@@ -361,6 +369,28 @@ export class GameSession {
     } catch (err) {
       this.fail(err instanceof Error ? err.message : this.msgs.m('session.failed'), reqId);
     }
+  }
+
+  /**
+   * A player-made hero joins the party (C002): a guest's character (played by their seat) or, in duo
+   * mode, the host's second hero (control 'player'). It takes a party slot like a companion, gets a
+   * free id if the creator's one is taken, and starts with at least the main hero's XP so it can level
+   * up by hand to catch up. One hero per guest seat; the host may add more while there is room.
+   */
+  addHero(character: Character, seat: SeatId = HOST_SEAT): Character {
+    const s = this.current;
+    if (s.extensions.combat) throw new Error(this.msgs.m('level.finishFight'));
+    if (s.companions.length >= MAX_COMPANIONS) throw new Error(this.msgs.m('hero.partyFull'));
+    if (seat !== HOST_SEAT && extraHeroes(s).some((c) => ownerOf(this.table, s, c.id) === seat)) throw new Error(this.msgs.m('hero.oneEach'));
+    const taken = new Set([s.hero.id, ...s.companions.map((c) => c.id), ...Object.keys((s.extensions.companionSheets as Record<string, unknown> | undefined) ?? {})]);
+    let id = character.id;
+    for (let n = 2; taken.has(id); n++) id = `hero-${n}`;
+    const joined: Character = { ...character, id, xp: Math.max(character.xp, s.hero.xp) };
+    s.companions = [...s.companions, joined];
+    s.origins = { ...s.origins, [id]: 'hero' };
+    setControl(s, id, seat === HOST_SEAT ? 'player' : `seat:${seat}`, this.msgs);
+    this.addLog('system', this.msgs.m('hero.joins', { name: joined.name }));
+    return joined;
   }
 
   /** A new game in the world of the finished save in `slot` (throws a player-facing error otherwise). */

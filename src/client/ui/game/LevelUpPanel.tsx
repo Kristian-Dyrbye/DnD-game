@@ -14,7 +14,8 @@ import { PickList } from '../creator/PickList';
 import { t, tn } from '../i18n';
 import { srdText, skillText } from '../srdText';
 
-export function LevelUpPanel({ hero, onClose }: { hero: Character; onClose: () => void }) {
+/** `hero` = the character levelling up: the main hero, or a player-made hero (sent as `characterId`, C002). */
+export function LevelUpPanel({ hero, main = true, onClose }: { hero: Character; main?: boolean; onClose: () => void }) {
   const classId = hero.classes[0]!.classId;
   const newLevel = classLevel(hero, classId) + 1;
   const choices = useMemo(() => pendingChoices(hero, db, classId, newLevel), [hero, classId, newLevel]);
@@ -62,6 +63,7 @@ export function LevelUpPanel({ hero, onClose }: { hero: Character; onClose: () =
     const featChoice = choices.find((c) => c.kind === 'feat');
     send({
       type: 'level_up',
+      ...(!main && { characterId: hero.id }),
       classId,
       hpMode,
       ...(subclassId && { subclassId }),

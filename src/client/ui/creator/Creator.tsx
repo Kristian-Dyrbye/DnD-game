@@ -5,7 +5,7 @@
 import type { ComponentType } from 'preact';
 import { canAdvance, goToStep, nextStep, prevStep, stepLabel, stepProblems, stepsFor, type CreatorStep } from '../../../engine/character/creator';
 import { db } from '../../data';
-import { screen } from '../state';
+import { addingHero, screen } from '../state';
 import { currentTranslator, t } from '../i18n';
 import { beginAdventure, creator } from './creatorState';
 import { AbilitiesStep } from './AbilitiesStep';
@@ -77,8 +77,8 @@ export function Creator() {
   return (
     <div class="creator">
       <nav class="step-rail" aria-label={t('creator.stepsAria')}>
-        <button type="button" class="link-button" onClick={() => (screen.value = 'title')}>
-          {t('creator.backToTitle')}
+        <button type="button" class="link-button" onClick={() => (addingHero.value ? ((addingHero.value = false), (screen.value = 'game')) : (screen.value = 'title'))}>
+          {t(addingHero.value ? 'creator.backToGame' : 'creator.backToTitle')}
         </button>
         <ol>
           {steps.map((st, i) => {
@@ -103,7 +103,7 @@ export function Creator() {
           {problems[0] ?? ''}
         </span>
         <button type="button" class="primary" onClick={() => (isLast ? beginAdventure() : (creator.value = nextStep(s, db)))} disabled={!canAdvance(s, db)}>
-          {isLast ? t('creator.begin') : t('creator.next')}
+          {isLast ? t(addingHero.value ? 'creator.addHero' : 'creator.begin') : t('creator.next')}
         </button>
       </footer>
     </div>

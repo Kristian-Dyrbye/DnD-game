@@ -5,7 +5,7 @@ import { buildCharacter } from '../../../engine/character/builder';
 import { db } from '../../data';
 import { send } from '../../net/gameSocket';
 import { campaignOf } from '../../../host/campaigns';
-import { campaignChoice, continueWorldNext, hash, hero, heroMode, newCharacterRequests, screen, worldFromChoice } from '../state';
+import { addingHero, campaignChoice, continueWorldNext, hash, hero, heroMode, newCharacterRequests, screen, worldFromChoice } from '../state';
 
 export const creator = signal<CreatorState>(newCreatorState());
 
@@ -21,6 +21,13 @@ effect(() => {
 
 export function beginAdventure(): void {
   const s = creator.value;
+  if (addingHero.peek()) {
+    // Duo mode: the new character joins the running game (the session gives it a free id).
+    send({ type: 'add_hero', hero: buildCharacter(toBuildInput(s), db) });
+    addingHero.value = false;
+    screen.value = 'game';
+    return;
+  }
   hero.value = buildCharacter(toBuildInput(s), db);
   // `#play-<class>+scars`: a test hero with two scars (A091).
   if (hash.endsWith('+scars')) {

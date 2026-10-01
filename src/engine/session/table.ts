@@ -30,7 +30,7 @@ export interface Table {
 }
 
 /** Why a command was refused: an engine message key (`table.*`). `propose` = a guest's story action the host may take up (C006). */
-export type Refusal = { key: 'table.noSeat' | 'table.hostOnly' | 'table.spectator' | 'table.proposeOnly' | 'table.notYourTurn'; propose?: boolean };
+export type Refusal = { key: 'table.noSeat' | 'table.hostOnly' | 'table.spectator' | 'table.proposeOnly' | 'table.notYourTurn' | 'table.notYourCharacter'; propose?: boolean };
 export type Verdict = { ok: true } | ({ ok: false } & Refusal);
 
 export function soloTable(): Table {
@@ -91,6 +91,8 @@ const HOST_ONLY: ReadonlySet<CommandType> = new Set(['new_game', 'load', 'save',
 const PROPOSALS: ReadonlySet<CommandType> = new Set(['say', 'choose']);
 /** Fight commands: decided by who owns the creature whose turn it is. */
 const COMBAT: ReadonlySet<CommandType> = new Set(['combat_act', 'combat_flee']);
+/** Any player seat, whatever the policy: bringing your own hero to the table (C002). */
+const PLAYERS: ReadonlySet<CommandType> = new Set(['add_hero']);
 
 /** The creature whose turn it is in the running fight, if any. */
 function actingCreature(state: GameState | undefined): string | undefined {
@@ -99,16 +101,22 @@ function actingCreature(state: GameState | undefined): string | undefined {
 }
 
 /**
- * May `seat` send `cmd`? Story commands (say, choose, travel, shops, inventory, journal, level-up)
- * follow the table policy; saves/loads/new games/language/control are the host's; fight commands
- * belong to the seat that owns the creature whose turn it is.
+ * May `seat` send `cmd`? Story commands (say, choose, travel, shops, inventory, journal) follow the
+ * table policy; saves/loads/new games/language/control are the host's; fight commands belong to the
+ * seat that owns the creature whose turn it is; a level-up to the seat that owns the character
+ * (`characterId`, default the hero); any player seat may add its own hero.
  */
-export function allows(table: Table, cmd: Pick<ClientCommand, 'type'>, seatId: SeatId, state?: GameState): Verdict {
+export function allows(table: Table, cmd: Pick<ClientCommand, 'type'> & { characterId?: string }, seatId: SeatId, state?: GameState): Verdict {
   const seat = seatOf(table, seatId);
   if (!seat) return { ok: false, key: 'table.noSeat' };
   if (OPEN.has(cmd.type)) return { ok: true };
   if (HOST_ONLY.has(cmd.type)) return seat.role === 'host' ? { ok: true } : { ok: false, key: 'table.hostOnly' };
   if (seat.role === 'spectator') return { ok: false, key: 'table.spectator' };
+  if (PLAYERS.has(cmd.type)) return { ok: true };
+  if (cmd.type === 'level_up') {
+    if (!state) return { ok: true };
+    return ownerOf(table, state, cmd.characterId ?? state.hero.id) === seat.id ? { ok: true } : { ok: false, key: 'table.notYourCharacter' };
+  }
   if (COMBAT.has(cmd.type)) {
     const acting = actingCreature(state);
     // No fight (or no turn): the fight port reports that itself.

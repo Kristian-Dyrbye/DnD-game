@@ -388,8 +388,12 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       if (cmd.type === 'level_up') {
         if (!db) throw new Error(m('level.needsSrd'));
         if (activeFight(session.current)) throw new Error(m('level.finishFight'));
-        const before = totalLevel(session.current.hero);
-        const res = levelUp(session.current.hero, db, {
+        const s = session.current;
+        const extra = cmd.characterId && cmd.characterId !== s.hero.id ? s.companions.find((c) => c.id === cmd.characterId) : undefined;
+        if (cmd.characterId && cmd.characterId !== s.hero.id && (!extra || s.origins?.[extra.id] !== 'hero')) throw new Error(m('level.notHero'));
+        const who = extra ?? s.hero;
+        const before = totalLevel(who);
+        const res = levelUp(who, db, {
           classId: cmd.classId,
           hp: cmd.hpMode === 'roll' ? { mode: 'roll', rng: session.rng } : { mode: 'average' },
           ...(cmd.subclassId && { subclassId: cmd.subclassId }),
@@ -400,7 +404,13 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
           ...(cmd.expertise && { expertise: cmd.expertise as Skill[] }),
           ...(cmd.skills && { skills: cmd.skills as Skill[] }),
         });
-        session.current.hero = res.character;
+        if (extra) {
+          s.companions = s.companions.map((c) => (c.id === extra.id ? res.character : c));
+          const p = { name: extra.name, level: before + 1, hp: res.hpGained };
+          session.addLog('system', res.features.length ? m('level.upNamedNew', { ...p, features: res.features.join(', ') }) : m('level.upNamed', p));
+          return;
+        }
+        s.hero = res.character;
         session.addLog('system', res.features.length ? m('level.upNew', { level: before + 1, hp: res.hpGained, features: res.features.join(', ') }) : m('level.up', { level: before + 1, hp: res.hpGained }));
         if (opts.companions) for (const line of levelCompanionsWithHero(session.current, opts.companions, db, session.msgs)) session.addLog('system', line);
         return;

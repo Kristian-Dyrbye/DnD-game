@@ -35,8 +35,19 @@ export const campaignChoice = signal<string>(DEFAULT_CAMPAIGN.adventure);
 /** "New hero, same world" (B002): slot of the finished save whose world the next new game imports (null = a new world). */
 export const worldFromChoice = signal<string | null>(null);
 
+/** Duo mode (C002): the creator is building a second hero for the running game (sent as `add_hero`, not `new_game`). */
+export const addingHero = signal(false);
+
 export function startNewCharacter(): void {
+  addingHero.value = false;
   newCharacterRequests.value++;
+  screen.value = 'creator';
+}
+
+/** Opens the creator for a second hero who joins the running game's party. */
+export function startAddingHero(): void {
+  newCharacterRequests.value++;
+  addingHero.value = true;
   screen.value = 'creator';
 }
 

@@ -26,6 +26,7 @@ export const en = {
   'table.spectator': 'Spectators can only watch',
   'table.proposeOnly': 'The host decides the story: propose it to them instead',
   'table.notYourTurn': 'It is not your character’s turn',
+  'table.notYourCharacter': 'That character is played by someone else',
 
   // Story results
   'story.received': 'Received: {list}',
@@ -99,6 +100,11 @@ export const en = {
   'companion.disapprovesStrongly': '{name} strongly disapproves. ({delta})',
   'companion.patience': 'Their patience is wearing thin.',
 
+  // Player-made heroes (co-op guests, duo mode)
+  'hero.joins': '{name} joins the party as a hero.',
+  'hero.partyFull': 'The party is full: there is no room for another hero.',
+  'hero.oneEach': 'You already play a hero in this party.',
+
   // Combat (story side)
   'fight.start': 'Combat! {name} attack.',
   'fight.enemies': 'Enemies',
@@ -119,6 +125,9 @@ export const en = {
   'level.upNew': 'Level {level}! +{hp} HP. New: {features}.',
   'level.needsSrd': 'Leveling needs the SRD data',
   'level.finishFight': 'Finish the fight first.',
+  'level.notHero': 'Only heroes level up by hand; companions level with the party.',
+  'level.upNamed': '{name}: level {level}! +{hp} HP.',
+  'level.upNamedNew': '{name}: level {level}! +{hp} HP. New: {features}.',
 
   // Side quests
   'job.take': 'Take a job from {source}: {name}',

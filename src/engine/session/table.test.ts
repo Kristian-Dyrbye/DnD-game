@@ -109,7 +109,20 @@ describe('who may do what (allows)', () => {
     const t = coopTable();
     expect(allows(t, cmd('say'), 'guest-1')).toEqual({ ok: false, key: 'table.proposeOnly', propose: true });
     expect(allows(t, cmd('choose'), 'guest-1')).toEqual({ ok: false, key: 'table.proposeOnly', propose: true });
-    for (const type of ['travel', 'shop_buy', 'equip', 'journal_save', 'level_up', 'repair'] as const) expect(allows(t, cmd(type), 'guest-1')).toEqual({ ok: false, key: 'table.hostOnly' });
+    for (const type of ['travel', 'shop_buy', 'equip', 'journal_save', 'repair'] as const) expect(allows(t, cmd(type), 'guest-1')).toEqual({ ok: false, key: 'table.hostOnly' });
+  });
+
+  it('level-up belongs to the seat that owns the character; any player seat may add a hero (C002)', () => {
+    for (const policy of ['host_decides', 'anyone'] as const) {
+      const t = coopTable(policy);
+      const s = stateWith({ nettle: 'seat:guest-1' });
+      expect(allows(t, cmd('level_up'), 'host', s)).toEqual({ ok: true });
+      expect(allows(t, cmd('level_up'), 'guest-1', s)).toEqual({ ok: false, key: 'table.notYourCharacter' });
+      expect(allows(t, { type: 'level_up', characterId: 'nettle' }, 'guest-1', s)).toEqual({ ok: true });
+      expect(allows(t, { type: 'level_up', characterId: 'nettle' }, 'host', s)).toEqual({ ok: false, key: 'table.notYourCharacter' });
+      expect(allows(t, cmd('add_hero'), 'guest-1', s)).toEqual({ ok: true });
+      expect(allows(t, cmd('add_hero'), 'guest-2', s)).toEqual({ ok: false, key: 'table.spectator' });
+    }
   });
 
   it('anyone: player seats act in the story; spectators still only watch', () => {

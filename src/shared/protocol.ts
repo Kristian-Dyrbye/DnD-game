@@ -57,10 +57,13 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
     /** "New hero, same world" (B002): slot of a finished save whose world the new campaign starts in. */
     worldFrom: z.string().regex(SLOT_ID_PATTERN).optional(),
   }),
-  /** Level up the hero (choices as required by leveling.pendingChoices). */
+  /** A second player-made hero joins the party (C002): a co-op guest's character, or the host's own in duo mode. */
+  z.object({ ...base, type: z.literal('add_hero'), hero: CharacterSchema }),
+  /** Level up the hero, or `characterId`'s player-made hero (choices as required by leveling.pendingChoices). */
   z.object({
     ...base,
     type: z.literal('level_up'),
+    characterId: z.string().max(40).optional(),
     classId: z.string().max(40),
     hpMode: z.enum(['average', 'roll']),
     subclassId: z.string().max(60).optional(),

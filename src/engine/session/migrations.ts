@@ -49,6 +49,18 @@ export const MIGRATIONS: Migration[] = [
       };
     },
   },
+  {
+    from: 1,
+    to: 2,
+    description: 'Co-op (C002): state.origins marks every existing companion as a roster companion',
+    migrate(save) {
+      const state = (save.state ?? {}) as Record<string, unknown>;
+      const companions = Array.isArray(state.companions) ? (state.companions as { id?: unknown }[]) : [];
+      const origins = { ...(state.origins as Record<string, string> | undefined) };
+      for (const c of companions) if (typeof c.id === 'string' && !origins[c.id]) origins[c.id] = 'companion';
+      return { ...save, state: { ...state, origins } };
+    },
+  },
 ];
 
 /** Version of a raw save. Files without `schemaVersion` are the v0 prototype format. */

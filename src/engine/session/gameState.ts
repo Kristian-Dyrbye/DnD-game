@@ -43,6 +43,8 @@ export const GameStateSchema = z.object({
   hero: CharacterSchema,
   /** Companion characters (Phase 6). */
   companions: z.array(CharacterSchema).default([]),
+  /** Where each party member in `companions` came from (C002): 'hero' = a player-made hero (co-op guest or duo mode); absent = a roster companion. */
+  origins: z.record(z.string(), z.enum(['companion', 'hero'])).default({}),
   location: z.object({
     /** Adventure + scene ids (set by the scene runner, A051). */
     adventureId: z.string().optional(),
@@ -70,6 +72,11 @@ export const GameStateSchema = z.object({
   extensions: z.record(z.string(), z.unknown()).default({}),
 });
 export type GameState = z.infer<typeof GameStateSchema>;
+
+/** Player-made heroes in the party besides the main hero (C002): they level by hand and share story XP. */
+export function extraHeroes(state: Pick<GameState, 'companions' | 'origins'>): GameState['companions'] {
+  return state.companions.filter((c) => state.origins?.[c.id] === 'hero');
+}
 
 /** Caps so the state (and every snapshot) stays small. */
 export const LOG_LIMIT = 200;

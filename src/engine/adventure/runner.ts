@@ -18,7 +18,7 @@ import { totalLevel, type Character } from '../core/creature';
 import { Rng } from '../core/rng';
 import type { SrdDatabase } from '../data/srd';
 import { abilityCheck, savingThrow, type D20TestResult } from '../rules/checks';
-import type { GameState } from '../session/gameState';
+import { extraHeroes, type GameState } from '../session/gameState';
 import { applyFlagWrites, evalCondition, inHours, timeOfDay, type ConditionContext } from './conditions';
 import type { Action, Adventure, Check, Condition, Outcome, Scene } from './schema';
 import { allScenes } from './validate';
@@ -524,7 +524,8 @@ export function applyOutcome(ctx: RunContext, o: Outcome, result: StepResult, de
   if (o.coins) giveCoins(state.hero, o.coins, result);
   if (o.loot) rollLoot(ctx, o.loot, result);
   if (o.xp) {
-    state.hero.xp += o.xp;
+    // Story XP goes to every player-made hero (companions level with the hero instead).
+    for (const h of [state.hero, ...extraHeroes(state)]) h.xp += o.xp;
     result.xp += o.xp;
   }
   for (const r of o.reputation) (result.reputation ??= []).push(...changeReputation(state, r.faction, r.delta, ctx.lore));

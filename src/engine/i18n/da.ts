@@ -25,6 +25,7 @@ export const da: Partial<Record<EngineKey, string>> = {
   'table.spectator': 'Tilskuere kan kun se med',
   'table.proposeOnly': 'Værten bestemmer historien: foreslå det i stedet',
   'table.notYourTurn': 'Det er ikke din figurs tur',
+  'table.notYourCharacter': 'Den figur spilles af en anden',
 
   // Historien
   'story.received': 'Modtaget: {list}',
@@ -98,6 +99,11 @@ export const da: Partial<Record<EngineKey, string>> = {
   'companion.disapprovesStrongly': '{name} misbilliger kraftigt. ({delta})',
   'companion.patience': 'Tålmodigheden er ved at slippe op.',
 
+  // Spillerskabte helte (co-op-gæster, duo)
+  'hero.joins': '{name} slutter sig til gruppen som helt.',
+  'hero.partyFull': 'Gruppen er fuld: der er ikke plads til endnu en helt.',
+  'hero.oneEach': 'Du spiller allerede en helt i denne gruppe.',
+
   // Kamp (historiesiden)
   'fight.start': 'Kamp! {name} angriber.',
   'fight.enemies': 'Fjender',
@@ -118,6 +124,9 @@ export const da: Partial<Record<EngineKey, string>> = {
   'level.upNew': 'Niveau {level}! +{hp} LP. Nyt: {features}.',
   'level.needsSrd': 'Niveaustigning kræver SRD-data',
   'level.finishFight': 'Gør kampen færdig først.',
+  'level.notHero': 'Kun helte stiger i niveau i hånden; følgesvende følger gruppen.',
+  'level.upNamed': '{name}: niveau {level}! +{hp} LP.',
+  'level.upNamedNew': '{name}: niveau {level}! +{hp} LP. Nyt: {features}.',
 
   // Sideopgaver
   'job.take': 'Tag et job fra {source}: {name}',

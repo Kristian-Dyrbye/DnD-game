@@ -1,14 +1,15 @@
-/** Left panel: the hero (and later companions) with HP bar, AC, level/XP, conditions and coins. */
+/** Left panel: the hero, other player-made heroes (C002) and companions with HP bar, AC, level/XP, conditions and coins. */
 import type { Character } from '../../../engine/core/creature';
 import { totalLevel } from '../../../engine/core/creature';
 import { db } from '../../data';
 import { coins, t } from '../i18n';
 import { canLevelUp } from '../../../engine/character/leveling';
+import { MAX_COMPANIONS } from '../../../engine/party/companions';
 import { send } from '../../net/gameSocket';
 import { scarLabel, scarLine } from './labels';
 import { srdText } from '../srdText';
 
-function MemberCard({ c, lead, onLevelUp, loyalty, control, onToggle }: { c: Character; lead?: boolean; onLevelUp?: () => void; loyalty?: number; control?: 'ai' | 'player'; onToggle?: () => void }) {
+function MemberCard({ c, lead, isHero, onLevelUp, loyalty, control, onToggle }: { c: Character; lead?: boolean; isHero?: boolean; onLevelUp?: () => void; loyalty?: number; control?: 'ai' | 'player'; onToggle?: () => void }) {
   const pct = Math.max(0, Math.min(100, (c.hp / c.maxHp) * 100));
   const classes = c.classes.map((cl) => `${srdText('classes', cl.classId, db.classes.get(cl.classId)?.name ?? cl.classId)} ${cl.level}`).join(' / ');
   const hpClass = pct <= 25 ? 'low' : pct <= 50 ? 'mid' : 'ok';
@@ -17,6 +18,7 @@ function MemberCard({ c, lead, onLevelUp, loyalty, control, onToggle }: { c: Cha
     <article class={`member-card${lead ? ' lead' : ''}`} aria-label={`${c.name}, ${classes}`}>
       <header>
         <strong>{c.name}</strong>
+        {isHero && !lead && <span class="tag tag-primary">{t('party.heroTag')}</span>}
         <span class="muted">{classes}</span>
       </header>
       <div class={`hp-bar hp-${hpClass}`} role="meter" aria-valuemin={0} aria-valuemax={c.maxHp} aria-valuenow={c.hp} aria-label={t('party.hpAria')}>
@@ -64,7 +66,7 @@ function MemberCard({ c, lead, onLevelUp, loyalty, control, onToggle }: { c: Cha
           {mood ? ` · ${mood}` : ''}
         </p>
       )}
-      {lead && onLevelUp && canLevelUp(c, db) && (
+      {(lead || isHero) && onLevelUp && canLevelUp(c, db) && (
         <button type="button" class="primary level-up" onClick={onLevelUp}>
           {t('party.levelUp')}
         </button>
@@ -73,21 +75,39 @@ function MemberCard({ c, lead, onLevelUp, loyalty, control, onToggle }: { c: Cha
   );
 }
 
-export function PartyPanel({ hero, companions, onLevelUp, loyalty, controls }: { hero: Character; companions: Character[]; onLevelUp?: () => void; loyalty?: Record<string, number>; controls?: Record<string, 'ai' | 'player'> }) {
+/** Player-made heroes first, then roster companions, each group in party order (the main hero is shown above both). */
+export function partyOrder(companions: Character[], origins: Record<string, string>): Character[] {
+  return [...companions.filter((c) => origins[c.id] === 'hero'), ...companions.filter((c) => origins[c.id] !== 'hero')];
+}
+
+export function PartyPanel({ hero, companions, origins = {}, onLevelUp, onAddHero, loyalty, controls }: { hero: Character; companions: Character[]; origins?: Record<string, string>; onLevelUp?: (id: string) => void; onAddHero?: () => void; loyalty?: Record<string, number>; controls?: Record<string, string> }) {
   return (
     <aside class="party-panel" aria-label={t('party.title')}>
       <h2>{t('party.title')}</h2>
-      <MemberCard c={hero} lead {...(onLevelUp && { onLevelUp })} />
-      {companions.map((c) => (
-        <MemberCard
-          key={c.id}
-          c={c}
-          {...(loyalty?.[c.id] !== undefined && { loyalty: loyalty[c.id] })}
-          control={controls?.[c.id] ?? 'ai'}
-          onToggle={() => send({ type: 'companion_control', companionId: c.id, control: controls?.[c.id] === 'player' ? 'ai' : 'player' })}
-        />
-      ))}
+      <MemberCard c={hero} lead {...(onLevelUp && { onLevelUp: () => onLevelUp(hero.id) })} />
+      {partyOrder(companions, origins).map((c) => {
+        const isHero = origins[c.id] === 'hero';
+        const control = controls?.[c.id] ?? 'ai';
+        // A guest's hero (control seat:<id>) is theirs: no control toggle and no level-up from here.
+        const seated = control.startsWith('seat:');
+        const toggle = () => send({ type: 'companion_control', companionId: c.id, control: control === 'player' ? 'ai' : 'player' });
+        return (
+          <MemberCard
+            key={c.id}
+            c={c}
+            isHero={isHero}
+            {...(isHero && !seated && onLevelUp && { onLevelUp: () => onLevelUp(c.id) })}
+            {...(!isHero && loyalty?.[c.id] !== undefined && { loyalty: loyalty[c.id] })}
+            {...(!seated && { control: control === 'player' ? ('player' as const) : ('ai' as const), onToggle: toggle })}
+          />
+        );
+      })}
       {companions.length === 0 && <p class="hint small">{t('party.noCompanions')}</p>}
+      {onAddHero && companions.length < MAX_COMPANIONS && (
+        <button type="button" class="link-button small" onClick={onAddHero} title={t('party.addHeroTitle')}>
+          {t('party.addHero')}
+        </button>
+      )}
     </aside>
   );
 }

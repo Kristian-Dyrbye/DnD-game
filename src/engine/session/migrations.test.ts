@@ -28,7 +28,16 @@ describe('save migrations', () => {
     expect(save.schemaVersion).toBe(SAVE_SCHEMA_VERSION);
     const parsed = SaveFileSchema.parse(save);
     expect(parsed.meta).toMatchObject({ characterName: 'Brenna', level: 3, mode: 'hardcore', location: 'Mossgate Inn' });
-    expect(parsed.state).toEqual({ flags: { 'world.met_innkeeper': true } });
+    expect(parsed.state).toEqual({ flags: { 'world.met_innkeeper': true }, origins: {} });
+  });
+
+  it('v1 → v2 (C002): existing companions are marked as roster companions', () => {
+    const v1 = { schemaVersion: 1, meta: { slotId: 'slot-1' }, state: { companions: [{ id: 'nettle' }, { id: 'rook' }], flags: {} } };
+    const { save, applied } = migrateSave(v1);
+    expect(applied).toEqual(['1→2']);
+    expect((save.state as Record<string, unknown>).origins).toEqual({ nettle: 'companion', rook: 'companion' });
+    // A state without companions gets an empty map.
+    expect((migrateSave({ schemaVersion: 1, meta: {}, state: {} }).save.state as Record<string, unknown>).origins).toEqual({});
   });
 
   it('does not mutate the input', () => {
