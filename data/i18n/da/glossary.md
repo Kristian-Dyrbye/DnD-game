@@ -413,3 +413,25 @@ Fennick's Rest (= Fennicks Hvile), Gullhaven, Port Sorrel, Red Gull, Oshaya and 
 | the book of the unmade (prose) | de uskabtes bog |
 | Camp on the Wreckers' Beach | Lejr på Vragplyndrerstranden |
 | The Road to the Blightwood | Vejen til Visneskoven |
+
+## The Hollow Crown ch3 "The Blightwood Mint" (B012)
+
+Dawnspire (Keep = "borgen Dawnspire", as B011), Deepanvil Hold, Highcrown, Aurelmark and person names (Bertrand Ashe, Hallam Brightwater, Ondra Vexx, Orsa Ironhand, Gilt) stay English; "Ser" stays. Everyone says "du". Ashe calls the hero "rejsende"; Pale calls everyone "sultne sjæl"; Corwin's "hold the line" = "hold linjen".
+
+| English | Danish |
+|---|---|
+| The Blightwood Mint | Visneskovens møntværk |
+| Knight-Captain | ridderkaptajn |
+| Brother Pale | broder Pale |
+| sunburst (banner, seal) | sol / solbanner / krone-i-en-sol |
+| weeping trees / black sap / pale path | de grædende træer / sort harpiks / den blege sti |
+| worg (prose) | worg (pl. worgerne) |
+| construct-foundry / mould floor / moulds / crucible | konstruktstøberi / formgulvet / forme / smeltedigel |
+| assay stations / imperial ledger / anvil altar | prøvestationer / den kejserlige protokol / ambolt-alter |
+| (animated) armour / plinths / gargoyle | (levende) rustninger / sokler / gargoyle |
+| gate hall / throne hall / dais | porthallen / tronsalen / tronforhøjningen |
+| coronation (hymn) / bought court / courtier | kroning (kroningshymne) / det købte hof / hofmand |
+| Regent / Queen Isolde / envoy | regenten / dronning Isolde / sendebud |
+| bar of the court / iron rod | rettens skranke / jernstav |
+| The Last Assay | Den sidste prøve |
+| endings: The False Coin / True Weight / The Hollow Keeper / A Stranger in the Mirror / The Thousand Faces | Den falske mønt / Den sande vægt / Den Hule Vogter / En fremmed i spejlet / De Tusind Ansigter |

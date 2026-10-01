@@ -1,0 +1,1552 @@
+{
+  "$source": "data/adventures/arc2/ch3_blightwood_mint.json",
+  "strings": {
+    "name": {
+      "hash": "d1ed51a1",
+      "text": "Visneskovens møntværk"
+    },
+    "summary": {
+      "hash": "4d837911",
+      "text": "Ansigterne og det hule guld fører til ruinerne af Gamle Vaelthorn, hvor overguardein Ondra Vexx har vækket et kejserligt støberi under Visneskoven for at smede en krone. Lån en ridder på borgen Dawnspire, hold stien gennem en skov, der flytter sig efter mørkets frembrud, køl støberiets forme, stop kroningen af et Ansigt, og afgør, hvad Den Hule Krone er værd."
+    },
+    "chapters/ch3/name": {
+      "hash": "d1ed51a1",
+      "text": "Visneskovens møntværk"
+    },
+    "chapters/ch3/summary": {
+      "hash": "e2c8faa6",
+      "text": "Borgen Dawnspire, Visneskoven, støberiet i Gamle Vaelthorn, kroningen, der ikke må finde sted, valget om Den Hule Krone og Jernhvælvets rets sidste dom."
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/name": {
+      "hash": "a1add64f",
+      "text": "Borgen Dawnspire"
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/seed": {
+      "hash": "efdf5d80",
+      "text": "Borgen Dawnspire står hvid på sin bakke over nordvejen, og Daggrylansens solbannere smælder på hvert tårn. Riddere øver i gården, væbnere løber med spande, og i hallen har ridderkaptajnen et kort over Visneskoven sat fast med sorte nåle: én for hver patrulje, der gik derind efter mørkets frembrud og aldrig kom ud igen."
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/variants/0/seed": {
+      "hash": "e6f118cc",
+      "text": "Bannerne vajer på halv stang for en dronning, der er død, og ridderne taler om regenten med forsigtige stemmer."
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/variants/1/seed": {
+      "hash": "acb23923",
+      "text": "En efterlysning fra Jernhvælvet med dit ansigt på er sømmet op ved porten. Vagterne ser på den, og på dig, og siger ingenting endnu."
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/variants/2/seed": {
+      "hash": "82db317e",
+      "text": "Ser Hallam Brightwater sadler en grå stridshest i gården, klar til at ride med dig."
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/revisitSeed": {
+      "hash": "e3d13f34",
+      "text": "Dawnspires hvide mure og solbannere, og riddernes klirren i gården."
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/onEnter/text": {
+      "hash": "746f9fc8",
+      "text": "Portsergenten læser vejstøvet på dig og dine våben og vinker dig igennem. \"Visneskoven? Ridderkaptajnen vil gerne have et ord med dig, før du får dig selv slået ihjel derinde.\""
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/pois/chapel/name": {
+      "hash": "5a925799",
+      "text": "Daggrykapellet"
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/pois/chapel/seed": {
+      "hash": "dd78f1dc",
+      "text": "Et lille kapel af hvid sten, hvor riddere holder vagt foran en sol af hamret guld, det eneste ægte guld på borgen."
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/pois/chapel/actions/pilgrim/label": {
+      "hash": "4245569b",
+      "text": "Spørg pilgrimmen ved alteret, hvad hun så i Visneskoven"
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/pois/chapel/actions/pilgrim/keywords": {
+      "hash": "bd16c167",
+      "text": [
+        "pilgrim",
+        "pilgrimmen",
+        "alter",
+        "alteret",
+        "spørg",
+        "så",
+        "skov",
+        "skoven",
+        "kapel",
+        "kapellet"
+      ]
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/pois/chapel/actions/pilgrim/outcome/text": {
+      "hash": "d6de49b1",
+      "text": "\"Et optog,\" hvisker pilgrimmen. \"Vogne med guld, der kørte ind mellem træerne om natten, og en præst i gråt, der sang forrest. Broder Pale kaldte de ham. Han sagde, at guldet var sult gjort fast, og skoven åbnede sine stier for ham.\""
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/actions/rest_keep/label": {
+      "hash": "6e29e4ee",
+      "text": "Sov i borgens gæstehal"
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/actions/rest_keep/keywords": {
+      "hash": "2e09b2ba",
+      "text": [
+        "sov",
+        "sove",
+        "hvil",
+        "hvile",
+        "seng",
+        "hal",
+        "hallen",
+        "nat",
+        "natten"
+      ]
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/actions/rest_keep/outcome/text": {
+      "hash": "61bfda6f",
+      "text": "Gæstehallen er kold og ren, og riddernes bønner ved daggry vækker dig udhvilet."
+    },
+    "chapters/ch3/scenes/dawnspire_muster_lite/exits/to_blightwood/label": {
+      "hash": "5a8b17c0",
+      "text": "Rid nordpå ind i Visneskoven"
+    },
+    "chapters/ch3/scenes/blightwood_paths/name": {
+      "hash": "efb6a50f",
+      "text": "Visneskoven"
+    },
+    "chapters/ch3/scenes/blightwood_paths/seed": {
+      "hash": "31db5d17",
+      "text": "Visneskoven er en skov af grå, bladløse træer, der græder sort harpiks. Intet synger her. Stierne er blege bånd af gamle vognspor mellem stammerne, og de bliver ikke, hvor de var: se væk og se tilbage, og en sti, der løb mod nord, løber mod øst. Et sted bag dem ligger Gamle Vaelthorns knuste tårne."
+    },
+    "chapters/ch3/scenes/blightwood_paths/variants/0/seed": {
+      "hash": "7c9e46e6",
+      "text": "Det er mørkt under træerne, og stierne flytter sig: du kan høre dem, en tør hvisken som blade mod sten."
+    },
+    "chapters/ch3/scenes/blightwood_paths/variants/1/seed": {
+      "hash": "ff76ec13",
+      "text": "Den sorte harpiks løber hurtigere her, end den burde, og under stilheden er der noget, der ligner en stemme langt nede under sumpen, der nynner."
+    },
+    "chapters/ch3/scenes/blightwood_paths/variants/2/seed": {
+      "hash": "eff4eb59",
+      "text": "Du har stien nu: et blegt spor, der ligger stille under dine fødder og løber mod tårnene."
+    },
+    "chapters/ch3/scenes/blightwood_paths/revisitSeed": {
+      "hash": "ab150a7d",
+      "text": "Grå træer, sort harpiks og stier, der aldrig ligger, hvor du forlod dem."
+    },
+    "chapters/ch3/scenes/blightwood_paths/onEnter/text": {
+      "hash": "4abc60dc",
+      "text": "Langt borte mellem træerne hyler noget, og noget andet svarer."
+    },
+    "chapters/ch3/scenes/blightwood_paths/pois/weeping_trees/name": {
+      "hash": "6e758162",
+      "text": "De grædende træer"
+    },
+    "chapters/ch3/scenes/blightwood_paths/pois/weeping_trees/seed": {
+      "hash": "7f15f532",
+      "text": "Grå stammer, hvor sort harpiks løber ned og samler sig ved rødderne og så, meget langsomt, flyder op ad bakke."
+    },
+    "chapters/ch3/scenes/blightwood_paths/pois/weeping_trees/actions/read_sap/label": {
+      "hash": "40d9d671",
+      "text": "Aflæs, hvilken vej den sorte harpiks græder"
+    },
+    "chapters/ch3/scenes/blightwood_paths/pois/weeping_trees/actions/read_sap/keywords": {
+      "hash": "19d38439",
+      "text": [
+        "harpiks",
+        "harpiksen",
+        "aflæs",
+        "læs",
+        "græder",
+        "natur",
+        "træer",
+        "træerne",
+        "sort"
+      ]
+    },
+    "chapters/ch3/scenes/blightwood_paths/pois/weeping_trees/actions/read_sap/check/success/text": {
+      "hash": "de9aa70e",
+      "text": "Harpiksen flyder ikke ned ad bakke; den flyder mod varme. Hver eneste lille strøm i skoven kryber samme vej, mod noget, der brænder under ruinerne."
+    },
+    "chapters/ch3/scenes/blightwood_paths/pois/weeping_trees/actions/read_sap/check/failure/text": {
+      "hash": "d00e93f2",
+      "text": "Harpiksen løber alle veje på én gang, og jo længere du ser på den, jo mindre bryder du dig om den."
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/keep_path/label": {
+      "hash": "085b1a40",
+      "text": "Fæstn stien i dit sind, og følg den uden at se væk"
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/keep_path/keywords": {
+      "hash": "5571a567",
+      "text": [
+        "sti",
+        "stien",
+        "følg",
+        "hold",
+        "overlevelse",
+        "spor",
+        "sporet"
+      ]
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/keep_path/check/advantageIf/0/source": {
+      "hash": "96ea84d9",
+      "text": "Harpiksen græder mod smedjen"
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/keep_path/check/advantageIf/1/source": {
+      "hash": "e8b71805",
+      "text": "Daggrylansens advarsel om stierne"
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/keep_path/check/disadvantageIf/0/source": {
+      "hash": "4f57e0ad",
+      "text": "Stierne flytter sig efter mørkets frembrud"
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/keep_path/check/success/text": {
+      "hash": "6e2c651d",
+      "text": "Du tager aldrig øjnene fra det blege spor, og det kan ikke flytte sig, mens du ser på det. Da Gamle Vaelthorns tårne viser sig over træerne, løber stien lige mod dem."
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/keep_path/check/failure/text": {
+      "hash": "f7a6b56e",
+      "text": "Du blinker, og stien er væk. Du er et sted dybt inde mellem de grå træer, og hylet er tæt på nu, og det har selskab."
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/push_on/label": {
+      "hash": "c4ecef3d",
+      "text": "Bryd lige gennem træerne mod ruinerne"
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/push_on/keywords": {
+      "hash": "4110ecb8",
+      "text": [
+        "bryd",
+        "lige",
+        "gennem",
+        "kæmp",
+        "ruiner",
+        "ruinerne",
+        "tving"
+      ]
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/push_on/outcome/text": {
+      "hash": "7917ddf1",
+      "text": "Du går lige mod tårnene, sti eller ej. Grå skikkelser holder trit med dig mellem træerne, og så kommer worgerne, med goblins på ryggen."
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/wait_light/label": {
+      "hash": "d53ff81a",
+      "text": "Slå lejr ved skovbrynet, til dagslyset får stierne til at ligge stille"
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/wait_light/keywords": {
+      "hash": "9741e37f",
+      "text": [
+        "vent",
+        "lejr",
+        "dagslys",
+        "dagslyset",
+        "daggry",
+        "morgen",
+        "morgenen",
+        "lys",
+        "lyset"
+      ]
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/wait_light/outcome/text": {
+      "hash": "4e8112d0",
+      "text": "Du slår en kold lejr ved skovbrynet for at vente på lyset. I mørket kommer hylene nærmere, og nærmere, og så er flokken inde i lejren."
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/bind_wounds/label": {
+      "hash": "3b38d5de",
+      "text": "Sov på skift i læ af de væltede tårnsten"
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/bind_wounds/keywords": {
+      "hash": "757730bb",
+      "text": [
+        "sov",
+        "sår",
+        "sårene",
+        "hvil",
+        "skift",
+        "forbind",
+        "sten",
+        "stenene"
+      ]
+    },
+    "chapters/ch3/scenes/blightwood_paths/actions/bind_wounds/outcome/text": {
+      "hash": "67623eed",
+      "text": "Du sætter ryggen mod en væltet blok af kejserlig sten, forbinder dine sår og sover på skift, mens skoven hvisker. Intet kommer i nærheden af de gamle sten."
+    },
+    "chapters/ch3/scenes/blightwood_paths/exits/day_trail/label": {
+      "hash": "ced9f20c",
+      "text": "Følg den blege sti til ruinerne, mens lyset holder den stille"
+    },
+    "chapters/ch3/scenes/blightwood_paths/exits/night_trail/label": {
+      "hash": "d2759084",
+      "text": "Følg stien i mørket uden nogensinde at se væk fra den"
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/name": {
+      "hash": "d1c841ca",
+      "text": "Gamle Vaelthorns støberi"
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/seed": {
+      "hash": "a7a2a3f4",
+      "text": "Under Gamle Vaelthorns knuste himmeltårne er et kejserligt konstruktstøberi blevet vækket: en hvælvet hal af sort jern og rødt lys, hvor floder af smeltet guld løber i stenrender ud til rækker af forme. Tre prøvestationer står rundt om formgulvet, hver med sin messingvægt og sin forseglede smeltedigel, og i skyggerne mellem dem står tomme rustninger ret og venter på en hånd på et håndtag."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/variants/0/seed": {
+      "hash": "cae6521e",
+      "text": "Formene er blevet mørke og grå. Rustningerne står stille som statuer, og varmen er gået ud af hallen."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/variants/1/seed": {
+      "hash": "f03a5bff",
+      "text": "Dele af levende rustninger ligger spredt ud over formgulvet og rykker stadig."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/variants/2/seed": {
+      "hash": "49d3a483",
+      "text": "Brannoc standser ved den første station og rører ved vægten, meget varsomt, som man rører ved en grav."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/revisitSeed": {
+      "hash": "3fe7acfa",
+      "text": "Sort jern, rødt lys og guldfloderne i deres render."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/onEnter/text": {
+      "hash": "c4584a14",
+      "text": "Dørene skurrer i bag dig. På den anden side af hallen, bag et forhæng af hede, hører du sang: en kroningshymne."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/name": {
+      "hash": "69b1c758",
+      "text": "De tre prøvestationer"
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/seed": {
+      "hash": "20a3750b",
+      "text": "Tre messingstationer rundt om formgulvet: en smeltedigel forseglet med arkane segl, en protokol over kejserlige mål og vægte og et ambolt-alter, hvor en gammel guardeins ritual engang ville have velsignet metallet."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/arcane/label": {
+      "hash": "e29c9e98",
+      "text": "Pil seglene på den forseglede smeltedigel fra hinanden"
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/arcane/keywords": {
+      "hash": "7942e5d5",
+      "text": [
+        "segl",
+        "seglene",
+        "smeltedigel",
+        "diglen",
+        "arkana",
+        "pil",
+        "magi"
+      ]
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/arcane/check/advantageIf/0/source": {
+      "hash": "3b078353",
+      "text": "Ilse har drømt om denne smeltedigel"
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/arcane/check/success/text": {
+      "hash": "1b4285a8",
+      "text": "Seglene går op under dine fingre, ét for ét, og diglens glød synker fra hvid til rød til mat orange."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/arcane/check/failure/text": {
+      "hash": "2e30b1ac",
+      "text": "Et segl blusser op under din hånd. Overalt i hallen drejer tomme hjelme sig mod dig."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/ledger/label": {
+      "hash": "8af9f619",
+      "text": "Find de sande vægte i den kejserlige protokol, og indstil vægten"
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/ledger/keywords": {
+      "hash": "9979b281",
+      "text": [
+        "protokol",
+        "protokollen",
+        "vægte",
+        "vægt",
+        "vægten",
+        "undersøgelse",
+        "mål",
+        "indstil"
+      ]
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/ledger/check/advantageIf/0/source": {
+      "hash": "bbe55a52",
+      "text": "Du har læst Vexx' falske hovedbog før"
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/ledger/check/success/text": {
+      "hash": "13662c4a",
+      "text": "Vexx har sat vægten en tiendedel for let, sådan som hun satte Jernhvælvets. Du sætter den rigtigt, og guldet i renderne går langsommere og bliver tykkere."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/ledger/check/failure/text": {
+      "hash": "399228ad",
+      "text": "Du sætter den forkerte vægt. Vægtskålene slår ned, en klokke ringer et sted i jernet, og rustningerne træder ned fra deres sokler."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/rite/label": {
+      "hash": "453e80b5",
+      "text": "Bed Brannoc om at fremsige Korraths ritual for den sande vægt over amboltten"
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/rite/keywords": {
+      "hash": "306cec04",
+      "text": [
+        "brannoc",
+        "ritual",
+        "ritualet",
+        "korrath",
+        "ambolt",
+        "amboltten",
+        "bed",
+        "velsign"
+      ]
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/rite/outcome/text": {
+      "hash": "05ff72ed",
+      "text": "Brannoc lægger sin hammer på ambolt-alteret og fremsiger de gamle guardeiners ritual med en stemme som sten, der sætter sig. Amboltten ringer én gang, rent, og de nærmeste forme bliver grå."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/rite_alone/label": {
+      "hash": "26706002",
+      "text": "Fremsig selv guardeinernes ritual over amboltten"
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/rite_alone/keywords": {
+      "hash": "bc8b948a",
+      "text": [
+        "ritual",
+        "ritualet",
+        "korrath",
+        "ambolt",
+        "amboltten",
+        "bed",
+        "religion",
+        "velsign"
+      ]
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/rite_alone/check/success/text": {
+      "hash": "500ee4b8",
+      "text": "Du husker nok af Korraths ritual fra helligdommen i Brightwater. Amboltten ringer én gang, rent, og de nærmeste forme bliver grå."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/stations/actions/rite_alone/check/failure/text": {
+      "hash": "1aa0589a",
+      "text": "Du snubler over ordene. Amboltten ringer falsk, og hver eneste hjelm i hallen drejer sig mod dig."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/seal/name": {
+      "hash": "4289deb2",
+      "text": "Det kejserlige segl"
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/seal/seed": {
+      "hash": "15e39341",
+      "text": "Et stort bronzesegl sat i gulvet for enden af formgulvet: det gamle Vaelthorns krone-i-en-sol, skåret dybt, og med frisk guld stadig i rillerne."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/seal/actions/compare/label": {
+      "hash": "1cd853bd",
+      "text": "Sammenlign det kejserlige segl med den tomme kroneform"
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/seal/actions/compare/keywords": {
+      "hash": "816fde65",
+      "text": [
+        "sammenlign",
+        "segl",
+        "seglet",
+        "form",
+        "formen",
+        "krone",
+        "kronen",
+        "undersøg",
+        "kejserlig"
+      ]
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/pois/seal/actions/compare/outcome/text": {
+      "hash": "6a8b3055",
+      "text": "Kroneformen på den sidste bænk er skåret efter samme segl: de gamle kejseres egne regalier, kopieret streg for streg. Den, der bærer det, der kom ud af den, vil for hvert hof i Aurelmark ligne Vaelthorns sande arving."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/actions/storm_floor/label": {
+      "hash": "3aa28549",
+      "text": "Ignorer stationerne, og kryds formgulvet med trukket stål"
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/actions/storm_floor/keywords": {
+      "hash": "2e50afdc",
+      "text": [
+        "kryds",
+        "stål",
+        "kæmp",
+        "angrib",
+        "rustning",
+        "rustningerne",
+        "storm"
+      ]
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/actions/storm_floor/outcome/text": {
+      "hash": "8fac68b3",
+      "text": "Du går ud på formgulvet. Håndtag falder af sig selv, rustningerne træder ned fra deres sokler, og en skygge med stenvinger folder sig ud fra loftsbjælkerne."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/actions/catch_breath/label": {
+      "hash": "4cb3eab3",
+      "text": "Spær porthallen, og sov i kølighed ved dørene"
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/actions/catch_breath/keywords": {
+      "hash": "837dd599",
+      "text": [
+        "sov",
+        "hvil",
+        "spær",
+        "forbind",
+        "sår",
+        "sårene",
+        "pust"
+      ]
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/actions/catch_breath/outcome/text": {
+      "hash": "fd4d93e5",
+      "text": "Du spærrer porthallen og sover, hvor luften er køligere, mens hymnen bag heden fortsætter og fortsætter: en kroning er et langt ritual."
+    },
+    "chapters/ch3/scenes/vaelthorn_foundry/exits/to_coronation/label": {
+      "hash": "a1817a04",
+      "text": "Gå gennem forhænget af hede mod kroningshymnen"
+    },
+    "chapters/ch3/scenes/coronation/name": {
+      "hash": "a5d70066",
+      "text": "Kroningen"
+    },
+    "chapters/ch3/scenes/coronation/seed": {
+      "hash": "cd99ec8b",
+      "text": "Bag støberiet ligger de gamle kejseres tronsal, uden tag under en grå himmel. Et købt hof af adelige og købmænd knæler på det knuste gulv i lånt pragt. Broder Pale, en gråklædt sultens præst, synger hymnen. På tronforhøjningen sidder et Ansigt på den revnede kejsertrone, og ved siden af løfter en slank kvinde i en guardeins sorte frakke Den Hule Krone: nyt guld, fejlfrit, de gamle kejseres regalier streg for streg. Ondra Vexx."
+    },
+    "chapters/ch3/scenes/coronation/variants/0/seed": {
+      "hash": "a131d17b",
+      "text": "Ansigtet på tronen bærer regentens egne træk, helt ned til modermærket på kinden. Når det er kronet, vil det skrive kongerigets gæld over til De Tusind Ansigter."
+    },
+    "chapters/ch3/scenes/coronation/variants/1/seed": {
+      "hash": "ad46a436",
+      "text": "Ansigtet på tronen bærer skikkelsen af dronningens eget sendebud. Når det er kronet, vil dronning Isoldes segl betyde, hvad De Tusind Ansigter vil have det til at betyde."
+    },
+    "chapters/ch3/scenes/coronation/variants/2/seed": {
+      "hash": "7fc9e983",
+      "text": "Bag tronen står en skriver, du kender: revisor Hesks ansigt, Gilts smil."
+    },
+    "chapters/ch3/scenes/coronation/variants/3/seed": {
+      "hash": "c01a4c45",
+      "text": "I udkanten af hoffet sidder en buttet gammel kone i sjal og strikker. Moder Tallow er kommet for at se sin bedste kunde blive kronet, og for at gøre en gæld op med dig."
+    },
+    "chapters/ch3/scenes/coronation/variants/4/seed": {
+      "hash": "2d9e9dee",
+      "text": "Ser Hallam står ved din skulder med sænket lanse og Daggrylansens sol skinnende på sit skjold."
+    },
+    "chapters/ch3/scenes/coronation/variants/5/seed": {
+      "hash": "0e5c1ce7",
+      "text": "Broder Pales hymne har en anden stemme under sig, fra meget langt nede: stemmen under sumpen, der synger med."
+    },
+    "chapters/ch3/scenes/coronation/actions/name_vexx/label": {
+      "hash": "56b626a5",
+      "text": "Stil dig frem for det købte hof, og navngiv Ondra Vexx med dine beviser"
+    },
+    "chapters/ch3/scenes/coronation/actions/name_vexx/keywords": {
+      "hash": "dd83fc16",
+      "text": [
+        "navngiv",
+        "vexx",
+        "bevis",
+        "beviser",
+        "anklag",
+        "hof",
+        "hoffet",
+        "afslør"
+      ]
+    },
+    "chapters/ch3/scenes/coronation/actions/name_vexx/outcome/text": {
+      "hash": "3c29cf9a",
+      "text": "Din stemme gjalder mod det knuste tag. Præglemærket, kvinden med de to skygger, revisoren, der glemte sin datter, hovedbogen, de uskabtes bog, det kejserlige segl: én efter én lægger du prøven af Ondra Vexx frem. Det købte hof ser på kvinden med kronen og ser, hvad hun er. To af de lejede vagter vender deres spyd mod hende. Vexx smiler og lader sit ansigt glide af som voks, og hymnen bliver til et skrig."
+    },
+    "chapters/ch3/scenes/coronation/actions/wear_face/label": {
+      "hash": "331b15f3",
+      "text": "Tag ansigtet på, du købte af Moder Tallow, og gå iblandt dem"
+    },
+    "chapters/ch3/scenes/coronation/actions/wear_face/keywords": {
+      "hash": "70488710",
+      "text": [
+        "ansigt",
+        "ansigtet",
+        "bær",
+        "forklædning",
+        "lånt",
+        "gå",
+        "iblandt",
+        "bedrag"
+      ]
+    },
+    "chapters/ch3/scenes/coronation/actions/wear_face/check/success/text": {
+      "hash": "2aa5edee",
+      "text": "Tallows ansigt lægger sig over dit som varmt voks. Du går op ad midtergangen som et af De Tusind Ansigter, og broder Pales fanatikere bukker dig forbi, og da du fortæller dem, at Lansen står ved portene, løber de for at holde dem. Du er tre skridt fra Vexx, da hun ser ind i dine lånte øjne og ved det."
+    },
+    "chapters/ch3/scenes/coronation/actions/wear_face/check/failure/text": {
+      "hash": "8c11062a",
+      "text": "Ansigtet glider i din mundvig, og broder Pale ser det. \"Et lånt ansigt!\" råber han. \"Hult! Hult!\" Fanatikerne lukker sig om dig, og ansigtet, opbrugt, skaller af din hud."
+    },
+    "chapters/ch3/scenes/coronation/actions/storm/label": {
+      "hash": "8433e6e7",
+      "text": "Storm tronforhøjningen, før kronen sænkes"
+    },
+    "chapters/ch3/scenes/coronation/actions/storm/keywords": {
+      "hash": "ac700e5a",
+      "text": [
+        "storm",
+        "tronforhøjning",
+        "tronforhøjningen",
+        "angrib",
+        "kæmp",
+        "krone",
+        "kronen",
+        "stop"
+      ]
+    },
+    "chapters/ch3/scenes/coronation/actions/storm/outcome/text": {
+      "hash": "3b2684c6",
+      "text": "Du løber op ad midtergangen. Det købte hof spredes, hymnen brydes, og De Tusind Ansigter vender sig for at møde dig."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/name": {
+      "hash": "a6d26530",
+      "text": "Den Hule Krone"
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/seed": {
+      "hash": "d0a7367d",
+      "text": "Tronsalen er stille. Det købte hof er flygtet, hymnen er forbi, og Den Hule Krone ligger på tronforhøjningens knuste gulv, hvor den faldt: nyt guld, fejlfrit, varmt at røre ved. Den er ægte nok til at virke. Den, der bærer den, vil ligne en kejsers arving for enhver, der ser vedkommende."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/variants/0/seed": {
+      "hash": "bacb659a",
+      "text": "Ondra Vexx er væk fra tronforhøjningen. Blandt de flygtende hofmænd går én lidt for roligt."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/variants/1/seed": {
+      "hash": "5d3719ff",
+      "text": "Ondra Vexx knæler ved tronen med bundne håndled og sit eget ansigt igen: tyndt, træt, ældre end du havde ventet."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/variants/2/seed": {
+      "hash": "1f351f7a",
+      "text": "Hoffets vagter holder Ondra Vexx i lænker til Jernhvælvet, og hele det købte hof har set hendes sande ansigt."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/variants/3/seed": {
+      "hash": "277aa6c7",
+      "text": "Et sted derude går Ondra Vexx sin vej med en andens ansigt."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/revisitSeed": {
+      "hash": "9a7bfab9",
+      "text": "Den tagløse tronsal, den knuste tronforhøjning og kronen af nyt guld."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/catch_vexx/label": {
+      "hash": "c787ade5",
+      "text": "Udpeg, hvilken af de flygtende hofmænd der er Vexx i et stjålet ansigt"
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/catch_vexx/keywords": {
+      "hash": "449fe4a4",
+      "text": [
+        "fang",
+        "vexx",
+        "hofmand",
+        "hofmanden",
+        "flygtende",
+        "opmærksomhed",
+        "udpeg",
+        "ansigt"
+      ]
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/catch_vexx/check/advantageIf/0/source": {
+      "hash": "9dcc8bb8",
+      "text": "Ilse har drømt om Vexx' sande ansigt"
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/catch_vexx/check/advantageIf/1/source": {
+      "hash": "a211c0fb",
+      "text": "Du har selv båret et lånt ansigt"
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/catch_vexx/check/success/text": {
+      "hash": "10e840ed",
+      "text": "Én hofmand går for roligt, og hendes skygge passer ikke til hendes ansigt. Du fanger hende ved døren. Under din hånd glider det lånte ansigt af, og Ondra Vexx ser op på dig med sine egne trætte øjne."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/catch_vexx/check/failure/text": {
+      "hash": "d4db5817",
+      "text": "Ansigter, ansigter, alle bange, alle på flugt. Da du har set på hver og en, er hun væk, og et sted ude i Visneskoven går en kvinde, du aldrig har set, roligt mod nord."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/vexx_court/label": {
+      "hash": "e6787f8a",
+      "text": "Bind Vexx til Jernhvælvets ret"
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/vexx_court/keywords": {
+      "hash": "1716773a",
+      "text": [
+        "bind",
+        "ret",
+        "retten",
+        "jernhvælvet",
+        "retfærdighed",
+        "rettergang",
+        "lænker"
+      ]
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/vexx_court/outcome/text": {
+      "hash": "885ae144",
+      "text": "Du binder hendes håndled med en rem fra tronen. \"Vejet og fundet for let,\" siger Vexx, næsten moret. \"Det skulle jo altid ende med at være en hovedbog, der gjorde det.\""
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/vexx_kill/label": {
+      "hash": "126bc973",
+      "text": "Gør det af med Ondra Vexx her, før hun kan tage et nyt ansigt på"
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/vexx_kill/keywords": {
+      "hash": "5efb74e7",
+      "text": [
+        "dræb",
+        "afslut",
+        "henret",
+        "gør",
+        "ende"
+      ]
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/vexx_kill/outcome/text": {
+      "hash": "629c2441",
+      "text": "Det går hurtigt. Hun tigger ikke. Da det er overstået, glider eller skifter hendes ansigt ikke: det forbliver hendes eget, tyndt og træt, som om det længe havde ventet på at få lov."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/vexx_bargain/label": {
+      "hash": "c2299268",
+      "text": "Hør den handel, Vexx tilbyder: hvert Ansigts sande navn, for det ene ansigt, hun ikke kan forfalske"
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/vexx_bargain/keywords": {
+      "hash": "a77a92e5",
+      "text": [
+        "handel",
+        "handlen",
+        "aftale",
+        "navne",
+        "tilbud",
+        "tilbuddet",
+        "byt",
+        "hør"
+      ]
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/vexx_bargain/outcome/text": {
+      "hash": "2c11cf47",
+      "text": "\"Hvert eneste Ansigt i Aurelmark,\" siger Vexx, \"hver skriver og kaptajn, jeg erstattede, og hvor de ægte ligger begravet eller holdes fanget. Og jeg smelter selv kronen, her, nu. Prisen er dit ansigt. Ikke en kopi. Dit.\" Du siger ja. Hendes fingre er kolde mod din kind, og så bærer hun dig og smiler med din mund og går ud af hallen, og kronen løber som flydende guld mellem fliserne. I tronens mørke spejl ser en fremmed tilbage på dig."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/vexx_bargain/outcome/scar/description": {
+      "hash": "b48230f1",
+      "text": "en fremmed i spejlet"
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/crown_destroy/label": {
+      "hash": "005f0430",
+      "text": "Knus Den Hule Krone på amboltten med Korraths hammer"
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/crown_destroy/keywords": {
+      "hash": "72dfd341",
+      "text": [
+        "knus",
+        "ødelæg",
+        "hammer",
+        "hammeren",
+        "ambolt",
+        "amboltten",
+        "smadr",
+        "korrath"
+      ]
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/crown_destroy/outcome/text": {
+      "hash": "2fbf1729",
+      "text": "Du bærer kronen tilbage til støberiets ambolt-alter og lader hammeren falde. Det nye guld bøjer ikke; det smuldrer, som hver hul mønt smuldrede, til grå aske, som støberiets sidste varme løfter og spreder."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/crown_hand/label": {
+      "hash": "94793788",
+      "text": "Svøb kronen i et banner, og bring den til Aurelmarks Krone"
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/crown_hand/keywords": {
+      "hash": "e7ddcce3",
+      "text": [
+        "overdrag",
+        "krone",
+        "kronen",
+        "aurelmark",
+        "bær",
+        "banner",
+        "dronning",
+        "dronningen",
+        "regent",
+        "regenten"
+      ]
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/crown_hand/outcome/text": {
+      "hash": "ea15c11c",
+      "text": "Du svøber Den Hule Krone i et iturevet banner og binder den til din sadel. Aurelmarks Krone vil gerne se den og låse den inde og måske, en dag, se længe på den."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/crown_keep/label": {
+      "hash": "acfbc30f",
+      "text": "Behold Den Hule Krone selv"
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/crown_keep/keywords": {
+      "hash": "ece6ba30",
+      "text": [
+        "behold",
+        "min",
+        "tag",
+        "selv",
+        "bær",
+        "taske",
+        "tasken"
+      ]
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/crown_keep/outcome/text": {
+      "hash": "a5f5ca0c",
+      "text": "Du lægger Den Hule Krone i din taske. Den er varm gennem læderet og meget let, og du opdager, at du ikke har lyst til at fortælle nogen, at den er der."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/camp/label": {
+      "hash": "c75c9ee1",
+      "text": "Slå lejr i ruinerne, og sov"
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/camp/keywords": {
+      "hash": "2653d2ce",
+      "text": [
+        "lejr",
+        "sov",
+        "hvil",
+        "nat",
+        "natten",
+        "ruiner",
+        "ruinerne"
+      ]
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/camp/outcome/text": {
+      "hash": "276de555",
+      "text": "Du sover mellem Gamle Vaelthorns knuste tårne, mens støberiet tikker, efterhånden som det køler af. Da du vågner, har Visneskovens stier, støberiet, tronsalen og kronen lagt sig til rette som noget, du forstår: du er bedre til det her, end du var."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/actions/camp/outcome/tip": {
+      "hash": "1bec0602",
+      "text": "Du har erfaring nok til at nå niveau 5: brug knappen Stig i niveau på din helts kort."
+    },
+    "chapters/ch3/scenes/hollow_crown_choice/exits/to_deepanvil/label": {
+      "hash": "49de26d6",
+      "text": "Rid til Deepanvil Hold og Jernhvælvets ret"
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/name": {
+      "hash": "e63d95b7",
+      "text": "Den sidste prøve"
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/seed": {
+      "hash": "c9b13ede",
+      "text": "Jernhvælvets ret sidder endnu en gang under bjerget: thanevogteren på sin jernstol, konsortiets mestre i sort og sølv og Deepanvils store vægt hængende over gulvet. Hver prøve ender på en vægt. I dag er det, der skal vejes, Den Hule Krone, og den, der bar den hertil."
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/variants/0/seed": {
+      "hash": "b4c6296c",
+      "text": "Retten er halvtom. Budbringere kommer og går med forseglede breve under et nyt kronet segl, og mestrene møder ikke dit blik."
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/variants/1/seed": {
+      "hash": "12f85799",
+      "text": "Ondra Vexx står i lænker ved rettens skranke med sit eget ansigt og ser op på den vægt, hun blev slået fra."
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/variants/2/seed": {
+      "hash": "0de894d7",
+      "text": "En rytter i regentens farver venter i siden af hallen på dommen."
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/onEnter/text": {
+      "hash": "76aa0b59",
+      "text": "Thanevogteren løfter sin jernstav, og retten bliver stille for at høre dig."
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/read_thane/label": {
+      "hash": "1837e6f6",
+      "text": "Aflæs thanevogterens ansigt, mens hun vejer din beretning"
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/read_thane/keywords": {
+      "hash": "ce819ec0",
+      "text": [
+        "aflæs",
+        "læs",
+        "thane",
+        "thanen",
+        "thanevogter",
+        "ansigt",
+        "indsigt",
+        "vej"
+      ]
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/read_thane/check/disadvantageIf/0/source": {
+      "hash": "596b7491",
+      "text": "En fremmed i spejlet"
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/read_thane/check/success/text": {
+      "hash": "ed8f4365",
+      "text": "Bag jernstaven og den gamle dommers rynkede pande er thanevogteren lettet og træt og en smule bange for, hvad hendes egne hvælvinger vil vise, når de bliver åbnet."
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/read_thane/check/failure/text": {
+      "hash": "19ac18d8",
+      "text": "Thanevogterens ansigt giver dig intet. Ansigter er holdt op med at give dig ret meget overhovedet."
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/end_false_coin/label": {
+      "hash": "29f0ace1",
+      "text": "Hør dommen over et kongerige med en falsk krone"
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/end_false_coin/keywords": {
+      "hash": "4e5f2753",
+      "text": [
+        "dom",
+        "dommen",
+        "afslut",
+        "hør",
+        "falsk",
+        "mønt"
+      ]
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/end_true_weight/label": {
+      "hash": "def7c18c",
+      "text": "Læg beretningen om Den Hule Krone frem for vægten"
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/end_true_weight/keywords": {
+      "hash": "29ee844d",
+      "text": [
+        "dom",
+        "dommen",
+        "afslut",
+        "beretning",
+        "beretningen",
+        "vægt",
+        "vægten",
+        "sand"
+      ]
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/end_hollow_keeper/label": {
+      "hash": "1f2d89d3",
+      "text": "Sig til retten, at kronen er væk, med dens varme i din taske"
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/end_hollow_keeper/keywords": {
+      "hash": "1e65e4c1",
+      "text": [
+        "dom",
+        "dommen",
+        "afslut",
+        "væk",
+        "vogter",
+        "lyv",
+        "taske",
+        "tasken"
+      ]
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/end_stranger/label": {
+      "hash": "102a1f4b",
+      "text": "Giv retten Vexx' liste over navne, med en fremmeds ansigt"
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/end_stranger/keywords": {
+      "hash": "efb71089",
+      "text": [
+        "dom",
+        "dommen",
+        "afslut",
+        "navne",
+        "liste",
+        "listen",
+        "fremmed"
+      ]
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/end_thousand_faces/label": {
+      "hash": "ca25e802",
+      "text": "Sig til retten, at Ondra Vexx stadig er derude"
+    },
+    "chapters/ch3/scenes/epilogue_deepanvil/actions/end_thousand_faces/keywords": {
+      "hash": "2d0c96a4",
+      "text": [
+        "dom",
+        "dommen",
+        "afslut",
+        "undsluppet",
+        "flygtet",
+        "derude",
+        "ansigter"
+      ]
+    },
+    "maps/blightwood_map/name": {
+      "hash": "53f5b617",
+      "text": "Visneskovens stier"
+    },
+    "maps/blightwood_map/rooms/forest_edge/name": {
+      "hash": "0168bac2",
+      "text": "Skovbrynet"
+    },
+    "maps/blightwood_map/rooms/sap_grove/name": {
+      "hash": "9aaada88",
+      "text": "Den grædende lund"
+    },
+    "maps/blightwood_map/rooms/black_trail/name": {
+      "hash": "99227a43",
+      "text": "Det sorte spor"
+    },
+    "maps/blightwood_map/rooms/foundry_approach/name": {
+      "hash": "46962ff0",
+      "text": "Under tårnene"
+    },
+    "maps/vaelthorn_foundry/name": {
+      "hash": "d1c841ca",
+      "text": "Gamle Vaelthorns støberi"
+    },
+    "maps/vaelthorn_foundry/rooms/gate_hall/name": {
+      "hash": "cee029c6",
+      "text": "Porthallen"
+    },
+    "maps/vaelthorn_foundry/rooms/mould_floor/name": {
+      "hash": "afafb719",
+      "text": "Formgulvet"
+    },
+    "maps/vaelthorn_foundry/rooms/throne_hall/name": {
+      "hash": "6b3200ed",
+      "text": "Tronsalen"
+    },
+    "npcs/captain_ashe/name": {
+      "hash": "d1e1b156",
+      "text": "Ridderkaptajn Bertrand Ashe"
+    },
+    "npcs/captain_ashe/personality": {
+      "hash": "85b3bc48",
+      "text": "Daggrylansens ridderkaptajn på Dawnspire: gråskægget, ligefrem, træt af at miste patruljer til Visneskoven og stille skamfuld over, at ordenen ikke er gået ind efter dem."
+    },
+    "npcs/captain_ashe/secrets": {
+      "hash": "1c0079cd",
+      "text": [
+        "To af hans egne riddere red ind i Visneskoven efter broder Pales optog og kom aldrig tilbage."
+      ]
+    },
+    "npcs/captain_ashe/voice": {
+      "hash": "f25dee54",
+      "text": "Korte sætninger, en eksercerpladsstemme, han glemmer at dæmpe indendørs; kalder helten 'rejsende', indtil vedkommende har gjort sig fortjent til et navn."
+    },
+    "npcs/captain_ashe/conversations/lance/label": {
+      "hash": "7a71520e",
+      "text": "Bed ridderkaptajn Ashe om en ridder, der kan ride med dig"
+    },
+    "npcs/captain_ashe/conversations/lance/keywords": {
+      "hash": "e5ce1c7e",
+      "text": [
+        "ashe",
+        "kaptajn",
+        "kaptajnen",
+        "ridderkaptajn",
+        "ridder",
+        "lanse",
+        "bed",
+        "hjælp",
+        "rid"
+      ]
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/greet/text": {
+      "hash": "4c9c122a",
+      "text": "Rejsende. Du vil til Visneskoven. Alle, der vil til Visneskoven for tiden, vil have en ridder med derind, og jeg har allerede mistet to. Giv mig en grund til at miste en tredje."
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/greet/options/commission/label": {
+      "hash": "cf55dd77",
+      "text": "Vis ham Jernhvælvets rets bestalling"
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/greet/options/commission/keywords": {
+      "hash": "adff5b98",
+      "text": [
+        "bestalling",
+        "bestallingen",
+        "jernhvælvet",
+        "segl",
+        "seglet",
+        "vis",
+        "brev",
+        "brevet"
+      ]
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/greet/options/standing/label": {
+      "hash": "8ed0217c",
+      "text": "\"Daggrylansen kender mit navn.\""
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/greet/options/standing/keywords": {
+      "hash": "1bdb12d5",
+      "text": [
+        "navn",
+        "kender",
+        "ven",
+        "orden",
+        "ordenen",
+        "anseelse"
+      ]
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/greet/options/persuade/label": {
+      "hash": "eadc96f5",
+      "text": "\"Det guld, der går ind i den skov, bliver smedet til en krone. Dine patruljer døde for det. Hjælp mig med at gøre en ende på det.\""
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/greet/options/persuade/keywords": {
+      "hash": "d56ca65c",
+      "text": [
+        "overtal",
+        "krone",
+        "kronen",
+        "guld",
+        "guldet",
+        "patruljer",
+        "ende",
+        "overbevis"
+      ]
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/greet/options/persuade/check/advantageIf/0/source": {
+      "hash": "a61edaf8",
+      "text": "Du lægger beviserne mod De Tusind Ansigter frem"
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/greet/options/persuade/check/disadvantageIf/0/source": {
+      "hash": "ae6c96e3",
+      "text": "Dit ansigt er på Jernhvælvets efterlysninger"
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/greet/options/paths/label": {
+      "hash": "6a9bd3df",
+      "text": "Spørg, hvad hans patruljer lærte om Visneskovens stier"
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/greet/options/paths/keywords": {
+      "hash": "7d8ea13e",
+      "text": [
+        "stier",
+        "stierne",
+        "patruljer",
+        "lærte",
+        "skov",
+        "skoven",
+        "råd",
+        "advar"
+      ]
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/greet/options/bye/label": {
+      "hash": "8931c68f",
+      "text": "\"Jeg klarer mig alene.\""
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/greet/options/bye/keywords": {
+      "hash": "d6a57e60",
+      "text": [
+        "farvel",
+        "alene",
+        "gå",
+        "klarer"
+      ]
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/lent/text": {
+      "hash": "8d8d2ea0",
+      "text": "Så får du Ser Hallam Brightwater. Den bedste lanse, jeg har tilbage, og den mest stædige. Bring ham tilbage, rejsende, eller bring det tilbage, der dræbte ham."
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/lent/options/thanks/label": {
+      "hash": "69e59148",
+      "text": "\"Det skal jeg.\""
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/refused/text": {
+      "hash": "bd12fb63",
+      "text": "Smukke ord, og jeg tror på halvdelen af dem. Ikke nok til at sende en mand i døden. Gå, hvis du skal, og hvis du kommer tilbage, skal jeg nok høre den anden halvdel."
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/refused/options/back/label": {
+      "hash": "55210319",
+      "text": "\"Fair nok.\""
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/paths/text": {
+      "hash": "652a9164",
+      "text": "Stierne flytter sig, når ingen holder øje med dem. Mine riddere, der kom tilbage, sagde det samme: vælg én, fæstn blikket på den, og se aldrig væk. Dem, der så væk, er derinde endnu."
+    },
+    "npcs/captain_ashe/conversations/lance/nodes/paths/options/back/label": {
+      "hash": "7068fa20",
+      "text": "\"Hvad angår den ridder.\""
+    },
+    "npcs/corwin_cameo/name": {
+      "hash": "baf1e795",
+      "text": "Ser Corwin"
+    },
+    "npcs/corwin_cameo/personality": {
+      "hash": "fe6017b8",
+      "text": "Ser Corwin af Daggrylansen, ældre nu og mere grå, en helt fra krigen mod Koret, der træner væbnere på Dawnspire og savner landevejen."
+    },
+    "npcs/corwin_cameo/voice": {
+      "hash": "711e38f3",
+      "text": "Varm, tør, en soldats ligefremme ord; siger stadig 'hold linjen', når han mener 'pas på dig selv'."
+    },
+    "npcs/corwin_cameo/conversations/old_road/label": {
+      "hash": "32cafbcf",
+      "text": "Tal med den gråhårede ridder, der øver med væbnerne"
+    },
+    "npcs/corwin_cameo/conversations/old_road/keywords": {
+      "hash": "3924613c",
+      "text": [
+        "corwin",
+        "ridder",
+        "ridderen",
+        "grå",
+        "væbnere",
+        "væbnerne",
+        "tal",
+        "gammel"
+      ]
+    },
+    "npcs/corwin_cameo/conversations/old_road/nodes/greet/text": {
+      "hash": "ea2c51a8",
+      "text": "Endnu en, der rider ud i mørket for os andres skyld. Det gjorde jeg engang, med en ven, der gik ned i Svælget. For et år siden nu. Hold linjen derinde, og når du kommer tilbage, så kom og fortæl en gammel ridder om det."
+    },
+    "npcs/corwin_cameo/conversations/old_road/nodes/greet/options/go/label": {
+      "hash": "03fafe7c",
+      "text": "\"Det skal jeg, Ser Corwin.\""
+    },
+    "npcs/ondra_vexx/name": {
+      "hash": "8ba566de",
+      "text": "Ondra Vexx"
+    },
+    "npcs/ondra_vexx/personality": {
+      "hash": "7a2f13d1",
+      "text": "Overguardein Ondra Vexx, slettet af Jernhvælvets ruller for en fejl, der var konsortiets: præcis, stille, foragtende over for enhver, der tror på en hovedbog. Hun skabte De Tusind Ansigter for at bevise, at værdi aldrig er andet end det, bøgerne siger."
+    },
+    "npcs/ondra_vexx/secrets": {
+      "hash": "a1b6d8ca",
+      "text": [
+        "Hun fandt Jernhvælvet allerede en tiendedel hult og blev bragt til tavshed for det.",
+        "Hun købte sit ansigt af Moder Tallow for minderne om den dag, hun blev slettet af rullerne."
+      ]
+    },
+    "npcs/ondra_vexx/voice": {
+      "hash": "a4b7a895",
+      "text": "Blød, tør, nøjagtig; vejer hvert ord som en mønt; hæver aldrig stemmen."
+    },
+    "npcs/brother_pale/name": {
+      "hash": "5a901c97",
+      "text": "Broder Pale"
+    },
+    "npcs/brother_pale/personality": {
+      "hash": "5d057b59",
+      "text": "En gråklædt præst for Vashkuls sult, der ser hult guld som sult gjort fast og synger det til kroner; mild i stemmen og fuldstændig vanvittig."
+    },
+    "npcs/brother_pale/secrets": {
+      "hash": "759ae6b5",
+      "text": [
+        "Han har kun hørt om Det Hule Kor som et rygte og længes efter at blive hørt af det."
+      ]
+    },
+    "npcs/brother_pale/voice": {
+      "hash": "c31c327e",
+      "text": "En sød tenor; taler i hymnebrudstykker; kalder alle 'sultne sjæl'."
+    },
+    "npcs/thane_orsa/name": {
+      "hash": "53bafa0d",
+      "text": "Thanevogter Orsa Ironhand"
+    },
+    "npcs/thane_orsa/personality": {
+      "hash": "37ebd51f",
+      "text": "Thanevogter i Deepanvil Hold og dommer i Jernhvælvets ret: gammel, jerngrå, samvittighedsfuld og pinligt klar over, at hendes egne hvælvinger var hule, længe før Vexx rørte dem."
+    },
+    "npcs/thane_orsa/secrets": {
+      "hash": "871eede5",
+      "text": [
+        "Hun underskrev ordren, der slettede Ondra Vexx af rullerne, og vidste hvorfor."
+      ]
+    },
+    "npcs/thane_orsa/voice": {
+      "hash": "9bff4260",
+      "text": "Langsom og tung, som en vægt, der falder til ro; bruger heltens fulde navn."
+    },
+    "encounters/blightwood_pack/name": {
+      "hash": "f1f3b108",
+      "text": "Visneskovens flok"
+    },
+    "encounters/blightwood_pack/win/text": {
+      "hash": "f4365037",
+      "text": "Den sidste worg løber hylende ind mellem de grå træer med sin rytter slæbende efter sig i en stigbøjle. Flokken kom et sted fra og var på vej et sted hen: et spor af poteaftryk og hjulspor løber lige gennem de flyttende stier mod Gamle Vaelthorns tårne, og det flytter sig ikke."
+    },
+    "encounters/blightwood_pack/lose/text": {
+      "hash": "330e047b",
+      "text": "Du kommer til dig selv ved skovbrynet, slæbt derhen af hvem ved hvad, bidt og blødende. Stierne har flyttet sig igen."
+    },
+    "encounters/blightwood_pack/flee/text": {
+      "hash": "497b859b",
+      "text": "Du løber, til de grå træer bliver tyndere, og står igen ved skovbrynet med hylene bag dig."
+    },
+    "encounters/foundry_guardians/name": {
+      "hash": "5395b19d",
+      "text": "Støberiets vogtere"
+    },
+    "encounters/foundry_guardians/win/text": {
+      "hash": "91e2d439",
+      "text": "Gargoylen splintres på formgulvet, og den sidste rustning falder fra hinanden i leddene. Støberiet er dit, og gennem heden bag det fortsætter kroningshymnen uden hast."
+    },
+    "encounters/foundry_guardians/lose/text": {
+      "hash": "f242e92d",
+      "text": "Du kravler tilbage til porthallen med bulet rustning og ringen for ørerne. Vogterne træder tilbage op på deres sokler og venter."
+    },
+    "encounters/foundry_guardians/flee/text": {
+      "hash": "2d8f7d80",
+      "text": "Du trækker dig tilbage til porthallen. Vogterne følger ikke efter forbi formgulvet."
+    },
+    "encounters/coronation_fight/name": {
+      "hash": "14c78304",
+      "text": "De Tusind Ansigter"
+    },
+    "encounters/coronation_fight/statOverrides/spy/name": {
+      "hash": "8ba566de",
+      "text": "Ondra Vexx"
+    },
+    "encounters/coronation_fight/statOverrides/doppelganger/name": {
+      "hash": "0e877275",
+      "text": "Gilt"
+    },
+    "encounters/coronation_fight/statOverrides/night_hag/name": {
+      "hash": "2d02d6f3",
+      "text": "Moder Tallow"
+    },
+    "encounters/coronation_fight/win/text": {
+      "hash": "b7185f44",
+      "text": "Vexx falder på tronforhøjningens trin, og Den Hule Krone triller ud af hendes hænder og klinger mod det knuste gulv. De Ansigter, der er tilbage, flygter med de ansigter, de kan få på, og det købte hof flygter med dem."
+    },
+    "encounters/coronation_fight/lose/text": {
+      "hash": "2aba47b3",
+      "text": "Det sidste, du ser, er kronen, der sænkes ned på Ansigtets hoved, og det købte hof, der rejser sig for at juble. Du vågner på en vogn på vejen til Deepanvil, dage senere, i live, fordi ingen gad gøre det af med dig: et nyt kronet segl sidder allerede på hvert brev i kongeriget."
+    },
+    "encounters/coronation_fight/flee/text": {
+      "hash": "241c122e",
+      "text": "Du slipper levende ud af tronsalen, og bag dig stiger hymnen, det købte hof jubler, og kronen sænkes. Da du når vejen til Deepanvil, sidder et nyt kronet segl på hvert brev i kongeriget."
+    },
+    "beats/moulds_cooled/text": {
+      "hash": "101d3876",
+      "text": "To af de tre prøvestationer er sat rigtigt, og formene køler af."
+    },
+    "beats/moulds_cooled/outcome/text": {
+      "hash": "40529913",
+      "text": "Med et langt hvæs går guldfloderne i deres render langsommere, bliver tykkere og grå. Formene køler af. Rustningerne på soklerne sænker hovederne."
+    },
+    "beats/named_unmasked/text": {
+      "hash": "7793ac75",
+      "text": "Vexx, navngivet for hoffet, holdes fast til Jernhvælvet."
+    },
+    "beats/named_unmasked/outcome/text": {
+      "hash": "1fb0fbd1",
+      "text": "Vagterne, der vendte deres spyd mod hende, holder Ondra Vexx nede ved tronen. Hele det købte hof så hendes sande ansigt; der er intet sted tilbage, hvor hun kan skjule det."
+    },
+    "beats/pale_falls/text": {
+      "hash": "16a37999",
+      "text": "Broder Pales sidste hymne."
+    },
+    "beats/pale_falls/outcome/text": {
+      "hash": "3489ec84",
+      "text": "Broder Pale ligger ved tronen med sin hymnebog opslået på brystet. \"Sultne sjæl,\" hvisker han, \"det var aldrig andet end sult,\" og så ikke mere."
+    },
+    "beats/knight_salute/text": {
+      "hash": "0cd3640e",
+      "text": "Ser Hallam gør honnør efter kampen."
+    },
+    "beats/knight_salute/outcome/text": {
+      "hash": "47dd4cbb",
+      "text": "Ser Hallam læner sig på sin lanse, forpustet, og løfter sin jernhandske mod dig. \"Dawnspire skal høre om det her. Hvert eneste ord.\""
+    },
+    "beats/ilse_crown/text": {
+      "hash": "025dbacf",
+      "text": "Ilse taler over kronen."
+    },
+    "beats/ilse_crown/outcome/text": {
+      "hash": "646cd596",
+      "text": "Ilse knæler ved kronen uden at røre den. \"Jeg drømte om det her,\" siger hun. \"Hvert ansigt i Tallows bog er i dette guld. Giv den ikke til nogen, der ville bære den.\""
+    },
+    "beats/brannoc_crown/text": {
+      "hash": "28cbc5c9",
+      "text": "Brannoc vejer kronen med øjnene."
+    },
+    "beats/brannoc_crown/outcome/text": {
+      "hash": "934536a9",
+      "text": "Brannoc ser på kronen, sådan som han så på den første askemønt i Brightwater. \"Korraths ambolt er stadig varm derinde,\" siger han. \"Ét slag. Mere skal der ikke til.\""
+    },
+    "beats/wren_crown/text": {
+      "hash": "f2b7a787",
+      "text": "Wren kaster et blik på kronen."
+    },
+    "beats/wren_crown/outcome/text": {
+      "hash": "90edaefa",
+      "text": "Wren fløjter lavt. \"Det er det største gældsbevis, nogen nogensinde har udstedt, min ven. Den, der holder det, har alle andre i gæld.\""
+    },
+    "beats/ep_outlaw_cleared/text": {
+      "hash": "54107b09",
+      "text": "Epilog: heltens navn bliver renset."
+    },
+    "beats/ep_outlaw_cleared/outcome/text": {
+      "hash": "2c23727b",
+      "text": "Thanevogteren stryger efterlysningen med dit ansigt af Jernhvælvets ruller med én streg rødt blæk. Dit navn er rent i Deepanvil Hold igen."
+    },
+    "beats/ep_ironvault_honest/text": {
+      "hash": "2c60bda1",
+      "text": "Epilog: Jernhvælvet åbner sine bøger."
+    },
+    "beats/ep_ironvault_honest/outcome/text": {
+      "hash": "4a21ed68",
+      "text": "Jernhvælv-konsortiet åbner sine hvælvinger for et ærligt eftersyn for første gang i en menneskealder og indrømmer offentligt, hvad Ondra Vexx fandt: den tiendedel, der var hul, før hun nogensinde rørte den. Deepanvils vægt vejer rigtigt igen."
+    },
+    "beats/ep_ironvault_austerity/text": {
+      "hash": "ffb1b7f7",
+      "text": "Epilog: Jernhvælvet strammer livremmen."
+    },
+    "beats/ep_ironvault_austerity/outcome/text": {
+      "hash": "1c32150e",
+      "text": "Jernhvælv-konsortiet kalder sine lån hjem, lukker sine mindre hvælvinger og vejer hver mønt to gange. Priserne stiger fra Deepanvil til havet, og ingen stoler helt på guld i år."
+    },
+    "beats/ep_crown_queen/text": {
+      "hash": "e518fa10",
+      "text": "Epilog: dronningens segl er i sikkerhed."
+    },
+    "beats/ep_crown_queen/outcome/text": {
+      "hash": "e7de6e6c",
+      "text": "Dronning Isoldes sendebud, det ægte, bliver fundet i live i en kælder under Visneskoven sammen med fyrre andre udskiftede skrivere og kaptajner. Dronningens segl betyder igen, hvad der står."
+    },
+    "beats/ep_crown_regent/text": {
+      "hash": "f35f924b",
+      "text": "Epilog: regenten regerer videre."
+    },
+    "beats/ep_crown_regent/outcome/text": {
+      "hash": "c8970649",
+      "text": "Regenten regerer videre i et kongerige uden dronning og lader hver hofmands ansigt sammenligne med et portræt to gange om året. Spøgen i Highcrown er, at regenten også tjekker spejlet."
+    },
+    "beats/ep_crown_false/text": {
+      "hash": "ad57126d",
+      "text": "Epilog: en falsk krone regerer."
+    },
+    "beats/ep_crown_false/outcome/text": {
+      "hash": "9e30f4c1",
+      "text": "Under det nye kronede segl bliver kongerigets gæld skrevet over, én efter én, til et konsortium, ingen har hørt om. Et sted sidder en kvinde i en guardeins sorte frakke og afstemmer bøgerne."
+    },
+    "beats/ep_hand_crown/text": {
+      "hash": "886493ee",
+      "text": "Epilog: kronen i skatkammeret."
+    },
+    "beats/ep_hand_crown/outcome/text": {
+      "hash": "db0c72c5",
+      "text": "Den Hule Krone havner i Highcrowns skatkammer bag tre låse, og Aurelmarks Krones ministre finder grunde til at besøge den oftere, end de burde."
+    },
+    "beats/ep_salt_unpaid/text": {
+      "hash": "dbf73c64",
+      "text": "Epilog: Salt holder stadig gældsbeviset."
+    },
+    "beats/ep_salt_unpaid/outcome/text": {
+      "hash": "e93d265f",
+      "text": "I Fennicks Hvile fortæller kaptajn Ferrin Salt alle, der vil give ham en drink, at en vis helt stadig skylder ham et skib. Red Gull leder stadig efter hans kajplads."
+    },
+    "beats/ep_salt_handed/text": {
+      "hash": "a1d7d4e4",
+      "text": "Epilog: Salts straf."
+    },
+    "beats/ep_salt_handed/outcome/text": {
+      "hash": "ef676f1e",
+      "text": "Red Gull holder kaptajn Ferrin Salt lænket til en åre på deres flagskib. Han kalder stadig alle 'fragtgods'."
+    },
+    "beats/ep_knight/text": {
+      "hash": "c4c8977a",
+      "text": "Epilog: Lansens ridder vender hjem."
+    },
+    "beats/ep_knight/outcome/text": {
+      "hash": "c70b1454",
+      "text": "Ser Hallam Brightwater rider hjem til Dawnspire og fortæller historien ved ridderkaptajnens bord, og Daggrylansen sender igen patruljer ind i Visneskoven, ved dagslys, med øjnene på stierne."
+    },
+    "beats/ep_brannoc/text": {
+      "hash": "de9ffe12",
+      "text": "Epilog: Brannoc."
+    },
+    "beats/ep_brannoc/outcome/text": {
+      "hash": "6012dd4f",
+      "text": "Brannoc Stonecount bringer sin fars prøvesegl tilbage til Korraths helligdom i Brightwater og hænger det op over alteret, og vejer gratis hver mønt, der bliver bragt til ham der."
+    },
+    "beats/ep_ilse/text": {
+      "hash": "358a6a4c",
+      "text": "Epilog: Ilse."
+    },
+    "beats/ep_ilse/outcome/text": {
+      "hash": "6b1f368f",
+      "text": "Søster Ilse Varn drager ud for at finde de uskabtes bog og give navnene i den tilbage, ét efter ét. Hun drømmer mindre om smedjer nu, og mere om ansigter."
+    },
+    "beats/ep_wren/text": {
+      "hash": "40f6a6b9",
+      "text": "Epilog: Wren."
+    },
+    "beats/ep_wren/outcome/text": {
+      "hash": "8057f341",
+      "text": "Wren Thistle tager tilbage til Fennicks Hvile for at kræve en måneds gevinster ind hos Quillon Vane, plus renter. Rygtet siger, at hun fik dem ærligt. Ingen tror på rygtet."
+    },
+    "beats/ep_brightwater/text": {
+      "hash": "04b08f9f",
+      "text": "Epilog: Brightwaters prøvehus."
+    },
+    "beats/ep_brightwater/outcome/text": {
+      "hash": "d25e3c3e",
+      "text": "I Brightwater hænger fru Dunmore et nyt skilt op over sit prøvehus: 'Hver mønt vejet. Hvert ansigt også.' Forretningen går godt."
+    },
+    "beats/ep_memory/text": {
+      "hash": "0725cd6f",
+      "text": "Epilog: mindet, der blev solgt til Tallow."
+    },
+    "beats/ep_memory/outcome/text": {
+      "hash": "6769b6f8",
+      "text": "Nogle nætter rækker du stadig ud efter et navn, der ikke er der. Det står skrevet i en bog et sted, med en heks' omhyggelige hånd."
+    },
+    "beats/ep_memory_restored/text": {
+      "hash": "ccb8bcca",
+      "text": "Epilog: mindet, der kom tilbage."
+    },
+    "beats/ep_memory_restored/outcome/text": {
+      "hash": "0fae46e5",
+      "text": "Navnet, Moder Tallow tog fra dig, er dit igen. Du siger det højt engang imellem, bare for at høre det."
+    },
+    "beats/ep_defeats/text": {
+      "hash": "61d34e23",
+      "text": "Epilog: heltens vane med at tabe."
+    },
+    "beats/ep_defeats/outcome/text": {
+      "hash": "3b8ce76a",
+      "text": "Jernhvælvets kontorister fører en privat hovedbog over, hvor mange gange du blev slået ned undervejs. De er enige om, at den går op: du rejste dig altid én gang mere, end du faldt."
+    },
+    "beats/ep_maw_stirring/text": {
+      "hash": "f0bee361",
+      "text": "Epilog (importeret verden): Svælget rører stadig på sig."
+    },
+    "beats/ep_maw_stirring/outcome/text": {
+      "hash": "15986098",
+      "text": "Broder Pales hymnebog går til Lygtevogterne, som læser den ved lampelys og ikke siger noget. Under sumpen er stemmen, der sang med ham, ikke holdt op."
+    },
+    "beats/ep_corwin/text": {
+      "hash": "2c9a5e61",
+      "text": "Epilog (importeret verden): Ser Corwin hører historien."
+    },
+    "beats/ep_corwin/outcome/text": {
+      "hash": "297db54a",
+      "text": "På Dawnspire hører Ser Corwin din historie til ende og ler og siger, at det er anden gang, en fremmed har reddet kongeriget for næsen af ham, og at han gerne vil spørges, om han vil med, næste gang."
+    },
+    "quests/the_blightwood_mint/name": {
+      "hash": "d1ed51a1",
+      "text": "Visneskovens møntværk"
+    },
+    "quests/the_blightwood_mint/objectives/ride/text": {
+      "hash": "797ecd77",
+      "text": "Rid ind i Visneskoven mod ruinerne af Gamle Vaelthorn"
+    },
+    "quests/the_blightwood_mint/objectives/path/text": {
+      "hash": "22b86679",
+      "text": "Find en sti gennem Visneskoven, der bliver, hvor den er"
+    },
+    "quests/the_blightwood_mint/objectives/foundry/text": {
+      "hash": "d19082e2",
+      "text": "Kom forbi støberiets forme og vogtere"
+    },
+    "quests/the_blightwood_mint/objectives/coronation/text": {
+      "hash": "a5d94fa7",
+      "text": "Stop kroningen af Ansigtet"
+    },
+    "quests/the_blightwood_mint/objectives/crown/text": {
+      "hash": "7b2fcadd",
+      "text": "Afgør, hvad der skal ske med Den Hule Krone"
+    },
+    "quests/the_blightwood_mint/objectives/court/text": {
+      "hash": "8ecbab32",
+      "text": "Bring beretningen til Jernhvælvets ret"
+    },
+    "endings/ending_false_coin/name": {
+      "hash": "6217998c",
+      "text": "Den falske mønt"
+    },
+    "endings/ending_false_coin/text": {
+      "hash": "b1d42100",
+      "text": "Et Ansigt bærer Den Hule Krone, og dets segl sidder på hvert brev i Aurelmark. Kongerigets gæld flyder stille over i De Tusind Ansigters hovedbøger, og mønterne i hver pung klinger ægte og består hver prøve, og ingen kan længere sige, hvilke af dem der er hule. Ondra Vexx fik ret: værdi er aldrig andet end det, hovedbogen siger, og nu er det hende, der fører hovedbogen."
+    },
+    "endings/ending_true_weight/name": {
+      "hash": "b9ed4fdb",
+      "text": "Den sande vægt"
+    },
+    "endings/ending_true_weight/text": {
+      "hash": "f36b1987",
+      "text": "Den Hule Krone er uden for verdens rækkevidde, og Ondra Vexx har stået til ansvar for den. Jernhvælvet vejer sit guld ærligt igen, de udskiftede skrivere og kaptajner kommer hjem til deres egne ansigter, og i Deepanvil skærer de et nyt mærke i den store vægt: dit. Mønterne klinger ægte over hele Aurelmark i år, og når de gør, tænker folk på dig."
+    },
+    "endings/ending_hollow_king/name": {
+      "hash": "6b4355df",
+      "text": "Den Hule Vogter"
+    },
+    "endings/ending_hollow_king/text": {
+      "hash": "e8f68f7f",
+      "text": "De Tusind Ansigter er knust, og retten takker dig og tror dig, når du siger, at kronen er væk. Den ligger i din taske. Den er varm. Nogle nætter tager du den frem og ser på den, og den viser dig et ansigt, som hvert hof i Aurelmark ville knæle for. Du har ikke taget den på. Endnu."
+    },
+    "endings/ending_stranger/name": {
+      "hash": "628a0711",
+      "text": "En fremmed i spejlet"
+    },
+    "endings/ending_stranger/text": {
+      "hash": "7d980834",
+      "text": "Med Vexx' liste finder Jernhvælvet hvert Ansigt i kongeriget, ét efter ét, og de ægte skrivere og kaptajner kommer hjem. Kronen er aske. Prisen var dit ansigt: et sted bærer Ondra Vexx det, og hvert spejl viser dig en fremmed med dine øjne. De mennesker, du reddede, genkender dig ikke altid. Du genkender dem."
+    },
+    "endings/ending_thousand_faces/name": {
+      "hash": "14c78304",
+      "text": "De Tusind Ansigter"
+    },
+    "endings/ending_thousand_faces/text": {
+      "hash": "11577faf",
+      "text": "Kroningen mislykkedes, og Den Hule Krone kom aldrig til at sidde på et Ansigts hoved, men Ondra Vexx gik ud af tronsalen med en andens ansigt og blev aldrig fundet. Jernhvælvet lapper sine bøger, Kronen tjekker sine skrivere, og en gang imellem bliver en mønt til aske i nogens hånd, et eller andet sted, for at minde dem om, at hun stadig er derude og afstemmer sine regnskaber."
+    }
+  }
+}
