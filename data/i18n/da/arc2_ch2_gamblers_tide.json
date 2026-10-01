@@ -1,0 +1,1796 @@
+{
+  "$source": "data/adventures/arc2/ch2_gamblers_tide.json",
+  "strings": {
+    "name": {
+      "hash": "53a99108",
+      "text": "Spillerens tidevand"
+    },
+    "summary": {
+      "hash": "379c97e4",
+      "text": "Det hule guld løber til Fennicks Hvile, hvor en spillehal vasker det rent, og en desertørkaptajn fragter det til søs. Terninger, en slup, en nat på revene og havgrotterne i Vragplyndrerbugten fører til Moder Tallows marked, hvor ansigter sælges for minder."
+    },
+    "chapters/ch2/name": {
+      "hash": "53a99108",
+      "text": "Spillerens tidevand"
+    },
+    "chapters/ch2/summary": {
+      "hash": "ddb6aa06",
+      "text": "Fennicks Hvile og Vragplyndrerbugten: terninghallen hvor det hule guld vaskes, kaptajn Salts slup, sejladsen gennem revene, havgrotterne og heksens ansigtsmarked."
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/name": {
+      "hash": "5b9fbd8b",
+      "text": "Den Forgyldte Måge"
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/seed": {
+      "hash": "15020b3a",
+      "text": "Den Forgyldte Måge er Fennicks Hviles mest larmende spillehal: et tjæret pakhus på pæle over havnen, behængt med skibslygter og fiskenet og proppet med sømænd, smuglere og lommetyve omkring et dusin terningborde. Bagest, bag et messingbur, sidder en smilende bankier og veksler enhver slags mønt til frisk sølv fra Øerne, uden at stille spørgsmål."
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/variants/0/seed": {
+      "hash": "27e2f865",
+      "text": "En bogholder fra Red Gull ved baren kender allerede dit navn, og summen ved siden af det."
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/variants/1/seed": {
+      "hash": "378fa045",
+      "text": "Ingen i Den Forgyldte Måge bryder sig om en efterlysning fra Deepanvil. Halvdelen af lokalet står på værre plakater."
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/variants/2/seed": {
+      "hash": "8c625748",
+      "text": "Bankieren Quillon Vane smiler til dig tværs over hallen, som var du en gammel ven. Hans øjne gør ikke."
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/variants/3/seed": {
+      "hash": "05196d8e",
+      "text": "To Red Gull-bøller står nu ved terningbordene med armene over kors og holder øje med dine hænder."
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/revisitSeed": {
+      "hash": "3b6c1c2c",
+      "text": [
+        "Den Forgyldte Måge igen: lygter, net, terningernes raslen og bankierens messingbur.",
+        "Tilbage i larmen i Den Forgyldte Måge, hvor hver eneste mønt på Øerne bliver vasket før eller siden."
+      ]
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/onEnter/text": {
+      "hash": "7b1c3483",
+      "text": "En halvling i en havgrøn frakke vinder højlydt ved det nærmeste bord og taber stille ved det næste. Hun ser, at du kigger, og blinker."
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/pois/cage/name": {
+      "hash": "0eb1d86d",
+      "text": "Bankierens bur"
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/pois/cage/seed": {
+      "hash": "ba67f93f",
+      "text": "Et messingbur bagest i hallen, hvor Quillon Vanes kontorister vejer fremmedes mønter ned i pengekister og betaler frisk ø-sølv ud."
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/pois/cage/actions/watch_cage/label": {
+      "hash": "20a329f4",
+      "text": "Hold øje med, hvilken pengekiste de fremmedes guld havner i"
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/pois/cage/actions/watch_cage/keywords": {
+      "hash": "97d28890",
+      "text": [
+        "hold",
+        "øje",
+        "bur",
+        "buret",
+        "pengekiste",
+        "pengekisten",
+        "bankier",
+        "bankieren",
+        "guld",
+        "guldet",
+        "undersøg",
+        "kontorister"
+      ]
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/pois/cage/actions/watch_cage/check/success/text": {
+      "hash": "bf244b52",
+      "text": "Hver eneste fremmed mønt havner i én jernbeslået pengekiste og bliver aldrig talt. To gange i timen bærer en tatoveret sømand den ud gennem vanddøren til en slup ved navn Lykkens Kølvand: kaptajn Ferrin Salts."
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/pois/cage/actions/watch_cage/check/failure/text": {
+      "hash": "a96f2945",
+      "text": "Mønter går ind, sølv kommer ud, og kontoristerne er hurtigere end dine øjne."
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/pois/harbour_office/name": {
+      "hash": "8a467741",
+      "text": "Havnekontoret"
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/pois/harbour_office/seed": {
+      "hash": "22cd215b",
+      "text": "Et skur på kajen, hvor en enøjet havnefoged kridter hvert skib ind og ud på en skifertavle."
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/pois/harbour_office/actions/ask_harbour/label": {
+      "hash": "a87b2724",
+      "text": "Spørg havnefogeden, hvilken kaptajn sejler ud til Vragplyndrerbugten"
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/pois/harbour_office/actions/ask_harbour/keywords": {
+      "hash": "91492f2f",
+      "text": [
+        "havn",
+        "havnefoged",
+        "havnefogeden",
+        "kaptajn",
+        "kaptajnen",
+        "skib",
+        "vragplyndrerbugten",
+        "bugt",
+        "bugten",
+        "spørg",
+        "tavle",
+        "tavlen"
+      ]
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/pois/harbour_office/actions/ask_harbour/outcome/text": {
+      "hash": "5941912f",
+      "text": "\"Ingen sejler til Bugten,\" siger havnefogeden og banker så på én linje på sin tavle. \"Ingen andre end Lykkens Kølvand. Ferrin Salt. Sejlede under Red Gull, indtil han holdt op med det. Kajplads ni.\""
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/actions/rest_room/label": {
+      "hash": "29d764d4",
+      "text": "Lej et værelse over hallen for natten (5 ss)"
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/actions/rest_room/keywords": {
+      "hash": "0f0cde57",
+      "text": [
+        "værelse",
+        "værelset",
+        "sove",
+        "seng",
+        "hvil",
+        "hvile",
+        "nat",
+        "natten",
+        "kro"
+      ]
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/actions/rest_room/outcome/text": {
+      "hash": "f12df8cb",
+      "text": "Værelset over Den Forgyldte Måge gynger lidt med tidevandet, og terningerne holder aldrig op dernede, men sengen er tør."
+    },
+    "chapters/ch2/scenes/fennicks_rest_hall/exits/to_sloop/label": {
+      "hash": "8238310d",
+      "text": "Gå ned ad kajen til kajplads ni og Lykkens Kølvand"
+    },
+    "chapters/ch2/scenes/salt_s_sloop/name": {
+      "hash": "1920f62c",
+      "text": "Lykkens Kølvand"
+    },
+    "chapters/ch2/scenes/salt_s_sloop/seed": {
+      "hash": "95cc68b0",
+      "text": "Kajplads ni: en hurtig, sortskroget slup ved navn Lykkens Kølvand, hvis Red Gull-farver er dårligt overmalet. Pirater i uens frakker kveiler tov på dækket, og ved rælingen står kaptajn Ferrin Salt og spiser et æble med en kniv: mager, solbrændt, en guldring i hvert øre og et desertørbrændemærke på håndryggen."
+    },
+    "chapters/ch2/scenes/salt_s_sloop/variants/0/seed": {
+      "hash": "ea4868e4",
+      "text": "Besætningen på Lykkens Kølvand gør plads til dig ved rælingen. Sluppen er klar til at løbe til Bugten, når du siger til."
+    },
+    "chapters/ch2/scenes/salt_s_sloop/variants/1/seed": {
+      "hash": "9415d28c",
+      "text": "Salts besætning sidder på kajen med bundne hænder, og rorpinden på Lykkens Kølvand er din."
+    },
+    "chapters/ch2/scenes/salt_s_sloop/revisitSeed": {
+      "hash": "f2e5bc53",
+      "text": "Kajplads ni igen: den sortskrogede slup, de overmalede måger, besætningen der kveiler tov."
+    },
+    "chapters/ch2/scenes/salt_s_sloop/actions/board/label": {
+      "hash": "af88343f",
+      "text": "Gå om bord på Lykkens Kølvand med dragen klinge"
+    },
+    "chapters/ch2/scenes/salt_s_sloop/actions/board/keywords": {
+      "hash": "6deabfbf",
+      "text": [
+        "entr",
+        "entre",
+        "klinge",
+        "angrib",
+        "kæmp",
+        "træk",
+        "storm",
+        "angreb"
+      ]
+    },
+    "chapters/ch2/scenes/salt_s_sloop/actions/board/outcome/text": {
+      "hash": "95cb353a",
+      "text": "Du kommer over rælingen med blank klinge. Salt taber sit æble og fløjter, og hans besætning går løs på dig."
+    },
+    "chapters/ch2/scenes/salt_s_sloop/actions/spare_salt/label": {
+      "hash": "5945da4c",
+      "text": "Skær Salt løs og lad ham gå, ubetalt"
+    },
+    "chapters/ch2/scenes/salt_s_sloop/actions/spare_salt/keywords": {
+      "hash": "2b7730d5",
+      "text": [
+        "skån",
+        "lad",
+        "gå",
+        "løs",
+        "nåde",
+        "fri",
+        "slip"
+      ]
+    },
+    "chapters/ch2/scenes/salt_s_sloop/actions/spare_salt/outcome/text": {
+      "hash": "c3831edc",
+      "text": "Du skærer Salts reb over. Han gnider sine håndled, ser længe på dig og griner. \"Du skylder mig et skib, min ven. Det skal jeg huske.\" Så går han ned ad kajen uden andet end ringene i ørerne."
+    },
+    "chapters/ch2/scenes/salt_s_sloop/actions/hand_salt/label": {
+      "hash": "2999dc95",
+      "text": "Overgiv Salt til Red Gull for hans desertering"
+    },
+    "chapters/ch2/scenes/salt_s_sloop/actions/hand_salt/keywords": {
+      "hash": "58556f55",
+      "text": [
+        "overgiv",
+        "måger",
+        "mågerne",
+        "red",
+        "gull",
+        "lov",
+        "desertør",
+        "desertøren",
+        "udlever"
+      ]
+    },
+    "chapters/ch2/scenes/salt_s_sloop/actions/hand_salt/outcome/text": {
+      "hash": "23cf828b",
+      "text": "Red Gulls kvartermester tager Salt fra dig med ægte fornøjelse og et nik, der betyder, at Broderskabet vil huske dit navn venligt."
+    },
+    "chapters/ch2/scenes/salt_s_sloop/exits/to_hall/label": {
+      "hash": "fbc1cfb9",
+      "text": "Gå tilbage op ad kajen til Den Forgyldte Måge"
+    },
+    "chapters/ch2/scenes/salt_s_sloop/exits/to_reef/label": {
+      "hash": "0781df1e",
+      "text": "Kast los mod Vragplyndrerbugten"
+    },
+    "chapters/ch2/scenes/reef_run/name": {
+      "hash": "6fc5f97f",
+      "text": "Sejladsen gennem revene"
+    },
+    "chapters/ch2/scenes/reef_run/seed": {
+      "hash": "05003725",
+      "text": "Lykkens Kølvand løber vestpå ud af Fennicks Hvile for fulde sejl, forbi Gullhavens lys og ind i Tænderne: en labyrint af sorte rev og hvidt vand mellem Øerne og Vragplyndrerbugten, hvor Oshayas vejr afgør, hvem der kommer frem."
+    },
+    "chapters/ch2/scenes/reef_run/variants/0/seed": {
+      "hash": "9a1ea162",
+      "text": "Et uvejr trækker op over revene: grønsorte skyer, regn i tykke byger og bølger, der brydes hvidt hen over Tænderne."
+    },
+    "chapters/ch2/scenes/reef_run/variants/1/seed": {
+      "hash": "b69e5458",
+      "text": "En tæt havtåge ligger på vandet. Revene er kun en lyd af brændinger et sted tæt på."
+    },
+    "chapters/ch2/scenes/reef_run/variants/2/seed": {
+      "hash": "52d6d8f6",
+      "text": "Himlen er klar og hård og blå, og revene står sorte gennem det grønne vand."
+    },
+    "chapters/ch2/scenes/reef_run/variants/3/seed": {
+      "hash": "166ab998",
+      "text": "Nat på revene: ingen måne, sluppens lygte slukket, det hvide vand det eneste lys."
+    },
+    "chapters/ch2/scenes/reef_run/variants/4/seed": {
+      "hash": "d07e7dc8",
+      "text": "Tænderne ligger bag jer. Forude rejser klipperne ved Vragplyndrerbugten sig sorte op af havet."
+    },
+    "chapters/ch2/scenes/reef_run/actions/sail_day/label": {
+      "hash": "07ebfb35",
+      "text": "Tag den lange, sikre dagsejlads uden om de yderste rev"
+    },
+    "chapters/ch2/scenes/reef_run/actions/sail_day/keywords": {
+      "hash": "5ebb03ca",
+      "text": [
+        "dag",
+        "dagen",
+        "sikker",
+        "sikre",
+        "lang",
+        "lange",
+        "ydre",
+        "yderste",
+        "dagslys",
+        "langsom"
+      ]
+    },
+    "chapters/ch2/scenes/reef_run/actions/sail_day/outcome/text": {
+      "hash": "1d173b5d",
+      "text": "I tager den lange vej uden om, i dagslys, hvor revene kan ses. Det koster en dag."
+    },
+    "chapters/ch2/scenes/reef_run/actions/sail_night/label": {
+      "hash": "97b369f2",
+      "text": "Løb gennem den indre kanal om natten, hurtigt og mørkt"
+    },
+    "chapters/ch2/scenes/reef_run/actions/sail_night/keywords": {
+      "hash": "2e5220d1",
+      "text": [
+        "nat",
+        "natten",
+        "hurtig",
+        "hurtigt",
+        "mørk",
+        "mørkt",
+        "indre",
+        "kanal",
+        "kanalen"
+      ]
+    },
+    "chapters/ch2/scenes/reef_run/actions/sail_night/outcome/text": {
+      "hash": "e5f8d672",
+      "text": "Du slukker lygten og løber den indre kanal i mørket. Hurtigt, og Red Gulls patruljer får jer aldrig at se. Hvad der end lever i kanalen, gør måske."
+    },
+    "chapters/ch2/scenes/reef_run/actions/read_weather/label": {
+      "hash": "5d6d4c7e",
+      "text": "Læs Oshayas vejr og vælg kursen gennem revene"
+    },
+    "chapters/ch2/scenes/reef_run/actions/read_weather/keywords": {
+      "hash": "a2ead0f2",
+      "text": [
+        "vejr",
+        "vejret",
+        "himmel",
+        "himlen",
+        "vind",
+        "vinden",
+        "læs",
+        "overlevelse",
+        "kurs",
+        "kursen",
+        "oshaya"
+      ]
+    },
+    "chapters/ch2/scenes/reef_run/actions/read_weather/check/advantageIf/0/source": {
+      "hash": "a20fdb11",
+      "text": "En klar himmel over Øerne"
+    },
+    "chapters/ch2/scenes/reef_run/actions/read_weather/check/disadvantageIf/0/source": {
+      "hash": "09ee3896",
+      "text": "Oshayas vejr er ondt"
+    },
+    "chapters/ch2/scenes/reef_run/actions/read_weather/check/success/text": {
+      "hash": "d396aad8",
+      "text": "Du læser dønningerne og skyerne og angiver kursen, og besætningen stoler på dig. Sluppen trækker sig gennem de første rev, som om hun kender vejen."
+    },
+    "chapters/ch2/scenes/reef_run/actions/read_weather/check/failure/text": {
+      "hash": "540cf6bb",
+      "text": "En byge kommer ud af det blå og lægger sluppen på siden. Løst grej og grønt vand fejer hen over dækket."
+    },
+    "chapters/ch2/scenes/reef_run/actions/run_reef/label": {
+      "hash": "4f9652af",
+      "text": "Hal i tovene sammen og driv sluppen gennem Tænderne"
+    },
+    "chapters/ch2/scenes/reef_run/actions/run_reef/keywords": {
+      "hash": "eae179fc",
+      "text": [
+        "hal",
+        "tov",
+        "tovene",
+        "driv",
+        "tænderne",
+        "rev",
+        "revet",
+        "atletik",
+        "ro",
+        "sejl"
+      ]
+    },
+    "chapters/ch2/scenes/reef_run/actions/run_reef/check/advantageIf/0/source": {
+      "hash": "dc2606dd",
+      "text": "Du læste vejret rigtigt"
+    },
+    "chapters/ch2/scenes/reef_run/actions/run_reef/check/success/text": {
+      "hash": "ffb57e56",
+      "text": "Alle haler på én gang, sejlet smælder fuldt, og Lykkens Kølvand skyder gennem et hul i Tænderne med en håndsbred til overs på hver side."
+    },
+    "chapters/ch2/scenes/reef_run/actions/run_reef/check/failure/text": {
+      "hash": "8d60dc82",
+      "text": "Kølen skurer hen over et rev, og hele sluppen stejler. Du bliver kastet mod rælingen, før hun glider fri, med hul over vandlinjen, men flydende."
+    },
+    "chapters/ch2/scenes/reef_run/actions/make_cove_night/label": {
+      "hash": "0ca77d7c",
+      "text": "Styr mod Bugten gennem den sidste mørke kanal"
+    },
+    "chapters/ch2/scenes/reef_run/actions/make_cove_night/keywords": {
+      "hash": "7293961e",
+      "text": [
+        "styr",
+        "bugt",
+        "bugten",
+        "kanal",
+        "kanalen",
+        "land",
+        "videre",
+        "fortsæt"
+      ]
+    },
+    "chapters/ch2/scenes/reef_run/actions/make_cove_night/outcome/text": {
+      "hash": "78cbe3d0",
+      "text": "I den sidste kanal støder noget tungt mod skroget, to gange. Så kommer skællede hænder over rælingen, og merrowerne kravler om bord."
+    },
+    "chapters/ch2/scenes/reef_run/actions/make_cove_day/label": {
+      "hash": "6da24913",
+      "text": "Styr mod Bugten og sæt sluppen op på rullestenene"
+    },
+    "chapters/ch2/scenes/reef_run/actions/make_cove_day/keywords": {
+      "hash": "175b9c78",
+      "text": [
+        "styr",
+        "bugt",
+        "bugten",
+        "land",
+        "strand",
+        "stranden",
+        "videre",
+        "fortsæt"
+      ]
+    },
+    "chapters/ch2/scenes/reef_run/actions/make_cove_day/outcome/text": {
+      "hash": "0b30f6e4",
+      "text": "Du sætter Lykkens Kølvand op på rullestenene under klipperne ved Vragplyndrerbugten, mens solen går ned."
+    },
+    "chapters/ch2/scenes/wreckers_cove/name": {
+      "hash": "493d3de7",
+      "text": "Vragplyndrerbugten"
+    },
+    "chapters/ch2/scenes/wreckers_cove/seed": {
+      "hash": "b5049d7b",
+      "text": "Vragplyndrerbugten er et bid ud af sorte klipper, og stranden er strøet med ribbenene af skibe, som de gamle vragplyndrere lokkede på klipperne med falske lys. Havgrotter løber ind i klippen bag en landingsplads af rullesten, og tidevandet suger og drøner i mørket derinde. Red Gull har et gemmested derinde, og noget andet holder dem med selskab."
+    },
+    "chapters/ch2/scenes/wreckers_cove/variants/0/seed": {
+      "hash": "4d1f482f",
+      "text": "Tidevandstunnelen ligger bag dig; forude åbner gemmegrotten sig og lugter af tjære, gamle mønter og noget dødt."
+    },
+    "chapters/ch2/scenes/wreckers_cove/variants/1/seed": {
+      "hash": "cc298090",
+      "text": "Gemmegrotten er stille nu. På den anden side hænger en dør af drivtømmer og knogler i klippen, oplyst bagfra af lygter af grønt glas."
+    },
+    "chapters/ch2/scenes/wreckers_cove/revisitSeed": {
+      "hash": "be4e6fd7",
+      "text": "Havgrotterne i Vragplyndrerbugten igen: dryppende klippe, drønende tidevand, lugten af tjære og råd."
+    },
+    "chapters/ch2/scenes/wreckers_cove/onEnter/text": {
+      "hash": "358291e3",
+      "text": "Bag landingspladsen ånder havgrotterne ind og ud med tidevandet."
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/tide_tunnel/name": {
+      "hash": "0796c802",
+      "text": "Tidevandstunnelen"
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/tide_tunnel/seed": {
+      "hash": "ba5d55de",
+      "text": "En lav tunnel halvt fuld af havvand, med vægge der glinser af noget, der ikke helt er tang. En smal afsats løber langs den ene væg over vandet."
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/tide_tunnel/actions/wade/label": {
+      "hash": "988261a2",
+      "text": "Vad gennem tidevandstunnelen"
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/tide_tunnel/actions/wade/keywords": {
+      "hash": "33d09b6f",
+      "text": [
+        "vad",
+        "vade",
+        "vand",
+        "vandet",
+        "tunnel",
+        "tunnelen",
+        "gå",
+        "kæmp",
+        "igennem"
+      ]
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/tide_tunnel/actions/wade/outcome/text": {
+      "hash": "069987ac",
+      "text": "Halvvejs igennem bevæger de glinsende vægge sig. To grå slimklatter glider af klippen og ned i vandet omkring dine ben."
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/tide_tunnel/actions/ledge/label": {
+      "hash": "e3f0dd6d",
+      "text": "Kant dig langs den smalle afsats over vandet"
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/tide_tunnel/actions/ledge/keywords": {
+      "hash": "a7d5b563",
+      "text": [
+        "afsats",
+        "afsatsen",
+        "kant",
+        "klatr",
+        "klatre",
+        "akrobatik",
+        "smal",
+        "smalle",
+        "over"
+      ]
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/tide_tunnel/actions/ledge/check/success/text": {
+      "hash": "cc1167cd",
+      "text": "Du kanter dig hen ad afsatsen med ryggen mod klippen, mens to grå slimklatter under dig glider gennem vandet på jagt efter varmen fra ben, der ikke er der."
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/tide_tunnel/actions/ledge/check/failure/text": {
+      "hash": "83d2fff4",
+      "text": "Afsatsen smuldrer, og du falder i vandet, lige midt blandt de ting, der lever i det."
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/name": {
+      "hash": "be469830",
+      "text": "Red Gulls gemmested"
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/seed": {
+      "hash": "bc99e62c",
+      "text": "En høj grotte stablet med Red Gull-bytte: tønder, kister, ruller af våd silke og knogler. Masser af knogler, gnavede."
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/search/label": {
+      "hash": "ef9a19f6",
+      "text": "Gennemsøg gemmestedet efter Salts pengekister"
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/search/keywords": {
+      "hash": "9af2af40",
+      "text": [
+        "gennemsøg",
+        "søg",
+        "gemmested",
+        "gemmestedet",
+        "pengekiste",
+        "pengekisterne",
+        "kister",
+        "kisterne",
+        "kæmp",
+        "bytte",
+        "byttet"
+      ]
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/search/outcome/text": {
+      "hash": "42c8b5eb",
+      "text": "Du løfter låget på den første kiste, og bag tønderne folder noget langt og gråt og udsultet sig ud, grinende, og luften fyldes af gravens stank."
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/sneak/label": {
+      "hash": "0be4a774",
+      "text": "Lad gemmestedet være og smut forbi det, der gnaver de knogler"
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/sneak/keywords": {
+      "hash": "8613faa9",
+      "text": [
+        "snig",
+        "smut",
+        "forbi",
+        "snigen",
+        "stille",
+        "undgå"
+      ]
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/sneak/check/success/text": {
+      "hash": "4fb8a65e",
+      "text": "Du holder dig i skyggerne langs grottens væg. Bag tønderne gnaver noget gråt på en knogle med lukkede øjne, og åbner dem aldrig. På den anden side gløder en drivtømmerdør grønt."
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/sneak/check/failure/text": {
+      "hash": "9d171fb4",
+      "text": "En lille sten skratter under din støvle. Bag tønderne løfter noget gråt hovedet, snuser og griner."
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/take_share/label": {
+      "hash": "7ad7d003",
+      "text": "Tag Salts pengekister, og lad Red Gull sende dig regningen"
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/take_share/keywords": {
+      "hash": "f1d82850",
+      "text": [
+        "tag",
+        "pengekiste",
+        "pengekisterne",
+        "andel",
+        "mønter",
+        "bytte",
+        "guld",
+        "guldet"
+      ]
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/take_share/outcome/text": {
+      "hash": "6bdd56f9",
+      "text": "To af Salts pengekister rummer ægte guld, hallens indtægter. En karvestok fra Red Gull er sømmet fast på tønden ved siden af: Broderskabet tæller sit gemmested og vil have halvtreds guld for det."
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/take_share_friend/label": {
+      "hash": "55eea8b1",
+      "text": "Tag Salts pengekister; Red Gull skylder dig en andel"
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/take_share_friend/keywords": {
+      "hash": "f1d82850",
+      "text": [
+        "tag",
+        "pengekiste",
+        "pengekisterne",
+        "andel",
+        "mønter",
+        "bytte",
+        "guld",
+        "guldet"
+      ]
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/take_share_friend/outcome/text": {
+      "hash": "af5fcf55",
+      "text": "To af Salts pengekister rummer ægte guld. Red Gulls karvestok ved siden af har allerede dit navn skåret ind på den venlige side. Ingen vil sende dig en regning."
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/hollow_chest/label": {
+      "hash": "3135390d",
+      "text": "Bræk kisten med nyprægede mønter op"
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/hollow_chest/keywords": {
+      "hash": "cf2bbeb3",
+      "text": [
+        "kiste",
+        "kisten",
+        "mønt",
+        "mønter",
+        "ny",
+        "nye",
+        "bræk",
+        "hul",
+        "hule",
+        "aske"
+      ]
+    },
+    "chapters/ch2/scenes/wreckers_cove/pois/stash/actions/hollow_chest/outcome/text": {
+      "hash": "d2d8d644",
+      "text": "Kisten er fuld af blanke, nye guldkroner med Jernhvælvets ambolt-og-nøgle og en hovedbogsseddel med skrå håndskrift: 'Vasket. Til markedet, for ansigter. O. V.' Du bider i en. Den giver efter som butterdej."
+    },
+    "chapters/ch2/scenes/wreckers_cove/actions/catch_breath/label": {
+      "hash": "6b593c04",
+      "text": "Sov om bord på den strandede slup, til tidevandet vender"
+    },
+    "chapters/ch2/scenes/wreckers_cove/actions/catch_breath/keywords": {
+      "hash": "a920ec4d",
+      "text": [
+        "pust",
+        "hvil",
+        "hvile",
+        "sov",
+        "sove",
+        "slup",
+        "sluppen",
+        "tidevand",
+        "tidevandet",
+        "forbind"
+      ]
+    },
+    "chapters/ch2/scenes/wreckers_cove/actions/catch_breath/outcome/text": {
+      "hash": "b187d0b1",
+      "text": "Du forbinder dine sår og sover i læ af den strandede slup, mens tidevandet drøner i grotterne og trækker sig ud igen."
+    },
+    "chapters/ch2/scenes/wreckers_cove/exits/to_market/label": {
+      "hash": "31b61879",
+      "text": "Gå gennem drivtømmerdøren mod de grønne lygter"
+    },
+    "chapters/ch2/scenes/tallow_s_market/name": {
+      "hash": "fc6b45d3",
+      "text": "Moder Tallows marked"
+    },
+    "chapters/ch2/scenes/tallow_s_market/seed": {
+      "hash": "159b2b8e",
+      "text": "Bag drivtømmerdøren er et marked med én bod. Lygter af grønt glas hænger fra grotteloftet over stativer med ansigter: glatte, tomme, fuldkomne ansigter, hængt op som masker til tørre, og hver eneste af dem er nogen. Bag boden sidder en buttet gammel kone i sjal og strikker med knoglepinde; hun smiler som en bedstemor og lugter af tælle. Moder Tallow."
+    },
+    "chapters/ch2/scenes/tallow_s_market/variants/0/seed": {
+      "hash": "5c52e66b",
+      "text": "Markedet er aske og dryppende glas. Stativerne er væk. Moder Tallow er væk."
+    },
+    "chapters/ch2/scenes/tallow_s_market/variants/1/seed": {
+      "hash": "032a0eca",
+      "text": "Et sted i dit hoved er der et hul, hvor et navn plejede at være. Ansigterne på stativerne synes at se på dig med det."
+    },
+    "chapters/ch2/scenes/tallow_s_market/revisitSeed": {
+      "hash": "afbc6b96",
+      "text": "De grønne lygter, stativerne med ansigter, knoglepindenes klik."
+    },
+    "chapters/ch2/scenes/tallow_s_market/pois/face_racks/name": {
+      "hash": "7c988457",
+      "text": "Stativerne med ansigter"
+    },
+    "chapters/ch2/scenes/tallow_s_market/pois/face_racks/seed": {
+      "hash": "9b85d1a3",
+      "text": "Rækker af ansigter hængt på træpløkker, hvert af dem en person, der solgte det eller fik det solgt. Under stativerne står en tønde lampeolie."
+    },
+    "chapters/ch2/scenes/tallow_s_market/pois/face_racks/actions/burn/label": {
+      "hash": "3f37c910",
+      "text": "Spark lampeolien omkuld og brænd markedet"
+    },
+    "chapters/ch2/scenes/tallow_s_market/pois/face_racks/actions/burn/keywords": {
+      "hash": "d2441d64",
+      "text": [
+        "brænd",
+        "ild",
+        "olie",
+        "olien",
+        "lampe",
+        "lampeolie",
+        "ødelæg",
+        "fakkel"
+      ]
+    },
+    "chapters/ch2/scenes/tallow_s_market/pois/face_racks/actions/burn/outcome/text": {
+      "hash": "ed8ea4fe",
+      "text": "Lampeolien løber hen over gulvet, og stativerne går op i flammer med en lyd som en skrigende menneskemængde. Moder Tallow rejser sig fra sin bod, og bedstemoren er væk: grøn hud, sorte negle, en mund fuld af nåle."
+    },
+    "chapters/ch2/scenes/tallow_s_market/exits/to_camp/label": {
+      "hash": "2cff2e35",
+      "text": "Gå tilbage ud på stranden og slå lejr"
+    },
+    "chapters/ch2/scenes/cove_camp/name": {
+      "hash": "0401aeb2",
+      "text": "Lejr på Vragplyndrerstranden"
+    },
+    "chapters/ch2/scenes/cove_camp/seed": {
+      "hash": "dd4deeee",
+      "text": "Et bål af drivtømmer på stranden i Vragplyndrerbugten, i læ for vinden bag ribbenene af et gammelt vrag. Lykkens Kølvand ligger på rullestenene, stjernerne kommer frem over revene, og tidevandet trækker sig ud med et langt suk."
+    },
+    "chapters/ch2/scenes/cove_camp/variants/0/seed": {
+      "hash": "29b2d829",
+      "text": "Wren sidder med korslagte ben ved bålet, tæller mønter, hun ikke burde have, og synger sagte for sig selv."
+    },
+    "chapters/ch2/scenes/cove_camp/variants/1/seed": {
+      "hash": "c05685f6",
+      "text": "Oppe i klippen gløder grotterne stadig svagt grønt, hvor markedet brændte."
+    },
+    "chapters/ch2/scenes/cove_camp/revisitSeed": {
+      "hash": "3805670a",
+      "text": "Drivtømmerbålet under vragets ribben og tidevandets lange suk."
+    },
+    "chapters/ch2/scenes/cove_camp/actions/long_rest/label": {
+      "hash": "bd6a440b",
+      "text": "Sov natten ved bålet"
+    },
+    "chapters/ch2/scenes/cove_camp/actions/long_rest/keywords": {
+      "hash": "ceb455a1",
+      "text": [
+        "sov",
+        "sove",
+        "hvil",
+        "hvile",
+        "nat",
+        "natten",
+        "bål",
+        "bålet",
+        "lejr",
+        "lejren"
+      ]
+    },
+    "chapters/ch2/scenes/cove_camp/actions/long_rest/outcome/text": {
+      "hash": "726ff801",
+      "text": "Du sover ved bålet med havet i ørerne. Da du vågner, har revene, terningerne, grotterne og ansigterne lagt sig til rette som noget, du forstår: du er bedre til det her, end du var."
+    },
+    "chapters/ch2/scenes/cove_camp/actions/long_rest/outcome/tip": {
+      "hash": "785edec1",
+      "text": "Du har erfaring nok til at nå niveau 4: brug knappen Stig i niveau på din helts kort."
+    },
+    "chapters/ch2/scenes/cove_camp/actions/wren_winnings/label": {
+      "hash": "cc27c1e8",
+      "text": "Spørg Wren, hvad hun vil gøre med sin gevinst"
+    },
+    "chapters/ch2/scenes/cove_camp/actions/wren_winnings/keywords": {
+      "hash": "eec04533",
+      "text": [
+        "wren",
+        "gevinst",
+        "gevinsten",
+        "spørg",
+        "mønter",
+        "tal",
+        "snak"
+      ]
+    },
+    "chapters/ch2/scenes/cove_camp/actions/wren_winnings/outcome/text": {
+      "hash": "63322ea9",
+      "text": "Wren lader en mønt danse hen over knoerne. \"Købe Salts skib tilbage fra hvem der nu har det, min ven, og slå ham i terninger om det. Ærligt. Én gang.\" Hun griner. \"Og så snyde ham for resten.\""
+    },
+    "chapters/ch2/scenes/cove_camp/pois/sloop/name": {
+      "hash": "1920f62c",
+      "text": "Lykkens Kølvand"
+    },
+    "chapters/ch2/scenes/cove_camp/pois/sloop/seed": {
+      "hash": "f74f721a",
+      "text": "Den sorte slup på rullestenene, lappet og klar, med stævnen mod fastlandet."
+    },
+    "chapters/ch2/scenes/cove_camp/pois/sloop/actions/sail_north/label": {
+      "hash": "8417b4f5",
+      "text": "Sejl mod fastlandet og vejen til Visneskoven"
+    },
+    "chapters/ch2/scenes/cove_camp/pois/sloop/actions/sail_north/keywords": {
+      "hash": "cc16a61f",
+      "text": [
+        "sejl",
+        "nord",
+        "nordpå",
+        "fastland",
+        "fastlandet",
+        "visneskoven",
+        "forlad",
+        "afsted",
+        "vej",
+        "vejen"
+      ]
+    },
+    "chapters/ch2/scenes/cove_camp/pois/sloop/actions/sail_north/outcome/text": {
+      "hash": "4af2d35c",
+      "text": "To dages sejlads til Port Sorrel, så den lange vej nordpå forbi borgen Dawnspire mod Visneskoven, hvor den skrå håndskrift på hver seddel har sendt ansigterne hen. Et sted under den skov venter en esse på en krone."
+    },
+    "maps/lucky_wake/name": {
+      "hash": "b2d05048",
+      "text": "Kajplads ni og Lykkens Kølvand"
+    },
+    "maps/lucky_wake/rooms/dock/name": {
+      "hash": "82d428de",
+      "text": "Kajplads ni"
+    },
+    "maps/lucky_wake/rooms/deck/name": {
+      "hash": "61d3ed76",
+      "text": "Hoveddækket"
+    },
+    "maps/lucky_wake/rooms/quarterdeck/name": {
+      "hash": "2c3c34d1",
+      "text": "Agterdækket"
+    },
+    "maps/cove_caves/name": {
+      "hash": "3cb68e2c",
+      "text": "Havgrotterne i Vragplyndrerbugten"
+    },
+    "maps/cove_caves/rooms/landing/name": {
+      "hash": "0355050d",
+      "text": "Landingspladsen af rullesten"
+    },
+    "maps/cove_caves/rooms/tide_tunnel/name": {
+      "hash": "385a1e02",
+      "text": "Tidevandstunnelen"
+    },
+    "maps/cove_caves/rooms/stash_cavern/name": {
+      "hash": "a288c522",
+      "text": "Gemmegrotten"
+    },
+    "maps/cove_caves/rooms/hag_market/name": {
+      "hash": "fc6b45d3",
+      "text": "Moder Tallows marked"
+    },
+    "npcs/quillon_vane/name": {
+      "hash": "7c2a368d",
+      "text": "Quillon Vane"
+    },
+    "npcs/quillon_vane/personality": {
+      "hash": "6dad3a3b",
+      "text": "Den Forgyldte Måges bankier og terningmester: buttet, parfumeret, uendeligt høflig. Han vasker enhver mønt for en tiendedel og har aldrig tabt ved sit eget bord."
+    },
+    "npcs/quillon_vane/secrets": {
+      "hash": "5d7cd4ff",
+      "text": [
+        "Han vasker det hule guld for De Tusind Ansigter og betaler kaptajn Salt for at fragte det til Vragplyndrerbugten.",
+        "Han snød Wren Thistle for en måneds gevinst med et gældsbevis, han aldrig indfriede."
+      ]
+    },
+    "npcs/quillon_vane/voice": {
+      "hash": "fb0c178c",
+      "text": "Silkeblød, kalder alle 'min guldklump' og ler af sine egne vittigheder, før han er færdig med dem."
+    },
+    "npcs/quillon_vane/conversations/dice/label": {
+      "hash": "a34f08ff",
+      "text": "Sæt dig ved Quillon Vanes terningbord"
+    },
+    "npcs/quillon_vane/conversations/dice/keywords": {
+      "hash": "ad3b2e05",
+      "text": [
+        "terning",
+        "terninger",
+        "terningerne",
+        "bord",
+        "bordet",
+        "spil",
+        "spille",
+        "spillet",
+        "gambl",
+        "quillon",
+        "vane",
+        "bankier",
+        "bankieren"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/greet/text": {
+      "hash": "841241ee",
+      "text": "Et nyt ansigt ved mit bord! Sid ned, sid ned, min guldklump. Tre kast med Mågens terninger, bedst af tre. Vinder du, giver jeg dig dette: et gældsbevis, en vis søkaptajn skylder mig, godt for en tjeneste og en overfart. Taber du, skylder du Red Gull ti guld, der betales, når de finder dig. De finder dig altid."
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/greet/options/play/label": {
+      "hash": "03729a03",
+      "text": "\"Kast terningerne.\""
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/greet/options/play/keywords": {
+      "hash": "23dad439",
+      "text": [
+        "kast",
+        "spil",
+        "terninger",
+        "terningerne",
+        "ja",
+        "aftale"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/greet/options/bye/label": {
+      "hash": "3a115167",
+      "text": "\"Ikke i aften.\""
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/greet/options/bye/keywords": {
+      "hash": "b03d419b",
+      "text": [
+        "farvel",
+        "gå",
+        "nej",
+        "senere"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r1/text": {
+      "hash": "dd209121",
+      "text": "Første kast, min guldklump. Huset kaster først: en nier. Din tur."
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r1/options/cheat/label": {
+      "hash": "6235ae71",
+      "text": "Smugl en af dine egne terninger ned i bægeret"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r1/options/cheat/keywords": {
+      "hash": "23324f26",
+      "text": [
+        "snyd",
+        "snyde",
+        "smugl",
+        "fingerfærdighed",
+        "egen",
+        "egne",
+        "byt"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r1/options/cheat/check/advantageIf/0/source": {
+      "hash": "b733db94",
+      "text": "Wren bytter husets terninger for dig"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r1/options/read/label": {
+      "hash": "974f2668",
+      "text": "Hold øje med Vanes hænder og sats imod hans afsløring"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r1/options/read/keywords": {
+      "hash": "5ba62b11",
+      "text": [
+        "hold",
+        "øje",
+        "læs",
+        "afsløring",
+        "indsigt",
+        "hænder",
+        "hænderne"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r1/options/read/check/advantageIf/0/source": {
+      "hash": "56df8831",
+      "text": "Du har holdt øje med hans kontorister hele aftenen"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r1/options/luck/label": {
+      "hash": "21141002",
+      "text": "Kast ærligt og stol på dit held"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r1/options/luck/keywords": {
+      "hash": "e7bfe077",
+      "text": [
+        "ærlig",
+        "ærligt",
+        "held",
+        "heldet",
+        "fair",
+        "stol"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r1/options/luck/check/disadvantageIf/0/source": {
+      "hash": "e743ba96",
+      "text": "Husets terninger er fyldt med bly"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_up/text": {
+      "hash": "e102fe05",
+      "text": "Åh, godt kastet. Et til dig. Andet kast: huset har en otter."
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_up/options/cheat/label": {
+      "hash": "6235ae71",
+      "text": "Smugl en af dine egne terninger ned i bægeret"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_up/options/cheat/keywords": {
+      "hash": "23324f26",
+      "text": [
+        "snyd",
+        "snyde",
+        "smugl",
+        "fingerfærdighed",
+        "egen",
+        "egne",
+        "byt"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_up/options/cheat/check/advantageIf/0/source": {
+      "hash": "b733db94",
+      "text": "Wren bytter husets terninger for dig"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_up/options/read/label": {
+      "hash": "974f2668",
+      "text": "Hold øje med Vanes hænder og sats imod hans afsløring"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_up/options/read/keywords": {
+      "hash": "5ba62b11",
+      "text": [
+        "hold",
+        "øje",
+        "læs",
+        "afsløring",
+        "indsigt",
+        "hænder",
+        "hænderne"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_up/options/read/check/advantageIf/0/source": {
+      "hash": "56df8831",
+      "text": "Du har holdt øje med hans kontorister hele aftenen"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_up/options/luck/label": {
+      "hash": "21141002",
+      "text": "Kast ærligt og stol på dit held"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_up/options/luck/keywords": {
+      "hash": "e7bfe077",
+      "text": [
+        "ærlig",
+        "ærligt",
+        "held",
+        "heldet",
+        "fair",
+        "stol"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_up/options/luck/check/disadvantageIf/0/source": {
+      "hash": "e743ba96",
+      "text": "Husets terninger er fyldt med bly"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_down/text": {
+      "hash": "3a7f0639",
+      "text": "Huset tager det første, min guldklump. Pyt med det. Andet kast: huset har en syver."
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_down/options/cheat/label": {
+      "hash": "6235ae71",
+      "text": "Smugl en af dine egne terninger ned i bægeret"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_down/options/cheat/keywords": {
+      "hash": "23324f26",
+      "text": [
+        "snyd",
+        "snyde",
+        "smugl",
+        "fingerfærdighed",
+        "egen",
+        "egne",
+        "byt"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_down/options/cheat/check/advantageIf/0/source": {
+      "hash": "b733db94",
+      "text": "Wren bytter husets terninger for dig"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_down/options/read/label": {
+      "hash": "974f2668",
+      "text": "Hold øje med Vanes hænder og sats imod hans afsløring"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_down/options/read/keywords": {
+      "hash": "5ba62b11",
+      "text": [
+        "hold",
+        "øje",
+        "læs",
+        "afsløring",
+        "indsigt",
+        "hænder",
+        "hænderne"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_down/options/read/check/advantageIf/0/source": {
+      "hash": "56df8831",
+      "text": "Du har holdt øje med hans kontorister hele aftenen"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_down/options/luck/label": {
+      "hash": "21141002",
+      "text": "Kast ærligt og stol på dit held"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_down/options/luck/keywords": {
+      "hash": "e7bfe077",
+      "text": [
+        "ærlig",
+        "ærligt",
+        "held",
+        "heldet",
+        "fair",
+        "stol"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r2_down/options/luck/check/disadvantageIf/0/source": {
+      "hash": "e743ba96",
+      "text": "Husets terninger er fyldt med bly"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r3/text": {
+      "hash": "bf286ea6",
+      "text": "Et til hver! Hele bordet ser med nu. Sidste kast, min guldklump: huset har en tier."
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r3/options/cheat/label": {
+      "hash": "6235ae71",
+      "text": "Smugl en af dine egne terninger ned i bægeret"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r3/options/cheat/keywords": {
+      "hash": "23324f26",
+      "text": [
+        "snyd",
+        "snyde",
+        "smugl",
+        "fingerfærdighed",
+        "egen",
+        "egne",
+        "byt"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r3/options/cheat/check/advantageIf/0/source": {
+      "hash": "b733db94",
+      "text": "Wren bytter husets terninger for dig"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r3/options/read/label": {
+      "hash": "974f2668",
+      "text": "Hold øje med Vanes hænder og sats imod hans afsløring"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r3/options/read/keywords": {
+      "hash": "5ba62b11",
+      "text": [
+        "hold",
+        "øje",
+        "læs",
+        "afsløring",
+        "indsigt",
+        "hænder",
+        "hænderne"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r3/options/read/check/advantageIf/0/source": {
+      "hash": "56df8831",
+      "text": "Du har holdt øje med hans kontorister hele aftenen"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r3/options/luck/label": {
+      "hash": "21141002",
+      "text": "Kast ærligt og stol på dit held"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r3/options/luck/keywords": {
+      "hash": "e7bfe077",
+      "text": [
+        "ærlig",
+        "ærligt",
+        "held",
+        "heldet",
+        "fair",
+        "stol"
+      ]
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/r3/options/luck/check/disadvantageIf/0/source": {
+      "hash": "e743ba96",
+      "text": "Husets terninger er fyldt med bly"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/won/text": {
+      "hash": "c92cfb8c",
+      "text": "Nå, nå. Ingen slår Mågens terninger. Ingen andre end dig, i aften. Gæld er gæld: her er gældsbeviset. Det skyldes af kaptajn Ferrin Salt på Lykkens Kølvand, kajplads ni. Han bliver ikke glad for at se det."
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/won/options/take/label": {
+      "hash": "62123931",
+      "text": "Tag gældsbeviset"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/lost/text": {
+      "hash": "1ff7c269",
+      "text": "Huset vinder, som huset gør. Ti guld til Red Gull, min guldklump. Kom endelig igen. Alle kommer igen."
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/lost/options/leave/label": {
+      "hash": "492d423b",
+      "text": "Rejs dig fra bordet"
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/caught/text": {
+      "hash": "2e44f2dc",
+      "text": "Vanes bløde hånd lukker sig om dit håndled, og en terning falder ud af dit ærme ned på filten. Der bliver stille ved bordet. \"Åh, min guldklump,\" siger han bedrøvet. To Red Gull-bøller fører dig væk fra bordene, og de er ikke blide ved det."
+    },
+    "npcs/quillon_vane/conversations/dice/nodes/caught/options/leave/label": {
+      "hash": "ee3f460c",
+      "text": "Ryst dem af dig"
+    },
+    "npcs/wren_npc/name": {
+      "hash": "f5e9e07c",
+      "text": "Wren Thistle"
+    },
+    "npcs/wren_npc/personality": {
+      "hash": "31c9b3c4",
+      "text": "En halvling-falskspiller i en havgrøn frakke: hurtig, munter og skamløs ved bordet, kold som havis over for enhver, der snyder hende. Quillon Vane skylder hende en måneds gevinst."
+    },
+    "npcs/wren_npc/secrets": {
+      "hash": "5a6d4fc4",
+      "text": [
+        "Vane snød hende med et værdiløst gældsbevis, og hun har tabt småbeløb ved hans borde i en uge for at lære, hvordan hans terninger er fyldt med bly."
+      ]
+    },
+    "npcs/wren_npc/voice": {
+      "hash": "2b946177",
+      "text": "Hurtig Brinescatter-snak; kalder alle 'min ven', lige indtil hun holder op med det."
+    },
+    "npcs/wren_npc/conversations/deal/label": {
+      "hash": "43df9037",
+      "text": "Sæt dig ved siden af halvlingen i den havgrønne frakke"
+    },
+    "npcs/wren_npc/conversations/deal/keywords": {
+      "hash": "b835784b",
+      "text": [
+        "wren",
+        "halvling",
+        "halvlingen",
+        "grøn",
+        "havgrøn",
+        "frakke",
+        "frakken",
+        "kort",
+        "falskspiller",
+        "hende"
+      ]
+    },
+    "npcs/wren_npc/conversations/deal/nodes/greet/text": {
+      "hash": "96c88233",
+      "text": "Min ven! Du ligner en, der er blevet snydt, eller er ved at blive det. Wren Thistle. Jeg spiller kort, jeg spiller terninger, og den parfumerede tudse bag buret der skylder mig en måneds gevinst. Hvad bringer en fastlænding til Mågen?"
+    },
+    "npcs/wren_npc/conversations/deal/nodes/greet/options/marker/label": {
+      "hash": "ec28894a",
+      "text": "Læg Vanes gældsbevis på bordet mellem jer"
+    },
+    "npcs/wren_npc/conversations/deal/nodes/greet/options/marker/keywords": {
+      "hash": "e79b7b0a",
+      "text": [
+        "gældsbevis",
+        "gældsbeviset",
+        "læg",
+        "vis",
+        "vandt",
+        "vane"
+      ]
+    },
+    "npcs/wren_npc/conversations/deal/nodes/greet/options/persuade/label": {
+      "hash": "e2e06594",
+      "text": "\"Hjælp mig med at sænke manden, der snød dig.\""
+    },
+    "npcs/wren_npc/conversations/deal/nodes/greet/options/persuade/keywords": {
+      "hash": "332a63bd",
+      "text": [
+        "hjælp",
+        "sænk",
+        "sænke",
+        "overtal",
+        "sammen",
+        "slut",
+        "snød"
+      ]
+    },
+    "npcs/wren_npc/conversations/deal/nodes/greet/options/cut/label": {
+      "hash": "a5c96c9f",
+      "text": "Skub ti guld over til hende som første andel af det, I finder"
+    },
+    "npcs/wren_npc/conversations/deal/nodes/greet/options/cut/keywords": {
+      "hash": "059b1c25",
+      "text": [
+        "betal",
+        "andel",
+        "del",
+        "guld",
+        "ti",
+        "hyr"
+      ]
+    },
+    "npcs/wren_npc/conversations/deal/nodes/greet/options/salt/label": {
+      "hash": "f6a032d1",
+      "text": "Spørg, hvor Vanes vaskede guld tager hen"
+    },
+    "npcs/wren_npc/conversations/deal/nodes/greet/options/salt/keywords": {
+      "hash": "b70bcc3b",
+      "text": [
+        "guld",
+        "guldet",
+        "hvor",
+        "hen",
+        "vasket",
+        "vaskede",
+        "spørg",
+        "salt"
+      ]
+    },
+    "npcs/wren_npc/conversations/deal/nodes/greet/options/bye/label": {
+      "hash": "d5cab43a",
+      "text": "\"Held og lykke ved bordene.\""
+    },
+    "npcs/wren_npc/conversations/deal/nodes/greet/options/bye/keywords": {
+      "hash": "d73a1a21",
+      "text": [
+        "farvel",
+        "gå",
+        "senere",
+        "held"
+      ]
+    },
+    "npcs/wren_npc/conversations/deal/nodes/salt/text": {
+      "hash": "cd7009f0",
+      "text": "Ud gennem vanddøren i en pengekiste og om bord på Lykkens Kølvand ved kajplads ni. Ferrin Salts slup. Han sejlede under Red Gulls farver, indtil han stak af med en prise, der ikke var hans; Broderskabet ville elske at vide, hvor han sover. Han fragter guldet til Vragplyndrerbugten. Ingen tager til Vragplyndrerbugten."
+    },
+    "npcs/wren_npc/conversations/deal/nodes/salt/options/back/label": {
+      "hash": "9c46f435",
+      "text": "\"Fortæl mig mere om dig selv.\""
+    },
+    "npcs/wren_npc/conversations/deal/nodes/joined/text": {
+      "hash": "639fd9a1",
+      "text": "Så er vi partnere, min ven. Retfærdig advarsel: jeg snyder. Aldrig dig. Alle andre, hele tiden, og især Quillon Vane."
+    },
+    "npcs/wren_npc/conversations/deal/nodes/joined/options/deal/label": {
+      "hash": "b1825e43",
+      "text": "\"Aftale.\""
+    },
+    "npcs/wren_npc/conversations/deal/nodes/not_yet/text": {
+      "hash": "9f74c5ef",
+      "text": "Pæne ord. Jeg har tabt penge på pæne ord. Kom tilbage, når du har noget bedre end en tale."
+    },
+    "npcs/wren_npc/conversations/deal/nodes/not_yet/options/back/label": {
+      "hash": "55210319",
+      "text": "\"Fair nok.\""
+    },
+    "npcs/captain_salt/name": {
+      "hash": "55102735",
+      "text": "Kaptajn Ferrin Salt"
+    },
+    "npcs/captain_salt/personality": {
+      "hash": "c126234d",
+      "text": "En mager, solbrændt desertør fra Red Gull, der fragter andres forbrydelser for penge og sætter sin egen hals over alt andet. Morsom, kvik og fuldstændig uden loyalitet."
+    },
+    "npcs/captain_salt/secrets": {
+      "hash": "3edde2ba",
+      "text": [
+        "Han fragter Vanes vaskede hule guld til Moder Tallows marked i Vragplyndrerbugten og bliver betalt i ægte guld af en kvinde med skrå håndskrift.",
+        "Red Gull ville hænge ham for desertering, hvis de kendte hans kajplads."
+      ]
+    },
+    "npcs/captain_salt/voice": {
+      "hash": "a0a7f780",
+      "text": "Afslappet og morsom, taler med munden fuld og kalder helten 'fragtgods'."
+    },
+    "npcs/captain_salt/conversations/passage/label": {
+      "hash": "1f212510",
+      "text": "Råb kaptajn Salt an fra kajen"
+    },
+    "npcs/captain_salt/conversations/passage/keywords": {
+      "hash": "d5903413",
+      "text": [
+        "salt",
+        "kaptajn",
+        "kaptajnen",
+        "råb",
+        "ferrin",
+        "tal",
+        "snak",
+        "overfart"
+      ]
+    },
+    "npcs/captain_salt/conversations/passage/nodes/greet/text": {
+      "hash": "bd5c8b65",
+      "text": "Fragtgods på vej op ad min landgang. Jeg tager ikke passagerer, fragtgods. Jeg tager kasser, og jeg kigger ikke i dem. Hvad er der i din?"
+    },
+    "npcs/captain_salt/conversations/passage/nodes/greet/options/buy/label": {
+      "hash": "27e098dc",
+      "text": "\"Femogtyve guld for en overfart til Vragplyndrerbugten, og du sejler for mig nu.\""
+    },
+    "npcs/captain_salt/conversations/passage/nodes/greet/options/buy/keywords": {
+      "hash": "fb4ed45d",
+      "text": [
+        "køb",
+        "guld",
+        "betal",
+        "overfart",
+        "mønt",
+        "femogtyve"
+      ]
+    },
+    "npcs/captain_salt/conversations/passage/nodes/greet/options/threaten/label": {
+      "hash": "94f6ab58",
+      "text": "\"Red Gull ville betale godt for at vide, hvor deres desertør sover.\""
+    },
+    "npcs/captain_salt/conversations/passage/nodes/greet/options/threaten/keywords": {
+      "hash": "4e379f24",
+      "text": [
+        "tru",
+        "true",
+        "gull",
+        "desertør",
+        "red",
+        "intimider",
+        "brændemærke"
+      ]
+    },
+    "npcs/captain_salt/conversations/passage/nodes/greet/options/threaten/check/advantageIf/0/source": {
+      "hash": "d70bb33b",
+      "text": "Du ved, hvilken prise han stak af med"
+    },
+    "npcs/captain_salt/conversations/passage/nodes/greet/options/trick/label": {
+      "hash": "6c62db5f",
+      "text": "Vis Vanes gældsbevis: \"Bankieren sendte mig for at kræve ind. Du sejler mig til Bugten, eller han kræver det hele.\""
+    },
+    "npcs/captain_salt/conversations/passage/nodes/greet/options/trick/keywords": {
+      "hash": "484f9f36",
+      "text": [
+        "gældsbevis",
+        "gældsbeviset",
+        "narre",
+        "nar",
+        "vane",
+        "kræv",
+        "bankier",
+        "bankieren",
+        "bedrag"
+      ]
+    },
+    "npcs/captain_salt/conversations/passage/nodes/greet/options/trick/check/advantageIf/0/source": {
+      "hash": "eca943bf",
+      "text": "Wren bakker historien op uden at fortrække en mine"
+    },
+    "npcs/captain_salt/conversations/passage/nodes/greet/options/bye/label": {
+      "hash": "69e16922",
+      "text": "\"Intet til dig, kaptajn.\""
+    },
+    "npcs/captain_salt/conversations/passage/nodes/greet/options/bye/keywords": {
+      "hash": "003f0e01",
+      "text": [
+        "farvel",
+        "gå",
+        "intet",
+        "senere"
+      ]
+    },
+    "npcs/captain_salt/conversations/passage/nodes/bought/text": {
+      "hash": "9b0fc47c",
+      "text": "Guld er guld, fragtgods, selv dit. Kom om bord. Vi sejler, når tidevandet vender, og du spørger ikke, hvad der er i lasten."
+    },
+    "npcs/captain_salt/conversations/passage/nodes/bought/options/aboard/label": {
+      "hash": "6785ee70",
+      "text": "Gå om bord"
+    },
+    "npcs/captain_salt/conversations/passage/nodes/threatened/text": {
+      "hash": "4f68d3d2",
+      "text": "Salt holder op med at tygge. \"Du ville sælge mig til Mågerne. Selvfølgelig ville du; det ville jeg også.\" Han spytter ud over rælingen. \"Fint. Bugten. Og bagefter glemmer du min kajplads, fragtgods, så glemmer jeg dit ansigt.\""
+    },
+    "npcs/captain_salt/conversations/passage/nodes/threatened/options/aboard/label": {
+      "hash": "6785ee70",
+      "text": "Gå om bord"
+    },
+    "npcs/captain_salt/conversations/passage/nodes/tricked/text": {
+      "hash": "9ebb98a6",
+      "text": "Salt læser gældsbeviset to gange og bander længe over bankierer. \"Kræver Vane tjenester ind nu? Fint. Bugten, og så er vi kvit, og det kan du sige til ham.\""
+    },
+    "npcs/captain_salt/conversations/passage/nodes/tricked/options/aboard/label": {
+      "hash": "6785ee70",
+      "text": "Gå om bord"
+    },
+    "npcs/captain_salt/conversations/passage/nodes/fight/text": {
+      "hash": "b4701906",
+      "text": "Salt ler og tørrer sin kniv af i ærmet. \"Nej, fragtgods. Det tror jeg ikke.\" Han fløjter, og besætningen lægger tovene og tager deres huggerter."
+    },
+    "npcs/captain_salt/conversations/passage/nodes/fight/options/draw/label": {
+      "hash": "0fd24590",
+      "text": "Træk blankt"
+    },
+    "npcs/captain_salt/conversations/passage/nodes/fight/options/draw/keywords": {
+      "hash": "4040085c",
+      "text": [
+        "træk",
+        "klinge",
+        "kæmp",
+        "angrib"
+      ]
+    },
+    "npcs/captain_salt/conversations/passage/nodes/fight/options/back_off/label": {
+      "hash": "c178a03c",
+      "text": "Gå baglæns ned ad landgangen"
+    },
+    "npcs/captain_salt/conversations/passage/nodes/fight/options/back_off/keywords": {
+      "hash": "11f643d5",
+      "text": [
+        "tilbage",
+        "gå",
+        "træk",
+        "væk"
+      ]
+    },
+    "npcs/mother_tallow/name": {
+      "hash": "2d02d6f3",
+      "text": "Moder Tallow"
+    },
+    "npcs/mother_tallow/personality": {
+      "hash": "7a43464b",
+      "text": "En natheks, der ligner alles bedstemor: buttet, med sjal, strikker med knoglepinde og har en blid stemme. Hun køber og sælger ansigter, og prisen for et ansigt er et minde."
+    },
+    "npcs/mother_tallow/secrets": {
+      "hash": "8ba14075",
+      "text": [
+        "Hun sælger ansigter til Ondra Vexx' Tusind Ansigter og fører en 'de uskabtes bog': navnene på alle, hvis ansigt hun har taget.",
+        "Hun solgte Vexx sit eget ansigt for mange år siden, for mindet om den dag, hun blev strøget af Jernhvælvets ruller."
+      ]
+    },
+    "npcs/mother_tallow/voice": {
+      "hash": "3573a1aa",
+      "text": "Varm og langsom, hver sætning ender på 'skat'; pindene holder aldrig op med at klikke."
+    },
+    "npcs/mother_tallow/conversations/faces/label": {
+      "hash": "fb4b4a21",
+      "text": "Træd hen til Moder Tallows bod"
+    },
+    "npcs/mother_tallow/conversations/faces/keywords": {
+      "hash": "8d6fdedb",
+      "text": [
+        "tallow",
+        "moder",
+        "heks",
+        "heksen",
+        "bod",
+        "boden",
+        "ansigter",
+        "køb",
+        "tal",
+        "snak"
+      ]
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/greet/text": {
+      "hash": "973df3a8",
+      "text": "En kunde! Kom ind fra fugten, skat. Hvert ansigt på mine stativer er nogen, og hvem som helst af dem kan være dig, for en lille stund. Prisen er lille. Ikke guld: guld er så tungt. Et minde. Bare ét. Du vil ikke engang savne det, skat. Det er jo ligesom pointen."
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/greet/options/buy/label": {
+      "hash": "d83adcf3",
+      "text": "Køb et ansigt, og betal hende med et minde"
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/greet/options/buy/keywords": {
+      "hash": "a090e5ac",
+      "text": [
+        "køb",
+        "ansigt",
+        "ansigtet",
+        "betal",
+        "minde",
+        "mindet",
+        "tag"
+      ]
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/greet/options/buy/outcome/scar/description": {
+      "hash": "f1ad2f4a",
+      "text": "mindet om et navn"
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/greet/options/bargain/label": {
+      "hash": "0ba382d3",
+      "text": "\"Jeg betaler dig med hemmeligheder i stedet. Fortæl mig, hvem der ellers køber her.\""
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/greet/options/bargain/keywords": {
+      "hash": "4e7ff043",
+      "text": [
+        "forhandl",
+        "hemmelighed",
+        "hemmeligheder",
+        "stedet",
+        "hvem",
+        "overtal"
+      ]
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/greet/options/bargain/check/advantageIf/0/source": {
+      "hash": "b88cd94d",
+      "text": "Ilse tilbyder Tallow en drøm, hun aldrig har fortalt"
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/greet/options/leave/label": {
+      "hash": "662f34c8",
+      "text": "Vend markedet ryggen og gå ud"
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/greet/options/leave/keywords": {
+      "hash": "7154bcd4",
+      "text": [
+        "gå",
+        "forlad",
+        "ud",
+        "nej",
+        "farvel"
+      ]
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/bought/text": {
+      "hash": "8bb70852",
+      "text": "Sådan. Det gjorde ikke ondt. Her er dit ansigt, skat: bær det én gang, der hvor det gælder, og de vil tro, du er en af deres egne. Åh, og navnet? Det skal du ikke bekymre dig om. Det står i min bog nu, sammen med alle de andre. De uskabtes bog. Din ven guardeinen har også en side i den."
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/bought/options/go/label": {
+      "hash": "c713a14b",
+      "text": "Tag ansigtet og gå"
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/book/text": {
+      "hash": "4c316165",
+      "text": "Hemmeligheder, hemmeligheder. Nå, lad gå, skat, du har fortjent et kig. Hun tager en bog frem, indbundet i noget blegt, og bladrer: navne, hundredvis af navne, hvert eneste overstreget. 'De uskabtes bog. Hvert ansigt på mine stativer, og hvem der købte det.' De sidste fyrre sider er alle én køber, med skrå håndskrift: O. V."
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/book/options/go/label": {
+      "hash": "c7956a2b",
+      "text": "\"Tak, Moder.\""
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/refused/text": {
+      "hash": "0cea0f3f",
+      "text": "Hemmeligheder! Alle har hemmeligheder, skat, og ingen af dem er et ansigt værd. Minder eller intet. Nå?"
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/refused/options/buy/label": {
+      "hash": "c8ff9985",
+      "text": "Betal hende alligevel med et minde"
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/refused/options/buy/keywords": {
+      "hash": "77123e37",
+      "text": [
+        "køb",
+        "ansigt",
+        "ansigtet",
+        "betal",
+        "minde",
+        "fint"
+      ]
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/refused/options/buy/outcome/scar/description": {
+      "hash": "f1ad2f4a",
+      "text": "mindet om et navn"
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/refused/options/think/label": {
+      "hash": "0f737c61",
+      "text": "\"Jeg må tænke over det.\""
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/refused/options/think/keywords": {
+      "hash": "1d399d72",
+      "text": [
+        "tænk",
+        "tænke",
+        "vent",
+        "senere"
+      ]
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/goodbye/text": {
+      "hash": "07f3d82c",
+      "text": "Så smut med dig, skat. Du kommer tilbage. Alle vil være en anden, før eller siden."
+    },
+    "npcs/mother_tallow/conversations/faces/nodes/goodbye/options/go/label": {
+      "hash": "fa2f3260",
+      "text": "Gå"
+    },
+    "encounters/salt_crew/name": {
+      "hash": "aa32cd43",
+      "text": "Besætningen på Lykkens Kølvand"
+    },
+    "encounters/salt_crew/statOverrides/bandit_captain/name": {
+      "hash": "55102735",
+      "text": "Kaptajn Ferrin Salt"
+    },
+    "encounters/salt_crew/win/text": {
+      "hash": "132d16ae",
+      "text": "Salt går i dækket på sit eget skib, mens hans huggert glider ud i spygattet, og de sidste af besætningen kaster deres efter den. \"Okay, fragtgods,\" hiver han. \"Okay. Hvor vil du hen?\""
+    },
+    "encounters/salt_crew/lose/text": {
+      "hash": "7c88696c",
+      "text": "Det sidste, du ser, er bommen, der svinger. Du kommer til dig selv på kajen, gennemvåd: Salts besætning smed dig over bord og fiskede dig op igen, for lig i havnen er dårligt for forretningen."
+    },
+    "encounters/salt_crew/flee/text": {
+      "hash": "05accf8e",
+      "text": "Du springer over rælingen og ned på kajen, og Salts latter følger dig op ad kajpladsen."
+    },
+    "encounters/merrow_ambush/name": {
+      "hash": "5b0a4134",
+      "text": "Merrows i kanalen"
+    },
+    "encounters/merrow_ambush/win/text": {
+      "hash": "416c50bf",
+      "text": "Den sidste merrow falder tilbage over rælingen i det sorte vand. Du styrer den medtagne slup ud af kanalen og op på rullestenene i Vragplyndrerbugten."
+    },
+    "encounters/merrow_ambush/lose/text": {
+      "hash": "c97f0918",
+      "text": "Noget trækker dig ned. Du vågner hostende på rullestenene i Vragplyndrerbugten med sluppen strandet ved siden af dig og uden at huske, hvordan nogen af jer kom derhen."
+    },
+    "encounters/merrow_ambush/flee/text": {
+      "hash": "edd88889",
+      "text": "Du sætter hver en sejlklud til, og sluppen sejler fra dem og skraber op på rullestenene i Vragplyndrerbugten."
+    },
+    "encounters/cove_oozes/name": {
+      "hash": "385a1e02",
+      "text": "Tidevandstunnelen"
+    },
+    "encounters/cove_oozes/win/text": {
+      "hash": "b2eec56c",
+      "text": "Den anden slimklat brydes op i grå skum på tidevandet. Tunnelen åbner sig forude i en høj grotte."
+    },
+    "encounters/cove_oozes/lose/text": {
+      "hash": "41e80456",
+      "text": "Du kravler tilbage ud på landingspladsen med dit udstyr ætset og rygende, hvor slimen rørte det."
+    },
+    "encounters/cove_oozes/flee/text": {
+      "hash": "f84f2fba",
+      "text": "Du plasker tilbage til landingspladsen. De grå slimklatter standser ved tunnelmundingen, hvor vandet slutter."
+    },
+    "encounters/cove_ghast/name": {
+      "hash": "fe8c706d",
+      "text": "Tingen i gemmestedet"
+    },
+    "encounters/cove_ghast/win/text": {
+      "hash": "8f9ce066",
+      "text": "Ghasten falder om mellem tønderne, og dens stank forsvinder med den. Red Gulls gemmested ligger åbent, og på den anden side af grotten gløder en dør af drivtømmer og knogler grønt."
+    },
+    "encounters/cove_ghast/lose/text": {
+      "hash": "bcfae001",
+      "text": "Du vågner på landingspladsen, slæbt derhen i dine egne støvler, med ghastens stank stadig på dig. Den er tilbage bag tønderne og spiser."
+    },
+    "encounters/cove_ghast/flee/text": {
+      "hash": "e9c4acce",
+      "text": "Du trækker dig baglæns ud af grotten. Ghasten følger ikke efter; den har rigeligt at spise."
+    },
+    "encounters/tallow_burn/name": {
+      "hash": "2d02d6f3",
+      "text": "Moder Tallow"
+    },
+    "encounters/tallow_burn/statOverrides/green_hag/name": {
+      "hash": "2d02d6f3",
+      "text": "Moder Tallow"
+    },
+    "encounters/tallow_burn/win/text": {
+      "hash": "a1f15f48",
+      "text": "Tallows krop falder sammen som en tom sæk, og ud af den smutter noget leende væk i røgen. I asken af hendes bod finder du hendes bog, halvt brændt: de uskabtes bog, hvis sidste fyrre sider alle er én køber med initialerne O. V."
+    },
+    "encounters/tallow_burn/lose/text": {
+      "hash": "b7065dde",
+      "text": "Du vågner på stranden med klippen glødende grønt over dig. Markedet er aske, Tallow er væk, og en halvbrændt bog ligger ved din hånd: de uskabtes bog, hvis sidste fyrre sider alle er én køber med initialerne O. V."
+    },
+    "encounters/tallow_burn/flee/text": {
+      "hash": "ab4aa3b2",
+      "text": "Du løber gennem røgen med heksens latter bag dig. Da du ser dig tilbage, brænder markedet, og Tallow er væk. En halvbrændt bog ligger på grottegulvet, hvor du faldt: de uskabtes bog, med initialerne O. V. på hver eneste af de sidste sider."
+    },
+    "beats/wren_salt/text": {
+      "hash": "1d34263c",
+      "text": "Wren beder helten skåne Salt."
+    },
+    "beats/wren_salt/outcome/text": {
+      "hash": "f7f224a7",
+      "text": "Wren sætter sig på hug ved den slagne kaptajn og klapper ham på kinden. \"Slå ham ikke ihjel, min ven. Han skylder mig en revanche, og den vil jeg have ærligt.\""
+    },
+    "beats/ilse_book/text": {
+      "hash": "ff0ca167",
+      "text": "Ilse læser i de uskabtes bog."
+    },
+    "beats/ilse_book/outcome/text": {
+      "hash": "8b39ee4e",
+      "text": "Ilse lader en finger glide ned ad de overstregede navne, og hendes læber bevæger sig. \"Hver eneste af dem er nogen,\" siger hun. \"Nogen burde give dem tilbage.\""
+    },
+    "beats/brannoc_chest/text": {
+      "hash": "e047bff4",
+      "text": "Brannoc vejer en hul mønt fra gemmestedet."
+    },
+    "beats/brannoc_chest/outcome/text": {
+      "hash": "2268073b",
+      "text": "Brannoc knuser en af de nye kroner mellem tommel- og pegefinger og ser asken falde. \"Vasket i en terninghal, fragtet af en desertør, brugt på ansigter,\" siger han. \"Korrath græde.\""
+    },
+    "quests/the_gamblers_tide/name": {
+      "hash": "53a99108",
+      "text": "Spillerens tidevand"
+    },
+    "quests/the_gamblers_tide/objectives/salt/text": {
+      "hash": "e275a39b",
+      "text": "Find ud af, hvor Den Forgyldte Måges vaskede guld tager hen"
+    },
+    "quests/the_gamblers_tide/objectives/passage/text": {
+      "hash": "aa66a528",
+      "text": "Skaf en overfart til Vragplyndrerbugten med Lykkens Kølvand"
+    },
+    "quests/the_gamblers_tide/objectives/reef/text": {
+      "hash": "7b069d53",
+      "text": "Sejl gennem revene til Vragplyndrerbugten"
+    },
+    "quests/the_gamblers_tide/objectives/caves/text": {
+      "hash": "ed1a098d",
+      "text": "Find enden på guldsporet i havgrotterne"
+    },
+    "quests/the_gamblers_tide/objectives/market/text": {
+      "hash": "8b92c189",
+      "text": "Gør noget ved Moder Tallows marked"
+    },
+    "quests/the_gamblers_tide/objectives/rest/text": {
+      "hash": "d2a7d103",
+      "text": "Slå lejr på stranden før sejladsen hjem"
+    },
+    "endings/ch2_to_blightwood/name": {
+      "hash": "7bf0d3a3",
+      "text": "Vejen til Visneskoven"
+    },
+    "endings/ch2_to_blightwood/text": {
+      "hash": "f5aaf209",
+      "text": "Det hule guld blev vasket i Den Forgyldte Måge, fragtet af en desertør og brugt på ansigter på en heks' marked, og hver eneste seddel var underskrevet O. V. Sporet fører nu nordpå, forbi borgen Dawnspire, ind i Visneskoven og ruinerne af Gamle Vaelthorn, hvor en esse venter på en krone."
+    }
+  }
+}

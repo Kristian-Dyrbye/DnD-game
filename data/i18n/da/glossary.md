@@ -389,3 +389,27 @@ Deepanvil Hold, Fennick's Rest (= Fennicks Hvile, as in the tables), Port Sorrel
 | doppelganger (prose) | dobbeltgænger |
 | WANTED (broadsheet) | EFTERLYST (plakat) |
 | Brinescatter Isles | Brinescatter-øerne |
+
+## The Hollow Crown ch2 "The Gambler's Tide" (B011)
+
+Fennick's Rest (= Fennicks Hvile), Gullhaven, Port Sorrel, Red Gull, Oshaya and person names (Quillon Vane, Wren Thistle, Ferrin Salt) stay English; Dawnspire Keep = "borgen Dawnspire". Everyone says "du". Forms of address: Vane "my treasure" = "min guldklump", Salt "cargo" = "fragtgods", Wren "friend" = "min ven", Tallow "dearie" = "skat".
+
+| English | Danish |
+|---|---|
+| The Gambler's Tide | Spillerens tidevand |
+| the Gilded Gull (hall) / the Gull | Den Forgyldte Måge / Mågen |
+| the Gull's Dice / the house / weighted dice | Mågens terninger / huset / terninger fyldt med bly |
+| the Lucky Wake (sloop) | Lykkens Kølvand |
+| berth nine / quay / gangplank | kajplads ni / kajen / landgangen |
+| banker / banker's cage / strongbox / clerks | bankier / bankierens bur / pengekiste / kontorister |
+| Isles silver | ø-sølv / sølv fra Øerne |
+| deserter / brand / prize (ship) | desertør / brændemærke / prise |
+| the Reef Run / the Teeth (reefs) / inner channel | Sejladsen gennem revene / Tænderne / den indre kanal |
+| shingle / landing | rullesten / landingsplads |
+| tide tunnel / stash (cavern) / tally-stick | tidevandstunnelen / gemmestedet (gemmegrotten) / karvestok |
+| driftwood door / green lanterns | drivtømmerdøren / de grønne lygter |
+| Mother Tallow's Market / racks of faces / stall | Moder Tallows marked / stativerne med ansigter / boden |
+| ooze (prose) / merrow (prose) | slimklat / merrow (pl. merrows) |
+| the book of the unmade (prose) | de uskabtes bog |
+| Camp on the Wreckers' Beach | Lejr på Vragplyndrerstranden |
+| The Road to the Blightwood | Vejen til Visneskoven |

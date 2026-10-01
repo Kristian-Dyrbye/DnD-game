@@ -141,7 +141,7 @@ describe('real content', () => {
       }
     }
     // Complete Danish files (A142 demo, A143 starter arc, A144 ch1, A145 ch2, A146 ch3, A147 ch4, A148 ch5, B009 arc 2 ch0).
-    for (const key of ['millbrook_demo', 'millbrook_disappearances', 'ch1_whispering_fen', 'ch2_salt_and_treason', 'ch3_the_gilded_lie', 'ch4_wyrmfire', 'ch5_the_hungering_dark', 'arc2_ch0_hollow_coin', 'arc2_ch1_faces']) {
+    for (const key of ['millbrook_demo', 'millbrook_disappearances', 'ch1_whispering_fen', 'ch2_salt_and_treason', 'ch3_the_gilded_lie', 'ch4_wyrmfire', 'ch5_the_hungering_dark', 'arc2_ch0_hollow_coin', 'arc2_ch1_faces', 'arc2_ch2_gamblers_tide']) {
       const r = checkOverlay(BUNDLED_ADVENTURES.find((a) => (a.raw as { id: string }).id === key)!.raw, BUNDLED_TRANSLATIONS.da![key]);
       expect({ key, missing: r.missing }).toEqual({ key, missing: [] });
     }
@@ -319,6 +319,26 @@ describe('real content', () => {
     expect(events.filter((e) => e.type === 'error')).toEqual([]);
     expect(logText()).toContain('Otte timer med malmsække');
     expect(labels()).toContain('Gå ned i byen til Jernhvælvets tællehus');
+  });
+
+  it('the Danish Hollow Crown ch2: translated dice hall, buttons, and Danish free text (B011)', async () => {
+    const host = createGameHost({ srd: db, adventures, flags: bundledFlagRegistry(), tables, translations: BUNDLED_TRANSLATIONS, sessionPorts: { newSeed: () => 'b011' } });
+    const events: ServerEvent[] = [];
+    host.on((e) => events.push(e));
+    const labels = () => (events.filter((e) => e.type === 'suggestions').at(-1) as Extract<ServerEvent, { type: 'suggestions' }>).actions.map((a) => a.label);
+    const logText = () => events.flatMap((e) => (e.type === 'log' ? [e.entry.text] : [])).join(' ');
+    const hero = buildCharacter(toBuildInput(quickBuild('fighter', db, Rng.fromSeed(1))), db);
+    await host.send({ type: 'set_language', language: 'da' });
+    await host.send({ type: 'new_game', hero, mode: 'heroic', campaign: 'arc2_ch2_gamblers_tide' });
+    await host.idle();
+    expect(events.filter((e) => e.type === 'error')).toEqual([]);
+    expect(logText()).toContain('En halvling i en havgrøn frakke');
+    expect(labels().some((l) => l.startsWith('Hold øje med, hvilken pengekiste'))).toBe(true);
+    expect(labels()).toContain('Spørg havnefogeden, hvilken kaptajn sejler ud til Vragplyndrerbugten');
+    await host.send({ type: 'say', text: 'jeg spørger havnefogeden om kaptajnen' });
+    await host.idle();
+    expect(events.filter((e) => e.type === 'error')).toEqual([]);
+    expect(logText()).toContain('Ingen sejler til Bugten');
   });
 
   it('builds the translated content once per language; languages without overlays get English', () => {
