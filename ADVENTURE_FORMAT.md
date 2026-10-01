@@ -325,6 +325,24 @@ Generated side quests follow the same shape every time (A137). In `data/tables/s
 
 The quality gate rejects quests with fewer than 3 approaches, and quests where the solver can't end the job with every outcome variant.
 
+## Campaigns
+
+A campaign is a chain of adventures that a new game can start. It is named by the `id` of its **first chapter**, and each chapter's final ending names the next one with `next` (the last chapter's endings have no `next`). The game ships two: *The Seven Teeth of Vashkul* (`millbrook_disappearances` → `arc1_*`, level 1 → 10, bible `data/adventures/DESIGN.md`) and *The Hollow Crown* (`arc2_ch0_hollow_coin` → `arc2_ch1_faces` → `arc2_ch2_gamblers_tide` → `arc2_ch3_blightwood_mint`, level 1 → 5, bible `data/adventures/DESIGN_ARC2.md`).
+
+To add a campaign:
+
+1. **Write the chapters** as ordinary adventures with one shared `arcId` (the Hollow Crown uses `crown`, so its flags are `arc.crown.*`) and chain them with ending `next`. Add campaign flags to `data/adventures/flags.json` (one registry for every campaign); shared world state stays in `world.*`.
+2. **List it** in `CAMPAIGNS` in `src/host/campaigns.ts`: `id` (short, for UI keys), `adventure` (the first chapter's id), `levels`, `playable`, `importsWorld`, and optional `freshWorld` flags. Add its name and blurb to the UI catalogs as `campaign.<id>.name` / `campaign.<id>.blurb` in `src/shared/i18n/en.ts` and `da.ts`.
+3. **Bundle** every chapter (and its overlays) in `src/host/bundled.ts` for the web edition. Set `playable: true` only once the first chapter is bundled: `tests/campaigns.test.ts` checks that playable equals installed. A listed, unplayable campaign shows as a greyed "Coming soon" card.
+4. **Campaign-only data** (optional):
+   - Companions: a roster entry in `data/companions.json` with `arcs: ["<arcId>"]` can only be recruited by adventures of that arc (validator error otherwise).
+   - Defeat outcomes: `when.campaigns: ["<first chapter id>"]` in `data/tables/defeat-outcomes.json` limits an entry to that campaign. Put such entries first, since the first match wins.
+   - Side-quest threads and patrons in `data/tables/sidequests.json` can read the campaign's flags.
+
+**State and saves.** `new_game.campaign` carries the first chapter's id (default: the starter arc). The game state and the save meta keep it as `campaign`, and the save browser shows its name. Old saves without it count as the Seven Teeth.
+
+**New hero, same world.** A save whose story reached a final ending (an ending without `next`) records it in its meta. For a campaign with `importsWorld: true`, the creator's Review step lists those saves, and `new_game.worldFrom: "<slot>"` starts the new hero in that world: `world.*` and `arc.main.*` flags plus faction reputation are copied, and the clock moves on one year to 08:00. Flags the old world never wrote get the campaign's `freshWorld` values. Without an import, the `freshWorld` flags are written as the starting world. The old journal, map knowledge, companions and side quests are not carried over. Chapters read the imported world with ordinary flag conditions (e.g. `world.queen_alive`, `world.corwin_status`), and the import's source is in `state.extensions.worldFrom`. **The plot must never depend on an imported flag**: use imported flags only for colour and variants.
+
 ## Translations
 
 Adventures are written in English. A translation is an **overlay file**; it never copies the adventure. The English file stays the only place where ids, flags, checks and outcomes live.

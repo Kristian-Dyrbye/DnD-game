@@ -1,6 +1,6 @@
 # Campaign Design Bible: "The Hollow Crown" (Arc 2, Level 1 → 5)
 
-> Status: **approved and queued** (owner, 2026-10-01) as Phase 17 (B001–B014 in brain.md). Built so far: B001–B007 (campaign picker, world import, companions/tables, chapter 0 in `arc2/ch0_hollow_coin.json`, chapter 1 in `arc2/ch1_faces.json`, chapter 2 in `arc2/ch2_gamblers_tide.json`, chapter 3 + the five endings in `arc2/ch3_blightwood_mint.json`). It follows the conventions of `DESIGN.md` §0 and the schema in `ADVENTURE_FORMAT.md`. Flag ids here use the `arc.crown.*` namespace; shared world state stays in `world.*`.
+> Status: **built** (owner-approved 2026-10-01; Phase 17, B001–B014 in brain.md, finished 2026-10-01). Campaign picker + "new hero, same world" (`src/host/campaigns.ts`, `new_game.worldFrom`), companions/tables/hooks, chapter 0 in `arc2/ch0_hollow_coin.json`, chapter 1 in `arc2/ch1_faces.json`, chapter 2 in `arc2/ch2_gamblers_tide.json`, chapter 3 + the five endings in `arc2/ch3_blightwood_mint.json`; Danish overlays for every chapter (`data/i18n/da/arc2_*.json`); whole-campaign smoke tests (`tests/arc2Smoke.test.ts`) and a real-model playtest (`npx tsx scripts/playtest-llm.ts --campaign=hollow_crown`). Where the built chapters simplify this bible, brain.md's Decisions Log (B004–B007) says how. It follows the conventions of `DESIGN.md` §0 and the schema in `ADVENTURE_FORMAT.md`. Flag ids here use the `arc.crown.*` namespace; shared world state stays in `world.*`.
 
 ## 0. Why a second campaign, and what it must do
 

@@ -3,7 +3,11 @@
 A single-player Dungeons & Dragons game (SRD 5.2.1 rules) that runs entirely on your own Windows PC. The code resolves every rule, every roll and every fight; a small local language model (via Ollama) only narrates what already happened, voices NPCs and suggests ideas. No internet connection or account is needed once it is set up.
 
 - **Build a hero** from the full SRD 5.2.1: 12 classes with subclasses, species, backgrounds, origin feats, three ways to set ability scores, spells, equipment, a 3D look, and an optional AI-written backstory. Quick Build gets you playing in a minute.
-- **Play a campaign**: a starter arc in the village of Millbrook, then a five-chapter main arc across three regions with different tones, four companions with loyalty, factions, reputation, shops, a day/night clock, weather, a world map with travel, and procedurally generated side quests woven into the story.
+- **Play a campaign** (pick one on the title screen or in the creator's Review step):
+  - ***The Seven Teeth of Vashkul*** (level 1 → 10): a starter arc in the village of Millbrook, then a five-chapter main arc across three regions with different tones and four companions.
+  - ***The Hollow Crown*** (level 1 → 5): a shorter, sharper story about a counterfeiting ring and the Thousand Faces behind it, in four chapters from Brightwater to the Blightwood, with three new companions and five endings.
+  - Both have companions with loyalty, factions, reputation, shops, a day/night clock, weather, a world map with travel, and procedurally generated side quests woven into the story.
+- **New hero, same world**: once a Seven Teeth save reaches its ending, a new Hollow Crown hero can start in that world a year later. Reputation, the Queen's fate, the Maw and old companions colour lines, prices and an ending beat; the plot never depends on them. Without an imported world, the Hollow Crown starts in a fresh one.
 - **Fight on a tactical grid** (3D or 2D): initiative, action economy, opportunity attacks, cover and line of sight, area templates, spell zones, grapple/shove/ready, weapon masteries, enemy AI with morale, and companions you can control or leave to the AI.
 - **See the consequences**: wounds that fade as you heal, permanent scars logged with their origin, armor that dents and needs repair, and equipment shown on the 3D model.
 - **Listen**: music and sound effects by mood, and optional offline narration voices (Piper).
@@ -21,7 +25,7 @@ A single-player Dungeons & Dragons game (SRD 5.2.1 rules) that runs entirely on 
 
 1. **Run `Setup.bat`** once. It checks Node, installs the packages, builds the game, offers to install Ollama (via winget) and pulls the default model (`llama3.2:3b`), and downloads the free 3D models, audio and narration voices.
 2. **Run `Start Game.bat`**. It starts Ollama if needed, starts the game server and opens the game in your browser (http://127.0.0.1:3210).
-3. Click **New Game**, build a hero (or use Quick Build), and play.
+3. Pick a campaign, click **New Game**, build a hero (or use Quick Build), and play. For *The Hollow Crown*, the creator's Review step also lets you start in the world of a finished save.
 
 Your saves are in `saves/`, your settings in `userdata/settings.json`.
 
@@ -69,7 +73,7 @@ npm run build:web    # web edition (no server, no AI) in dist-web/
 Test shortcuts in the browser: `#creator`, `#quickbuild-<class>`, `#play-<class>` (start at once), `#play-<class>+map`, `#play-<class>+scars`, `#combat-<class>` (combat sandbox), `#load` (save browser).
 
 - **Architecture**: see [ARCHITECTURE.md](ARCHITECTURE.md). The rules engine (`src/engine`) is pure TypeScript shared by server and client; the server owns the game session; the client only renders.
-- **Writing adventures**: see [ADVENTURE_FORMAT.md](ADVENTURE_FORMAT.md). Adventures are JSON files in `data/adventures/`, validated at load time.
+- **Writing adventures**: see [ADVENTURE_FORMAT.md](ADVENTURE_FORMAT.md). Adventures are JSON files in `data/adventures/`, validated at load time. Campaigns are listed in `src/host/campaigns.ts` (see "Campaigns" in the format guide); the campaign bibles are `data/adventures/DESIGN.md` and `DESIGN_ARC2.md`.
 - **SRD data**: `npm run srd:fetch` then `npm run srd:import` rebuild `data/srd/*.json` from the SRD 5.2.1 Markdown source.
 
 ## Troubleshooting
