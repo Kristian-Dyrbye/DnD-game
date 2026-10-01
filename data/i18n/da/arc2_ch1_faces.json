@@ -1,0 +1,1401 @@
+{
+  "$source": "data/adventures/arc2/ch1_faces.json",
+  "strings": {
+    "name": {
+      "hash": "be0d73bc",
+      "text": "Ansigter i hovedbogen"
+    },
+    "summary": {
+      "hash": "1ad36554",
+      "text": "I Deepanvil Hold, dværgebyen hvis hvælvinger rummer halvdelen af rigets guld, er Jernhvælvets egen revisor ikke den, han giver sig ud for. Den tredje hvælving er en tiendedel hul, hovedbogen skjuler en falskners hånd, og helten må afsløre et Ansigt, før Jernhvælvets ret beslutter, hvem der skal bære skylden."
+    },
+    "chapters/ch1/name": {
+      "hash": "be0d73bc",
+      "text": "Ansigter i hovedbogen"
+    },
+    "chapters/ch1/summary": {
+      "hash": "943a9bc6",
+      "text": "Deepanvil Hold: porten og dens papirer, revisor Hesks tællehus, den hule tredje hvælving, den falske revisor afsløret og Jernhvælvets ret."
+    },
+    "chapters/ch1/scenes/deepanvil_gate/name": {
+      "hash": "cce9eb7e",
+      "text": "Portene til Deepanvil Hold"
+    },
+    "chapters/ch1/scenes/deepanvil_gate/seed": {
+      "hash": "fb924c7f",
+      "text": "Deepanvil Holds porte er hugget lige ind i bjerget: to bronzedøre højere end en skibsmast, en toldhal af sort sten og dværgeportvogtere i Jernhvælvets grå, som vejer hver vogn, hver pung og hvert ansigt, der kommer op ad vejen. Bag dørene falder byen bort i lampeoplyste terrasser af smedjer og tællehuse."
+    },
+    "chapters/ch1/scenes/deepanvil_gate/variants/0/seed": {
+      "hash": "a9233d4a",
+      "text": "En falmet plakat, sømmet op ved toldhallens dør, bærer stadig en grov tegning af dig under ordet EFTERLYST."
+    },
+    "chapters/ch1/scenes/deepanvil_gate/variants/1/seed": {
+      "hash": "9e37c4f4",
+      "text": "Portvogterne nikker dig igennem nu, selv om deres øjne stadig følger din pung."
+    },
+    "chapters/ch1/scenes/deepanvil_gate/revisitSeed": {
+      "hash": "023c6a0e",
+      "text": [
+        "De store bronzedøre igen, toldhallen og den endeløse række af malmvogne.",
+        "Tilbage ved portene til Deepanvil Hold, hvor vogterne vejer alt, hvad der kommer forbi."
+      ]
+    },
+    "chapters/ch1/scenes/deepanvil_gate/onEnter/text": {
+      "hash": "ac21fbdc",
+      "text": "Vejen ender ved bjerget. Deepanvil Hold, hvor Jernhvælvet præger sin mønt, og hvor nogen prægede en mønt, der blev til aske."
+    },
+    "chapters/ch1/scenes/deepanvil_gate/pois/ore_line/name": {
+      "hash": "bf86758e",
+      "text": "Malmkøen"
+    },
+    "chapters/ch1/scenes/deepanvil_gate/pois/ore_line/seed": {
+      "hash": "d5162dec",
+      "text": "En række malmvogne, der venter på at blive vejet, og en forjaget toldmester, der råber efter enhver med en stærk ryg."
+    },
+    "chapters/ch1/scenes/deepanvil_gate/pois/ore_line/actions/haul_ore/label": {
+      "hash": "53157366",
+      "text": "Tag et skift med at slæbe malm for toldmesteren i stedet for at betale told"
+    },
+    "chapters/ch1/scenes/deepanvil_gate/pois/ore_line/actions/haul_ore/keywords": {
+      "hash": "1f69ce86",
+      "text": [
+        "slæb",
+        "slæbe",
+        "arbejd",
+        "arbejde",
+        "malm",
+        "malmen",
+        "skift",
+        "vogne",
+        "vognene"
+      ]
+    },
+    "chapters/ch1/scenes/deepanvil_gate/pois/ore_line/actions/haul_ore/outcome/text": {
+      "hash": "2beccd58",
+      "text": "Otte timer med malmsække og dværgiske arbejdssange senere kridter toldmesteren dit navn på porttavlen som betalt i sved. \"Ærligt arbejde er ærlig mønt,\" brummer han og vinker dig ind."
+    },
+    "chapters/ch1/scenes/deepanvil_gate/actions/rest_lodging/label": {
+      "hash": "5c51ff7b",
+      "text": "Tag en køje i porthusets herberg for natten (5 sp)"
+    },
+    "chapters/ch1/scenes/deepanvil_gate/actions/rest_lodging/keywords": {
+      "hash": "51abea03",
+      "text": [
+        "herberg",
+        "herberget",
+        "køje",
+        "sove",
+        "seng",
+        "hvil",
+        "hvile",
+        "nat",
+        "natten"
+      ]
+    },
+    "chapters/ch1/scenes/deepanvil_gate/actions/rest_lodging/outcome/text": {
+      "hash": "fca51f4d",
+      "text": "Porthusets herberg giver dig en stenkøje, et uldtæppe og den fjerne hamren fra de dybe smedjer at sove til."
+    },
+    "chapters/ch1/scenes/deepanvil_gate/exits/to_counting_house/label": {
+      "hash": "d0720f62",
+      "text": "Gå ned i byen til Jernhvælvets tællehus"
+    },
+    "chapters/ch1/scenes/counting_house/name": {
+      "hash": "d95da34b",
+      "text": "Jernhvælvets tællehus"
+    },
+    "chapters/ch1/scenes/counting_house/seed": {
+      "hash": "1ff666e8",
+      "text": "Jernhvælvets tællehus er en katedral af tal: rækker af høje pulte under hængende lamper, skrivere der kradser i hovedbøger, messingvægte på hvert bord, og for den fjerne ende, ved en hævet pult under Konsortiets ambolt-og-nøgle, revisor Hesk, som godkender hver mønt, byen præger. En tilgitret trappe bag ham fører ned til hvælvingerne."
+    },
+    "chapters/ch1/scenes/counting_house/variants/0/seed": {
+      "hash": "ef1e8ab9",
+      "text": "Siden skandalen i Almisseembedet har Jernhvælvet ikke stolet på sine egne bøger. De ældre skrivere holder lige så skarpt øje med revisor Hesk som med guldet."
+    },
+    "chapters/ch1/scenes/counting_house/variants/1/seed": {
+      "hash": "86094b4f",
+      "text": "Nu hvor du har set det, kan du ikke lade være med at se det: Hesks smil kommer et øjeblik efter, at hans ansigt har besluttet at lave et."
+    },
+    "chapters/ch1/scenes/counting_house/variants/2/seed": {
+      "hash": "511ce92c",
+      "text": "Den tilgitrede trappe bag Hesks pult står åben for dig nu."
+    },
+    "chapters/ch1/scenes/counting_house/revisitSeed": {
+      "hash": "9c725014",
+      "text": "Tællehuset igen: kradsende penne, svingende lamper og revisor Hesk ved sin høje pult."
+    },
+    "chapters/ch1/scenes/counting_house/pois/hesk_desk/name": {
+      "hash": "d92b261b",
+      "text": "Hesks pult"
+    },
+    "chapters/ch1/scenes/counting_house/pois/hesk_desk/seed": {
+      "hash": "803741d3",
+      "text": "En høj egetræspult stablet med hovedbøger, en messingvægt, en krukke Jernhvælv-grønt blæk og et lille malet portræt, vendt med billedsiden nedad."
+    },
+    "chapters/ch1/scenes/counting_house/pois/hesk_desk/actions/portrait/label": {
+      "hash": "4ce84711",
+      "text": "Vend det lille portræt på Hesks pult"
+    },
+    "chapters/ch1/scenes/counting_house/pois/hesk_desk/actions/portrait/keywords": {
+      "hash": "fc95cfcc",
+      "text": [
+        "portræt",
+        "portrættet",
+        "billede",
+        "billedet",
+        "maleri",
+        "vend",
+        "pult",
+        "pulten"
+      ]
+    },
+    "chapters/ch1/scenes/counting_house/pois/hesk_desk/actions/portrait/outcome/text": {
+      "hash": "081dc747",
+      "text": "Et barns maleri af en dværg med et alt for stort skæg, og under det med omhyggelige bogstaver: \"Til far, fra Marit.\" Nogen har vendt det mod træet."
+    },
+    "chapters/ch1/scenes/counting_house/pois/vault_stair/name": {
+      "hash": "65e2c029",
+      "text": "Hvælvingstrappen"
+    },
+    "chapters/ch1/scenes/counting_house/pois/vault_stair/seed": {
+      "hash": "3d2febf0",
+      "text": "En tilgitret jerntrappe bag revisorens pult, der går ned i kold luft og en lugt af metal."
+    },
+    "chapters/ch1/scenes/counting_house/pois/vault_stair/actions/break_in/label": {
+      "hash": "c856d05e",
+      "text": "Kom tilbage, når tællehuset lukker, og smut ned ad hvælvingstrappen"
+    },
+    "chapters/ch1/scenes/counting_house/pois/vault_stair/actions/break_in/keywords": {
+      "hash": "55d4b31f",
+      "text": [
+        "snig",
+        "snige",
+        "nat",
+        "natten",
+        "bryd",
+        "smut",
+        "trappe",
+        "trappen",
+        "lukker",
+        "lukketid"
+      ]
+    },
+    "chapters/ch1/scenes/counting_house/pois/vault_stair/actions/break_in/check/success/text": {
+      "hash": "448af00c",
+      "text": "Efter lukkeklokken venter du i skyggen af en hovedbogspresse, til den sidste lampe går ud, løfter så trappens slå med en knivsæg og smutter ned i kulden."
+    },
+    "chapters/ch1/scenes/counting_house/pois/vault_stair/actions/break_in/check/failure/text": {
+      "hash": "d35678f9",
+      "text": "En nattevagts lygte finder dig halvvejs til trappen. Vagten marcherer dig tilbage til gaden med en advarsel: kom ind ad hoveddøren næste gang, med papirer."
+    },
+    "chapters/ch1/scenes/counting_house/pois/vault_stair/actions/standing/label": {
+      "hash": "f6c376ba",
+      "text": "Vis din anseelse hos Jernhvælvet og gå ned til hvælvingerne"
+    },
+    "chapters/ch1/scenes/counting_house/pois/vault_stair/actions/standing/keywords": {
+      "hash": "5827320a",
+      "text": [
+        "anseelse",
+        "omdømme",
+        "jernhvælvet",
+        "ven",
+        "hvælving",
+        "hvælvingen"
+      ]
+    },
+    "chapters/ch1/scenes/counting_house/pois/vault_stair/actions/standing/outcome/text": {
+      "hash": "050ac0af",
+      "text": "Den ældre skriver kaster ét blik på dine Jernhvælv-mærker og låser selv trappen op. Hesks smil bliver præcis, hvor det er."
+    },
+    "chapters/ch1/scenes/counting_house/actions/supervised_audit/label": {
+      "hash": "be45d379",
+      "text": "Vend tilbage ved åbningsklokken til det overvågede eftersyn, Hesk lovede"
+    },
+    "chapters/ch1/scenes/counting_house/actions/supervised_audit/keywords": {
+      "hash": "dfa8e5c2",
+      "text": [
+        "tilbage",
+        "morgen",
+        "morgenen",
+        "overvåget",
+        "eftersyn",
+        "klokke",
+        "klokken",
+        "imorgen"
+      ]
+    },
+    "chapters/ch1/scenes/counting_house/actions/supervised_audit/outcome/text": {
+      "hash": "02bd599c",
+      "text": "Ved åbningsklokken venter en ældre skriver med en lampe og en tavle på dig, som Hesk lovede for vidner. Han låser hvælvingstrappen op og følger gabende med dig ned."
+    },
+    "chapters/ch1/scenes/counting_house/actions/almonry_file/label": {
+      "hash": "daf23e2f",
+      "text": "Bed de ældre skrivere om sagsmappen, de åbnede efter skandalen i Almisseembedet"
+    },
+    "chapters/ch1/scenes/counting_house/actions/almonry_file/keywords": {
+      "hash": "5b195cfb",
+      "text": [
+        "almisseembedet",
+        "mappe",
+        "sagsmappe",
+        "skandale",
+        "skandalen",
+        "skrivere",
+        "skriverne",
+        "bøger"
+      ]
+    },
+    "chapters/ch1/scenes/counting_house/actions/almonry_file/outcome/text": {
+      "hash": "bd0edd47",
+      "text": "Skriverne har ventet på, at nogen skulle spørge. Siden skandalen i Almisseembedet har de holdt den tredje hvælvings hovedbog op mod vejningerne, og én post er forkert: en tiendedel af hvælvingen opført som til stede med en pæn, skrå hånd, der ikke er Hesks, og med initialerne O. V. De giver dig en renskrevet kopi."
+    },
+    "chapters/ch1/scenes/counting_house/exits/to_vault/label": {
+      "hash": "653dd10f",
+      "text": "Gå ned ad hvælvingstrappen"
+    },
+    "chapters/ch1/scenes/counting_house/exits/to_confront/label": {
+      "hash": "c7a22798",
+      "text": "Tag det, du har fundet, med til Hesks pult, foran hele tællehuset"
+    },
+    "chapters/ch1/scenes/counting_house/exits/to_gate/label": {
+      "hash": "de3da63c",
+      "text": "Klatr tilbage op til portene"
+    },
+    "chapters/ch1/scenes/vault_audit/name": {
+      "hash": "34dcdd69",
+      "text": "Den tredje hvælving"
+    },
+    "chapters/ch1/scenes/vault_audit/seed": {
+      "hash": "927678f0",
+      "text": "Jernhvælvets tredje hvælving: et langt galleri hugget ud af den levende klippe, foret med jernreoler af guldbarrer stemplet med ambolt-og-nøgle og oplyst af kolde blå lamper, der aldrig blafrer. For enden af galleriet står to sæt gammel Jernhvælv-rustning på sokler med visiret nede, og bag dem en forseglet niche, hvor hvælvingens hovedbog opbevares."
+    },
+    "chapters/ch1/scenes/vault_audit/variants/0/seed": {
+      "hash": "4cb19c4e",
+      "text": "De to sæt Jernhvælv-rustning står stille på deres sokler igen med visiret nede og lader dig passere."
+    },
+    "chapters/ch1/scenes/vault_audit/variants/1/seed": {
+      "hash": "b82b919b",
+      "text": "Hovedbogens forkerte post ligger i din oppakning nu, og reolerne med den hule tiendedel glimter bag dig som en godt fortalt løgn."
+    },
+    "chapters/ch1/scenes/vault_audit/revisitSeed": {
+      "hash": "b5c0f2d3",
+      "text": "Den tredje hvælving igen: blå lamper, jernreoler og de to tavse vogtere på deres sokler."
+    },
+    "chapters/ch1/scenes/vault_audit/pois/hollow_tenth/name": {
+      "hash": "8cc29d78",
+      "text": "Den hule tiendedel"
+    },
+    "chapters/ch1/scenes/vault_audit/pois/hollow_tenth/seed": {
+      "hash": "a789c5c2",
+      "text": "Galleriets sidste reoler: guldbarrer, der ser præcis ud som resten og klinger en anelse for let."
+    },
+    "chapters/ch1/scenes/vault_audit/pois/hollow_tenth/actions/weigh_bars/label": {
+      "hash": "a13f7496",
+      "text": "Vej en af guldbarrerne fra de sidste reoler"
+    },
+    "chapters/ch1/scenes/vault_audit/pois/hollow_tenth/actions/weigh_bars/keywords": {
+      "hash": "6e5e5e90",
+      "text": [
+        "vej",
+        "veje",
+        "barre",
+        "barren",
+        "guld",
+        "guldet",
+        "reoler",
+        "test",
+        "vægt"
+      ]
+    },
+    "chapters/ch1/scenes/vault_audit/pois/hollow_tenth/actions/weigh_bars/outcome/text": {
+      "hash": "86206848",
+      "text": "Du løfter en barre fra den sidste reol og så en fra den første. Den sidste er let. Du ridser den med en kniv, og grå aske siver ud af guldhuden. En tiendedel af den tredje hvælving er hul, og har været det længe."
+    },
+    "chapters/ch1/scenes/vault_audit/pois/hollow_tenth/actions/fathers_seal/label": {
+      "hash": "d23eaa52",
+      "text": "Hjælp Brannoc med at gennemsøge de hule reoler efter hans fars prøvesegl"
+    },
+    "chapters/ch1/scenes/vault_audit/pois/hollow_tenth/actions/fathers_seal/keywords": {
+      "hash": "5445e19e",
+      "text": [
+        "brannoc",
+        "far",
+        "faren",
+        "segl",
+        "seglet",
+        "søg",
+        "gennemsøg",
+        "hjælp"
+      ]
+    },
+    "chapters/ch1/scenes/vault_audit/pois/hollow_tenth/actions/fathers_seal/outcome/text": {
+      "hash": "b11764fe",
+      "text": "I søger reol for reol, mens Brannoc mumler tællesangen for sig selv. Seglet er her ikke, men ridset ind i den ældste reol, under støvet, er et enkelt mærke: hans fars prøvetegn, og ved siden af en dato tyve år tilbage. \"Han fandt det her,\" siger Brannoc. \"Han fandt det, og så tog de hans segl.\""
+    },
+    "chapters/ch1/scenes/vault_audit/pois/ledger_alcove/name": {
+      "hash": "bd66a341",
+      "text": "Hovedbogsnichen"
+    },
+    "chapters/ch1/scenes/vault_audit/pois/ledger_alcove/seed": {
+      "hash": "b3644cbb",
+      "text": "En forseglet stenniche med en pult og en hovedbog i kæde, hver side underskrevet og stemplet af dagens revisor."
+    },
+    "chapters/ch1/scenes/vault_audit/pois/ledger_alcove/actions/read_ledger/label": {
+      "hash": "02ae749e",
+      "text": "Læs den tredje hvælvings hovedbog op mod reolerne"
+    },
+    "chapters/ch1/scenes/vault_audit/pois/ledger_alcove/actions/read_ledger/keywords": {
+      "hash": "b7e0e840",
+      "text": [
+        "hovedbog",
+        "hovedbogen",
+        "læs",
+        "bog",
+        "bogen",
+        "post",
+        "posten",
+        "side",
+        "niche",
+        "nichen"
+      ]
+    },
+    "chapters/ch1/scenes/vault_audit/pois/ledger_alcove/actions/read_ledger/outcome/text": {
+      "hash": "afbb1282",
+      "text": "Side efter side passer vejningerne med reolerne, indtil én post ti år tilbage: en tiendedel af hvælvingen ført som til stede med en pæn, skrå hånd, der ikke er revisorens, og med initialerne O. V. Hver vejning siden er skrevet af efter den ene linje. Nogen fik hovedbogen til at sige, at guldet var der."
+    },
+    "chapters/ch1/scenes/vault_audit/actions/advance/label": {
+      "hash": "7872d9b6",
+      "text": "Gå ned gennem galleriet mod hovedbogsnichen"
+    },
+    "chapters/ch1/scenes/vault_audit/actions/advance/keywords": {
+      "hash": "39fcde17",
+      "text": [
+        "gå",
+        "fremad",
+        "galleri",
+        "galleriet",
+        "frem",
+        "kamp",
+        "kæmp",
+        "angrib"
+      ]
+    },
+    "chapters/ch1/scenes/vault_audit/actions/advance/outcome/text": {
+      "hash": "8f10e0fe",
+      "text": "Halvvejs nede ad galleriet løfter to visirer sig med en knasen af gammelt jern. Vogterne stiger ned fra deres sokler."
+    },
+    "chapters/ch1/scenes/vault_audit/actions/watchword/label": {
+      "hash": "abd15adf",
+      "text": "Læs bindingsrunerne på soklerne og sig vogternes løsen"
+    },
+    "chapters/ch1/scenes/vault_audit/actions/watchword/keywords": {
+      "hash": "5cabd22b",
+      "text": [
+        "runer",
+        "runerne",
+        "løsen",
+        "ord",
+        "ordet",
+        "magi",
+        "arkana",
+        "binding",
+        "sokkel",
+        "soklerne"
+      ]
+    },
+    "chapters/ch1/scenes/vault_audit/actions/watchword/check/advantageIf/0/source": {
+      "hash": "525dc09f",
+      "text": "Brannoc kender de gamle Jernhvælv-eder"
+    },
+    "chapters/ch1/scenes/vault_audit/actions/watchword/check/success/text": {
+      "hash": "2f987438",
+      "text": "Runerne er en gammel binding på dværgisk, knyttet til en revisors ed. Du siger den højt, og vogternes halvt løftede visirer falder til ro igen."
+    },
+    "chapters/ch1/scenes/vault_audit/actions/watchword/check/failure/text": {
+      "hash": "31f07e53",
+      "text": "Ordene kommer forkert ud. Begge visirer løfter sig, og gammelt jern stiger ned fra soklerne."
+    },
+    "chapters/ch1/scenes/vault_audit/exits/to_counting_house/label": {
+      "hash": "08c93805",
+      "text": "Klatr tilbage op til tællehuset"
+    },
+    "chapters/ch1/scenes/vault_audit/exits/to_confront/label": {
+      "hash": "b9e60a32",
+      "text": "Tag hovedbogen direkte op til Hesks pult"
+    },
+    "chapters/ch1/scenes/hesk_unmasked/name": {
+      "hash": "d438a2b6",
+      "text": "Foran revisorens pult"
+    },
+    "chapters/ch1/scenes/hesk_unmasked/seed": {
+      "hash": "7ccc9dd4",
+      "text": "Hele tællehuset er holdt op med at skrive. Fyrre skrivere kigger op over deres hovedbøger, mens du står foran revisor Hesks høje pult med hvælvingens løgn i hænderne. To af Jernhvælvets vagter ved dørene lægger hånden på økserne. Hesk folder sine blækplettede fingre og smiler, et øjeblik for sent."
+    },
+    "chapters/ch1/scenes/hesk_unmasked/variants/0/seed": {
+      "hash": "050916bf",
+      "text": "De to vagter er gået væk fra dørene og står nu bag dig og holder øje med revisoren."
+    },
+    "chapters/ch1/scenes/hesk_unmasked/variants/1/seed": {
+      "hash": "c999bfa5",
+      "text": "Hesks høje pult står tom, og hans grønne blæk er spildt ud over hovedbøgerne."
+    },
+    "chapters/ch1/scenes/hesk_unmasked/actions/name_daughter/label": {
+      "hash": "b514ebb8",
+      "text": "Spørg Hesk, foran hele tællehuset, hvad hans datter hedder"
+    },
+    "chapters/ch1/scenes/hesk_unmasked/actions/name_daughter/keywords": {
+      "hash": "7a98beb1",
+      "text": [
+        "datter",
+        "datteren",
+        "navn",
+        "navnet",
+        "marit",
+        "spørg",
+        "offentligt"
+      ]
+    },
+    "chapters/ch1/scenes/hesk_unmasked/actions/name_daughter/outcome/text": {
+      "hash": "9ef04734",
+      "text": "\"Din datter, revisor. Hende der maler. Hvad hedder hun?\" Fyrre penne standser. Hesk åbner munden, og der kommer intet ud. Så flyder hans ansigt som voks, gråt og glat og uden øjne, og tingen, der bar ham, springer over pulten, styrter ud gennem et vindue i en regn af glas og er væk mellem de lampeoplyste terrasser. Ingen følger efter. Et sted under tællehuset er den rigtige Hesk måske stadig i live."
+    },
+    "chapters/ch1/scenes/hesk_unmasked/actions/show_guards/label": {
+      "hash": "0634059d",
+      "text": "Vis de to vagter hovedbogens falske post og revisorens håndskrift"
+    },
+    "chapters/ch1/scenes/hesk_unmasked/actions/show_guards/keywords": {
+      "hash": "a1b9e9d8",
+      "text": [
+        "vagter",
+        "vagterne",
+        "vis",
+        "overbevis",
+        "hovedbog",
+        "hovedbogen",
+        "bevis",
+        "beviset"
+      ]
+    },
+    "chapters/ch1/scenes/hesk_unmasked/actions/show_guards/check/advantageIf/0/source": {
+      "hash": "9a6c6e65",
+      "text": "Du bærer en hul barre fra hvælvingen"
+    },
+    "chapters/ch1/scenes/hesk_unmasked/actions/show_guards/check/success/text": {
+      "hash": "70670ee0",
+      "text": "Den ældste vagt læser posten, ser på Hesk og flytter sig langsomt hen ved siden af dig. Den yngre følger efter."
+    },
+    "chapters/ch1/scenes/hesk_unmasked/actions/show_guards/check/failure/text": {
+      "hash": "37fb3a04",
+      "text": "\"Revisorens ord mod en fremmeds,\" siger den ældste vagt og løsner sin økse."
+    },
+    "chapters/ch1/scenes/hesk_unmasked/actions/unmask/label": {
+      "hash": "a3f037c2",
+      "text": "Træk dit våben og kald revisoren et Ansigt"
+    },
+    "chapters/ch1/scenes/hesk_unmasked/actions/unmask/keywords": {
+      "hash": "a8caeb68",
+      "text": [
+        "træk",
+        "våben",
+        "angrib",
+        "kæmp",
+        "kamp",
+        "afslør",
+        "ansigt"
+      ]
+    },
+    "chapters/ch1/scenes/hesk_unmasked/actions/unmask/outcome/text": {
+      "hash": "593a4ad5",
+      "text": "Hesks ansigt glider som voks, da han rejser sig fra pulten, gråt og glat og smilende, og hans hænder bliver lange."
+    },
+    "chapters/ch1/scenes/hesk_unmasked/exits/to_court/label": {
+      "hash": "1f1fb514",
+      "text": "Gå frem for Jernhvælvets ret"
+    },
+    "chapters/ch1/scenes/ironvault_court/name": {
+      "hash": "4a72e225",
+      "text": "Jernhvælvets ret"
+    },
+    "chapters/ch1/scenes/ironvault_court/seed": {
+      "hash": "4846204b",
+      "text": "Jernhvælvets ret holder til i en rund hal under en kuppel af hamret kobber. Konsortiets mestre i grå fløjl fylder bænkene, et af Kronens vidner i tempelblåt tager noter ved døren, og på højsædet under ambolt-og-nøgle sidder thanevogter Orsa Ironhand, som afgør, hvem Jernhvælvet vil takke, og hvem det vil give skylden."
+    },
+    "chapters/ch1/scenes/ironvault_court/variants/0/seed": {
+      "hash": "7edacfa3",
+      "text": "Ansigtets grå, øjenløse krop ligger under et lagen på en bukkebænk foran højsædet, så hver mester kan se den."
+    },
+    "chapters/ch1/scenes/ironvault_court/variants/1/seed": {
+      "hash": "1c81c09b",
+      "text": "Hver mester har hørt om revisoren, der løb ud ad et vindue. Ingen har set ham siden, og ingen kan bevise, hvad han var."
+    },
+    "chapters/ch1/scenes/ironvault_court/variants/2/seed": {
+      "hash": "ec14bd28",
+      "text": "Mestrene nikker til dig på vej ud, og thanens bestalling ligger varm i din oppakning."
+    },
+    "chapters/ch1/scenes/ironvault_court/variants/3/seed": {
+      "hash": "4c6b4c70",
+      "text": "Mestrene ser væk fra dig. Thanens dom hænger stadig under kobberkuplen."
+    },
+    "chapters/ch1/scenes/ironvault_court/revisitSeed": {
+      "hash": "9487765b",
+      "text": "Den runde hal under kobberkuplen, de grå fløjlsbænke og thanens højsæde."
+    },
+    "chapters/ch1/scenes/ironvault_court/onEnter/text": {
+      "hash": "d52099d5",
+      "text": "Et af Kronens vidner ved døren, en ung kvinde i blåt fra Veyras tempel, ser op fra sine noter, da du kommer ind, og bliver bleg, som om hun har set dit ansigt før."
+    },
+    "chapters/ch1/scenes/ironvault_court/exits/to_rest/label": {
+      "hash": "fc7394aa",
+      "text": "Forlad retten og gå til Thanens Hvile"
+    },
+    "chapters/ch1/scenes/thane_s_rest/name": {
+      "hash": "8cf6cb36",
+      "text": "Thanens Hvile"
+    },
+    "chapters/ch1/scenes/thane_s_rest/seed": {
+      "hash": "b07f3251",
+      "text": "Thanens Hvile er en dyb kro hugget ind i klippen, med varme kilder i kælderen, lange borde fulde af minearbejdere og skrivere og senge i stennicher behængt med uld. Skænkestuen dufter af jernbrød og mørkt øl."
+    },
+    "chapters/ch1/scenes/thane_s_rest/variants/0/seed": {
+      "hash": "d39a0ab9",
+      "text": "Ilse sidder længe oppe ved ilden med sin drømmebog åben og skriver om en smedje, der sover."
+    },
+    "chapters/ch1/scenes/thane_s_rest/variants/1/seed": {
+      "hash": "8db16e2f",
+      "text": "Kroværten tager din mønt uden at møde dit blik. Thanens dom giver dig til morgenklokken til at forlade byen."
+    },
+    "chapters/ch1/scenes/thane_s_rest/variants/2/seed": {
+      "hash": "e911d05e",
+      "text": "Kroværten så thanens bestalling og gav dig den bedste niche, ved den varme kilde."
+    },
+    "chapters/ch1/scenes/thane_s_rest/revisitSeed": {
+      "hash": "bb8c93eb",
+      "text": "Thanens Hvile: varme kilder, lange borde, nicher behængt med uld."
+    },
+    "chapters/ch1/scenes/thane_s_rest/actions/long_rest/label": {
+      "hash": "239cadbf",
+      "text": "Sov en hel nat i en stenniche"
+    },
+    "chapters/ch1/scenes/thane_s_rest/actions/long_rest/keywords": {
+      "hash": "ace84613",
+      "text": [
+        "sov",
+        "sove",
+        "hvil",
+        "hvile",
+        "seng",
+        "nat",
+        "natten",
+        "niche"
+      ]
+    },
+    "chapters/ch1/scenes/thane_s_rest/actions/long_rest/outcome/text": {
+      "hash": "274065b1",
+      "text": "Du sover, som dværge sover, dybt og længe, med bjergets varme i stenen omkring dig. Om morgenen kan du dit håndværk bedre, end du kunne for en uge siden."
+    },
+    "chapters/ch1/scenes/thane_s_rest/actions/long_rest/outcome/tip": {
+      "hash": "9fbfc784",
+      "text": "Du har erfaring nok til at nå niveau 3: brug knappen Stig i niveau på din helts kort."
+    },
+    "chapters/ch1/scenes/thane_s_rest/actions/ilse_dream/label": {
+      "hash": "31b2dab2",
+      "text": "Spørg Ilse, hvad hun drømte i Deepanvil"
+    },
+    "chapters/ch1/scenes/thane_s_rest/actions/ilse_dream/keywords": {
+      "hash": "7caf072e",
+      "text": [
+        "ilse",
+        "drøm",
+        "drømte",
+        "drømmen",
+        "spørg"
+      ]
+    },
+    "chapters/ch1/scenes/thane_s_rest/actions/ilse_dream/outcome/text": {
+      "hash": "0beb160c",
+      "text": "Ilse vender sin drømmebog om mod dig. \"En smedje i mørket under en død by, sovende og sulten. En krone, der bliver hældt ned i den. Og en kvinde, der tæller ansigter som mønter.\" Hun lukker bogen. \"Fennicks Hvile er der, hvor guldet bliver vasket. Drømmen lugter altid af hav.\""
+    },
+    "chapters/ch1/scenes/thane_s_rest/pois/road_board/name": {
+      "hash": "2d008a5e",
+      "text": "Vejtavlen"
+    },
+    "chapters/ch1/scenes/thane_s_rest/pois/road_board/seed": {
+      "hash": "34afd98c",
+      "text": "En skifertavle ved krodøren med karavaner skrevet op i kridt: sydpå til Highcrown og Port Sorrel og bådene til øerne."
+    },
+    "chapters/ch1/scenes/thane_s_rest/pois/road_board/actions/road_south/label": {
+      "hash": "2b1d4e03",
+      "text": "Tag karavanevejen sydpå og en båd til Fennicks Hvile"
+    },
+    "chapters/ch1/scenes/thane_s_rest/pois/road_board/actions/road_south/keywords": {
+      "hash": "5c2ae657",
+      "text": [
+        "vej",
+        "vejen",
+        "syd",
+        "sydpå",
+        "båd",
+        "fennick",
+        "rejs",
+        "tag",
+        "karavane",
+        "karavanen"
+      ]
+    },
+    "chapters/ch1/scenes/thane_s_rest/pois/road_board/actions/road_south/outcome/text": {
+      "hash": "087304a3",
+      "text": "Seks dages vej ned ud af bjergene, gennem Highcrown til Port Sorrel, og så en saltplettet postbåd over til Brinescatter-øerne. Sporet efter det hule guld fører til Fennicks Hvile, hvor guld bliver vasket."
+    },
+    "maps/third_vault/name": {
+      "hash": "d2cb846d",
+      "text": "Jernhvælvets tredje hvælving"
+    },
+    "maps/third_vault/rooms/vault_stair/name": {
+      "hash": "374b9da9",
+      "text": "Hvælvingstrappen"
+    },
+    "maps/third_vault/rooms/gallery/name": {
+      "hash": "6de3062b",
+      "text": "Reolgalleriet"
+    },
+    "maps/third_vault/rooms/hollow_tenth/name": {
+      "hash": "4f99e738",
+      "text": "Den hule tiendedel"
+    },
+    "maps/third_vault/rooms/ledger_alcove/name": {
+      "hash": "a40d07c1",
+      "text": "Hovedbogsnichen"
+    },
+    "npcs/warden_brekka/name": {
+      "hash": "82aff2d6",
+      "text": "Portvogter Brekka Coalbrow"
+    },
+    "npcs/warden_brekka/personality": {
+      "hash": "65a851b9",
+      "text": "En firkantet, jerngrå dværgeportvogter, som i tredive år har vejet hver pung, der kom op ad vejen, og ikke stoler på nogen af dem."
+    },
+    "npcs/warden_brekka/secrets": {
+      "hash": "ba6703e9",
+      "text": [
+        "Hun fik ordre til at lade revisor Hesks kurerer passere uden at veje dem, og det ærgrer hende."
+      ]
+    },
+    "npcs/warden_brekka/voice": {
+      "hash": "0de7c64e",
+      "text": "Flad og tung; hver sætning er en told."
+    },
+    "npcs/warden_brekka/conversations/papers/label": {
+      "hash": "676b08b5",
+      "text": "Meld dig hos portvogteren"
+    },
+    "npcs/warden_brekka/conversations/papers/keywords": {
+      "hash": "19bd2097",
+      "text": [
+        "portvogter",
+        "portvogteren",
+        "brekka",
+        "vogter",
+        "papirer",
+        "told",
+        "port",
+        "porten"
+      ]
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/text": {
+      "hash": "3f6271a9",
+      "text": "Navn, ærinde og told. Fem guld for fremmede uden papirer. Deepanvil Hold vejer alt, hvad der kommer op ad denne vej, og alle."
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/letter/label": {
+      "hash": "e5e282a0",
+      "text": "Ræk hende fru Dunmores forseglede brev"
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/letter/keywords": {
+      "hash": "ed85a8ff",
+      "text": [
+        "brev",
+        "brevet",
+        "dunmore",
+        "segl",
+        "seglet",
+        "ræk"
+      ]
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/persuade/label": {
+      "hash": "877eda40",
+      "text": "\"Jeg bringer nyt om falsk Jernhvælv-mønt. Dine herrer vil gerne høre det.\""
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/persuade/keywords": {
+      "hash": "bbffed2c",
+      "text": [
+        "nyt",
+        "nyheder",
+        "mønt",
+        "falsk",
+        "herrer",
+        "overtal"
+      ]
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/persuade/check/disadvantageIf/0/source": {
+      "hash": "b3547cda",
+      "text": "Dit ansigt hænger på en plakat ved døren"
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/persuade/check/failure/text": {
+      "hash": "17f251ee",
+      "text": "\"Alle bringer nyt,\" siger Brekka. \"Fem guld.\""
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/deceive/label": {
+      "hash": "9060d6a1",
+      "text": "\"Jernhvælvets ærinde. Revisor Hesk sendte bud efter mig.\""
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/deceive/keywords": {
+      "hash": "ddc71ac4",
+      "text": [
+        "hesk",
+        "revisor",
+        "revisoren",
+        "ærinde",
+        "lyv",
+        "løgn",
+        "sendte"
+      ]
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/deceive/check/failure/text": {
+      "hash": "cddb2b0d",
+      "text": "Brekka kniber øjnene sammen. \"Hesks folk kommer med hans grønne segl. Du har ingen.\""
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/pay/label": {
+      "hash": "0befea88",
+      "text": "Betal tolden på fem guld"
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/pay/keywords": {
+      "hash": "006d044e",
+      "text": [
+        "betal",
+        "told",
+        "tolden",
+        "guld",
+        "fem"
+      ]
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/pay_outlaw/label": {
+      "hash": "bc8e200c",
+      "text": "Betal dobbelt told og hold hætten oppe"
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/pay_outlaw/keywords": {
+      "hash": "cb90ecf5",
+      "text": [
+        "betal",
+        "told",
+        "tolden",
+        "dobbelt",
+        "hætte",
+        "hætten"
+      ]
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/bye/label": {
+      "hash": "c7eb76ee",
+      "text": "\"Lad mig tænke over det.\""
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/greet/options/bye/keywords": {
+      "hash": "e018d838",
+      "text": [
+        "farvel",
+        "gå",
+        "senere",
+        "tænke"
+      ]
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/letter/text": {
+      "hash": "a9ef50e0",
+      "text": "Dunmores segl. Guardeinen i Brightwater skriver ikke til byen for ingenting. Gå ind, og tag det her med til tællehuset: de vil tage imod dig, når du har det."
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/letter/options/in/label": {
+      "hash": "967de3f2",
+      "text": "Gå ind"
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/hesk/text": {
+      "hash": "2b4e1c9c",
+      "text": "Hesks ærinde. Selvfølgelig. Hans kurerer kommer op ad vejen hver nymåne, og jeg har fået besked på ikke at veje deres sække. Så gå bare. Og hvis du ser revisoren, så sig til ham, at Brekka stadig tæller."
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/hesk/options/in/label": {
+      "hash": "967de3f2",
+      "text": "Gå ind"
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/passed/text": {
+      "hash": "f5bbbe0e",
+      "text": "Fint. Ind med dig. Hold din pung tæt og din mønt ærlig."
+    },
+    "npcs/warden_brekka/conversations/papers/nodes/passed/options/in/label": {
+      "hash": "967de3f2",
+      "text": "Gå ind"
+    },
+    "npcs/false_hesk/name": {
+      "hash": "51ca0926",
+      "text": "Revisor Hesk"
+    },
+    "npcs/false_hesk/personality": {
+      "hash": "d70b0a66",
+      "text": "For alle øjne revisor Tavin Hesk: en nøjagtig, tør dværg, der godkender hver mønt, byen præger. I virkeligheden Gilt, en dobbeltgænger fra De Tusind Ansigter, der bærer ham som en frakke. Charmerende, en anelse for medgørlig og altid et øjeblik for sent med sit smil."
+    },
+    "npcs/false_hesk/secrets": {
+      "hash": "d5455b9b",
+      "text": [
+        "Han er Gilt, Ondra Vexx' stemme i Deepanvil; den rigtige Hesk sidder låst inde i en malmkælder under tællehuset.",
+        "Han kender ikke navnet på Hesks datter, Marit."
+      ]
+    },
+    "npcs/false_hesk/voice": {
+      "hash": "11826e40",
+      "text": "Tør og behagelig, er for hurtig til at give ret, siger aldrig et navn, han kan undgå."
+    },
+    "npcs/false_hesk/conversations/audit/label": {
+      "hash": "487810ef",
+      "text": "Bed revisor Hesk om at åbne hvælvingernes hovedbøger"
+    },
+    "npcs/false_hesk/conversations/audit/keywords": {
+      "hash": "19b7d85b",
+      "text": [
+        "hesk",
+        "revisor",
+        "revisoren",
+        "hovedbog",
+        "hovedbøger",
+        "hovedbøgerne",
+        "hvælving",
+        "eftersyn",
+        "spørg"
+      ]
+    },
+    "npcs/false_hesk/conversations/audit/nodes/greet/text": {
+      "hash": "bcec623a",
+      "text": "Askemønter? Hvor forfærdeligt. Og med vores eget mærke, siger du. Selvfølgelig vil Jernhvælvet gerne hjælpe. Men hvælvingernes hovedbøger åbnes ikke for enhver rejsende med en historie. Hvad er det helt præcist, du ønsker?"
+    },
+    "npcs/false_hesk/conversations/audit/nodes/greet/options/by_book/label": {
+      "hash": "9290a7b1",
+      "text": "Henvis til Konsortiets charter: enhver, der holder Jernhvælv-mønt, kan kræve et eftersyn"
+    },
+    "npcs/false_hesk/conversations/audit/nodes/greet/options/by_book/keywords": {
+      "hash": "255feec4",
+      "text": [
+        "charter",
+        "charteret",
+        "lov",
+        "loven",
+        "bog",
+        "kræv",
+        "ret",
+        "retten",
+        "historie"
+      ]
+    },
+    "npcs/false_hesk/conversations/audit/nodes/greet/options/by_book/check/advantageIf/0/source": {
+      "hash": "e6fba4c9",
+      "text": "Fru Dunmores brev"
+    },
+    "npcs/false_hesk/conversations/audit/nodes/greet/options/by_book/check/advantageIf/1/source": {
+      "hash": "9cd0bdb3",
+      "text": "Du bærer et falsk Jernhvælv-prægestempel"
+    },
+    "npcs/false_hesk/conversations/audit/nodes/greet/options/bribe/label": {
+      "hash": "6dea82ac",
+      "text": "Skub ti guldstykker ind under den nærmeste hovedbog"
+    },
+    "npcs/false_hesk/conversations/audit/nodes/greet/options/bribe/keywords": {
+      "hash": "51cfed85",
+      "text": [
+        "bestik",
+        "bestikkelse",
+        "guld",
+        "betal",
+        "ti",
+        "skub"
+      ]
+    },
+    "npcs/false_hesk/conversations/audit/nodes/greet/options/family/label": {
+      "hash": "1f6443fe",
+      "text": "Spørg til hans familie, mens du holder øje med hans ansigt"
+    },
+    "npcs/false_hesk/conversations/audit/nodes/greet/options/family/keywords": {
+      "hash": "e7b0dd76",
+      "text": [
+        "familie",
+        "familien",
+        "datter",
+        "kone",
+        "børn",
+        "indsigt",
+        "iagttag"
+      ]
+    },
+    "npcs/false_hesk/conversations/audit/nodes/greet/options/family/check/advantageIf/0/source": {
+      "hash": "28c4407f",
+      "text": "Du så portrættet på hans pult"
+    },
+    "npcs/false_hesk/conversations/audit/nodes/greet/options/family/check/failure/text": {
+      "hash": "c5be37f9",
+      "text": "Hesk taler varmt om, hvad skolegang koster i byen, og du lærer ingenting."
+    },
+    "npcs/false_hesk/conversations/audit/nodes/greet/options/bye/label": {
+      "hash": "57327564",
+      "text": "\"Tak, revisor. En anden gang.\""
+    },
+    "npcs/false_hesk/conversations/audit/nodes/greet/options/bye/keywords": {
+      "hash": "66d700f0",
+      "text": [
+        "farvel",
+        "gå",
+        "senere",
+        "tak"
+      ]
+    },
+    "npcs/false_hesk/conversations/audit/nodes/audit_granted/text": {
+      "hash": "c376b0a5",
+      "text": "Charteret. Ganske rigtigt, ganske rigtigt. Ingen skal kunne sige, at Jernhvælvet ikke holder sine egne love. Trappen er låst op for dig. Pas på vogterne; de er meget gamle."
+    },
+    "npcs/false_hesk/conversations/audit/nodes/audit_granted/options/thanks/label": {
+      "hash": "69e59148",
+      "text": "\"Det skal jeg nok.\""
+    },
+    "npcs/false_hesk/conversations/audit/nodes/audit_later/text": {
+      "hash": "8a6926e6",
+      "text": "En interessant læsning af charteret. Jeg er sikker på, at mestrene ville nyde at debattere den. Skal vi sige et overvåget eftersyn i morgen ved åbningsklokken? For vidner, naturligvis."
+    },
+    "npcs/false_hesk/conversations/audit/nodes/audit_later/options/thanks/label": {
+      "hash": "0543d739",
+      "text": "\"I morgen, så.\""
+    },
+    "npcs/false_hesk/conversations/audit/nodes/bribed/text": {
+      "hash": "1cde3ee7",
+      "text": "Hvor gavmildt. Jernhvælvet sætter altid pris på en giver. Trappen er låst op. Pas på vogterne; de er meget gamle."
+    },
+    "npcs/false_hesk/conversations/audit/nodes/bribed/options/thanks/label": {
+      "hash": "a431a32e",
+      "text": "Sig ingenting og gå"
+    },
+    "npcs/false_hesk/conversations/audit/nodes/daughter/text": {
+      "hash": "2eb034cf",
+      "text": "Min datter? Åh, en fryd. En sand fryd. Hun er, øh, til undervisning. Pigen maler, ved du. Maler hele dagen. Hendes navn? Ha. Fædre glemmer intet, min ven. Nå, angående de hovedbøger."
+    },
+    "npcs/false_hesk/conversations/audit/nodes/daughter/options/back/label": {
+      "hash": "102c031f",
+      "text": "Lad det ligge, for nu"
+    },
+    "npcs/clerk_orrin/name": {
+      "hash": "8d23c8b4",
+      "text": "Orrin Flintwhistle"
+    },
+    "npcs/clerk_orrin/personality": {
+      "hash": "81029d75",
+      "text": "En ung, blækplettet dværgeskriver, som har bemærket, at hans herre er venstrehåndet i denne måned og var højrehåndet sidste måned, og som er for bange til at sige det."
+    },
+    "npcs/clerk_orrin/voice": {
+      "hash": "2a62b16a",
+      "text": "Hvisker og kaster et blik mod den høje pult efter hver sætning."
+    },
+    "npcs/clerk_orrin/conversations/whisper/label": {
+      "hash": "5d47cb58",
+      "text": "Tag en stille snak med den unge skriver Orrin"
+    },
+    "npcs/clerk_orrin/conversations/whisper/keywords": {
+      "hash": "8967f9b2",
+      "text": [
+        "orrin",
+        "skriver",
+        "skriveren",
+        "ung",
+        "unge",
+        "stille",
+        "hvisk"
+      ]
+    },
+    "npcs/clerk_orrin/conversations/whisper/nodes/greet/text": {
+      "hash": "b8cdcce0",
+      "text": "Det burde jeg ikke. Revisoren kan ikke lide, at vi taler med besøgende. Det gjorde ham aldrig noget før. Intet gjorde ham noget før."
+    },
+    "npcs/clerk_orrin/conversations/whisper/nodes/greet/options/kind/label": {
+      "hash": "7fd87e97",
+      "text": "\"Før hvad, Orrin?\""
+    },
+    "npcs/clerk_orrin/conversations/whisper/nodes/greet/options/kind/keywords": {
+      "hash": "84083bfd",
+      "text": [
+        "før",
+        "hvad",
+        "venlig",
+        "blid"
+      ]
+    },
+    "npcs/clerk_orrin/conversations/whisper/nodes/greet/options/bye/label": {
+      "hash": "60635b9c",
+      "text": "Lad ham være med sin hovedbog"
+    },
+    "npcs/clerk_orrin/conversations/whisper/nodes/greet/options/bye/keywords": {
+      "hash": "c2208d52",
+      "text": [
+        "farvel",
+        "gå"
+      ]
+    },
+    "npcs/clerk_orrin/conversations/whisper/nodes/told/text": {
+      "hash": "ce4923c5",
+      "text": "Før forårseftersynet. Han kom tilbage fra den tredje hvælving, og nu skriver han under med venstre hånd. Og han havde altid lille Marits maleri vendt mod sig, hele dagen. Nu ligger det med billedsiden nedad."
+    },
+    "npcs/clerk_orrin/conversations/whisper/nodes/told/options/thanks/label": {
+      "hash": "33365618",
+      "text": "\"Tak. Hold hovedet nede.\""
+    },
+    "npcs/thane_orsa/name": {
+      "hash": "53bafa0d",
+      "text": "Thanevogter Orsa Ironhand"
+    },
+    "npcs/thane_orsa/personality": {
+      "hash": "5a904a69",
+      "text": "Den valgte vogter af Jernhvælvets ret: gammel, hård, retfærdig efter sit eget hoved og frem for alt omhyggelig med Konsortiets gode navn."
+    },
+    "npcs/thane_orsa/secrets": {
+      "hash": "e1d0d4ac",
+      "text": [
+        "Hun har i årevis haft mistanke om, at den tredje hvælvings vejninger var for pæne, og har tiet."
+      ]
+    },
+    "npcs/thane_orsa/voice": {
+      "hash": "f7ab26c9",
+      "text": "Langsom og bevidst; taler om Konsortiet som 'vi' og om alle andre som 'sagen'."
+    },
+    "npcs/thane_orsa/conversations/verdict/label": {
+      "hash": "1c403b81",
+      "text": "Træd frem for thanevogteren og aflæg din beretning"
+    },
+    "npcs/thane_orsa/conversations/verdict/keywords": {
+      "hash": "f03160d4",
+      "text": [
+        "thane",
+        "thanevogter",
+        "orsa",
+        "vogter",
+        "beretning",
+        "ret",
+        "retten",
+        "dom",
+        "tal"
+      ]
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/greet/text": {
+      "hash": "286444d5",
+      "text": "En revisor i dette konsortium er væk, eller død, eller var der aldrig. En hvælving er en tiendedel hul. Og midt i sagen står en fremmed fra Brightwater. Fortæl retten, hvorfor vi ikke skal hænge sagen op på dig."
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/greet/options/body/label": {
+      "hash": "b998da57",
+      "text": "Peg på den grå ting under lagenet: \"Det var jeres revisor.\""
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/greet/options/body/keywords": {
+      "hash": "ec3b5181",
+      "text": [
+        "krop",
+        "liget",
+        "lagen",
+        "lagenet",
+        "ansigt",
+        "ting",
+        "peg"
+      ]
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/greet/options/ledger/label": {
+      "hash": "b3f646d0",
+      "text": "Læs den falske post højt, med dens initialer, O. V."
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/greet/options/ledger/keywords": {
+      "hash": "607e9dca",
+      "text": [
+        "hovedbog",
+        "hovedbogen",
+        "post",
+        "posten",
+        "læs",
+        "initialer",
+        "bevis",
+        "beviser"
+      ]
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/greet/options/ledger/check/advantageIf/0/source": {
+      "hash": "cbdd3968",
+      "text": "Det falske prægestempel fra Brightwater"
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/greet/options/ledger/check/advantageIf/1/source": {
+      "hash": "510bf99f",
+      "text": "Fyrre skrivere så revisorens ansigt flyde"
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/greet/options/plead/label": {
+      "hash": "e8642237",
+      "text": "\"Jeg kom hertil med aske i hånden og intet at vinde. Døm mig efter det.\""
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/greet/options/plead/keywords": {
+      "hash": "30e7f9bd",
+      "text": [
+        "bøn",
+        "ærlig",
+        "døm",
+        "intet",
+        "vinde"
+      ]
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/greet/options/defy/label": {
+      "hash": "06fb1011",
+      "text": "\"En ret, der lod et Ansigt underskrive dens mønt, skal ikke dømme mig.\""
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/greet/options/defy/keywords": {
+      "hash": "cf70c95a",
+      "text": [
+        "trods",
+        "nægt",
+        "ret",
+        "retten",
+        "døm",
+        "ansigt"
+      ]
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/hired/text": {
+      "hash": "2d339bc0",
+      "text": "Retten har hørt nok. Sagen er Konsortiets skam, ikke din. Tag denne bestalling under vores segl: Jernhvælvets døre står åbne for dig, og vores smede og boder vil behandle dig som en af vores egne. Find den, der skrev de initialer."
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/hired/options/accept/label": {
+      "hash": "e6a1514e",
+      "text": "Tag imod bestallingen"
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/blamed/text": {
+      "hash": "3c051c82",
+      "text": "Retten er ikke tilfreds. En fremmed kommer, en revisor forsvinder, og den fremmedes historie er alt, hvad vi har. Du forlader byen inden morgenklokken, og dit navn sendes til Kronens vogtere som efterlyst i denne sag. Bed til, at du kan bevise noget andet."
+    },
+    "npcs/thane_orsa/conversations/verdict/nodes/blamed/options/accept/label": {
+      "hash": "49c92fc4",
+      "text": "Vend om og gå"
+    },
+    "npcs/ilse_npc/name": {
+      "hash": "a6afa9db",
+      "text": "Søster Ilse Varn"
+    },
+    "npcs/ilse_npc/personality": {
+      "hash": "fcf30773",
+      "text": "En blidt talende, søvnløs ung søster af Veyra, sendt af Kronen for at overvære Jernhvælvets ret. Hun drømmer ting, før de sker, og skriver hver drøm ned før morgenmaden."
+    },
+    "npcs/ilse_npc/secrets": {
+      "hash": "1506a115",
+      "text": [
+        "Hun har drømt heltens ansigt i en uge: stående foran en sovende smedje med en krone, der ikke er en krone."
+      ]
+    },
+    "npcs/ilse_npc/voice": {
+      "hash": "5179ba41",
+      "text": "Stille tempelsprog; taler sig hen midt i en sætning, når en drøm vender tilbage."
+    },
+    "npcs/ilse_npc/conversations/dreams/label": {
+      "hash": "86bcaae8",
+      "text": "Tal med Kronens vidne i tempelblåt"
+    },
+    "npcs/ilse_npc/conversations/dreams/keywords": {
+      "hash": "40c06630",
+      "text": [
+        "ilse",
+        "vidne",
+        "vidnet",
+        "søster",
+        "blå",
+        "blåt",
+        "tempel",
+        "kvinde",
+        "kvinden"
+      ]
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/greet/text": {
+      "hash": "1d362e18",
+      "text": "Tilgiv mig, at jeg stirrer. Jeg er Ilse Varn, Veyras søster, her på Kronens vegne. Jeg har set dit ansigt før. I en drøm for en uge siden, stående foran en smedje, der sov. Jeg skriver alt ned. Her, se."
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/greet/options/share/label": {
+      "hash": "43b30989",
+      "text": "Vis hende alt, hvad du har fundet: asken, hovedbogen, revisoren"
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/greet/options/share/keywords": {
+      "hash": "9600f7cd",
+      "text": [
+        "vis",
+        "del",
+        "spor",
+        "fundet",
+        "alt",
+        "hovedbog",
+        "hovedbogen"
+      ]
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/greet/options/persuade/label": {
+      "hash": "eaa3a890",
+      "text": "\"Så kom og se, hvordan drømmen ender.\""
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/greet/options/persuade/keywords": {
+      "hash": "8d5b44b3",
+      "text": [
+        "kom",
+        "følg",
+        "drøm",
+        "drømmen",
+        "ender",
+        "overtal"
+      ]
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/greet/options/read/label": {
+      "hash": "162c3721",
+      "text": "Læs drømmebogen sammen med hende og spørg, hvad der skræmmer hende i den"
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/greet/options/read/keywords": {
+      "hash": "01873fa8",
+      "text": [
+        "læs",
+        "bog",
+        "bogen",
+        "drømmebog",
+        "skræmmer",
+        "bange",
+        "indsigt"
+      ]
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/greet/options/read/check/failure/text": {
+      "hash": "d91258c5",
+      "text": "Ilse lukker blidt bogen. \"Noget af det forstår jeg ikke selv.\""
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/greet/options/bye/label": {
+      "hash": "1ec41709",
+      "text": "\"En anden gang, søster.\""
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/greet/options/bye/keywords": {
+      "hash": "332e12ae",
+      "text": [
+        "farvel",
+        "gå",
+        "senere"
+      ]
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/joined/text": {
+      "hash": "b79df7a8",
+      "text": "Så fortæller jeg Kronen, at jeg følger sagen, hvorhen den fører. Det vil de tro på. Det er endda sandt."
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/joined/options/back/label": {
+      "hash": "75eac7e2",
+      "text": "\"Velkommen, Ilse.\""
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/duty/text": {
+      "hash": "c879bed3",
+      "text": "Jeg har svoret at tjene denne ret, til dens dom er skrevet. Jeg er ked af det. Hvis drømmen er sand, mødes vi igen."
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/duty/options/back/label": {
+      "hash": "a3750b2a",
+      "text": "\"Så gør vi det.\""
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/fear/text": {
+      "hash": "c78c9565",
+      "text": "Ansigterne. I drømmen tæller en kvinde ansigter som mønter, og når hun når enden af tællingen, er der en krone. Jeg er bange for, hvad hun gør med de ansigter, hun ikke har brug for. Jeg kommer med dig. Nogen bør skrive det her ned."
+    },
+    "npcs/ilse_npc/conversations/dreams/nodes/fear/options/back/label": {
+      "hash": "75eac7e2",
+      "text": "\"Velkommen, Ilse.\""
+    },
+    "encounters/vault_guardians/name": {
+      "hash": "611990cf",
+      "text": "Den tredje hvælvings vogtere"
+    },
+    "encounters/vault_guardians/statOverrides/animated_armor/name": {
+      "hash": "86127424",
+      "text": "Jernhvælvets vogter"
+    },
+    "encounters/vault_guardians/win/text": {
+      "hash": "29c96b24",
+      "text": "Den anden vogter falder fra hinanden med en klang, der runger gennem hele galleriet. Bag reolerne står hovedbogsnichen åben."
+    },
+    "encounters/vault_guardians/lose/text": {
+      "hash": "03d41a34",
+      "text": "Jernnæver driver dig tilbage op ad trappen. Du kommer til dig selv på tællehusets gulv med skrivere, der stirrer ned på dig."
+    },
+    "encounters/vault_guardians/flee/text": {
+      "hash": "e5f1b536",
+      "text": "Du kravler tilbage op ad hvælvingstrappen, og vogterne standser ved det nederste trin."
+    },
+    "encounters/gilt_fight/name": {
+      "hash": "863ab215",
+      "text": "Den falske revisor"
+    },
+    "encounters/gilt_fight/statOverrides/doppelganger/name": {
+      "hash": "0e877275",
+      "text": "Gilt"
+    },
+    "encounters/gilt_fight/win/text": {
+      "hash": "e53e2e71",
+      "text": "Gilt går i gulvet, og dens skikkelse slipper revisorens ansigt for altid: gråt, glat, uden øjne. Vagterne stirrer. Under tællehuset finder de den rigtige Tavin Hesk i en malmkælder, mager og i live, og han spørger efter sin datter Marit."
+    },
+    "encounters/gilt_fight/lose/text": {
+      "hash": "89b4739c",
+      "text": "Du vågner i en celle hos Jernhvælvet med en vagts støvle i ribbenene. Revisoren, siger de, løb ud i forvirringen og er ikke kommet tilbage. Nogen har sendt bud efter retten."
+    },
+    "encounters/gilt_fight/flee/text": {
+      "hash": "bcb7706c",
+      "text": "Du river dig løs, og i kaosset forsvinder den falske revisor ud ad et vindue og ind mellem terrasserne. Vagterne holder dig tilbage til retten."
+    },
+    "beats/brannoc_ledger/text": {
+      "hash": "0935c474",
+      "text": "Brannoc læser den falske post over heltens skulder."
+    },
+    "beats/brannoc_ledger/outcome/text": {
+      "hash": "6767e5dd",
+      "text": "Brannoc læser posten to gange, mens hans læber bevæger sig. \"Ti år,\" siger han. \"I ti år har Jernhvælvet vejet en løgn og kaldt den guld.\""
+    },
+    "beats/orrin_after/text": {
+      "hash": "1c03f68d",
+      "text": "Orrin takker helten, efter at Gilt er afsløret."
+    },
+    "beats/orrin_after/outcome/text": {
+      "hash": "3fbe1d42",
+      "text": "Unge Orrin griber dit ærme ved rettens dør. \"Den rigtige revisor spurgte efter Marit som det allerførste. Han skriver under med højre hånd.\" Han griner som en dreng."
+    },
+    "beats/ilse_court/text": {
+      "hash": "afb3bd17",
+      "text": "Ilse noterer dommen."
+    },
+    "beats/ilse_court/outcome/text": {
+      "hash": "29a72943",
+      "text": "Ilse skriver dommen ned med sin lille, pæne hånd og sætter to streger under initialerne O. V."
+    },
+    "quests/faces_in_the_ledger/name": {
+      "hash": "be0d73bc",
+      "text": "Ansigter i hovedbogen"
+    },
+    "quests/faces_in_the_ledger/objectives/gate/text": {
+      "hash": "8291538b",
+      "text": "Kom igennem portene til Deepanvil Hold"
+    },
+    "quests/faces_in_the_ledger/objectives/access/text": {
+      "hash": "99d33011",
+      "text": "Kom ind i Jernhvælvets tredje hvælving"
+    },
+    "quests/faces_in_the_ledger/objectives/ledger/text": {
+      "hash": "07887e43",
+      "text": "Find den falske post i hvælvingens hovedbog"
+    },
+    "quests/faces_in_the_ledger/objectives/hesk/text": {
+      "hash": "9bd7f31c",
+      "text": "Konfronter revisor Hesk foran tællehuset"
+    },
+    "quests/faces_in_the_ledger/objectives/court/text": {
+      "hash": "03205b5f",
+      "text": "Aflæg din beretning for Jernhvælvets ret"
+    },
+    "quests/faces_in_the_ledger/objectives/rest/text": {
+      "hash": "974175b8",
+      "text": "Hvil på Thanens Hvile før vejen sydpå"
+    },
+    "endings/ch1_to_fennicks/name": {
+      "hash": "fa7b67a7",
+      "text": "Vejen til Fennicks Hvile"
+    },
+    "endings/ch1_to_fennicks/text": {
+      "hash": "d75074de",
+      "text": "Jernhvælvets tredje hvælving var en tiendedel hul, et Ansigt sad ved dens revisors pult, og initialerne i hovedbogen var O. V. Det hule guld fører til Brinescatter-øerne, til spillehallerne i Fennicks Hvile, hvor guld bliver vasket."
+    }
+  }
+}

@@ -365,3 +365,27 @@ Brightwater, Silverrun, Deepanvil Hold, Highcrown and person names stay English.
 | the woman with two shadows | kvinden med de to skygger |
 | reeve's watch house | fogedens vagtstue |
 | courier | kurer |
+
+## The Hollow Crown ch1 "Faces in the Ledger" (B010)
+
+Deepanvil Hold, Fennick's Rest (= Fennicks Hvile, as in the tables), Port Sorrel and person names (Brekka Coalbrow, Orrin Flintwhistle, Orsa Ironhand, Marit) stay English. Everyone says "du" (Hesk's mock politeness is in word choice, not "De").
+
+| English | Danish |
+|---|---|
+| Faces in the Ledger | Ansigter i hovedbogen |
+| Auditor (Hesk) / audit (supervised) | revisor (revisor Hesk) / eftersyn (overvåget) |
+| counting house | tællehuset |
+| ledger / entry | hovedbog / post |
+| third vault / vault stair / ledger alcove | den tredje hvælving / hvælvingstrappen / hovedbogsnichen |
+| Gallery of Racks / racks | Reolgalleriet / reoler |
+| gatewarden / toll-master / toll-hall | portvogter / toldmester / toldhal |
+| the Consortium / anvil-and-key / charter | Konsortiet / ambolt-og-nøgle / charter |
+| Ironvault court | Jernhvælvets ret |
+| Thane-Warden / the Thane / commission | thanevogter / thanen / bestalling |
+| Thane's Rest | Thanens Hvile |
+| (vault) guardians / watchword | vogtere / løsen |
+| Crown witness | Kronens vidne |
+| dream-book | drømmebog |
+| doppelganger (prose) | dobbeltgænger |
+| WANTED (broadsheet) | EFTERLYST (plakat) |
+| Brinescatter Isles | Brinescatter-øerne |
