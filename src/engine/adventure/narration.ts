@@ -14,6 +14,8 @@ export interface NarrationJob {
   /** 'combat': brief background narration of combat moments (A069). */
   kind: 'scene' | 'outcome' | 'combat';
   playerAction?: string;
+  /** Name of the extra hero (co-op/duo) who took the action; absent = the main hero ("you"). */
+  actor?: string;
   /** Fixed facts, in order. */
   facts: string[];
   /** Index in `facts` where the scene arrival starts (scene jobs). */
@@ -31,14 +33,19 @@ export type Narrator = (job: NarrationJob, signal?: AbortSignal) => AsyncIterabl
 /** Where narration lands: the session, or a guard around it that can drop late output. */
 export type NarrationSink = Pick<GameSession, 'reserveId' | 'emit' | 'addLog'>;
 
-/** Deterministic narration from data: facts on the way, the scene description, then arrival facts. */
+/**
+ * Deterministic narration from data: facts on the way, the scene description, then arrival facts.
+ * An action taken by an extra hero opens with a line naming them (authored facts say "you").
+ */
 export function templateNarration(job: NarrationJob): string {
   const { m } = job.ctx.msgs ?? ENGLISH_MESSAGES;
-  if (job.kind === 'outcome' || job.kind === 'combat') return job.facts.join(' ') || m('tpl.nothingHappens');
+  if (job.kind === 'combat') return job.facts.join(' ') || m('tpl.nothingHappens');
+  const who = job.actor ? [m('tpl.actorActs', { name: job.actor })] : [];
+  if (job.kind === 'outcome') return [...who, ...job.facts].join(' ') || m('tpl.nothingHappens');
   const d = describeScene(job.ctx, job.visit);
   const scene = [d.seed, ...d.pois.map((p) => p.seed), ...(d.npcs.length ? [m('tpl.here', { list: d.npcs.join(', ') })] : [])].join(' ');
   const cut = job.arrivalIndex ?? 0;
-  return [...job.facts.slice(0, cut), scene, ...job.facts.slice(cut)].join(' ');
+  return [...who, ...job.facts.slice(0, cut), scene, ...job.facts.slice(cut)].join(' ');
 }
 
 /**

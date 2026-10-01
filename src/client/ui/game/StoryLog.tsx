@@ -17,7 +17,7 @@ export function StoryLog() {
       {entries.map((e) => (
         <p key={e.id} class={`log-entry log-${e.kind}`}>
           {e.kind === 'dialogue' && e.speaker && <strong class="speaker">{e.speaker}: </strong>}
-          {e.kind === 'player' && <span class="speaker">› </span>}
+          {e.kind === 'player' && <span class="speaker">› {e.speaker && <strong>{e.speaker}: </strong>}</span>}
           {e.text}
         </p>
       ))}

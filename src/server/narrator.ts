@@ -29,6 +29,7 @@ export function llmNarrator(getLlm: () => LlmProvider, lore: Lore, db?: SrdDatab
       kind: job.kind,
       facts: job.facts,
       ...(job.playerAction && { playerAction: job.playerAction }),
+      ...(job.actor && { actor: job.actor }),
       ...(job.visit && { visit: job.visit }),
       ...(language && { language }),
     });

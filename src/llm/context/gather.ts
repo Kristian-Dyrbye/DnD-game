@@ -10,7 +10,7 @@ import { questContextLines } from '../../engine/adventure/quests';
 import type { Adventure } from '../../engine/adventure/schema';
 import type { Character } from '../../engine/core/creature';
 import type { SrdDatabase } from '../../engine/data/srd';
-import type { GameState, LogEntry } from '../../engine/session/gameState';
+import { extraHeroes, type GameState, type LogEntry } from '../../engine/session/gameState';
 import type { Lore } from '../../engine/world/lore';
 import { srdName } from '../../engine/i18n/srdNames';
 import type { Language } from '../../shared/i18nCore';
@@ -33,7 +33,7 @@ export function describeMember(c: Character, db?: SrdDatabase, lang: Language = 
 }
 
 export function recentLines(log: readonly LogEntry[], n = RECENT_EXCHANGES): string[] {
-  const who = (e: LogEntry) => (e.kind === 'player' ? 'Player' : e.kind === 'dialogue' ? (e.speaker ?? 'NPC') : 'Narrator');
+  const who = (e: LogEntry) => (e.kind === 'player' ? (e.speaker ?? 'Player') : e.kind === 'dialogue' ? (e.speaker ?? 'NPC') : 'Narrator');
   return log
     .filter((e) => e.kind === 'player' || e.kind === 'narration' || e.kind === 'dialogue')
     .slice(-n)
@@ -79,11 +79,15 @@ export function gatherNarrationContext(state: GameState, lore: Lore, adventure?:
     sceneText = [`${d.name}. ${d.seed}`, ...d.pois.map((p) => `${p.name}: ${p.seed}`), ...(d.npcs.length ? [`Present: ${d.npcs.join(', ')}.`] : [])].join('\n');
   }
 
+  // C007: heroes made by a player (duo/co-op) are listed as heroes, not companions.
+  const extras = extraHeroes(state);
   return {
     ...(region && { tone: toneText(region) }),
+    ...(extras.length > 0 && { heroes: [state.hero.name, ...extras.map((h) => h.name)] }),
     party: [
       describeMember(state.hero, db, lang),
       ...state.companions.map((c) => {
+        if (extras.includes(c)) return `${describeMember(c, db, lang)} (player hero)`;
         const loyalty = state.flags[`world.${c.id}_loyalty`];
         return `${describeMember(c, db, lang)} (companion${typeof loyalty === 'number' ? `, loyalty ${loyalty}/100${loyalty <= 20 ? ', resentful' : loyalty >= 70 ? ', devoted' : ''}` : ''})`;
       }),

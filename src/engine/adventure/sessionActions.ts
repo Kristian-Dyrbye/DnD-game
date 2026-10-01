@@ -29,6 +29,7 @@ import { canLevelUp, levelUp } from '../character/leveling';
 import { banterDue, speakBanter, type BanterGenerator } from '../party/banter';
 import { changeApproval, levelCompanionsWithHero, partingLine, partWithCompanion,recruitCompanion, returnCompanion, setControl, type CompanionRoster } from '../party/companions';
 import { totalLevel } from '../core/creature';
+import { extraHeroes } from '../session/gameState';
 import type { Ability, Skill } from '../rules/basics';
 import { acceptOffer, activeSideQuest, finishActive, offerSources, offersAt, refreshOffers, roadOffer, sideQuestState, type SideQuestDeps } from './sideQuests';
 import type { SideQuestTables } from './sidequestTables';
@@ -86,7 +87,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     return { state: session.current, adventure, rng: session.rng, msgs: session.msgs, ...(db && { db }), ...(opts.flags && { flags: opts.flags }), ...(opts.lore && { lore: opts.lore }), ...(opts.companions && { companions: opts.companions }) };
   };
 
-  const publish = async (session: GameSession, ctx: RunContext, r: StepResult, playerAction?: string): Promise<void> => {
+  const publish = async (session: GameSession, ctx: RunContext, r: StepResult, playerAction?: string, actor?: string): Promise<void> => {
     // Dice first, so the tray animates while the narration is written.
     for (const roll of r.rolls) {
       session.addRoll({
@@ -107,6 +108,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
           facts: r.facts,
           ctx,
           ...(playerAction && { playerAction }),
+          ...(actor && { actor }),
           ...(r.arrivalIndex !== undefined && { arrivalIndex: r.arrivalIndex }),
           ...(r.entered.length > 0 && { visit: r.returning ? 'return' : 'first' }),
         },
@@ -275,8 +277,8 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       .catch(() => undefined);
   };
 
-  const finish = async (session: GameSession, ctx: RunContext, r: StepResult, playerAction?: string) => {
-    await publish(session, ctx, r, playerAction);
+  const finish = async (session: GameSession, ctx: RunContext, r: StepResult, playerAction?: string, actor?: string) => {
+    await publish(session, ctx, r, playerAction, actor);
     maybeBanter(session);
     // A finished side quest hands control back to the main adventure.
     const done = finishActive(session.current);
@@ -508,11 +510,15 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       if (actionId.startsWith('sq:')) return sideQuestChoice(session, actionId);
       const ctx = ctxFor(session);
       const label = availableActions(ctx).find((a) => a.id === actionId)?.label;
-      // A picked conversation reply shows as the hero's line.
-      if (label && actionId.startsWith(DIALOGUE_PREFIX) && actionId !== LEAVE_TALK) session.addLog('player', label);
+      // C007: an extra hero acting (named, or the one who opened the talk) is named in the log and narration.
+      const dialogue = actionId.startsWith(DIALOGUE_PREFIX);
+      const actingId = actor ?? (dialogue ? getProgress(ctx.state)?.talk?.actor : undefined);
+      const acting = actingId === undefined ? undefined : extraHeroes(ctx.state).find((h) => h.id === actingId)?.name;
+      // A picked conversation reply shows as the speaking hero's line.
+      if (label && dialogue && actionId !== LEAVE_TALK) session.addLog('player', label, acting);
       const before = ctx.state.time;
       const r = perform(ctx, actionId, actor === undefined ? {} : { actor });
-      await finish(session, ctx, r, label);
+      await finish(session, ctx, r, label, actionId === LEAVE_TALK ? undefined : acting);
       session.timePassed(before);
     },
     async say(session, text) {

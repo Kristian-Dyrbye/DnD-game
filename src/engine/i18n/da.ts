@@ -726,6 +726,7 @@ export const da: Partial<Record<EngineKey, string>> = {
   // Fallback templates (A141d)
   'tpl.nothingHappens': 'Der sker ikke meget.',
   'tpl.here': 'Her er: {list}.',
+  'tpl.actorActs': '{name} træder frem.',
   'summary.hero': 'Helten: {text}',
   'summary.someone': 'Nogen',
   'suggest.look': 'Se dig omkring',

@@ -28,6 +28,8 @@ export interface NarrationContext {
   cards: PromptCard[];
   /** Scene description seed + visible points of interest. */
   scene: string;
+  /** C007: the player heroes' names when there are several (main hero first, the "you"); absent in solo play. */
+  heroes?: string[];
 }
 
 export type NarrationKind = 'scene' | 'outcome' | 'combat';
@@ -36,6 +38,8 @@ export interface NarrationRequest {
   kind: NarrationKind;
   /** What the player did, in their words or the action label. */
   playerAction?: string;
+  /** Name of the extra player hero who took the action (C007); absent = the main hero. */
+  actor?: string;
   /** Engine-resolved facts, in order. The narrator must convey all of them and invent nothing mechanical. */
   facts: string[];
   /** Scene narration: first arrival (default), a return to a visited place, or resuming a loaded game. */
@@ -73,8 +77,10 @@ export const DEFAULT_PROMPT_BUDGET = 1400;
 export function buildNarrationPrompt(ctx: NarrationContext, req: NarrationRequest, budget = DEFAULT_PROMPT_BUDGET): BuiltPrompt {
   const langRule = replyLanguageRule(req.language);
   const rules = [...NARRATION_RULES, ...(langRule ? [langRule] : [])];
-  const system = [DM_PERSONA, ...(ctx.tone ? [ctx.tone] : []), 'Rules:', ...rules.map((r) => `- ${r}`)].join('\n');
+  const system = [persona(ctx.heroes, req.actor), ...(ctx.tone ? [ctx.tone] : []), 'Rules:', ...rules.map((r) => `- ${r}`)].join('\n');
   const dropped: string[] = [];
+  // C007: the acting extra hero leads the facts (authored facts say "you"; small models follow facts best).
+  const facts = req.actor && req.kind !== 'combat' ? [`${req.actor} (not "you") takes this action.`, ...req.facts] : req.facts;
 
   // Mandatory parts: state, scene, facts, task. Optional (trimmed in this order): recent exchanges
   // (oldest first), low-priority cards, flags, summary.
@@ -86,12 +92,13 @@ export function buildNarrationPrompt(ctx: NarrationContext, req: NarrationReques
   const render = () =>
     [
       section('STATE', [...ctx.party, `Location: ${ctx.where}`, `Time: ${ctx.when}`, ...(ctx.threats.length ? [`Threats: ${ctx.threats.join('; ')}`] : [])]),
+      partyCard(ctx.heroes),
       flags.length ? section('WORLD', flags) : '',
       summary ? section('STORY SO FAR', [summary]) : '',
       recent.length ? section('RECENT', recent) : '',
       cards.length ? section('NOTES', cards.map((c) => c.text)) : '',
       section('SCENE', [ctx.scene]),
-      req.facts.length ? section('FIXED FACTS (narrate all of these, in order)', req.facts.map((f, i) => `${i + 1}. ${f}`)) : '',
+      facts.length ? section('FIXED FACTS (narrate all of these, in order)', facts.map((f, i) => `${i + 1}. ${f}`)) : '',
       section('TASK', [task(req)]),
     ]
       .filter(Boolean)
@@ -131,13 +138,40 @@ export function buildNarrationPrompt(ctx: NarrationContext, req: NarrationReques
   };
 }
 
+/** The DM persona; with several player heroes "you" is reserved for the main hero (C007). */
+function persona(heroes: readonly string[] | undefined, actor: string | undefined): string {
+  if (!heroes || heroes.length < 2) return DM_PERSONA;
+  const [main, ...others] = heroes;
+  return (
+    `You are the Dungeon Master of a fantasy adventure, narrating for a party of player heroes: ${heroes.join(', ')}. ` +
+    `Write in present tense, 3 to 5 sentences of vivid, concrete prose (one short paragraph, two at most). ` +
+    `Address ${main} as "you"; always call ${others.join(' and ')} by name in the third person.` +
+    (actor ? ` This time ${actor} acts: tell it about ${actor} by name.` : '')
+  );
+}
+
 function section(title: string, lines: string[]): string {
   return `${title}:\n${lines.join('\n')}`;
 }
 
+/**
+ * C007: with several player heroes the model must know who "you" is. Mandatory (never trimmed):
+ * without it a small model calls every hero "you".
+ */
+export function partyCard(heroes: readonly string[] | undefined): string {
+  if (!heroes || heroes.length < 2) return '';
+  const [main, ...others] = heroes;
+  const names = others.join(' and ');
+  return section('PARTY', [
+    `Player heroes: ${heroes.join(', ')}.`,
+    `"You" always means ${main}. Call ${names} by name, never "you". Each hero does only what the facts and the player's action say.`,
+  ]);
+}
+
 /** The task line, plus a closing reminder of the reply language (small models forget the system rule). */
 function task(req: NarrationRequest): string {
-  const text = taskText(req);
+  const led = req.kind === 'scene' && req.actor ? ` ${req.actor} (not "you") made the move that led here${req.playerAction ? `: "${req.playerAction}"` : ''}.` : '';
+  const text = taskText(req) + led;
   return req.language && req.language !== 'en' ? `${text} Write it in ${LANGUAGE_NAMES[req.language]}.` : text;
 }
 
@@ -150,5 +184,7 @@ function taskText(req: NarrationRequest): string {
   }
   if (req.kind === 'combat')
     return 'In one or two short, vivid sentences, narrate these moments of the fight. No numbers or game terms; do not add new hits, deaths or effects. Only the fighters named in these moments act or get hurt; bystanders and prisoners in the scene take no part.';
+  if (req.actor)
+    return `${req.actor} (a player hero, not "you"): "${req.playerAction ?? 'acts'}". In 3 to 5 sentences, narrate ${req.actor} doing it, following the fixed facts exactly; where a fact says "you" about this action, it means ${req.actor}.`;
   return `The player: "${req.playerAction ?? 'acts'}". In 3 to 5 sentences, narrate what happens, following the fixed facts exactly.`;
 }

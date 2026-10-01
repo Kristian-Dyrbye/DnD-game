@@ -727,6 +727,7 @@ export const en = {
   // Fallback templates (A141d): narration/summary glue, buttons, check labels, template backstory
   'tpl.nothingHappens': 'Nothing much happens.',
   'tpl.here': 'Here: {list}.',
+  'tpl.actorActs': '{name} steps up.',
   'summary.hero': 'The hero: {text}',
   'summary.someone': 'Someone',
   'suggest.look': 'Look around',

@@ -6,13 +6,15 @@
  * call is recorded (RecordingLlm) and the run waits for background calls (suggestions, summary,
  * banter) before the next command, like a player reading the text.
  *
- *   npx tsx scripts/playtest-llm.ts [model] [--ch1-steps=10] [--lang=da] [--campaign=hollow_crown]
+ *   npx tsx scripts/playtest-llm.ts [model] [--ch1-steps=10] [--lang=da] [--campaign=hollow_crown] [--duo]
  *
  * Writes userdata/playtest-llm.json (summary + every call) and userdata/playtest-llm.md (transcript);
  * with --lang=da (A150) the session plays in Danish (Danish probes, the language's default model) and
  * writes userdata/playtest-llm-da.{json,md}. --campaign (B013; campaign id or first adventure id)
  * plays another campaign's first chapter + the start of its second (hollow_crown: ch0 + ch1 with the
- * arc 2 test policy and level-ups) and adds the campaign id to the file names.
+ * arc 2 test policy and level-ups) and adds the campaign id to the file names. --duo (C007) adds a
+ * second player hero (Wren, a rogue) after new_game; every other check button with a hero chooser is
+ * taken by Wren, and the report counts how often the narration names her (`-duo` in the file names).
  * Needs Ollama on http://127.0.0.1:11434. Takes 30–60 minutes on a laptop CPU.
  */
 import fs from 'node:fs';
@@ -57,7 +59,8 @@ const campaignArg = args.find((a) => a.startsWith('--campaign='))?.split('=')[1]
 const found = campaignArg === undefined ? DEFAULT_CAMPAIGN : CAMPAIGNS.find((c) => c.id === campaignArg || c.adventure === campaignArg);
 if (!found) throw new Error(`Unknown --campaign=${campaignArg}`);
 const campaign = found;
-const suffix = `${campaign === DEFAULT_CAMPAIGN ? '' : `-${campaign.id}`}${lang === 'en' ? '' : `-${lang}`}`;
+const duo = args.includes('--duo');
+const suffix = `${campaign === DEFAULT_CAMPAIGN ? '' : `-${campaign.id}`}${lang === 'en' ? '' : `-${lang}`}${duo ? '-duo' : ''}`;
 const db = loadSrd();
 const S = 'arc.starter.';
 
@@ -242,6 +245,12 @@ async function main(): Promise<void> {
   if (lang !== 'en') await session.handle({ type: 'set_language', language: lang });
   await run({ type: 'new_game', hero, mode: 'heroic', ...(campaign !== DEFAULT_CAMPAIGN && { campaign: campaign.adventure }) }, 'new_game');
   await settle('start');
+  if (duo) {
+    await run({ type: 'add_hero', hero: { ...buildCharacter(toBuildInput(quickBuild('rogue', db, Rng.fromSeed('duo'))), db), name: 'Wren' } }, 'add_hero');
+    await settle('start');
+  }
+  const duoTurns: { actionId: string; callIndex: number }[] = [];
+  let checksSeen = 0;
 
   const probed = new Set<string>();
   let ch1Taken = 0;
@@ -289,7 +298,11 @@ async function main(): Promise<void> {
       console.log(`stuck in ${scene}; offered: ${offered.join(', ')}`);
       break;
     }
-    await run({ type: 'choose', actionId: choice }, `choose ${choice}`);
+    // --duo: every other action with a hero chooser goes to the second hero.
+    const button = ([...events].reverse().find((e): e is Extract<ServerEvent, { type: 'suggestions' }> => e.type === 'suggestions')?.actions ?? []).find((a) => a.id === choice);
+    const second = duo && button?.actors?.some((a) => a.id !== 'hero') && checksSeen++ % 2 === 0 ? button.actors.find((a) => a.id !== 'hero')!.id : undefined;
+    if (second) duoTurns.push({ actionId: choice, callIndex: llm.calls.length });
+    await run({ type: 'choose', actionId: choice, ...(second && { actor: second }) }, `choose ${choice}${second ? ` (${second})` : ''}`);
     await settle(scene);
   }
   await settle('end');
@@ -309,6 +322,17 @@ async function main(): Promise<void> {
     reachedAdventure: getProgress(session.current)?.adventureId,
     errors: events.filter((e) => e.type === 'error'),
     narration: { story: narrations(false), combat: narrations(true) },
+    ...(duo && {
+      duo: (() => {
+        // The story narration of each of Wren's turns: does it name her?
+        const turns = duoTurns.map((t) => {
+          const call = llm.calls.slice(t.callIndex).find((c) => c.task === 'narrate' && !c.prompt.includes('moments of the fight'));
+          return { actionId: t.actionId, namesWren: !!call && /\bWren\b/.test(call.reply), actorInTask: !!call?.prompt.includes('Wren (a player hero, not "you")'), reply: call?.reply ?? '' };
+        });
+        // The recorder keeps the prompt's last 600 characters: enough for the TASK line naming the actor.
+        return { secondHeroTurns: turns.length, narratedWithName: turns.filter((t) => t.namesWren).length, actorInTask: turns.filter((t) => t.actorInTask).length, turns };
+      })(),
+    }),
     tasks: summarizeCalls(llm.calls),
     probeScore: (() => {
       const scored = probes.filter((p) => p.understood !== null);
