@@ -954,7 +954,7 @@
       "text": "en rænkefuld konkurrerende købmand"
     },
     "complications/rain_of_arrows/text": {
-      "hash": "ff7984fb",
+      "hash": "59cb7af2",
       "text": "{antagonist} havde ventet besøg og har lagt et baghold."
     },
     "complications/ticking_clock/text": {
@@ -982,11 +982,11 @@
       "text": "{patron} løj om, hvorfor det her skulle gøres."
     },
     "twists/sympathetic_foe/text": {
-      "hash": "83fd4d3b",
+      "hash": "9b68e188",
       "text": "Der var en god grund til det, {antagonist} gjorde."
     },
     "twists/bigger_threat/text": {
-      "hash": "7ccb0aaa",
+      "hash": "ca65ee73",
       "text": "{antagonist} var på flugt fra noget, der er langt værre."
     },
     "twists/choir_mark/text": {

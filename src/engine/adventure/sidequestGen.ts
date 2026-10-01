@@ -17,6 +17,7 @@ import { totalLevel } from '../core/creature';
 import { xpBudget } from './encounters';
 import { evalCondition } from './conditions';
 import type { APPROACH_KINDS, SideQuestTables } from './sidequestTables';
+import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
 type ApproachKind = (typeof APPROACH_KINDS)[number];
 
@@ -31,6 +32,8 @@ export interface SideQuestOptions {
   flags?: FlagRegistry;
   /** Chance to use an open thread when one exists (default 0.75). */
   threadChance?: number;
+  /** Language of the generated glue text (pass tables/lore in the same language). Default English. */
+  msgs?: Messages;
 }
 
 export interface GeneratedQuest {
@@ -46,12 +49,27 @@ export interface GeneratedQuest {
 
 /** Companion approval tag earned by resolving a job this way (on success). */
 const APPROACH_TAGS: Partial<Record<ApproachKind, string>> = { sneak: 'clever', trick: 'clever', talk: 'diplomacy' };
-const FIGHT_FAILURE: Partial<Record<ApproachKind, string>> = {
-  sneak: 'You are spotted. Steel is drawn.',
-  talk: 'Talk fails. Steel is drawn.',
-  trick: 'The ruse falls apart, and they come for you.',
-  skill: 'It goes wrong, and they come for you.',
-};
+const FIGHT_FAILURE = { sneak: 'sq.fail.sneak', talk: 'sq.fail.talk', trick: 'sq.fail.trick', skill: 'sq.fail.skill' } as const;
+
+/** Upper-cases the first letter (any script). */
+const cap = (s: string) => s.replace(/^\p{Ll}/u, (c) => c.toUpperCase());
+
+/**
+ * Fills `{name}` placeholders; a value that starts the text or a sentence is capitalised, so
+ * "{antagonist} pays well." reads "A pirate crew pays well." ({unknown} placeholders stay as they are).
+ */
+export function fillPlaceholders(text: string, values: Record<string, string>): string {
+  const out = text.replace(/\{(\w+)\}/g, (whole, key: string, offset: number, src: string) => {
+    const v = values[key];
+    if (v === undefined) return whole;
+    return /(^|[.!?]["”»]?\s+)$/u.test(src.slice(0, offset)) ? cap(v) : v;
+  });
+  return cap(out);
+}
+
+/** English keywords plus the language's own (players mix languages). */
+const keywordList = (msgs: Messages, key: 'sq.kw.force' | 'sq.kw.accept') =>
+  [...new Set([...ENGLISH_MESSAGES.m(key).split(','), ...msgs.m(key).split(',')])];
 
 /** Local flag set by an outcome variant (read by its claim at the report). */
 export const outcomeFlag = (outcomeId: string) => `~o_${outcomeId}`;
@@ -88,6 +106,8 @@ export function questDc(level: number): number {
 
 export function generateSideQuest(o: SideQuestOptions): GeneratedQuest {
   const { tables, lore, db, rng, state } = o;
+  const msgs = o.msgs ?? ENGLISH_MESSAGES;
+  const { m } = msgs;
   const level = totalLevel(state.hero);
   const here = lore.locations.find((l) => l.id === o.locationId) ?? lore.locations[0]!;
   const region = here.regionId;
@@ -116,21 +136,10 @@ export function generateSideQuest(o: SideQuestOptions): GeneratedQuest {
   const villain = thread?.villain || foe.name;
   // Picked once so the goal, choices and claims all name the same relative/heirloom/parcel.
   const words = { relative: rng.pick(p.relatives), heirloom: rng.pick(p.heirlooms), mystery: rng.pick(p.mysteries), parcel: rng.pick(p.parcels), rival: rng.pick(p.names.filter((n) => n !== patron)) };
-  const fill = (text: string) =>
-    text
-      .replaceAll('{antagonist}', villain)
-      .replaceAll('{patron}', patron)
-      .replaceAll('{relative}', words.relative)
-      .replaceAll('{heirloom}', words.heirloom)
-      .replaceAll('{mystery}', words.mystery)
-      .replaceAll('{parcel}', words.parcel)
-      .replaceAll('{destination}', destination)
-      .replaceAll('{deadline}', 'nightfall tomorrow')
-      .replaceAll('{rival}', words.rival)
-      .replaceAll('{site}', site.name)
-      .replace(/^\w/, (c) => c.toUpperCase());
+  const values = { ...words, antagonist: villain, patron, destination, deadline: m('sq.deadline'), site: site.name };
+  const fill = (text: string) => fillPlaceholders(text, values);
   const goal = fill(type.goal);
-  const title = thread?.name ?? `${type.name}: ${villain}`;
+  const title = thread?.name ?? m('sq.title', { type: type.name, villain });
 
   // 4. Encounter sized to a Moderate budget for the hero's level.
   const budget = db.tables ? xpBudget([level], tables.rewards.xpDifficulty, db.tables) : 100 * level;
@@ -168,14 +177,14 @@ export function generateSideQuest(o: SideQuestOptions): GeneratedQuest {
   const dc = questDc(level);
   const approval = (tags: (string | undefined)[]) => tags.flatMap((t) => (t && tables.approvalTags[t]) || []);
   const open = { not: { flag: '~resolved' } };
-  const winFacts = [`${villain} will trouble no one again.`, ...(twist.text ? [fill(twist.text)] : [])].join(' ');
+  const winFacts = [cap(m('sq.win', { villain })), ...(twist.text ? [fill(twist.text)] : [])].join(' ');
   const siteScene: Record<string, unknown> = {
     id: 'site',
-    name: site.name.replace(/^an? /, '').replace(/^\w/, (c) => c.toUpperCase()),
+    name: cap(site.name.replace(/^an? /, '')),
     seed: site.seed,
     actions: [] as unknown[],
     // Once the job is resolved, choose how it ends before heading back.
-    exits: [{ id: 'leave', label: 'Head back to ' + here.name, to: 'report', minutes: 120, if: { any: [{ not: { flag: '~resolved' } }, { flag: '~decided' }] } }],
+    exits: [{ id: 'leave', label: m('sq.headBack', { place: here.name }), to: 'report', minutes: 120, if: { any: [{ not: { flag: '~resolved' } }, { flag: '~decided' }] } }],
   };
   const siteActions = siteScene.actions as unknown[];
   if (complication.effect === 'ambush') siteScene.onEnter = { text: fill(complication.text), encounter: 'fight' };
@@ -191,12 +200,12 @@ export function generateSideQuest(o: SideQuestOptions): GeneratedQuest {
     approachIds.push(id);
     const base = { id, label: fill(a.label), if: open, ...(a.keywords.length && { keywords: a.keywords }) };
     if (a.kind === 'fight') return siteActions.push({ ...base, outcome: { encounter: 'fight' } });
-    if (a.kind === 'bribe') return siteActions.push({ ...base, label: `${base.label} (${bribeGp} gp)`, outcome: { cost: bribeGp * 100, text: fill(a.success), flags: resolvedBy('bribe') } });
+    if (a.kind === 'bribe') return siteActions.push({ ...base, label: m('sq.bribe', { label: base.label, price: msgs.coins(bribeGp * 100) }), outcome: { cost: bribeGp * 100, text: fill(a.success), flags: resolvedBy('bribe') } });
     // Talking a foe down is harder unless they had a good reason (spare_option twist); a ruse is a little harder.
     const checkDc = !type.fight ? dc : a.kind === 'talk' ? (twist.effect === 'spare_option' ? dc : dc + 2) : a.kind === 'trick' ? dc + 1 : dc;
     const failure = type.fight
-      ? { text: FIGHT_FAILURE[a.kind] ?? FIGHT_FAILURE.skill!, encounter: 'fight' }
-      : { text: 'It is harder than it looked; you will need another way.', flags: [{ set: '~setback' }] };
+      ? { text: m(a.kind in FIGHT_FAILURE ? FIGHT_FAILURE[a.kind as keyof typeof FIGHT_FAILURE] : FIGHT_FAILURE.skill), encounter: 'fight' }
+      : { text: m('sq.setback'), flags: [{ set: '~setback' }] };
     return siteActions.push({
       ...base,
       once: true,
@@ -204,7 +213,7 @@ export function generateSideQuest(o: SideQuestOptions): GeneratedQuest {
     });
   });
   if (!type.fight) {
-    siteActions.push({ id: 'force', label: `Force the issue with ${villain}`, if: { all: [{ flag: '~setback' }, open] }, keywords: ['fight', 'attack', 'force'], outcome: { encounter: 'fight' } });
+    siteActions.push({ id: 'force', label: m('sq.force', { villain }), if: { all: [{ flag: '~setback' }, open] }, keywords: keywordList(msgs, 'sq.kw.force'), outcome: { encounter: 'fight' } });
     approachIds.push('force');
   }
 
@@ -219,20 +228,20 @@ export function generateSideQuest(o: SideQuestOptions): GeneratedQuest {
   }
   if (complication.effect === 'gate_check' || complication.effect === 'hazard_check') {
     const sk = complication.skill ?? 'athletics';
-    siteActions.unshift({ id: 'obstacle', label: complication.effect === 'gate_check' ? 'Slip past the watch' : 'Push through the storm', once: true, check: { skill: sk, dc, success: { text: 'You get through unseen and unhurt.' }, failure: { text: 'It costs you time and a few bruises.', minutes: 30 } } });
+    siteActions.unshift({ id: 'obstacle', label: m(complication.effect === 'gate_check' ? 'sq.gate' : 'sq.hazard'), once: true, check: { skill: sk, dc, success: { text: m('sq.obstacle.ok') }, failure: { text: m('sq.obstacle.fail'), minutes: 30 } } });
   }
 
   const report = {
     id: 'report',
     name: here.name,
     locationId: here.id,
-    seed: `${patron} is waiting for news.`,
+    seed: m('sq.waiting', { patron }),
     actions: [
       // One claim per outcome variant: pay, reputation and the thread's write-back follow the choice.
       ...type.outcomes.map((o, i) => {
         const coins = Math.round(gold * o.goldMul) * 100;
         const patronRep = Math.round(rep * o.repMul);
-        const paidBy = o.goldMul === 0 ? `${patron} listens in silence. There is no pay for this, but you know why you chose it.` : o.repMul < 0 ? `The coin is yours; ${patron}'s trust is not.` : `${patron} thanks you and pays as promised.`;
+        const paidBy = m(o.goldMul === 0 ? 'sq.paid.none' : o.repMul < 0 ? 'sq.paid.distrust' : 'sq.paid.ok', { patron });
         return {
           id: i === 0 ? 'claim' : `claim_${o.id}`,
           label: fill(o.claim),
@@ -250,12 +259,12 @@ export function generateSideQuest(o: SideQuestOptions): GeneratedQuest {
       }),
       {
         id: 'give_up',
-        label: `Admit to ${patron} that you failed`,
+        label: m('sq.giveUp', { patron }),
         if: { all: [type.fight ? { flag: '~botched' } : { any: [{ flag: '~botched' }, { flag: '~setback' }] }, { not: { flag: '~resolved' } }] },
-        outcome: { text: `${patron} nods, disappointed.`, flags: [{ set: '~failed' }], ending: 'failed' },
+        outcome: { text: m('sq.giveUp.text', { patron }), flags: [{ set: '~failed' }], ending: 'failed' },
       },
     ],
-    exits: [{ id: 'back_to_site', label: `Return to ${site.name}`, to: 'site', minutes: 120, if: { not: { flag: '~resolved' } } }],
+    exits: [{ id: 'back_to_site', label: m('sq.returnTo', { site: site.name }), to: 'site', minutes: 120, if: { not: { flag: '~resolved' } } }],
   };
 
   const adventure: Record<string, unknown> = {
@@ -278,9 +287,9 @@ export function generateSideQuest(o: SideQuestOptions): GeneratedQuest {
             id: 'offer',
             name: here.name,
             locationId: here.id,
-            seed: `${patron} approaches you with a job: ${goal}.`,
-            actions: [{ id: 'accept', label: 'Accept the job', once: true, keywords: ['accept', 'yes', 'job'], outcome: { text: `${patron} explains where to find ${site.name}.`, flags: [{ set: '~accepted' }] } }],
-            exits: [{ id: 'go', label: `Set out for ${site.name}`, to: 'site', minutes: 120, if: { flag: '~accepted' } }],
+            seed: m('sq.offerSeed', { patron, goal }),
+            actions: [{ id: 'accept', label: m('sq.accept'), once: true, keywords: keywordList(msgs, 'sq.kw.accept'), outcome: { text: m('sq.explains', { patron, site: site.name }), flags: [{ set: '~accepted' }] } }],
+            exits: [{ id: 'go', label: m('sq.setOut', { site: site.name }), to: 'site', minutes: 120, if: { flag: '~accepted' } }],
           },
           siteScene,
           report,
@@ -288,20 +297,20 @@ export function generateSideQuest(o: SideQuestOptions): GeneratedQuest {
       },
     ],
     encounters: [
-      { id: 'fight', name: villain, monsters, terrain: [], win: { text: winFacts, flags: [{ set: '~resolved' }, { set: '~by_fight' }] }, lose: { text: 'You are driven off, battered but alive.', flags: [{ set: '~botched' }], goto: 'report' }, flee: { text: 'You retreat to safety.', goto: 'report' } },
+      { id: 'fight', name: cap(villain), monsters, terrain: [], win: { text: winFacts, flags: [{ set: '~resolved' }, { set: '~by_fight' }] }, lose: { text: m('sq.lose'), flags: [{ set: '~botched' }], goto: 'report' }, flee: { text: m('sq.flee'), goto: 'report' } },
     ],
     deadlines:
       complication.effect === 'deadline'
-        ? [{ id: 'hurry', text: goal, start: { flag: '~accepted' }, met: { flag: '~resolved' }, within: complication.minutes ?? 1440, warnAt: 240, missed: { text: 'You are too late; the chance has passed.', flags: [{ set: '~botched' }] } }]
+        ? [{ id: 'hurry', text: goal, start: { flag: '~accepted' }, met: { flag: '~resolved' }, within: complication.minutes ?? 1440, warnAt: 240, missed: { text: m('sq.missed'), flags: [{ set: '~botched' }] } }]
         : [],
     quests: [
       {
         id: 'job',
         name: title,
         objectives: [
-          { id: 'accept', text: `Hear out ${patron}`, done: { flag: '~accepted' } },
+          { id: 'accept', text: m('sq.obj.hear', { patron }), done: { flag: '~accepted' } },
           { id: 'resolve', text: goal, done: { flag: '~resolved' }, if: { flag: '~accepted' } },
-          { id: 'report', text: `Return to ${patron} in ${here.name}`, done: { flag: '~done' }, if: { flag: '~resolved' } },
+          { id: 'report', text: m('sq.obj.report', { patron, place: here.name }), done: { flag: '~done' }, if: { flag: '~resolved' } },
         ],
         fail: { flag: '~failed' },
       },
@@ -320,8 +329,8 @@ export function generateSideQuest(o: SideQuestOptions): GeneratedQuest {
       ...(thread ? [{ id: threadDoneFlag(thread.id), description: `Resolved the thread "${thread.name}".` }] : []),
     ],
     endings: [
-      { id: 'done', name: 'Job done', text: `${title}: done.` },
-      { id: 'failed', name: 'Job failed', text: `${title}: failed.` },
+      { id: 'done', name: m('sq.end.done'), text: m('sq.end.doneText', { title }) },
+      { id: 'failed', name: m('sq.end.failed'), text: m('sq.end.failedText', { title }) },
     ],
   };
   return { adventure, ...(thread && { threadId: thread.id }), questType: type.id, approaches: approachIds, outcomes: type.outcomes.map((o) => o.id) };

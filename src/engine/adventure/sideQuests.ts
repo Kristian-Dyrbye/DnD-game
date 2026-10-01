@@ -72,8 +72,8 @@ export function offerSources(state: GameState, deps: SideQuestDeps, locationId: 
   return out;
 }
 
-function makeOffer(state: GameState, deps: SideQuestDeps, locationId: string, source: OfferSource, label: string, seed: string): SideQuestOffer | undefined {
-  const res = generateValidSideQuest({ ...deps, state, locationId, rng: Rng.fromSeed(seed), ...(deps.flags && { flags: deps.flags }) });
+function makeOffer(state: GameState, deps: SideQuestDeps, locationId: string, source: OfferSource, label: string, seed: string, msgs: Messages): SideQuestOffer | undefined {
+  const res = generateValidSideQuest({ ...deps, state, locationId, rng: Rng.fromSeed(seed), msgs, ...(deps.flags && { flags: deps.flags }) });
   if (!res) return undefined;
   return {
     id: res.adventure.id,
@@ -101,7 +101,7 @@ export function refreshOffers(state: GameState, deps: SideQuestDeps, locationId:
   const added: SideQuestOffer[] = [];
   for (const src of offerSources(state, deps, locationId, msgs)) {
     if (sq.offers.some((o) => o.locationId === locationId && o.source === src.source)) continue;
-    const offer = makeOffer(state, deps, locationId, src.source, src.label, `${state.campaignId}:sq:${key}:${src.source}`);
+    const offer = makeOffer(state, deps, locationId, src.source, src.label, `${state.campaignId}:sq:${key}:${src.source}`, msgs);
     if (offer && !sq.offers.some((o) => o.threadId && o.threadId === offer.threadId)) {
       sq.offers.push(offer);
       added.push(offer);
@@ -111,9 +111,9 @@ export function refreshOffers(state: GameState, deps: SideQuestDeps, locationId:
 }
 
 /** A stranger met on the road asks for help at the destination (travel "discovery" events). */
-export function roadOffer(state: GameState, deps: SideQuestDeps, locationId: string, { m }: Messages = ENGLISH_MESSAGES): SideQuestOffer | undefined {
+export function roadOffer(state: GameState, deps: SideQuestDeps, locationId: string, msgs: Messages = ENGLISH_MESSAGES): SideQuestOffer | undefined {
   const sq = sideQuestState(state);
-  const offer = makeOffer(state, deps, locationId, 'road', m('job.source.road'), `${state.campaignId}:sq:road:${state.time}`);
+  const offer = makeOffer(state, deps, locationId, 'road', msgs.m('job.source.road'), `${state.campaignId}:sq:road:${state.time}`, msgs);
   if (offer) sq.offers.push(offer);
   return offer;
 }

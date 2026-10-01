@@ -134,7 +134,7 @@
     { "id": "rival_merchant", "kind": "rival", "regions": ["aurelmark", "gloamfen", "brinescatter_isles"], "name": "a scheming rival merchant", "leader": "noble", "minions": ["guard"], "levels": [1,10] }
   ],
   "complications": [
-    { "id": "rain_of_arrows", "weight": 2, "text": "The {antagonist} expected company and set an ambush.", "effect": "ambush" },
+    { "id": "rain_of_arrows", "weight": 2, "text": "{antagonist} expected company and set an ambush.", "effect": "ambush" },
     { "id": "ticking_clock", "weight": 2, "text": "It has to be done within a day, or it will be too late.", "effect": "deadline", "minutes": 1440 },
     { "id": "rival_adventurers", "weight": 1, "text": "Another band of adventurers is after the same prize.", "effect": "rival" },
     { "id": "bad_weather", "weight": 1, "text": "A storm rolls in as you arrive, making every step harder.", "effect": "hazard_check", "skill": "athletics" },
@@ -143,8 +143,8 @@
   ],
   "twists": [
     { "id": "patron_lied", "weight": 2, "text": "{patron} lied about why they wanted this done.", "effect": "reveal" },
-    { "id": "sympathetic_foe", "weight": 2, "text": "The {antagonist} had a good reason for what they did.", "effect": "spare_option" },
-    { "id": "bigger_threat", "weight": 1, "text": "The {antagonist} were fleeing something far worse.", "effect": "extra_encounter" },
+    { "id": "sympathetic_foe", "weight": 2, "text": "{antagonist} had a good reason for what they did.", "effect": "spare_option" },
+    { "id": "bigger_threat", "weight": 1, "text": "{antagonist} had been fleeing something far worse.", "effect": "extra_encounter" },
     { "id": "choir_mark", "weight": 1, "text": "You find the seven-tooth sigil of the Hollow Choir scratched nearby.", "effect": "clue" },
     { "id": "no_twist", "weight": 3, "text": "", "effect": "none" }
   ],
