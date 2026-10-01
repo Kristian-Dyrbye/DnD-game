@@ -10,6 +10,7 @@ import ch0Json from '../data/adventures/arc2/ch0_hollow_coin.json';
 import flagsJson from '../data/adventures/flags.json';
 import companionsJson from '../data/companions.json';
 import { combatStep } from './helpers/combatPolicy';
+import { ch0Choice } from './helpers/arc2Policy';
 import { buildCharacter } from '../src/engine/character/builder';
 import { toBuildInput } from '../src/engine/character/creator';
 import { quickBuild } from '../src/engine/character/quickBuild';
@@ -309,38 +310,7 @@ describe('arc2_ch0_hollow_coin: approaches and consequences', () => {
 });
 
 describe('arc2_ch0_hollow_coin: policy playthrough through the game host', () => {
-  /** Next story action by scene and flags (failed checks just take the next branch). */
-  function nextChoice(scene: string, flags: Flags, offered: string[]): string | undefined {
-    const f = (k: string) => flags[`${L}${k}`] ?? flags[`${C}${k}`];
-    const first = (...xs: string[]) => xs.find((x) => offered.includes(x));
-    const talking = offered.filter((x) => x.startsWith('dlg.'));
-    if (talking.length) return first('dlg.greet.persuade', 'dlg.greet.oath', 'dlg.greet.honest', 'dlg.test.to_bench', 'dlg.fear.take_key', 'dlg.paid.to_bench', 'dlg.cowed.to_bench') ?? talking.at(-1);
-    const mintDone = f('mint_won') || f('mint_searched');
-    switch (scene) {
-      case 'brightwater_market':
-        if (!f('saw_ash')) return first('moneychanger.change_coin');
-        if (flags['world.brannoc_status'] === 'unmet') return first('exit.to_shrine');
-        if (!f('bench_ready')) return first('exit.to_assay');
-        if (!f('gate_open')) return first('mill_race_gate.unlock_gate', 'mill_race_gate.force_gate', 'mill_race_gate.pick_gate');
-        if (!mintDone) return first('exit.to_cellars');
-        if (!f('oath_sworn')) return first('exit.to_shrine');
-        return first('exit.to_road');
-      case 'assay_house':
-        if (!f('bench_ready')) return first('talk.mistress_dunmore.assay');
-        return first('assay_bench.assay_eye', 'assay_bench.assay_spell', 'ask_letter', 'exit.to_market');
-      case 'mill_cellars':
-        return first('storm_mint_silver', 'storm_mint', 'push_on', 'sneak_past', 'search_empty_mint', 'exit.to_den');
-      case 'wererat_den_rest':
-        return first('free_clerk', 'search_mint', 'presses.smash_dies', 'question_rat', 'hand_to_reeve', 'exit.to_market');
-      case 'korrath_shrine_oath':
-        if (flags['world.brannoc_status'] === 'met' && !f('brannoc_waits')) return first('talk.brannoc_npc.scales');
-        if (mintDone && flags['world.brannoc_status'] === 'met') return first('talk.brannoc_npc.scales', 'scales.kneel_scales');
-        return first('scales.kneel_scales', mintDone ? 'exit.to_road' : 'exit.to_market');
-      case 'road_east':
-        return first('walk_east');
-    }
-    return undefined;
-  }
+  const nextChoice = ch0Choice;
 
   it('plays from the campaign picker to the road to Deepanvil with real fights and no errors', async () => {
     const tables = worldTables();

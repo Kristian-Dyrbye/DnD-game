@@ -106,7 +106,11 @@ async function playtest(advId: string, seed: string, steps: number): Promise<{ f
   return { findings, endings, fights, scenes };
 }
 
-const ADVENTURES = ['millbrook_disappearances', 'ch1_whispering_fen', 'ch2_salt_and_treason', 'ch3_the_gilded_lie', 'ch4_wyrmfire', 'ch5_the_hungering_dark'].filter((id) => adventures.has(id));
+// Both campaigns (B008): the Seven Teeth and the Hollow Crown chapters.
+const ADVENTURES = [
+  'millbrook_disappearances', 'ch1_whispering_fen', 'ch2_salt_and_treason', 'ch3_the_gilded_lie', 'ch4_wyrmfire', 'ch5_the_hungering_dark',
+  'arc2_ch0_hollow_coin', 'arc2_ch1_faces', 'arc2_ch2_gamblers_tide', 'arc2_ch3_blightwood_mint',
+].filter((id) => adventures.has(id));
 const SEEDS = ['p1', 'p2', 'p3'];
 
 describe('exploratory playtest (A115)', () => {

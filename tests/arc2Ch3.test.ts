@@ -15,6 +15,7 @@ import ch2Json from '../data/adventures/arc2/ch2_gamblers_tide.json';
 import flagsJson from '../data/adventures/flags.json';
 import companionsJson from '../data/companions.json';
 import { combatStep } from './helpers/combatPolicy';
+import { ch3Choice } from './helpers/arc2Policy';
 import { buildCharacter } from '../src/engine/character/builder';
 import { toBuildInput } from '../src/engine/character/creator';
 import { quickBuild } from '../src/engine/character/quickBuild';
@@ -426,28 +427,7 @@ describe('arc2_ch3_blightwood_mint: approaches and consequences', () => {
 });
 
 describe('arc2_ch3_blightwood_mint: policy playthrough through the game host', () => {
-  /** Next story action by scene and flags (failed checks just take the next branch). */
-  function nextChoice(scene: string, flags: Flags, offered: string[]): string | undefined {
-    const first = (...xs: string[]) => xs.find((x) => offered.includes(x));
-    const talking = offered.filter((x) => x.startsWith('dlg.'));
-    if (talking.length) return first('dlg.greet.commission', 'dlg.greet.standing', 'dlg.greet.persuade', 'dlg.greet.go') ?? talking.find((x) => !x.startsWith('dlg.greet.')) ?? talking.at(-1);
-    switch (scene) {
-      case 'dawnspire_muster_lite':
-        if (!flags[`${L}knight`] && !flags[`${L}lance_refused`]) return first('talk.captain_ashe.lance');
-        return first('exit.to_blightwood');
-      case 'blightwood_paths':
-        return first('weeping_trees.read_sap', 'keep_path', 'exit.day_trail', 'exit.night_trail', 'push_on');
-      case 'vaelthorn_foundry':
-        return first('stations.ledger', 'stations.arcane', 'stations.rite_alone', 'seal.compare', 'exit.to_coronation', 'storm_floor');
-      case 'coronation':
-        return first('name_vexx', 'wear_face', 'storm');
-      case 'hollow_crown_choice':
-        return first('catch_vexx', 'vexx_court', 'crown_destroy', 'camp', 'exit.to_deepanvil');
-      case 'epilogue_deepanvil':
-        return first('read_thane', ...END_ACTIONS);
-    }
-    return undefined;
-  }
+  const nextChoice = ch3Choice;
 
   it('plays chapter 3 at level 4 through the game host with no errors to an ending', async () => {
     const tables = worldTables();

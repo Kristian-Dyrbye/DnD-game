@@ -11,6 +11,7 @@ import ch0Json from '../data/adventures/arc2/ch0_hollow_coin.json';
 import flagsJson from '../data/adventures/flags.json';
 import companionsJson from '../data/companions.json';
 import { combatStep } from './helpers/combatPolicy';
+import { ch1Choice } from './helpers/arc2Policy';
 import { buildCharacter } from '../src/engine/character/builder';
 import { toBuildInput } from '../src/engine/character/creator';
 import { quickBuild } from '../src/engine/character/quickBuild';
@@ -350,41 +351,7 @@ describe('arc2_ch1_faces: approaches and consequences', () => {
 });
 
 describe('arc2_ch1_faces: policy playthrough through the game host', () => {
-  /** Next story action by scene and flags (failed checks just take the next branch). */
-  function nextChoice(scene: string, flags: Flags, offered: string[]): string | undefined {
-    const f = (k: string) => flags[`${L}${k}`] ?? flags[`${C}${k}`];
-    const first = (...xs: string[]) => xs.find((x) => offered.includes(x));
-    const talking = offered.filter((x) => x.startsWith('dlg.'));
-    if (talking.length)
-      return (
-        first('dlg.greet.letter', 'dlg.greet.persuade', 'dlg.greet.pay', 'dlg.greet.family', 'dlg.greet.by_book', 'dlg.greet.body', 'dlg.greet.ledger', 'dlg.greet.share', 'dlg.greet.read', 'dlg.greet.plead', 'dlg.greet.defy') ??
-        talking.find((x) => !x.startsWith('dlg.greet.')) ??
-        talking.at(-1)
-      );
-    switch (scene) {
-      case 'deepanvil_gate':
-        if (!f('gate_passed')) return first('talk.warden_brekka.papers', 'ore_line.haul_ore');
-        return first('exit.to_counting_house');
-      case 'counting_house':
-        if (!f('ledger_found')) {
-          if (!f('saw_portrait')) return first('hesk_desk.portrait');
-          if (!f('vault_access')) return first('talk.false_hesk.audit', 'supervised_audit', 'vault_stair.break_in');
-          return first('exit.to_vault');
-        }
-        return first('exit.to_confront');
-      case 'vault_audit':
-        return first('watchword', 'advance', 'hollow_tenth.weigh_bars', 'hollow_tenth.fathers_seal', 'ledger_alcove.read_ledger', 'exit.to_confront');
-      case 'hesk_unmasked':
-        return first('name_daughter', 'show_guards', 'unmask', 'exit.to_court');
-      case 'ironvault_court':
-        if (!f('verdict')) return first('talk.thane_orsa.verdict');
-        if (flags['world.ilse_status'] === 'met' && !f('ilse_declined') && !f('ilse_asked')) return first('talk.ilse_npc.dreams', 'exit.to_rest');
-        return first('exit.to_rest');
-      case 'thane_s_rest':
-        return first('long_rest', 'ilse_dream', 'road_board.road_south');
-    }
-    return undefined;
-  }
+  const nextChoice = ch1Choice;
 
   it('plays chapter 1 at level 2 through the game host with no errors to the road to Fennick\'s Rest', async () => {
     const tables = worldTables();

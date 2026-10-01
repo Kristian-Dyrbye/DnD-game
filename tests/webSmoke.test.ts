@@ -13,6 +13,7 @@ import { InPageTransport } from '../src/client/net/transport';
 import { createInPageHost } from '../src/host/inPage';
 import { openBrowserSaves } from '../src/host/indexedDbSaves';
 import type { GameHost } from '../src/host/gameHost';
+import { CAMPAIGNS } from '../src/host/campaigns';
 import type { ClientCommand, ServerEvent } from '../src/shared/protocol';
 import { buildCharacter } from '../src/engine/character/builder';
 import { toBuildInput } from '../src/engine/character/creator';
@@ -46,6 +47,28 @@ const LANGS = [
   { language: 'en', ch1: 'The Whispering Fen', foreign: /\bSG \d/ },
   { language: 'da', ch1: 'Den Hviskende Sump', foreign: /\bDC \d|\b(Success|Failure)\b/ },
 ] as const;
+
+describe('web edition campaign picker (B008)', () => {
+  it.each(CAMPAIGNS.filter((c) => c.playable))('the page offers $id and a new game starts it, saves it and loads it back', async (c) => {
+    const idb = new IDBFactory();
+    const page = await openPage(idb);
+    const hero = buildCharacter(toBuildInput(quickBuild('rogue', db, Rng.fromSeed('picker'))), db);
+    // The card the player clicks sends its first chapter as `new_game.campaign` (ui/CampaignPicker.tsx).
+    await page.send({ type: 'new_game', hero, mode: 'heroic', campaign: c.adventure });
+    expect(page.host().campaigns.map((x) => x.id)).toEqual(CAMPAIGNS.filter((x) => x.playable).map((x) => x.id));
+    expect(page.of('error')).toEqual([]);
+    const snap = page.of('snapshot').at(-1)!.state;
+    expect(getProgress(snap)!.adventureId).toBe(c.adventure);
+    expect(page.of('suggestions').at(-1)!.actions.length).toBeGreaterThan(0);
+    await page.send({ type: 'save', slot: 'picker', name: c.id });
+    expect(page.of('saved').at(-1)!.meta.campaign).toBe(c.adventure);
+    await page.saves.flush();
+    const reloaded = await openPage(idb);
+    await reloaded.send({ type: 'load', slot: 'picker' });
+    expect(reloaded.of('error')).toEqual([]);
+    expect(reloaded.of('snapshot').at(-1)!.state.campaign).toBe(c.adventure);
+  });
+});
 
 describe('web edition smoke test (A128)', () => {
   it.each(LANGS)('plays the starter arc into chapter 1 in the page ($language), saves to IndexedDB and loads in a new page', async ({ language, ch1, foreign }) => {

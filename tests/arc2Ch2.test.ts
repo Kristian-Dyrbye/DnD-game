@@ -12,6 +12,7 @@ import ch1Json from '../data/adventures/arc2/ch1_faces.json';
 import flagsJson from '../data/adventures/flags.json';
 import companionsJson from '../data/companions.json';
 import { combatStep } from './helpers/combatPolicy';
+import { ch2Choice } from './helpers/arc2Policy';
 import { buildCharacter } from '../src/engine/character/builder';
 import { toBuildInput } from '../src/engine/character/creator';
 import { quickBuild } from '../src/engine/character/quickBuild';
@@ -383,38 +384,7 @@ describe('arc2_ch2_gamblers_tide: approaches and consequences', () => {
 });
 
 describe('arc2_ch2_gamblers_tide: policy playthrough through the game host', () => {
-  /** Next story action by scene and flags (failed checks just take the next branch). */
-  function nextChoice(scene: string, flags: Flags, offered: string[]): string | undefined {
-    const f = (k: string) => flags[`${L}${k}`];
-    const first = (...xs: string[]) => xs.find((x) => offered.includes(x));
-    const talking = offered.filter((x) => x.startsWith('dlg.'));
-    if (talking.length)
-      return (
-        first('dlg.greet.marker', 'dlg.greet.play', 'dlg.r1.read', 'dlg.r2_up.read', 'dlg.r2_down.read', 'dlg.r3.read', 'dlg.greet.trick', 'dlg.greet.threaten', 'dlg.fight.draw', 'dlg.greet.bargain', 'dlg.refused.buy', 'dlg.greet.persuade', 'dlg.greet.salt') ??
-        talking.find((x) => !x.startsWith('dlg.greet.')) ??
-        talking.at(-1)
-      );
-    switch (scene) {
-      case 'fennicks_rest_hall':
-        if (!f('wash_seen') && offered.includes('cage.watch_cage')) return 'cage.watch_cage';
-        if (!f('marker') && !f('dice_lost') && !f('dice_caught')) return first('talk.quillon_vane.dice');
-        if (flags['world.wren_status'] === 'met' && !f('wren_asked')) return first('talk.wren_npc.deal');
-        if (!f('salt_known')) return first('harbour_office.ask_harbour');
-        return first('exit.to_sloop');
-      case 'salt_s_sloop':
-        if (!f('passage')) return first('talk.captain_salt.passage', 'board');
-        return first('spare_salt', 'exit.to_reef');
-      case 'reef_run':
-        return first('sail_day', 'read_weather', 'run_reef', 'make_cove_day', 'make_cove_night');
-      case 'wreckers_cove':
-        return first('tide_tunnel.wade', 'stash.sneak', 'stash.search', 'stash.hollow_chest', 'exit.to_market');
-      case 'tallow_s_market':
-        return first('talk.mother_tallow.faces', 'exit.to_camp');
-      case 'cove_camp':
-        return first('long_rest', 'wren_winnings', 'sloop.sail_north');
-    }
-    return undefined;
-  }
+  const nextChoice = ch2Choice;
 
   it('plays chapter 2 at level 3 through the game host with no errors to the road to the Blightwood', async () => {
     const tables = worldTables();

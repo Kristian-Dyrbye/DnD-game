@@ -6,7 +6,8 @@
 import { activeFight } from '../../src/engine/adventure/fights';
 import { reachableForMove } from '../../src/engine/combat/actions';
 import { attackProfiles, checkAttack } from '../../src/engine/combat/attack';
-import { distanceFt } from '../../src/engine/combat/grid';
+import { cellKey, distanceFt } from '../../src/engine/combat/grid';
+import { reachableSquares } from '../../src/engine/combat/movement';
 import { currentId, movementLeft } from '../../src/engine/combat/turns';
 import { Rng } from '../../src/engine/core/rng';
 import type { SrdDatabase } from '../../src/engine/data/srd';
@@ -35,6 +36,12 @@ export function combatStep(session: GameSession, db: SrdDatabase): Parameters<Ga
     if (nearest) {
       const best = [...reachableForMove(state, ctx, me).values()].sort((a, b) => distanceFt({ ...a, size: hero.size }, nearest) - distanceFt({ ...b, size: hero.size }, nearest))[0];
       if (best && best.path.length && distanceFt({ ...best, size: hero.size }, nearest) < distanceFt(here, nearest)) return { type: 'combat_act', action: { kind: 'move', path: best.path } };
+      // A wall in the way (B008: a fleeing goblin behind one stalled a fight for 1000 rounds): walk
+      // the way that shortens the walking distance to the foe, as a player would walk around.
+      const walk = reachableSquares(state.grid, nearest.id, 5000, { ignore: Object.keys(state.grid.tokens).filter((t) => t !== nearest.id) });
+      const walkFrom = (p: { x: number; y: number }) => walk.get(cellKey(p))?.costFt ?? Infinity;
+      const around = [...reachableForMove(state, ctx, me).values()].filter((s) => s.path.length).sort((a, b) => walkFrom(a) - walkFrom(b))[0];
+      if (around && walkFrom(around) < walkFrom(here)) return { type: 'combat_act', action: { kind: 'move', path: around.path } };
     }
   }
   return { type: 'combat_act', action: { kind: 'end_turn' } };
