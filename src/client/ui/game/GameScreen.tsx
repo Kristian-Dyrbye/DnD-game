@@ -34,7 +34,7 @@ import { LevelUpPanel } from './LevelUpPanel';
 import { ShopPanel } from './ShopPanel';
 import { getMap } from '../../../engine/world/travel';
 import { shopsAt } from '../../../engine/world/shops';
-import { shops } from '../../data';
+import { localShops } from '../../data';
 import { PartyPanel } from './PartyPanel';
 import { StoryLog } from './StoryLog';
 import { currentTranslator, language, t } from '../i18n';
@@ -56,7 +56,7 @@ export function GameScreen() {
   const [savesOpen, setSavesOpen] = useState(false);
   const [shopId, setShopId] = useState<string | null>(null);
   const here = state ? getMap(state)?.current : undefined;
-  const localShops = here ? shopsAt(shops, here) : [];
+  const shopsHere = here ? shopsAt(localShops.value, here) : [];
   const [mapOpen, setMapOpen] = useState(() => typeof location !== 'undefined' && location.hash.endsWith('+map'));
   if (fight.value) {
     const f = fight.value;
@@ -118,7 +118,7 @@ export function GameScreen() {
           <button type="button" disabled={!state} onClick={() => setInventoryOpen(true)}>
             {t('game.inventory')}
           </button>
-          {localShops.map((s) => (
+          {shopsHere.map((s) => (
             <button key={s.id} type="button" class="shop-button" onClick={() => setShopId(s.id)}>
               {s.name}
             </button>

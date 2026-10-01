@@ -238,6 +238,7 @@ export const en = {
   'clock.night': 'Night has fallen.',
   'clock.newDay': 'A new day begins (day {day}).',
   'clock.date': 'It is {date}.',
+  'clock.dateText': '{weekday}, {day} {month} {year} {suffix}',
 
   // Roll math lines ("d20: 14 + 5 (Persuasion) = 19 vs DC 15 — Success"; SRD names stay English until A149)
   'roll.adv': 'adv',

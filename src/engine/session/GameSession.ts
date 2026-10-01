@@ -40,6 +40,8 @@ export interface ActionPort {
   choose(session: GameSession, actionId: string): Promise<void>;
   /** Called after new_game and load so the scene can present itself. */
   begin?(session: GameSession): Promise<void>;
+  /** Offers the current buttons again without acting (after a language switch). */
+  refresh?(session: GameSession): Promise<void>;
   /** World-map travel to a known lore location. */
   travel?(session: GameSession, to: string, pace: 'slow' | 'normal' | 'fast'): Promise<void>;
   /** Other game commands (inventory, shops, future systems). Throw to report an error. */
@@ -214,9 +216,13 @@ export class GameSession {
         case 'thumbnail':
           this.thumbnail = cmd.data;
           return;
-        case 'set_language':
+        case 'set_language': {
+          const changed = this.language !== cmd.language;
           this.language = cmd.language;
+          // Buttons on screen were offered in the old language: offer them again in the new one.
+          if (changed && this.running) await this.ports.actions?.refresh?.(this);
           return;
+        }
         case 'new_game': {
           this.thumbnail = undefined;
           const seed = cmd.seed ?? this.ports.newSeed?.() ?? `${Date.now()}-${Math.random()}`;

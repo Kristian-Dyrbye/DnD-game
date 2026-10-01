@@ -10,7 +10,7 @@ import { timeOfDay } from '../../../engine/world/clock';
 import { MAP_HEIGHT, MAP_WIDTH, type Region } from '../../../engine/world/lore';
 import { effectivePace, getMap, initialMap, legHours, planRoute, type Pace } from '../../../engine/world/travel';
 import { weatherEffects, type WeatherState } from '../../../engine/world/weather';
-import { lore } from '../../data';
+import { localLore } from '../../data';
 import { gameState, send } from '../../net/gameSocket';
 import type { MessageKey } from '../../../shared/i18n';
 import { language, t, tn } from '../i18n';
@@ -66,6 +66,7 @@ function hoursText(h: number): string {
 }
 
 export function WorldMap({ onClose }: { onClose: () => void }) {
+  const lore = localLore.value;
   const state = gameState.value;
   const map = (state && getMap(state)) ?? initialMap(lore);
   const [target, setTarget] = useState<string | null>(null);
@@ -91,7 +92,7 @@ export function WorldMap({ onClose }: { onClose: () => void }) {
           { x: 0, y: 0, width: MAP_WIDTH, height: MAP_HEIGHT },
         ).map((o) => [o.id, o]),
       ),
-    [map.known.length],
+    [map.known.length, lore],
   );
 
   const go = () => {

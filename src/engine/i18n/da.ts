@@ -237,6 +237,7 @@ export const da: Partial<Record<EngineKey, string>> = {
   'clock.night': 'Natten er faldet på.',
   'clock.newDay': 'En ny dag begynder (dag {day}).',
   'clock.date': 'Det er {date}.',
+  'clock.dateText': '{weekday} den {day}. {month} {year} {suffix}',
 
   // Terningeslag (regelnavne forbliver engelske indtil A149)
   'roll.adv': 'fordel',

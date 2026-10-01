@@ -328,6 +328,11 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       else await narrateInto(session, { kind: 'scene', facts: [], ctx, visit: 'resume' }, opts.narrator);
       offer(session, ctx);
     },
+    async refresh(session) {
+      // Re-offer the buttons (e.g. in a new language); nothing to offer mid-fight or before the story starts.
+      if (!session.running || activeFight(session.current) || !getProgress(session.current)) return;
+      offer(session, ctxFor(session));
+    },
     async travel(session, to, pace) {
       const { m, mn } = session.msgs;
       if (activeFight(session.current)) throw new Error(m('travel.inFight'));

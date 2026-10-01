@@ -117,12 +117,13 @@ export function createGameHost(opts: GameHostOptions): GameHost {
         say: (s, text) => portFor(s.language).say(s, text),
         choose: (s, id) => portFor(s.language).choose(s, id),
         begin: (s) => portFor(s.language).begin?.(s) ?? Promise.resolve(),
+        refresh: (s) => portFor(s.language).refresh?.(s) ?? Promise.resolve(),
         travel: (s, to, pace) => portFor(s.language).travel?.(s, to, pace) ?? Promise.resolve(),
         command: (s, cmd) => portFor(s.language).command?.(s, cmd) ?? Promise.resolve(),
       }
     : undefined;
   const session = new GameSession({
-    systems: createDefaultRegistry({ lore: t.lore, regionOf: (state) => regionOfState(state, adventures, t.lore) }),
+    systems: createDefaultRegistry({ lore: t.lore, loreFor: (lang) => content(lang).tables.lore, regionOf: (state) => regionOfState(state, adventures, t.lore) }),
     ...(actions && { actions }),
     ...(opts.saves && { saves: opts.saves }),
     ...opts.sessionPorts,

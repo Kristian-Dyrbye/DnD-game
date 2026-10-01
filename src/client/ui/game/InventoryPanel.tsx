@@ -1,7 +1,7 @@
 /** Inventory (spec §11.5 UI): carried items grouped by kind, equip/unequip, coins, AC and speed. */
 import { equipSlots, type EquipSlot } from '../../../engine/character/inventory';
 import { itemText } from '../srdText';
-import { db, shops } from '../../data';
+import { db, localShops } from '../../data';
 import { repairCost } from '../../../engine/character/armorWear';
 import { shopsAt } from '../../../engine/world/shops';
 import { getMap } from '../../../engine/world/travel';
@@ -24,7 +24,7 @@ export function InventoryPanel({ onClose }: { onClose: () => void }) {
   const hero = gameState.value?.hero;
   if (!hero) return null;
   const here = gameState.value ? getMap(gameState.value)?.current : undefined;
-  const smith = here ? shopsAt(shops, here).find((s) => s.kind === 'smith') : undefined;
+  const smith = here ? shopsAt(localShops.value, here).find((s) => s.kind === 'smith') : undefined;
   const groups = new Map<Kind, typeof hero.inventory>();
   for (const i of hero.inventory) groups.set(kindOf(i.itemId), [...(groups.get(kindOf(i.itemId)) ?? []), i]);
   return (
