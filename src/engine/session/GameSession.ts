@@ -15,7 +15,7 @@ import { messages, type Messages } from '../i18n';
 import { MINUTES_PER_DAY } from '../world/clock';
 import { deletePage, reorderPages, savePage } from './journal';
 import { MAX_COMPANIONS, setControl } from '../party/companions';
-import { allows, HOST_SEAT, ownerOf, seatOf, setAway, soloTable, type SeatId, type Table } from './table';
+import { addSeat, allows, guestCount, HOST_SEAT, MAX_GUESTS, ownerOf, removeSeat, seatOf, setAway, soloTable, type Seat, type SeatId, type Table } from './table';
 import { extraHeroes, GameStateSchema, LOG_LIMIT, ROLL_LIMIT, type GameState, type LogEntry, type RollRecord } from './gameState';
 
 /** Metadata the session provides for a save; the store adds slot id, kind and timestamp. */
@@ -307,6 +307,15 @@ export class GameSession {
           await this.ports.actions?.begin?.(this);
           return;
         }
+        case 'join':
+          // Joining needs the join code and a connection to seat: the transport does it (host.join).
+          return this.fail(this.msgs.m('table.joinClosed'), reqId);
+        case 'release_seat':
+          this.releaseSeat(cmd.seat ?? seat);
+          await this.seatsChanged();
+          if (this.running) this.emit(this.snapshot());
+          this.emit({ type: 'ack', command: cmd.type, ...(reqId && { reqId }) });
+          return;
         case 'add_hero':
           if (!this.running) return this.fail(this.msgs.m('session.noGame'), reqId);
           this.addHero(cmd.hero, seat);
@@ -404,7 +413,39 @@ export class GameSession {
    */
   async setSeatAway(seat: SeatId, away: boolean): Promise<void> {
     if (!setAway(this.table, seat, away)) return;
+    this.emitTable();
     await this.seatsChanged();
+  }
+
+  /** Seats a guest who came in with the join code (C005; the transport checked the code). Throws when the table is full. */
+  seatGuest(role: 'player' | 'spectator', name?: string): Seat {
+    if (guestCount(this.table) >= MAX_GUESTS) throw new Error(this.msgs.m('table.full'));
+    const seat = addSeat(this.table, role, name);
+    if (this.running) this.addLog('system', this.msgs.m('table.joined', { name: name ?? seat.id }));
+    this.emitTable();
+    return seat;
+  }
+
+  /**
+   * A guest leaves the table, or the host frees their seat (C005): the seat goes, and the characters it
+   * played become AI companions so the party plays on. The caller re-reads a running fight (seatsChanged).
+   */
+  releaseSeat(id: SeatId): void {
+    if (id === HOST_SEAT) throw new Error(this.msgs.m('table.hostStays'));
+    const seat = seatOf(this.table, id);
+    if (!seat) throw new Error(this.msgs.m('table.noSeat'));
+    if (this.running) {
+      const s = this.current;
+      for (const c of s.companions) if (ownerOf(this.table, s, c.id) === id) setControl(s, c.id, 'ai', this.msgs);
+    }
+    removeSeat(this.table, id);
+    if (this.running) this.addLog('system', this.msgs.m('table.left', { name: seat.name ?? seat.id }));
+    this.emitTable();
+  }
+
+  /** Tells every connection who sits at the table now. */
+  emitTable(): void {
+    this.emit({ type: 'table', seats: structuredClone(this.table.seats), policy: this.table.policy });
   }
 
   /** Re-reads the table into a running fight (after seats were added, removed or marked away). Never throws. */

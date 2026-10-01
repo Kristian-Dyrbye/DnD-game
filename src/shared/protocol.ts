@@ -15,6 +15,7 @@ import type { DungeonView } from '../engine/world/dungeon';
 import type { DialogueView } from '../engine/adventure/conversation';
 import { SLOT_ID_PATTERN, type SaveMeta } from './save';
 import { LANGUAGES } from './i18nCore';
+import type { Seat, TablePolicy } from '../engine/session/table';
 
 const base = { reqId: z.string().max(40).optional() };
 
@@ -57,6 +58,20 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
     /** "New hero, same world" (B002): slot of a finished save whose world the new campaign starts in. */
     worldFrom: z.string().regex(SLOT_ID_PATTERN).optional(),
   }),
+  /**
+   * Co-op (C005): sit down at the table with the host's join code, as a player or a spectator. `token`
+   * (from an earlier `joined`) reclaims the same seat after a reload. Handled by the transport, not the session.
+   */
+  z.object({
+    ...base,
+    type: z.literal('join'),
+    code: z.string().min(4).max(12),
+    role: z.enum(['player', 'spectator']).optional(),
+    name: z.string().min(1).max(40).optional(),
+    token: z.string().max(64).optional(),
+  }),
+  /** Leave the table (own seat), or the host frees a guest's seat; its characters fall back to the AI. */
+  z.object({ ...base, type: z.literal('release_seat'), seat: z.string().regex(/^(host|guest-[1-9][0-9]?)$/).optional() }),
   /** A second player-made hero joins the party (C002): a co-op guest's character, or the host's own in duo mode. */
   z.object({ ...base, type: z.literal('add_hero'), hero: CharacterSchema }),
   /** Level up the hero, or `characterId`'s player-made hero (choices as required by leveling.pendingChoices). */
@@ -146,6 +161,10 @@ export type ServerEvent =
   | { type: 'combat'; encounter: Encounter | null; canFlee?: boolean }
   /** Co-op (C003): the fight waits for a guest seat's creature ("Waiting for Wren's player"); sent after `combat`. */
   | { type: 'waiting'; creatureId: string; name: string; seat: string; text: string }
+  /** Co-op (C005): who sits at the table (after every join, leave, drop-out and return). */
+  | { type: 'table'; seats: Seat[]; policy: TablePolicy }
+  /** Co-op (C005), to the joining connection only: its seat and the token that reclaims it after a reload. */
+  | { type: 'joined'; seat: string; role: 'player' | 'spectator'; token: string }
   /** Hardcore: the hero died; a new hero can continue in this world. */
   | { type: 'hero_fallen'; name: string }
   /** Music mood + ambience bed for the current place (the client crossfades). */

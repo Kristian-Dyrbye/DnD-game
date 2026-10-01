@@ -27,6 +27,13 @@ export const da: Partial<Record<EngineKey, string>> = {
   'table.notYourTurn': 'Det er ikke din figurs tur',
   'table.notYourCharacter': 'Den figur spilles af en anden',
   'table.waitingFor': 'Venter på spilleren bag {name}…',
+  'table.joinClosed': 'Dette spil er ikke åbent for gæster',
+  'table.badCode': 'Den deltagerkode er forkert',
+  'table.full': 'Bordet er fuldt',
+  'table.alreadySeated': 'Du har allerede en plads ved bordet',
+  'table.hostStays': 'Værtens plads kan ikke frigives',
+  'table.joined': '{name} sætter sig ved bordet.',
+  'table.left': '{name} forlader bordet; vedkommendes figurer følger selv med selskabet.',
 
   // Historien
   'story.received': 'Modtaget: {list}',

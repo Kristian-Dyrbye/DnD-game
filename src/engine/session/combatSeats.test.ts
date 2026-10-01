@@ -162,13 +162,13 @@ describe('GameSession fights per seat (C003)', () => {
     expect(activeFight(s.current)?.enc.seats).toEqual({ hero: 'host', 'hero-2': 'guest-1' });
   });
 
-  it('marking a seat away outside a fight changes nothing else', async () => {
+  it('marking a seat away outside a fight changes nothing else (only the table is told, C005)', async () => {
     const { s, events } = session();
     await s.handle({ type: 'new_game', hero: build('fighter', 'host'), mode: 'heroic' });
     addSeat(s.table, 'player');
     const before = events.length;
     await s.setSeatAway('guest-1', true);
-    expect(events.length).toBe(before);
+    expect(events.slice(before).map((e) => e.type)).toEqual(['table']);
     expect(s.table.seats[1]).toMatchObject({ away: true });
   });
 });

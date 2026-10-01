@@ -28,6 +28,13 @@ export const en = {
   'table.notYourTurn': 'It is not your character’s turn',
   'table.notYourCharacter': 'That character is played by someone else',
   'table.waitingFor': 'Waiting for {name}’s player…',
+  'table.joinClosed': 'This game is not open to guests',
+  'table.badCode': 'That join code is wrong',
+  'table.full': 'The table is full',
+  'table.alreadySeated': 'You already have a seat at this table',
+  'table.hostStays': 'The host’s seat can’t be released',
+  'table.joined': '{name} sits down at the table.',
+  'table.left': '{name} leaves the table; their characters follow the party on their own.',
 
   // Story results
   'story.received': 'Received: {list}',

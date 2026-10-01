@@ -5,7 +5,8 @@
  * keyword intents, data buttons). Commands run one at a time, in order, like on the server.
  */
 import { GameSession, type ActionPort, type SavePort, type SessionPorts } from '../engine/session/GameSession';
-import { HOST_SEAT, type SeatId } from '../engine/session/table';
+import { HOST_SEAT, seatOf, type SeatId } from '../engine/session/table';
+import { SeatTokens, sameCode } from './joinDesk';
 import { adventureActionPort, type AdventureActionPort, type AdventurePortOptions } from '../engine/adventure/sessionActions';
 import type { ContentTranslations } from '../shared/contentI18n';
 import { contentByLanguage, type LocalizedContent } from './translations';
@@ -72,7 +73,12 @@ export interface GameHostOptions {
   startingAdventure?: string;
   /** Content overlays by language (data/i18n/<lang>/*.json); missing texts stay English. */
   translations?: ContentTranslations;
+  /** The join code guests must give (C005), read on every join; undefined = the table is closed to guests. */
+  joinCode?: () => string | undefined;
 }
+
+export type JoinRequest = Pick<Extract<ClientCommand, { type: 'join' }>, 'code' | 'role' | 'name' | 'token'>;
+export type JoinResult = { ok: true; seat: SeatId; role: 'player' | 'spectator'; token: string } | { ok: false; message: string };
 
 export interface GameHost {
   session: GameSession;
@@ -86,6 +92,12 @@ export interface GameHost {
   receive(raw: string, seat?: SeatId): ServerEvent | undefined;
   /** A guest seat went away or came back (C003); queued like a command so it never cuts into one. */
   setSeatAway(seat: SeatId, away: boolean): Promise<void>;
+  /**
+   * A connection asks for a seat with the join code (C005): a valid token reclaims its old seat (back
+   * from away), otherwise a new guest seat and token. Queued like a command. The transport sends the
+   * `joined` result to that connection only (the token is its key).
+   */
+  join(req: JoinRequest): Promise<JoinResult>;
   /** Subscribes to session events; returns the unsubscribe function. */
   on(listener: (e: ServerEvent) => void): () => void;
   /** Waits for queued commands and background suggestion/summary work (tests). */
@@ -154,6 +166,25 @@ export function createGameHost(opts: GameHostOptions): GameHost {
     await session.handle(cmd, seat);
   };
   const send = (cmd: ClientCommand, seat: SeatId = HOST_SEAT): Promise<void> => (queue = queue.then(() => run(cmd, seat)));
+  const tokens = new SeatTokens();
+  const seatGuest = async (req: JoinRequest): Promise<JoinResult> => {
+    const code = opts.joinCode?.();
+    const no = (key: 'table.joinClosed' | 'table.badCode'): JoinResult => ({ ok: false, message: session.msgs.m(key) });
+    if (!code) return no('table.joinClosed');
+    if (!sameCode(req.code, code)) return no('table.badCode');
+    const known = tokens.seatOf(req.token);
+    const back = known ? seatOf(session.table, known) : undefined;
+    if (back && back.role !== 'host') {
+      await session.setSeatAway(back.id, false);
+      return { ok: true, seat: back.id, role: back.role, token: req.token! };
+    }
+    try {
+      const seat = session.seatGuest(req.role ?? 'player', req.name);
+      return { ok: true, seat: seat.id, role: req.role ?? 'player', token: tokens.issue(seat.id) };
+    } catch (err) {
+      return { ok: false, message: (err as Error).message };
+    }
+  };
   return {
     session,
     defaultAdventure,
@@ -166,6 +197,11 @@ export function createGameHost(opts: GameHostOptions): GameHost {
       return undefined;
     },
     setSeatAway: (seat, away) => (queue = queue.then(() => session.setSeatAway(seat, away))),
+    join(req) {
+      const result = queue.then(() => seatGuest(req));
+      queue = result.then(() => undefined);
+      return result;
+    },
     on: (listener) => session.on(listener),
     async idle() {
       await queue;

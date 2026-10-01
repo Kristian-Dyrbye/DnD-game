@@ -43,6 +43,13 @@ export function seatOf(table: Table, id: SeatId): Seat | undefined {
   return table.seats.find((s) => s.id === id);
 }
 
+/** Most guest seats (players + spectators) a table takes (C005): the party itself holds at most 3 companions. */
+export const MAX_GUESTS = 6;
+
+export function guestCount(table: Table): number {
+  return table.seats.filter((s) => s.id !== HOST_SEAT).length;
+}
+
 /** Seats a new guest (`guest-<n>`, lowest free n) and returns the seat. */
 export function addSeat(table: Table, role: 'player' | 'spectator', name?: string): Seat {
   let n = 1;
@@ -112,8 +119,8 @@ export function charactersOf(table: Table, state: GameState, seat: SeatId): stri
 
 type CommandType = ClientCommand['type'];
 
-/** Anyone at the table, spectators included. */
-const OPEN: ReadonlySet<CommandType> = new Set(['ping', 'get_state']);
+/** Anyone at the table, spectators included (`join` itself is the transport's job; the session refuses it). */
+const OPEN: ReadonlySet<CommandType> = new Set(['ping', 'get_state', 'join']);
 /** The host alone: the game itself, its saves, its language and who plays which companion. */
 const HOST_ONLY: ReadonlySet<CommandType> = new Set(['new_game', 'load', 'save', 'set_language', 'thumbnail', 'companion_control']);
 /** Story actions a guest may only propose under host_decides (the rest of the story commands are refused). */
@@ -135,10 +142,12 @@ function actingCreature(state: GameState | undefined): string | undefined {
  * seat that owns the creature whose turn it is; a level-up to the seat that owns the character
  * (`characterId`, default the hero); any player seat may add its own hero.
  */
-export function allows(table: Table, cmd: Pick<ClientCommand, 'type'> & { characterId?: string }, seatId: SeatId, state?: GameState): Verdict {
+export function allows(table: Table, cmd: Pick<ClientCommand, 'type'> & { characterId?: string; seat?: string }, seatId: SeatId, state?: GameState): Verdict {
   const seat = seatOf(table, seatId);
   if (!seat) return { ok: false, key: 'table.noSeat' };
   if (OPEN.has(cmd.type)) return { ok: true };
+  // Anyone may leave; only the host may free someone else's seat (C005).
+  if (cmd.type === 'release_seat') return cmd.seat === undefined || cmd.seat === seat.id || seat.role === 'host' ? { ok: true } : { ok: false, key: 'table.hostOnly' };
   if (HOST_ONLY.has(cmd.type)) return seat.role === 'host' ? { ok: true } : { ok: false, key: 'table.hostOnly' };
   if (seat.role === 'spectator') return { ok: false, key: 'table.spectator' };
   if (PLAYERS.has(cmd.type)) return { ok: true };

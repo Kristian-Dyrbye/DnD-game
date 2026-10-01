@@ -69,6 +69,11 @@ export const GameplaySettingsSchema = z.object({
   language: z.enum(LANGUAGES).default('en'),
 });
 
+/** Co-op (C005, desktop edition): the server listens on the LAN with a join code. Read at server start. */
+export const TableSettingsSchema = z.object({
+  allowJoin: z.boolean().default(false),
+});
+
 export const SettingsSchema = z.object({
   llm: LlmSettingsSchema.prefault({}),
   tts: TtsSettingsSchema.prefault({}),
@@ -76,6 +81,7 @@ export const SettingsSchema = z.object({
   performance: PerformanceSettingsSchema.prefault({}),
   accessibility: AccessibilitySettingsSchema.prefault({}),
   gameplay: GameplaySettingsSchema.prefault({}),
+  table: TableSettingsSchema.prefault({}),
 });
 
 export type Settings = z.infer<typeof SettingsSchema>;

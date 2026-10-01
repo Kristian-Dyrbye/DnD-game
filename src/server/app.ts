@@ -6,7 +6,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import Fastify, { type FastifyInstance, type FastifyRequest } from 'fastify';
-import { HOST_SEAT, type SeatId } from '../engine/session/table';
+import { HOST_SEAT, seatOf, type SeatId } from '../engine/session/table';
+import { parseCommand, type ServerEvent } from '../shared/protocol';
+import { newJoinCode } from '../host/joinDesk';
+import { guestMayCall, isLocalRequest, joinUrls } from './lan';
 import fastifyStatic from '@fastify/static';
 import fastifyWebsocket from '@fastify/websocket';
 import { GAME_VERSION } from '../shared/version';
@@ -49,14 +52,32 @@ export interface AppOptions {
   sessionPorts?: Partial<SessionPorts>;
   logger?: boolean;
   /**
-   * The table seat a new game channel plays (co-op, C003). Default: every channel is the host's.
-   * C005's join codes will choose it; tests pass one to put two sockets at one table.
+   * The table seat a new game channel plays (co-op, C003); undefined = no seat until it sends `join`.
+   * Default: a channel from this PC's own pages is the host's, any other must join with the code (C005).
+   * Tests pass one to put two sockets at one table.
    */
-  seatFor?: (req: FastifyRequest) => SeatId;
+  seatFor?: (req: FastifyRequest) => SeatId | undefined;
+  /** Is the request from this PC? Default: loopback address + a loopback Host header (lan.ts). */
+  isLocal?: (req: FastifyRequest) => boolean;
+  /** The join code guests need (C005); default a fresh random one. Only valid while settings.table.allowJoin is on. */
+  joinCode?: string;
+  /** The server listens on the LAN (main.ts, settings.table.allowJoin at start); /api/table then lists join links. */
+  lan?: boolean;
 }
 
 export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> {
   const app = Fastify({ logger: opts.logger ?? false });
+  const isLocal = opts.isLocal ?? isLocalRequest;
+  const joinCode = opts.joinCode ?? newJoinCode();
+  app.decorate('joinCode', joinCode);
+
+  // Listening on the LAN (co-op) must not open the REST API to it: a guest's browser gets only what
+  // its page needs (lan.ts guestMayCall); saves, settings changes and the AI tools stay with the host.
+  app.addHook('onRequest', async (req, reply) => {
+    if (req.url.startsWith('/api/') && !isLocal(req) && !guestMayCall(req.method, req.url)) {
+      return reply.code(403).send({ error: 'Only the host can do that' });
+    }
+  });
 
   await app.register(fastifyWebsocket);
 
@@ -183,9 +204,23 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
       load: (slot) => saves.load(slot).state,
     },
     ...(opts.sessionPorts && { sessionPorts: opts.sessionPorts }),
+    joinCode: () => (settings.get().table.allowJoin ? joinCode : undefined),
   });
   const session = host.session;
   app.decorate('session', session);
+
+  // The host's table panel (C006): is the door open, its code and the links to share.
+  app.get('/api/table', async (req) => {
+    const open = settings.get().table.allowJoin;
+    return {
+      allowJoin: open,
+      lan: !!opts.lan,
+      code: open ? joinCode : null,
+      urls: open && opts.lan ? joinUrls(req.socket.localPort ?? 0, joinCode) : [],
+      seats: session.table.seats,
+      policy: session.table.policy,
+    };
+  });
 
   // Spoken narration: narration/dialogue lines are voiced in the background (never blocking play).
   notices = new Notices(session);
@@ -206,26 +241,87 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
     tts.clear();
     return { ok: true };
   });
+  // The live connection of each guest seat: a reload that reclaims the seat replaces the old one.
+  const seated = new Map<SeatId, { close(code?: number, reason?: string): void }>();
   app.register(async (scope) => {
     scope.get('/ws', { websocket: true }, (socket, req) => {
       // Browsers let any web page open a WebSocket to localhost, so only pages served from this
-      // machine may drive the game (non-browser clients send no Origin).
-      if (!originAllowed(req.headers.origin)) {
-        app.log.warn({ origin: req.headers.origin }, 'Refused a game channel from a foreign origin');
+      // machine (or, for LAN guests, by this server) may connect (non-browser clients send no Origin).
+      const origin = req.headers.origin;
+      if (!originAllowed(origin) && !sameOrigin(origin, req.headers.host)) {
+        app.log.warn({ origin }, 'Refused a game channel from a foreign origin');
         socket.close(1008, 'Origin not allowed');
         return;
       }
-      const seat = opts.seatFor?.(req) ?? HOST_SEAT;
-      const off = host.on((e) => socket.send(JSON.stringify(e)));
-      // A guest who drops out leaves their characters to the AI until they are back (C003).
-      if (seat !== HOST_SEAT) void host.setSeatAway(seat, false);
+      // This PC's own pages are the host; anyone else (a LAN guest, `?guest` for a second tab) must join (C005).
+      const guestTab = 'guest' in ((req.query as object | undefined) ?? {});
+      let seat: SeatId | undefined = opts.seatFor ? opts.seatFor(req) : isLocal(req) && originAllowed(origin) && !guestTab ? HOST_SEAT : undefined;
+      let off: (() => void) | undefined;
+      let joins: Promise<void> = Promise.resolve();
+      let failedJoins = 0;
+      const send = (e: ServerEvent): void => socket.send(JSON.stringify(e));
+      const unseat = (): void => {
+        off?.();
+        off = undefined;
+        if (seat && seated.get(seat) === socket) seated.delete(seat);
+        seat = undefined;
+      };
+      const sit = (id: SeatId): void => {
+        seat = id;
+        if (id !== HOST_SEAT) {
+          const before = seated.get(id);
+          seated.set(id, socket);
+          if (before && before !== socket) before.close(4001, 'Seat taken over');
+        }
+        off = host.on((e) => {
+          send(e);
+          // Released (by themselves or the host): the connection stays, without a seat, until it joins again.
+          if (e.type === 'table' && seat && !seatOf(session.table, seat)) unseat();
+        });
+      };
+      if (seat) {
+        sit(seat);
+        // A guest who drops out leaves their characters to the AI until they are back (C003).
+        if (seat !== HOST_SEAT) void host.setSeatAway(seat, false);
+      }
       socket.on('close', () => {
-        off();
-        if (seat !== HOST_SEAT) void host.setSeatAway(seat, true);
+        const left = seat !== undefined && seat !== HOST_SEAT && seated.get(seat) === socket ? seat : undefined;
+        unseat();
+        if (left) void host.setSeatAway(left, true);
       });
       socket.on('message', (raw: Buffer) => {
-        const err = host.receive(raw.toString(), seat);
-        if (err) socket.send(JSON.stringify(err));
+        const parsed = parseCommand(raw.toString());
+        if (!parsed.ok) return send({ type: 'error', message: parsed.error, ...(parsed.reqId && { reqId: parsed.reqId }) });
+        const cmd = parsed.command;
+        const reqId = cmd.reqId ? { reqId: cmd.reqId } : {};
+        if (seat) {
+          if (cmd.type === 'join') return send({ type: 'error', message: session.msgs.m('table.alreadySeated'), ...reqId });
+          void host.send(cmd, seat);
+          return;
+        }
+        // No seat yet: only ping and join; the game's events start once seated.
+        if (cmd.type === 'ping') return send({ type: 'pong', ...reqId });
+        if (cmd.type !== 'join') return send({ type: 'error', message: session.msgs.m('table.noSeat'), ...reqId });
+        // One join at a time per connection (a second one waits and finds the seat taken).
+        joins = joins.then(async () => {
+          if (seat) return send({ type: 'error', message: session.msgs.m('table.alreadySeated'), ...reqId });
+          if (socket.readyState !== socket.OPEN) return;
+          const res = await host.join(cmd);
+          if (!res.ok) {
+            send({ type: 'error', message: res.message, ...reqId });
+            // Guessing codes: hang up after a few tries.
+            if (++failedJoins >= 5) socket.close(1008, 'Too many join attempts');
+            return;
+          }
+          if (socket.readyState !== socket.OPEN) {
+            void host.setSeatAway(res.seat, true);
+            return;
+          }
+          sit(res.seat);
+          send({ type: 'joined', seat: res.seat, role: res.role, token: res.token });
+          send({ type: 'table', seats: structuredClone(session.table.seats), policy: session.table.policy });
+          if (session.running) send(session.snapshot());
+        });
       });
     });
   });
@@ -265,8 +361,20 @@ export function originAllowed(origin: string | undefined): boolean {
   }
 }
 
+/** A page served by this server itself (a LAN guest's browser: Origin http://192.168.x.y:3210 = Host). */
+export function sameOrigin(origin: string | undefined, host: string | undefined): boolean {
+  if (origin === undefined || host === undefined) return false;
+  try {
+    return new URL(origin).host === host.toLowerCase();
+  } catch {
+    return false;
+  }
+}
+
 declare module 'fastify' {
   interface FastifyInstance {
+    /** The join code LAN guests need while settings.table.allowJoin is on (C005). */
+    joinCode: string;
     settings: SettingsStore;
     services: Services;
     saves: SaveStore;

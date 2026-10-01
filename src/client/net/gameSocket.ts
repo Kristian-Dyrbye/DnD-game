@@ -35,6 +35,9 @@ export const dungeon = signal<DungeonView | null>(null);
 export const fight = signal<{ encounter: Encounter; canFlee: boolean } | null>(null);
 /** Co-op: the guest seat's creature the fight waits for (cleared by every `combat` event; C006 shows it). */
 export const waitingFor = signal<Extract<ServerEvent, { type: 'waiting' }> | null>(null);
+/** Co-op (C005): who sits at the table, and this connection's own seat after a `join` (C006 shows both). */
+export const tableSeats = signal<Omit<Extract<ServerEvent, { type: 'table' }>, 'type'> | null>(null);
+export const mySeat = signal<Omit<Extract<ServerEvent, { type: 'joined' }>, 'type'> | null>(null);
 /** Hardcore: name of the hero who just died (shows the "continue this world" screen). */
 export const heroFallen = signal<string | null>(null);
 /** The open shop's offer (server-computed prices). */
@@ -56,6 +59,13 @@ export function applyEvent(e: ServerEvent): void {
       return;
     case 'waiting':
       waitingFor.value = e;
+      return;
+    case 'table':
+      tableSeats.value = { seats: e.seats, policy: e.policy };
+      if (mySeat.value && !e.seats.some((s) => s.id === mySeat.value?.seat)) mySeat.value = null;
+      return;
+    case 'joined':
+      mySeat.value = { seat: e.seat, role: e.role, token: e.token };
       return;
     case 'hero_fallen':
       heroFallen.value = e.name;
