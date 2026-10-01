@@ -59,8 +59,11 @@ export function activeFight(state: GameState): ActiveFight | undefined {
   return state.extensions.combat as ActiveFight | undefined;
 }
 
-/** Starts the adventure encounter as a tactical fight with the hero and companions. */
-export function startFight(ctx: RunContext, encounterId: string, rng: Rng, db: SrdDatabase): ActiveFight {
+/**
+ * Starts the adventure encounter as a tactical fight with the hero and companions. `seats` (co-op,
+ * C003): who plays which creature (see session/table.ts fightSeats); default: everyone human-controlled.
+ */
+export function startFight(ctx: RunContext, encounterId: string, rng: Rng, db: SrdDatabase, seats?: Record<string, string>): ActiveFight {
   const def = ctx.adventure.encounters.find((e) => e.id === encounterId);
   if (!def) throw new Error(`Unknown encounter ${encounterId}`);
   const cctx: CombatContext = { rng, db, ...(ctx.msgs && { msgs: ctx.msgs }) };
@@ -74,6 +77,7 @@ export function startFight(ctx: RunContext, encounterId: string, rng: Rng, db: S
       hero: ctx.state.hero,
       companions: ctx.state.companions,
       playerControlled: playerControlled(ctx.state),
+      ...(seats && { seats }),
       monsters: monsters.length ? monsters : groups,
       allies: activeGroups(ctx, def.allies),
       overrides: def.statOverrides,

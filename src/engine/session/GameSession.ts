@@ -15,7 +15,7 @@ import { messages, type Messages } from '../i18n';
 import { MINUTES_PER_DAY } from '../world/clock';
 import { deletePage, reorderPages, savePage } from './journal';
 import { MAX_COMPANIONS, setControl } from '../party/companions';
-import { allows, HOST_SEAT, ownerOf, seatOf, soloTable, type SeatId, type Table } from './table';
+import { allows, HOST_SEAT, ownerOf, seatOf, setAway, soloTable, type SeatId, type Table } from './table';
 import { extraHeroes, GameStateSchema, LOG_LIMIT, ROLL_LIMIT, type GameState, type LogEntry, type RollRecord } from './gameState';
 
 /** Metadata the session provides for a save; the store adds slot id, kind and timestamp. */
@@ -53,6 +53,8 @@ export interface ActionPort {
   travel?(session: GameSession, to: string, pace: 'slow' | 'normal' | 'fast'): Promise<void>;
   /** Other game commands (inventory, shops, future systems). Throw to report an error. */
   command?(session: GameSession, cmd: ExtensionCommand): Promise<void>;
+  /** The table changed (a seat went away, came back or left): a running fight hands turns to the AI or back (C003). */
+  seatsChanged?(session: GameSession): Promise<void>;
 }
 
 export interface SessionPorts {
@@ -391,6 +393,26 @@ export class GameSession {
     setControl(s, id, seat === HOST_SEAT ? 'player' : `seat:${seat}`, this.msgs);
     this.addLog('system', this.msgs.m('hero.joins', { name: joined.name }));
     return joined;
+  }
+
+  /**
+   * A guest went away (socket closed) or came back (C003). While away, their characters fight with
+   * the companion AI — at once if it is their turn — so the others are never stuck waiting.
+   */
+  async setSeatAway(seat: SeatId, away: boolean): Promise<void> {
+    if (!setAway(this.table, seat, away)) return;
+    await this.seatsChanged();
+  }
+
+  /** Re-reads the table into a running fight (after seats were added, removed or marked away). Never throws. */
+  async seatsChanged(): Promise<void> {
+    if (!this.running || !this.current.extensions.combat) return;
+    try {
+      await this.ports.actions?.seatsChanged?.(this);
+      this.emit(this.snapshot());
+    } catch (err) {
+      this.fail(err instanceof Error ? err.message : this.msgs.m('session.failed'));
+    }
   }
 
   /** A new game in the world of the finished save in `slot` (throws a player-facing error otherwise). */

@@ -84,6 +84,8 @@ export interface GameHost {
   send(cmd: ClientCommand, seat?: SeatId): Promise<void>;
   /** Parses a raw protocol message from `seat` and queues it; returns an error event for the sender if it is invalid. */
   receive(raw: string, seat?: SeatId): ServerEvent | undefined;
+  /** A guest seat went away or came back (C003); queued like a command so it never cuts into one. */
+  setSeatAway(seat: SeatId, away: boolean): Promise<void>;
   /** Subscribes to session events; returns the unsubscribe function. */
   on(listener: (e: ServerEvent) => void): () => void;
   /** Waits for queued commands and background suggestion/summary work (tests). */
@@ -125,6 +127,7 @@ export function createGameHost(opts: GameHostOptions): GameHost {
         refresh: (s) => portFor(s.language).refresh?.(s) ?? Promise.resolve(),
         travel: (s, to, pace) => portFor(s.language).travel?.(s, to, pace) ?? Promise.resolve(),
         command: (s, cmd) => portFor(s.language).command?.(s, cmd) ?? Promise.resolve(),
+        seatsChanged: (s) => portFor(s.language).seatsChanged?.(s) ?? Promise.resolve(),
       }
     : undefined;
   const campaignFor = (adventure: string | undefined): Campaign | undefined => campaignOf(adventure ?? defaultAdventure);
@@ -162,6 +165,7 @@ export function createGameHost(opts: GameHostOptions): GameHost {
       void send(parsed.command, seat);
       return undefined;
     },
+    setSeatAway: (seat, away) => (queue = queue.then(() => session.setSeatAway(seat, away))),
     on: (listener) => session.on(listener),
     async idle() {
       await queue;

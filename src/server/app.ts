@@ -5,7 +5,8 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import Fastify, { type FastifyInstance } from 'fastify';
+import Fastify, { type FastifyInstance, type FastifyRequest } from 'fastify';
+import { HOST_SEAT, type SeatId } from '../engine/session/table';
 import fastifyStatic from '@fastify/static';
 import fastifyWebsocket from '@fastify/websocket';
 import { GAME_VERSION } from '../shared/version';
@@ -47,6 +48,11 @@ export interface AppOptions {
   /** Overrides for the game session (tests inject actions/seeds). */
   sessionPorts?: Partial<SessionPorts>;
   logger?: boolean;
+  /**
+   * The table seat a new game channel plays (co-op, C003). Default: every channel is the host's.
+   * C005's join codes will choose it; tests pass one to put two sockets at one table.
+   */
+  seatFor?: (req: FastifyRequest) => SeatId;
 }
 
 export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> {
@@ -209,10 +215,16 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
         socket.close(1008, 'Origin not allowed');
         return;
       }
+      const seat = opts.seatFor?.(req) ?? HOST_SEAT;
       const off = host.on((e) => socket.send(JSON.stringify(e)));
-      socket.on('close', off);
+      // A guest who drops out leaves their characters to the AI until they are back (C003).
+      if (seat !== HOST_SEAT) void host.setSeatAway(seat, false);
+      socket.on('close', () => {
+        off();
+        if (seat !== HOST_SEAT) void host.setSeatAway(seat, true);
+      });
       socket.on('message', (raw: Buffer) => {
-        const err = host.receive(raw.toString());
+        const err = host.receive(raw.toString(), seat);
         if (err) socket.send(JSON.stringify(err));
       });
     });

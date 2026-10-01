@@ -6,7 +6,8 @@
 import { mendYourself, repairAtSmith } from '../character/armorWear';
 import { dungeonView } from '../world/dungeon';
 import { CombatNarrationQueue, pickMoments, type CombatNarrationMode } from './combatNarration';
-import { logSince } from '../combat/encounter';
+import { logSince, setSeats, waitingOn } from '../combat/encounter';
+import { fightSeats } from '../session/table';
 import type { SrdDatabase } from '../data/srd';
 import type { FlagRegistry } from '../world/flags';
 import { describeChange } from '../world/factions';
@@ -173,7 +174,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
         return;
       }
       session.autosave(); // before combat (spec §9)
-      const fight = startFight(ctx, r.encounter, session.rng, db);
+      const fight = startFight(ctx, r.encounter, session.rng, db, fightSeats(session.table, session.current));
       session.addLog('system', m('fight.start', { name: def?.name ?? m('fight.enemies') }));
       session.emit({ type: 'mood', mood: 'battle', ambience: null });
       narrateCombat(session, ctx, fight.enc.log);
@@ -193,6 +194,9 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     const f = activeFight(session.current);
     const def = f && adventures.get(f.adventureId)?.encounters.find((e) => e.id === f.encounterId);
     session.emit({ type: 'combat', encounter: f ? structuredClone(f.enc) : null, ...(def && { canFlee: def.canFlee }) });
+    // Co-op: tell the table whose player the fight waits for (solo fights never wait on a guest).
+    const w = f && waitingOn(f.enc);
+    if (w) session.emit({ type: 'waiting', ...w, text: session.msgs.m('table.waitingFor', { name: w.name }) });
   };
 
   const endFight = async (session: GameSession, ctx: RunContext, how: FightEnd) => {
@@ -330,6 +334,20 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       else if (awayAt) await narrateInto(session, { kind: 'outcome', facts: [session.msgs.m('story.youAreIn', { name: awayAt.name, summary: awayAt.summary })], ctx }, opts.narrator);
       else await narrateInto(session, { kind: 'scene', facts: [], ctx, visit: 'resume' }, opts.narrator);
       offer(session, ctx);
+    },
+    async seatsChanged(session) {
+      // A player went away or came back mid-fight: the AI takes over (or hands back) their characters.
+      const f = activeFight(session.current);
+      if (!f || !db) return;
+      const ctx = ctxFor(session);
+      const seq = f.enc.logSeq ?? f.enc.log.length;
+      setSeats(f.enc, { rng: session.rng, db, msgs: session.msgs }, fightSeats(session.table, session.current));
+      narrateCombat(session, ctx, logSince(f.enc, seq));
+      if (f.enc.status === 'ongoing') emitFight(session);
+      else {
+        await endFight(session, ctx, f.enc.status === 'won' ? 'win' : 'lose');
+        offer(session, ctxFor(session));
+      }
     },
     async refresh(session) {
       // Re-offer the buttons (e.g. in a new language); nothing to offer mid-fight or before the story starts.

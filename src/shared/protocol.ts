@@ -142,6 +142,8 @@ export type ServerEvent =
   | { type: 'tts'; entryId: number }
   /** The running fight (null when it ends). */
   | { type: 'combat'; encounter: Encounter | null; canFlee?: boolean }
+  /** Co-op (C003): the fight waits for a guest seat's creature ("Waiting for Wren's player"); sent after `combat`. */
+  | { type: 'waiting'; creatureId: string; name: string; seat: string; text: string }
   /** Hardcore: the hero died; a new hero can continue in this world. */
   | { type: 'hero_fallen'; name: string }
   /** Music mood + ambience bed for the current place (the client crossfades). */

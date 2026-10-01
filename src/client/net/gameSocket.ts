@@ -33,6 +33,8 @@ export const objective = signal<string | null>(null);
 export const dungeon = signal<DungeonView | null>(null);
 /** The running fight (server state) and whether fleeing is allowed. */
 export const fight = signal<{ encounter: Encounter; canFlee: boolean } | null>(null);
+/** Co-op: the guest seat's creature the fight waits for (cleared by every `combat` event; C006 shows it). */
+export const waitingFor = signal<Extract<ServerEvent, { type: 'waiting' }> | null>(null);
 /** Hardcore: name of the hero who just died (shows the "continue this world" screen). */
 export const heroFallen = signal<string | null>(null);
 /** The open shop's offer (server-computed prices). */
@@ -50,6 +52,10 @@ export function applyEvent(e: ServerEvent): void {
       return;
     case 'combat':
       fight.value = e.encounter ? { encounter: e.encounter, canFlee: e.canFlee ?? true } : null;
+      waitingFor.value = null;
+      return;
+    case 'waiting':
+      waitingFor.value = e;
       return;
     case 'hero_fallen':
       heroFallen.value = e.name;

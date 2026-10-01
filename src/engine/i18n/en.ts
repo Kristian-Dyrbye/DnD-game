@@ -27,6 +27,7 @@ export const en = {
   'table.proposeOnly': 'The host decides the story: propose it to them instead',
   'table.notYourTurn': 'It is not your character’s turn',
   'table.notYourCharacter': 'That character is played by someone else',
+  'table.waitingFor': 'Waiting for {name}’s player…',
 
   // Story results
   'story.received': 'Received: {list}',

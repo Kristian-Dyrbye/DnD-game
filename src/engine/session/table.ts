@@ -22,6 +22,8 @@ export interface Seat {
   role: 'host' | 'player' | 'spectator';
   /** Display name (the player's, not the character's). */
   name?: string;
+  /** The player is gone for now (socket closed): their characters fight on with the AI (C003). */
+  away?: boolean;
 }
 
 export interface Table {
@@ -73,6 +75,33 @@ export function ownerOf(table: Table, state: GameState, characterId: string): Se
     if (seatOf(table, seat)) return seat;
   }
   return HOST_SEAT;
+}
+
+/** Marks a guest seat away or back (the host is never away). Returns whether anything changed. */
+export function setAway(table: Table, id: SeatId, away: boolean): boolean {
+  const seat = seatOf(table, id);
+  if (!seat || seat.role === 'host' || !!seat.away === away) return false;
+  if (away) seat.away = true;
+  else delete seat.away;
+  return true;
+}
+
+/**
+ * Who plays which creature in a fight (C003): the hero and the host's 'player' companions → host,
+ * a `seat:<id>` companion → that seat while it is seated and not away. Characters missing from the
+ * map (AI control, or a seat that left or is away) are played by the companion AI.
+ */
+export function fightSeats(table: Table, state: GameState): Record<string, SeatId> {
+  const out: Record<string, SeatId> = { [state.hero.id]: HOST_SEAT };
+  for (const [id, control] of Object.entries(controlMap(state))) {
+    if (!state.companions.some((c) => c.id === id)) continue;
+    if (control === 'player') out[id] = HOST_SEAT;
+    else if (control.startsWith('seat:')) {
+      const seat = seatOf(table, control.slice(5));
+      if (seat && !seat.away && seat.role !== 'spectator') out[id] = seat.id;
+    }
+  }
+  return out;
 }
 
 /** Characters (hero + companions) a seat plays. Spectators own nothing. */

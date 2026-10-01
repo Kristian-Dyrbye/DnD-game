@@ -36,6 +36,8 @@ export interface Encounter {
   heroId: string;
   /** Creatures the player controls (the hero + companions toggled to player control). */
   controlled?: string[];
+  /** Co-op (C003): the seat that plays each controlled creature (`host`, `guest-<n>`); absent in solo fights. */
+  seats?: Record<string, string>;
   /** Initial sides (for the AI's morale rule). */
   roster: Record<string, string>;
   log: string[];
@@ -114,6 +116,8 @@ export interface EncounterSetup {
   companions?: Character[];
   /** Companion ids the player controls in this fight (default: all AI). */
   playerControlled?: string[];
+  /** Co-op: creature id → seat for every human-played creature (replaces `playerControlled`; others use the AI). */
+  seats?: Record<string, string>;
   monsters: { id: string; count: number }[];
   /** Friendly stat blocks on the party's side (AI-controlled with the companion AI). */
   allies?: { id: string; count: number }[];
@@ -175,10 +179,13 @@ export function setupEncounter(setup: EncounterSetup, ctx: CombatContext): Encou
   );
   const creatures = Object.fromEntries([...party, ...foes].map((c) => [c.id, c]));
   const turns = startCombat(toEntries(rolls));
+  const human = setup.seats ? Object.keys(setup.seats) : (setup.playerControlled ?? []);
+  const controlled = [setup.hero.id, ...human.filter((id) => (setup.companions ?? []).some((c) => c.id === id))];
   const enc: Encounter = {
     state: { grid, turns, creatures },
     heroId: setup.hero.id,
-    controlled: [setup.hero.id, ...(setup.playerControlled ?? []).filter((id) => (setup.companions ?? []).some((c) => c.id === id))],
+    controlled,
+    ...(setup.seats && { seats: Object.fromEntries(controlled.map((id) => [id, setup.seats?.[id] ?? 'host'])) }),
     roster: Object.fromEntries(turns.order.map((e) => [e.id, e.side])),
     log: [msgsOf(ctx).m('combat.initiative'), ...rolls.map((r) => `${creatures[r.id]?.name ?? r.id}: ${r.text}`)],
     status: 'ongoing',
@@ -220,18 +227,48 @@ function advance(enc: Encounter, ctx: CombatContext, aiOpts: AiOptions = {}): vo
       if (pc && pc.hp > 0) return;
       continue;
     }
-    const c = enc.state.creatures[id];
-    if (!c || c.hp <= 0) continue;
-    // Companions follow the hero and focus on the hero's target; everyone else is the enemy AI.
-    const res =
-      enc.roster[id] === 'party'
-        ? takeCompanionTurn(enc.state, ctx, id, { roster: enc.roster, leaderId: enc.heroId, ...(enc.focusId && { focusId: enc.focusId }), ...aiOpts })
-        : takeAiTurn(enc.state, ctx, id, { roster: enc.roster, ...aiOpts });
-    enc.state = res.state;
-    push(enc, res.events.map((e: CombatEvent) => e.text));
-    if (enc.roster[id] === 'party') companionZones(enc, ctx, id);
-    else fireReadied(enc, ctx, id);
+    aiTurn(enc, ctx, id, aiOpts);
   }
+}
+
+/** The AI plays `id`'s turn (alive creatures only): companions follow the hero and focus on the hero's target; everyone else is the enemy AI. */
+function aiTurn(enc: Encounter, ctx: CombatContext, id: string, aiOpts: AiOptions = {}): void {
+  const c = enc.state.creatures[id];
+  if (!c || c.hp <= 0) return;
+  const res =
+    enc.roster[id] === 'party'
+      ? takeCompanionTurn(enc.state, ctx, id, { roster: enc.roster, leaderId: enc.heroId, ...(enc.focusId && { focusId: enc.focusId }), ...aiOpts })
+      : takeAiTurn(enc.state, ctx, id, { roster: enc.roster, ...aiOpts });
+  enc.state = res.state;
+  push(enc, res.events.map((e: CombatEvent) => e.text));
+  if (enc.roster[id] === 'party') companionZones(enc, ctx, id);
+  else fireReadied(enc, ctx, id);
+}
+
+/**
+ * Co-op (C003): who plays which creature changed mid-fight (a player went away, came back or left).
+ * `seats` maps every human-played creature to its seat (the hero is always played). If the creature
+ * whose turn it is lost its player, the companion AI finishes that turn and the fight runs on to the
+ * next human turn; a creature taken back is played from its next turn.
+ */
+export function setSeats(enc: Encounter, ctx: CombatContext, seats: Record<string, string>): void {
+  const party = (id: string) => enc.roster[id] === 'party' && !id.startsWith('ally_');
+  enc.controlled = [enc.heroId, ...Object.keys(seats).filter((id) => id !== enc.heroId && party(id))];
+  enc.seats = Object.fromEntries(enc.controlled.map((id) => [id, seats[id] ?? 'host']));
+  if (enc.status !== 'ongoing') return;
+  const id = currentId(enc.state.turns);
+  if (!id || isControlled(enc, id)) return;
+  aiTurn(enc, ctx, id);
+  advance(enc, ctx);
+}
+
+/** Co-op: the creature (and its seat) the fight is waiting for, if a guest seat plays it. */
+export function waitingOn(enc: Encounter): { creatureId: string; name: string; seat: string } | undefined {
+  if (enc.status !== 'ongoing' || !enc.seats) return undefined;
+  const id = currentId(enc.state.turns);
+  const seat = id ? enc.seats[id] : undefined;
+  if (!id || !seat || seat === 'host') return undefined;
+  return { creatureId: id, name: enc.state.creatures[id]?.name ?? id, seat };
 }
 
 /**

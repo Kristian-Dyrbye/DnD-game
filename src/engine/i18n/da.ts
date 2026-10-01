@@ -26,6 +26,7 @@ export const da: Partial<Record<EngineKey, string>> = {
   'table.proposeOnly': 'Værten bestemmer historien: foreslå det i stedet',
   'table.notYourTurn': 'Det er ikke din figurs tur',
   'table.notYourCharacter': 'Den figur spilles af en anden',
+  'table.waitingFor': 'Venter på spilleren bag {name}…',
 
   // Historien
   'story.received': 'Modtaget: {list}',
