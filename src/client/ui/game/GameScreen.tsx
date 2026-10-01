@@ -36,6 +36,7 @@ import { getMap } from '../../../engine/world/travel';
 import { shopsAt } from '../../../engine/world/shops';
 import { localShops } from '../../data';
 import { PartyPanel } from './PartyPanel';
+import { TablePanel } from './TablePanel';
 import { StoryLog } from './StoryLog';
 import { currentTranslator, language, t } from '../i18n';
 import { messages } from '../../../engine/i18n';
@@ -57,6 +58,7 @@ export function GameScreen() {
   const levelling = levelUpFor === null || !h ? undefined : levelUpFor === h.id ? h : state?.companions.find((c) => c.id === levelUpFor);
   const [characterOpen, setCharacterOpen] = useState(false);
   const [savesOpen, setSavesOpen] = useState(false);
+  const [tableOpen, setTableOpen] = useState(false);
   const [shopId, setShopId] = useState<string | null>(null);
   const here = state ? getMap(state)?.current : undefined;
   const shopsHere = here ? shopsAt(localShops.value, here) : [];
@@ -154,6 +156,12 @@ export function GameScreen() {
               <button type="button" onClick={() => (settingsOpen.value = true)}>
                 {t('game.settings')}
               </button>
+              {/* Co-op over the network is the local edition's for now (the web edition gets it with C009). */}
+              {!WEB_EDITION && (
+                <button type="button" title={t('game.tableTitle')} onClick={() => setTableOpen(true)}>
+                  {t('game.table')}
+                </button>
+              )}
             </>
           )}
           <button type="button" onClick={() => (screen.value = 'title')}>
@@ -184,6 +192,7 @@ export function GameScreen() {
       {journalOpen && <JournalPanel onClose={() => setJournalOpen(false)} />}
       {characterOpen && h && <CharacterScreen c={h} onClose={() => setCharacterOpen(false)} />}
       {savesOpen && <SaveBrowser mode="save" onClose={() => setSavesOpen(false)} />}
+      {tableOpen && <TablePanel onClose={() => setTableOpen(false)} />}
       {mapOpen && <WorldMap onClose={() => setMapOpen(false)} />}
       {inventoryOpen && <InventoryPanel onClose={() => setInventoryOpen(false)} />}
       {shopId && <ShopPanel shopId={shopId} onClose={() => setShopId(null)} />}

@@ -443,3 +443,13 @@ body.cb-helpers .hp-bar.hp-mid div { background-image: repeating-linear-gradient
 @media (max-width: 1000px) { .combat-screen { grid-template-columns: 1fr; grid-template-rows: auto auto auto; grid-template-areas: 'bar' 'main' 'side'; height: auto; } .combat-side { border-left: none; border-top: 1px solid #3a3226; } }
 .level-up { margin-top: 0.4rem; width: 100%; }
 .econ.acting { background: #3a2f1c; color: var(--accent); text-decoration: none; }
+/* Co-op (C006b): guest join screen + host table panel */
+.join-form { display: grid; gap: 0.6rem; max-width: 26rem; text-align: left; }
+.join-form input[type='text'] { display: block; width: 100%; margin-top: 0.2rem; }
+.join-role { border: 1px solid #3a3226; border-radius: 6px; display: flex; gap: 1.2rem; }
+.table-join { display: flex; gap: 1rem; align-items: flex-start; flex-wrap: wrap; }
+.join-code { font-size: 1.4rem; letter-spacing: 0.15em; }
+.join-url { user-select: all; word-break: break-all; }
+.join-qr { width: 10rem; height: 10rem; flex: none; }
+.table-seats li { display: flex; gap: 0.5rem; align-items: baseline; flex-wrap: wrap; }
+.table-toggle { display: block; margin-bottom: 0.4rem; }

@@ -63,6 +63,7 @@ describe('game and combat screens use the catalog', () => {
     ...readdirSync(join(root, 'three')).filter((f) => f.endsWith('.tsx')).map((f) => `three/${f}`),
     'ui/AboutPanel.tsx',
     'ui/SaveBrowser.tsx',
+    'ui/JoinScreen.tsx',
   ];
 
   it('no plain English text between JSX tags or in visible attributes', () => {

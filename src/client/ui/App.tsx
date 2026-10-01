@@ -1,5 +1,5 @@
 /**
- * Root UI component: switches between the title screen, the character creator and the game.
+ * Root UI component: switches between the title screen (a co-op guest's join screen on `?join=` pages), the character creator and the game.
  * The creator, game and combat sandbox are separate chunks (they carry the SRD data), loaded when first shown.
  */
 import { GAME_TITLE } from '../../shared/version';
@@ -16,6 +16,8 @@ import { lazyScreen } from './lazyScreen';
 import { t } from './i18n';
 import { LanguagePicker } from './LanguagePicker';
 import { CampaignPicker } from './CampaignPicker';
+import { JoinScreen } from './JoinScreen';
+import { joinCode } from '../net/gameSocket';
 
 const Creator = lazyScreen(async () => (await import('./creator/Creator')).Creator, 'screen.creator');
 const GameScreen = lazyScreen(async () => (await import('./game/GameScreen')).GameScreen, 'screen.game');
@@ -59,7 +61,7 @@ export function App() {
   }, [screen.value]);
   return (
     <>
-      {screen.value === 'creator' ? <Creator /> : screen.value === 'game' ? <GameScreen /> : screen.value === 'combat' ? <DemoCombat /> : <TitleScreen />}
+      {screen.value === 'creator' ? <Creator /> : screen.value === 'game' ? <GameScreen /> : screen.value === 'combat' ? <DemoCombat /> : joinCode.value ? <JoinScreen /> : <TitleScreen />}
       {screen.value !== 'combat' && <StatusIndicator />}
       {settingsOpen.value && <SettingsPanel onClose={() => (settingsOpen.value = false)} />}
     </>

@@ -1,8 +1,8 @@
 /** C006: the client keeps proposals for the host and a guest's seat token. */
 import { beforeEach, describe, expect, it } from 'vitest';
 import type { ProposalEvent } from '../../shared/protocol';
-import { applyEvent, dismissProposal, joinCode, mySeat, proposals, setSeatStore } from './gameSocket';
-import { seatToken, type SeatStore } from './guest';
+import { applyEvent, dismissProposal, joinCode, mySeat, proposals, setSeatStore, storedSeat } from './gameSocket';
+import { rememberSeat, seatToken, type SeatStore } from './guest';
 
 const data = new Map<string, string>();
 const store: SeatStore = { getItem: (k) => data.get(k) ?? null, setItem: (k, v) => void data.set(k, v), removeItem: (k) => void data.delete(k) };
@@ -39,6 +39,15 @@ describe('guest seat token (C006)', () => {
     applyEvent({ type: 'table', seats: [{ id: 'host', role: 'host' }], policy: 'host_decides' });
     expect(mySeat.value).toBeNull();
     expect(seatToken(store, 'AB3K9X')).toBeUndefined();
+  });
+
+  it('storedSeat tells the join screen the last name and whether a reload can reclaim the seat (C006b)', () => {
+    joinCode.value = 'AB3K9X';
+    expect(storedSeat()).toEqual({ token: false });
+    rememberSeat(store, 'AB3K9X', 'tok-1', 'Kim');
+    expect(storedSeat()).toEqual({ name: 'Kim', token: true });
+    joinCode.value = 'ZZZ999'; // another table: same name, stale token
+    expect(storedSeat()).toEqual({ name: 'Kim', token: false });
   });
 
   it('the host’s own page stores nothing', () => {

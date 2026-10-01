@@ -8,7 +8,7 @@ import { effect, signal } from '@preact/signals';
 import { language } from '../ui/i18n';
 import type { GameState, LogEntry, RollRecord } from '../../engine/session/gameState';
 import type { ClientCommand, ProposalEvent, ServerEvent, SuggestedAction } from '../../shared/protocol';
-import { forgetSeat, joinCodeFrom, openCommands, rememberSeat, type SeatStore } from './guest';
+import { forgetSeat, joinCodeFrom, openCommands, rememberSeat, seatName, seatToken, type SeatStore } from './guest';
 import type { ShopView } from '../../engine/world/shops';
 import type { Encounter } from '../../engine/combat/encounter';
 import { audio } from '../audio/AudioManager';
@@ -153,6 +153,13 @@ let seatStore: SeatStore | undefined = (() => {
   }
 })();
 let guestProfile: { name?: string; role?: 'player' | 'spectator' } = {};
+
+/** The name this browser joined with last, and whether it holds a seat token for this table (a reload reclaims the seat). */
+export function storedSeat(): { name?: string; token: boolean } {
+  const code = joinCode.peek();
+  const name = seatName(seatStore);
+  return { ...(name && { name }), token: !!code && !!seatToken(seatStore, code) };
+}
 
 /** Tests: the storage for seat tokens. */
 export function setSeatStore(store: SeatStore | undefined): void {
