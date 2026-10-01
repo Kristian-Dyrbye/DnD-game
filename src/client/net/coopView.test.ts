@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Encounter } from '../../engine/combat/encounter';
 import type { ProposalEvent } from '../../shared/protocol';
-import { bestActor, buttonCommand, mayAddHero, pageSeat, partyRights, playsCreature, proposalCommand, proposalText, seatId, shownCreature, storyMode } from './coopView';
+import { bestActor, buttonCommand, mayAddHero, pageSeat, partyRights, playsCreature, proposalCommand, proposalText, seatId, shownCreature, storyMode, viewedHero } from './coopView';
 
 const host = pageSeat(false, null);
 const kim = pageSeat(true, { seat: 'guest-1', role: 'player' });
@@ -22,6 +22,19 @@ describe('co-op view rules (C006c)', () => {
     expect(storyMode(kim, undefined)).toBe('suggest');
     expect(storyMode(kim, 'anyone')).toBe('act');
     expect(storyMode(ada, 'anyone')).toBe('suggest');
+  });
+
+  it("shows a guest player their own hero, everyone else the main hero (C008b)", () => {
+    const main = { id: 'hero' };
+    const wren = { id: 'hero-2' };
+    const corwin = { id: 'corwin' };
+    const party = [corwin, wren];
+    const control = { corwin: 'ai', 'hero-2': 'seat:guest-1' };
+    expect(viewedHero(kim, main, party, control)).toBe(wren);
+    expect(viewedHero(host, main, party, control)).toBe(main);
+    expect(viewedHero(ada, main, party, control)).toBe(main);
+    expect(viewedHero(pageSeat(true, { seat: 'guest-3', role: 'player' }), main, party, control)).toBe(main);
+    expect(viewedHero(kim, main, party, undefined)).toBe(main);
   });
 
   it('gives the party panel controls to the right seat', () => {

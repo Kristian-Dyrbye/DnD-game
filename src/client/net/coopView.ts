@@ -48,6 +48,16 @@ export function mayAddHero(p: PageSeat, control: Record<string, string> | undefi
   return !Object.values(control ?? {}).includes(`seat:${p.seat}`);
 }
 
+/**
+ * The hero this page shows in its hero view and Character screen: a guest player's own hero (the character
+ * with `seat:<seat>` control), else the main hero (host pages, spectators, a player who has no hero yet).
+ */
+export function viewedHero<C extends { id: string }>(p: PageSeat, hero: C, companions: readonly C[], control: Record<string, string> | undefined): C {
+  if (p.role !== 'player') return hero;
+  const id = Object.entries(control ?? {}).find(([, c]) => c === `seat:${p.seat}`)?.[0];
+  return companions.find((c) => c.id === id) ?? hero;
+}
+
 /** Does this seat play creature `id` in the fight? Solo fights (no seat map) belong to the host. */
 export function playsCreature(enc: Encounter, id: string, seat: string): boolean {
   const controlled = id === enc.heroId || (enc.controlled ?? []).includes(id);

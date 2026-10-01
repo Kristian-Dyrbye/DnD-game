@@ -13,7 +13,7 @@ import { weatherEffects, type WeatherState } from '../../../engine/world/weather
 import { CharacterPreview } from '../../three/LazyCharacterPreview';
 import { useEffect, useState } from 'preact/hooks';
 import { connection, dungeon, fight, gameState, heroFallen, joinCode, lastError, mySeat, objective, send, storyLog, streaming, waitingFor } from '../../net/gameSocket';
-import { pageSeat, seatId } from '../../net/coopView';
+import { pageSeat, seatId, viewedHero } from '../../net/coopView';
 import { DungeonPanel } from './DungeonPanel';
 
 /** Previews (reachable squares, attack checks) need a context; they never roll. */
@@ -51,6 +51,9 @@ export function GameScreen() {
   }, []);
   const guest = joinCode.value !== null;
   const seat = pageSeat(guest, mySeat.value);
+  const controls = (state?.extensions.party as { control?: Record<string, string> } | undefined)?.control ?? {};
+  /** The hero this page looks at (a guest player's own hero, C008b). */
+  const shown = h && viewedHero(seat, h, state?.companions ?? [], controls);
   const hintOn = settings.value?.gameplay.objectiveHint ?? false;
   const voiceOn = settings.value?.tts.enabled ?? false;
   const [journalOpen, setJournalOpen] = useState(false);
@@ -178,7 +181,7 @@ export function GameScreen() {
           <span class="muted">{t('game.objective')}</span> {objective.value}
         </p>
       )}
-      {h && <PartyPanel hero={h} companions={state?.companions ?? []} origins={state?.origins ?? {}} onLevelUp={setLevelUpFor} {...(state && { onAddHero: startAddingHero })} loyalty={Object.fromEntries((state?.companions ?? []).map((c) => [c.id, Number(state?.flags[`world.${c.id}_loyalty`] ?? 50)]))} controls={(state?.extensions.party as { control?: Record<string, string> } | undefined)?.control ?? {}} seat={seat} />}
+      {h && <PartyPanel hero={h} companions={state?.companions ?? []} origins={state?.origins ?? {}} onLevelUp={setLevelUpFor} {...(state && { onAddHero: startAddingHero })} loyalty={Object.fromEntries((state?.companions ?? []).map((c) => [c.id, Number(state?.flags[`world.${c.id}_loyalty`] ?? 50)]))} controls={controls} seat={seat} />}
       {levelling && h && <LevelUpPanel key={levelling.id} hero={levelling} main={levelling.id === h.id} onClose={() => setLevelUpFor(null)} />}
       <main class="game-main">
         {connection.value !== 'open' && <p class="connection-note">{t(connection.value === 'connecting' ? (WEB_EDITION ? 'game.startingWeb' : 'game.connecting') : 'game.disconnected')}</p>}
@@ -194,7 +197,7 @@ export function GameScreen() {
         <ActionInput />
       </main>
       {journalOpen && <JournalPanel onClose={() => setJournalOpen(false)} />}
-      {characterOpen && h && <CharacterScreen c={h} onClose={() => setCharacterOpen(false)} />}
+      {characterOpen && shown && <CharacterScreen c={shown} onClose={() => setCharacterOpen(false)} />}
       {savesOpen && <SaveBrowser mode="save" onClose={() => setSavesOpen(false)} />}
       {tableOpen && <TablePanel onClose={() => setTableOpen(false)} />}
       {mapOpen && <WorldMap onClose={() => setMapOpen(false)} />}
@@ -202,7 +205,7 @@ export function GameScreen() {
       {shopId && <ShopPanel shopId={shopId} onClose={() => setShopId(null)} />}
       <aside class="game-side">
         {dungeon.value && h && <DungeonPanel view={dungeon.value} hero={h} />}
-        <div class="hero-view">{h && <CharacterPreview appearance={h.appearance} size={h.size} height={240} look={equipmentLook(h, db)} wounds={woundLevel(h.hp, h.maxHp)} seed={h.id} scars={h.scars.map((s) => s.location)} wear={armorWear(h)} onSnapshot={guest ? undefined : (data) => send({ type: 'thumbnail', data })} />}</div>
+        <div class="hero-view">{shown && <CharacterPreview appearance={shown.appearance} size={shown.size} height={240} look={equipmentLook(shown, db)} wounds={woundLevel(shown.hp, shown.maxHp)} seed={shown.id} scars={shown.scars.map((s) => s.location)} wear={armorWear(shown)} onSnapshot={guest ? undefined : (data) => send({ type: 'thumbnail', data })} />}</div>
         <DiceTray />
       </aside>
     </div>

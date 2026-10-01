@@ -86,8 +86,12 @@ export interface GameHost {
   defaultAdventure: string | undefined;
   /** Campaigns whose first chapter is loaded (what `new_game.campaign` may name). */
   campaigns: readonly Campaign[];
-  /** Queues a command from `seat` (default the host); resolves once it (and everything queued before it) has run. */
-  send(cmd: ClientCommand, seat?: SeatId): Promise<void>;
+  /**
+   * Queues a command from `seat` (default the host); resolves once it (and everything queued before it) has run.
+   * `from` names the sending connection (any value, e.g. its socket): `error` events the command causes are
+   * handed to listeners with it, so a transport can show a refusal to the sender only (C008b).
+   */
+  send(cmd: ClientCommand, seat?: SeatId, from?: unknown): Promise<void>;
   /** Parses a raw protocol message from `seat` and queues it; returns an error event for the sender if it is invalid. */
   receive(raw: string, seat?: SeatId): ServerEvent | undefined;
   /** A guest seat went away or came back (C003); queued like a command so it never cuts into one. */
@@ -98,8 +102,8 @@ export interface GameHost {
    * `joined` result to that connection only (the token is its key).
    */
   join(req: JoinRequest): Promise<JoinResult>;
-  /** Subscribes to session events; returns the unsubscribe function. */
-  on(listener: (e: ServerEvent) => void): () => void;
+  /** Subscribes to session events (`from` = the sender of the running command, on `error` events); returns the unsubscribe function. */
+  on(listener: (e: ServerEvent, from?: unknown) => void): () => void;
   /** Waits for queued commands and background suggestion/summary work (tests). */
   idle(): Promise<void>;
 }
@@ -165,7 +169,17 @@ export function createGameHost(opts: GameHostOptions): GameHost {
     }
     await session.handle(cmd, seat);
   };
-  const send = (cmd: ClientCommand, seat: SeatId = HOST_SEAT): Promise<void> => (queue = queue.then(() => run(cmd, seat)));
+  // Commands run one at a time, so the sender of the running one is the sender of any error it causes.
+  let sender: unknown;
+  const send = (cmd: ClientCommand, seat: SeatId = HOST_SEAT, from?: unknown): Promise<void> =>
+    (queue = queue.then(async () => {
+      sender = from;
+      try {
+        await run(cmd, seat);
+      } finally {
+        sender = undefined;
+      }
+    }));
   const tokens = new SeatTokens();
   const seatGuest = async (req: JoinRequest): Promise<JoinResult> => {
     const code = opts.joinCode?.();
@@ -202,7 +216,7 @@ export function createGameHost(opts: GameHostOptions): GameHost {
       queue = result.then(() => undefined);
       return result;
     },
-    on: (listener) => session.on(listener),
+    on: (listener) => session.on((e) => listener(e, e.type === 'error' ? sender : undefined)),
     async idle() {
       await queue;
       for (const p of ports.values()) await p.idle();

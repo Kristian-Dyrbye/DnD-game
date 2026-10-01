@@ -273,7 +273,9 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
           seated.set(id, socket);
           if (before && before !== socket) before.close(4001, 'Seat taken over');
         }
-        off = host.on((e) => {
+        off = host.on((e, from) => {
+          // A refused or failed command is the sender's business only (C008b).
+          if (from !== undefined && from !== socket) return;
           send(e);
           // Released (by themselves or the host): the connection stays, without a seat, until it joins again.
           if (e.type === 'table' && seat && !seatOf(session.table, seat)) unseat();
@@ -296,7 +298,7 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
         const reqId = cmd.reqId ? { reqId: cmd.reqId } : {};
         if (seat) {
           if (cmd.type === 'join') return send({ type: 'error', message: session.msgs.m('table.alreadySeated'), ...reqId });
-          void host.send(cmd, seat);
+          void host.send(cmd, seat, socket);
           return;
         }
         // No seat yet: only ping and join; the game's events start once seated.

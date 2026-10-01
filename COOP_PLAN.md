@@ -109,4 +109,4 @@ Automated part: `npm run build`, then `npx tsx scripts/coop-screens.ts` (two iso
 | 12 | Guest reloads the page: same seat again; guest closes the tab mid-fight: AI plays their hero | owner, by hand | covered by tests (coopJoin/combatSeats), not clicked |
 | 13 | Spectator joins: suggest only, no level-up/toggles | owner, by hand | covered by coopView.test.ts |
 
-Seen in the run, queued as C008b: the guest's hero view (right column) shows the host's hero, not the guest's own (the Character screen probably too; not checked); refused commands' error events go to every page, not just the sender's.
+Seen in the run, fixed in C008b: the guest's hero view (right column) and Character screen showed the host's hero (now the guest's own, `viewedHero` in client/net/coopView.ts); refused commands' error events went to every page (now only the sender's socket: `GameHost.send(cmd, seat, from)` + `on((e, from) => …)`, test src/server/coopErrors.test.ts). Script re-run after the fixes: all steps ok.
