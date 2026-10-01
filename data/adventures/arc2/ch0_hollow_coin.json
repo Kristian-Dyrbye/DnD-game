@@ -1,0 +1,917 @@
+{
+  "formatVersion": 1,
+  "id": "arc2_ch0_hollow_coin",
+  "name": "The Hollow Coin",
+  "arcId": "crown",
+  "kind": "arc",
+  "levelRange": [1, 2],
+  "regionId": "aurelmark",
+  "summary": "A gold crown crumbles to ash in the hero's hand at the Brightwater market. The town assayer finds the Ironvault's own die mark on the ash, and the trail leads under the old Silverrun mill, where a wererat runs a secret mint for someone who pays in true gold.",
+  "start": { "chapter": "ch0", "scene": "brightwater_market" },
+  "improvisedDifficulty": "easy",
+  "chapters": [
+    {
+      "id": "ch0",
+      "name": "The Hollow Coin",
+      "summary": "Brightwater: the ash coin, the assay house, the mint under the mill and Korrath's shrine.",
+      "start": "brightwater_market",
+      "scenes": [
+        {
+          "id": "brightwater_market",
+          "name": "Brightwater Market",
+          "locationId": "brightwater",
+          "mood": "town",
+          "seed": "Brightwater's market fills the cobbled quay where the Silverrun runs fast under the mills. Barges unload grain and wool, a moneychanger's stall sits under a striped awning, the Weir & Daughter stall sells rope and lamp oil, the Brightwater Forge rings beside the toll bridge, and a small stone shrine to Korrath, god of the forge and honest weight, stands by the iron gate of the old mill-race.",
+          "variants": [
+            { "if": { "flag": "arc.crown.saw_ash" }, "seed": "A grey smear of ash still marks your palm where a gold crown used to be." },
+            { "if": { "flag": "~ch0_mint_won" }, "seed": "Word has spread of the rats' mint under the old mill. Stallholders bite every coin you hand them, and some of them nod at you." },
+            { "if": { "flag": "arc.crown.mint_fled" }, "seed": "People whisper that grey ash turned up in three tills this week. Whoever made the false gold is still out there." }
+          ],
+          "revisitSeed": [
+            "The Brightwater quay again: barges, gulls, the moneychanger's awning and the rush of the mill-race under the bridge.",
+            "Back among the market stalls by the Silverrun, where the forge still rings and the shrine of Korrath keeps its scales."
+          ],
+          "npcs": ["oswin_harl", "hetty_weir"],
+          "onEnter": {
+            "text": "You reached Brightwater this morning with a barge-master's wages in your purse: one heavy gold crown, newly struck, for a week of hauling ropes.",
+            "discover": ["brightwater", "millbrook", "highcrown"]
+          },
+          "pois": [
+            {
+              "id": "moneychanger",
+              "name": "The moneychanger's stall",
+              "seed": "Oswin Harl's stall: brass scales, a touchstone, stacks of silver and copper under a striped awning.",
+              "actions": [
+                {
+                  "id": "change_coin",
+                  "label": "Change your gold crown into silver",
+                  "once": true,
+                  "keywords": ["change", "coin", "crown", "silver", "moneychanger", "gold"],
+                  "outcome": {
+                    "text": "Oswin rings your crown on the counter: it sounds true. He weighs it: true. He hands it back to bite, and the coin crumbles in your fingers into a pinch of fine grey ash. Oswin goes white. \"That's the fourth this month,\" he whispers, and sweeps the ash into a twist of paper for you. \"Take it to Mistress Dunmore at the assay house. Quietly.\"",
+                    "flags": [{ "set": "arc.crown.saw_ash" }],
+                    "minutes": 10
+                  }
+                }
+              ]
+            },
+            {
+              "id": "weir_stall",
+              "name": "Weir & Daughter",
+              "seed": "A general-goods stall run by old Ebb Weir and his sharp-eyed daughter Hetty: rope, torches, rations, lamp oil, rumours.",
+              "actions": [
+                {
+                  "id": "buy_supplies",
+                  "label": "Buy torches and rations (1 gp)",
+                  "once": true,
+                  "keywords": ["buy", "torches", "rations", "supplies"],
+                  "outcome": {
+                    "cost": 100,
+                    "text": "Hetty Weir bundles three torches and two days of rations, and bites your silver before she takes it.",
+                    "items": [{ "itemId": "torch", "quantity": 3 }, { "itemId": "rations", "quantity": 2 }]
+                  }
+                },
+                {
+                  "id": "ask_hetty",
+                  "label": "Ask Hetty Weir what's wrong with the old mill",
+                  "once": true,
+                  "keywords": ["hetty", "mill", "rumour", "gossip", "rats"],
+                  "outcome": {
+                    "text": "Hetty leans over the rope coils. \"The old Silverrun mill's been shut ten years. But my da sees lights in the mill-race at night, and the rats down there are big as dogs and walk in a line, like they're carrying something. The race gate is chained. Mistress Dunmore has the old key, her husband ran the mill.\"",
+                    "flags": [{ "set": "~ch0_mill_rumour" }]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "forge",
+              "name": "The Brightwater Forge",
+              "seed": "An Ironvault smithy by the toll bridge, its anvils loud, its prices posted in Dwarvish and Common.",
+              "actions": [
+                {
+                  "id": "silver_blade",
+                  "label": "Buy silver dust and have the smith coat your weapon (5 gp)",
+                  "once": true,
+                  "keywords": ["silver", "silvered", "coat", "smith", "blade"],
+                  "outcome": {
+                    "cost": 500,
+                    "text": "The smith rubs silver dust and resin into your weapon's edge and warms it over the coals. \"Rat-folk in the cellars, is it? Steel cuts them and they knit. Silver they remember.\"",
+                    "flags": [{ "set": "~ch0_silvered" }],
+                    "minutes": 30
+                  }
+                }
+              ]
+            },
+            {
+              "id": "mill_race_gate",
+              "name": "The mill-race gate",
+              "seed": "A rusted iron gate over the black mouth of the old mill-race, chained shut. Cold air and the smell of wet stone and rat come through the bars.",
+              "actions": [
+                {
+                  "id": "force_gate",
+                  "label": "Wrench the rusted chain off the gate",
+                  "once": true,
+                  "if": { "not": { "flag": "~ch0_gate_open" } },
+                  "keywords": ["force", "wrench", "break", "chain", "gate"],
+                  "check": {
+                    "skill": "athletics",
+                    "dc": 12,
+                    "success": { "text": "The rusted links give with a shriek. The gate swings in over black water.", "flags": [{ "set": "~ch0_gate_open" }] },
+                    "failure": { "text": "The chain holds, and the noise brings a watchman's stare from the bridge. You will need the key, or a quieter way.", "minutes": 10 }
+                  }
+                },
+                {
+                  "id": "pick_gate",
+                  "label": "Work the old padlock open",
+                  "once": true,
+                  "if": { "not": { "flag": "~ch0_gate_open" } },
+                  "keywords": ["pick", "lock", "padlock"],
+                  "check": {
+                    "skill": "sleight_of_hand",
+                    "dc": 13,
+                    "success": { "text": "The padlock's rusted wards turn under your blade-point. The gate swings in over black water.", "flags": [{ "set": "~ch0_gate_open" }] },
+                    "failure": { "text": "The rusted wards will not turn. Mistress Dunmore has the key, Hetty said.", "minutes": 10 }
+                  }
+                },
+                {
+                  "id": "unlock_gate",
+                  "label": "Open the gate with Mistress Dunmore's key",
+                  "once": true,
+                  "if": { "all": [{ "flag": "~ch0_mill_key" }, { "not": { "flag": "~ch0_gate_open" } }] },
+                  "keywords": ["key", "unlock", "open"],
+                  "outcome": { "text": "The old key turns stiffly. The gate swings in over black water.", "flags": [{ "set": "~ch0_gate_open" }] }
+                }
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "id": "rest_inn",
+              "label": "Take a bed at the Lockkeeper's Inn for the night (2 sp)",
+              "keywords": ["inn", "sleep", "bed", "rest", "night", "room"],
+              "outcome": { "cost": 20, "text": "The Lockkeeper's Inn gives you a narrow bed over the weir, and the river talks you to sleep.", "rest": "long" }
+            }
+          ],
+          "exits": [
+            { "id": "to_assay", "label": "Take the ash to the assay house", "to": "assay_house", "if": { "flag": "arc.crown.saw_ash" }, "minutes": 10 },
+            { "id": "to_shrine", "label": "Step into the shrine of Korrath", "to": "korrath_shrine_oath", "minutes": 5 },
+            { "id": "to_cellars", "label": "Climb down into the mill-race", "to": "mill_cellars", "if": { "flag": "~ch0_gate_open" }, "minutes": 10 },
+            { "id": "to_road", "label": "Take the east road out of Brightwater", "to": "road_east", "if": { "flag": "~ch0_oath_sworn" }, "minutes": 15 }
+          ]
+        },
+        {
+          "id": "assay_house",
+          "name": "The Silverrun Assay House",
+          "locationId": "brightwater",
+          "mood": "town",
+          "seed": "A narrow stone house above the river with barred windows, a balance under a glass bell, a touchstone, acids in stoppered jars and an Ironvault licence framed by the door. Mistress Dunmore, the town assayer, keeps her back to the wall.",
+          "variants": [
+            { "if": { "flag": "arc.crown.clue_1" }, "seed": "The ash lies on the black touchstone, and beside it the little anvil-and-key mark of the Ironvault dies." }
+          ],
+          "revisitSeed": "The assay house again: the glass bell, the acids, and Mistress Dunmore's careful, frightened hands.",
+          "npcs": ["mistress_dunmore"],
+          "pois": [
+            {
+              "id": "assay_bench",
+              "name": "The assay bench",
+              "seed": "A black touchstone, a jeweller's loupe, acids and a brass scale under a glass bell.",
+              "if": { "flag": "~ch0_bench_ready" },
+              "actions": [
+                {
+                  "id": "assay_eye",
+                  "label": "Search the ash under the loupe for a die mark",
+                  "once": true,
+                  "if": { "not": { "flag": "arc.crown.clue_1" } },
+                  "keywords": ["loupe", "search", "die", "mark", "examine", "ash"],
+                  "check": {
+                    "skill": "investigation",
+                    "dc": 12,
+                    "advantageIf": [{ "if": { "flag": "~ch0_dunmore_trust" }, "source": "Mistress Dunmore guides your hand" }],
+                    "success": {
+                      "text": "In the grey ash, one flake still holds the ghost of the coin's face: a tiny anvil crossed with a key. It is the private die mark of the Ironvault Consortium, the mark only their own mint in Deepanvil Hold should strike.",
+                      "flags": [{ "set": "arc.crown.clue_1" }],
+                      "approval": [{ "companion": "brannoc", "delta": 5 }]
+                    },
+                    "failure": { "text": "The ash is only ash under the loupe, grey and soft and telling you nothing." }
+                  }
+                },
+                {
+                  "id": "assay_spell",
+                  "label": "Read the lingering magic in the ash",
+                  "once": true,
+                  "if": { "not": { "flag": "arc.crown.clue_1" } },
+                  "keywords": ["magic", "arcana", "spell", "enchantment", "read"],
+                  "check": {
+                    "skill": "arcana",
+                    "dc": 12,
+                    "advantageIf": [{ "if": { "flag": "~ch0_dunmore_trust" }, "source": "Mistress Dunmore guides your hand" }],
+                    "success": {
+                      "text": "A dying illusion still clings to the ash, and for a heartbeat it shows the coin it pretended to be: a gold crown with a tiny anvil crossed with a key under the Queen's chin. The private die mark of the Ironvault Consortium, struck into a lie.",
+                      "flags": [{ "set": "arc.crown.clue_1" }],
+                      "approval": [{ "companion": "brannoc", "delta": 5 }]
+                    },
+                    "failure": { "text": "Whatever magic held the coin together has bled away. The ash is cold." }
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "id": "ask_letter",
+              "label": "Ask Mistress Dunmore for a letter to the Ironvault",
+              "once": true,
+              "if": { "all": [{ "flag": "arc.crown.clue_1" }, { "not": { "flag": "~ch0_dunmore_cowed" } }] },
+              "keywords": ["letter", "ironvault", "deepanvil", "write"],
+              "outcome": {
+                "text": "Dunmore writes three careful lines, seals them with her own assay stamp, and presses the letter on you. \"Give it to the Ironvault gatewardens in Deepanvil Hold, nobody lower. And do not tell them I was afraid.\"",
+                "flags": [{ "set": "~ch0_dunmore_letter" }]
+              }
+            }
+          ],
+          "exits": [{ "id": "to_market", "label": "Go back down to the market", "to": "brightwater_market", "minutes": 10 }]
+        },
+        {
+          "id": "mill_cellars",
+          "name": "The Mill Cellars",
+          "locationId": "brightwater",
+          "mood": "dungeon",
+          "map": { "id": "mill_cellars", "room": "race_tunnel" },
+          "seed": "The old mill-race runs knee-deep and cold under the Silverrun mill. The tunnel opens into flooded cellars where grain sacks rot on the shelves, and from somewhere ahead comes the tap-tap-tap of a hammer and the squeak of rats.",
+          "variants": [
+            { "if": { "flag": "~ch0_at_mint" }, "seed": "Past the rat run, lamplight leaks round a door: the counting floor, where somebody is striking coins." },
+            { "if": { "flag": "arc.crown.mint_fled" }, "seed": "No hammer sounds now. Only the rats are left, and the cellars smell of cold coals and haste." }
+          ],
+          "revisitSeed": "The cold mill-race again, the rotting grain, and the drip of the river through the vault above.",
+          "pois": [],
+          "actions": [
+            {
+              "id": "push_on",
+              "label": "Wade up the rat run toward the hammering",
+              "if": { "all": [{ "not": { "flag": "~ch0_at_mint" } }, { "not": { "flag": "~ch0_rats_fought" } }] },
+              "keywords": ["wade", "push", "forward", "rats", "fight", "attack"],
+              "outcome": { "text": "Eyes glint in the dark above the water. Four rats the size of dogs come off the shelves at you.", "encounter": "cellar_rats" }
+            },
+            {
+              "id": "sneak_past",
+              "label": "Creep along the shelves past the rats",
+              "once": true,
+              "if": { "not": { "flag": "~ch0_at_mint" } },
+              "keywords": ["sneak", "creep", "quiet", "stealth", "slip"],
+              "check": {
+                "skill": "stealth",
+                "dc": 13,
+                "group": true,
+                "advantageIf": [{ "if": { "flag": "~ch0_mill_rumour" }, "source": "Hetty said the rats keep to their lines" }],
+                "success": {
+                  "text": "You edge along the slimy shelves while the rats squabble over a grain sack. Nobody squeaks. Lamplight shows round a door ahead.",
+                  "flags": [{ "set": "~ch0_at_mint" }],
+                  "revealRoom": { "map": "mill_cellars", "room": "rat_run" }
+                },
+                "failure": { "text": "A shelf gives under your weight. Every rat in the cellar turns.", "encounter": "cellar_rats" }
+              }
+            },
+            {
+              "id": "storm_mint",
+              "label": "Kick open the door to the counting floor",
+              "if": { "all": [{ "flag": "~ch0_at_mint" }, { "not": { "flag": "~ch0_mint_won" } }, { "not": { "flag": "arc.crown.mint_fled" } }, { "not": { "flag": "~ch0_silvered" } }] },
+              "keywords": ["kick", "door", "storm", "attack", "mint", "fight"],
+              "outcome": { "text": "The door bangs in on a long room of coin-presses and crucibles. Two bandits drop their hammers and grab blades, and a hunched man in an apron turns, grins, and keeps grinning as his face stretches into a rat's.", "encounter": "mint_fight" }
+            },
+            {
+              "id": "storm_mint_silver",
+              "label": "Kick open the door with your silvered weapon ready",
+              "if": { "all": [{ "flag": "~ch0_at_mint" }, { "not": { "flag": "~ch0_mint_won" } }, { "not": { "flag": "arc.crown.mint_fled" } }, { "flag": "~ch0_silvered" }] },
+              "keywords": ["kick", "door", "storm", "attack", "mint", "fight", "silver"],
+              "outcome": { "text": "The door bangs in on a long room of coin-presses and crucibles. Two bandits grab blades, and the hunched man in the apron changes into a rat-thing, then hisses at the silver gleam on your weapon.", "encounter": "mint_fight_silver" }
+            },
+            {
+              "id": "bluff_mint",
+              "label": "Knock and claim the woman with two shadows sent you",
+              "once": true,
+              "if": { "all": [{ "flag": "~ch0_at_mint" }, { "not": { "flag": "~ch0_mint_won" } }, { "not": { "flag": "arc.crown.mint_fled" } }, { "flag": "~ch0_dunmore_fear" }] },
+              "keywords": ["bluff", "knock", "lie", "shadows", "pretend", "deceive"],
+              "check": {
+                "skill": "deception",
+                "dc": 13,
+                "success": {
+                  "text": "\"She says the Ironvault knows,\" you hiss through the door. \"Run.\" Two bandits bolt out the river-hatch with a sack of true gold. The man in the apron stays, sniffing at you, and his face slides into a rat's: \"She never sends anyone.\"",
+                  "encounter": "mint_fight_bluffed"
+                },
+                "failure": {
+                  "text": "\"Funny,\" says a squeaky voice behind the door. \"She never sends anyone.\" The door flies open.",
+                  "encounter": "mint_fight"
+                }
+              }
+            },
+            {
+              "id": "search_empty_mint",
+              "label": "Search the abandoned counting floor",
+              "once": true,
+              "if": { "all": [{ "flag": "~ch0_at_mint" }, { "flag": "arc.crown.mint_fled" }] },
+              "keywords": ["search", "empty", "mint", "abandoned", "counting"],
+              "outcome": {
+                "text": "The presses are cold and the dies are gone. Under a cracked crucible you find a chalk tally of coins struck, and from the den beyond you hear a man calling weakly for help.",
+                "flags": [{ "set": "~ch0_mint_searched" }],
+                "xp": 50,
+                "revealRoom": { "map": "mill_cellars", "room": "counting_floor" },
+                "goto": "wererat_den_rest"
+              }
+            }
+          ],
+          "exits": [
+            { "id": "to_den", "label": "Go through to the den behind the mint", "to": "wererat_den_rest", "if": { "any": [{ "flag": "~ch0_mint_won" }, { "flag": "~ch0_mint_searched" }] }, "minutes": 2 },
+            { "id": "to_market", "label": "Wade back out to the market", "to": "brightwater_market", "minutes": 10 }
+          ]
+        },
+        {
+          "id": "wererat_den_rest",
+          "name": "The Wererat's Den",
+          "locationId": "brightwater",
+          "mood": "dungeon",
+          "map": { "id": "mill_cellars", "room": "den" },
+          "seed": "Behind the counting floor is a dry room of straw and stolen blankets, a brazier and a barred niche. A thin man in a customs clerk's coat is chained to the wall, and a strongbox sits under the straw.",
+          "variants": [
+            { "if": { "all": [{ "flag": "~ch0_rat_captured" }, { "not": { "flag": "~ch0_rat_handed" } }, { "not": { "flag": "~ch0_rat_freed" } }] }, "seed": "Skeet, the wererat, sits bound in the corner in his man-shape, licking his teeth and watching you." },
+            { "if": { "flag": "arc.crown.mint_fled" }, "seed": "The coiners left in a hurry: the strongbox is gone and only the chained clerk was left behind." }
+          ],
+          "revisitSeed": "The den behind the mint: straw, a cold brazier and the smell of rat.",
+          "npcs": ["clerk_aldous", "skeet"],
+          "pois": [
+            {
+              "id": "presses",
+              "name": "The coin-presses",
+              "seed": "Two iron coin-presses with their dies still in them: a gold crown's face, perfect, in hard steel.",
+              "if": { "flag": "~ch0_mint_won" },
+              "actions": [
+                {
+                  "id": "smash_dies",
+                  "label": "Smash the false dies on the anvil",
+                  "once": true,
+                  "if": { "not": { "flag": "~ch0_die_kept" } },
+                  "keywords": ["smash", "break", "destroy", "dies"],
+                  "outcome": {
+                    "text": "You beat the dies against the anvil until the Queen's face is a crack in the steel. Nobody will strike another false crown with these.",
+                    "flags": [{ "set": "~ch0_dies_smashed" }],
+                    "approval": [{ "companion": "brannoc", "delta": 10 }]
+                  }
+                },
+                {
+                  "id": "keep_die",
+                  "label": "Keep one die as evidence for the Ironvault",
+                  "once": true,
+                  "if": { "not": { "flag": "~ch0_dies_smashed" } },
+                  "keywords": ["keep", "evidence", "die", "take"],
+                  "outcome": {
+                    "text": "You wrap one of the dies in a rag and pack it away. The Ironvault will have a hard time calling this a rumour.",
+                    "flags": [{ "set": "~ch0_die_kept" }]
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "id": "free_clerk",
+              "label": "Free the chained clerk",
+              "once": true,
+              "keywords": ["free", "clerk", "chain", "unchain", "help", "aldous"],
+              "outcome": {
+                "text": "The clerk, Aldous Penn of the Brightwater customs house, rubs his raw wrists and talks in a rush. \"They took me because I noticed the barge tolls paid in new gold. The rats were paid too, in true gold, real coin, by a woman who came down here twice. A woman with two shadows. I swear it, one fell the way the lamp threw it, and one fell the other way.\"",
+                "flags": [{ "set": "arc.crown.clue_2" }, { "set": "~ch0_clerk_freed" }],
+                "reputation": [{ "faction": "crown_of_aurelmark", "delta": 5 }],
+                "approval": [{ "companion": "brannoc", "delta": 5 }]
+              }
+            },
+            {
+              "id": "search_mint",
+              "label": "Open the strongbox under the straw",
+              "once": true,
+              "if": { "flag": "~ch0_mint_won" },
+              "keywords": ["strongbox", "box", "loot", "search", "open"],
+              "outcome": {
+                "text": "Under the straw: the rats' wages, real silver and gold that rings true and stays true, and a healing draught in a stoppered vial.",
+                "coins": 1500,
+                "items": [{ "itemId": "potion_of_healing", "quantity": 1 }]
+              }
+            },
+            {
+              "id": "short_rest",
+              "label": "Bar the door and rest for an hour",
+              "once": true,
+              "keywords": ["rest", "sit", "breathe", "bandage", "short"],
+              "outcome": { "text": "You bar the door with a coin-press handle and catch your breath by the brazier.", "rest": "short", "tip": "A short rest spends Hit Dice to heal. A long rest at an inn restores everything." }
+            },
+            {
+              "id": "hand_to_reeve",
+              "label": "March Skeet up to the reeve's watch house",
+              "once": true,
+              "if": { "all": [{ "flag": "~ch0_rat_captured" }, { "not": { "flag": "~ch0_rat_freed" } }] },
+              "keywords": ["reeve", "watch", "hand", "arrest", "justice", "law"],
+              "outcome": {
+                "text": "The Brightwater watch locks Skeet in a silver-barred cell, and the reeve shakes your hand in front of half the quay.",
+                "flags": [{ "set": "~ch0_rat_handed" }],
+                "reputation": [{ "faction": "crown_of_aurelmark", "delta": 5 }],
+                "approval": [{ "companion": "brannoc", "delta": 5 }],
+                "minutes": 30
+              }
+            },
+            {
+              "id": "let_go",
+              "label": "Let Skeet go if he names the courier",
+              "once": true,
+              "if": { "all": [{ "flag": "~ch0_rat_captured" }, { "not": { "flag": "~ch0_rat_handed" } }] },
+              "keywords": ["let", "go", "release", "deal", "courier", "name"],
+              "outcome": {
+                "text": "Skeet licks his teeth. \"Mott Varrow. Rides the east road to Deepanvil every new moon with her letters. The woman with the two shadows, yes, she paid us in true gold.\" Then he is a rat again, and gone down a drain.",
+                "flags": [{ "set": "~ch0_rat_freed" }, { "set": "arc.crown.clue_2" }, { "set": "arc.crown.courier_known" }],
+                "approval": [{ "companion": "brannoc", "delta": -5 }]
+              }
+            },
+            {
+              "id": "question_rat",
+              "label": "Lean on Skeet for the courier's name",
+              "once": true,
+              "if": { "all": [{ "flag": "~ch0_rat_captured" }, { "not": { "flag": "~ch0_rat_handed" } }, { "not": { "flag": "~ch0_rat_freed" } }] },
+              "keywords": ["threaten", "lean", "question", "interrogate", "intimidate"],
+              "check": {
+                "skill": "intimidation",
+                "dc": 14,
+                "success": {
+                  "text": "You hold your blade close to his ear until he squeaks. \"Mott Varrow! Rides the east road to Deepanvil every new moon. She pays in true gold, the woman with two shadows!\"",
+                  "flags": [{ "set": "arc.crown.clue_2" }, { "set": "arc.crown.courier_known" }]
+                },
+                "failure": { "text": "Skeet bares yellow teeth and says nothing at all." }
+              }
+            }
+          ],
+          "exits": [
+            { "id": "to_cellars", "label": "Go back through the counting floor", "to": "mill_cellars", "minutes": 2 },
+            { "id": "to_market", "label": "Climb the old mill stair up to the market", "to": "brightwater_market", "minutes": 15 }
+          ]
+        },
+        {
+          "id": "korrath_shrine_oath",
+          "name": "The Shrine of Korrath",
+          "locationId": "brightwater",
+          "mood": "town",
+          "seed": "A small stone shrine to Korrath, the dwarven god of the forge and honest weight. A great brass scale hangs before a cold anvil, and the walls are hung with old assay seals left as offerings. Its keeper is a broad, grey-bearded dwarf with ink on his fingers.",
+          "variants": [
+            { "if": { "flag": "arc.crown.saw_ash" }, "seed": "The keeper's eyes go at once to the grey ash on your hand." },
+            { "if": { "flag": "world.brannoc_status", "eq": "in_party" }, "seed": "Brannoc tends the shrine's lamp before he leaves it to a neighbour's girl." }
+          ],
+          "revisitSeed": "The shrine of Korrath again, the brass scale still and level before the anvil.",
+          "onEnter": {
+            "text": "\"Brannoc Stonecount,\" the keeper says, \"keeper of Korrath's scales in this wet town. Come in, come in. Every honest weight is welcome here.\"",
+            "flags": [{ "set": "world.brannoc_status", "value": "met" }]
+          },
+          "npcs": [],
+          "pois": [
+            {
+              "id": "scales",
+              "name": "Korrath's scales",
+              "seed": "A great brass scale before a cold anvil, one pan holding a single true gold crown as a weight.",
+              "actions": [
+                {
+                  "id": "kneel_scales",
+                  "label": "Lay what you found on Korrath's scales and swear to finish it",
+                  "once": true,
+                  "if": { "any": [{ "flag": "~ch0_mint_won" }, { "flag": "~ch0_mint_searched" }] },
+                  "keywords": ["kneel", "swear", "oath", "scales", "pray"],
+                  "outcome": {
+                    "text": "You set the ash on one pan of the great scale. The true crown on the other pan drops, and the ash weighs nothing at all. You swear to find who struck it. The cold anvil rings once, though nobody touched it.",
+                    "flags": [{ "set": "~ch0_oath_sworn" }],
+                    "xp": 250,
+                    "tip": "You have enough experience to reach level 2: use the Level up button on your hero's card."
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": [],
+          "exits": [
+            { "id": "to_market", "label": "Go back out to the market", "to": "brightwater_market", "minutes": 5 },
+            { "id": "to_road", "label": "Take the east road out of Brightwater", "to": "road_east", "if": { "flag": "~ch0_oath_sworn" }, "minutes": 15 }
+          ]
+        },
+        {
+          "id": "road_east",
+          "name": "The East Road",
+          "locationId": "brightwater",
+          "mood": "wilderness_aurelmark",
+          "seed": "The east road leaves Brightwater over the toll bridge and climbs between barley fields toward Highcrown and, far beyond it, the mountain gates of Deepanvil Hold. Ironvault wagons rumble past under guard, heading the same way.",
+          "variants": [
+            { "if": { "flag": "world.brannoc_status", "eq": "in_party" }, "seed": "Brannoc walks beside you with his travelling scale strapped to his pack, humming a counting-song." },
+            { "if": { "flag": "arc.crown.courier_known" }, "seed": "Somewhere on this road rides Mott Varrow, the courier, every new moon." }
+          ],
+          "onEnter": { "text": "The answer to the ash lies in Deepanvil Hold, where the Ironvault strikes its coin.", "discover": ["deepanvil_hold", "highcrown"] },
+          "pois": [],
+          "actions": [
+            {
+              "id": "join_caravan",
+              "label": "Pay to ride with an Ironvault wagon train (3 gp)",
+              "keywords": ["caravan", "wagon", "ride", "pay"],
+              "outcome": {
+                "cost": 300,
+                "text": "The wagon-master takes your silver, bites it twice and gives you a seat on a strongbox. Three days of dust and dwarven road songs later, the gates of Deepanvil Hold rise out of the mountain.",
+                "minutes": 4320,
+                "ending": "ch0_to_deepanvil"
+              }
+            },
+            {
+              "id": "walk_east",
+              "label": "Walk the long road east to Deepanvil Hold",
+              "keywords": ["walk", "east", "road", "deepanvil", "go", "leave"],
+              "outcome": {
+                "text": "Five days on foot by Highcrown and the mountain road, and then the gates of Deepanvil Hold rise out of the rock.",
+                "minutes": 7200,
+                "ending": "ch0_to_deepanvil"
+              }
+            }
+          ],
+          "exits": [{ "id": "to_market", "label": "Turn back to the market", "to": "brightwater_market", "minutes": 15 }]
+        }
+      ]
+    }
+  ],
+  "maps": [
+    {
+      "id": "mill_cellars",
+      "name": "Cellars under the Silverrun Mill",
+      "width": 24,
+      "height": 14,
+      "rooms": [
+        { "id": "race_tunnel", "name": "The Mill-Race", "x": 1, "y": 4, "w": 6, "h": 4, "difficult": [{ "x": 2, "y": 5 }, { "x": 3, "y": 5 }, { "x": 4, "y": 6 }, { "x": 5, "y": 6 }] },
+        { "id": "rat_run", "name": "The Rat Run", "x": 7, "y": 2, "w": 8, "h": 8, "difficult": [{ "x": 9, "y": 4 }, { "x": 10, "y": 4 }, { "x": 12, "y": 7 }], "blocking": [{ "x": 11, "y": 3 }, { "x": 11, "y": 8 }] },
+        { "id": "counting_floor", "name": "The Counting Floor", "x": 15, "y": 1, "w": 8, "h": 7, "blocking": [{ "x": 18, "y": 3 }, { "x": 20, "y": 3 }] },
+        { "id": "den", "name": "The Den", "x": 15, "y": 8, "w": 8, "h": 5 }
+      ],
+      "doors": [
+        { "x": 6, "y": 5, "side": "E" },
+        { "x": 14, "y": 4, "side": "E" },
+        { "x": 18, "y": 7, "side": "S" }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "id": "oswin_harl",
+      "name": "Oswin Harl",
+      "statBlock": "commoner",
+      "personality": "A careful, balding moneychanger who trusts scales more than faces and is frightened of losing his licence.",
+      "secrets": ["He has taken three ash coins already this month and said nothing, hoping it would stop."],
+      "voice": "Quiet, quick, counts under his breath while he talks.",
+      "factions": ["ironvault_consortium"],
+      "attitude": "friendly"
+    },
+    {
+      "id": "hetty_weir",
+      "name": "Hetty Weir",
+      "statBlock": "commoner",
+      "personality": "Sharp-eyed and cheerful, sells rope and rumours in equal measure and bites every coin.",
+      "voice": "Fast river-town talk, laughs at her own jokes.",
+      "attitude": "friendly"
+    },
+    {
+      "id": "mistress_dunmore",
+      "name": "Mistress Dunmore",
+      "statBlock": "commoner",
+      "personality": "The Brightwater assayer: precise, proud of her craft and badly frightened. She keeps her back to the wall.",
+      "secrets": [
+        "Ironvault men told her a month ago to pass every new crown without testing it, and she obeyed.",
+        "Her late husband ran the old Silverrun mill; she still has the key to its race gate."
+      ],
+      "voice": "Clipped and exact, weighs every word; her hands shake when she is not holding a tool.",
+      "factions": ["ironvault_consortium"],
+      "attitude": "indifferent",
+      "conversations": [
+        {
+          "id": "assay",
+          "label": "Ask Mistress Dunmore to test the ash",
+          "keywords": ["dunmore", "assayer", "test", "ask", "assay"],
+          "if": { "not": { "flag": "~ch0_bench_ready" } },
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Ash. Of course it is ash. Put it down there, on the cloth, and do not breathe on it. Why did you bring it to me, and not to the watch?",
+              "options": [
+                {
+                  "id": "honest",
+                  "label": "\"Because Oswin trusts you. It crumbled in my hand an hour ago, and I want to know who made it.\"",
+                  "once": true,
+                  "keywords": ["honest", "truth", "trust", "oswin"],
+                  "outcome": { "flags": [{ "set": "~ch0_dunmore_trust" }], "approval": [{ "companion": "brannoc", "delta": 5 }] },
+                  "next": "test"
+                },
+                {
+                  "id": "bribe",
+                  "label": "Slide two gold pieces across the cloth: \"For your discretion.\"",
+                  "once": true,
+                  "if": { "coins": { "gte": 200 } },
+                  "keywords": ["bribe", "pay", "gold", "discretion", "money"],
+                  "outcome": { "cost": 200, "flags": [{ "set": "~ch0_dunmore_paid" }], "approval": [{ "companion": "brannoc", "delta": -5 }] },
+                  "next": "paid"
+                },
+                {
+                  "id": "read_fear",
+                  "label": "Watch her hands and ask what she is afraid of",
+                  "once": true,
+                  "keywords": ["afraid", "fear", "hands", "why", "scared"],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 12,
+                    "success": { "flags": [{ "set": "~ch0_dunmore_fear" }] },
+                    "failure": { "text": "She folds her shaking hands away and gives you nothing." }
+                  },
+                  "next": "fear",
+                  "nextOnFail": "greet"
+                },
+                {
+                  "id": "lean",
+                  "label": "\"You know exactly what this is. Start talking.\"",
+                  "once": true,
+                  "keywords": ["threaten", "talk", "know", "lean", "intimidate"],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 13,
+                    "success": { "flags": [{ "set": "~ch0_dunmore_cowed" }] },
+                    "failure": { "text": "Dunmore reaches for the bell-pull that rings the watch house, and you have to back off and start again more gently." }
+                  },
+                  "next": "cowed",
+                  "nextOnFail": "greet"
+                }
+              ]
+            },
+            {
+              "id": "paid",
+              "text": "Discretion. Yes. That is what they paid for too. Very well: the bench is yours, and the loupe, and the acids. Look for yourself, and you never heard my name.",
+              "options": [{ "id": "to_bench", "label": "Go to the assay bench", "outcome": { "flags": [{ "set": "~ch0_bench_ready" }] } }]
+            },
+            {
+              "id": "fear",
+              "text": "A month ago two men in Ironvault grey came here with a licence I could not refuse and told me to pass every new crown without testing it. One of them had a woman's voice when he thought I could not hear. Since then the rats under my husband's old mill walk in lines. Here: his key to the race gate. I cannot go down there. You can.",
+              "options": [
+                {
+                  "id": "take_key",
+                  "label": "Take the key and ask her to set up the bench",
+                  "outcome": { "flags": [{ "set": "~ch0_mill_key" }, { "set": "~ch0_dunmore_trust" }, { "set": "~ch0_bench_ready" }] }
+                }
+              ]
+            },
+            {
+              "id": "cowed",
+              "text": "All right! All right. Ironvault men told me to pass the new crowns untested, and I did. There, the bench, test it yourself, and then get out of my house.",
+              "options": [{ "id": "to_bench", "label": "Go to the assay bench", "outcome": { "flags": [{ "set": "~ch0_bench_ready" }] } }]
+            },
+            {
+              "id": "test",
+              "text": "Then we will do this properly. The touchstone, the loupe, the acids. Look closely at the flakes: if a die struck this, it left its mark. I will tell you what I see, but you look first. And, since you were straight with me: my late husband's key to the old mill-race. The rats down there walk in lines.",
+              "options": [
+                {
+                  "id": "to_bench",
+                  "label": "Take the key and go to the assay bench",
+                  "outcome": { "flags": [{ "set": "~ch0_bench_ready" }, { "set": "~ch0_mill_key" }] }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "brannoc_npc",
+      "name": "Brannoc Stonecount",
+      "statBlock": "priest_acolyte",
+      "personality": "A broad, patient dwarf priest of Korrath who keeps the scales of a small river-town shrine. Honest to the grain, slow to anger, and furious about anything false.",
+      "secrets": ["His father was an Ironvault assayer whose seal went missing in Deepanvil Hold years ago."],
+      "voice": "Deep, slow, counts in Dwarvish when thinking; calls coins 'little liars' or 'honest weights'.",
+      "factions": ["ironvault_consortium"],
+      "attitude": "friendly",
+      "schedule": [{ "scene": "korrath_shrine_oath", "from": 0, "to": 24, "if": { "any": [{ "flag": "world.brannoc_status", "eq": "unmet" }, { "flag": "world.brannoc_status", "eq": "met" }] } }],
+      "conversations": [
+        {
+          "id": "scales",
+          "label": "Talk to Brannoc about the ash",
+          "keywords": ["brannoc", "dwarf", "keeper", "priest", "talk", "ash"],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Gold that rings true and weighs true and then crumbles. Korrath has a word for that, and it is not a kind word. What do you want of an old shrine-keeper?",
+              "options": [
+                {
+                  "id": "ash",
+                  "label": "\"Have you seen ash coins before?\"",
+                  "once": true,
+                  "keywords": ["seen", "before", "coins"],
+                  "next": "ash"
+                },
+                {
+                  "id": "persuade",
+                  "label": "\"Come with me. Help me find who struck it.\"",
+                  "once": true,
+                  "if": { "not": { "any": [{ "flag": "~ch0_mint_won" }, { "flag": "~ch0_mint_searched" }, { "flag": "~ch0_brannoc_waits" }] } },
+                  "keywords": ["come", "join", "help"],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "success": { "recruit": "brannoc" },
+                    "failure": { "flags": [{ "set": "~ch0_brannoc_waits" }] }
+                  },
+                  "next": "joined",
+                  "nextOnFail": "prove"
+                },
+                {
+                  "id": "oath",
+                  "label": "\"The mint under the mill is finished. Swear with me, and come to Deepanvil.\"",
+                  "once": true,
+                  "if": { "any": [{ "flag": "~ch0_mint_won" }, { "flag": "~ch0_mint_searched" }] },
+                  "keywords": ["swear", "oath", "mint", "deepanvil", "come", "join"],
+                  "outcome": { "recruit": "brannoc", "approval": [{ "companion": "brannoc", "delta": 10 }] },
+                  "next": "joined"
+                },
+                {
+                  "id": "donate",
+                  "label": "Put two gold pieces in the shrine box: \"For Korrath, if you come along.\"",
+                  "once": true,
+                  "if": { "coins": { "gte": 200 } },
+                  "keywords": ["donate", "gold", "pay", "coins", "box"],
+                  "outcome": { "cost": 200, "recruit": "brannoc", "approval": [{ "companion": "brannoc", "delta": -10 }] },
+                  "next": "bought"
+                },
+                { "id": "bye", "label": "\"Another time, keeper.\"", "keywords": ["bye", "leave", "later"] }
+              ]
+            },
+            {
+              "id": "ash",
+              "text": "Twice. A bargeman's wages and a widow's dowry, both crumbled. Both struck to look like Ironvault coin, which is a lie I take personally: my father was an Ironvault assayer before his seal went missing. Somebody in Deepanvil knows more than they say.",
+              "options": [{ "id": "back", "label": "\"Then help me find out who.\"", "next": "greet" }]
+            },
+            {
+              "id": "prove",
+              "text": "Words are light, friend. Find the mint first. Bring me proof that weighs something, and I'll come.",
+              "options": [{ "id": "back", "label": "\"I will.\"" }]
+            },
+            {
+              "id": "joined",
+              "text": "Then give me a moment to bank the shrine lamp. Korrath's scales travel well, and so do I.",
+              "options": [{ "id": "back", "label": "\"Welcome, Brannoc.\"" }]
+            },
+            {
+              "id": "bought",
+              "text": "Korrath is not for sale, and neither am I. But I'd rather walk beside a fool with gold than let you go after these forgers alone. I'll come. I'll put your coin in the box all the same.",
+              "options": [{ "id": "back", "label": "\"Fair enough.\"" }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "clerk_aldous",
+      "name": "Aldous Penn",
+      "statBlock": "commoner",
+      "personality": "A thin, sleepless customs clerk who noticed too much new gold in the barge tolls and was taken for it.",
+      "voice": "Hoarse and hurried, apologises constantly.",
+      "factions": ["crown_of_aurelmark"],
+      "attitude": "friendly",
+      "schedule": [{ "scene": "wererat_den_rest", "from": 0, "to": 24, "if": { "not": { "flag": "~ch0_clerk_freed" } } }]
+    },
+    {
+      "id": "skeet",
+      "name": "Skeet",
+      "statBlock": "wererat",
+      "personality": "A wererat coiner, sly and cowardly, loyal only to whoever paid last.",
+      "secrets": ["He knows the courier who carries the paymaster's letters: Mott Varrow."],
+      "voice": "Squeaky, wet, giggles at the wrong moments.",
+      "attitude": "hostile",
+      "schedule": [{ "scene": "wererat_den_rest", "from": 0, "to": 24, "if": { "all": [{ "flag": "~ch0_rat_captured" }, { "not": { "flag": "~ch0_rat_handed" } }, { "not": { "flag": "~ch0_rat_freed" } }] } }]
+    }
+  ],
+  "encounters": [
+    {
+      "id": "cellar_rats",
+      "name": "Rats of the Mill-Race",
+      "monsters": [{ "id": "giant_rat", "count": 4 }],
+      "map": "mill_cellars",
+      "room": "rat_run",
+      "scaling": { "target": "moderate", "pool": ["giant_rat"] },
+      "win": { "text": "The last rat slides under the black water. Lamplight leaks round a door ahead.", "flags": [{ "set": "~ch0_at_mint" }, { "set": "~ch0_rats_fought" }] },
+      "lose": { "text": "Teeth and water close over you. You wake on the quay, coughing up the mill-race, where a bargeman fished you out.", "goto": "brightwater_market", "minutes": 120 },
+      "flee": { "text": "You splash back down the race with the rats squealing behind you." }
+    },
+    {
+      "id": "mint_fight",
+      "name": "The Mint under the Mill",
+      "monsters": [{ "id": "wererat", "count": 1 }, { "id": "bandit", "count": 2 }],
+      "statOverrides": { "wererat": { "name": "Skeet the Mill-Rat", "hpPercent": 50 } },
+      "bosses": ["wererat"],
+      "map": "mill_cellars",
+      "room": "counting_floor",
+      "scaling": { "target": "moderate", "pool": ["bandit"] },
+      "win": { "text": "Skeet drops in his man-shape, bleeding and begging, and the presses fall silent.", "flags": [{ "set": "~ch0_mint_won" }, { "set": "~ch0_rat_captured" }], "goto": "wererat_den_rest" },
+      "lose": { "text": "You come to on the quay at dawn, dumped there with your purse slit open. Somebody is still hammering under the mill.", "goto": "brightwater_market", "minutes": 360 },
+      "flee": { "text": "You stumble back into the rat run with the coiners' jeers behind you." }
+    },
+    {
+      "id": "mint_fight_silver",
+      "name": "The Mint under the Mill",
+      "monsters": [{ "id": "wererat", "count": 1 }, { "id": "bandit", "count": 2 }],
+      "statOverrides": { "wererat": { "name": "Skeet the Mill-Rat", "hpPercent": 35 } },
+      "bosses": ["wererat"],
+      "map": "mill_cellars",
+      "room": "counting_floor",
+      "scaling": { "target": "moderate", "pool": ["bandit"] },
+      "win": { "text": "Silver bites where steel would not, and Skeet drops in his man-shape, clutching wounds that will not knit. The presses fall silent.", "flags": [{ "set": "~ch0_mint_won" }, { "set": "~ch0_rat_captured" }], "goto": "wererat_den_rest" },
+      "lose": { "text": "You come to on the quay at dawn, dumped there with your purse slit open. Somebody is still hammering under the mill.", "goto": "brightwater_market", "minutes": 360 },
+      "flee": { "text": "You stumble back into the rat run with the coiners' jeers behind you." }
+    },
+    {
+      "id": "mint_fight_bluffed",
+      "name": "Skeet Alone",
+      "monsters": [{ "id": "wererat", "count": 1 }],
+      "statOverrides": { "wererat": { "name": "Skeet the Mill-Rat", "hpPercent": 50 } },
+      "map": "mill_cellars",
+      "room": "counting_floor",
+      "win": { "text": "Skeet drops in his man-shape, bleeding and begging. His bandits are long gone with the gold, but the presses are yours.", "flags": [{ "set": "~ch0_mint_won" }, { "set": "~ch0_rat_captured" }], "goto": "wererat_den_rest" },
+      "lose": { "text": "You come to on the quay at dawn, dumped there with your purse slit open. Somebody is still hammering under the mill.", "goto": "brightwater_market", "minutes": 360 },
+      "flee": { "text": "You stumble back into the rat run with Skeet's giggle behind you." }
+    }
+  ],
+  "beats": [
+    {
+      "id": "brannoc_at_bench",
+      "text": "Brannoc studies the touchstone with a professional frown and grunts approval at a careful test.",
+      "trigger": { "all": [{ "flag": "arc.crown.clue_1" }, { "flag": "world.brannoc_status", "eq": "in_party" }] },
+      "scenes": ["assay_house"],
+      "outcome": { "text": "Brannoc turns the ash flake over with a fingernail. \"Ironvault's own mark. My father would have spat.\"" }
+    },
+    {
+      "id": "brannoc_silver",
+      "text": "Brannoc approves of the silvered weapon.",
+      "trigger": { "all": [{ "flag": "~ch0_silvered" }, { "flag": "world.brannoc_status", "eq": "in_party" }] },
+      "outcome": { "text": "Brannoc runs a thumb along your silvered edge. \"Good. Rat-folk heal from steel. They do not heal from silver.\"" }
+    }
+  ],
+  "deadlines": [
+    {
+      "id": "mint_moves",
+      "text": "Find the mint under the mill before the coiners move it (two days after the coin crumbled)",
+      "start": { "flag": "arc.crown.saw_ash" },
+      "met": { "flag": "~ch0_at_mint" },
+      "within": 2880,
+      "warnAt": 720,
+      "warning": "Hetty Weir says the mill-race rats were carrying sacks out last night. Whoever is under the mill is getting ready to leave.",
+      "missed": {
+        "text": "At dawn a barge slips away from the old mill with its hatches shut. By noon the hammering under the mill has stopped. The mint has moved.",
+        "flags": [{ "set": "arc.crown.mint_fled" }]
+      }
+    }
+  ],
+  "quests": [
+    {
+      "id": "hollow_coin",
+      "name": "The Hollow Coin",
+      "objectives": [
+        { "id": "change", "text": "Change your gold crown at the moneychanger's stall", "done": { "flag": "arc.crown.saw_ash" } },
+        { "id": "assay", "text": "Have the ash tested at the assay house", "done": { "flag": "~ch0_bench_ready" }, "if": { "flag": "arc.crown.saw_ash" } },
+        { "id": "gate", "text": "Get through the gate of the old mill-race", "done": { "flag": "~ch0_gate_open" }, "if": { "flag": "arc.crown.saw_ash" } },
+        { "id": "mint", "text": "Find the mint under the old mill", "done": { "any": [{ "flag": "~ch0_mint_won" }, { "flag": "~ch0_mint_searched" }] }, "if": { "flag": "~ch0_gate_open" } },
+        { "id": "oath", "text": "Lay what you found on Korrath's scales at the shrine", "done": { "flag": "~ch0_oath_sworn" }, "if": { "any": [{ "flag": "~ch0_mint_won" }, { "flag": "~ch0_mint_searched" }] } },
+        { "id": "road", "text": "Take the east road to Deepanvil Hold", "done": { "visited": "road_east" }, "if": { "flag": "~ch0_oath_sworn" } }
+      ]
+    }
+  ],
+  "flags": [
+    { "id": "~ch0_mill_rumour", "description": "Hetty Weir told the hero about the lights and the marching rats in the old mill-race." },
+    { "id": "~ch0_silvered", "description": "The hero's weapon is coated in silver (the wererat fight is easier)." },
+    { "id": "~ch0_gate_open", "description": "The mill-race gate is open." },
+    { "id": "~ch0_mill_key", "description": "Mistress Dunmore gave the hero her husband's key to the mill-race gate." },
+    { "id": "~ch0_bench_ready", "description": "Mistress Dunmore let the hero use her assay bench." },
+    { "id": "~ch0_dunmore_trust", "description": "The hero was honest with Mistress Dunmore (or understood her fear); she helps with the assay." },
+    { "id": "~ch0_dunmore_paid", "description": "The hero bribed Mistress Dunmore for her discretion." },
+    { "id": "~ch0_dunmore_fear", "description": "The hero learned why Dunmore is afraid: Ironvault men made her pass new crowns untested; one had a woman's voice." },
+    { "id": "~ch0_dunmore_cowed", "description": "The hero frightened Mistress Dunmore into talking; she will write no letter." },
+    { "id": "~ch0_dunmore_letter", "description": "Mistress Dunmore's sealed letter to the Ironvault gatewardens of Deepanvil Hold (chapter 1 may read it)." },
+    { "id": "~ch0_at_mint", "description": "The hero got past the rats to the door of the mint (meets the mint deadline)." },
+    { "id": "~ch0_rats_fought", "description": "The hero fought the rats of the mill-race." },
+    { "id": "~ch0_mint_won", "description": "The hero beat the coiners at the mint." },
+    { "id": "~ch0_mint_searched", "description": "The hero searched the abandoned mint after it moved." },
+    { "id": "~ch0_rat_captured", "description": "Skeet the wererat was beaten and taken alive." },
+    { "id": "~ch0_rat_handed", "description": "The hero handed Skeet to the Brightwater watch." },
+    { "id": "~ch0_rat_freed", "description": "The hero let Skeet go in exchange for the courier's name." },
+    { "id": "~ch0_clerk_freed", "description": "The hero freed Aldous Penn, the chained customs clerk." },
+    { "id": "~ch0_dies_smashed", "description": "The hero smashed the false coin dies." },
+    { "id": "~ch0_die_kept", "description": "The hero kept one false die as evidence for the Ironvault (chapter 1 may read it)." },
+    { "id": "~ch0_brannoc_waits", "description": "Brannoc asked the hero to find the mint before he joins." },
+    { "id": "~ch0_oath_sworn", "description": "The hero swore at Korrath's scales to find the forgers (level 2 milestone)." }
+  ],
+  "endings": [
+    {
+      "id": "ch0_to_deepanvil",
+      "name": "The Road to Deepanvil",
+      "text": "The ash coin bore the Ironvault's own mark, and somebody who casts two shadows paid good gold to have it struck. The answers lie in Deepanvil Hold, behind the Ironvault's doors.",
+      "next": "arc2_ch1_faces"
+    }
+  ]
+}

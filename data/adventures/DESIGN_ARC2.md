@@ -1,6 +1,6 @@
 # Campaign Design Bible: "The Hollow Crown" (Arc 2, Level 1 → 5)
 
-> Status: **approved and queued** (owner, 2026-10-01) as Phase 17 (B001–B014 in brain.md). Nothing is built yet. It follows the conventions of `DESIGN.md` §0 and the schema in `ADVENTURE_FORMAT.md`. Flag ids here use the `arc.crown.*` namespace; shared world state stays in `world.*`.
+> Status: **approved and queued** (owner, 2026-10-01) as Phase 17 (B001–B014 in brain.md). Built so far: B001–B004 (campaign picker, world import, companions/tables, chapter 0 in `arc2/ch0_hollow_coin.json`). It follows the conventions of `DESIGN.md` §0 and the schema in `ADVENTURE_FORMAT.md`. Flag ids here use the `arc.crown.*` namespace; shared world state stays in `world.*`.
 
 ## 0. Why a second campaign, and what it must do
 

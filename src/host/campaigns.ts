@@ -27,7 +27,7 @@ export const CAMPAIGNS: readonly Campaign[] = [
     id: 'hollow_crown',
     adventure: 'arc2_ch0_hollow_coin',
     levels: [1, 5],
-    playable: false,
+    playable: true,
     importsWorld: true,
     // DESIGN_ARC2 §3: as if the Seven Teeth ended well, without the player having been there.
     freshWorld: { 'world.maw_state': 'sealed', 'world.queen_alive': true, 'world.player_outlawed': false },
