@@ -400,7 +400,7 @@ describe('arc2_ch1_faces: policy playthrough through the game host', () => {
     let fights = 0;
     for (let step = 0; step < 400; step++) {
       const p = getProgress(session.current)!;
-      if (p.ending) break;
+      if (p.ending || p.adventureId !== 'arc2_ch1_faces') break;
       if (activeFight(session.current)) {
         fights++;
         await h.send(combatStep(session, db));
@@ -419,8 +419,8 @@ describe('arc2_ch1_faces: policy playthrough through the game host', () => {
     const errors = events.filter((e) => e.type === 'error');
     expect(errors, JSON.stringify(errors.slice(0, 3))).toEqual([]);
     expect(fights).toBeGreaterThan(0);
-    // The ending has no installed next chapter yet (B006), so the chapter ends here.
-    expect(getProgress(session.current)!.ending).toBe('ch1_to_fennicks');
+    // The ending chained straight into chapter 2 (B006).
+    expect(getProgress(session.current)!.adventureId).toBe('arc2_ch2_gamblers_tide');
     expect(session.current.flags).toMatchObject({ [`${C}clue_4`]: true, [`${L}verdict`]: true, [`${L}rested`]: true });
     // Level 3 milestone.
     expect(session.current.hero.xp).toBeGreaterThanOrEqual(900);

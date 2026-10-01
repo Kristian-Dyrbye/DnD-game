@@ -1,0 +1,1199 @@
+{
+  "formatVersion": 1,
+  "id": "arc2_ch2_gamblers_tide",
+  "name": "The Gambler's Tide",
+  "arcId": "crown",
+  "kind": "arc",
+  "levelRange": [3, 4],
+  "regionId": "brinescatter_isles",
+  "summary": "The hollow gold runs to Fennick's Rest, where a gambling hall washes it clean and a deserter captain carries it out to sea. Dice, a sloop, a night on the reefs and the sea caves of Wreckers' Cove lead to Mother Tallow's market, where faces are sold for memories.",
+  "start": { "chapter": "ch2", "scene": "fennicks_rest_hall" },
+  "improvisedDifficulty": "easy",
+  "chapters": [
+    {
+      "id": "ch2",
+      "name": "The Gambler's Tide",
+      "summary": "Fennick's Rest and Wreckers' Cove: the dice hall where hollow gold is washed, Captain Salt's sloop, the reef run, the sea caves and the hag's face-market.",
+      "start": "fennicks_rest_hall",
+      "scenes": [
+        {
+          "id": "fennicks_rest_hall",
+          "name": "The Gilded Gull",
+          "locationId": "fennicks_rest",
+          "mood": "rowdy",
+          "seed": "The Gilded Gull is Fennick's Rest's loudest gambling hall: a tarred warehouse on stilts over the harbour, hung with ship's lanterns and fishing nets, packed with sailors, smugglers and pickpockets around a dozen dice tables. At the back, behind a brass cage, a smiling banker changes every kind of coin for fresh Isles silver, no questions asked.",
+          "variants": [
+            { "if": { "flag": "world.red_gull_debt", "gte": 1 }, "seed": "A Red Gull bookkeeper at the bar knows your name already, and the sum beside it." },
+            { "if": { "flag": "world.player_outlawed" }, "seed": "Nobody in the Gilded Gull cares about a Deepanvil broadsheet. Half the room has worse on theirs." },
+            { "if": { "flag": "~ch2_marker" }, "seed": "The banker Quillon Vane smiles at you across the hall as if you were an old friend. His eyes do not." },
+            { "if": { "flag": "~ch2_dice_caught" }, "seed": "Two Red Gull bruisers stand by the dice tables now, arms folded, watching your hands." }
+          ],
+          "revisitSeed": [
+            "The Gilded Gull again: lanterns, nets, the rattle of dice and the banker's brass cage.",
+            "Back in the roar of the Gilded Gull, where every coin in the Isles gets washed sooner or later."
+          ],
+          "npcs": ["quillon_vane", "wren_npc"],
+          "onEnter": {
+            "text": "A halfling in a sea-green coat is winning loudly at the nearest table, and losing quietly at the next. She catches you watching and winks.",
+            "flags": [{ "set": "world.wren_status", "value": "met" }],
+            "discover": ["fennicks_rest", "gullhaven", "wreckers_cove"]
+          },
+          "pois": [
+            {
+              "id": "cage",
+              "name": "The banker's cage",
+              "seed": "A brass cage at the back of the hall where Quillon Vane's clerks weigh strangers' coin into strongboxes and pay out fresh Isles silver.",
+              "actions": [
+                {
+                  "id": "watch_cage",
+                  "label": "Watch which strongbox the strangers' gold goes into",
+                  "once": true,
+                  "keywords": ["watch", "cage", "strongbox", "banker", "gold", "investigate", "clerks"],
+                  "check": {
+                    "skill": "investigation",
+                    "dc": 12,
+                    "success": {
+                      "text": "Every foreign coin goes into one iron-bound strongbox, never counted. Twice an hour a tattooed sailor carries it out through the water door, to a sloop called the Lucky Wake: Captain Ferrin Salt's.",
+                      "flags": [{ "set": "~ch2_wash_seen" }, { "set": "~ch2_salt_known" }],
+                      "minutes": 60
+                    },
+                    "failure": { "text": "Coins go in, silver comes out, and the clerks are faster than your eyes.", "minutes": 60 }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "harbour_office",
+              "name": "The harbour office",
+              "seed": "A shack on the quay where a one-eyed harbour master chalks every ship in and out on a slate.",
+              "actions": [
+                {
+                  "id": "ask_harbour",
+                  "label": "Ask the harbour master which captain runs out to Wreckers' Cove",
+                  "once": true,
+                  "keywords": ["harbour", "master", "captain", "ship", "wreckers", "cove", "ask", "slate"],
+                  "outcome": {
+                    "text": "\"Nobody sails to the Cove,\" the harbour master says, then taps one line on his slate. \"Nobody but the Lucky Wake. Ferrin Salt. Used to fly the Red Gull, till he didn't. Berth nine.\"",
+                    "flags": [{ "set": "~ch2_salt_known" }, { "set": "~ch2_deserter_known" }],
+                    "minutes": 60
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "id": "rest_room",
+              "label": "Take a room above the hall for the night (5 sp)",
+              "keywords": ["room", "sleep", "bed", "rest", "night", "inn"],
+              "outcome": { "cost": 50, "text": "The room above the Gilded Gull sways a little with the tide, and the dice never stop below, but the bed is dry.", "rest": "long" }
+            }
+          ],
+          "exits": [
+            { "id": "to_sloop", "label": "Walk down the quay to berth nine and the Lucky Wake", "to": "salt_s_sloop", "if": { "flag": "~ch2_salt_known" }, "minutes": 15 }
+          ]
+        },
+        {
+          "id": "salt_s_sloop",
+          "name": "The Lucky Wake",
+          "locationId": "fennicks_rest",
+          "mood": "tense",
+          "map": { "id": "lucky_wake", "room": "dock" },
+          "seed": "Berth nine: a fast black-hulled sloop called the Lucky Wake, her Red Gull colours painted over badly. Pirates in mismatched coats coil rope on her deck, and at the rail, eating an apple with a knife, stands Captain Ferrin Salt: lean, sunburned, a gold ring in each ear and a deserter's brand on the back of his hand.",
+          "variants": [
+            { "if": { "flag": "~ch2_passage" }, "seed": "The Lucky Wake's crew make room for you at the rail. The sloop is ready to run for the Cove on your word." },
+            { "if": { "flag": "~ch2_salt_beaten" }, "seed": "Salt's crew sit on the quay with their hands tied, and the Lucky Wake's tiller is yours." }
+          ],
+          "revisitSeed": "Berth nine again: the black-hulled sloop, the painted-over gulls, the crew coiling rope.",
+          "npcs": ["captain_salt"],
+          "actions": [
+            {
+              "id": "board",
+              "label": "Board the Lucky Wake with steel drawn",
+              "if": { "all": [{ "not": { "flag": "~ch2_passage" } }, { "not": { "flag": "~ch2_salt_beaten" } }] },
+              "keywords": ["board", "steel", "attack", "fight", "draw", "storm"],
+              "outcome": { "text": "You come over the rail with steel out. Salt drops his apple and whistles, and his crew come for you.", "flags": [{ "set": "~ch2_salt_fought" }], "encounter": "salt_crew" }
+            },
+            {
+              "id": "spare_salt",
+              "label": "Cut Salt loose and let him go, unpaid",
+              "once": true,
+              "if": { "all": [{ "flag": "~ch2_salt_beaten" }, { "not": { "flag": "~ch2_salt_fate" } }] },
+              "keywords": ["spare", "let", "go", "loose", "mercy", "free"],
+              "outcome": {
+                "text": "You cut Salt's bonds. He rubs his wrists, looks at you for a long moment and grins. \"You'll owe me a ship, friend. I'll remember.\" Then he walks off down the quay with nothing but the rings in his ears.",
+                "flags": [{ "set": "~ch2_salt_spared" }, { "set": "~ch2_salt_fate" }, { "set": "arc.crown.salt_unpaid" }],
+                "approval": [{ "companion": "wren", "delta": 10 }]
+              }
+            },
+            {
+              "id": "hand_salt",
+              "label": "Hand Salt to the Red Gull for his desertion",
+              "once": true,
+              "if": { "all": [{ "flag": "~ch2_salt_beaten" }, { "not": { "flag": "~ch2_salt_fate" } }] },
+              "keywords": ["hand", "gulls", "red", "law", "deserter", "turn"],
+              "outcome": {
+                "text": "The Red Gull's quartermaster takes Salt off your hands with real pleasure, and a nod that means the Brotherhood will remember your name kindly.",
+                "flags": [{ "set": "~ch2_salt_handed" }, { "set": "~ch2_salt_fate" }],
+                "reputation": [{ "faction": "red_gull_brotherhood", "delta": 5 }],
+                "approval": [{ "companion": "wren", "delta": -10 }],
+                "minutes": 30
+              }
+            }
+          ],
+          "exits": [
+            { "id": "to_hall", "label": "Go back up the quay to the Gilded Gull", "to": "fennicks_rest_hall", "minutes": 15 },
+            { "id": "to_reef", "label": "Cast off for Wreckers' Cove", "to": "reef_run", "if": { "flag": "~ch2_passage" }, "minutes": 30 }
+          ]
+        },
+        {
+          "id": "reef_run",
+          "name": "The Reef Run",
+          "locationId": "fennicks_rest",
+          "mood": "adventurous",
+          "seed": "The Lucky Wake runs west out of Fennick's Rest under a full spread of sail, past Gullhaven's lights and into the Teeth: a maze of black reefs and white water between the Isles and Wreckers' Cove, where Oshaya's weather decides who arrives.",
+          "variants": [
+            { "if": { "weather": ["storm"] }, "seed": "A storm is building out over the reefs: green-black clouds, rain in sheets, and waves breaking white across the Teeth." },
+            { "if": { "weather": ["fog"] }, "seed": "A thick sea-fog lies on the water. The reefs are only a sound of breaking surf somewhere close." },
+            { "if": { "weather": ["clear"] }, "seed": "The sky is clear and hard and blue, and the reefs show black through the green water." },
+            { "if": { "flag": "~ch2_night_crossing" }, "seed": "Night on the reefs: no moon, the sloop's lantern doused, the white water the only light." },
+            { "if": { "flag": "~ch2_reef_cleared" }, "seed": "The Teeth are behind you. Ahead, the cliffs of Wreckers' Cove rise black out of the sea." }
+          ],
+          "actions": [
+            {
+              "id": "sail_day",
+              "label": "Take the long, safe day crossing round the outer reefs",
+              "once": true,
+              "if": { "all": [{ "not": { "flag": "~ch2_day_crossing" } }, { "not": { "flag": "~ch2_night_crossing" } }] },
+              "keywords": ["day", "safe", "long", "outer", "daylight", "slow"],
+              "outcome": {
+                "text": "You take the long way round, in daylight, where the reefs can be seen. It costs a day.",
+                "flags": [{ "set": "~ch2_day_crossing" }],
+                "minutes": 480
+              }
+            },
+            {
+              "id": "sail_night",
+              "label": "Run the inner channel at night, fast and dark",
+              "once": true,
+              "if": { "all": [{ "not": { "flag": "~ch2_day_crossing" } }, { "not": { "flag": "~ch2_night_crossing" } }] },
+              "keywords": ["night", "fast", "dark", "inner", "channel", "quick"],
+              "outcome": {
+                "text": "You douse the lantern and run the inner channel in the dark. Fast, and the Red Gull patrols will never see you. Whatever lives in the channel might.",
+                "flags": [{ "set": "~ch2_night_crossing" }],
+                "minutes": 120
+              }
+            },
+            {
+              "id": "read_weather",
+              "label": "Read Oshaya's weather and pick the line through the reefs",
+              "once": true,
+              "if": { "all": [{ "any": [{ "flag": "~ch2_day_crossing" }, { "flag": "~ch2_night_crossing" }] }, { "not": { "flag": "~ch2_weather_done" } }] },
+              "keywords": ["weather", "sky", "wind", "read", "survival", "line", "oshaya", "course"],
+              "check": {
+                "skill": "survival",
+                "dc": 12,
+                "advantageIf": [{ "if": { "weather": ["clear"] }, "source": "A clear sky over the Isles" }],
+                "disadvantageIf": [{ "if": { "weather": ["storm", "fog", "rain"] }, "source": "Oshaya's weather is foul" }],
+                "success": {
+                  "text": "You read the swell and the clouds and call the line, and the crew trust you. The sloop threads the first reefs as if she knows the way.",
+                  "flags": [{ "set": "~ch2_weather_done" }, { "set": "~ch2_weather_read" }],
+                  "minutes": 60
+                },
+                "failure": {
+                  "text": "A squall comes out of nowhere and lays the sloop on her side. Loose gear and green water sweep the deck.",
+                  "flags": [{ "set": "~ch2_weather_done" }],
+                  "damage": { "dice": "1d6", "type": "bludgeoning", "target": "party" },
+                  "minutes": 60
+                }
+              }
+            },
+            {
+              "id": "run_reef",
+              "label": "Haul on the lines together and drive the sloop through the Teeth",
+              "once": true,
+              "if": { "all": [{ "flag": "~ch2_weather_done" }, { "not": { "flag": "~ch2_reef_cleared" } }] },
+              "keywords": ["haul", "lines", "drive", "teeth", "reef", "athletics", "row", "sail"],
+              "check": {
+                "skill": "athletics",
+                "dc": 13,
+                "group": true,
+                "advantageIf": [{ "if": { "flag": "~ch2_weather_read" }, "source": "You read the weather right" }],
+                "success": {
+                  "text": "Everyone hauls at once, the sail cracks full, and the Lucky Wake shoots through a gap in the Teeth with a hand's breadth to spare on either side.",
+                  "flags": [{ "set": "~ch2_reef_cleared" }],
+                  "xp": 100,
+                  "minutes": 120
+                },
+                "failure": {
+                  "text": "The keel grinds over a reef and the whole sloop bucks. You are thrown against the rail before she slides free, holed above the waterline but afloat.",
+                  "flags": [{ "set": "~ch2_reef_cleared" }],
+                  "damage": { "dice": "2d6", "type": "bludgeoning", "target": "hero", "save": { "ability": "dex", "dc": 12 } },
+                  "xp": 100,
+                  "minutes": 180
+                }
+              }
+            },
+            {
+              "id": "make_cove_night",
+              "label": "Steer for the Cove through the last dark channel",
+              "if": { "all": [{ "flag": "~ch2_reef_cleared" }, { "flag": "~ch2_night_crossing" }] },
+              "keywords": ["steer", "cove", "channel", "land", "go", "on"],
+              "outcome": { "text": "In the last channel something heavy bumps the hull, twice. Then scaled hands come over the rail, and the merrow climb aboard.", "encounter": "merrow_ambush" }
+            },
+            {
+              "id": "make_cove_day",
+              "label": "Steer for the Cove and run the sloop up the shingle",
+              "if": { "all": [{ "flag": "~ch2_reef_cleared" }, { "flag": "~ch2_day_crossing" }] },
+              "keywords": ["steer", "cove", "land", "beach", "go", "on"],
+              "outcome": { "text": "You run the Lucky Wake up the shingle under the cliffs of Wreckers' Cove as the sun goes down.", "goto": "wreckers_cove", "minutes": 120 }
+            }
+          ],
+          "exits": []
+        },
+        {
+          "id": "wreckers_cove",
+          "name": "Wreckers' Cove",
+          "locationId": "wreckers_cove",
+          "mood": "eerie",
+          "map": { "id": "cove_caves", "room": "landing" },
+          "seed": "Wreckers' Cove is a bite out of black cliffs, its beach strewn with the ribs of ships the old wreckers lured onto the rocks with false lights. Sea caves run back into the cliff behind a shingle landing, and the tide sucks and booms in the dark of them. The Red Gull keep a stash in there, and something else keeps them company.",
+          "variants": [
+            { "if": { "flag": "~ch2_tunnel_passed" }, "seed": "The tide tunnel is behind you; ahead the stash cavern opens out, smelling of tar, old coin and something dead." },
+            { "if": { "flag": "~ch2_stash_done" }, "seed": "The stash cavern is quiet now. Beyond it, a door of driftwood and bone hangs in the rock, lit from behind by lanterns of green glass." }
+          ],
+          "revisitSeed": "The sea caves of Wreckers' Cove again: dripping rock, booming tide, the smell of tar and rot.",
+          "onEnter": { "text": "Behind the landing, the sea caves breathe in and out with the tide.", "discover": ["wreckers_cove"] },
+          "pois": [
+            {
+              "id": "tide_tunnel",
+              "name": "The tide tunnel",
+              "seed": "A low tunnel half full of sea water, its walls glistening with something that is not quite weed. A narrow ledge runs along one wall above the water.",
+              "if": { "not": { "flag": "~ch2_tunnel_passed" } },
+              "actions": [
+                {
+                  "id": "wade",
+                  "label": "Wade through the tide tunnel",
+                  "keywords": ["wade", "water", "tunnel", "walk", "fight", "through"],
+                  "outcome": { "text": "Halfway through, the glistening walls move. Two grey slicks slide off the rock into the water around your legs.", "encounter": "cove_oozes" }
+                },
+                {
+                  "id": "ledge",
+                  "label": "Edge along the narrow ledge above the water",
+                  "once": true,
+                  "keywords": ["ledge", "edge", "climb", "acrobatics", "narrow", "above"],
+                  "check": {
+                    "skill": "acrobatics",
+                    "dc": 13,
+                    "success": {
+                      "text": "You edge along the ledge with your back to the rock, while below you two grey slicks of ooze glide through the water hunting the warmth of legs that are not there.",
+                      "flags": [{ "set": "~ch2_tunnel_passed" }],
+                      "revealRoom": { "map": "cove_caves", "room": "stash_cavern" },
+                      "xp": 50
+                    },
+                    "failure": { "text": "The ledge crumbles and you drop into the water, right among the things that live in it.", "encounter": "cove_oozes" }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "stash",
+              "name": "The Red Gull stash",
+              "seed": "A high cavern stacked with Red Gull plunder: casks, chests, bolts of wet silk, and bones. Lots of bones, gnawed.",
+              "if": { "flag": "~ch2_tunnel_passed" },
+              "actions": [
+                {
+                  "id": "search",
+                  "label": "Search the stash for Salt's strongboxes",
+                  "if": { "not": { "flag": "~ch2_stash_done" } },
+                  "keywords": ["search", "stash", "strongbox", "chests", "fight", "plunder"],
+                  "outcome": { "text": "You lift the first chest lid, and behind the casks something long and grey and starving unfolds itself, grinning, and the air fills with the stench of the grave.", "encounter": "cove_ghast" }
+                },
+                {
+                  "id": "sneak",
+                  "label": "Leave the stash alone and slip past whatever gnaws those bones",
+                  "once": true,
+                  "if": { "not": { "flag": "~ch2_stash_done" } },
+                  "keywords": ["sneak", "slip", "past", "stealth", "quiet", "avoid"],
+                  "check": {
+                    "skill": "stealth",
+                    "dc": 14,
+                    "success": {
+                      "text": "You keep to the shadows along the cavern wall. Behind the casks something grey chews on a bone with its eyes closed, and never opens them. On the far side a driftwood door glows green.",
+                      "flags": [{ "set": "~ch2_stash_done" }, { "set": "~ch2_slipped_past" }],
+                      "revealRoom": { "map": "cove_caves", "room": "hag_market" },
+                      "xp": 100
+                    },
+                    "failure": { "text": "A pebble skitters under your boot. Behind the casks something grey lifts its head, sniffs, and grins.", "encounter": "cove_ghast" }
+                  }
+                },
+                {
+                  "id": "take_share",
+                  "label": "Take Salt's strongboxes, and let the Red Gull send you the bill",
+                  "once": true,
+                  "if": { "all": [{ "flag": "~ch2_ghast_done" }, { "not": { "flag": "~ch2_share_taken" } }, { "not": { "reputation": { "faction": "red_gull_brotherhood", "gte": 30 } } }] },
+                  "keywords": ["take", "strongbox", "share", "coin", "loot", "gold"],
+                  "outcome": {
+                    "text": "Two of Salt's strongboxes hold real gold, the takings of the hall. A Red Gull tally-stick is nailed to the cask beside them: the Brotherhood counts its stash, and will want fifty gold for it.",
+                    "flags": [{ "set": "~ch2_share_taken" }, { "inc": "world.red_gull_debt", "by": 50 }],
+                    "coins": 6000
+                  }
+                },
+                {
+                  "id": "take_share_friend",
+                  "label": "Take Salt's strongboxes; the Red Gull owe you a share",
+                  "once": true,
+                  "if": { "all": [{ "flag": "~ch2_ghast_done" }, { "not": { "flag": "~ch2_share_taken" } }, { "reputation": { "faction": "red_gull_brotherhood", "gte": 30 } }] },
+                  "keywords": ["take", "strongbox", "share", "coin", "loot", "gold"],
+                  "outcome": {
+                    "text": "Two of Salt's strongboxes hold real gold. The Red Gull tally-stick beside them has your name already carved on the friendly side. Nobody will send you a bill.",
+                    "flags": [{ "set": "~ch2_share_taken" }],
+                    "coins": 6000
+                  }
+                },
+                {
+                  "id": "hollow_chest",
+                  "label": "Break open the chest of new-struck coin",
+                  "once": true,
+                  "if": { "flag": "~ch2_stash_done" },
+                  "keywords": ["chest", "coin", "new", "break", "hollow", "ash"],
+                  "outcome": {
+                    "text": "The chest is full of bright new crowns with the Ironvault's anvil-and-key, and a ledger slip in a slanting hand: 'Washed. To the market, for faces. O. V.' You bite one. It gives like pastry.",
+                    "flags": [{ "set": "~ch2_hollow_chest" }],
+                    "approval": [{ "companion": "brannoc", "delta": 5 }]
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "id": "catch_breath",
+              "label": "Sleep aboard the beached sloop until the tide turns",
+              "keywords": ["breath", "rest", "sleep", "sloop", "tide", "bandage"],
+              "outcome": { "text": "You bind your cuts and sleep in the lee of the beached sloop, while the tide booms in the caves and goes out again.", "rest": "long" }
+            }
+          ],
+          "exits": [
+            { "id": "to_market", "label": "Go through the driftwood door toward the green lanterns", "to": "tallow_s_market", "if": { "flag": "~ch2_stash_done" }, "minutes": 10 }
+          ]
+        },
+        {
+          "id": "tallow_s_market",
+          "name": "Mother Tallow's Market",
+          "locationId": "wreckers_cove",
+          "mood": "dread",
+          "map": { "id": "cove_caves", "room": "hag_market" },
+          "seed": "Behind the driftwood door is a market with one stall. Green glass lanterns hang from the cave roof over racks of faces: smooth, empty, perfect faces, hung like masks to dry, every one of them somebody. Behind the stall, knitting with needles of bone, sits a stout old woman in a shawl who smiles like a grandmother and smells of candle-fat. Mother Tallow.",
+          "variants": [
+            { "if": { "flag": "~ch2_market_burned" }, "seed": "The market is ash and dripping glass. The racks are gone. Mother Tallow is gone." },
+            { "if": { "flag": "~ch2_face_bought" }, "seed": "Somewhere in your head is a hole where a name used to be. The faces on the racks seem to watch you with it." }
+          ],
+          "revisitSeed": "The green lanterns, the racks of faces, the click of bone needles.",
+          "npcs": ["mother_tallow"],
+          "pois": [
+            {
+              "id": "face_racks",
+              "name": "The racks of faces",
+              "seed": "Rows of faces hung on wooden pegs, each one a person who sold it, or had it sold. Under the racks, a lamp-oil cask.",
+              "if": { "not": { "flag": "~ch2_market_burned" } },
+              "actions": [
+                {
+                  "id": "burn",
+                  "label": "Kick over the lamp-oil and burn the market",
+                  "once": true,
+                  "keywords": ["burn", "fire", "oil", "lamp", "destroy", "torch"],
+                  "outcome": {
+                    "text": "Lamp-oil runs across the floor and the racks go up with a sound like a crowd screaming. Mother Tallow rises from her stall, and the grandmother is gone: green skin, black nails, a mouth full of needles.",
+                    "approval": [{ "companion": "ilse", "delta": -10 }],
+                    "encounter": "tallow_burn"
+                  }
+                }
+              ]
+            }
+          ],
+          "exits": [
+            { "id": "to_camp", "label": "Go back out to the beach and make camp", "to": "cove_camp", "if": { "flag": "~ch2_market_done" }, "minutes": 20 }
+          ]
+        },
+        {
+          "id": "cove_camp",
+          "name": "Camp on the Wreckers' Beach",
+          "locationId": "wreckers_cove",
+          "mood": "solemn",
+          "seed": "A driftwood fire on the beach of Wreckers' Cove, out of the wind behind the ribs of an old wreck. The Lucky Wake sits on the shingle, the stars come out over the reefs, and the tide goes out with a long sigh.",
+          "variants": [
+            { "if": { "flag": "world.wren_status", "eq": "in_party" }, "seed": "Wren sits cross-legged by the fire, counting coins she should not have and singing under her breath." },
+            { "if": { "flag": "~ch2_market_burned" }, "seed": "Up in the cliff the caves still glow faintly green where the market burned." }
+          ],
+          "revisitSeed": "The driftwood fire under the wreck's ribs, and the long sigh of the tide.",
+          "actions": [
+            {
+              "id": "long_rest",
+              "label": "Sleep the night by the fire",
+              "once": true,
+              "keywords": ["sleep", "rest", "night", "fire", "camp"],
+              "outcome": {
+                "text": "You sleep by the fire with the sea in your ears. When you wake, the reefs, the dice, the caves and the faces have settled into something you understand: you are better at this than you were.",
+                "flags": [{ "set": "~ch2_rested" }],
+                "rest": "long",
+                "xp": 1500,
+                "minutes": 60,
+                "tip": "You have enough experience to reach level 4: use the Level up button on your hero's card."
+              }
+            },
+            {
+              "id": "wren_winnings",
+              "label": "Ask Wren what she means to do with her winnings",
+              "once": true,
+              "if": { "flag": "world.wren_status", "eq": "in_party" },
+              "keywords": ["wren", "winnings", "ask", "coins", "talk"],
+              "outcome": {
+                "text": "Wren flips a coin across her knuckles. \"Buy Salt's ship back off whoever has it, friend, and beat him at dice for it. Honestly. Once.\" She grins. \"Then cheat him for the rest.\"",
+                "flags": [{ "set": "~ch2_wren_talk" }],
+                "approval": [{ "companion": "wren", "delta": 5 }]
+              }
+            }
+          ],
+          "exits": [],
+          "pois": [
+            {
+              "id": "sloop",
+              "name": "The Lucky Wake",
+              "seed": "The black sloop on the shingle, patched and ready, her bow toward the mainland.",
+              "actions": [
+                {
+                  "id": "sail_north",
+                  "label": "Sail for the mainland and the road to the Blightwood",
+                  "if": { "flag": "~ch2_rested" },
+                  "keywords": ["sail", "north", "mainland", "blightwood", "leave", "go", "road"],
+                  "outcome": {
+                    "text": "Two days of sea to Port Sorrel, then the long road north past Dawnspire Keep toward the Blightwood, where the slanting hand on every slip has been sending the faces. Somewhere under that forest, a forge is waiting for a crown.",
+                    "discover": ["port_sorrel", "dawnspire_keep", "blightwood"],
+                    "minutes": 4320,
+                    "ending": "ch2_to_blightwood"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "maps": [
+    {
+      "id": "lucky_wake",
+      "name": "Berth Nine and the Lucky Wake",
+      "width": 20,
+      "height": 9,
+      "rooms": [
+        { "id": "dock", "name": "Berth Nine", "x": 1, "y": 2, "w": 4, "h": 5 },
+        { "id": "deck", "name": "The Main Deck", "x": 5, "y": 1, "w": 10, "h": 7, "blocking": [{ "x": 9, "y": 4 }], "difficult": [{ "x": 7, "y": 2 }, { "x": 7, "y": 6 }, { "x": 12, "y": 2 }] },
+        { "id": "quarterdeck", "name": "The Quarterdeck", "x": 15, "y": 2, "w": 4, "h": 5 }
+      ],
+      "doors": [
+        { "x": 4, "y": 4, "side": "E" },
+        { "x": 14, "y": 4, "side": "E" }
+      ]
+    },
+    {
+      "id": "cove_caves",
+      "name": "The Sea Caves of Wreckers' Cove",
+      "width": 26,
+      "height": 14,
+      "rooms": [
+        { "id": "landing", "name": "The Shingle Landing", "x": 1, "y": 5, "w": 5, "h": 4 },
+        { "id": "tide_tunnel", "name": "The Tide Tunnel", "x": 6, "y": 5, "w": 6, "h": 3, "difficult": [{ "x": 7, "y": 6 }, { "x": 8, "y": 6 }, { "x": 9, "y": 6 }, { "x": 10, "y": 6 }] },
+        { "id": "stash_cavern", "name": "The Stash Cavern", "x": 12, "y": 3, "w": 7, "h": 8, "blocking": [{ "x": 14, "y": 5 }, { "x": 16, "y": 8 }] },
+        { "id": "hag_market", "name": "Mother Tallow's Market", "x": 19, "y": 4, "w": 6, "h": 6, "blocking": [{ "x": 23, "y": 6 }] }
+      ],
+      "doors": [
+        { "x": 5, "y": 6, "side": "E" },
+        { "x": 11, "y": 6, "side": "E" },
+        { "x": 18, "y": 6, "side": "E" }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "id": "quillon_vane",
+      "name": "Quillon Vane",
+      "statBlock": "noble",
+      "personality": "The Gilded Gull's banker and dice-master: plump, perfumed, endlessly courteous, who washes any coin for a tenth and has never once lost at his own table.",
+      "secrets": ["He washes the hollow gold for the Thousand Faces and pays Captain Salt to carry it to Wreckers' Cove.", "He stiffed Wren Thistle of a month's winnings with a marker he never paid."],
+      "voice": "Silky, calls everyone 'my treasure', laughs at his own jokes before he finishes them.",
+      "factions": ["red_gull_brotherhood"],
+      "attitude": "friendly",
+      "conversations": [
+        {
+          "id": "dice",
+          "label": "Sit down at Quillon Vane's dice table",
+          "keywords": ["dice", "table", "game", "play", "gamble", "quillon", "vane", "banker"],
+          "if": { "all": [{ "not": { "flag": "~ch2_marker" } }, { "not": { "flag": "~ch2_dice_caught" } }] },
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "A new face at my table! Sit, sit, my treasure. Three throws of the Gull's Dice, best of three. If you win, I give you this: a marker I owe a certain sea captain, good for a favour and a passage. If you lose, you owe the Red Gull ten gold, payable whenever they find you. They always find you.",
+              "options": [
+                { "id": "play", "label": "\"Throw the dice.\"", "keywords": ["throw", "play", "dice", "yes", "deal"], "next": "r1" },
+                { "id": "bye", "label": "\"Not tonight.\"", "keywords": ["bye", "leave", "no", "later"] }
+              ]
+            },
+            {
+              "id": "r1",
+              "text": "First throw, my treasure. The house throws first: a nine. Your turn.",
+              "options": [
+                {
+                  "id": "cheat",
+                  "label": "Palm a die of your own into the cup",
+                  "keywords": ["cheat", "palm", "sleight", "own", "switch"],
+                  "check": {
+                    "skill": "sleight_of_hand",
+                    "dc": 14,
+                    "advantageIf": [{ "if": { "flag": "world.wren_status", "eq": "in_party" }, "source": "Wren palms the house dice for you" }],
+                    "success": {},
+                    "failure": { "flags": [{ "set": "~ch2_dice_caught" }], "reputation": [{ "faction": "red_gull_brotherhood", "delta": -5 }] }
+                  },
+                  "next": "r2_up",
+                  "nextOnFail": "caught"
+                },
+                {
+                  "id": "read",
+                  "label": "Watch Vane's hands and bet against his tell",
+                  "keywords": ["watch", "read", "tell", "insight", "hands"],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 13,
+                    "advantageIf": [{ "if": { "flag": "~ch2_wash_seen" }, "source": "You have watched his clerks all evening" }],
+                    "success": {},
+                    "failure": {}
+                  },
+                  "next": "r2_up",
+                  "nextOnFail": "r2_down"
+                },
+                {
+                  "id": "luck",
+                  "label": "Throw honestly and trust your luck",
+                  "keywords": ["honest", "luck", "honestly", "fair", "trust"],
+                  "check": {
+                    "ability": "wis",
+                    "dc": 10,
+                    "disadvantageIf": [{ "if": { "not": { "flag": "~ch2_marker" } }, "source": "The house dice are weighted" }],
+                    "success": {},
+                    "failure": {}
+                  },
+                  "next": "r2_up",
+                  "nextOnFail": "r2_down"
+                }
+              ]
+            },
+            {
+              "id": "r2_up",
+              "text": "Oh, well thrown. One to you. Second throw: the house has an eight.",
+              "options": [
+                {
+                  "id": "cheat",
+                  "label": "Palm a die of your own into the cup",
+                  "keywords": ["cheat", "palm", "sleight", "own", "switch"],
+                  "check": {
+                    "skill": "sleight_of_hand",
+                    "dc": 14,
+                    "advantageIf": [{ "if": { "flag": "world.wren_status", "eq": "in_party" }, "source": "Wren palms the house dice for you" }],
+                    "success": { "flags": [{ "set": "~ch2_marker" }, { "set": "~ch2_salt_known" }], "xp": 50 },
+                    "failure": { "flags": [{ "set": "~ch2_dice_caught" }], "reputation": [{ "faction": "red_gull_brotherhood", "delta": -5 }] }
+                  },
+                  "next": "won",
+                  "nextOnFail": "caught"
+                },
+                {
+                  "id": "read",
+                  "label": "Watch Vane's hands and bet against his tell",
+                  "keywords": ["watch", "read", "tell", "insight", "hands"],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 13,
+                    "advantageIf": [{ "if": { "flag": "~ch2_wash_seen" }, "source": "You have watched his clerks all evening" }],
+                    "success": { "flags": [{ "set": "~ch2_marker" }, { "set": "~ch2_salt_known" }], "xp": 50 },
+                    "failure": {}
+                  },
+                  "next": "won",
+                  "nextOnFail": "r3"
+                },
+                {
+                  "id": "luck",
+                  "label": "Throw honestly and trust your luck",
+                  "keywords": ["honest", "luck", "honestly", "fair", "trust"],
+                  "check": {
+                    "ability": "wis",
+                    "dc": 10,
+                    "disadvantageIf": [{ "if": { "not": { "flag": "~ch2_marker" } }, "source": "The house dice are weighted" }],
+                    "success": { "flags": [{ "set": "~ch2_marker" }, { "set": "~ch2_salt_known" }], "xp": 50 },
+                    "failure": {}
+                  },
+                  "next": "won",
+                  "nextOnFail": "r3"
+                }
+              ]
+            },
+            {
+              "id": "r2_down",
+              "text": "The house takes the first, my treasure. Never mind. Second throw: the house has a seven.",
+              "options": [
+                {
+                  "id": "cheat",
+                  "label": "Palm a die of your own into the cup",
+                  "keywords": ["cheat", "palm", "sleight", "own", "switch"],
+                  "check": {
+                    "skill": "sleight_of_hand",
+                    "dc": 14,
+                    "advantageIf": [{ "if": { "flag": "world.wren_status", "eq": "in_party" }, "source": "Wren palms the house dice for you" }],
+                    "success": {},
+                    "failure": { "flags": [{ "set": "~ch2_dice_caught" }], "reputation": [{ "faction": "red_gull_brotherhood", "delta": -5 }] }
+                  },
+                  "next": "r3",
+                  "nextOnFail": "caught"
+                },
+                {
+                  "id": "read",
+                  "label": "Watch Vane's hands and bet against his tell",
+                  "keywords": ["watch", "read", "tell", "insight", "hands"],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 13,
+                    "advantageIf": [{ "if": { "flag": "~ch2_wash_seen" }, "source": "You have watched his clerks all evening" }],
+                    "success": {},
+                    "failure": { "flags": [{ "set": "~ch2_dice_lost" }, { "inc": "world.red_gull_debt", "by": 10 }] }
+                  },
+                  "next": "r3",
+                  "nextOnFail": "lost"
+                },
+                {
+                  "id": "luck",
+                  "label": "Throw honestly and trust your luck",
+                  "keywords": ["honest", "luck", "honestly", "fair", "trust"],
+                  "check": {
+                    "ability": "wis",
+                    "dc": 10,
+                    "disadvantageIf": [{ "if": { "not": { "flag": "~ch2_marker" } }, "source": "The house dice are weighted" }],
+                    "success": {},
+                    "failure": { "flags": [{ "set": "~ch2_dice_lost" }, { "inc": "world.red_gull_debt", "by": 10 }] }
+                  },
+                  "next": "r3",
+                  "nextOnFail": "lost"
+                }
+              ]
+            },
+            {
+              "id": "r3",
+              "text": "One each! The whole table is watching now. Last throw, my treasure: the house has a ten.",
+              "options": [
+                {
+                  "id": "cheat",
+                  "label": "Palm a die of your own into the cup",
+                  "keywords": ["cheat", "palm", "sleight", "own", "switch"],
+                  "check": {
+                    "skill": "sleight_of_hand",
+                    "dc": 14,
+                    "advantageIf": [{ "if": { "flag": "world.wren_status", "eq": "in_party" }, "source": "Wren palms the house dice for you" }],
+                    "success": { "flags": [{ "set": "~ch2_marker" }, { "set": "~ch2_salt_known" }], "xp": 50 },
+                    "failure": { "flags": [{ "set": "~ch2_dice_caught" }], "reputation": [{ "faction": "red_gull_brotherhood", "delta": -5 }] }
+                  },
+                  "next": "won",
+                  "nextOnFail": "caught"
+                },
+                {
+                  "id": "read",
+                  "label": "Watch Vane's hands and bet against his tell",
+                  "keywords": ["watch", "read", "tell", "insight", "hands"],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 13,
+                    "advantageIf": [{ "if": { "flag": "~ch2_wash_seen" }, "source": "You have watched his clerks all evening" }],
+                    "success": { "flags": [{ "set": "~ch2_marker" }, { "set": "~ch2_salt_known" }], "xp": 50 },
+                    "failure": { "flags": [{ "set": "~ch2_dice_lost" }, { "inc": "world.red_gull_debt", "by": 10 }] }
+                  },
+                  "next": "won",
+                  "nextOnFail": "lost"
+                },
+                {
+                  "id": "luck",
+                  "label": "Throw honestly and trust your luck",
+                  "keywords": ["honest", "luck", "honestly", "fair", "trust"],
+                  "check": {
+                    "ability": "wis",
+                    "dc": 10,
+                    "disadvantageIf": [{ "if": { "not": { "flag": "~ch2_marker" } }, "source": "The house dice are weighted" }],
+                    "success": { "flags": [{ "set": "~ch2_marker" }, { "set": "~ch2_salt_known" }], "xp": 50 },
+                    "failure": { "flags": [{ "set": "~ch2_dice_lost" }, { "inc": "world.red_gull_debt", "by": 10 }] }
+                  },
+                  "next": "won",
+                  "nextOnFail": "lost"
+                }
+              ]
+            },
+            {
+              "id": "won",
+              "text": "Well, well. Nobody beats the Gull's Dice. Nobody but you, tonight. A debt is a debt: here is the marker. It is owed by Captain Ferrin Salt of the Lucky Wake, berth nine. He will not be pleased to see it.",
+              "options": [{ "id": "take", "label": "Take the marker" }]
+            },
+            {
+              "id": "lost",
+              "text": "The house wins, as the house does. Ten gold to the Red Gull, my treasure. Do come again. Everyone comes again.",
+              "options": [{ "id": "leave", "label": "Get up from the table" }]
+            },
+            {
+              "id": "caught",
+              "text": "Vane's soft hand closes on your wrist, and a die falls out of your sleeve onto the felt. The table goes quiet. \"Oh, my treasure,\" he says sadly. Two Red Gull bruisers walk you away from the tables, and they are not gentle about it.",
+              "options": [{ "id": "leave", "label": "Shake them off" }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wren_npc",
+      "name": "Wren Thistle",
+      "statBlock": "spy",
+      "personality": "A halfling card-sharp in a sea-green coat: quick, cheerful and shameless at the table, cold as sea ice to anyone who cheats her. Quillon Vane owes her a month's winnings.",
+      "secrets": ["Vane stiffed her with a worthless marker, and she has been losing small at his tables for a week to learn how his dice are weighted."],
+      "voice": "Fast Brinescatter patter; calls everyone 'friend' right up until she doesn't.",
+      "factions": ["red_gull_brotherhood"],
+      "attitude": "friendly",
+      "schedule": [{ "scene": "fennicks_rest_hall", "from": 0, "to": 24, "if": { "any": [{ "flag": "world.wren_status", "eq": "unmet" }, { "flag": "world.wren_status", "eq": "met" }] } }],
+      "conversations": [
+        {
+          "id": "deal",
+          "label": "Sit down beside the halfling in the sea-green coat",
+          "keywords": ["wren", "halfling", "green", "coat", "card", "sharp", "her"],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Friend! You have the look of someone who has been cheated, or is about to be. Wren Thistle. I play cards, I play dice, and I am owed a month's winnings by the perfumed toad behind that cage. What brings a mainlander to the Gull?",
+              "options": [
+                {
+                  "id": "marker",
+                  "label": "Lay Vane's marker on the table between you",
+                  "once": true,
+                  "if": { "flag": "~ch2_marker" },
+                  "keywords": ["marker", "lay", "show", "won", "vane"],
+                  "outcome": { "recruit": "wren", "approval": [{ "companion": "wren", "delta": 10 }] },
+                  "next": "joined"
+                },
+                {
+                  "id": "persuade",
+                  "label": "\"Help me sink the man who stiffed you.\"",
+                  "once": true,
+                  "keywords": ["help", "sink", "persuade", "together", "join", "stiffed"],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "success": { "recruit": "wren" },
+                    "failure": { "flags": [{ "set": "~ch2_wren_declined" }] }
+                  },
+                  "next": "joined",
+                  "nextOnFail": "not_yet"
+                },
+                {
+                  "id": "cut",
+                  "label": "Slide her ten gold as a first share of whatever you find",
+                  "once": true,
+                  "if": { "coins": { "gte": 1000 } },
+                  "keywords": ["pay", "share", "cut", "gold", "ten", "hire"],
+                  "outcome": { "cost": 1000, "recruit": "wren" },
+                  "next": "joined"
+                },
+                {
+                  "id": "salt",
+                  "label": "Ask where Vane's washed gold goes",
+                  "once": true,
+                  "keywords": ["gold", "goes", "where", "washed", "ask", "salt"],
+                  "outcome": { "flags": [{ "set": "~ch2_salt_known" }, { "set": "~ch2_deserter_known" }] },
+                  "next": "salt"
+                },
+                { "id": "bye", "label": "\"Good luck at the tables.\"", "keywords": ["bye", "leave", "later", "luck"] }
+              ]
+            },
+            {
+              "id": "salt",
+              "text": "Out the water door in a strongbox, onto the Lucky Wake at berth nine. Ferrin Salt's sloop. He used to fly the Red Gull's colours until he ran off with a prize that wasn't his; the Brotherhood would love to know where he sleeps. He carries the gold to Wreckers' Cove. Nobody goes to Wreckers' Cove.",
+              "options": [{ "id": "back", "label": "\"Tell me more about yourself.\"", "next": "greet" }]
+            },
+            {
+              "id": "joined",
+              "text": "Then we're partners, friend. Fair warning: I cheat. Never you. Everyone else, all the time, and especially Quillon Vane.",
+              "options": [{ "id": "deal", "label": "\"Deal.\"" }]
+            },
+            {
+              "id": "not_yet",
+              "text": "Pretty words. I've lost money on pretty words. Come back when you've got something better than a speech.",
+              "options": [{ "id": "back", "label": "\"Fair enough.\"" }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "captain_salt",
+      "name": "Captain Ferrin Salt",
+      "statBlock": "bandit_captain",
+      "personality": "A lean, sunburned deserter from the Red Gull who carries other people's crimes for money and his own neck above everything. Funny, quick, entirely without loyalty.",
+      "secrets": ["He carries Vane's washed hollow gold to Mother Tallow's market at Wreckers' Cove and is paid in real gold by a woman with a slanting hand.", "The Red Gull would hang him for desertion if they knew his berth."],
+      "voice": "Easy and amused, talks with his mouth full, calls the hero 'cargo'.",
+      "factions": ["red_gull_brotherhood"],
+      "attitude": "indifferent",
+      "schedule": [{ "scene": "salt_s_sloop", "from": 0, "to": 24, "if": { "all": [{ "not": { "flag": "~ch2_passage" } }, { "not": { "flag": "~ch2_salt_beaten" } }] } }],
+      "conversations": [
+        {
+          "id": "passage",
+          "label": "Hail Captain Salt from the quay",
+          "keywords": ["salt", "captain", "hail", "ferrin", "talk", "passage"],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Cargo, coming up my gangplank. I don't take passengers, cargo. I take crates, and I don't look in them. What's in yours?",
+              "options": [
+                {
+                  "id": "buy",
+                  "label": "\"Twenty-five gold for a passage to Wreckers' Cove, and you sail for me now.\"",
+                  "once": true,
+                  "if": { "coins": { "gte": 2500 } },
+                  "keywords": ["buy", "gold", "pay", "passage", "coin", "twenty"],
+                  "outcome": { "cost": 2500, "flags": [{ "set": "~ch2_salt_bought" }, { "set": "~ch2_passage" }], "xp": 100 },
+                  "next": "bought"
+                },
+                {
+                  "id": "threaten",
+                  "label": "\"The Red Gull would pay well to learn where their deserter sleeps.\"",
+                  "once": true,
+                  "keywords": ["threaten", "gull", "deserter", "red", "intimidate", "brand"],
+                  "check": {
+                    "skill": "intimidation",
+                    "dc": 14,
+                    "advantageIf": [{ "if": { "flag": "~ch2_deserter_known" }, "source": "You know which prize he ran off with" }],
+                    "success": { "flags": [{ "set": "~ch2_salt_threatened" }, { "set": "~ch2_passage" }, { "set": "arc.crown.salt_unpaid" }], "xp": 100 },
+                    "failure": {}
+                  },
+                  "next": "threatened",
+                  "nextOnFail": "fight"
+                },
+                {
+                  "id": "trick",
+                  "label": "Show Vane's marker: \"The banker sent me to collect. You carry me to the Cove, or he calls it in.\"",
+                  "once": true,
+                  "if": { "flag": "~ch2_marker" },
+                  "keywords": ["marker", "trick", "vane", "collect", "banker", "deceive"],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 13,
+                    "advantageIf": [{ "if": { "flag": "world.wren_status", "eq": "in_party" }, "source": "Wren backs the story with a straight face" }],
+                    "success": { "flags": [{ "set": "~ch2_salt_tricked" }, { "set": "~ch2_passage" }, { "set": "arc.crown.salt_unpaid" }], "approval": [{ "companion": "wren", "delta": 5 }], "xp": 100 },
+                    "failure": {}
+                  },
+                  "next": "tricked",
+                  "nextOnFail": "fight"
+                },
+                { "id": "bye", "label": "\"Nothing for you, Captain.\"", "keywords": ["bye", "leave", "nothing", "later"] }
+              ]
+            },
+            {
+              "id": "bought",
+              "text": "Gold's gold, cargo, even yours. Get aboard. We sail on the turn of the tide, and you don't ask what's in the hold.",
+              "options": [{ "id": "aboard", "label": "Go aboard" }]
+            },
+            {
+              "id": "threatened",
+              "text": "Salt stops chewing. \"You'd sell me to the Gull. Of course you would; I would.\" He spits over the rail. \"Fine. The Cove. And afterwards you forget my berth, cargo, and I'll forget your face.\"",
+              "options": [{ "id": "aboard", "label": "Go aboard" }]
+            },
+            {
+              "id": "tricked",
+              "text": "Salt reads the marker twice and swears at length about bankers. \"Vane's calling in favours now? Fine. The Cove, and that's us square, and tell him so.\"",
+              "options": [{ "id": "aboard", "label": "Go aboard" }]
+            },
+            {
+              "id": "fight",
+              "text": "Salt laughs and wipes his knife on his sleeve. \"No, cargo. I don't think so.\" He whistles, and his crew put down their ropes and pick up their cutlasses.",
+              "options": [
+                {
+                  "id": "draw",
+                  "label": "Draw steel",
+                  "keywords": ["draw", "steel", "fight", "attack"],
+                  "outcome": { "flags": [{ "set": "~ch2_salt_fought" }], "encounter": "salt_crew" }
+                },
+                { "id": "back_off", "label": "Back down the gangplank", "keywords": ["back", "leave", "retreat", "off"] }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mother_tallow",
+      "name": "Mother Tallow",
+      "statBlock": "night_hag",
+      "personality": "A night hag who looks like everybody's grandmother: stout, shawled, knitting with bone needles, gentle-voiced. She buys and sells faces, and the price of a face is a memory.",
+      "secrets": ["She sells faces to Ondra Vexx's Thousand Faces and keeps a 'book of the unmade': the names of everyone whose face she has taken.", "She sold Vexx her own face, years ago, for the memory of the day she was struck from the Ironvault rolls."],
+      "voice": "Warm, slow, every sentence ends in 'dearie'; the needles never stop clicking.",
+      "factions": [],
+      "attitude": "friendly",
+      "schedule": [{ "scene": "tallow_s_market", "from": 0, "to": 24, "if": { "not": { "flag": "~ch2_market_burned" } } }],
+      "conversations": [
+        {
+          "id": "faces",
+          "label": "Step up to Mother Tallow's stall",
+          "keywords": ["tallow", "mother", "hag", "stall", "faces", "buy", "talk"],
+          "if": { "not": { "flag": "~ch2_market_done" } },
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "A customer! Come in out of the damp, dearie. Every face on my racks is somebody, and any of them can be you, for a little while. The price is small. Not gold: gold is so heavy. A memory. Just one. You won't even miss it, dearie. That's rather the point.",
+              "options": [
+                {
+                  "id": "buy",
+                  "label": "Buy a face, and pay her a memory",
+                  "once": true,
+                  "keywords": ["buy", "face", "pay", "memory", "take"],
+                  "outcome": {
+                    "flags": [{ "set": "arc.crown.borrowed_face" }, { "set": "world.hag_bargain" }, { "set": "arc.crown.clue_5" }, { "set": "~ch2_face_bought" }, { "set": "~ch2_market_done" }],
+                    "scar": { "description": "the memory of a name", "location": "brow" },
+                    "conditions": [{ "condition": "frightened", "minutes": 480 }],
+                    "approval": [{ "companion": "brannoc", "delta": -5 }, { "companion": "ilse", "delta": -5 }]
+                  },
+                  "next": "bought"
+                },
+                {
+                  "id": "bargain",
+                  "label": "\"I'll pay you in secrets instead. Tell me who else buys here.\"",
+                  "once": true,
+                  "keywords": ["bargain", "secret", "secrets", "instead", "who", "persuade"],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "advantageIf": [{ "if": { "flag": "world.ilse_status", "eq": "in_party" }, "source": "Ilse offers Tallow a dream she has never told" }],
+                    "success": { "flags": [{ "set": "arc.crown.clue_5" }, { "set": "~ch2_bargained" }, { "set": "~ch2_market_done" }], "approval": [{ "companion": "ilse", "delta": 5 }], "xp": 100 },
+                    "failure": {}
+                  },
+                  "next": "book",
+                  "nextOnFail": "refused"
+                },
+                {
+                  "id": "leave",
+                  "label": "Turn your back on the market and walk out",
+                  "keywords": ["leave", "walk", "out", "no", "bye"],
+                  "outcome": { "flags": [{ "set": "~ch2_market_done" }] },
+                  "next": "goodbye"
+                }
+              ]
+            },
+            {
+              "id": "bought",
+              "text": "There. That didn't hurt. Here is your face, dearie: wear it once, where it matters, and they will think you one of their own. Oh, and the name? Don't trouble yourself. It's in my book now, with all the others. The book of the unmade. Your friend the assayer has a page in it too.",
+              "options": [{ "id": "go", "label": "Take the face and go" }]
+            },
+            {
+              "id": "book",
+              "text": "Secrets, secrets. Oh, very well, dearie, you've earned a peek. She takes out a book bound in something pale and turns the pages: names, hundreds of names, each crossed through. 'The book of the unmade. Every face on my racks, and who bought it.' The last forty pages are all one buyer, in a slanting hand: O. V.",
+              "options": [{ "id": "go", "label": "\"Thank you, Mother.\"" }]
+            },
+            {
+              "id": "refused",
+              "text": "Secrets! Everyone has secrets, dearie, and none of them are worth a face. Memories or nothing. Well?",
+              "options": [
+                {
+                  "id": "buy",
+                  "label": "Pay her a memory after all",
+                  "once": true,
+                  "keywords": ["buy", "face", "pay", "memory", "fine"],
+                  "outcome": {
+                    "flags": [{ "set": "arc.crown.borrowed_face" }, { "set": "world.hag_bargain" }, { "set": "arc.crown.clue_5" }, { "set": "~ch2_face_bought" }, { "set": "~ch2_market_done" }],
+                    "scar": { "description": "the memory of a name", "location": "brow" },
+                    "conditions": [{ "condition": "frightened", "minutes": 480 }],
+                    "approval": [{ "companion": "brannoc", "delta": -5 }, { "companion": "ilse", "delta": -5 }]
+                  },
+                  "next": "bought"
+                },
+                { "id": "think", "label": "\"I need to think.\"", "keywords": ["think", "wait", "later"] }
+              ]
+            },
+            {
+              "id": "goodbye",
+              "text": "Off you go then, dearie. You'll be back. Everyone wants to be somebody else, sooner or later.",
+              "options": [{ "id": "go", "label": "Leave" }]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "encounters": [
+    {
+      "id": "salt_crew",
+      "name": "The Crew of the Lucky Wake",
+      "monsters": [{ "id": "bandit_captain", "count": 1 }, { "id": "pirate", "count": 4 }],
+      "statOverrides": { "bandit_captain": { "name": "Captain Ferrin Salt", "hpPercent": 60 } },
+      "bosses": ["bandit_captain"],
+      "map": "lucky_wake",
+      "room": "deck",
+      "scaling": { "target": "moderate", "pool": ["pirate"] },
+      "win": {
+        "text": "Salt goes down on his own deck with his cutlass skidding into the scuppers, and the last of his crew throw theirs after it. \"All right, cargo,\" he wheezes. \"All right. Where do you want to go?\"",
+        "flags": [{ "set": "~ch2_salt_beaten" }, { "set": "~ch2_passage" }]
+      },
+      "lose": {
+        "text": "The last thing you see is the boom swinging. You come round on the quay, wet through: Salt's crew threw you overboard and fished you out again, because bodies in the harbour are bad for business.",
+        "goto": "fennicks_rest_hall",
+        "minutes": 120
+      },
+      "flee": { "text": "You go over the rail and onto the quay, and Salt's laughter follows you up the berth." }
+    },
+    {
+      "id": "merrow_ambush",
+      "name": "Merrow in the Channel",
+      "monsters": [{ "id": "merrow", "count": 2 }],
+      "statOverrides": { "merrow": { "hpPercent": 60 } },
+      "scaling": { "target": "moderate", "pool": [] },
+      "win": { "text": "The last merrow drops back over the rail into the black water. You steer the battered sloop out of the channel and up the shingle of Wreckers' Cove.", "goto": "wreckers_cove", "minutes": 60 },
+      "lose": { "text": "Something drags you under. You wake coughing on the shingle of Wreckers' Cove, the sloop beached beside you, with no memory of how either of you got there.", "goto": "wreckers_cove", "minutes": 120 },
+      "flee": { "text": "You crowd on every scrap of sail and the sloop outruns them, scraping up onto the shingle of Wreckers' Cove.", "goto": "wreckers_cove", "minutes": 60 }
+    },
+    {
+      "id": "cove_oozes",
+      "name": "The Tide Tunnel",
+      "monsters": [{ "id": "gray_ooze", "count": 2 }],
+      "map": "cove_caves",
+      "room": "tide_tunnel",
+      "scaling": { "target": "moderate", "pool": ["gray_ooze"] },
+      "win": { "text": "The second ooze breaks up into grey scum on the tide. The tunnel opens ahead into a high cavern.", "flags": [{ "set": "~ch2_tunnel_passed" }] },
+      "lose": { "text": "You crawl back out onto the landing, your gear pitted and smoking where the oozes touched it.", "minutes": 60 },
+      "flee": { "text": "You splash back to the landing. The grey slicks stop at the tunnel mouth, where the water ends." }
+    },
+    {
+      "id": "cove_ghast",
+      "name": "The Thing in the Stash",
+      "monsters": [{ "id": "ghast", "count": 1 }],
+      "statOverrides": { "ghast": { "hpPercent": 70 } },
+      "bosses": ["ghast"],
+      "map": "cove_caves",
+      "room": "stash_cavern",
+      "scaling": { "target": "moderate", "pool": [] },
+      "win": {
+        "text": "The ghast goes down among the casks, and its stench goes with it. The Red Gull's stash lies open, and on the far side of the cavern a door of driftwood and bone glows green.",
+        "flags": [{ "set": "~ch2_ghast_done" }, { "set": "~ch2_stash_done" }],
+        "revealRoom": { "map": "cove_caves", "room": "hag_market" }
+      },
+      "lose": { "text": "You wake on the landing, dragged there by your own boots, with the ghast's stink still on you. It is back behind the casks, eating.", "minutes": 120 },
+      "flee": { "text": "You back out of the cavern. The ghast does not follow; it has plenty to eat." }
+    },
+    {
+      "id": "tallow_burn",
+      "name": "Mother Tallow",
+      "monsters": [{ "id": "green_hag", "count": 1 }],
+      "statOverrides": { "green_hag": { "name": "Mother Tallow", "hpPercent": 50 } },
+      "bosses": ["green_hag"],
+      "map": "cove_caves",
+      "room": "hag_market",
+      "scaling": { "target": "moderate", "pool": [] },
+      "win": {
+        "text": "Tallow's body crumples like an empty sack, and out of it, laughing, something slips away into the smoke. In the ashes of her stall you find her book, half burned: the book of the unmade, its last forty pages all one buyer, initialled O. V.",
+        "flags": [{ "set": "~ch2_market_burned" }, { "set": "~ch2_market_done" }, { "set": "arc.crown.clue_5" }]
+      },
+      "lose": {
+        "text": "You wake on the beach with the cliff glowing green above you. The market is ash, Tallow is gone, and a half-burned book lies by your hand: the book of the unmade, its last forty pages all one buyer, initialled O. V.",
+        "flags": [{ "set": "~ch2_market_burned" }, { "set": "~ch2_market_done" }, { "set": "arc.crown.clue_5" }],
+        "goto": "cove_camp",
+        "minutes": 240
+      },
+      "flee": {
+        "text": "You run through the smoke with the hag's laughter behind you. When you look back, the market is burning and Tallow is gone. A half-burned book lies on the cave floor where you fell: the book of the unmade, initialled O. V. on every last page.",
+        "flags": [{ "set": "~ch2_market_burned" }, { "set": "~ch2_market_done" }, { "set": "arc.crown.clue_5" }],
+        "goto": "cove_camp",
+        "minutes": 30
+      }
+    }
+  ],
+  "beats": [
+    {
+      "id": "wren_salt",
+      "text": "Wren asks the hero to spare Salt.",
+      "trigger": { "all": [{ "flag": "~ch2_salt_beaten" }, { "flag": "world.wren_status", "eq": "in_party" }] },
+      "scenes": ["salt_s_sloop"],
+      "outcome": { "text": "Wren crouches by the beaten captain and pats his cheek. \"Don't kill him, friend. He owes me a rematch, and I want it honest.\"" }
+    },
+    {
+      "id": "ilse_book",
+      "text": "Ilse reads the book of the unmade.",
+      "trigger": { "all": [{ "flag": "arc.crown.clue_5" }, { "flag": "world.ilse_status", "eq": "in_party" }] },
+      "scenes": ["tallow_s_market", "cove_camp"],
+      "outcome": { "text": "Ilse runs a finger down the crossed-out names, her lips moving. \"Every one of these is somebody,\" she says. \"Somebody should give them back.\"" }
+    },
+    {
+      "id": "brannoc_chest",
+      "text": "Brannoc weighs a hollow coin from the stash.",
+      "trigger": { "all": [{ "flag": "~ch2_hollow_chest" }, { "flag": "world.brannoc_status", "eq": "in_party" }] },
+      "scenes": ["wreckers_cove"],
+      "outcome": { "text": "Brannoc crushes one of the new crowns between finger and thumb and watches the ash fall. \"Washed in a dice hall, carried by a deserter, spent on faces,\" he says. \"Korrath weep.\"" }
+    }
+  ],
+  "quests": [
+    {
+      "id": "the_gamblers_tide",
+      "name": "The Gambler's Tide",
+      "objectives": [
+        { "id": "salt", "text": "Find out where the Gilded Gull's washed gold goes", "done": { "flag": "~ch2_salt_known" } },
+        { "id": "passage", "text": "Get passage to Wreckers' Cove on the Lucky Wake", "done": { "flag": "~ch2_passage" }, "if": { "flag": "~ch2_salt_known" } },
+        { "id": "reef", "text": "Run the reefs to Wreckers' Cove", "done": { "flag": "~ch2_reef_cleared" }, "if": { "flag": "~ch2_passage" } },
+        { "id": "caves", "text": "Find the end of the gold trail in the sea caves", "done": { "flag": "~ch2_stash_done" }, "if": { "flag": "~ch2_reef_cleared" } },
+        { "id": "market", "text": "Deal with Mother Tallow's market", "done": { "flag": "~ch2_market_done" }, "if": { "flag": "~ch2_stash_done" } },
+        { "id": "rest", "text": "Make camp on the beach before the voyage home", "done": { "flag": "~ch2_rested" }, "if": { "flag": "~ch2_market_done" } }
+      ]
+    }
+  ],
+  "flags": [
+    { "id": "~ch2_wash_seen", "description": "The hero watched the Gilded Gull's cage wash foreign gold into Salt's strongbox." },
+    { "id": "~ch2_salt_known", "description": "The hero knows Captain Salt carries the washed gold to Wreckers' Cove." },
+    { "id": "~ch2_deserter_known", "description": "The hero knows Salt deserted the Red Gull." },
+    { "id": "~ch2_marker", "description": "The hero won Quillon Vane's marker on Captain Salt at the dice table." },
+    { "id": "~ch2_dice_lost", "description": "The hero lost at the Gull's Dice (owes the Red Gull ten gold)." },
+    { "id": "~ch2_dice_caught", "description": "The hero was caught cheating at Vane's table and barred from it." },
+    { "id": "~ch2_wren_declined", "description": "Wren turned down the hero's speech." },
+    { "id": "~ch2_passage", "description": "The Lucky Wake will carry the hero to Wreckers' Cove." },
+    { "id": "~ch2_salt_bought", "description": "The hero bought Salt's passage with gold." },
+    { "id": "~ch2_salt_threatened", "description": "The hero forced Salt's hand with his desertion." },
+    { "id": "~ch2_salt_tricked", "description": "The hero tricked Salt with Vane's marker." },
+    { "id": "~ch2_salt_fought", "description": "The hero fought Salt's crew." },
+    { "id": "~ch2_salt_beaten", "description": "The hero beat Salt's crew and took the Lucky Wake." },
+    { "id": "~ch2_salt_fate", "description": "The hero decided Salt's fate after the fight." },
+    { "id": "~ch2_salt_spared", "description": "The hero let the beaten Salt go." },
+    { "id": "~ch2_salt_handed", "description": "The hero handed Salt to the Red Gull." },
+    { "id": "~ch2_day_crossing", "description": "The hero took the long day crossing." },
+    { "id": "~ch2_night_crossing", "description": "The hero ran the inner channel at night (merrow ambush)." },
+    { "id": "~ch2_weather_done", "description": "The hero tried to read the weather on the reef run." },
+    { "id": "~ch2_weather_read", "description": "The hero read Oshaya's weather right." },
+    { "id": "~ch2_reef_cleared", "description": "The Lucky Wake came through the Teeth." },
+    { "id": "~ch2_tunnel_passed", "description": "The hero got through the tide tunnel." },
+    { "id": "~ch2_ghast_done", "description": "The hero killed the ghast in the Red Gull stash." },
+    { "id": "~ch2_slipped_past", "description": "The hero slipped past the ghast without a fight." },
+    { "id": "~ch2_stash_done", "description": "The way past the stash cavern is open." },
+    { "id": "~ch2_share_taken", "description": "The hero took Salt's strongboxes from the stash." },
+    { "id": "~ch2_hollow_chest", "description": "The hero opened the chest of hollow crowns bound for the market." },
+    { "id": "~ch2_face_bought", "description": "The hero bought a face from Mother Tallow with a memory." },
+    { "id": "~ch2_bargained", "description": "The hero talked Mother Tallow into showing the book of the unmade." },
+    { "id": "~ch2_market_burned", "description": "The hero burned Mother Tallow's market (chapter 3: Tallow joins the coronation fight)." },
+    { "id": "~ch2_market_done", "description": "The hero is done with Mother Tallow's market." },
+    { "id": "~ch2_rested", "description": "The hero slept at the cove camp (level 4 milestone)." },
+    { "id": "~ch2_wren_talk", "description": "Wren told the hero about her rematch with Salt." }
+  ],
+  "endings": [
+    {
+      "id": "ch2_to_blightwood",
+      "name": "The Road to the Blightwood",
+      "text": "The hollow gold was washed at the Gilded Gull, carried by a deserter, and spent at a hag's market on faces, and every slip was signed O. V. The trail leads north now, past Dawnspire Keep, into the Blightwood and the ruins of Old Vaelthorn, where a forge is waiting for a crown.",
+      "next": "arc2_ch3_blightwood_mint"
+    }
+  ]
+}

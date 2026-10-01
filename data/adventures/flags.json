@@ -2031,7 +2031,8 @@
         "fort_kestrel_gallows",
         "side_quests",
         "fennicks_rest_wager",
-        "wreckers_cove"
+        "wreckers_cove",
+        "fennicks_rest_hall"
       ],
       "readBy": [
         "fort_kestrel_gallows",
@@ -2317,7 +2318,9 @@
       "setBy": [
         "korrath_shrine_oath",
         "hollow_crown_choice",
-        "side_quests"
+        "side_quests",
+        "wreckers_cove",
+        "tallow_s_market"
       ],
       "readBy": [
         "epilogue_deepanvil",
@@ -2398,7 +2401,8 @@
       "setBy": [
         "fennicks_rest_hall",
         "salt_s_sloop",
-        "side_quests"
+        "side_quests",
+        "cove_camp"
       ],
       "readBy": [
         "epilogue_deepanvil",
