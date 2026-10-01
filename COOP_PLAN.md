@@ -45,7 +45,10 @@ So a friend can already play **hot-seat** today: sit at the same PC, take a comp
 5. **Leaving.** The guest's hero becomes an AI companion (or is parked at the nearest town as "waiting", like a companion who left) so the host can keep playing.
 6. **Hardcore mode.** A dead guest hero is final for that character; the guest can build a new one at the next town, like the host's "new hero, same world".
 
-## 5. Option C later (web edition, free)
+## 5. Option C (web edition, free) — built (C009–C009c, 2026-10-02)
+
+**Status: built.** The public PeerJS broker (`0.peerjs.com`) was chosen. Host page: Table → "Allow a friend to join over the internet" opens a PeerJS room (`solo-dnd-<10 chars>`, kept in localStorage with the join code, so the link survives reloads) and admits each data connection through the same table door as the LAN `/ws` (`src/host/tableDoor.ts`, `src/client/net/roomHost.ts`). Guest page: `?room=…&join=…` runs no host, only `PeerTransport` (`src/client/net/peer.ts` + the lazy PeerJS adapter `peerjs.ts`). Checked against the real broker by `scripts/web-coop-screens.ts` (§9, rows W1–W8). Original plan:
+
 
 - A `PeerTransport` over a WebRTC data channel: the host page runs `InPageHost`, the guest page sends commands and receives events through the channel. Same protocol, same seat rules.
 - Needs **signalling** to exchange the WebRTC offer: GitHub Pages cannot host that. Choices: a public PeerJS broker (free, third party, no data stored beyond the handshake), or a tiny relay the owner hosts. Decide when B is done.
@@ -110,3 +113,19 @@ Automated part: `npm run build`, then `npx tsx scripts/coop-screens.ts` (two iso
 | 13 | Spectator joins: suggest only, no level-up/toggles | owner, by hand | covered by coopView.test.ts |
 
 Seen in the run, fixed in C008b: the guest's hero view (right column) and Character screen showed the host's hero (now the guest's own, `viewedHero` in client/net/coopView.ts); refused commands' error events went to every page (now only the sender's socket: `GameHost.send(cmd, seat, from)` + `on((e, from) => …)`, test src/server/coopErrors.test.ts). Script re-run after the fixes: all steps ok.
+
+### Web edition rows (C009c)
+
+Automated part: `npm run build:web`, `npx vite preview --mode web --port 4199 --strictPort` (background), then `npx tsx scripts/web-coop-screens.ts` (two isolated headless Edge pages + a phone-sized page; the REAL broker `0.peerjs.com`, so it needs internet; screenshots `userdata/shots/webcoop-*.png`; exit 1 = failed step or page error, exit 3 = broker unreachable). Run 2026-10-02: every step ok, 0 page errors on all three pages.
+
+| # | Step | How | Result 2026-10-02 |
+|---|------|-----|-------------------|
+| W1 | Host (web) opens Table, ticks allow-join: the room opens on the broker; room link `?room=solo-dnd-…&join=CODE`, QR, privacy + keep-open notes | script (webcoop-02) | ok |
+| W2 | Guest opens the room link: join screen | script (webcoop-03; phone size webcoop-12) | ok |
+| W3 | Guest joins as player over WebRTC → creator → Quick Build → "Add to the party" → game screen with Suggest buttons | script (webcoop-04, -05) | ok |
+| W4 | No error banner on either page after joining | script | ok |
+| W5 | Guest suggests; host sees "Kim suggests: …" and takes it | script (webcoop-07, -08, -09) | ok |
+| W6 | Host's Table panel lists the guest seat | script (webcoop-10) | ok |
+| W7 | Guest reloads the room link: the stored token reclaims the seat (game screen, no creator) | script (webcoop-11) | ok |
+| W8 | Host page reloads or closes: the guest page redials and is back once the host page is open again | tests (tests/webSmoke.test.ts, tests/webCoopRoom.test.ts with a fake broker) | not clicked against the real broker |
+| W9 | Two different networks (e.g. a friend at home on another ISP, or a phone on mobile data) connect through the public site | owner, by hand | not run (both test pages ran on one PC; behind strict NATs PeerJS's default config falls back to its public TURN relays `*.turn.peerjs.com`; networks that block WebRTC can't join) |

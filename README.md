@@ -49,7 +49,16 @@ The Windows edition can seat friends on the same network (home Wi-Fi or cable) a
 
 Saves, settings, voice and the AI stay with the host. **Duo mode**: no friend at hand? Click **+ Add a hero** in the party panel to play two heroes yourself.
 
-The web edition (GitHub Pages) has no co-op yet.
+### Play with a friend in the browser
+
+The web edition can seat a friend too, and they don't need to be on your network:
+
+1. Start or load a game, open **Table** and tick **Allow a friend to join over the internet**. After a moment the panel shows a **room link** like `https://kristian-dyrbye.github.io/DnD-game/?room=solo-dnd-…&join=ABC234` and its QR code.
+2. Send your friend the link (or let them scan the QR code). They join as a Player or Spectator exactly as above; everything else (who decides, hero chooser, fights per seat, lending, leaving) works the same.
+3. **Keep your page open** while you play: the game runs in your browser tab, and your friend's page talks to it directly. If you close or reload it, your friend's page reconnects by itself once yours is back. The link stays the same across reloads in the same browser, so you don't need to resend it.
+4. **Saves stay in your browser** (the host's). Your friend's page keeps no game or saves, only their seat, so reloading takes the same seat again.
+
+**Privacy**: to find each other, the two pages use the free public PeerJS service (`0.peerjs.com`). During that handshake it sees both pages' internet (IP) addresses and the room name. The game itself (story, choices, rolls, names) then goes straight from page to page over an encrypted WebRTC connection and does not pass through the broker. Only when two networks can't reach each other directly does WebRTC fall back to PeerJS's free relay servers (`*.turn.peerjs.com`), which pass the encrypted data along without being able to read it. The host's browser only contacts the broker while joining is ticked. Some strict networks (corporate or school) block WebRTC entirely; then the friend's page keeps trying to connect.
 
 ## How to play
 
@@ -87,7 +96,7 @@ npm run build:web    # web edition (no server, no AI) in dist-web/
 
 Test shortcuts in the browser: `#creator`, `#quickbuild-<class>`, `#play-<class>` (start at once), `#play-<class>+map`, `#play-<class>+scars`, `#combat-<class>` (combat sandbox), `#load` (save browser).
 
-Co-op check with two headless Edge pages (host + guest, mock AI, temp saves): `npm run build`, then `npx tsx scripts/coop-screens.ts`. It joins a guest, adds their hero, sends a suggestion the host takes, and writes screenshots to `userdata/shots/coop-*.png`. Things it can't do (scan the QR code with a real phone, a second PC on the network) are in the manual checklist in [COOP_PLAN.md](COOP_PLAN.md) §9.
+Co-op check with two headless Edge pages (host + guest, mock AI, temp saves): `npm run build`, then `npx tsx scripts/coop-screens.ts`. It joins a guest, adds their hero, sends a suggestion the host takes, and writes screenshots to `userdata/shots/coop-*.png`. Things it can't do (scan the QR code with a real phone, a second PC on the network) are in the manual checklist in [COOP_PLAN.md](COOP_PLAN.md) §9. The web edition's version uses the real PeerJS broker (needs internet): `npm run build:web`, `npx vite preview --mode web --port 4199 --strictPort` in a second terminal, then `npx tsx scripts/web-coop-screens.ts` (screenshots `userdata/shots/webcoop-*.png`; exit code 3 means the broker was unreachable).
 
 - **Architecture**: see [ARCHITECTURE.md](ARCHITECTURE.md). The rules engine (`src/engine`) is pure TypeScript shared by server and client; the server owns the game session; the client only renders.
 - **Writing adventures**: see [ADVENTURE_FORMAT.md](ADVENTURE_FORMAT.md). Adventures are JSON files in `data/adventures/`, validated at load time. Campaigns are listed in `src/host/campaigns.ts` (see "Campaigns" in the format guide); the campaign bibles are `data/adventures/DESIGN.md` and `DESIGN_ARC2.md`.

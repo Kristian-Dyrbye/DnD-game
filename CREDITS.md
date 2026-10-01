@@ -12,6 +12,10 @@ This work includes material from the System Reference Document 5.2.1 ("SRD 5.2.1
 
 The web edition published by `.github/workflows/pages.yml` redistributes the 3D models, music and sound effects listed below: the workflow fetches them with the same scripts and verified hashes as Setup, and copies them into the site next to a copy of this file. All of them are CC0, which allows redistribution. The Piper voices are **not** part of the web edition (it uses the browser's own speech), and the SRD attribution above applies to the rules data bundled in the site.
 
+### Code libraries in the web edition
+
+- **PeerJS** 1.5.5 (https://github.com/peers/peerjs), MIT License, Copyright (c) 2015 Michelle Bu and Eric Zhang, http://peerjs.com. Bundled (with its small MIT dependencies) in a separate chunk that loads only when the host allows a friend to join, or on a friend's room-link page. Co-op connections are set up through the public PeerJS broker `0.peerjs.com` (see "Play with a friend in the browser" in the README for what it sees).
+
 ## 3D models
 
 All 3D models are downloaded on the player's machine by `scripts/assets-fetch.mjs` from the authors' official distribution points (listed in `assets/manifest.json`, with the exact files, sizes and sha256 hashes). All are released under **CC0 1.0 Universal (public domain dedication)**. Attribution isn't required, but we credit the authors gladly. Licences were verified on 2026-09-29.
