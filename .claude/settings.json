@@ -21,6 +21,7 @@
       "Bash(git restore *)",
       "Bash(git checkout -- *)",
       "Bash(git stash*)",
+      "Bash(git merge *)",
       "Bash(ollama list*)",
       "Bash(ollama pull *)",
       "Bash(ollama show *)",
