@@ -64,9 +64,9 @@ echo ================================================
 node scripts\loop-watch.mjs --next
 echo.
 
-REM Each call is a brand-new session = fresh, cleared context.
-REM stream-json emits every step as it happens; loop-watch.mjs prints it live and writes the logs.
-claude -p "Follow CLAUDE.md exactly: read brain.md, complete exactly ONE assignment using the Session Protocol, update brain.md, commit, and write loop_status.txt. At most one helper subagent at a time (CLAUDE.md section 2)." --permission-mode acceptEdits --max-turns %MAX_TURNS% --output-format stream-json --verbose 2>&1 | node scripts\loop-watch.mjs "!LOG!"
+REM Each call = new session, clean context, model Opus 5.5.
+REM loop-watch.mjs prints the stream-json live + logs it.                    
+claude -p "Follow CLAUDE.md exactly: read brain.md, complete exactly ONE assignment using the Session Protocol, update brain.md, commit, and write loop_status.txt. At most one helper subagent at a time (CLAUDE.md section 2)." --model claude-opus-5-5 --permission-mode acceptEdits --max-turns %MAX_TURNS% --output-format stream-json --verbose 2>&1 | node scripts\loop-watch.mjs "!LOG!"
 
 set STATUS=
 set /p STATUS=<loop_status.txt
