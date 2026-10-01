@@ -496,6 +496,18 @@ export const en = {
   'action.describeAria': 'Describe what you do',
   'action.act': 'Act',
   'action.webHint': 'Use the buttons for best results: typed text is matched by keywords only.',
+  'action.actorAria': 'Who tries “{action}”',
+  'action.actorBonus': '{name} ({bonus})',
+  'action.proposalsAria': 'Suggestions from the table',
+  'action.proposal': '{name} suggests: {label}',
+  'action.proposalTake': 'Do it',
+  'action.proposalDismiss': 'Ignore this suggestion',
+  'action.suggest': 'Suggest',
+  'action.suggestLabel': 'Suggest: {label}',
+  'action.suggestTitle': 'The host decides: your pick goes to them as a suggestion',
+  'action.suggestHint': 'The host decides what happens: your buttons and text reach them as suggestions.',
+  'action.spectatorHint': 'You are watching: your buttons and text reach the host as suggestions.',
+  'action.placeholderSuggest': 'Or suggest what the party does…',
 
   // Dice tray
   'dice.title': 'Dice',

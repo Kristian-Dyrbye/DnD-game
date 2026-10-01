@@ -303,6 +303,15 @@ input[type='color'] { width: 2.2rem; height: 1.8rem; border: 1px solid #4a3f30; 
 @keyframes die-land { from { transform: scale(1.25); } to { transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) { .die.d20.tumbling, .last-roll .die.d20.kept { animation: none; } }
 .suggestions button.idea { border-style: dashed; font-style: italic; }
+/* co-op (C006c): guests' proposals for the host, actor chooser beside a check button */
+.proposals { list-style: none; margin: 0 0 0.5rem; padding: 0; display: flex; flex-direction: column; gap: 0.3rem; }
+.proposals li { display: flex; align-items: center; gap: 0.4rem; }
+.proposals button.proposal { text-align: left; border-color: #c9a45c; background: #3a2f1c; box-shadow: 0 0 0 1px #c9a45c55; }
+.proposals span.proposal { font-style: italic; }
+.with-actor { display: inline-flex; align-items: stretch; gap: 0.2rem; }
+.dialogue-options .with-actor { display: flex; }
+.dialogue-options .with-actor button { flex: 1; }
+.actor-chooser { font: inherit; font-size: 0.85rem; background: #211c16; color: var(--fg); border: 1px solid #4a3f30; border-radius: 6px; padding: 0 0.3rem; }
 /* conversation (A129): the NPC's line above the reply options */
 .dialogue-panel { background: #211c16; border: 1px solid #5a4a30; border-left: 3px solid #c9a45c; border-radius: 6px; padding: 0.5rem 0.8rem; margin-bottom: 0.5rem; }
 .dialogue-line { margin: 0; font-style: italic; }

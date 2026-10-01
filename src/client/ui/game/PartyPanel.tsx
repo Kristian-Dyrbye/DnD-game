@@ -6,6 +6,7 @@ import { coins, t } from '../i18n';
 import { canLevelUp } from '../../../engine/character/leveling';
 import { MAX_COMPANIONS } from '../../../engine/party/companions';
 import { send } from '../../net/gameSocket';
+import { mayAddHero, partyRights, type PageSeat } from '../../net/coopView';
 import { scarLabel, scarLine } from './labels';
 import { srdText } from '../srdText';
 
@@ -80,30 +81,31 @@ export function partyOrder(companions: Character[], origins: Record<string, stri
   return [...companions.filter((c) => origins[c.id] === 'hero'), ...companions.filter((c) => origins[c.id] !== 'hero')];
 }
 
-export function PartyPanel({ hero, companions, origins = {}, onLevelUp, onAddHero, loyalty, controls }: { hero: Character; companions: Character[]; origins?: Record<string, string>; onLevelUp?: (id: string) => void; onAddHero?: () => void; loyalty?: Record<string, number>; controls?: Record<string, string> }) {
+export function PartyPanel({ hero, companions, origins = {}, onLevelUp, onAddHero, loyalty, controls, seat = { role: 'host' } }: { hero: Character; companions: Character[]; origins?: Record<string, string>; onLevelUp?: (id: string) => void; onAddHero?: () => void; loyalty?: Record<string, number>; controls?: Record<string, string>; seat?: PageSeat }) {
+  const heroRights = partyRights(seat, undefined, true);
   return (
     <aside class="party-panel" aria-label={t('party.title')}>
       <h2>{t('party.title')}</h2>
-      <MemberCard c={hero} lead {...(onLevelUp && { onLevelUp: () => onLevelUp(hero.id) })} />
+      <MemberCard c={hero} lead {...(onLevelUp && heroRights.levelUp && { onLevelUp: () => onLevelUp(hero.id) })} />
       {partyOrder(companions, origins).map((c) => {
         const isHero = origins[c.id] === 'hero';
         const control = controls?.[c.id] ?? 'ai';
-        // A guest's hero (control seat:<id>) is theirs: no control toggle and no level-up from here.
-        const seated = control.startsWith('seat:');
+        // A guest's hero (control seat:<id>) is theirs: the host gets no toggle or level-up for it; guests only level their own.
+        const rights = partyRights(seat, control, false);
         const toggle = () => send({ type: 'companion_control', companionId: c.id, control: control === 'player' ? 'ai' : 'player' });
         return (
           <MemberCard
             key={c.id}
             c={c}
             isHero={isHero}
-            {...(isHero && !seated && onLevelUp && { onLevelUp: () => onLevelUp(c.id) })}
+            {...(isHero && rights.levelUp && onLevelUp && { onLevelUp: () => onLevelUp(c.id) })}
             {...(!isHero && loyalty?.[c.id] !== undefined && { loyalty: loyalty[c.id] })}
-            {...(!seated && { control: control === 'player' ? ('player' as const) : ('ai' as const), onToggle: toggle })}
+            {...(rights.toggle && { control: control === 'player' ? ('player' as const) : ('ai' as const), onToggle: toggle })}
           />
         );
       })}
       {companions.length === 0 && <p class="hint small">{t('party.noCompanions')}</p>}
-      {onAddHero && companions.length < MAX_COMPANIONS && (
+      {onAddHero && mayAddHero(seat, controls) && companions.length < MAX_COMPANIONS && (
         <button type="button" class="link-button small" onClick={onAddHero} title={t('party.addHeroTitle')}>
           {t('party.addHero')}
         </button>

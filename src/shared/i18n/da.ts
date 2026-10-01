@@ -498,6 +498,18 @@ export const da: Partial<Record<MessageKey, string>> = {
   'action.describeAria': 'Beskriv, hvad du gør',
   'action.act': 'Gør det',
   'action.webHint': 'Brug knapperne for det bedste resultat: skrevet tekst genkendes kun ud fra nøgleord.',
+  'action.actorAria': 'Hvem forsøger “{action}”',
+  'action.actorBonus': '{name} ({bonus})',
+  'action.proposalsAria': 'Forslag fra bordet',
+  'action.proposal': '{name} foreslår: {label}',
+  'action.proposalTake': 'Gør det',
+  'action.proposalDismiss': 'Se bort fra forslaget',
+  'action.suggest': 'Foreslå',
+  'action.suggestLabel': 'Foreslå: {label}',
+  'action.suggestTitle': 'Værten bestemmer: dit valg sendes til værten som et forslag',
+  'action.suggestHint': 'Værten bestemmer, hvad der sker: dine knapper og din tekst når frem som forslag.',
+  'action.spectatorHint': 'Du ser med: dine knapper og din tekst når frem til værten som forslag.',
+  'action.placeholderSuggest': 'Eller foreslå, hvad gruppen gør…',
 
   // Terninger
   'dice.title': 'Terninger',

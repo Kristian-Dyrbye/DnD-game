@@ -10,7 +10,8 @@ import { useMemo, useState } from 'preact/hooks';
 import { templateFromArea, templateFromCaster, previewArea } from '../../../engine/combat/aoe';
 import { attackProfiles, checkAttack, type AttackProfile } from '../../../engine/combat/attack';
 import type { CombatContext } from '../../../engine/combat/combatState';
-import { isControlled, type Encounter, type PlayerAction } from '../../../engine/combat/encounter';
+import type { Encounter, PlayerAction } from '../../../engine/combat/encounter';
+import { playsCreature, shownCreature } from '../../net/coopView';
 import { cellKey, type Point } from '../../../engine/combat/grid';
 import { reachableSquares } from '../../../engine/combat/movement';
 import { lowestSlotFor, reachProblem, spellEconomy, spellRangeFt } from '../../../engine/combat/castAction';
@@ -43,7 +44,7 @@ type Mode =
 
 const SKILL_NAME = (s: string) => s.replace('_', ' ').replace(/^./, (m) => m.toUpperCase());
 
-export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: { enc: Encounter; ctx: CombatContext; act: (a: PlayerAction) => string | undefined; onLeave?: () => void; leaveLabel?: string; narration?: string | undefined }) {
+export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration, seat = 'host', waitingText }: { enc: Encounter; ctx: CombatContext; act: (a: PlayerAction) => string | undefined; onLeave?: () => void; leaveLabel?: string; narration?: string | undefined; /** Co-op: this page's seat (actions only on its own creatures' turns). */ seat?: string; /** Co-op: "Waiting for <name>'s player". */ waitingText?: string }) {
   const [mode, setMode] = useState<Mode>({ kind: 'move' });
   const [hover, setHover] = useState<Point | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -54,11 +55,11 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
   const [chosenView, setView] = useState<'2d' | '3d' | null>(null);
   const view = chosenView ?? settings.value?.performance.gridMode ?? '2d';
   const { state } = enc;
-  // The player acts for the hero and any companion toggled to player control.
+  // The player acts for the hero and any companion toggled to player control; in co-op only for this seat's creatures.
   const upNow = currentId(state.turns);
-  const heroId = upNow && isControlled(enc, upNow) ? upNow : enc.heroId;
+  const heroId = shownCreature(enc, upNow, seat);
   const hero = state.creatures[heroId] as Character | undefined;
-  const myTurn = enc.status === 'ongoing' && upNow === heroId && isControlled(enc, heroId);
+  const myTurn = enc.status === 'ongoing' && upNow === heroId && playsCreature(enc, heroId, seat);
   const budget = budgetOf(state.turns, heroId);
   const sides = enc.roster;
 
@@ -195,7 +196,7 @@ export function CombatScreen({ enc, ctx, act, onLeave, leaveLabel, narration }: 
         )}
         <section class="action-bar" aria-label={t('combat.actionsAria')}>
           {!myTurn ? (
-            <p class="hint small">{t(enc.status === 'ongoing' ? 'combat.waiting' : enc.status === 'won' ? 'combat.won' : 'combat.fallen')}</p>
+            <p class="hint small">{enc.status === 'ongoing' && waitingText ? waitingText : t(enc.status === 'ongoing' ? 'combat.waiting' : enc.status === 'won' ? 'combat.won' : 'combat.fallen')}</p>
           ) : (
             <>
               <span class={`econ ${budget.action ? 'on' : ''}`}>{t('combat.econ.action')}</span>

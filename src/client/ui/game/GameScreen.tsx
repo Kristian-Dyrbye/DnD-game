@@ -12,7 +12,8 @@ import { timeOfDay } from '../../../engine/world/clock';
 import { weatherEffects, type WeatherState } from '../../../engine/world/weather';
 import { CharacterPreview } from '../../three/LazyCharacterPreview';
 import { useEffect, useState } from 'preact/hooks';
-import { connection, dungeon, fight, gameState, heroFallen, joinCode, lastError, objective, send, storyLog, streaming } from '../../net/gameSocket';
+import { connection, dungeon, fight, gameState, heroFallen, joinCode, lastError, mySeat, objective, send, storyLog, streaming, waitingFor } from '../../net/gameSocket';
+import { pageSeat, seatId } from '../../net/coopView';
 import { DungeonPanel } from './DungeonPanel';
 
 /** Previews (reachable squares, attack checks) need a context; they never roll. */
@@ -49,6 +50,7 @@ export function GameScreen() {
     void loadSettings();
   }, []);
   const guest = joinCode.value !== null;
+  const seat = pageSeat(guest, mySeat.value);
   const hintOn = settings.value?.gameplay.objectiveHint ?? false;
   const voiceOn = settings.value?.tts.enabled ?? false;
   const [journalOpen, setJournalOpen] = useState(false);
@@ -69,6 +71,8 @@ export function GameScreen() {
       <CombatScreen
         enc={f.encounter}
         ctx={previewCtx}
+        seat={seatId(seat)}
+        {...(waitingFor.value && { waitingText: waitingFor.value.text })}
         narration={streaming.value?.text || [...storyLog.value].reverse().find((e) => e.kind === 'narration')?.text}
         act={(a) => {
           send({ type: 'combat_act', action: a });
@@ -174,7 +178,7 @@ export function GameScreen() {
           <span class="muted">{t('game.objective')}</span> {objective.value}
         </p>
       )}
-      {h && <PartyPanel hero={h} companions={state?.companions ?? []} origins={state?.origins ?? {}} onLevelUp={setLevelUpFor} {...(state && { onAddHero: startAddingHero })} loyalty={Object.fromEntries((state?.companions ?? []).map((c) => [c.id, Number(state?.flags[`world.${c.id}_loyalty`] ?? 50)]))} controls={(state?.extensions.party as { control?: Record<string, 'ai' | 'player'> } | undefined)?.control ?? {}} />}
+      {h && <PartyPanel hero={h} companions={state?.companions ?? []} origins={state?.origins ?? {}} onLevelUp={setLevelUpFor} {...(state && { onAddHero: startAddingHero })} loyalty={Object.fromEntries((state?.companions ?? []).map((c) => [c.id, Number(state?.flags[`world.${c.id}_loyalty`] ?? 50)]))} controls={(state?.extensions.party as { control?: Record<string, string> } | undefined)?.control ?? {}} seat={seat} />}
       {levelling && h && <LevelUpPanel key={levelling.id} hero={levelling} main={levelling.id === h.id} onClose={() => setLevelUpFor(null)} />}
       <main class="game-main">
         {connection.value !== 'open' && <p class="connection-note">{t(connection.value === 'connecting' ? (WEB_EDITION ? 'game.startingWeb' : 'game.connecting') : 'game.disconnected')}</p>}
