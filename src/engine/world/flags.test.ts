@@ -75,7 +75,7 @@ describe('flag names', () => {
 describe('FlagRegistry', () => {
   it('loads the campaign registry with types, values and defaults', () => {
     const reg = registry();
-    expect(reg.size).toBe(65);
+    expect(reg.size).toBe(89); // 65 arc 1 + 24 arc 2 (B003)
     expect(reg.get('arc.starter.reeve_attitude')).toMatchObject({ type: 'string', default: 'neutral', values: ['neutral', 'friendly', 'hostile'] });
     expect(reg.defaults()['arc.starter.reeve_attitude']).toBe('neutral');
     expect(readFlag({}, 'arc.starter.reeve_attitude', reg)).toBe('neutral');

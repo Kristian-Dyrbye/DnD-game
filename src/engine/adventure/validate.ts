@@ -68,6 +68,8 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
     if (companions) {
       const known = (id: string) => companions.companions.some((c) => c.id === id);
       if (o.recruit && !known(o.recruit)) errors.push(`${where}: recruit names unknown companion "${o.recruit}"`);
+      const arcs = companions.companions.find((c) => c.id === o.recruit)?.arcs;
+      if (o.recruit && arcs && !arcs.includes(adv.arcId ?? '')) errors.push(`${where}: companion "${o.recruit}" can only be recruited in arc ${arcs.join(', ')}`);
       for (const a of o.approval) if (!known(a.companion)) errors.push(`${where}: approval names unknown companion "${a.companion}"`);
       if (o.companionLeaves && !known(o.companionLeaves.id)) errors.push(`${where}: companionLeaves names unknown companion "${o.companionLeaves.id}"`);
       if (o.companionReturns && !known(o.companionReturns.id)) errors.push(`${where}: companionReturns names unknown companion "${o.companionReturns.id}"`);

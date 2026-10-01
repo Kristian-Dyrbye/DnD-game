@@ -325,3 +325,20 @@ All 330 in data/i18n/da/srd/monsters.json. Patterns to reuse:
 | Bardic Inspiration / Jack of All Trades / Tactical Mind / Indomitable / Remarkable Athlete | Bardisk inspiration / Tusindkunstner / Taktisk sans / Ukuelig / Bemærkelsesværdig atlet |
 | Sacred Weapon / Steady Aim / Surprised / Sapped / Enlarge / Reduce | Helligt våben / Roligt sigte / Overrumplet / Svækket / Forstør / Formindsk |
 | masteries in lines: Cleave/Graze/Nick/Push/Sap/Slow/Topple/Vex | Kløv/Strejf/Snit/Skub/Svæk/Sænk/Vælt/Drille (rules overlay) |
+
+## The Hollow Crown: companions, hooks, defeats (B003)
+
+Person names stay as they are (Brannoc Stonecount, Wren Thistle, Ferrin Salt, Gilt, Hesk, Ondra Vexx, Tallow); gods too (Korrath, Veyra, Fennick). B009–B012 reuse these terms.
+
+| English | Danish |
+|---|---|
+| Sister Ilse Varn | Søster Ilse Varn |
+| Mother Tallow | Moder Tallow |
+| hollow gold / the hollow tenth | hult guld / den hule tiendedel |
+| assay / assay seal / assayer | prøve / prøvesegl / guardein (Master Assayer = overguardein) |
+| the Thousand Faces / a Face / a bought face / borrowed face | De Tusind Ansigter / et Ansigt / et købt ansigt / lånt ansigt |
+| the Unmade / the Book of the Unmade | De Uskabte / De Uskabtes Bog |
+| (gambling) marker | gældsbevis |
+| launderer | hvidvasker |
+| Captain Ferrin Salt | kaptajn Ferrin Salt |
+| the Hollow Crown | Den Hule Krone |

@@ -1151,6 +1151,42 @@
     "threads/wanted/villain": {
       "hash": "8735d2e1",
       "text": "dusørjægere"
+    },
+    "threads/ash_in_the_till/name": {
+      "hash": "67e17ccc",
+      "text": "Aske i kassen"
+    },
+    "threads/ash_in_the_till/villain": {
+      "hash": "fe9b4e14",
+      "text": "en, der sender hult guld i omløb"
+    },
+    "threads/couriers_road/name": {
+      "hash": "59527369",
+      "text": "Kurerens vej"
+    },
+    "threads/couriers_road/villain": {
+      "hash": "64b682dc",
+      "text": "kureren for kvinden med to skygger"
+    },
+    "threads/hesks_daughter/name": {
+      "hash": "e21ab5b6",
+      "text": "Hesks datter"
+    },
+    "threads/hesks_daughter/villain": {
+      "hash": "0e877275",
+      "text": "Gilt"
+    },
+    "threads/salts_marker/name": {
+      "hash": "99ae78cb",
+      "text": "Salts gældsbevis"
+    },
+    "threads/salts_marker/villain": {
+      "hash": "55102735",
+      "text": "kaptajn Ferrin Salt"
+    },
+    "threads/the_unmade/name": {
+      "hash": "d6b9268a",
+      "text": "De Uskabte"
     }
   }
 }

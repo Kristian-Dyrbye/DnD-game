@@ -128,6 +128,102 @@
         "Jeg forlod ikke min familie for at følge en, der opfører sig som dem.",
         "Vi driver væk fra grunden til, at jeg kom med."
       ]
+    },
+    "companions/brannoc/name": {
+      "hash": "b657d0ea",
+      "text": "Brannoc Stonecount"
+    },
+    "companions/brannoc/personality": {
+      "hash": "e85301f9",
+      "text": "Brysk, tålmodig og pinligt retfærdig; vejer hvert ord, som var det mønt, og ler som en ambolt, der bliver tabt."
+    },
+    "companions/brannoc/goal": {
+      "hash": "d26a489f",
+      "text": "Give Jernhvælvet dets ære tilbage og finde sin fars prøvesegl i den hule tiendedel."
+    },
+    "companions/brannoc/voice": {
+      "hash": "997b044f",
+      "text": "Langsom Deepanvil-snerren; tæller sagte for sig selv, når han bliver vred."
+    },
+    "companions/brannoc/banter": {
+      "hash": "a69e062f",
+      "text": [
+        "Korrath vejer den hånd, der slår, lige så vel som slaget.",
+        "Guld, der lyver, er værre end slet intet guld.",
+        "Min far kunne høre ægte sølv klinge tværs over et torv.",
+        "Bid i den. Vej den. Stol så på den. I den rækkefølge."
+      ]
+    },
+    "companions/brannoc/grumbles": {
+      "hash": "25f40051",
+      "text": [
+        "En fair handel har to ærlige hænder. Jeg tæller dine.",
+        "Sådan bliver hovedbogen hul: én nem løgn ad gangen."
+      ]
+    },
+    "companions/ilse/name": {
+      "hash": "a6afa9db",
+      "text": "Søster Ilse Varn"
+    },
+    "companions/ilse/personality": {
+      "hash": "8e1c8684",
+      "text": "Lavmælt, søvnløs og stædigt venlig; skriver hver drøm ned før morgenmaden."
+    },
+    "companions/ilse/goal": {
+      "hash": "72f1ab5c",
+      "text": "Læse De Uskabtes Bog og give ét købt ansigt tilbage til sin ejer."
+    },
+    "companions/ilse/voice": {
+      "hash": "5179ba41",
+      "text": "Stille tempelsprog; går i stå midt i en sætning, når en drøm vender tilbage."
+    },
+    "companions/ilse/banter": {
+      "hash": "0bd43f00",
+      "text": [
+        "Jeg drømte om en smedje i nat. Den sov, og den var sulten.",
+        "Hvert ansigt, de sælger, tilhørte en, som nogen elskede.",
+        "Veyra gemmer de drømme, vi glemmer. Jeg prøver at gemme resten.",
+        "Skriv det ned. Hukommelsen er det første, de stjæler."
+      ]
+    },
+    "companions/ilse/grumbles": {
+      "hash": "2e7b299e",
+      "text": [
+        "Jeg kom ikke for at se mennesker blive til poster i en hovedbog.",
+        "Vær sød. Tænk over, hvem der betaler for det her."
+      ]
+    },
+    "companions/wren/name": {
+      "hash": "f5e9e07c",
+      "text": "Wren Thistle"
+    },
+    "companions/wren/personality": {
+      "hash": "b020fd8b",
+      "text": "Kvik, munter og skamløs ved spillebordet; kold som havis over for enhver, der snyder hende."
+    },
+    "companions/wren/goal": {
+      "hash": "08ba22fd",
+      "text": "Komme til at gøre regnskabet op med hvidvaskeren, der snød hende, og så vinde sin revanche mod Salt."
+    },
+    "companions/wren/voice": {
+      "hash": "2b946177",
+      "text": "Hurtig snak fra Brinescatter; kalder alle \"min ven\", lige indtil hun holder op."
+    },
+    "companions/wren/banter": {
+      "hash": "4384b1ee",
+      "text": [
+        "Fennick elsker et dristigt væddemål. Han betaler bare ikke ud på de dumme.",
+        "Fuppede terninger er ærlige, min ven. De fortæller dig altid, hvem der snyder.",
+        "Jeg stjæler aldrig fra nogen, der ikke har råd til at miste det. Som regel.",
+        "Dobbelt eller kvit? Nej? Dit tab."
+      ]
+    },
+    "companions/wren/grumbles": {
+      "hash": "1ce14eb5",
+      "text": [
+        "Bliver du ved med at aflevere folk til loven, begynder jeg at tælle udgangene.",
+        "Jeg er gået fra bedre spil end det her."
+      ]
     }
   }
 }

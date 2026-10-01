@@ -19,9 +19,11 @@ import { conditionContext, getProgress } from './runner';
 import { ConditionSchema, FlagWriteSchema, type Condition } from './schema';
 import { ENGLISH_MESSAGES, type Messages } from '../i18n';
 
-type When = { locations?: string[]; regions?: string[]; enemyTypes?: string[]; enemyTags?: string[]; if?: Condition; any?: When[] };
+type When = { campaigns?: string[]; locations?: string[]; regions?: string[]; enemyTypes?: string[]; enemyTags?: string[]; if?: Condition; any?: When[] };
 const WhenSchema: z.ZodType<When> = z.lazy(() =>
   z.object({
+    /** Campaigns (first-chapter adventure id, GameState.campaign; absent = the starter arc) the outcome belongs to. */
+    campaigns: z.array(z.string()).optional(),
     locations: z.array(z.string()).optional(),
     regions: z.array(z.string()).optional(),
     enemyTypes: z.array(z.string()).optional(),
@@ -60,6 +62,7 @@ export interface DefeatSituation {
 
 function matches(w: When, s: DefeatSituation, table: DefeatTable, db: SrdDatabase, state: GameState, flags?: FlagRegistry): boolean {
   if (w.any && !w.any.some((x) => matches(x, s, table, db, state, flags))) return false;
+  if (w.campaigns && !(state.campaign && w.campaigns.includes(state.campaign))) return false;
   if (w.locations && !(s.locationId && w.locations.includes(s.locationId))) return false;
   if (w.regions && !(s.regionId && w.regions.includes(s.regionId))) return false;
   if (w.enemyTypes && !s.enemies.some((id) => w.enemyTypes!.includes(db.monsters.get(id)?.creatureType ?? ''))) return false;

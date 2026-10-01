@@ -30,13 +30,13 @@ Hollow gold is turning up across Aurelmark: coins that ring true, pass every ass
 | 2 | Launder the coin through the gambling hall; buy more faces. | Dice, boats, a sea cave, the hag's face-market. |
 | 3 | Forge the Hollow Crown in the imperial foundry; crown a Face. | The Blightwood mint; the coronation that must not happen. |
 
-- **How the player learns the truth** (clue flags `arc.crown.clue_<n>`, 6 clues; 3 unlock the "name Vexx" option in ch3):
-  1. The ash coin's die mark is the Ironvault's own (ch0 assay).
-  2. The wererats were paid in real gold "by a woman with two shadows" (ch0).
-  3. Auditor Hesk does not know his own daughter's name (ch1 insight).
-  4. The vault ledger shows the tenth-hollow entry in Vexx's hand (ch1).
-  5. Mother Tallow sells faces and keeps a "book of the unmade" (ch2).
-  6. The foundry's imperial seal matches the Hollow Crown's mould (ch3).
+- **How the player learns the truth** (6 boolean clue flags; any 3 unlock the "name Vexx" option in ch3):
+  1. `arc.crown.clue_1`: the ash coin's die mark is the Ironvault's own (ch0 assay).
+  2. `arc.crown.clue_2`: the wererats were paid in real gold "by a woman with two shadows" (ch0).
+  3. `arc.crown.clue_3`: Auditor Hesk does not know his own daughter's name (ch1 insight).
+  4. `arc.crown.clue_4`: the vault ledger shows the tenth-hollow entry in Vexx's hand (ch1).
+  5. `arc.crown.clue_5`: Mother Tallow sells faces and keeps a "book of the unmade" (ch2).
+  6. `arc.crown.clue_6`: the foundry's imperial seal matches the Hollow Crown's mould (ch3).
 - **Possible fates** (`arc.crown.vexx_fate`): `unmasked` (exposed before the Ironvault court), `killed`, `bargained` (the hero trades her the one face she cannot forge: their own, a scar flag), `escaped`.
 
 ## 3. Starting state and cross-arc reads
@@ -69,7 +69,7 @@ Hollow gold is turning up across Aurelmark: coins that ring true, pass every ass
   - `deepanvil_gate`: toll and papers (Persuasion / Deception / show Dunmore's letter). Rep `ironvault_consortium` gates the price of everything in the Hold (price multiplier from lore).
   - `counting_house`: **Auditor Hesk** (replaced by a Face in the imported-world variant only if `arc.main.money_trail_proven` is false; otherwise the Face is his clerk). Insight DC 13 (clue 3). Three approaches to get at the ledgers: audit by the book (History), bribe, break in at night (Stealth, map scene).
   - `vault_audit`: the dungeon map: Ironvault's third vault, `animated_armor` ×2 guarding the hollow tenth; ledger entry in Vexx's hand (clue 4).
-  - `hesk_unmasked`: the first doppelganger fight: `doppelganger` ×1 (CR 3; the scaling keeps the boss) with `guard` ×2 who believe it is Hesk until it is hurt. Non-combat route: name the daughter in public (clue 3) and it flees (`arc.crown.gilt_exposed` = false; the Face returns in ch3).
+  - `hesk_unmasked`: the first doppelganger fight: `doppelganger` ×1 (CR 3; the scaling keeps the boss) with `guard` ×2 who believe it is Hesk until it is hurt. Non-combat route: name the daughter in public (clue 3) and it flees (`arc.crown.gilt_fled` = true, `arc.crown.gilt_exposed` stays false; the Face returns in ch3). Winning the fight sets `arc.crown.gilt_exposed` = true.
   - `ironvault_court`: outcome scene. The Consortium either hires the hero (letter of commission, −20% at Ironvault shops) or blames them (`world.player_outlawed` = true until ch3 clears it). Second companion offer: **Sister Ilse Varn** (see §9).
   - `thane_s_rest`: long rest; **[LEVEL 3]**. Ending → `next: arc2_ch2_gamblers_tide`.
 - **Encounters:** `animated_armor` ×2; `doppelganger` ×1 + `guard` ×2.
@@ -79,7 +79,7 @@ Hollow gold is turning up across Aurelmark: coins that ring true, pass every ass
 - **Purpose:** the swashbuckling turn. Lighter tone, dice and boats, the hag.
 - **Scenes:**
   - `fennicks_rest_hall`: the gambling hall where hollow gold is washed. A dice game as a check sequence (Sleight of Hand / Insight / honest luck with disadvantage) that can win the launderer's marker. Third companion: **Wren Thistle** (see §9), who cheats on the hero's side if asked (rep `red_gull_brotherhood` −5 if caught).
-  - `salt_s_sloop`: Captain Ferrin Salt. Conversation ≥ 3 approaches: buy him out, threaten (he is a deserter: `red_gull_brotherhood` knows), trick (Deception with Wren's marker). Fight if it fails: `pirate` ×4 + `bandit_captain` ×1 on a ship-deck map.
+  - `salt_s_sloop`: Captain Ferrin Salt. Conversation ≥ 3 approaches: buy him out, threaten (he is a deserter: `red_gull_brotherhood` knows), trick (Deception with Wren's marker). Fight if it fails: `pirate` ×4 + `bandit_captain` ×1 on a ship-deck map. If Salt walks away alive without being bought out, `arc.crown.salt_unpaid` = true (he still holds the hero's marker).
   - `reef_run`: travel event chain by boat: Oshaya's weather (uses the weather system), Survival/Athletics checks, a `merrow` ×2 ambush if the hero chose the night crossing.
   - `wreckers_cove`: dungeon map with fog, sea caves; "something that eats": `gray_ooze` ×2 then `ghast` ×1 among the Red Gull stash (the Gulls expect a share: `world.red_gull_debt` += 50 unless rep ≥ 30).
   - `tallow_s_market`: **Mother Tallow** (night hag) sells faces. The hero can buy, bargain or burn. Buying a face (a disguise flag `arc.crown.borrowed_face` usable once in ch3) costs a memory: a permanent scar entry "the memory of a name" (scar system, cosmetic) and `world.hag_bargain` = true. Burning the market starts the fight early: `green_hag` ×1 stands in for Tallow here (she escapes; the real fight is ch3). Clue 5 either way.
@@ -110,6 +110,8 @@ Milestone levels at the scenes marked above (level-set outcome, as arc 1 does): 
 | `ilse` | Sister Ilse Varn | Human wizard (Veyra, dreams) | Dreams the Sleeping Forge; reads the unmade book. | clues shared, mercy to the unmade / burning the market | "The Book of the Unmade": restore one bought face. |
 | `wren` | Wren Thistle | Halfling rogue (Fennick) | Cheats for a living, hates being cheated; the launderer stiffed her. | winning, sparing Salt / handing people to the law | "Double or Nothing": Salt's rematch at the hall. |
 
+Flags (B003, `world.*` like arc 1's companions so later arcs can read them): `world.brannoc_status` / `world.brannoc_loyalty`, `world.ilse_status` / `world.ilse_loyalty`, `world.wren_status` / `world.wren_loyalty`. Their roster entries list `arcs: ["crown"]`: the validator rejects a `recruit` of them from any other arc.
+
 Models: existing CC0 packs cover dwarf, human and halfling body types with the outfit system; no new assets required (confirm with `equipmentLook`).
 
 ## 10. Endings (evaluated in `epilogue_deepanvil`, first match wins)
@@ -136,7 +138,9 @@ Reuse `defeat-outcomes.json`; add three arc-specific entries: "sold to the hall"
 | "The Courier's Road" | `arc.crown.courier_known` | hunt_fugitive (`brightwater`, `deepanvil_hold`) | clue 2 shared with Ilse |
 | "Hesk's Daughter" | `arc.crown.gilt_exposed` = false | rescue (`deepanvil_hold`) | sets `gilt_exposed` = true |
 | "Salt's Marker" | Salt alive and unpaid | negotiate (`fennicks_rest`) | clears `world.red_gull_debt` |
-| "The Unmade" | `world.hag_bargain` | fetch (`wreckers_cove`) | restores the memory scar |
+| "The Unmade" | `world.hag_bargain` | fetch (`wreckers_cove`) | restores the memory scar (`arc.crown.memory_restored` = true; the epilogue reads it) |
+
+Built in B003 as `data/tables/sidequests.json` threads `ash_in_the_till`, `couriers_road`, `hesks_daughter` (if `arc.crown.gilt_fled` and not exposed), `salts_marker` (if `arc.crown.salt_unpaid`; also clears it), `the_unmade`. The three defeat outcomes of §11 are `wardens_escort`, `sold_to_the_hall` and `borrowed_face` in `data/tables/defeat-outcomes.json`, limited to this campaign by `when.campaigns`.
 
 ## 13. What has to be built (proposed queue, one session each unless split)
 

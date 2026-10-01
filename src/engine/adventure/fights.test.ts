@@ -150,6 +150,27 @@ describe('defeat outcomes table', () => {
     expect(pickDefeatOutcome(defeats, { regionId: 'aurelmark', enemies: ['wolf'] }, db, s()).id).toBe('left_for_dead');
   });
 
+  it('arc 2 defeat outcomes only happen in The Hollow Crown (DESIGN_ARC2 §11)', () => {
+    const crown = () => Object.assign(s(), { campaign: 'arc2_ch0_hollow_coin' });
+    const isles = { locationId: 'fennicks_rest', regionId: 'brinescatter_isles', enemies: ['pirate'] };
+    const wood = { locationId: 'blightwood', regionId: 'gloamfen', enemies: ['worg'] };
+    expect(pickDefeatOutcome(defeats, isles, db, crown()).id).toBe('sold_to_the_hall');
+    expect(pickDefeatOutcome(defeats, isles, db, s()).id).toBe('fished_out_by_red_gulls');
+    expect(pickDefeatOutcome(defeats, wood, db, crown()).id).toBe('wardens_escort');
+    expect(pickDefeatOutcome(defeats, wood, db, s()).id).toBe('rescued_by_wardens');
+    const faced = crown();
+    faced.flags['arc.crown.borrowed_face'] = true;
+    const road = { regionId: 'aurelmark', enemies: ['bandit'] };
+    expect(pickDefeatOutcome(defeats, road, db, crown()).id).toBe('robbed_and_left');
+    const o = pickDefeatOutcome(defeats, road, db, faced, flags);
+    expect(o.id).toBe('borrowed_face');
+    applyDefeat(faced, o, { rng: Rng.fromSeed(1), lore, flags });
+    expect(faced.flags['arc.crown.borrowed_face']).toBe(false);
+    const sold = crown();
+    applyDefeat(sold, defeats.outcomes.find((x) => x.id === 'sold_to_the_hall')!, { rng: Rng.fromSeed(1), lore, flags });
+    expect(sold.flags['world.red_gull_debt']).toBe(30);
+  });
+
   it('applies heal, clock, money, item, relocation and times_defeated', () => {
     const st = s();
     st.hero.hp = 0;

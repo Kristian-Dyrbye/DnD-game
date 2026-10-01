@@ -1,6 +1,18 @@
 {
   "$source": "data/tables/defeat-outcomes.json",
   "strings": {
+    "outcomes/wardens_escort/text": {
+      "hash": "ff783fbb",
+      "text": "Lygtevogtere finder dig på en sti, der ikke fandtes for en time siden, og fører dig med bind for øjnene ud af Blightwood til Lygteborgen. Når du vender tilbage, har stierne flyttet sig igen."
+    },
+    "outcomes/sold_to_the_hall/text": {
+      "hash": "2056d4de",
+      "text": "Du vågner i et baglokale i spillehallen i Fennicks Hvile. Den, der slæbte dig ud, solgte din redning til huset, og nu holder Red Gulls dit gældsbevis."
+    },
+    "outcomes/borrowed_face/text": {
+      "hash": "5d123eb1",
+      "text": "Moder Tallows lånte ansigt glider ind over dit eget, idet du falder. Dine fjender ser en fremmed, mister interessen og lader dig ligge. Da du vågner, er ansigtet væk for altid."
+    },
     "outcomes/maws_spit/text": {
       "hash": "c3bae7fc",
       "text": "Svælget hæver sig og kaster dig op på sin rand, hvor du ligger og gisper. Noget dyrebart blev revet fra dig i mørket."

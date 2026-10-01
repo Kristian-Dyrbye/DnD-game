@@ -5,7 +5,7 @@ import loreJson from '../../../data/world/lore.json';
 import { loadSrd } from '../data/srdBundle';
 import { FlagRegistry } from '../world/flags';
 import { LoreSchema } from '../world/lore';
-import { flagsRead } from './conditions';
+import { evalCondition, flagsRead } from './conditions';
 import { SideQuestTablesSchema } from './sidequestTables';
 
 const db = loadSrd();
@@ -44,7 +44,7 @@ describe('side-quest tables', () => {
   });
 
   it('threads match the campaign bible: registry flags, valid write-backs, known places, quest types and foes', () => {
-    expect(t.threads).toHaveLength(15);
+    expect(t.threads).toHaveLength(20); // 15 from DESIGN §14 + 5 from DESIGN_ARC2 §12
     const types = new Set(t.questTypes.map((q) => q.id));
     const foes = new Set(t.antagonists.map((a) => a.id));
     for (const th of t.threads) {
@@ -58,6 +58,20 @@ describe('side-quest tables', () => {
         if ('set' in w) expect(registry.checkValue(id, w.value), `${th.id} ${id}`).toBeUndefined();
       }
       for (const r of th.writeBack.reputation) expect(lore.factions.some((f) => f.id === r.faction), `${th.id}: ${r.faction}`).toBe(true);
+    }
+  });
+
+  it('arc 2 hooks (DESIGN_ARC2 §12) open only from arc 2 flags, never in a fresh arc 1 world', () => {
+    const arc2 = ['ash_in_the_till', 'couriers_road', 'hesks_daughter', 'salts_marker', 'the_unmade'];
+    for (const id of arc2) {
+      const th = t.threads.find((x) => x.id === id)!;
+      expect(th, id).toBeDefined();
+      expect([...flagsRead(th.if)].some((f) => f.startsWith('arc.crown.') || f === 'world.hag_bargain'), id).toBe(true);
+      const fresh = { flags: {}, defaults: registry.defaults(), timeOfDay: 'day' as const, reputation: {}, level: 1, visited: new Set<string>() };
+      expect(evalCondition(th.if, fresh), `${id} open in a fresh world`).toBe(false);
+      // The foe must live in the region of every place the hook can be offered.
+      const foe = t.antagonists.find((a) => a.id === th.antagonist)!;
+      for (const l of th.locations) expect(foe.regions).toContain(lore.locations.find((x) => x.id === l)!.regionId);
     }
   });
 });

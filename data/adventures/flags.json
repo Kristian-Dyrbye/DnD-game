@@ -1,5 +1,5 @@
 {
-  "$comment": "World-flag registry for data/adventures/DESIGN.md. In descriptions, loc:<id> and fac:<id> reference lore.json ids. setBy/readBy name scene ids, chapter ids, or specials: ending, side_quests, defeat_outcomes, companion_quests.",
+  "$comment": "World-flag registry for data/adventures/DESIGN.md (arc 1) and DESIGN_ARC2.md (arc 2, arc.crown.*). In descriptions, loc:<id> and fac:<id> reference lore.json ids. setBy/readBy name scene ids, chapter ids, or specials: ending, side_quests, defeat_outcomes, companion_quests.",
   "specialIds": [
     "ending",
     "side_quests",
@@ -71,6 +71,51 @@
       "levelRange": [
         9,
         10
+      ]
+    },
+    {
+      "id": "arc2_ch0_hollow_coin",
+      "title": "The Hollow Coin",
+      "regionIds": [
+        "aurelmark"
+      ],
+      "levelRange": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "arc2_ch1_faces",
+      "title": "Faces in the Ledger",
+      "regionIds": [
+        "aurelmark"
+      ],
+      "levelRange": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "arc2_ch2_gamblers_tide",
+      "title": "The Gambler's Tide",
+      "regionIds": [
+        "brinescatter_isles"
+      ],
+      "levelRange": [
+        3,
+        4
+      ]
+    },
+    {
+      "id": "arc2_ch3_blightwood_mint",
+      "title": "The Blightwood Mint",
+      "regionIds": [
+        "gloamfen",
+        "aurelmark"
+      ],
+      "levelRange": [
+        4,
+        5
       ]
     }
   ],
@@ -269,6 +314,126 @@
       "id": "maw_final_seal",
       "chapter": "ch5_the_hungering_dark",
       "locationId": "the_maw"
+    },
+    {
+      "id": "brightwater_market",
+      "chapter": "arc2_ch0_hollow_coin",
+      "locationId": "brightwater"
+    },
+    {
+      "id": "assay_house",
+      "chapter": "arc2_ch0_hollow_coin",
+      "locationId": "brightwater"
+    },
+    {
+      "id": "mill_cellars",
+      "chapter": "arc2_ch0_hollow_coin",
+      "locationId": "brightwater"
+    },
+    {
+      "id": "wererat_den_rest",
+      "chapter": "arc2_ch0_hollow_coin",
+      "locationId": "brightwater"
+    },
+    {
+      "id": "korrath_shrine_oath",
+      "chapter": "arc2_ch0_hollow_coin",
+      "locationId": "brightwater"
+    },
+    {
+      "id": "road_east",
+      "chapter": "arc2_ch0_hollow_coin",
+      "locationId": "brightwater"
+    },
+    {
+      "id": "deepanvil_gate",
+      "chapter": "arc2_ch1_faces",
+      "locationId": "deepanvil_hold"
+    },
+    {
+      "id": "counting_house",
+      "chapter": "arc2_ch1_faces",
+      "locationId": "deepanvil_hold"
+    },
+    {
+      "id": "vault_audit",
+      "chapter": "arc2_ch1_faces",
+      "locationId": "deepanvil_hold"
+    },
+    {
+      "id": "hesk_unmasked",
+      "chapter": "arc2_ch1_faces",
+      "locationId": "deepanvil_hold"
+    },
+    {
+      "id": "ironvault_court",
+      "chapter": "arc2_ch1_faces",
+      "locationId": "deepanvil_hold"
+    },
+    {
+      "id": "thane_s_rest",
+      "chapter": "arc2_ch1_faces",
+      "locationId": "deepanvil_hold"
+    },
+    {
+      "id": "fennicks_rest_hall",
+      "chapter": "arc2_ch2_gamblers_tide",
+      "locationId": "fennicks_rest"
+    },
+    {
+      "id": "salt_s_sloop",
+      "chapter": "arc2_ch2_gamblers_tide",
+      "locationId": "fennicks_rest"
+    },
+    {
+      "id": "reef_run",
+      "chapter": "arc2_ch2_gamblers_tide",
+      "locationId": "fennicks_rest"
+    },
+    {
+      "id": "wreckers_cove",
+      "chapter": "arc2_ch2_gamblers_tide",
+      "locationId": "wreckers_cove"
+    },
+    {
+      "id": "tallow_s_market",
+      "chapter": "arc2_ch2_gamblers_tide",
+      "locationId": "wreckers_cove"
+    },
+    {
+      "id": "cove_camp",
+      "chapter": "arc2_ch2_gamblers_tide",
+      "locationId": "wreckers_cove"
+    },
+    {
+      "id": "dawnspire_muster_lite",
+      "chapter": "arc2_ch3_blightwood_mint",
+      "locationId": "dawnspire_keep"
+    },
+    {
+      "id": "blightwood_paths",
+      "chapter": "arc2_ch3_blightwood_mint",
+      "locationId": "blightwood"
+    },
+    {
+      "id": "vaelthorn_foundry",
+      "chapter": "arc2_ch3_blightwood_mint",
+      "locationId": "ruins_of_old_vaelthorn"
+    },
+    {
+      "id": "coronation",
+      "chapter": "arc2_ch3_blightwood_mint",
+      "locationId": "ruins_of_old_vaelthorn"
+    },
+    {
+      "id": "hollow_crown_choice",
+      "chapter": "arc2_ch3_blightwood_mint",
+      "locationId": "ruins_of_old_vaelthorn"
+    },
+    {
+      "id": "epilogue_deepanvil",
+      "chapter": "arc2_ch3_blightwood_mint",
+      "locationId": "deepanvil_hold"
     }
   ],
   "locationsUsed": [
@@ -316,13 +481,18 @@
     "commoner",
     "cultist",
     "cultist_fanatic",
+    "doppelganger",
     "fire_elemental",
+    "gargoyle",
     "ghast",
     "ghoul",
     "giant_rat",
     "giant_spider",
     "giant_toad",
     "gibbering_mouther",
+    "goblin_warrior",
+    "gray_ooze",
+    "green_hag",
     "grick",
     "grimlock",
     "guard",
@@ -351,6 +521,7 @@
     "swarm_of_rats",
     "tough",
     "warrior_veteran",
+    "wererat",
     "wight",
     "will_o_wisp",
     "wolf",
@@ -1211,7 +1382,8 @@
         "dawnspire_muster",
         "ending",
         "palace_undercroft",
-        "maw_final_seal"
+        "maw_final_seal",
+        "counting_house"
       ],
       "description": "Clue 4: fac:ironvault_consortium ledgers tie the Almonry to Choir funds."
     },
@@ -1325,7 +1497,9 @@
         "highcrown_burning",
         "defeat_outcomes",
         "side_quests",
-        "fort_kestrel_gallows"
+        "fort_kestrel_gallows",
+        "ironvault_court",
+        "coronation"
       ],
       "readBy": [
         "port_sorrel_docks",
@@ -1337,7 +1511,9 @@
         "side_quests",
         "almoners_masque",
         "palace_undercroft",
-        "emberpeak_ascent"
+        "emberpeak_ascent",
+        "deepanvil_gate",
+        "coronation"
       ],
       "description": "Hero is wanted by fac:crown_of_aurelmark or fac:saltwind_trading_company law."
     },
@@ -1355,7 +1531,8 @@
         "choir_of_teeth",
         "ending",
         "ashfall_road",
-        "maw_final_seal"
+        "maw_final_seal",
+        "coronation"
       ],
       "description": "Queen Isolde Varannis of fac:crown_of_aurelmark survives the Cantor's poison."
     },
@@ -1504,7 +1681,8 @@
       ],
       "readBy": [
         "ending",
-        "maw_final_seal"
+        "maw_final_seal",
+        "blightwood_paths"
       ],
       "description": "State of loc:the_maw after the finale; readable by future arcs."
     },
@@ -1536,7 +1714,8 @@
         "fort_kestrel_gallows",
         "dawnspire_vigil",
         "dawnspire_muster",
-        "highcrown_burning"
+        "highcrown_burning",
+        "dawnspire_muster_lite"
       ],
       "description": "Ser Corwin Ashvale, dismissed knight of fac:order_of_the_dawn_lance."
     },
@@ -1589,7 +1768,8 @@
       "readBy": [
         "ending",
         "choir_of_teeth",
-        "maw_final_seal"
+        "maw_final_seal",
+        "dawnspire_muster_lite"
       ],
       "description": "Corwin resolved \"The Broken Oath\" (knighted or Thane exposed)."
     },
@@ -1850,13 +2030,381 @@
         "defeat_outcomes",
         "fort_kestrel_gallows",
         "side_quests",
-        "fennicks_rest_wager"
+        "fennicks_rest_wager",
+        "wreckers_cove"
       ],
       "readBy": [
         "fort_kestrel_gallows",
-        "side_quests"
+        "side_quests",
+        "wreckers_cove"
       ],
       "description": "Gold owed to fac:red_gull_brotherhood for salvage."
+    },
+    {
+      "id": "arc.crown.saw_ash",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "brightwater_market"
+      ],
+      "readBy": [
+        "assay_house",
+        "side_quests"
+      ],
+      "description": "Hero saw a hollow coin crumble to ash at the loc:brightwater moneychanger's stall; opens the Ash in the Till side quest."
+    },
+    {
+      "id": "arc.crown.clue_1",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "assay_house"
+      ],
+      "readBy": [
+        "coronation"
+      ],
+      "description": "Clue 1: the ash coin's die mark is the fac:ironvault_consortium's own (Mistress Dunmore's assay)."
+    },
+    {
+      "id": "arc.crown.clue_2",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "wererat_den_rest",
+        "side_quests"
+      ],
+      "readBy": [
+        "coronation"
+      ],
+      "description": "Clue 2: the wererats were paid in true gold by a woman with two shadows."
+    },
+    {
+      "id": "arc.crown.clue_3",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "counting_house"
+      ],
+      "readBy": [
+        "hesk_unmasked",
+        "coronation"
+      ],
+      "description": "Clue 3: Auditor Hesk does not know his own daughter's name (Insight)."
+    },
+    {
+      "id": "arc.crown.clue_4",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "vault_audit",
+        "counting_house"
+      ],
+      "readBy": [
+        "coronation"
+      ],
+      "description": "Clue 4: the loc:deepanvil_hold vault ledger shows the tenth-hollow entry in Vexx's hand."
+    },
+    {
+      "id": "arc.crown.clue_5",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "tallow_s_market"
+      ],
+      "readBy": [
+        "coronation"
+      ],
+      "description": "Clue 5: Mother Tallow sells faces and keeps a book of the unmade."
+    },
+    {
+      "id": "arc.crown.clue_6",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "vaelthorn_foundry"
+      ],
+      "readBy": [
+        "coronation"
+      ],
+      "description": "Clue 6: the foundry's imperial seal matches the Hollow Crown's mould. Any three clues let the hero name Vexx at the coronation."
+    },
+    {
+      "id": "arc.crown.mint_fled",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "mill_cellars"
+      ],
+      "readBy": [
+        "mill_cellars",
+        "wererat_den_rest"
+      ],
+      "description": "The wererat mint under the loc:brightwater mill moved before the hero found it (2-day deadline)."
+    },
+    {
+      "id": "arc.crown.courier_known",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "wererat_den_rest"
+      ],
+      "readBy": [
+        "side_quests"
+      ],
+      "description": "Hero let the wererat go for the name of Vexx's courier; opens The Courier's Road."
+    },
+    {
+      "id": "arc.crown.gilt_exposed",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "hesk_unmasked",
+        "side_quests"
+      ],
+      "readBy": [
+        "coronation",
+        "side_quests"
+      ],
+      "description": "Gilt, the doppelganger wearing Auditor Hesk, was unmasked and beaten; otherwise Gilt fights at the coronation."
+    },
+    {
+      "id": "arc.crown.gilt_fled",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "hesk_unmasked"
+      ],
+      "readBy": [
+        "coronation",
+        "side_quests"
+      ],
+      "description": "Gilt fled when the hero named Hesk's daughter in public (the non-combat route); opens Hesk's Daughter."
+    },
+    {
+      "id": "arc.crown.borrowed_face",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "tallow_s_market",
+        "defeat_outcomes"
+      ],
+      "readBy": [
+        "coronation",
+        "defeat_outcomes"
+      ],
+      "description": "Hero bought a face from Mother Tallow; usable once to walk into the coronation as one of the Faces, or spent by a defeat."
+    },
+    {
+      "id": "arc.crown.salt_unpaid",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "salt_s_sloop",
+        "side_quests"
+      ],
+      "readBy": [
+        "side_quests"
+      ],
+      "description": "Captain Ferrin Salt lives and still holds the hero's unpaid marker; opens Salt's Marker."
+    },
+    {
+      "id": "arc.crown.crowned",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "coronation"
+      ],
+      "readBy": [
+        "epilogue_deepanvil",
+        "ending"
+      ],
+      "description": "A Face was crowned with the Hollow Crown (the False Coin ending)."
+    },
+    {
+      "id": "arc.crown.vexx_fate",
+      "type": "string",
+      "values": [
+        "at_large",
+        "unmasked",
+        "killed",
+        "bargained",
+        "escaped"
+      ],
+      "default": "at_large",
+      "setBy": [
+        "coronation",
+        "hollow_crown_choice"
+      ],
+      "readBy": [
+        "epilogue_deepanvil",
+        "ending"
+      ],
+      "description": "Fate of Master Assayer Ondra Vexx; bargained = the hero traded her their own face."
+    },
+    {
+      "id": "arc.crown.memory_restored",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "side_quests"
+      ],
+      "readBy": [
+        "epilogue_deepanvil"
+      ],
+      "description": "The Unmade side quest returned the memory the hero sold to Mother Tallow."
+    },
+    {
+      "id": "world.hag_bargain",
+      "type": "boolean",
+      "default": false,
+      "setBy": [
+        "tallow_s_market"
+      ],
+      "readBy": [
+        "side_quests",
+        "epilogue_deepanvil"
+      ],
+      "description": "Hero paid Mother Tallow with a memory (scar 'the memory of a name'); opens The Unmade."
+    },
+    {
+      "id": "world.hollow_crown",
+      "type": "string",
+      "values": [
+        "none",
+        "destroyed",
+        "crown",
+        "player"
+      ],
+      "default": "none",
+      "setBy": [
+        "hollow_crown_choice"
+      ],
+      "readBy": [
+        "epilogue_deepanvil",
+        "ending"
+      ],
+      "description": "What became of the Hollow Crown: destroyed by Korrath's hammer, handed to the Crown, or kept by the hero (a future hook)."
+    },
+    {
+      "id": "world.brannoc_status",
+      "type": "string",
+      "values": [
+        "unmet",
+        "met",
+        "in_party",
+        "waiting",
+        "left",
+        "betrayed",
+        "dead"
+      ],
+      "default": "unmet",
+      "setBy": [
+        "korrath_shrine_oath"
+      ],
+      "readBy": [
+        "korrath_shrine_oath",
+        "epilogue_deepanvil",
+        "ending"
+      ],
+      "description": "Brannoc Stonecount (arc 2 companion, DESIGN_ARC2 §9): recruited at korrath_shrine_oath."
+    },
+    {
+      "id": "world.brannoc_loyalty",
+      "type": "number",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "setBy": [
+        "korrath_shrine_oath",
+        "hollow_crown_choice",
+        "side_quests"
+      ],
+      "readBy": [
+        "epilogue_deepanvil",
+        "ending"
+      ],
+      "description": "Brannoc Stonecount's loyalty 0–100 (starts 50; ≤ 20 may leave)."
+    },
+    {
+      "id": "world.ilse_status",
+      "type": "string",
+      "values": [
+        "unmet",
+        "met",
+        "in_party",
+        "waiting",
+        "left",
+        "betrayed",
+        "dead"
+      ],
+      "default": "unmet",
+      "setBy": [
+        "ironvault_court"
+      ],
+      "readBy": [
+        "ironvault_court",
+        "epilogue_deepanvil",
+        "ending"
+      ],
+      "description": "Sister Ilse Varn (arc 2 companion, DESIGN_ARC2 §9): recruited at ironvault_court."
+    },
+    {
+      "id": "world.ilse_loyalty",
+      "type": "number",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "setBy": [
+        "ironvault_court",
+        "tallow_s_market",
+        "hollow_crown_choice",
+        "side_quests"
+      ],
+      "readBy": [
+        "epilogue_deepanvil",
+        "ending"
+      ],
+      "description": "Sister Ilse Varn's loyalty 0–100 (starts 50; ≤ 20 may leave)."
+    },
+    {
+      "id": "world.wren_status",
+      "type": "string",
+      "values": [
+        "unmet",
+        "met",
+        "in_party",
+        "waiting",
+        "left",
+        "betrayed",
+        "dead"
+      ],
+      "default": "unmet",
+      "setBy": [
+        "fennicks_rest_hall"
+      ],
+      "readBy": [
+        "fennicks_rest_hall",
+        "epilogue_deepanvil",
+        "ending"
+      ],
+      "description": "Wren Thistle (arc 2 companion, DESIGN_ARC2 §9): recruited at fennicks_rest_hall."
+    },
+    {
+      "id": "world.wren_loyalty",
+      "type": "number",
+      "default": 50,
+      "min": 0,
+      "max": 100,
+      "setBy": [
+        "fennicks_rest_hall",
+        "salt_s_sloop",
+        "side_quests"
+      ],
+      "readBy": [
+        "epilogue_deepanvil",
+        "ending"
+      ],
+      "description": "Wren Thistle's loyalty 0–100 (starts 50; ≤ 20 may leave)."
     }
   ]
 }

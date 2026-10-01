@@ -1,5 +1,5 @@
 {
-  "$comment": "Recruitable companions (spec §6; campaign bible DESIGN.md §11). Built from SRD rules like the hero (Quick Build plan + species/background), levelled to the party's level on joining. status/loyalty flags follow DESIGN §11 (loyalty 0–100, starts 50).",
+  "$comment": "Recruitable companions (spec §6; campaign bible DESIGN.md §11). Built from SRD rules like the hero (Quick Build plan + species/background), levelled to the party's level on joining. status/loyalty flags follow DESIGN §11 (loyalty 0–100, starts 50). Arc 2 companions (DESIGN_ARC2 §9) list `arcs`: only adventures of those arcs may recruit them (absent = any arc).",
   "companions": [
     {
       "id": "corwin",
@@ -145,6 +145,123 @@
       "grumbles": [
         "I did not leave my family to follow someone who acts like them.",
         "We are drifting from the reason I came."
+      ]
+    },
+    {
+      "id": "brannoc",
+      "name": "Brannoc Stonecount",
+      "classId": "cleric",
+      "subclassId": "life_domain",
+      "species": "dwarf",
+      "background": "acolyte",
+      "role": "healer",
+      "arcs": [
+        "crown"
+      ],
+      "personality": "Gruff, patient and scrupulously fair; weighs every word as if it were coin, and laughs like a dropped anvil.",
+      "goal": "Give the Ironvault back its honour, and find his father's assay seal in the hollow tenth.",
+      "voice": "Slow Deepanvil burr; counts under his breath when angry.",
+      "factions": [
+        "ironvault_consortium"
+      ],
+      "appearance": {
+        "outfit": "knight",
+        "head": "barbarian",
+        "build": "broad",
+        "skinTone": "#a0673e",
+        "primaryColor": "#8a6a2a",
+        "showHeadgear": false,
+        "showCape": true
+      },
+      "statusFlag": "world.brannoc_status",
+      "loyaltyFlag": "world.brannoc_loyalty",
+      "banter": [
+        "Korrath weighs the hand that strikes as well as the blow.",
+        "Gold that lies is worse than no gold at all.",
+        "My father could tell true silver by its ring across a market square.",
+        "Bite it. Weigh it. Then trust it. In that order."
+      ],
+      "grumbles": [
+        "A fair deal has two honest hands. I am counting yours.",
+        "This is how the ledger goes hollow: one easy lie at a time."
+      ]
+    },
+    {
+      "id": "ilse",
+      "name": "Sister Ilse Varn",
+      "classId": "wizard",
+      "subclassId": "evoker",
+      "species": "human",
+      "background": "sage",
+      "role": "ranged",
+      "arcs": [
+        "crown"
+      ],
+      "personality": "Soft-spoken, sleepless and stubbornly kind; writes down every dream before breakfast.",
+      "goal": "Read the Book of the Unmade and give one bought face back to its owner.",
+      "voice": "Quiet temple Common; trails off mid-sentence when a dream returns.",
+      "factions": [
+        "crown_of_aurelmark"
+      ],
+      "appearance": {
+        "outfit": "mage",
+        "head": "mage",
+        "build": "slim",
+        "skinTone": "#e0ac7e",
+        "primaryColor": "#5a4a8a",
+        "showHeadgear": false,
+        "showCape": true
+      },
+      "statusFlag": "world.ilse_status",
+      "loyaltyFlag": "world.ilse_loyalty",
+      "banter": [
+        "I dreamed of a forge last night. It was asleep, and it was hungry.",
+        "Every face they sell belonged to someone who was loved.",
+        "Veyra keeps the dreams we forget. I try to keep the rest.",
+        "Write it down. Memory is the first thing they steal."
+      ],
+      "grumbles": [
+        "I did not come to watch people become ledger entries.",
+        "Please. Think about who pays for this."
+      ]
+    },
+    {
+      "id": "wren",
+      "name": "Wren Thistle",
+      "classId": "rogue",
+      "subclassId": "thief",
+      "species": "halfling",
+      "background": "criminal",
+      "role": "striker",
+      "arcs": [
+        "crown"
+      ],
+      "personality": "Quick, cheerful and shameless at the table; cold as sea ice to anyone who cheats her.",
+      "goal": "Get even with the launderer who stiffed her, then win back her rematch with Salt.",
+      "voice": "Fast Brinescatter patter; calls everyone 'friend' right up until she doesn't.",
+      "factions": [
+        "red_gull_brotherhood"
+      ],
+      "appearance": {
+        "outfit": "rogue",
+        "head": "rogue",
+        "build": "slim",
+        "skinTone": "#c68c59",
+        "primaryColor": "#2a6a5a",
+        "showHeadgear": false,
+        "showCape": true
+      },
+      "statusFlag": "world.wren_status",
+      "loyaltyFlag": "world.wren_loyalty",
+      "banter": [
+        "Fennick loves a bold bet. He just doesn't pay out on stupid ones.",
+        "Loaded dice are honest, friend. They always tell you who's cheating.",
+        "I never steal from anyone who couldn't afford to lose it. Usually.",
+        "Double or nothing? No? Your loss."
+      ],
+      "grumbles": [
+        "You keep handing people to the law and I'll start counting the exits.",
+        "I've walked out of better games than this."
       ]
     }
   ]

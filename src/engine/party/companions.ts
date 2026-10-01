@@ -30,6 +30,8 @@ export const CompanionDefSchema = z.object({
   lineage: z.string().optional(),
   background: z.string(),
   role: z.enum(['healer', 'ranged', 'defender', 'striker']).optional(),
+  /** Arc ids (adventure `arcId`) whose adventures may recruit this companion; absent = any arc. */
+  arcs: z.array(z.string()).optional(),
   personality: z.string(),
   goal: z.string(),
   voice: z.string(),

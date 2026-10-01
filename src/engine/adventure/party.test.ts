@@ -109,6 +109,22 @@ describe('party outcomes inside the runner (A068b)', () => {
     expect(r.errors).toContain('encounter e: boss "ogre" is not one of its monsters');
   });
 
+  it('arc 2 companions can only be recruited by arc 2 adventures (B003)', () => {
+    const withRecruit = (arcId: string | undefined, who: string) => {
+      const adv = structuredClone(raw) as typeof raw & { arcId?: string };
+      if (arcId) adv.arcId = arcId;
+      else delete adv.arcId;
+      adv.chapters[0]!.scenes[0]!.actions[0]!.outcome = { text: 'x', recruit: who };
+      return validateAdventure(adv, db, flags, roster).errors.filter((e) => e.includes('can only be recruited'));
+    };
+    for (const id of ['brannoc', 'ilse', 'wren']) {
+      expect(withRecruit('crown', id)).toEqual([]);
+      expect(withRecruit('main', id)).toHaveLength(1);
+      expect(withRecruit(undefined, id)).toHaveLength(1);
+    }
+    expect(withRecruit('crown', 'corwin')).toEqual([]); // arc 1 companions have no arc limit
+  });
+
   it('bosses: authored, else the single most expensive monster type', () => {
     const enc = (monsters: { id: string; count: number }[], bosses: string[] = []) => ({ id: 'e', name: 'E', monsters, terrain: [], canFlee: true, bosses, win: {}, lose: {}, flee: {} }) as unknown as Parameters<typeof bossesOf>[0];
     expect(bossesOf(enc([{ id: 'goblin_warrior', count: 4 }, { id: 'bugbear_warrior', count: 1 }]), db)).toEqual(['bugbear_warrior']);

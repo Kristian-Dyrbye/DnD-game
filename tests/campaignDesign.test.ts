@@ -22,9 +22,12 @@ const locationIds = new Set(lore.locations.map((l) => l.id));
 const factionIds = new Set(lore.factions.map((f) => f.id));
 const regionIds = new Set(lore.regions.map((r) => r.id));
 const design = readFileSync(path.join(root, 'data', 'adventures', 'DESIGN.md'), 'utf8');
+// Arc 2 ("The Hollow Crown", B003): its chapters (ids `arc2_*`) and arc.crown.* flags live in the same registry.
+const design2 = readFileSync(path.join(root, 'data', 'adventures', 'DESIGN_ARC2.md'), 'utf8');
+const bibleOf = (chapterId: string): string => (chapterId.startsWith('arc2_') ? design2 : design);
 
 const SnakeId = z.string().regex(/^[a-z][a-z0-9_]*$/);
-const FLAG_ID = /^(arc\.(starter|main)|world)\.[a-z][a-z0-9_]*$/;
+const FLAG_ID = /^(arc\.(starter|main|crown)|world)\.[a-z][a-z0-9_]*$/;
 
 const FlagSchema = z
   .object({
@@ -83,8 +86,8 @@ describe('data/adventures/flags.json (campaign design registry)', () => {
     expect(dupes(reg.chapters.map((c) => c.id))).toEqual([]);
   });
 
-  it('uses the three flag namespaces', () => {
-    for (const ns of ['arc.starter.', 'arc.main.', 'world.']) {
+  it('uses the four flag namespaces', () => {
+    for (const ns of ['arc.starter.', 'arc.main.', 'arc.crown.', 'world.']) {
       expect(reg.flags.some((f) => f.id.startsWith(ns)), ns).toBe(true);
     }
   });
@@ -152,22 +155,25 @@ describe('data/adventures/flags.json (campaign design registry)', () => {
   });
 });
 
-describe('data/adventures/DESIGN.md consistency with flags.json', () => {
+describe('data/adventures/DESIGN.md + DESIGN_ARC2.md consistency with flags.json', () => {
   it('mentions every registered flag, and registers every flag it mentions', () => {
-    const mentioned = new Set([...design.matchAll(/\b(?:arc\.(?:starter|main)|world)\.[a-z0-9_]+/g)].map((m) => m[0]));
+    const mentionedIn = (doc: string) => new Set([...doc.matchAll(/\b(?:arc\.(?:starter|main|crown)|world)\.[a-z0-9_]+/g)].map((m) => m[0]));
+    const mentioned = new Set([...mentionedIn(design), ...mentionedIn(design2)]);
     const registered = new Set(reg.flags.map((f) => f.id));
     expect([...mentioned].filter((id) => !registered.has(id)).sort()).toEqual([]);
     expect([...registered].filter((id) => !mentioned.has(id)).sort()).toEqual([]);
+    // Each arc's own flags are documented in its own bible.
+    expect([...mentionedIn(design)].filter((id) => id.startsWith('arc.crown.'))).toEqual([]);
+    expect([...registered].filter((id) => id.startsWith('arc.crown.') && !mentionedIn(design2).has(id))).toEqual([]);
   });
 
-  it('mentions every scene id and chapter id', () => {
-    for (const id of [...reg.scenes.map((s) => s.id), ...reg.chapters.map((c) => c.id)]) {
-      expect(design.includes(`\`${id}\``), id).toBe(true);
-    }
+  it('mentions every scene id and chapter id (in the bible of its arc)', () => {
+    for (const s of reg.scenes) expect(bibleOf(s.chapter).includes(`\`${s.id}\``), s.id).toBe(true);
+    for (const c of reg.chapters) expect(bibleOf(c.id).includes(`\`${c.id}\``), c.id).toBe(true);
   });
 
   it('lists exactly the monsters used in its encounter lines (`id` ×n)', () => {
-    const tokens = [...design.matchAll(/`([a-z0-9_]+)` ×/g)].map((m) => m[1]!);
+    const tokens = [...`${design}\n${design2}`.matchAll(/`([a-z0-9_]+)` ×/g)].map((m) => m[1]!);
     const monsters = new Set(tokens.filter((t) => !itemIds.has(t)));
     for (const t of monsters) expect(monsterIds.has(t), `unknown monster ${t}`).toBe(true);
     expect([...monsters].sort()).toEqual([...reg.monstersUsed].sort());

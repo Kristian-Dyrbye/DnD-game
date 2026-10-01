@@ -106,7 +106,7 @@ Every field is optional:
 | `reputation` | `[{ "faction": "id", "delta": 1 }]`. Faction ids come from lore. Half of the change ripples to allied factions, and the opposite half to hostile ones. |
 | `minutes` | Time passes. |
 | `encounter` | Starts an encounter by id. |
-| `recruit` | A companion id from `data/companions.json` joins the party. If the party already has 3 companions, they wait instead. |
+| `recruit` | A companion id from `data/companions.json` joins the party. If the party already has 3 companions, they wait instead. A companion whose roster entry lists `arcs` (e.g. the Hollow Crown's `["crown"]`) can only be recruited by adventures with one of those `arcId`s (validator error otherwise). |
 | `companionLeaves` | `{ "id": "corwin", "status": "waiting" \| "left" \| "betrayed" \| "dead" }` |
 | `approval` | `[{ "companion": "nettle", "delta": 10 }]`: ±5 for minor choices, ±10 significant, ±20 defining. Only companions in the party react. Loyalty is kept in `world.<id>_loyalty` (0–100). Author leave or betray points as actions or beats with `{ "flag": "world.<id>_loyalty", "lte": 20 }`. |
 | `goto` | Moves to a scene. This is applied last. |
