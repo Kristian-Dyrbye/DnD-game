@@ -32,6 +32,8 @@ export const settingsOpen = signal(false);
 export const continueWorldNext = signal(false);
 /** Campaign the next new game starts (first-chapter adventure id; title screen + creator review pick it). */
 export const campaignChoice = signal<string>(DEFAULT_CAMPAIGN.adventure);
+/** "New hero, same world" (B002): slot of the finished save whose world the next new game imports (null = a new world). */
+export const worldFromChoice = signal<string | null>(null);
 
 export function startNewCharacter(): void {
   newCharacterRequests.value++;

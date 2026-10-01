@@ -26,7 +26,8 @@ import shopsJson from '../../data/world/shops.json';
 import sideQuestsJson from '../../data/tables/sidequests.json';
 import defeatsJson from '../../data/tables/defeat-outcomes.json';
 import companionsJson from '../../data/companions.json';
-import { CAMPAIGNS, DEFAULT_CAMPAIGN, type Campaign } from './campaigns';
+import { MINUTES_PER_DAY } from '../engine/world/clock';
+import { CAMPAIGNS, DEFAULT_CAMPAIGN, campaignOf, type Campaign } from './campaigns';
 
 /** Adventure a new game starts with when `new_game.campaign` is not given (the default campaign's first chapter). */
 export const STARTING_ADVENTURE = DEFAULT_CAMPAIGN.adventure;
@@ -125,8 +126,10 @@ export function createGameHost(opts: GameHostOptions): GameHost {
         command: (s, cmd) => portFor(s.language).command?.(s, cmd) ?? Promise.resolve(),
       }
     : undefined;
+  const campaignFor = (adventure: string | undefined): Campaign | undefined => campaignOf(adventure ?? defaultAdventure);
   const session = new GameSession({
     systems: createDefaultRegistry({ lore: t.lore, loreFor: (lang) => content(lang).tables.lore, regionOf: (state) => regionOfState(state, adventures, t.lore) }),
+    world: { freshFlags: (c) => ({ ...campaignFor(c)?.freshWorld }), yearMinutes: t.lore.calendar.daysPerYear * MINUTES_PER_DAY },
     ...(actions && { actions }),
     ...(opts.saves && { saves: opts.saves }),
     ...opts.sessionPorts,
@@ -137,6 +140,11 @@ export function createGameHost(opts: GameHostOptions): GameHost {
     // A campaign names an installed first chapter; otherwise the game would start and then fail to find it.
     if (cmd.type === 'new_game' && cmd.campaign !== undefined && !adventures.has(cmd.campaign)) {
       session.emit({ type: 'error', message: session.msgs.m('session.noCampaign', { id: cmd.campaign }), ...(cmd.reqId && { reqId: cmd.reqId }) });
+      return;
+    }
+    // Only campaigns written for it start in an imported world (the Seven Teeth would re-read its own finished arc.main.* flags).
+    if (cmd.type === 'new_game' && cmd.worldFrom !== undefined && campaignFor(cmd.campaign)?.importsWorld === false) {
+      session.emit({ type: 'error', message: session.msgs.m('session.noWorldImport'), ...(cmd.reqId && { reqId: cmd.reqId }) });
       return;
     }
     await session.handle(cmd);

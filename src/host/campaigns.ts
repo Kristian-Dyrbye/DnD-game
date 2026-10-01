@@ -15,11 +15,23 @@ export interface Campaign {
   levels: [number, number];
   /** False while the first chapter is not in the repo yet. */
   playable: boolean;
+  /** "New hero, same world" (B002): a new game may import the world of a finished save. */
+  importsWorld: boolean;
+  /** Flags a fresh (not imported) world of this campaign starts with. */
+  freshWorld?: Readonly<Record<string, boolean | number | string>>;
 }
 
 export const CAMPAIGNS: readonly Campaign[] = [
-  { id: 'seven_teeth', adventure: 'millbrook_disappearances', levels: [1, 10], playable: true },
-  { id: 'hollow_crown', adventure: 'arc2_ch0_hollow_coin', levels: [1, 5], playable: false },
+  { id: 'seven_teeth', adventure: 'millbrook_disappearances', levels: [1, 10], playable: true, importsWorld: false },
+  {
+    id: 'hollow_crown',
+    adventure: 'arc2_ch0_hollow_coin',
+    levels: [1, 5],
+    playable: false,
+    importsWorld: true,
+    // DESIGN_ARC2 §3: as if the Seven Teeth ended well, without the player having been there.
+    freshWorld: { 'world.maw_state': 'sealed', 'world.queen_alive': true, 'world.player_outlawed': false },
+  },
 ];
 
 /** The campaign a new game starts when none is chosen (the starter arc). */

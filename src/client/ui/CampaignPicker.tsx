@@ -3,10 +3,16 @@
  * and blurb (en + da). Shown on the title screen and in the creator's Review step; both edit the same
  * `campaignChoice` signal that `new_game` sends. Campaigns without a first chapter yet are greyed out.
  */
-import { CAMPAIGNS, campaignKeys } from '../../host/campaigns';
+import { CAMPAIGNS, campaignKeys, campaignOf, DEFAULT_CAMPAIGN } from '../../host/campaigns';
 import type { MessageKey } from '../../shared/i18n';
 import { t } from './i18n';
 import { campaignChoice } from './state';
+
+/** Name of a save's campaign (old saves without the field are starter-arc games). */
+export function campaignName(adventure: string | undefined): string {
+  const c = campaignOf(adventure) ?? (adventure === undefined ? DEFAULT_CAMPAIGN : undefined);
+  return c ? t(campaignKeys(c.id).name as MessageKey) : adventure!;
+}
 
 export function CampaignPicker({ class: cls }: { class?: string }) {
   return (

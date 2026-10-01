@@ -10,6 +10,8 @@ export const da: Partial<Record<EngineKey, string>> = {
   // Session
   'session.noGame': 'Der kører intet spil',
   'session.noCampaign': 'Kampagnen "{id}" er ikke installeret',
+  'session.worldNotFinished': 'Det gemte spil har ikke nået en afslutning endnu, så dets verden kan ikke videreføres',
+  'session.noWorldImport': 'Denne kampagne begynder altid i en ny verden',
   'session.noSaving': 'Du kan ikke gemme her',
   'session.noTravel': 'Rejser er ikke mulige',
   'session.notAvailable': 'Ikke muligt',

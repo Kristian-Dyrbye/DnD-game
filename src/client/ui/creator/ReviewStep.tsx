@@ -9,6 +9,7 @@ import { creator } from './creatorState';
 import { groupNames, itemDisplayName } from '../text';
 import { srdText, abilityAbbr, itemText, skillText } from '../srdText';
 import { CampaignPicker } from '../CampaignPicker';
+import { WorldPicker } from './WorldPicker';
 
 export function ReviewStep() {
   const s = creator.value;
@@ -119,6 +120,7 @@ export function ReviewStep() {
         <blockquote class="backstory">{s.personality.backstory}</blockquote>
       )}
       <CampaignPicker class="review-campaign" />
+      <WorldPicker />
     </section>
   );
 }

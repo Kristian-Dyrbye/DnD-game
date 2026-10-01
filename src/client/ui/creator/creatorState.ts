@@ -4,7 +4,8 @@ import { newCreatorState, toBuildInput, type CreatorState } from '../../../engin
 import { buildCharacter } from '../../../engine/character/builder';
 import { db } from '../../data';
 import { send } from '../../net/gameSocket';
-import { campaignChoice, continueWorldNext, hash, hero, heroMode, newCharacterRequests, screen } from '../state';
+import { campaignOf } from '../../../host/campaigns';
+import { campaignChoice, continueWorldNext, hash, hero, heroMode, newCharacterRequests, screen, worldFromChoice } from '../state';
 
 export const creator = signal<CreatorState>(newCreatorState());
 
@@ -32,7 +33,15 @@ export function beginAdventure(): void {
     };
   }
   heroMode.value = s.difficulty ?? 'heroic';
-  send({ type: 'new_game', hero: hero.value, mode: heroMode.value, campaign: campaignChoice.value, ...(continueWorldNext.value && { continueWorld: true }) });
+  const worldFrom = campaignOf(campaignChoice.value)?.importsWorld ? worldFromChoice.value : null;
+  send({
+    type: 'new_game',
+    hero: hero.value,
+    mode: heroMode.value,
+    campaign: campaignChoice.value,
+    ...(worldFrom ? { worldFrom } : continueWorldNext.value && { continueWorld: true }),
+  });
   continueWorldNext.value = false;
+  worldFromChoice.value = null;
   screen.value = 'game';
 }

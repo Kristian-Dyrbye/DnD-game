@@ -7,16 +7,9 @@ import { useEffect, useState } from 'preact/hooks';
 import type { SaveMeta } from '../../shared/save';
 import { send } from '../net/gameSocket';
 import { downloadSave, saveLibrary } from '../net/saveLibrary';
-import type { MessageKey } from '../../shared/i18n';
 import { language, t } from './i18n';
 import { screen } from './state';
-import { campaignKeys, campaignOf, DEFAULT_CAMPAIGN } from '../../host/campaigns';
-
-/** Name of a save's campaign (old saves without the field are starter-arc games). */
-function campaignName(adventure: string | undefined): string {
-  const c = campaignOf(adventure) ?? (adventure === undefined ? DEFAULT_CAMPAIGN : undefined);
-  return c ? t(campaignKeys(c.id).name as MessageKey) : adventure!;
-}
+import { campaignName } from './CampaignPicker';
 
 export function SaveBrowser({ mode, onClose }: { mode: 'load' | 'save'; onClose: () => void }) {
   const [saves, setSaves] = useState<SaveMeta[] | null>(null);

@@ -11,6 +11,8 @@ export const en = {
   // Session
   'session.noGame': 'No game is running',
   'session.noCampaign': 'Campaign "{id}" is not installed',
+  'session.worldNotFinished': 'That save has not reached an ending yet, so its world cannot be continued',
+  'session.noWorldImport': 'This campaign always starts in a new world',
   'session.noSaving': 'Saving is not available',
   'session.noTravel': 'Travel is not available',
   'session.notAvailable': 'Not available',

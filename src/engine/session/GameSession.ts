@@ -12,6 +12,7 @@ import { Rng } from '../core/rng';
 import type { SystemRegistry } from '../systems/registry';
 import type { Language } from '../../shared/i18nCore';
 import { messages, type Messages } from '../i18n';
+import { MINUTES_PER_DAY } from '../world/clock';
 import { deletePage, reorderPages, savePage } from './journal';
 import { GameStateSchema, LOG_LIMIT, ROLL_LIMIT, type GameState, type LogEntry, type RollRecord } from './gameState';
 
@@ -25,6 +26,8 @@ export interface SessionSaveMeta {
   playTimeMinutes: number;
   /** First-chapter adventure id of the campaign (B001). */
   campaign?: string;
+  /** Final ending the story reached (B002). */
+  ending?: string;
   /** Data URL of the hero picture (save browser). */
   thumbnail?: string;
 }
@@ -57,7 +60,20 @@ export interface SessionPorts {
   newSeed?: () => string;
   /** Engine systems (clock, weather, ...): initialised on new game/load, told when time passes. */
   systems?: SystemRegistry;
+  /** World rules for new games (B002); the host fills them from its campaign table and calendar. */
+  world?: WorldRules;
 }
+
+export interface WorldRules {
+  /** Flags a new world of `campaign` starts with (under any imported world's own flags). */
+  freshFlags?(campaign: string | undefined): GameState['flags'];
+  /** Minutes in a calendar year: an imported world moves on one year (default 360 days). */
+  yearMinutes?: number;
+}
+
+/** Flag namespaces a new hero inherits from a finished save's world. */
+const WORLD_PREFIXES = ['world.', 'arc.main.'];
+const DEFAULT_YEAR_MINUTES = 360 * MINUTES_PER_DAY;
 
 export const START_LOCATION = 'Millbrook';
 
@@ -70,6 +86,28 @@ export function continueWorld(old: GameState, fresh: GameState): GameState {
   // The world keeps its campaign too (the story in progress continues with the new hero).
   const campaign = old.campaign ?? fresh.campaign;
   return { ...fresh, campaignId: old.campaignId, ...(campaign && { campaign }), time: old.time, flags: old.flags, extensions, location: old.location, journal: old.journal, summary: old.summary, summaryUpTo: old.summaryUpTo, log: old.log, nextId: old.nextId, rolls: old.rolls };
+}
+
+/** The final ending a state's story reached (main adventure ended with no next chapter), if any. */
+export function finishedEnding(state: GameState): string | undefined {
+  const p = state.extensions.adventure as { ending?: string } | undefined;
+  return p?.ending;
+}
+
+/**
+ * "New hero, same world" (B002): a fresh campaign state that inherits a finished save's world — its
+ * world.* and arc.main.* flags and faction reputation — one year later at 08:00. Everything personal
+ * (hero, party, journal, log, map knowledge, story progress) starts fresh.
+ */
+export function importWorld(old: GameState, fresh: GameState, yearMinutes = DEFAULT_YEAR_MINUTES): GameState {
+  const flags = Object.fromEntries(Object.entries(old.flags).filter(([k]) => WORLD_PREFIXES.some((p) => k.startsWith(p))));
+  const day = Math.floor(old.time / MINUTES_PER_DAY);
+  const extensions: GameState['extensions'] = {
+    ...fresh.extensions,
+    worldFrom: { campaignId: old.campaignId, ...(old.campaign && { campaign: old.campaign }), ending: finishedEnding(old), hero: old.hero.name },
+  };
+  if (old.extensions.reputation !== undefined) extensions.reputation = structuredClone(old.extensions.reputation);
+  return { ...fresh, time: day * MINUTES_PER_DAY + yearMinutes + (fresh.time % MINUTES_PER_DAY), flags: { ...fresh.flags, ...flags }, extensions };
 }
 
 /** A fresh campaign state for a newly created hero. `campaign` = first-chapter adventure id (default: the host's starter). */
@@ -199,6 +237,7 @@ export class GameSession {
       mode: s.mode,
       playTimeMinutes: Math.round(s.playTimeMinutes),
       ...(s.campaign && { campaign: s.campaign }),
+      ...(finishedEnding(s) !== undefined && { ending: finishedEnding(s) }),
       ...(this.thumbnail && { thumbnail: this.thumbnail }),
     };
   }
@@ -233,7 +272,11 @@ export class GameSession {
           this.thumbnail = undefined;
           const seed = cmd.seed ?? this.ports.newSeed?.() ?? `${Date.now()}-${Math.random()}`;
           const fresh = newGameState(cmd.hero, cmd.mode, seed, cmd.campaign);
-          this.start(cmd.continueWorld && this.state ? continueWorld(this.current, fresh) : fresh);
+          fresh.flags = { ...this.ports.world?.freshFlags?.(cmd.campaign) };
+          let state = fresh;
+          if (cmd.worldFrom) state = this.worldOf(cmd.worldFrom, fresh);
+          else if (cmd.continueWorld && this.state) state = continueWorld(this.current, fresh);
+          this.start(state);
           this.emit(this.snapshot());
           await this.ports.actions?.begin?.(this);
           this.emit(this.snapshot());
@@ -309,6 +352,14 @@ export class GameSession {
     } catch (err) {
       this.fail(err instanceof Error ? err.message : this.msgs.m('session.failed'), reqId);
     }
+  }
+
+  /** A new game in the world of the finished save in `slot` (throws a player-facing error otherwise). */
+  private worldOf(slot: string, fresh: GameState): GameState {
+    if (!this.ports.saves) throw new Error(this.msgs.m('session.noSaving'));
+    const old = GameStateSchema.parse(this.ports.saves.load(slot));
+    if (finishedEnding(old) === undefined) throw new Error(this.msgs.m('session.worldNotFinished'));
+    return importWorld(old, fresh, this.ports.world?.yearMinutes);
   }
 
   private fail(message: string, reqId?: string): void {

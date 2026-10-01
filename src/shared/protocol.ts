@@ -54,6 +54,8 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
     continueWorld: z.boolean().optional(),
     /** Campaign to start = adventure id of its first chapter (src/host/campaigns.ts); default the starter arc. */
     campaign: z.string().max(80).optional(),
+    /** "New hero, same world" (B002): slot of a finished save whose world the new campaign starts in. */
+    worldFrom: z.string().regex(SLOT_ID_PATTERN).optional(),
   }),
   /** Level up the hero (choices as required by leveling.pendingChoices). */
   z.object({
