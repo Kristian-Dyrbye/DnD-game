@@ -1,0 +1,1156 @@
+{
+  "$source": "data/tables/sidequests.json",
+  "strings": {
+    "questTypes/hunt_fugitive/name": {
+      "hash": "63952f7a",
+      "text": "Jag en flygtning"
+    },
+    "questTypes/hunt_fugitive/goal": {
+      "hash": "fab7b237",
+      "text": "Opspor {antagonist}, og sørg for, at retfærdigheden sker fyldest"
+    },
+    "questTypes/hunt_fugitive/approaches/0/label": {
+      "hash": "c885a182",
+      "text": "Konfronter {antagonist}"
+    },
+    "questTypes/hunt_fugitive/approaches/0/keywords": {
+      "hash": "a593db7e",
+      "text": [
+        "kæmp",
+        "angrib",
+        "konfronter"
+      ]
+    },
+    "questTypes/hunt_fugitive/approaches/1/label": {
+      "hash": "ffbe5d37",
+      "text": "Overrask {antagonist} under hvilen"
+    },
+    "questTypes/hunt_fugitive/approaches/1/success": {
+      "hash": "d6c25b6d",
+      "text": "Du er over {antagonist}, før nogen når at gribe efter et våben."
+    },
+    "questTypes/hunt_fugitive/approaches/1/keywords": {
+      "hash": "047681af",
+      "text": [
+        "snig",
+        "overrask",
+        "list"
+      ]
+    },
+    "questTypes/hunt_fugitive/approaches/2/label": {
+      "hash": "7cad7cde",
+      "text": "Overtal {antagonist} til at overgive sig"
+    },
+    "questTypes/hunt_fugitive/approaches/2/success": {
+      "hash": "0d040d38",
+      "text": "{antagonist} hører dig ud og lægger våbnene."
+    },
+    "questTypes/hunt_fugitive/approaches/2/keywords": {
+      "hash": "84e7e372",
+      "text": [
+        "tal",
+        "overgiv",
+        "overtal"
+      ]
+    },
+    "questTypes/hunt_fugitive/approaches/3/label": {
+      "hash": "6fd48a22",
+      "text": "Lok {antagonist} frem med en forfalsket besked"
+    },
+    "questTypes/hunt_fugitive/approaches/3/success": {
+      "hash": "2dd1304a",
+      "text": "{antagonist} går lige i armene på dig."
+    },
+    "questTypes/hunt_fugitive/approaches/3/keywords": {
+      "hash": "2d24013e",
+      "text": [
+        "narre",
+        "lok",
+        "forfalsk",
+        "bluf"
+      ]
+    },
+    "questTypes/hunt_fugitive/approaches/4/label": {
+      "hash": "00ab185c",
+      "text": "Bestik en håndlanger til at udlevere {antagonist}"
+    },
+    "questTypes/hunt_fugitive/approaches/4/success": {
+      "hash": "0afd96c5",
+      "text": "Mønter skifter hænder; samme nat bliver {antagonist} leveret bundet og kneblet."
+    },
+    "questTypes/hunt_fugitive/approaches/4/keywords": {
+      "hash": "5aeb8b6d",
+      "text": [
+        "bestik",
+        "betal"
+      ]
+    },
+    "questTypes/hunt_fugitive/outcomes/turn_in/label": {
+      "hash": "26d45976",
+      "text": "Før {antagonist} tilbage i lænker"
+    },
+    "questTypes/hunt_fugitive/outcomes/turn_in/claim": {
+      "hash": "2c280569",
+      "text": "Udlever {antagonist} til {patron}"
+    },
+    "questTypes/hunt_fugitive/outcomes/turn_in/text": {
+      "hash": "61d51e54",
+      "text": "{antagonist} er bundet og klar til turen tilbage."
+    },
+    "questTypes/hunt_fugitive/outcomes/kill/label": {
+      "hash": "a4ffd943",
+      "text": "Gør det af med {antagonist} her og nu"
+    },
+    "questTypes/hunt_fugitive/outcomes/kill/claim": {
+      "hash": "8ccefb57",
+      "text": "Fortæl {patron}, at {antagonist} er død"
+    },
+    "questTypes/hunt_fugitive/outcomes/kill/text": {
+      "hash": "e55a6b4d",
+      "text": "Det går hurtigt, og {antagonist} kommer aldrig til at flygte igen."
+    },
+    "questTypes/hunt_fugitive/outcomes/let_go/label": {
+      "hash": "fa808a9d",
+      "text": "Lad {antagonist} gå mod et løfte om at forsvinde for altid"
+    },
+    "questTypes/hunt_fugitive/outcomes/let_go/claim": {
+      "hash": "fc1f70ab",
+      "text": "Fortæl {patron}, at {antagonist} slap væk"
+    },
+    "questTypes/hunt_fugitive/outcomes/let_go/text": {
+      "hash": "8658f171",
+      "text": "{antagonist} stirrer på dig og forsvinder så ud i mørket uden et ord."
+    },
+    "questTypes/clear_lair/name": {
+      "hash": "cd5176e3",
+      "text": "Ryd en hule"
+    },
+    "questTypes/clear_lair/goal": {
+      "hash": "3df49aec",
+      "text": "Fordriv {antagonist} fra {site}"
+    },
+    "questTypes/clear_lair/approaches/0/label": {
+      "hash": "656c7c97",
+      "text": "Storm {site}"
+    },
+    "questTypes/clear_lair/approaches/0/keywords": {
+      "hash": "99ec7d88",
+      "text": [
+        "kæmp",
+        "angrib",
+        "storm",
+        "anfald"
+      ]
+    },
+    "questTypes/clear_lair/approaches/1/label": {
+      "hash": "e4d533f0",
+      "text": "Snig dig ind, og slå lederen ned først"
+    },
+    "questTypes/clear_lair/approaches/1/success": {
+      "hash": "2d631a26",
+      "text": "Lederen falder uden at nå at vågne; resten flygter i panik."
+    },
+    "questTypes/clear_lair/approaches/1/keywords": {
+      "hash": "070b50c9",
+      "text": [
+        "snig",
+        "list",
+        "overrask"
+      ]
+    },
+    "questTypes/clear_lair/approaches/2/label": {
+      "hash": "933684d4",
+      "text": "Ryg dem ud i en fælde ved indgangen"
+    },
+    "questTypes/clear_lair/approaches/2/success": {
+      "hash": "f73faf95",
+      "text": "Røg og en snare klarer arbejdet for et dusin klinger."
+    },
+    "questTypes/clear_lair/approaches/2/keywords": {
+      "hash": "5af467b5",
+      "text": [
+        "røg",
+        "fælde",
+        "lok",
+        "madding"
+      ]
+    },
+    "questTypes/clear_lair/outcomes/destroy/label": {
+      "hash": "7d69d4b7",
+      "text": "Få indgangen til at styrte sammen, så intet slår sig ned her igen"
+    },
+    "questTypes/clear_lair/outcomes/destroy/claim": {
+      "hash": "8516a55a",
+      "text": "Fortæl {patron}, at stedet er ryddet for altid"
+    },
+    "questTypes/clear_lair/outcomes/destroy/text": {
+      "hash": "e8b1d798",
+      "text": "Sten og tømmer styrter sammen med et brøl. Intet kommer til at slå sig ned her igen."
+    },
+    "questTypes/clear_lair/outcomes/drive_off/label": {
+      "hash": "9d1d1a28",
+      "text": "Lad de overlevende sprede sig ud i vildmarken"
+    },
+    "questTypes/clear_lair/outcomes/drive_off/claim": {
+      "hash": "1a05973c",
+      "text": "Fortæl {patron}, at hulen står tom nu"
+    },
+    "questTypes/clear_lair/outcomes/drive_off/text": {
+      "hash": "cf40a8c8",
+      "text": "De sidste af dem lusker af ud i vildmarken, langt fra nogen gård."
+    },
+    "questTypes/rescue/name": {
+      "hash": "3fbeda09",
+      "text": "Befri en fange"
+    },
+    "questTypes/rescue/goal": {
+      "hash": "a3492622",
+      "text": "Befri {patron}s {relative} fra {antagonist}"
+    },
+    "questTypes/rescue/approaches/0/label": {
+      "hash": "d1947e5b",
+      "text": "Storm ind, og befri fangen"
+    },
+    "questTypes/rescue/approaches/0/keywords": {
+      "hash": "a135579a",
+      "text": [
+        "kæmp",
+        "angrib",
+        "storm"
+      ]
+    },
+    "questTypes/rescue/approaches/1/label": {
+      "hash": "41637a49",
+      "text": "Snig dig ind, og befri fangen i al stilhed"
+    },
+    "questTypes/rescue/approaches/1/success": {
+      "hash": "c1e905d1",
+      "text": "Rebene skåret over, en hånd for en mund, og I er begge ude, før nogen ser op."
+    },
+    "questTypes/rescue/approaches/1/keywords": {
+      "hash": "f1f063c2",
+      "text": [
+        "snig",
+        "stille",
+        "smut"
+      ]
+    },
+    "questTypes/rescue/approaches/2/label": {
+      "hash": "0a6db593",
+      "text": "Forhandl den bortførte {relative} fri"
+    },
+    "questTypes/rescue/approaches/2/success": {
+      "hash": "c64385f9",
+      "text": "Efter en lang og anspændt snak lader fangevogterne den bortførte {relative} gå fri."
+    },
+    "questTypes/rescue/approaches/2/keywords": {
+      "hash": "9335d696",
+      "text": [
+        "tal",
+        "forhandl",
+        "løsladelse"
+      ]
+    },
+    "questTypes/rescue/approaches/3/label": {
+      "hash": "7ecc5354",
+      "text": "Betal løsesummen"
+    },
+    "questTypes/rescue/approaches/3/success": {
+      "hash": "e4b87b3b",
+      "text": "Fangevogterne tæller mønterne to gange og skubber den bortførte {relative} hen mod dig."
+    },
+    "questTypes/rescue/approaches/3/keywords": {
+      "hash": "1310825f",
+      "text": [
+        "løsesum",
+        "betal",
+        "bestik"
+      ]
+    },
+    "questTypes/rescue/outcomes/bring_home/label": {
+      "hash": "5729d85b",
+      "text": "Bring den befriede {relative} hjem"
+    },
+    "questTypes/rescue/outcomes/bring_home/claim": {
+      "hash": "970674d7",
+      "text": "Aflever den befriede {relative} til {patron}"
+    },
+    "questTypes/rescue/outcomes/bring_home/text": {
+      "hash": "1d7fbb90",
+      "text": "Den befriede {relative} klamrer sig til dig hele vejen tilbage."
+    },
+    "questTypes/rescue/outcomes/help_flee/label": {
+      "hash": "82b3f90f",
+      "text": "Den befriede {relative} tigger om ikke at skulle tilbage: hjælp til en ny begyndelse et andet sted"
+    },
+    "questTypes/rescue/outcomes/help_flee/claim": {
+      "hash": "5cf6756d",
+      "text": "Fortæl {patron}, at du ikke kunne finde den bortførte {relative}"
+    },
+    "questTypes/rescue/outcomes/help_flee/text": {
+      "hash": "dd39e47f",
+      "text": "Du viser den befriede {relative} en sikrere vej. Et hvisket tak, og så er de væk."
+    },
+    "questTypes/fetch/name": {
+      "hash": "96f3ee5d",
+      "text": "Hent en genstand"
+    },
+    "questTypes/fetch/goal": {
+      "hash": "8f9b6e63",
+      "text": "Hent {patron}s {heirloom} tilbage fra {site}"
+    },
+    "questTypes/fetch/approaches/0/label": {
+      "hash": "477147bd",
+      "text": "Gennemsøg {site} efter den forsvundne {heirloom}"
+    },
+    "questTypes/fetch/approaches/0/success": {
+      "hash": "97043889",
+      "text": "Under murbrokker og råddenskab finder du den forsvundne {heirloom}."
+    },
+    "questTypes/fetch/approaches/0/keywords": {
+      "hash": "2c160e23",
+      "text": [
+        "søg",
+        "led",
+        "find",
+        "gennemsøg"
+      ]
+    },
+    "questTypes/fetch/approaches/1/label": {
+      "hash": "21bb7942",
+      "text": "Snig dig forbi det, der har sin hule der"
+    },
+    "questTypes/fetch/approaches/1/success": {
+      "hash": "886a4f66",
+      "text": "Du smutter ubemærket forbi hulen og tager den forsvundne {heirloom}."
+    },
+    "questTypes/fetch/approaches/1/keywords": {
+      "hash": "a7e662a6",
+      "text": [
+        "snig",
+        "list",
+        "forbi"
+      ]
+    },
+    "questTypes/fetch/approaches/2/label": {
+      "hash": "2b06d2c0",
+      "text": "Lok vogterne væk med en afledning"
+    },
+    "questTypes/fetch/approaches/2/success": {
+      "hash": "f825b8c1",
+      "text": "En raslen af sten og en luns kød lokker dem væk; den forsvundne {heirloom} er din."
+    },
+    "questTypes/fetch/approaches/2/keywords": {
+      "hash": "449756e4",
+      "text": [
+        "afledning",
+        "aflede",
+        "narre",
+        "lok"
+      ]
+    },
+    "questTypes/fetch/outcomes/return/label": {
+      "hash": "3f236310",
+      "text": "Pas godt på {patron}s {heirloom}"
+    },
+    "questTypes/fetch/outcomes/return/claim": {
+      "hash": "6a2822db",
+      "text": "Giv {patron} den forsvundne {heirloom} tilbage"
+    },
+    "questTypes/fetch/outcomes/return/text": {
+      "hash": "f15ba539",
+      "text": "Du pakker den dyrebare {heirloom} omhyggeligt ind til turen."
+    },
+    "questTypes/fetch/outcomes/keep/label": {
+      "hash": "e79ba0d0",
+      "text": "Behold den dyrebare {heirloom}, og sælg den i al stilhed"
+    },
+    "questTypes/fetch/outcomes/keep/claim": {
+      "hash": "733312ad",
+      "text": "Fortæl {patron}, at den forsvundne {heirloom} er gået tabt"
+    },
+    "questTypes/fetch/outcomes/keep/text": {
+      "hash": "4b20dbbf",
+      "text": "En hæler i næste by vil betale godt og ikke spørge om noget."
+    },
+    "questTypes/escort/name": {
+      "hash": "d41a04d5",
+      "text": "Eskorte"
+    },
+    "questTypes/escort/goal": {
+      "hash": "46da18ba",
+      "text": "Eskorter {patron} sikkert til {destination}"
+    },
+    "questTypes/escort/approaches/0/label": {
+      "hash": "a1441997",
+      "text": "Hold stand, og kæmp mod bagholdsfolkene"
+    },
+    "questTypes/escort/approaches/0/keywords": {
+      "hash": "7ae752b7",
+      "text": [
+        "kæmp",
+        "angrib",
+        "stand"
+      ]
+    },
+    "questTypes/escort/approaches/1/label": {
+      "hash": "3471a8de",
+      "text": "Tag en skjult sti uden om faren"
+    },
+    "questTypes/escort/approaches/1/success": {
+      "hash": "369ce461",
+      "text": "Den gamle sti er tilgroet, men tom; {destination} kommer til syne, uden at nogen generer jer."
+    },
+    "questTypes/escort/approaches/1/keywords": {
+      "hash": "6c18a110",
+      "text": [
+        "sti",
+        "skjult",
+        "udenom",
+        "snig"
+      ]
+    },
+    "questTypes/escort/approaches/2/label": {
+      "hash": "bf919c32",
+      "text": "Snak jer forbi mændene, der spærrer vejen"
+    },
+    "questTypes/escort/approaches/2/success": {
+      "hash": "4ff9dd1e",
+      "text": "Et par rolige ord og et fast blik, og de træder til side."
+    },
+    "questTypes/escort/approaches/2/keywords": {
+      "hash": "995eb6d4",
+      "text": [
+        "tal",
+        "overtal",
+        "forbi"
+      ]
+    },
+    "questTypes/escort/approaches/3/label": {
+      "hash": "7e2ecf8c",
+      "text": "Betal den vejtold, de forlanger"
+    },
+    "questTypes/escort/approaches/3/success": {
+      "hash": "a18001d3",
+      "text": "De stikker tolden i lommen og vinker jer igennem."
+    },
+    "questTypes/escort/approaches/3/keywords": {
+      "hash": "7b4ea6e0",
+      "text": [
+        "told",
+        "betal",
+        "bestik"
+      ]
+    },
+    "questTypes/escort/outcomes/deliver/label": {
+      "hash": "407c43a7",
+      "text": "Følg {patron} sikkert gennem porten"
+    },
+    "questTypes/escort/outcomes/deliver/claim": {
+      "hash": "4b5d9d18",
+      "text": "Hent din betaling hos {patron}"
+    },
+    "questTypes/escort/outcomes/deliver/text": {
+      "hash": "f6ba1abf",
+      "text": "{patron} er i sikkerhed i {destination}."
+    },
+    "questTypes/escort/outcomes/extort/label": {
+      "hash": "0b92524e",
+      "text": "Forlang dobbelt betaling før det sidste stykke vej"
+    },
+    "questTypes/escort/outcomes/extort/claim": {
+      "hash": "d4a8797c",
+      "text": "Kræv dobbelt betaling af {patron}"
+    },
+    "questTypes/escort/outcomes/extort/text": {
+      "hash": "f14611d6",
+      "text": "{patron} betaler med rystende hænder og et bittert blik."
+    },
+    "questTypes/investigate/name": {
+      "hash": "3821da16",
+      "text": "Opklar et mysterium"
+    },
+    "questTypes/investigate/goal": {
+      "hash": "1c3e5f13",
+      "text": "Find ud af, hvem der står bag {mystery}"
+    },
+    "questTypes/investigate/approaches/0/label": {
+      "hash": "7ccdf374",
+      "text": "Led efter spor"
+    },
+    "questTypes/investigate/approaches/0/success": {
+      "hash": "31803e52",
+      "text": "En iturevet kvittering og et mudret støvleaftryk peger på {antagonist}."
+    },
+    "questTypes/investigate/approaches/0/keywords": {
+      "hash": "5ba92f8c",
+      "text": [
+        "led",
+        "spor",
+        "undersøg"
+      ]
+    },
+    "questTypes/investigate/approaches/1/label": {
+      "hash": "41147b12",
+      "text": "Udspørg de lokale"
+    },
+    "questTypes/investigate/approaches/1/success": {
+      "hash": "654ec79e",
+      "text": "Ét nervøst svar for meget, og sporet fører til {antagonist}."
+    },
+    "questTypes/investigate/approaches/1/keywords": {
+      "hash": "b59e3190",
+      "text": [
+        "udspørg",
+        "spørg",
+        "lokale"
+      ]
+    },
+    "questTypes/investigate/approaches/2/label": {
+      "hash": "13cbb707",
+      "text": "Skyg den mest oplagte mistænkte"
+    },
+    "questTypes/investigate/approaches/2/success": {
+      "hash": "8f9ffa2d",
+      "text": "Du følger efter vedkommende til et baglokale og hører {antagonist} give ordrerne."
+    },
+    "questTypes/investigate/approaches/2/keywords": {
+      "hash": "a70ca4e6",
+      "text": [
+        "følg",
+        "skyg",
+        "efter"
+      ]
+    },
+    "questTypes/investigate/approaches/3/label": {
+      "hash": "a3cde6f7",
+      "text": "Sæt en fælde med falsk sladder"
+    },
+    "questTypes/investigate/approaches/3/success": {
+      "hash": "317d2350",
+      "text": "Dit rygte lokker {antagonist} frem, og du tager dem på fersk gerning."
+    },
+    "questTypes/investigate/approaches/3/keywords": {
+      "hash": "9c32738c",
+      "text": [
+        "fælde",
+        "sladder",
+        "rygte",
+        "bluf"
+      ]
+    },
+    "questTypes/investigate/outcomes/expose/label": {
+      "hash": "71b3d18f",
+      "text": "Afslør {antagonist} foran alle"
+    },
+    "questTypes/investigate/outcomes/expose/claim": {
+      "hash": "bb076c07",
+      "text": "Fortæl {patron}, hvem der står bag"
+    },
+    "questTypes/investigate/outcomes/expose/text": {
+      "hash": "d94dc7b6",
+      "text": "Hele gaden hører, hvad {antagonist} har gjort."
+    },
+    "questTypes/investigate/outcomes/blackmail/label": {
+      "hash": "eab6a9ee",
+      "text": "Ti stille, mod betaling fra {antagonist}"
+    },
+    "questTypes/investigate/outcomes/blackmail/claim": {
+      "hash": "29312db5",
+      "text": "Fortæl {patron}, at sporet er kølnet"
+    },
+    "questTypes/investigate/outcomes/blackmail/text": {
+      "hash": "b2da14ba",
+      "text": "{antagonist} betaler for din tavshed og kommer til at betale igen."
+    },
+    "questTypes/deliver/name": {
+      "hash": "d5770f1e",
+      "text": "Levér i tide"
+    },
+    "questTypes/deliver/goal": {
+      "hash": "c6731c35",
+      "text": "Bring {parcel} til {destination} inden {deadline}"
+    },
+    "questTypes/deliver/approaches/0/label": {
+      "hash": "edf877d5",
+      "text": "Tag den hurtige vej"
+    },
+    "questTypes/deliver/approaches/0/success": {
+      "hash": "8aa97644",
+      "text": "Du finder den hurtigste vej og holder dig til den."
+    },
+    "questTypes/deliver/approaches/0/keywords": {
+      "hash": "85151bc1",
+      "text": [
+        "hurtig",
+        "vej",
+        "skynd"
+      ]
+    },
+    "questTypes/deliver/approaches/1/label": {
+      "hash": "a5a3c9cf",
+      "text": "Rid natten igennem"
+    },
+    "questTypes/deliver/approaches/1/success": {
+      "hash": "f07a9683",
+      "text": "Dødtræt når du frem før daggry."
+    },
+    "questTypes/deliver/approaches/1/keywords": {
+      "hash": "f961cb5f",
+      "text": [
+        "nat",
+        "rid",
+        "pres"
+      ]
+    },
+    "questTypes/deliver/approaches/2/label": {
+      "hash": "885907e0",
+      "text": "Smut forbi de udkigsposter, som {antagonist} har sat ud"
+    },
+    "questTypes/deliver/approaches/2/success": {
+      "hash": "d9eb4552",
+      "text": "Udkigsposterne ser dig aldrig passere."
+    },
+    "questTypes/deliver/approaches/2/keywords": {
+      "hash": "bea1c720",
+      "text": [
+        "snig",
+        "smut",
+        "udkig"
+      ]
+    },
+    "questTypes/deliver/approaches/3/label": {
+      "hash": "7ef46be6",
+      "text": "Lej en frisk hest ved hver kro"
+    },
+    "questTypes/deliver/approaches/3/success": {
+      "hash": "b2f38185",
+      "text": "Friske heste og gode veje: du når frem med tid til overs."
+    },
+    "questTypes/deliver/approaches/3/keywords": {
+      "hash": "2a327922",
+      "text": [
+        "hest",
+        "lej",
+        "betal"
+      ]
+    },
+    "questTypes/deliver/outcomes/deliver/label": {
+      "hash": "88929c7e",
+      "text": "Aflever {parcel} med seglet ubrudt"
+    },
+    "questTypes/deliver/outcomes/deliver/claim": {
+      "hash": "a3d0866c",
+      "text": "Fortæl {patron}, at {parcel} er nået frem"
+    },
+    "questTypes/deliver/outcomes/deliver/text": {
+      "hash": "7be05410",
+      "text": "{parcel} er i de rette hænder."
+    },
+    "questTypes/deliver/outcomes/sell/label": {
+      "hash": "eaac55f2",
+      "text": "Sælg {parcel} til {antagonist}, der betaler langt mere"
+    },
+    "questTypes/deliver/outcomes/sell/claim": {
+      "hash": "d75f97c4",
+      "text": "Fortæl {patron}, at du blev røvet på vejen"
+    },
+    "questTypes/deliver/outcomes/sell/text": {
+      "hash": "7629043d",
+      "text": "{antagonist} betaler godt. En eller anden i {destination} kommer til at vente forgæves."
+    },
+    "questTypes/negotiate/name": {
+      "hash": "66b0407d",
+      "text": "Bilæg en strid"
+    },
+    "questTypes/negotiate/goal": {
+      "hash": "1b7e844c",
+      "text": "Bilæg striden mellem {patron} og {rival}"
+    },
+    "questTypes/negotiate/approaches/0/label": {
+      "hash": "4b6bd86b",
+      "text": "Mægl et rimeligt kompromis"
+    },
+    "questTypes/negotiate/approaches/0/success": {
+      "hash": "00f7d756",
+      "text": "Modvilligt giver begge parter hånd på det."
+    },
+    "questTypes/negotiate/approaches/0/keywords": {
+      "hash": "b1964c71",
+      "text": [
+        "kompromis",
+        "mægl",
+        "overtal"
+      ]
+    },
+    "questTypes/negotiate/approaches/1/label": {
+      "hash": "c4e5406a",
+      "text": "Find ud af, hvad de begge virkelig vil"
+    },
+    "questTypes/negotiate/approaches/1/success": {
+      "hash": "65fec611",
+      "text": "Under råbene handler det om stolthed, og stolthed kan man finde en løsning på."
+    },
+    "questTypes/negotiate/approaches/1/keywords": {
+      "hash": "2dd476ee",
+      "text": [
+        "vil",
+        "lyt",
+        "forstå",
+        "indsigt"
+      ]
+    },
+    "questTypes/negotiate/approaches/2/label": {
+      "hash": "9df0fb05",
+      "text": "Bluf dem begge til at blive enige"
+    },
+    "questTypes/negotiate/approaches/2/success": {
+      "hash": "3e557b9a",
+      "text": "Hver af dem tror, at den anden gav sig først. Ingen af dem får nogensinde sandheden at vide."
+    },
+    "questTypes/negotiate/approaches/2/keywords": {
+      "hash": "e969d023",
+      "text": [
+        "bluf",
+        "narre",
+        "løgn",
+        "lyv"
+      ]
+    },
+    "questTypes/negotiate/approaches/3/label": {
+      "hash": "5dd25b33",
+      "text": "Glat tingene ud med mønt"
+    },
+    "questTypes/negotiate/approaches/3/success": {
+      "hash": "952704f0",
+      "text": "En pung på hver side af bordet får ordene til at glide lettere."
+    },
+    "questTypes/negotiate/approaches/3/keywords": {
+      "hash": "ada09788",
+      "text": [
+        "betal",
+        "bestik",
+        "mønt"
+      ]
+    },
+    "questTypes/negotiate/outcomes/fair/label": {
+      "hash": "31c63c71",
+      "text": "Skriv forliget ned, rimeligt for begge"
+    },
+    "questTypes/negotiate/outcomes/fair/claim": {
+      "hash": "57c0a2e6",
+      "text": "Fortæl {patron}, at striden er bilagt"
+    },
+    "questTypes/negotiate/outcomes/fair/text": {
+      "hash": "683a3b1e",
+      "text": "Begge parter skriver under. Det er rimeligt, og begge hader det en lille smule."
+    },
+    "questTypes/negotiate/outcomes/side_patron/label": {
+      "hash": "dfd05b13",
+      "text": "Vip forliget til fordel for {patron}"
+    },
+    "questTypes/negotiate/outcomes/side_patron/claim": {
+      "hash": "639b3cda",
+      "text": "Fortæl {patron}, at du har skaffet den bedste aftale"
+    },
+    "questTypes/negotiate/outcomes/side_patron/text": {
+      "hash": "33bf009c",
+      "text": "{rival} skriver under med et surt blik."
+    },
+    "questTypes/negotiate/outcomes/side_rival/label": {
+      "hash": "fa4a238d",
+      "text": "Tag imod {rival}s pung, og vip aftalen til {rival}s fordel"
+    },
+    "questTypes/negotiate/outcomes/side_rival/claim": {
+      "hash": "7d4d6d4c",
+      "text": "Fortæl {patron}, at det var det bedste, du kunne gøre"
+    },
+    "questTypes/negotiate/outcomes/side_rival/text": {
+      "hash": "56d2615c",
+      "text": "{rival} smiler; det kommer {patron} ikke til."
+    },
+    "sites/bandit_camp/name": {
+      "hash": "6abe8195",
+      "text": "banditlejren i bakkerne"
+    },
+    "sites/bandit_camp/seed": {
+      "hash": "b926fd55",
+      "text": "Telte og et rygende bål bag en skærm af tornebuske; en vagtpost døser på en kampesten."
+    },
+    "sites/ruined_watchtower/name": {
+      "hash": "81e15d6d",
+      "text": "det faldefærdige vagttårn"
+    },
+    "sites/ruined_watchtower/seed": {
+      "hash": "f1a58911",
+      "text": "Et revnet tårn af grå sten; trappen er halvt styrtet sammen, og taget står åbent mod himlen."
+    },
+    "sites/old_mine/name": {
+      "hash": "d9b67005",
+      "text": "den forladte mine"
+    },
+    "sites/old_mine/seed": {
+      "hash": "8a263d6d",
+      "text": "Rådne tømmerstivere holder en lav tunnel oppe; gamle skinner forsvinder ind i mørket."
+    },
+    "sites/forest_glade/name": {
+      "hash": "e4a1b6cc",
+      "text": "den stille skovlysning"
+    },
+    "sites/forest_glade/seed": {
+      "hash": "9f8a2f1f",
+      "text": "Sollyset falder skråt gennem egetræerne ned på en mosklædt lysning; noget har trådt bregnerne ned."
+    },
+    "sites/wolf_den/name": {
+      "hash": "f1a87c8d",
+      "text": "hulen under den væltede eg"
+    },
+    "sites/wolf_den/seed": {
+      "hash": "9590daa3",
+      "text": "Gnavede knogler ligger spredt foran et mørkt hul under rødderne."
+    },
+    "sites/fen_shack/name": {
+      "hash": "c68e76a8",
+      "text": "pælehytten i sumpen"
+    },
+    "sites/fen_shack/seed": {
+      "hash": "72e2bed5",
+      "text": "En hytte på rådne pæle over sort vand, oplyst af et enkelt blafrende lys."
+    },
+    "sites/drowned_crypt/name": {
+      "hash": "e1a12233",
+      "text": "den halvt druknede krypt"
+    },
+    "sites/drowned_crypt/seed": {
+      "hash": "b6f5c8f9",
+      "text": "Stentrin fører ned i ankeldybt vand; navnene, der er hugget i væggene, er slidt glatte."
+    },
+    "sites/bog_hollow/name": {
+      "hash": "89a956cd",
+      "text": "lavningen dybt inde i mosen"
+    },
+    "sites/bog_hollow/seed": {
+      "hash": "5371b79d",
+      "text": "Sivene rager højt over hovedet; jorden gynger under fødderne, og bobler bryder overfladen."
+    },
+    "sites/fen_causeway/name": {
+      "hash": "66f4651a",
+      "text": "den gamle dæmningsvej gennem sumpen"
+    },
+    "sites/fen_causeway/seed": {
+      "hash": "3c42e755",
+      "text": "En hævet dæmningsvej af sunkne stammer snor sig mellem tågede damme."
+    },
+    "sites/sea_cave/name": {
+      "hash": "b0bfa128",
+      "text": "tidevandsgrotten ved kysten"
+    },
+    "sites/sea_cave/seed": {
+      "hash": "a68f7754",
+      "text": "Bølgerne drøner i en grotteåbning, der oversvømmes ved højvande; kasser dækket af rurer står stablet på en afsats."
+    },
+    "sites/smugglers_cove/name": {
+      "hash": "7ee8b265",
+      "text": "smuglerbugten"
+    },
+    "sites/smugglers_cove/seed": {
+      "hash": "80f0047b",
+      "text": "En halvmåneformet strand skjult af klinter, med en robåd trukket op mellem klipperne."
+    },
+    "sites/wreck/name": {
+      "hash": "3ef56736",
+      "text": "skibsvraget på stranden"
+    },
+    "sites/wreck/seed": {
+      "hash": "eec3e23b",
+      "text": "Et stort skibs ribben ligger i sandet, med lastrummet gabende og mørkt."
+    },
+    "sites/jungle_ruin/name": {
+      "hash": "709be492",
+      "text": "den tilgroede ruin på øen"
+    },
+    "sites/jungle_ruin/seed": {
+      "hash": "702c693c",
+      "text": "Papegøjer skriger over stentrin, der er slugt af slyngplanter og rødder."
+    },
+    "sites/coast_road/name": {
+      "hash": "017466ac",
+      "text": "kystvejen"
+    },
+    "sites/coast_road/seed": {
+      "hash": "3951b35b",
+      "text": "En forblæst vej langs klinterne, med måger, der kredser nedenunder."
+    },
+    "sites/kings_road/name": {
+      "hash": "a2123895",
+      "text": "kongevejen"
+    },
+    "sites/kings_road/seed": {
+      "hash": "408e86f4",
+      "text": "En brolagt vej med milesten langs siden, travl med vogne om dagen."
+    },
+    "sites/market_town/name": {
+      "hash": "37f2f764",
+      "text": "markedet og dets baggyder"
+    },
+    "sites/market_town/seed": {
+      "hash": "06196ba3",
+      "text": "Boder, sladder og smalle gyder, hvor folk taler med lav stemme."
+    },
+    "antagonists/bandit_gang/name": {
+      "hash": "07060099",
+      "text": "en banditbande"
+    },
+    "antagonists/goblin_raiders/name": {
+      "hash": "0602bfb6",
+      "text": "goblinplyndrere"
+    },
+    "antagonists/hobgoblin_warband/name": {
+      "hash": "179843eb",
+      "text": "en hobgoblin-krigerflok"
+    },
+    "antagonists/wolf_pack/name": {
+      "hash": "f93a646d",
+      "text": "en ulveflok"
+    },
+    "antagonists/owlbear/name": {
+      "hash": "04fcfd28",
+      "text": "en rasende uglebjørn"
+    },
+    "antagonists/choir_cell/name": {
+      "hash": "4b831860",
+      "text": "en celle fra Det Hule Kor"
+    },
+    "antagonists/restless_dead/name": {
+      "hash": "418bc7eb",
+      "text": "de rastløse døde"
+    },
+    "antagonists/bog_horror/name": {
+      "hash": "0cdce275",
+      "text": "noget ude i mosen"
+    },
+    "antagonists/giant_spiders/name": {
+      "hash": "102f9264",
+      "text": "en rede af kæmpeedderkopper"
+    },
+    "antagonists/pirate_crew/name": {
+      "hash": "55c5f6b6",
+      "text": "et piratmandskab"
+    },
+    "antagonists/sahuagin_raiders/name": {
+      "hash": "10567775",
+      "text": "sahuagin-plyndrere"
+    },
+    "antagonists/merrow/name": {
+      "hash": "47199a2c",
+      "text": "en merrow"
+    },
+    "antagonists/harpies/name": {
+      "hash": "6d59411a",
+      "text": "en flok harpyer"
+    },
+    "antagonists/rival_merchant/name": {
+      "hash": "30065ff0",
+      "text": "en rænkefuld konkurrerende købmand"
+    },
+    "complications/rain_of_arrows/text": {
+      "hash": "ff7984fb",
+      "text": "{antagonist} havde ventet besøg og har lagt et baghold."
+    },
+    "complications/ticking_clock/text": {
+      "hash": "f42fd06f",
+      "text": "Det skal gøres inden for et døgn, ellers er det for sent."
+    },
+    "complications/rival_adventurers/text": {
+      "hash": "531994ac",
+      "text": "En anden flok eventyrere er ude efter det samme bytte."
+    },
+    "complications/bad_weather/text": {
+      "hash": "2d42a932",
+      "text": "Et uvejr trækker op, idet du ankommer, og gør hvert skridt tungere."
+    },
+    "complications/locked_way/text": {
+      "hash": "9e16ba51",
+      "text": "Vejen ind er spærret og bevogtet."
+    },
+    "complications/innocent_hostage/text": {
+      "hash": "a765bad6",
+      "text": "En uskyldig er fanget midt i det hele og må ikke komme til skade."
+    },
+    "twists/patron_lied/text": {
+      "hash": "a90eafdb",
+      "text": "{patron} løj om, hvorfor det her skulle gøres."
+    },
+    "twists/sympathetic_foe/text": {
+      "hash": "83fd4d3b",
+      "text": "Der var en god grund til det, {antagonist} gjorde."
+    },
+    "twists/bigger_threat/text": {
+      "hash": "7ccb0aaa",
+      "text": "{antagonist} var på flugt fra noget, der er langt værre."
+    },
+    "twists/choir_mark/text": {
+      "hash": "e8a9bcbc",
+      "text": "Du finder Det Hule Kors syvtandede tegn ridset ind i nærheden."
+    },
+    "patrons/names": {
+      "hash": "6026ed00",
+      "text": [
+        "Gamle Maudie",
+        "Broder Aldo",
+        "Kaptajn Wren",
+        "Fiske-Sella",
+        "Mester Corvin",
+        "Enken Hask",
+        "Smede-Tamsin",
+        "Vicefoged Brand"
+      ]
+    },
+    "patrons/relatives": {
+      "hash": "1585225c",
+      "text": [
+        "datter",
+        "søn",
+        "bror",
+        "søster",
+        "lærling",
+        "mand",
+        "kone"
+      ]
+    },
+    "patrons/heirlooms": {
+      "hash": "2cad1f24",
+      "text": [
+        "sølvmedaljon",
+        "familiesabel",
+        "regnskabsbog",
+        "familiebibel",
+        "forseglede skrivelse",
+        "spilledåse"
+      ]
+    },
+    "patrons/mysteries": {
+      "hash": "13bb257e",
+      "text": [
+        "det forsvundne kvæg",
+        "den forgiftede brønd",
+        "de natlige klokker",
+        "de tomme fiskenet",
+        "de forsvundne skattepenge"
+      ]
+    },
+    "patrons/parcels": {
+      "hash": "d23b129c",
+      "text": [
+        "det forseglede brev",
+        "kassen med medicin",
+        "vielsesringen",
+        "kuren til et sygt barn"
+      ]
+    },
+    "threads/sextons_return/name": {
+      "hash": "de82489f",
+      "text": "Graverens genkomst"
+    },
+    "threads/sextons_return/villain": {
+      "hash": "dc065c28",
+      "text": "Broder Ashby"
+    },
+    "threads/sallows_seed/name": {
+      "hash": "79bc42ce",
+      "text": "Sallows frø"
+    },
+    "threads/sallows_seed/villain": {
+      "hash": "da536baf",
+      "text": "Sallow"
+    },
+    "threads/veys_last_run/name": {
+      "hash": "e527c08e",
+      "text": "Veys sidste tur"
+    },
+    "threads/veys_last_run/villain": {
+      "hash": "67e60428",
+      "text": "Harrow Vey"
+    },
+    "threads/hollow_library/name": {
+      "hash": "8eb10e70",
+      "text": "Det Hule Bibliotek"
+    },
+    "threads/hollow_library/villain": {
+      "hash": "eda2e468",
+      "text": "Vosk"
+    },
+    "threads/squires_errand/name": {
+      "hash": "d8b4fc83",
+      "text": "En væbners ærinde"
+    },
+    "threads/ashes_and_apologies/name": {
+      "hash": "d5dd48f9",
+      "text": "Aske og undskyldninger"
+    },
+    "threads/company_business/name": {
+      "hash": "0431d5b6",
+      "text": "Kompagniets forretninger"
+    },
+    "threads/company_business/villain": {
+      "hash": "8efcd59d",
+      "text": "Saltwinds dusørjægere"
+    },
+    "threads/gulls_grudge/name": {
+      "hash": "23d60585",
+      "text": "Mågens nag"
+    },
+    "threads/gulls_grudge/villain": {
+      "hash": "439b1048",
+      "text": "Red Gull-plyndrere"
+    },
+    "threads/governors_ledger/name": {
+      "hash": "484f5711",
+      "text": "Guvernørens regnskabsbog"
+    },
+    "threads/governors_ledger/villain": {
+      "hash": "2bfa4132",
+      "text": "Guvernør Pell"
+    },
+    "threads/aunties_due/name": {
+      "hash": "8df33307",
+      "text": "Hvad tante har til gode"
+    },
+    "threads/aunties_due/villain": {
+      "hash": "db87e19c",
+      "text": "havheksens søstre"
+    },
+    "threads/unclaimed_parrot/name": {
+      "hash": "150dc4a0",
+      "text": "Den uafhentede papegøje"
+    },
+    "threads/turncoats_debt/name": {
+      "hash": "cd4399d7",
+      "text": "Overløberens gæld"
+    },
+    "threads/turncoats_debt/villain": {
+      "hash": "cec9b5e9",
+      "text": "Rook Marrowby"
+    },
+    "threads/bells_of_mercy/name": {
+      "hash": "45c87dba",
+      "text": "Barmhjertighedens klokker"
+    },
+    "threads/debt_collectors/name": {
+      "hash": "f89cc268",
+      "text": "Inkassatorerne"
+    },
+    "threads/debt_collectors/villain": {
+      "hash": "9d86d118",
+      "text": "Red Gull-inkassatorer"
+    },
+    "threads/wanted/name": {
+      "hash": "4237dc0e",
+      "text": "Efterlyst"
+    },
+    "threads/wanted/villain": {
+      "hash": "8735d2e1",
+      "text": "dusørjægere"
+    }
+  }
+}

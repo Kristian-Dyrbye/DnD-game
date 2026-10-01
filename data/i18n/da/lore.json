@@ -1,0 +1,757 @@
+{
+  "$source": "data/world/lore.json",
+  "strings": {
+    "continent/name": {
+      "hash": "bafcbe47",
+      "text": "Orrimar"
+    },
+    "continent/summary": {
+      "hash": "ca4dfbb7",
+      "text": "Orrimar er et kileformet kontinent, arret af en ældgammel krig mellem drager og de første kongeriger. Det gyldne kongerige i nord husker stadig sin storhed, sumpene i vest rådner under en sovende sult, og sydkysten med dens øer tilhører den, der kan holde et dæk i en storm."
+    },
+    "regions/aurelmark/name": {
+      "hash": "5adcbe86",
+      "text": "Kongeriget Aurelmark"
+    },
+    "regions/aurelmark/summary": {
+      "hash": "36e81312",
+      "text": "Et rige af hvidmurede byer, veje med bannere langs siderne og ridderordener svoret til Daggryets Vogter. Drager ruger stadig i Emberpeaks, og ruinerne af et ældre imperium gemmer både skatte og advarsler."
+    },
+    "regions/aurelmark/toneProfile/style": {
+      "hash": "c13687d5",
+      "text": "Skriv med varm, bevægende storhed: sollys på rustninger, våbenskjolde, eder og undren. Heltemod er muligt og bliver belønnet, og selv fare føles som begyndelsen på en legende."
+    },
+    "regions/aurelmark/travelNotes": {
+      "hash": "43497bd5",
+      "text": "Kronens veje bliver patruljeret og holdt godt ved lige, med en vejsten for hver ti engelske mil. Uden for vejene gør bakketrolde og strejfende drakes de høje pas farlige uden eskorte."
+    },
+    "regions/gloamfen/name": {
+      "hash": "c7e28a27",
+      "text": "Gloamfen"
+    },
+    "regions/gloamfen/summary": {
+      "hash": "353648be",
+      "text": "Et druknet lavland af tørvemoser, døde skove og befæstede byer, der spærrer portene ved skumring. Pest, hungersnød og ting, der kravler op af mosen, har gjort folket hårdt, mistænksomt og villigt til at gøre forfærdelige ting for at overleve."
+    },
+    "regions/gloamfen/toneProfile/style": {
+      "hash": "297c1fd6",
+      "text": "Skriv med behersket rædsel: kold tåge, rationeret brød, hviskede aftaler og følelsen af, at noget altid holder øje. Sejre koster noget, og venlighed er sjælden nok til at betyde noget."
+    },
+    "regions/gloamfen/travelNotes": {
+      "hash": "305fda06",
+      "text": "Dæmningsvejene synker og flytter sig, og mosestierne er kun sikre i dagslys. Rejsende bærer lygter, salt og ekstra støvler; byerne lukker ingen ind efter mørkets frembrud."
+    },
+    "regions/brinescatter_isles/name": {
+      "hash": "2a0fe674",
+      "text": "Brinescatter-øerne"
+    },
+    "regions/brinescatter_isles/summary": {
+      "hash": "8908a7c5",
+      "text": "En solbleget sydkyst og et væld af øer, hvor handelsflåder, piratmandskaber og smuglere udveksler kanonild og fornærmelser i lige mål. Skattekort er flere end ærlige regnskabsbøger, og alle har en tjeneste til gode hos nogen."
+    },
+    "regions/brinescatter_isles/toneProfile/style": {
+      "hash": "1dcca475",
+      "text": "Skriv med frisk, legesyg energi: saltsprøjt, vittige replikker, dristige stunts og farverige skurke. Faren er virkelig, men spændende, og en snedig bemærkning er lige så god som et sværd."
+    },
+    "regions/brinescatter_isles/travelNotes": {
+      "hash": "0cecdb80",
+      "text": "For at komme fra ø til ø skal man have plads på et skib; kaptajnerne tager betaling per dag og mere for at sejle gennem piratfarvande. Stormsæsonen (sensommer til efterår) kan holde rejsende fast i flere dage."
+    },
+    "history/age_of_wyrms/name": {
+      "hash": "d0d47332",
+      "text": "Lindormenes tidsalder"
+    },
+    "history/age_of_wyrms/summary": {
+      "hash": "51aa6251",
+      "text": "Store drager herskede over Orrimar og rejste Emberpeaks med deres ild. De dødelige folk levede som deres skatskyldige og tjenere."
+    },
+    "history/the_first_oath/name": {
+      "hash": "c81c955a",
+      "text": "Den Første Ed"
+    },
+    "history/the_first_oath/summary": {
+      "hash": "5e5c04f6",
+      "text": "Høvdinge blandt mennesker, dværge og elvere svor en ed for Solenne og rejste sig mod dragerne. Den sejrende alliance grundlagde Vaelthorn-imperiet."
+    },
+    "history/vaelthorn_empire/name": {
+      "hash": "decb7107",
+      "text": "Vaelthorn-imperiet"
+    },
+    "history/vaelthorn_empire/summary": {
+      "hash": "cd679132",
+      "text": "Imperiet strakte sig over hele kontinentet, afvandede lavlandet i vest og byggede veje, fyrtårne og himmeltårne. Dets magikere blev hovmodige og begyndte at grave efter magt dybt under jorden."
+    },
+    "history/the_opened_maw/name": {
+      "hash": "fa954a26",
+      "text": "Det Åbnede Svælg"
+    },
+    "history/the_opened_maw/summary": {
+      "hash": "27e010b1",
+      "text": "Imperiets gravere brød ind i en forseglet hvælving under lavlandet i vest og vækkede Vashkul, Det Sultne Mørke. Landet sank, havet strømmede ind, og Gloamfen blev født."
+    },
+    "history/the_long_dusk/name": {
+      "hash": "1429ab1f",
+      "text": "Den Lange Skumring"
+    },
+    "history/the_long_dusk/summary": {
+      "hash": "6d657d98",
+      "text": "Et århundrede med pest, hungersnød og borgerkrig knuste imperiet. Lygtevogterne blev grundlagt for at holde det tilbage, der kravlede op af sumpene."
+    },
+    "history/founding_of_aurelmark/name": {
+      "hash": "82452321",
+      "text": "Aurelmarks grundlæggelse"
+    },
+    "history/founding_of_aurelmark/summary": {
+      "hash": "d4c77e9e",
+      "text": "Dronning Aurelia Lægeren samlede de nordlige provinser under én krone i Highcrown. Aurelmarks kalender tæller sine år fra den dag."
+    },
+    "history/charter_of_the_isles/name": {
+      "hash": "6e00a0d3",
+      "text": "Øernes Charter"
+    },
+    "history/charter_of_the_isles/summary": {
+      "hash": "d7001e02",
+      "text": "Kronen gav Saltwind-handelskompagniet monopol på søhandelen i syd. Øboere, der nægtede at betale dets told, gik til piratvirksomhed, og Red Gull-broderskabet blev født."
+    },
+    "history/the_ashfall_winter/name": {
+      "hash": "93dae782",
+      "text": "Askefaldsvinteren"
+    },
+    "history/the_ashfall_winter/summary": {
+      "hash": "e80c6729",
+      "text": "Den røde drage Pyrraxis vågnede i Emberpeaks og brændte tre dale, før Daggrylansen drev den tilbage til dens hule. Mange riddere døde, og dragen blev såret, men aldrig dræbt."
+    },
+    "history/the_whispering_sickness/name": {
+      "hash": "e2598cfb",
+      "text": "Den Hviskende Syge"
+    },
+    "history/the_whispering_sickness/summary": {
+      "hash": "e9216e84",
+      "text": "En ny pest breder sig fra Gloamfen, og de ramte hører stemmer, der lover, at sulten vil få en ende. For første gang i århundreder er der hørt kultprædikener i Highcrown og Port Sorrel."
+    },
+    "gods/solenne/name": {
+      "hash": "bf5d1847",
+      "text": "Solenne"
+    },
+    "gods/solenne/title": {
+      "hash": "80df31e7",
+      "text": "Daggryets Vogter"
+    },
+    "gods/solenne/symbol": {
+      "hash": "f9540c1f",
+      "text": "En opgående sol bag et dråbeformet skjold"
+    },
+    "gods/solenne/summary": {
+      "hash": "772baa9d",
+      "text": "Skytsgudinde for eder, riddere og den første solopgang efter mørket. Hendes templer ringer med klokkerne ved daggry, og det siges, at edsbrydere mister deres skygge."
+    },
+    "gods/korrath/name": {
+      "hash": "0543d0e6",
+      "text": "Korrath"
+    },
+    "gods/korrath/title": {
+      "hash": "2baf6561",
+      "text": "Smedefaderen"
+    },
+    "gods/korrath/symbol": {
+      "hash": "815976ce",
+      "text": "En hammer lagt på tværs af en ambolt"
+    },
+    "gods/korrath/summary": {
+      "hash": "52837f23",
+      "text": "Streng gud for smede, minearbejdere og redelige kontrakter, dyrket af dværgene frem for alle. Han værdsætter ærligt arbejde og straffer både sjusket håndværk og brudte aftaler."
+    },
+    "gods/thaloren/name": {
+      "hash": "fed23efe",
+      "text": "Thaloren"
+    },
+    "gods/thaloren/title": {
+      "hash": "d3843175",
+      "text": "Grønhjertet"
+    },
+    "gods/thaloren/symbol": {
+      "hash": "b0fe01dc",
+      "text": "Et egeblad kronet med et gevir"
+    },
+    "gods/thaloren/summary": {
+      "hash": "75562795",
+      "text": "Den vandrende gud for vækst, årstider og vilde dyr. Bønderne efterlader det første neg af hver høst til ham, og sumpfolket beder om, at han vender tilbage til de døde skove."
+    },
+    "gods/mireth/name": {
+      "hash": "8067b14e",
+      "text": "Mireth"
+    },
+    "gods/mireth/title": {
+      "hash": "443b68d7",
+      "text": "den Blege Moder"
+    },
+    "gods/mireth/symbol": {
+      "hash": "e40d9409",
+      "text": "En hvid hånd, der skærmer om en lysflamme"
+    },
+    "gods/mireth/summary": {
+      "hash": "0e620fd4",
+      "text": "Gudinde for den fredfulde død og den hvile, der følger. I Gloamfen brænder hendes præster de døde, så Vashkul ikke kan gøre krav på dem."
+    },
+    "gods/vashkul/name": {
+      "hash": "6c03d169",
+      "text": "Vashkul"
+    },
+    "gods/vashkul/title": {
+      "hash": "4f005833",
+      "text": "det Sultne Mørke"
+    },
+    "gods/vashkul/symbol": {
+      "hash": "20d278b2",
+      "text": "En sort mund omkranset af syv tænder"
+    },
+    "gods/vashkul/summary": {
+      "hash": "723507da",
+      "text": "En urgammel sult, forseglet under Orrimar, før guderne havde navne. Den lover de sultende, at de aldrig skal mangle noget igen, og den holder det løfte på den værst tænkelige måde."
+    },
+    "gods/oshaya/name": {
+      "hash": "3026a0d2",
+      "text": "Oshaya"
+    },
+    "gods/oshaya/title": {
+      "hash": "8d8982bb",
+      "text": "Tidevandsmoderen"
+    },
+    "gods/oshaya/symbol": {
+      "hash": "1e2972a7",
+      "text": "En spiralsnoet konkylie viklet ind i tang"
+    },
+    "gods/oshaya/summary": {
+      "hash": "200ddf0d",
+      "text": "Lunefuld gudinde for tidevandet, der drukner konger og skåner skibsdrenge efter forgodtbefindende. Enhver sømand spilder den første slurk grog for hende."
+    },
+    "gods/fennick/name": {
+      "hash": "7bd980c9",
+      "text": "Fennick"
+    },
+    "gods/fennick/title": {
+      "hash": "7030a569",
+      "text": "den Grinende Mønt"
+    },
+    "gods/fennick/symbol": {
+      "hash": "3adcb7c8",
+      "text": "En guldmønt med et blinkende ansigt"
+    },
+    "gods/fennick/summary": {
+      "hash": "0eda1eea",
+      "text": "Skytsgud for spillere, skurke og alle, der vinder mod alle odds. Hans helligdomme er gemt i kroer, og han begunstiger dem, der deler deres held."
+    },
+    "gods/veyra/name": {
+      "hash": "66c7f3ea",
+      "text": "Veyra"
+    },
+    "gods/veyra/title": {
+      "hash": "5fcea416",
+      "text": "den Tilslørede Måne"
+    },
+    "gods/veyra/symbol": {
+      "hash": "df7ac990",
+      "text": "En månesegl med et åbent øje"
+    },
+    "gods/veyra/summary": {
+      "hash": "93ed6a5f",
+      "text": "Hemmelighedernes vogter og vejleder for navigatører og lærde. Hun sender drømme som advarsler, og hendes præster er de eneste, der studerer Vashkul uden at falde for det."
+    },
+    "factions/crown_of_aurelmark/name": {
+      "hash": "21ed775c",
+      "text": "Aurelmarks Krone"
+    },
+    "factions/crown_of_aurelmark/summary": {
+      "hash": "82c30e61",
+      "text": "Kongehuset og dets hof, der har styret det nordlige kongerige siden dronning Aurelia. Stolt og gavmild over for sine allierede, men spændt hårdt ud af drageangreb og den spredende syge."
+    },
+    "factions/crown_of_aurelmark/goals": {
+      "hash": "c2ad50fb",
+      "text": [
+        "Holde Den Hviskende Syge ude af kongeriget",
+        "Genoprette kongemagtens herredømme over sølanerne i syd",
+        "Dræbe dragen Pyrraxis én gang for alle"
+      ]
+    },
+    "factions/crown_of_aurelmark/leader/name": {
+      "hash": "1859901d",
+      "text": "Dronning Isolde Varannis"
+    },
+    "factions/crown_of_aurelmark/leader/summary": {
+      "hash": "5a0b44a4",
+      "text": "En ung og skarp monark, der arvede en statskasse tømt af Askefaldsvinteren. Hun stoler på for få rådgivere, og en af dem lyver for hende."
+    },
+    "factions/crown_of_aurelmark/symbol": {
+      "hash": "f7a87cfc",
+      "text": "En gylden krone over et hvidt tårn"
+    },
+    "factions/order_of_the_dawn_lance/name": {
+      "hash": "bf1e7d6f",
+      "text": "Daggrylansens Orden"
+    },
+    "factions/order_of_the_dawn_lance/summary": {
+      "hash": "86bb5395",
+      "text": "Riddere svoret til Solenne, der værner riget mod drager og mørke. Deres antal er aldrig kommet sig efter Askefaldsvinteren."
+    },
+    "factions/order_of_the_dawn_lance/goals": {
+      "hash": "4fcc953a",
+      "text": [
+        "Genopbygge ordenen med nye, værdige riddere",
+        "Hente den tabte lanse Dawnbreaker tilbage fra ruinerne af Gamle Vaelthorn",
+        "Udrydde Det Hule Kor"
+      ]
+    },
+    "factions/order_of_the_dawn_lance/leader/name": {
+      "hash": "4b6a9792",
+      "text": "Øverstbefalende Aldric Thane"
+    },
+    "factions/order_of_the_dawn_lance/leader/summary": {
+      "hash": "a0bd24bf",
+      "text": "En arret veteran fra Askefaldsvinteren, der mistede sin dragedræberlanse og halvdelen af sine riddere. Han er hæderlig til det yderste og sen til at tilgive."
+    },
+    "factions/order_of_the_dawn_lance/symbol": {
+      "hash": "a71ad066",
+      "text": "En sølvlanse foran en opgående sol"
+    },
+    "factions/ironvault_consortium/name": {
+      "hash": "cfb25617",
+      "text": "Jernhvælv-konsortiet"
+    },
+    "factions/ironvault_consortium/summary": {
+      "hash": "c38f354e",
+      "text": "Et dværgelaug af smede, bankfolk og mineejere med base i Deepanvil Hold. Det ejer kronens gæld og meget af dens stål."
+    },
+    "factions/ironvault_consortium/goals": {
+      "hash": "040e7487",
+      "text": [
+        "Inddrive kronens krigsgæld",
+        "Sikre trygge transporter af malm og mønt",
+        "Genåbne de forseglede dybe miner"
+      ]
+    },
+    "factions/ironvault_consortium/leader/name": {
+      "hash": "41e14021",
+      "text": "Laugsmester Brunhild Ashgrove"
+    },
+    "factions/ironvault_consortium/leader/summary": {
+      "hash": "306a98a6",
+      "text": "En snu dværg, der måler enhver tjeneste i mønt og aldrig glemmer en gæld. Hun er ærlig, men aldrig gavmild."
+    },
+    "factions/ironvault_consortium/symbol": {
+      "hash": "40034d69",
+      "text": "En jernnøgle krydset med en hammer"
+    },
+    "factions/lantern_wardens/name": {
+      "hash": "378cdf5a",
+      "text": "Lygtevogterne"
+    },
+    "factions/lantern_wardens/summary": {
+      "hash": "93613449",
+      "text": "Barske monsterjægere, der har holdt sumpbyerne siden Den Lange Skumring. De brænder de smittede, de døde og til tider dem, der blot er mistænkt."
+    },
+    "factions/lantern_wardens/goals": {
+      "hash": "ef2b95f6",
+      "text": [
+        "Inddæmme Den Hviskende Syge med alle midler",
+        "Ødelægge Det Hule Kors skjulte helligdom",
+        "Rense sumpene for Briarkin-heksene"
+      ]
+    },
+    "factions/lantern_wardens/leader/name": {
+      "hash": "8c7cc714",
+      "text": "Vogterkaptajn Maud Grell"
+    },
+    "factions/lantern_wardens/leader/summary": {
+      "hash": "fe220149",
+      "text": "En utrættelig kvinde med en vilje af jern, der har underskrevet flere brændingsordrer, end hun kan tælle. Hun mener, at barmhjertighed er en luksus, sumpene ikke har råd til."
+    },
+    "factions/lantern_wardens/symbol": {
+      "hash": "7c87ff16",
+      "text": "En tændt lygte hængt fra to krydsede piker"
+    },
+    "factions/briarkin/name": {
+      "hash": "b0cb1f26",
+      "text": "Briarkin"
+    },
+    "factions/briarkin/summary": {
+      "hash": "1fa0d711",
+      "text": "Klaner af sumpfolk, ledet af hækkehekse, der købslår med mosens ånder. De heler de syge, når Vogterne ville brænde dem, men deres kure har altid en pris."
+    },
+    "factions/briarkin/goals": {
+      "hash": "8aba7312",
+      "text": [
+        "Overleve Vogternes udrensninger",
+        "Finde en virkelig kur mod Den Hviskende Syge",
+        "Forhindre fremmede i at afvande de sidste vilde moser"
+      ]
+    },
+    "factions/briarkin/leader/name": {
+      "hash": "6a6b8004",
+      "text": "Bedstemor Wick"
+    },
+    "factions/briarkin/leader/summary": {
+      "hash": "a23ea5f0",
+      "text": "En ældgammel, blødtalende heks, der gemmer sit sande navn i en krukke. Hun er venlig mod børn og skræmmende for alle andre."
+    },
+    "factions/briarkin/symbol": {
+      "hash": "191386da",
+      "text": "En tornet brombærranke viklet om en knogle"
+    },
+    "factions/hollow_choir/name": {
+      "hash": "f5ef1bb4",
+      "text": "Det Hule Kor"
+    },
+    "factions/hollow_choir/summary": {
+      "hash": "0e2c688f",
+      "text": "En hemmelig kult, der tilbeder Vashkul og spreder Den Hviskende Syge for at åbne det forseglede Svælg. Dens celler gemmer sig blandt adelige i Highcrown, havnearbejdere i Port Sorrel og de sultende i sumpene."
+    },
+    "factions/hollow_choir/goals": {
+      "hash": "4b607f2f",
+      "text": [
+        "Sprede Den Hviskende Syge over hele Orrimar",
+        "Samle de syv Tand-relikvier for at åbne Svælget",
+        "Få en agent anbragt ved dronningens side"
+      ]
+    },
+    "factions/hollow_choir/leader/name": {
+      "hash": "4c6fa33b",
+      "text": "Kantoren"
+    },
+    "factions/hollow_choir/leader/summary": {
+      "hash": "12ac6d35",
+      "text": "En maskeret skikkelse, hvis stemme høres i de syges drømme. Kantorens sande identitet er en adelig fra Highcrown og en hemmelighed for hele kampagnen."
+    },
+    "factions/hollow_choir/symbol": {
+      "hash": "20d278b2",
+      "text": "En sort mund omkranset af syv tænder"
+    },
+    "factions/saltwind_trading_company/name": {
+      "hash": "3480766c",
+      "text": "Saltwind-handelskompagniet"
+    },
+    "factions/saltwind_trading_company/summary": {
+      "hash": "06417e48",
+      "text": "Et handelskompagni med kongeligt privilegium, der styrer søhandelen i syd fra Port Sorrel. Tolden gør det rigt, og kanonbådene gør det frygtet."
+    },
+    "factions/saltwind_trading_company/goals": {
+      "hash": "5b5cb807",
+      "text": [
+        "Knuse piratvirksomheden på Brinescatter-øerne",
+        "Knække frihavnen Gullhaven",
+        "Få sit monopolprivilegium fornyet"
+      ]
+    },
+    "factions/saltwind_trading_company/leader/name": {
+      "hash": "145c9d89",
+      "text": "Guvernør Cassius Pell"
+    },
+    "factions/saltwind_trading_company/leader/summary": {
+      "hash": "094a6c13",
+      "text": "En smilende, parfumeret embedsmand med en regnskabsbog i stedet for et hjerte. Han hænger pirater om tirsdagen og spiser middag med smuglere om fredagen."
+    },
+    "factions/saltwind_trading_company/symbol": {
+      "hash": "32ad5df4",
+      "text": "Et hvidt sejl over en gylden vægt"
+    },
+    "factions/red_gull_brotherhood/name": {
+      "hash": "6cd3f8d1",
+      "text": "Red Gull-broderskabet"
+    },
+    "factions/red_gull_brotherhood/summary": {
+      "hash": "f57bdc1b",
+      "text": "En larmende, prangende piratflåde, der plyndrer Saltwinds skibe og deler byttet med øerne. De har en kodeks, og de følger den for det meste."
+    },
+    "factions/red_gull_brotherhood/goals": {
+      "hash": "3ce58229",
+      "text": [
+        "Årelade Saltwind-kompagniet til det sidste",
+        "Finde Messingpapegøjens tabte skat",
+        "Bevare Gullhaven som frihavn"
+      ]
+    },
+    "factions/red_gull_brotherhood/leader/name": {
+      "hash": "ccdf8516",
+      "text": "Kaptajn Marisol \"To-Hatte\" Quint"
+    },
+    "factions/red_gull_brotherhood/leader/summary": {
+      "hash": "2088a054",
+      "text": "En flot halvelver-kaptajn, der bærer to hatte på én gang, én for hver formue, hun har vundet og tabt. Hun bryder aldrig et løfte, men hun bøjer tit et."
+    },
+    "factions/red_gull_brotherhood/symbol": {
+      "hash": "4e6bbf78",
+      "text": "En rød måge med en huggert i kløerne"
+    },
+    "factions/tidewright_guild/name": {
+      "hash": "7e2b77fa",
+      "text": "Tidewright-lauget"
+    },
+    "factions/tidewright_guild/summary": {
+      "hash": "f6d811e2",
+      "text": "Skibsbyggere, havnelodser og skibshandlere, der driver frihavnen Gullhaven. De bygger skibe til enhver, der betaler, og stiller ingen spørgsmål."
+    },
+    "factions/tidewright_guild/goals": {
+      "hash": "4d9c2d3d",
+      "text": [
+        "Holde Gullhaven uafhængig af Saltwind-kompagniet",
+        "Vinde retten til at bygge krigsskibe tilbage",
+        "Kortlægge en sikker passage gennem Det Syngende Rev"
+      ]
+    },
+    "factions/tidewright_guild/leader/name": {
+      "hash": "8d63e568",
+      "text": "Havnefoged Oswin Tull"
+    },
+    "factions/tidewright_guild/leader/summary": {
+      "hash": "d250305e",
+      "text": "En rund, munter gnom, der kender hvert tidevand og hvert rygte. Han spiller på begge heste, indtil han bliver nødt til at vælge."
+    },
+    "factions/tidewright_guild/symbol": {
+      "hash": "0e287aa6",
+      "text": "Et skibsrat krydset af en skarøkse"
+    },
+    "locations/highcrown/name": {
+      "hash": "4bb34698",
+      "text": "Highcrown"
+    },
+    "locations/highcrown/summary": {
+      "hash": "60cbdbfd",
+      "text": "Aurelmarks hvidmurede hovedstad, bygget i terrasser op ad en bakke, der krones af kongeslottet. Markederne er rige, templerne storslåede og salonerne fulde af intriger."
+    },
+    "locations/brightwater/name": {
+      "hash": "7d9cc570",
+      "text": "Brightwater"
+    },
+    "locations/brightwater/summary": {
+      "hash": "8120b80b",
+      "text": "En travl flodby med møller og pramme, hvor floden Silverrun begynder sin lange rejse mod syd. Købmænd fra alle egne passerer dens toldbro."
+    },
+    "locations/millbrook/name": {
+      "hash": "58c26e3e",
+      "text": "Millbrook"
+    },
+    "locations/millbrook/summary": {
+      "hash": "259bdb9e",
+      "text": "En søvnig landsby i kongerigets sydvestlige udkant, tæt nok på sumpene til at mærke deres kulde. Nylige forsvindinger har fået folk til at slå slåen for dørene."
+    },
+    "locations/dawnspire_keep/name": {
+      "hash": "a1add64f",
+      "text": "Dawnspire Keep"
+    },
+    "locations/dawnspire_keep/summary": {
+      "hash": "5779b1c1",
+      "text": "Daggrylansens bjergfæstning, hvis høje spir fanger det første lys hver morgen. Dens haller har været halvtomme siden Askefaldsvinteren."
+    },
+    "locations/emberpeak/name": {
+      "hash": "804d44bf",
+      "text": "Emberpeak"
+    },
+    "locations/emberpeak/summary": {
+      "hash": "9c381821",
+      "text": "En rygende vulkantop gennemhullet af tunneler, den røde drage Pyrraxis' hule. Skråningerne er overstrøet med de smeltede rustninger fra mislykkede helte."
+    },
+    "locations/deepanvil_hold/name": {
+      "hash": "985ca15c",
+      "text": "Deepanvil Hold"
+    },
+    "locations/deepanvil_hold/summary": {
+      "hash": "e9449b6b",
+      "text": "En dværgeby hugget ind i de østlige bjerge, larmende af smedjer og kontorer. Dens hvælvinger rummer halvdelen af kongerigets guld."
+    },
+    "locations/ruins_of_old_vaelthorn/name": {
+      "hash": "257e881d",
+      "text": "Ruinerne af Gamle Vaelthorn"
+    },
+    "locations/ruins_of_old_vaelthorn/summary": {
+      "hash": "ad3c83a4",
+      "text": "Den gamle kejserlige hovedstads knuste himmeltårne, tilgroede og hjemsøgt af magiske konstruktioner, der stadig vogter deres herrers hemmeligheder. Den tabte lanse Dawnbreaker siges at ligge derinde."
+    },
+    "locations/ravensgate/name": {
+      "hash": "49726065",
+      "text": "Ravensgate"
+    },
+    "locations/ravensgate/summary": {
+      "hash": "098d17e0",
+      "text": "En befæstet grænseby på den sidste tørre højderyg før sumpene, fyldt med flygtninge og omkranset af galger. Portene lukker ved solnedgang og åbnes ikke for nogen."
+    },
+    "locations/hollowmere/name": {
+      "hash": "3d609405",
+      "text": "Hollowmere"
+    },
+    "locations/hollowmere/summary": {
+      "hash": "4ce0981b",
+      "text": "En landsby på pæle over sort vand, hvor fiskerne sælger ål og løgne i lige mål. Halvdelen af husene står tomme, og ingen siger hvorfor."
+    },
+    "locations/thornwife_hollow/name": {
+      "hash": "f648be32",
+      "text": "Thornwife Hollow"
+    },
+    "locations/thornwife_hollow/summary": {
+      "hash": "6cf87c4c",
+      "text": "Et sammenfiltret tornekrat, der skjuler Briarkins tingkreds og Bedstemor Wicks hytte. Fremmede, der går ind uden lov, finder sjældent vejen ud igen."
+    },
+    "locations/drowned_abbey/name": {
+      "hash": "58591e32",
+      "text": "Det Druknede Kloster"
+    },
+    "locations/drowned_abbey/summary": {
+      "hash": "8d7743da",
+      "text": "Et halvt sunket kloster viet til Mireth, hvis klokker stadig ringer under vandet ved midnat. Nogle få stædige præster holder de øverste etager og brænder de døde, der bliver bragt til dem."
+    },
+    "locations/lantern_hold/name": {
+      "hash": "1aeba6e0",
+      "text": "Lygteborgen"
+    },
+    "locations/lantern_hold/summary": {
+      "hash": "8d8a3a47",
+      "text": "Vogternes barske hovedkvarter af sten, hvis mure lyses op af hundrede lygter, der aldrig må gå ud. Bålene ryger i gården dag og nat."
+    },
+    "locations/blightwood/name": {
+      "hash": "efb6a50f",
+      "text": "Visneskoven"
+    },
+    "locations/blightwood/summary": {
+      "hash": "01071549",
+      "text": "En skov af grå, bladløse træer, der græder sort saft. Ulvene her har for mange øjne, og stierne skifter efter mørkets frembrud."
+    },
+    "locations/the_maw/name": {
+      "hash": "1a35affb",
+      "text": "Svælget"
+    },
+    "locations/the_maw/summary": {
+      "hash": "9f759bd7",
+      "text": "Et enormt synkehul, hvor imperiets gravere vækkede Vashkul, nu omkranset af Det Hule Kors skjulte helligdom. Jorden trækker vejret, langsomt."
+    },
+    "locations/port_sorrel/name": {
+      "hash": "419f2269",
+      "text": "Port Sorrel"
+    },
+    "locations/port_sorrel/summary": {
+      "hash": "e3effe18",
+      "text": "Saltwind-kompagniets velordnede havneby ved Silverruns udmunding, bare hvidkalkede pakhuse og hængende bure. Alt er til salg, hvis man betaler tolden."
+    },
+    "locations/fort_kestrel/name": {
+      "hash": "c78bcdfe",
+      "text": "Fort Kestrel"
+    },
+    "locations/fort_kestrel/summary": {
+      "hash": "7c407a52",
+      "text": "Et stjerneformet Saltwind-fort på en klint ved kysten, strittende af kanoner og med en lang række piratgalger. Kommandanten er berømt for at kunne bestikkes."
+    },
+    "locations/fennicks_rest/name": {
+      "hash": "be190c33",
+      "text": "Fennicks Hvile"
+    },
+    "locations/fennicks_rest/summary": {
+      "hash": "ce898890",
+      "text": "En munter fiskerlandsby af malede skure og én enorm spillehal. Smuglere lægger til her, fordi ingen stiller spørgsmål, og alle vædder om alt."
+    },
+    "locations/gullhaven/name": {
+      "hash": "006c9863",
+      "text": "Gullhaven"
+    },
+    "locations/gullhaven/summary": {
+      "hash": "d07a3232",
+      "text": "En faldefærdig frihavn bygget på vragene af hundrede skibe, surret sammen over en lagune. Pirater, handelsfolk og skibsbyggere deler dens grogknejper under en skrøbelig våbenhvile."
+    },
+    "locations/wreckers_cove/name": {
+      "hash": "493d3de7",
+      "text": "Vragplyndrerbugten"
+    },
+    "locations/wreckers_cove/summary": {
+      "hash": "093797f9",
+      "text": "Havgrotter, hvor vragplyndrere engang lokkede skibe ind på klipperne med falske lys. Nu gemmer Red Gull-folkene deres bytte her, sammen med noget, der æder de uforsigtige."
+    },
+    "locations/singing_reef/name": {
+      "hash": "d026ae85",
+      "text": "Det Syngende Rev"
+    },
+    "locations/singing_reef/summary": {
+      "hash": "10f4a590",
+      "text": "En ring af koralspir, der nynner uhyggeligt, når vinden rejser sig, og lokker skibe ind på klipperne. Det rygtes, at sirener og havhekse holder til i lagunen i dens midte."
+    },
+    "locations/isle_of_brass_parrots/name": {
+      "hash": "600f7bd3",
+      "text": "Messingpapegøjernes Ø"
+    },
+    "locations/isle_of_brass_parrots/summary": {
+      "hash": "320e77b8",
+      "text": "En jungleø, hvor mekaniske papegøjer fra en forsvunden opfinder stadig skræpper gåder fra træerne. Messingpapegøjens skat er begravet et sted under øens vulkan."
+    },
+    "calendar/months/seedwake/name": {
+      "hash": "887b417c",
+      "text": "Frøvåg"
+    },
+    "calendar/months/bloomrise/name": {
+      "hash": "d3c61221",
+      "text": "Blomstergry"
+    },
+    "calendar/months/greentide/name": {
+      "hash": "bb5aec00",
+      "text": "Grøntid"
+    },
+    "calendar/months/highsun/name": {
+      "hash": "4ec6ab59",
+      "text": "Højsol"
+    },
+    "calendar/months/blazeheart/name": {
+      "hash": "55d95d69",
+      "text": "Glødhjerte"
+    },
+    "calendar/months/longlight/name": {
+      "hash": "d392199d",
+      "text": "Langlys"
+    },
+    "calendar/months/reapmoon/name": {
+      "hash": "d2679024",
+      "text": "Høstmåne"
+    },
+    "calendar/months/leaffall/name": {
+      "hash": "45b0e9d0",
+      "text": "Løvfald"
+    },
+    "calendar/months/mistwane/name": {
+      "hash": "9c7f331d",
+      "text": "Tågesvind"
+    },
+    "calendar/months/frostwatch/name": {
+      "hash": "42fb56b0",
+      "text": "Frostvagt"
+    },
+    "calendar/months/deepdark/name": {
+      "hash": "a7585777",
+      "text": "Dybmørke"
+    },
+    "calendar/months/thawmoon/name": {
+      "hash": "fe0fe880",
+      "text": "Tømåne"
+    },
+    "calendar/weekdays/dawnday/name": {
+      "hash": "d6bccd43",
+      "text": "Gryningsdag"
+    },
+    "calendar/weekdays/forgeday/name": {
+      "hash": "3ab29dba",
+      "text": "Smedjedag"
+    },
+    "calendar/weekdays/greenday/name": {
+      "hash": "4978c0d6",
+      "text": "Grøndag"
+    },
+    "calendar/weekdays/tideday/name": {
+      "hash": "2da253a9",
+      "text": "Tidevandsdag"
+    },
+    "calendar/weekdays/moonday/name": {
+      "hash": "37ecf0ea",
+      "text": "Månedag"
+    },
+    "calendar/weekdays/coinday/name": {
+      "hash": "c776ab66",
+      "text": "Møntdag"
+    },
+    "calendar/weekdays/candleday/name": {
+      "hash": "20b1d6a2",
+      "text": "Lysdag"
+    }
+  }
+}

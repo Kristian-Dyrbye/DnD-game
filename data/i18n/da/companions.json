@@ -1,0 +1,133 @@
+{
+  "$source": "data/companions.json",
+  "strings": {
+    "companions/corwin/name": {
+      "hash": "f94b0d07",
+      "text": "Ser Corwin Ashvale"
+    },
+    "companions/corwin/personality": {
+      "hash": "21513433",
+      "text": "Oprigtig, stædig og med en tør humor; han skammer sig over sin afsked, men går aldrig og surmuler."
+    },
+    "companions/corwin/goal": {
+      "hash": "111ce555",
+      "text": "Bevise at Daggrylansens trosbekendelse betyder mere end dens ordrer, og blive genindsat."
+    },
+    "companions/corwin/voice": {
+      "hash": "7d6e88bd",
+      "text": "Kort og formel, men bliver blidere, efterhånden som tilliden vokser."
+    },
+    "companions/corwin/banter": {
+      "hash": "6852d3ca",
+      "text": [
+        "En ridder holder sit ord, også når ingen ser det. Især da.",
+        "Bliv bag mig, når stålet kommer frem.",
+        "Min læremester sagde altid, at en ed er et løfte til ens fremtidige jeg.",
+        "Jeg har sovet værre steder. Ikke mange, men nogle."
+      ]
+    },
+    "companions/corwin/grumbles": {
+      "hash": "8899e1cd",
+      "text": [
+        "Jeg følger dig, fordi jeg har lovet det. Få mig ikke til at fortryde det.",
+        "Sådan ville Lansen ikke have gjort."
+      ]
+    },
+    "companions/nettle/name": {
+      "hash": "3cd66647",
+      "text": "Nettle"
+    },
+    "companions/nettle/personality": {
+      "hash": "d09f5815",
+      "text": "Ligefrem, morsom og uden frygt blandt de syge; skarp over for autoriteter. Nynner, mens hun heler."
+    },
+    "companions/nettle/goal": {
+      "hash": "e4adf963",
+      "text": "Finde en virkelig kur mod Den Hviskende Syge."
+    },
+    "companions/nettle/voice": {
+      "hash": "9b8e727c",
+      "text": "Hurtig sumpdialekt; bander ved rødder og råddenskab."
+    },
+    "companions/nettle/banter": {
+      "hash": "dea23407",
+      "text": [
+        "Rod og råd, den lugt er enten aftensmad eller et lig.",
+        "Sid stille, jeg er ikke færdig med at lappe dig sammen.",
+        "Bedstemor Wick siger, at sumpen husker alle, der har gået i den.",
+        "Du trækker vejret for højt til at snige dig, ved du det?"
+      ]
+    },
+    "companions/nettle/grumbles": {
+      "hash": "f699b2ba",
+      "text": [
+        "Bliver du ved sådan, går jeg hjem til pælehusene.",
+        "Jeg har mødt igler med bedre manerer."
+      ]
+    },
+    "companions/rook/name": {
+      "hash": "cec9b5e9",
+      "text": "Rook Marrowby"
+    },
+    "companions/rook/personality": {
+      "hash": "9230517e",
+      "text": "Charmerende og undvigende; først loyal, når det koster ham noget."
+    },
+    "companions/rook/goal": {
+      "hash": "605db2a4",
+      "text": "Forblive fri og forblive rig, siger han i hvert fald."
+    },
+    "companions/rook/voice": {
+      "hash": "1715806f",
+      "text": "Afslappet, slæbende tale; laver sjov, når han er nervøs."
+    },
+    "companions/rook/banter": {
+      "hash": "562f23ba",
+      "text": [
+        "Slap af. Hvis det her var en fælde, stod jeg et andet sted.",
+        "Alt har en pris. De fleste kender bare ikke deres egen endnu.",
+        "Flot pung. Sjov. For det meste.",
+        "I Gullhaven var maden bedre. Og selskabet værre. Nå, anderledes i hvert fald."
+      ]
+    },
+    "companions/rook/grumbles": {
+      "hash": "f2fb75ee",
+      "text": [
+        "Du gør det meget let for mig at gå min vej.",
+        "Mind mig lige om, hvorfor jeg stadig er her?"
+      ]
+    },
+    "companions/aurek/name": {
+      "hash": "48c5bf90",
+      "text": "Aurek Vell"
+    },
+    "companions/aurek/personality": {
+      "hash": "09713f57",
+      "text": "Præcis og høflig, hjemsøgt af det, hans familie har gjort."
+    },
+    "companions/aurek/goal": {
+      "hash": "2eb9ea0b",
+      "text": "Forstå sin tante, og stoppe hende."
+    },
+    "companions/aurek/voice": {
+      "hash": "aa365a5a",
+      "text": "Afmålt Highcrown-diktion; lange pauser."
+    },
+    "companions/aurek/banter": {
+      "hash": "5864fecd",
+      "text": [
+        "Fascinerende. Forfærdeligt, men fascinerende.",
+        "Min tante ville kalde det her \"en ineffektiv brug af barmhjertighed\". Jeg kalder det selve pointen.",
+        "Der er et mønster her. Giv mig et øjeblik.",
+        "Jeg har læst om steder som dette. Bøgerne var venligere."
+      ]
+    },
+    "companions/aurek/grumbles": {
+      "hash": "24eb3664",
+      "text": [
+        "Jeg forlod ikke min familie for at følge en, der opfører sig som dem.",
+        "Vi driver væk fra grunden til, at jeg kom med."
+      ]
+    }
+  }
+}

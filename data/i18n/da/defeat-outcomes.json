@@ -1,0 +1,49 @@
+{
+  "$source": "data/tables/defeat-outcomes.json",
+  "strings": {
+    "outcomes/maws_spit/text": {
+      "hash": "c3bae7fc",
+      "text": "Svælget hæver sig og kaster dig op på sin rand, hvor du ligger og gisper. Noget dyrebart blev revet fra dig i mørket."
+    },
+    "outcomes/dragons_disdain/text": {
+      "hash": "173749a5",
+      "text": "Dragen smider dig ud af sin hule som affald. Du vågner ved foden af bjerget, forbrændt og forslået."
+    },
+    "outcomes/captured_by_choir/text": {
+      "hash": "b27f9269",
+      "text": "Du vågner i en af Korets celler. Timer senere får en løs sten og et desperat klem dig ud, men dine fangevogtere er for længst draget videre."
+    },
+    "outcomes/rescued_by_wardens/text": {
+      "hash": "e76691a5",
+      "text": "Lygtevogtere finder dig i sivene og bærer dig til Lygteborgen. Efter en dags karantæne lader de dig gå, mod et gebyr."
+    },
+    "outcomes/rescued_by_briarkin/text": {
+      "hash": "3a80988b",
+      "text": "Briarkin-hænder forbinder dine sår med mos og torn. Du vågner i Thornwife Hollow og skylder dem en tjeneste."
+    },
+    "outcomes/temple_revival/text": {
+      "hash": "9bbaf703",
+      "text": "Præster finder dig blandt de døde og bærer dig til deres tempel. Du vågner ved stearinlys og en anmodning om tiende."
+    },
+    "outcomes/fished_out_by_red_gulls/text": {
+      "hash": "1beee30d",
+      "text": "Du vågner på dækket af en Red Gull-slup, gennemblødt og i live. Kaptajnen nævner en bjærgeløn, og tager den."
+    },
+    "outcomes/thrown_in_cells/text": {
+      "hash": "a1b20aab",
+      "text": "Du vågner i en celle. Tre dage senere lukker en kedet fangevogter dig ud med en advarsel."
+    },
+    "outcomes/robbed_and_left/text": {
+      "hash": "c3404764",
+      "text": "Du vågner i vejkanten med et dunkende hoved. Din pung er lettere, og noget andet mangler også."
+    },
+    "outcomes/left_for_dead/text": {
+      "hash": "5bc03e92",
+      "text": "Du vågner, hvor du faldt, timer senere. Hvad der end angreb dig, har mistet interessen."
+    },
+    "outcomes/dragged_to_safety/text": {
+      "hash": "0287a0e3",
+      "text": "På en eller anden måde bliver du slæbt i sikkerhed. Du vågner timer senere, øm, men i live."
+    }
+  }
+}
