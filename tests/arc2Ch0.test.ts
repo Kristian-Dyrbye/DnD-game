@@ -356,7 +356,7 @@ describe('arc2_ch0_hollow_coin: policy playthrough through the game host', () =>
     let fights = 0;
     for (let step = 0; step < 400; step++) {
       const p = getProgress(session.current)!;
-      if (p.ending) break;
+      if (p.ending || p.adventureId !== 'arc2_ch0_hollow_coin') break;
       if (activeFight(session.current)) {
         fights++;
         await h.send(combatStep(session, db));
@@ -374,7 +374,8 @@ describe('arc2_ch0_hollow_coin: policy playthrough through the game host', () =>
     const errors = events.filter((e) => e.type === 'error');
     expect(errors, JSON.stringify(errors.slice(0, 3))).toEqual([]);
     expect(fights).toBeGreaterThan(0);
-    expect(getProgress(session.current)!.ending).toBe('ch0_to_deepanvil');
+    // The ending chained straight into chapter 1 (B005).
+    expect(getProgress(session.current)!.adventureId).toBe('arc2_ch1_faces');
     expect(session.current.campaign).toBe('arc2_ch0_hollow_coin');
     expect(session.current.flags).toMatchObject({ [`${C}saw_ash`]: true, 'world.brannoc_status': 'in_party' });
     // Level 2 milestone: fight XP plus the oath.

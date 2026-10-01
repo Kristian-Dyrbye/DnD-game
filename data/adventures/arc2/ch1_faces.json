@@ -1,0 +1,947 @@
+{
+  "formatVersion": 1,
+  "id": "arc2_ch1_faces",
+  "name": "Faces in the Ledger",
+  "arcId": "crown",
+  "kind": "arc",
+  "levelRange": [2, 3],
+  "regionId": "aurelmark",
+  "summary": "In Deepanvil Hold, the dwarven city whose vaults hold half the kingdom's gold, the Ironvault's own auditor is not who he seems. The third vault is a tenth hollow, the ledger hides a forger's hand, and the hero must unmask a Face before the Ironvault court decides who to blame.",
+  "start": { "chapter": "ch1", "scene": "deepanvil_gate" },
+  "improvisedDifficulty": "easy",
+  "chapters": [
+    {
+      "id": "ch1",
+      "name": "Faces in the Ledger",
+      "summary": "Deepanvil Hold: the gate and its papers, Auditor Hesk's counting house, the hollow third vault, the false auditor unmasked and the Ironvault court.",
+      "start": "deepanvil_gate",
+      "scenes": [
+        {
+          "id": "deepanvil_gate",
+          "name": "The Gates of Deepanvil Hold",
+          "locationId": "deepanvil_hold",
+          "mood": "town",
+          "seed": "Deepanvil Hold's gates are cut straight into the mountain: two bronze doors taller than a ship's mast, a toll-hall of black stone, and dwarven gatewardens in Ironvault grey weighing every wagon, every purse and every face that comes up the road. Beyond the doors the city drops away in lamplit terraces of forges and counting-houses.",
+          "variants": [
+            { "if": { "flag": "world.player_outlawed" }, "seed": "A faded broadsheet nailed by the toll-hall door still carries a crude likeness of you under the word WANTED." },
+            { "if": { "flag": "~ch1_gate_passed" }, "seed": "The gatewardens nod you through now, though their eyes still follow your purse." }
+          ],
+          "revisitSeed": [
+            "The great bronze doors again, the toll-hall and the endless line of ore wagons.",
+            "Back at the gates of Deepanvil Hold, where the wardens weigh everything that passes."
+          ],
+          "npcs": ["warden_brekka"],
+          "onEnter": {
+            "text": "The road ends at the mountain. Deepanvil Hold, where the Ironvault strikes its coin, and where somebody struck a coin that turned to ash.",
+            "discover": ["deepanvil_hold"]
+          },
+          "pois": [
+            {
+              "id": "ore_line",
+              "name": "The ore line",
+              "seed": "A line of ore wagons waiting to be weighed, and a harried toll-master shouting for anyone with a strong back.",
+              "actions": [
+                {
+                  "id": "haul_ore",
+                  "label": "Work a shift hauling ore for the toll-master in place of the toll",
+                  "once": true,
+                  "if": { "not": { "flag": "~ch1_gate_passed" } },
+                  "keywords": ["haul", "work", "ore", "shift", "labour", "wagons"],
+                  "outcome": {
+                    "text": "Eight hours of ore sacks and dwarven work-songs later, the toll-master chalks your name on the gate slate as paid in sweat. \"Honest work's honest coin,\" he grunts, and waves you in.",
+                    "flags": [{ "set": "~ch1_gate_passed" }],
+                    "approval": [{ "companion": "brannoc", "delta": 5 }],
+                    "minutes": 480
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "id": "rest_lodging",
+              "label": "Take a bunk at the gatehouse lodging for the night (5 sp)",
+              "keywords": ["lodging", "bunk", "sleep", "bed", "rest", "night"],
+              "outcome": { "cost": 50, "text": "The gatehouse lodging gives you a stone bunk, a wool blanket and the far-off hammering of the deep forges to sleep by.", "rest": "long" }
+            }
+          ],
+          "exits": [
+            { "id": "to_counting_house", "label": "Go down into the Hold to the Ironvault counting house", "to": "counting_house", "if": { "flag": "~ch1_gate_passed" }, "minutes": 20 }
+          ]
+        },
+        {
+          "id": "counting_house",
+          "name": "The Ironvault Counting House",
+          "locationId": "deepanvil_hold",
+          "mood": "town",
+          "seed": "The Ironvault counting house is a cathedral of numbers: rows of high desks under hanging lamps, clerks scratching in ledgers, brass scales on every table, and at the far end, on a raised desk under the Consortium's anvil-and-key, Auditor Hesk, who signs off every coin the Hold strikes. A barred stair behind him leads down to the vaults.",
+          "variants": [
+            { "if": { "flag": "arc.main.money_trail_proven" }, "seed": "Since the Almonry scandal the Ironvault has not trusted its own books. The senior clerks watch Auditor Hesk as closely as they watch the gold." },
+            { "if": { "flag": "arc.crown.clue_3" }, "seed": "Now you have seen it, you cannot stop seeing it: Hesk's smile arrives a moment after his face decides to make one." },
+            { "if": { "flag": "~ch1_vault_access" }, "seed": "The barred stair behind Hesk's desk stands open to you now." }
+          ],
+          "revisitSeed": "The counting house again: scratching pens, swinging lamps, and Auditor Hesk on his high desk.",
+          "npcs": ["false_hesk", "clerk_orrin"],
+          "pois": [
+            {
+              "id": "hesk_desk",
+              "name": "Hesk's desk",
+              "seed": "A high oak desk stacked with ledgers, a brass scale, a pot of Ironvault green ink and a little painted portrait turned face-down.",
+              "actions": [
+                {
+                  "id": "portrait",
+                  "label": "Turn over the little portrait on Hesk's desk",
+                  "once": true,
+                  "keywords": ["portrait", "picture", "painting", "turn", "desk"],
+                  "outcome": {
+                    "text": "A child's painting of a dwarf with a too-big beard, and under it in careful letters: \"For Papa, from Marit.\" Somebody has turned it to face the wood.",
+                    "flags": [{ "set": "~ch1_saw_portrait" }]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "vault_stair",
+              "name": "The vault stair",
+              "seed": "A barred iron stair behind the auditor's desk, going down into cold air and the smell of metal.",
+              "actions": [
+                {
+                  "id": "break_in",
+                  "label": "Come back after the counting house closes and slip down the vault stair",
+                  "once": true,
+                  "if": { "not": { "flag": "~ch1_vault_access" } },
+                  "keywords": ["sneak", "night", "break", "slip", "stair", "stealth", "closes"],
+                  "check": {
+                    "skill": "stealth",
+                    "dc": 13,
+                    "success": {
+                      "text": "After the closing bell you wait in the shadow of a ledger-press until the last lamp goes out, then lift the stair bar with a knife-blade and slip down into the cold.",
+                      "flags": [{ "set": "~ch1_vault_access" }, { "set": "~ch1_broke_in" }],
+                      "approval": [{ "companion": "brannoc", "delta": -5 }],
+                      "minutes": 600
+                    },
+                    "failure": {
+                      "text": "A night-watch lantern finds you halfway to the stair. The watch march you back to the street with a warning: come by the front door next time, with papers.",
+                      "minutes": 600
+                    }
+                  }
+                },
+                {
+                  "id": "standing",
+                  "label": "Show your Ironvault standing and walk down to the vaults",
+                  "once": true,
+                  "if": { "all": [{ "reputation": { "faction": "ironvault_consortium", "gte": 50 } }, { "not": { "flag": "~ch1_vault_access" } }] },
+                  "keywords": ["standing", "reputation", "ironvault", "friend", "vault"],
+                  "outcome": {
+                    "text": "The senior clerk takes one look at your Ironvault marks and unbars the stair himself. Hesk's smile stays exactly where it is.",
+                    "flags": [{ "set": "~ch1_vault_access" }]
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "id": "supervised_audit",
+              "label": "Return at the opening bell for the supervised audit Hesk promised",
+              "once": true,
+              "if": { "all": [{ "flag": "~ch1_audit_tomorrow" }, { "not": { "flag": "~ch1_vault_access" } }] },
+              "keywords": ["return", "morning", "supervised", "audit", "bell", "tomorrow"],
+              "outcome": {
+                "text": "At the opening bell a senior clerk with a lamp and a slate is waiting for you, as Hesk promised before witnesses. He unbars the vault stair and follows you down, yawning.",
+                "flags": [{ "set": "~ch1_vault_access" }],
+                "minutes": 900
+              }
+            },
+            {
+              "id": "almonry_file",
+              "label": "Ask the senior clerks for the file they opened after the Almonry scandal",
+              "once": true,
+              "if": { "all": [{ "flag": "arc.main.money_trail_proven" }, { "not": { "flag": "arc.crown.clue_4" } }] },
+              "keywords": ["almonry", "file", "scandal", "clerks", "books"],
+              "outcome": {
+                "text": "The clerks have been waiting for someone to ask. Since the Almonry scandal they have checked the third vault's ledger against the weighings, and one entry is wrong: a tenth of the vault marked present in a neat, slanting hand that is not Hesk's, initialled O. V. They hand you a fair copy.",
+                "flags": [{ "set": "arc.crown.clue_4" }, { "set": "~ch1_ledger_found" }, { "set": "~ch1_vault_access" }],
+                "xp": 100
+              }
+            }
+          ],
+          "exits": [
+            { "id": "to_vault", "label": "Go down the vault stair", "to": "vault_audit", "if": { "flag": "~ch1_vault_access" }, "minutes": 10 },
+            { "id": "to_confront", "label": "Take what you found to Hesk's desk, before the whole counting house", "to": "hesk_unmasked", "if": { "all": [{ "flag": "~ch1_ledger_found" }, { "not": { "flag": "~ch1_hesk_done" } }] }, "minutes": 5 },
+            { "id": "to_gate", "label": "Climb back up to the gates", "to": "deepanvil_gate", "minutes": 20 }
+          ]
+        },
+        {
+          "id": "vault_audit",
+          "name": "The Third Vault",
+          "locationId": "deepanvil_hold",
+          "mood": "dungeon",
+          "map": { "id": "third_vault", "room": "vault_stair" },
+          "seed": "The Ironvault's third vault: a long gallery cut from the living rock, lined with iron racks of gold bars stamped with the anvil-and-key, lit by cold blue lamps that never flicker. At the gallery's end stand two suits of old Ironvault plate on pedestals, visors down, and beyond them a sealed alcove where the vault ledger is kept.",
+          "variants": [
+            { "if": { "flag": "~ch1_guardians_done" }, "seed": "The two suits of Ironvault plate stand still on their pedestals again, visors down, letting you pass." },
+            { "if": { "flag": "~ch1_ledger_found" }, "seed": "The ledger's wrong entry is in your pack now, and the racks of the hollow tenth gleam behind you like a lie told well." }
+          ],
+          "revisitSeed": "The third vault again: blue lamps, iron racks and the two silent guardians on their pedestals.",
+          "pois": [
+            {
+              "id": "hollow_tenth",
+              "name": "The hollow tenth",
+              "seed": "The last racks of the gallery: gold bars that look exactly like the rest and ring a little too light.",
+              "if": { "flag": "~ch1_guardians_done" },
+              "actions": [
+                {
+                  "id": "weigh_bars",
+                  "label": "Weigh one of the gold bars from the last racks",
+                  "once": true,
+                  "keywords": ["weigh", "bar", "gold", "racks", "test", "scale"],
+                  "outcome": {
+                    "text": "You heft a bar from the last rack, then one from the first. The last one is light. You scratch it with a knife and grey ash sifts out of the gold skin. A tenth of the third vault is hollow, and has been for a long time.",
+                    "flags": [{ "set": "~ch1_weighed" }],
+                    "approval": [{ "companion": "brannoc", "delta": 5 }]
+                  }
+                },
+                {
+                  "id": "fathers_seal",
+                  "label": "Help Brannoc search the hollow racks for his father's assay seal",
+                  "once": true,
+                  "if": { "flag": "world.brannoc_status", "eq": "in_party" },
+                  "keywords": ["brannoc", "father", "seal", "search", "help"],
+                  "outcome": {
+                    "text": "You search rack by rack while Brannoc mutters the counting-song under his breath. The seal is not here, but scratched into the oldest rack, under the dust, is a single mark: his father's assay sign, and beside it a date twenty years gone. \"He found this,\" Brannoc says. \"He found it, and they took his seal.\"",
+                    "flags": [{ "set": "~ch1_seal_mark" }],
+                    "approval": [{ "companion": "brannoc", "delta": 10 }],
+                    "minutes": 30
+                  }
+                }
+              ]
+            },
+            {
+              "id": "ledger_alcove",
+              "name": "The ledger alcove",
+              "seed": "A sealed stone alcove with a lectern and a chained ledger, every page signed and stamped by the auditor of the day.",
+              "if": { "flag": "~ch1_guardians_done" },
+              "actions": [
+                {
+                  "id": "read_ledger",
+                  "label": "Read the third vault's ledger against the racks",
+                  "once": true,
+                  "if": { "not": { "flag": "~ch1_ledger_found" } },
+                  "keywords": ["ledger", "read", "book", "entry", "page", "alcove"],
+                  "outcome": {
+                    "text": "Page after page, the weighings match the racks, until one entry ten years back: a tenth of the vault entered as present in a neat, slanting hand that is not the auditor's, initialled O. V. Every weighing after it is copied from that one line. Somebody made the ledger say the gold was there.",
+                    "flags": [{ "set": "arc.crown.clue_4" }, { "set": "~ch1_ledger_found" }],
+                    "revealRoom": { "map": "third_vault", "room": "ledger_alcove" },
+                    "xp": 100
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "id": "advance",
+              "label": "Walk down the gallery toward the ledger alcove",
+              "if": { "not": { "flag": "~ch1_guardians_done" } },
+              "keywords": ["walk", "advance", "gallery", "forward", "fight", "attack"],
+              "outcome": { "text": "Halfway down the gallery, two visors lift with a grind of old iron. The guardians step down from their pedestals.", "encounter": "vault_guardians" }
+            },
+            {
+              "id": "watchword",
+              "label": "Read the binding runes on the pedestals and speak the guardians' watchword",
+              "once": true,
+              "if": { "not": { "flag": "~ch1_guardians_done" } },
+              "keywords": ["runes", "watchword", "word", "magic", "arcana", "binding", "pedestal"],
+              "check": {
+                "skill": "arcana",
+                "dc": 14,
+                "advantageIf": [{ "if": { "flag": "world.brannoc_status", "eq": "in_party" }, "source": "Brannoc knows the old Ironvault oaths" }],
+                "success": {
+                  "text": "The runes are an old binding in Dwarvish, keyed to an auditor's oath. You speak it aloud, and the guardians' visors, half-raised, settle again.",
+                  "flags": [{ "set": "~ch1_guardians_done" }],
+                  "revealRoom": { "map": "third_vault", "room": "gallery" },
+                  "xp": 50
+                },
+                "failure": { "text": "The words come out wrong. Both visors lift, and old iron steps down from the pedestals.", "encounter": "vault_guardians" }
+              }
+            }
+          ],
+          "exits": [
+            { "id": "to_counting_house", "label": "Climb back up to the counting house", "to": "counting_house", "minutes": 10 },
+            { "id": "to_confront", "label": "Take the ledger straight up to Hesk's desk", "to": "hesk_unmasked", "if": { "all": [{ "flag": "~ch1_ledger_found" }, { "not": { "flag": "~ch1_hesk_done" } }] }, "minutes": 10 }
+          ]
+        },
+        {
+          "id": "hesk_unmasked",
+          "name": "Before the Auditor's Desk",
+          "locationId": "deepanvil_hold",
+          "mood": "tense",
+          "seed": "The whole counting house has stopped writing. Forty clerks watch over their ledgers as you stand before Auditor Hesk's high desk with the vault's lie in your hands. Two Ironvault guards at the doors put their hands on their axes. Hesk folds his ink-stained fingers and smiles, a moment late.",
+          "variants": [
+            { "if": { "flag": "~ch1_guards_convinced" }, "seed": "The two guards have stepped away from the doors and stand at your back now, watching the auditor." },
+            { "if": { "flag": "~ch1_hesk_done" }, "seed": "Hesk's high desk stands empty, his green ink spilled across the ledgers." }
+          ],
+          "npcs": ["false_hesk"],
+          "actions": [
+            {
+              "id": "name_daughter",
+              "label": "Ask Hesk, before the whole counting house, the name of his daughter",
+              "once": true,
+              "if": { "all": [{ "flag": "arc.crown.clue_3" }, { "not": { "flag": "~ch1_hesk_done" } }] },
+              "keywords": ["daughter", "name", "marit", "ask", "public"],
+              "outcome": {
+                "text": "\"Your daughter, Auditor. The one who paints. What is her name?\" Forty pens stop. Hesk opens his mouth, and nothing comes out of it. Then his face runs like wax, grey and smooth and eyeless, and the thing that wore him vaults the desk, goes through a window in a spray of glass and is gone into the lamplit terraces. Nobody follows it. Somewhere below the counting house, the real Hesk may still be alive.",
+                "flags": [{ "set": "arc.crown.gilt_fled" }, { "set": "~ch1_hesk_done" }],
+                "approval": [{ "companion": "brannoc", "delta": 5 }],
+                "xp": 200
+              }
+            },
+            {
+              "id": "show_guards",
+              "label": "Show the two guards the ledger's false entry and the auditor's hand",
+              "once": true,
+              "if": { "not": { "flag": "~ch1_hesk_done" } },
+              "keywords": ["guards", "show", "convince", "ledger", "proof"],
+              "check": {
+                "skill": "persuasion",
+                "dc": 13,
+                "advantageIf": [{ "if": { "flag": "~ch1_weighed" }, "source": "You carry a hollow bar from the vault" }],
+                "success": { "text": "The older guard reads the entry, looks at Hesk, and slowly moves to stand beside you. The younger follows him.", "flags": [{ "set": "~ch1_guards_convinced" }] },
+                "failure": { "text": "\"The auditor's word against a stranger's,\" the older guard says, and loosens his axe." }
+              }
+            },
+            {
+              "id": "unmask",
+              "label": "Draw steel and call the auditor a Face",
+              "if": { "not": { "flag": "~ch1_hesk_done" } },
+              "keywords": ["draw", "steel", "attack", "fight", "unmask", "face"],
+              "outcome": { "text": "Hesk's face slides like wax as he rises from the desk, grey and smooth and smiling, and his hands grow long.", "encounter": "gilt_fight" }
+            }
+          ],
+          "exits": [{ "id": "to_court", "label": "Go before the Ironvault court", "to": "ironvault_court", "if": { "flag": "~ch1_hesk_done" }, "minutes": 30 }]
+        },
+        {
+          "id": "ironvault_court",
+          "name": "The Ironvault Court",
+          "locationId": "deepanvil_hold",
+          "mood": "town",
+          "seed": "The Ironvault court sits in a round hall under a dome of beaten copper. Consortium masters in grey velvet fill the benches, a Crown witness in temple blue takes notes by the door, and on the high seat, under the anvil-and-key, sits Thane-Warden Orsa Ironhand, who decides who the Ironvault will thank and who it will blame.",
+          "variants": [
+            { "if": { "flag": "arc.crown.gilt_exposed" }, "seed": "The grey, eyeless body of the Face lies under a sheet on a trestle before the high seat, for every master to see." },
+            { "if": { "flag": "arc.crown.gilt_fled" }, "seed": "Every master has heard of the auditor who ran out of a window. Nobody has seen him since, and nobody can prove what he was." },
+            { "if": { "flag": "~ch1_commission" }, "seed": "The masters nod to you on the way out, and the Thane's commission is warm in your pack." },
+            { "if": { "flag": "~ch1_blamed" }, "seed": "The masters look away from you. The Thane's verdict still hangs in the copper dome." }
+          ],
+          "revisitSeed": "The round hall under the copper dome, the grey velvet benches and the Thane's high seat.",
+          "npcs": ["thane_orsa", "ilse_npc"],
+          "onEnter": {
+            "text": "A Crown witness by the door, a young woman in the blue of Veyra's temple, looks up from her notes as you come in, and goes pale, as if she has seen your face before.",
+            "flags": [{ "set": "world.ilse_status", "value": "met" }]
+          },
+          "exits": [
+            { "id": "to_rest", "label": "Leave the court for the Thane's Rest", "to": "thane_s_rest", "if": { "flag": "~ch1_verdict" }, "minutes": 20 }
+          ]
+        },
+        {
+          "id": "thane_s_rest",
+          "name": "The Thane's Rest",
+          "locationId": "deepanvil_hold",
+          "mood": "town",
+          "seed": "The Thane's Rest is a deep inn carved into the rock, with hot springs in the cellar, long tables of miners and clerks, and beds in stone alcoves hung with wool. The common room smells of iron-bread and dark ale.",
+          "variants": [
+            { "if": { "flag": "world.ilse_status", "eq": "in_party" }, "seed": "Ilse sits up late by the fire with her dream-book open, writing down a forge that sleeps." },
+            { "if": { "flag": "world.player_outlawed", "eq": true }, "seed": "The innkeeper takes your coin without meeting your eye. The Thane's verdict gives you until the morning bell to leave the Hold." },
+            { "if": { "flag": "~ch1_commission" }, "seed": "The innkeeper saw the Thane's commission and gave you the best alcove, by the hot spring." }
+          ],
+          "revisitSeed": "The Thane's Rest: hot springs, long tables, wool-hung alcoves.",
+          "actions": [
+            {
+              "id": "long_rest",
+              "label": "Sleep a full night in a stone alcove",
+              "once": true,
+              "keywords": ["sleep", "rest", "bed", "night", "alcove"],
+              "outcome": {
+                "text": "You sleep as dwarves sleep, deep and long, with the mountain's warmth in the stone around you. In the morning you know your trade better than you did a week ago.",
+                "flags": [{ "set": "~ch1_rested" }],
+                "rest": "long",
+                "xp": 600,
+                "minutes": 60,
+                "tip": "You have enough experience to reach level 3: use the Level up button on your hero's card."
+              }
+            },
+            {
+              "id": "ilse_dream",
+              "label": "Ask Ilse what she dreamed in Deepanvil",
+              "once": true,
+              "if": { "flag": "world.ilse_status", "eq": "in_party" },
+              "keywords": ["ilse", "dream", "dreamed", "ask"],
+              "outcome": {
+                "text": "Ilse turns her dream-book round for you. \"A forge in the dark under a dead city, asleep and hungry. A crown being poured into it. And a woman counting faces like coins.\" She closes the book. \"Fennick's Rest is where the gold goes to be washed. The dream always smells of the sea.\"",
+                "flags": [{ "set": "~ch1_ilse_dream" }],
+                "approval": [{ "companion": "ilse", "delta": 5 }]
+              }
+            }
+          ],
+          "exits": [],
+          "pois": [
+            {
+              "id": "road_board",
+              "name": "The road board",
+              "seed": "A slate by the inn door chalked with caravans: south to Highcrown and Port Sorrel, and the boats to the Isles.",
+              "actions": [
+                {
+                  "id": "road_south",
+                  "label": "Take the caravan road south and a boat to Fennick's Rest",
+                  "if": { "flag": "~ch1_rested" },
+                  "keywords": ["road", "south", "boat", "fennick", "leave", "go", "caravan"],
+                  "outcome": {
+                    "text": "Six days of road down out of the mountains, through Highcrown to Port Sorrel, and then a salt-stained packet boat across to the Brinescatter Isles. The trail of the hollow gold runs to Fennick's Rest, where gold goes to be washed.",
+                    "discover": ["highcrown", "port_sorrel", "fennicks_rest"],
+                    "minutes": 8640,
+                    "ending": "ch1_to_fennicks"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "maps": [
+    {
+      "id": "third_vault",
+      "name": "The Ironvault's Third Vault",
+      "width": 22,
+      "height": 12,
+      "rooms": [
+        { "id": "vault_stair", "name": "The Vault Stair", "x": 1, "y": 4, "w": 5, "h": 4 },
+        { "id": "gallery", "name": "The Gallery of Racks", "x": 6, "y": 2, "w": 8, "h": 8, "blocking": [{ "x": 8, "y": 3 }, { "x": 8, "y": 8 }, { "x": 11, "y": 3 }, { "x": 11, "y": 8 }] },
+        { "id": "hollow_tenth", "name": "The Hollow Tenth", "x": 14, "y": 1, "w": 7, "h": 6, "blocking": [{ "x": 16, "y": 2 }, { "x": 18, "y": 2 }] },
+        { "id": "ledger_alcove", "name": "The Ledger Alcove", "x": 14, "y": 7, "w": 7, "h": 4 }
+      ],
+      "doors": [
+        { "x": 5, "y": 5, "side": "E" },
+        { "x": 13, "y": 3, "side": "E" },
+        { "x": 13, "y": 8, "side": "E" }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "id": "warden_brekka",
+      "name": "Gatewarden Brekka Coalbrow",
+      "statBlock": "guard",
+      "personality": "A square, iron-grey dwarf gatewarden who has weighed every purse that came up the road for thirty years and trusts none of them.",
+      "secrets": ["She was ordered to let Auditor Hesk's couriers through unweighed, and it galls her."],
+      "voice": "Flat and heavy, every sentence a toll.",
+      "factions": ["ironvault_consortium"],
+      "attitude": "indifferent",
+      "conversations": [
+        {
+          "id": "papers",
+          "label": "Present yourself to the gatewarden",
+          "keywords": ["gatewarden", "brekka", "warden", "papers", "toll", "gate"],
+          "if": { "not": { "flag": "~ch1_gate_passed" } },
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Name, business, and the toll. Five gold for strangers with no papers. Deepanvil Hold weighs everything that comes up this road, and everyone.",
+              "options": [
+                {
+                  "id": "letter",
+                  "label": "Hand over Mistress Dunmore's sealed letter",
+                  "once": true,
+                  "if": { "flag": "~ch0_dunmore_letter" },
+                  "keywords": ["letter", "dunmore", "seal", "hand"],
+                  "outcome": { "flags": [{ "set": "~ch1_gate_passed" }, { "set": "~ch1_letter_given" }], "reputation": [{ "faction": "ironvault_consortium", "delta": 5 }] },
+                  "next": "letter"
+                },
+                {
+                  "id": "persuade",
+                  "label": "\"I carry news of false Ironvault coin. Your masters will want it.\"",
+                  "once": true,
+                  "keywords": ["news", "coin", "false", "masters", "persuade"],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 12,
+                    "disadvantageIf": [{ "if": { "flag": "world.player_outlawed" }, "source": "Your face is on a broadsheet by the door" }],
+                    "success": { "flags": [{ "set": "~ch1_gate_passed" }] },
+                    "failure": { "text": "\"Everyone carries news,\" Brekka says. \"Five gold.\"" }
+                  },
+                  "next": "passed",
+                  "nextOnFail": "greet"
+                },
+                {
+                  "id": "deceive",
+                  "label": "\"Ironvault business. Auditor Hesk sent for me.\"",
+                  "once": true,
+                  "keywords": ["hesk", "auditor", "business", "lie", "sent"],
+                  "check": {
+                    "skill": "deception",
+                    "dc": 13,
+                    "success": { "flags": [{ "set": "~ch1_gate_passed" }, { "set": "~ch1_brekka_hint" }] },
+                    "failure": { "text": "Brekka's eyes narrow. \"Hesk's people come with his green seal. You have none.\"" }
+                  },
+                  "next": "hesk",
+                  "nextOnFail": "greet"
+                },
+                {
+                  "id": "pay",
+                  "label": "Pay the five-gold toll",
+                  "once": true,
+                  "if": { "all": [{ "coins": { "gte": 500 } }, { "not": { "flag": "world.player_outlawed" } }] },
+                  "keywords": ["pay", "toll", "gold", "five"],
+                  "outcome": { "cost": 500, "flags": [{ "set": "~ch1_gate_passed" }] },
+                  "next": "passed"
+                },
+                {
+                  "id": "pay_outlaw",
+                  "label": "Pay double the toll and keep your hood up",
+                  "once": true,
+                  "if": { "all": [{ "coins": { "gte": 1000 } }, { "flag": "world.player_outlawed" }] },
+                  "keywords": ["pay", "toll", "double", "hood"],
+                  "outcome": { "cost": 1000, "flags": [{ "set": "~ch1_gate_passed" }] },
+                  "next": "passed"
+                },
+                { "id": "bye", "label": "\"Let me think about it.\"", "keywords": ["bye", "leave", "later", "think"] }
+              ]
+            },
+            {
+              "id": "letter",
+              "text": "Dunmore's seal. Brightwater's assayer does not write to the Hold for nothing. Go in, and take this to the counting house: they will see you with it.",
+              "options": [{ "id": "in", "label": "Go in" }]
+            },
+            {
+              "id": "hesk",
+              "text": "Hesk's business. Of course it is. His couriers come up this road every new moon and I am told not to weigh their bags. Go on, then. And if you see the auditor, tell him Brekka still counts.",
+              "options": [{ "id": "in", "label": "Go in" }]
+            },
+            {
+              "id": "passed",
+              "text": "Fine. In you go. Keep your purse close and your coin honest.",
+              "options": [{ "id": "in", "label": "Go in" }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "false_hesk",
+      "name": "Auditor Hesk",
+      "statBlock": "doppelganger",
+      "personality": "To every eye, Auditor Tavin Hesk: a precise, dry dwarf who signs off every coin the Hold strikes. In truth Gilt, a doppelganger of the Thousand Faces, wearing him like a coat. Charming, a little too agreeable, and always a moment late with his smile.",
+      "secrets": [
+        "He is Gilt, Ondra Vexx's voice in Deepanvil; the real Hesk is locked in an ore cellar under the counting house.",
+        "He does not know the name of Hesk's daughter, Marit."
+      ],
+      "voice": "Dry and pleasant, agrees too readily, never says a name he can avoid.",
+      "factions": ["ironvault_consortium"],
+      "attitude": "friendly",
+      "schedule": [{ "scene": "counting_house", "from": 0, "to": 24, "if": { "not": { "flag": "~ch1_hesk_done" } } }, { "scene": "hesk_unmasked", "from": 0, "to": 24, "if": { "not": { "flag": "~ch1_hesk_done" } } }],
+      "conversations": [
+        {
+          "id": "audit",
+          "label": "Ask Auditor Hesk to open the vault ledgers",
+          "keywords": ["hesk", "auditor", "ledger", "ledgers", "vault", "audit", "ask"],
+          "if": { "not": { "flag": "~ch1_hesk_done" } },
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Ash coins? How dreadful. And bearing our own mark, you say. Of course the Ironvault wishes to help. But the vault ledgers are not opened for every traveller with a story. What exactly would you like?",
+              "options": [
+                {
+                  "id": "by_book",
+                  "label": "Cite the Consortium's charter: any holder of Ironvault coin may demand an audit",
+                  "once": true,
+                  "if": { "not": { "flag": "~ch1_vault_access" } },
+                  "keywords": ["charter", "law", "book", "demand", "right", "history"],
+                  "check": {
+                    "skill": "history",
+                    "dc": 13,
+                    "advantageIf": [
+                      { "if": { "flag": "~ch1_letter_given" }, "source": "Mistress Dunmore's letter" },
+                      { "if": { "flag": "~ch0_die_kept" }, "source": "You carry a false Ironvault die" }
+                    ],
+                    "success": { "flags": [{ "set": "~ch1_vault_access" }, { "set": "~ch1_by_book" }], "approval": [{ "companion": "brannoc", "delta": 5 }] },
+                    "failure": { "flags": [{ "set": "~ch1_audit_tomorrow" }] }
+                  },
+                  "next": "audit_granted",
+                  "nextOnFail": "audit_later"
+                },
+                {
+                  "id": "bribe",
+                  "label": "Slide ten gold pieces under the nearest ledger",
+                  "once": true,
+                  "if": { "all": [{ "coins": { "gte": 1000 } }, { "not": { "flag": "~ch1_vault_access" } }] },
+                  "keywords": ["bribe", "gold", "pay", "ten", "slide"],
+                  "outcome": { "cost": 1000, "flags": [{ "set": "~ch1_vault_access" }, { "set": "~ch1_bribed" }], "approval": [{ "companion": "brannoc", "delta": -5 }] },
+                  "next": "bribed"
+                },
+                {
+                  "id": "family",
+                  "label": "Ask after his family while you watch his face",
+                  "once": true,
+                  "if": { "not": { "flag": "arc.crown.clue_3" } },
+                  "keywords": ["family", "daughter", "wife", "children", "insight", "watch"],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 13,
+                    "advantageIf": [{ "if": { "flag": "~ch1_saw_portrait" }, "source": "You saw the portrait on his desk" }],
+                    "success": { "flags": [{ "set": "arc.crown.clue_3" }] },
+                    "failure": { "text": "Hesk talks warmly about the price of schooling in the Hold, and you learn nothing at all." }
+                  },
+                  "next": "daughter",
+                  "nextOnFail": "greet"
+                },
+                { "id": "bye", "label": "\"Thank you, Auditor. Another time.\"", "keywords": ["bye", "leave", "later", "thank"] }
+              ]
+            },
+            {
+              "id": "audit_granted",
+              "text": "The charter. Quite right, quite right. No one can say the Ironvault does not keep its own laws. The stair is unbarred for you. Do mind the guardians; they are very old.",
+              "options": [{ "id": "thanks", "label": "\"I will.\"" }]
+            },
+            {
+              "id": "audit_later",
+              "text": "An interesting reading of the charter. I am sure the masters would enjoy debating it. Shall we say a supervised audit, tomorrow at the opening bell? Before witnesses, of course.",
+              "options": [{ "id": "thanks", "label": "\"Tomorrow, then.\"" }]
+            },
+            {
+              "id": "bribed",
+              "text": "How generous. The Ironvault always values a donor. The stair is unbarred. Do mind the guardians; they are very old.",
+              "options": [{ "id": "thanks", "label": "Say nothing and go" }]
+            },
+            {
+              "id": "daughter",
+              "text": "My daughter? Oh, a delight. A real delight. She is, ah, at her lessons. The girl paints, you know. Paints all day. Her name? Ha. Fathers forget nothing, traveller. Now, about these ledgers.",
+              "options": [{ "id": "back", "label": "Let it pass, for now", "next": "greet" }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "clerk_orrin",
+      "name": "Orrin Flintwhistle",
+      "statBlock": "commoner",
+      "personality": "A young, ink-stained dwarf clerk who has noticed his master is left-handed this month and right-handed last month, and is too frightened to say so.",
+      "voice": "Whispers, glances at the high desk after every sentence.",
+      "factions": ["ironvault_consortium"],
+      "attitude": "friendly",
+      "schedule": [{ "scene": "counting_house", "from": 6, "to": 20 }],
+      "conversations": [
+        {
+          "id": "whisper",
+          "label": "Have a quiet word with the young clerk Orrin",
+          "keywords": ["orrin", "clerk", "young", "quiet", "whisper"],
+          "once": true,
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "I shouldn't. The auditor doesn't like us talking to visitors. He never minded before. He never minded anything before.",
+              "options": [
+                {
+                  "id": "kind",
+                  "label": "\"Before what, Orrin?\"",
+                  "keywords": ["before", "what", "kind", "gentle"],
+                  "outcome": { "flags": [{ "set": "~ch1_orrin_told" }] },
+                  "next": "told"
+                },
+                { "id": "bye", "label": "Leave him to his ledger", "keywords": ["bye", "leave"] }
+              ]
+            },
+            {
+              "id": "told",
+              "text": "Before the spring audit. He came back from the third vault and he signs with his left hand now. And he used to keep his little Marit's painting facing him, all day. Now it's turned down.",
+              "options": [{ "id": "thanks", "label": "\"Thank you. Keep your head down.\"" }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thane_orsa",
+      "name": "Thane-Warden Orsa Ironhand",
+      "statBlock": "noble",
+      "personality": "The elected warden of the Ironvault court: old, hard, fair by her own lights, and above all careful of the Consortium's good name.",
+      "secrets": ["She has suspected for years that the third vault's weighings were too neat, and said nothing."],
+      "voice": "Slow and deliberate; speaks of the Consortium as 'we' and of everyone else as 'the matter'.",
+      "factions": ["ironvault_consortium"],
+      "attitude": "indifferent",
+      "conversations": [
+        {
+          "id": "verdict",
+          "label": "Stand before the Thane-Warden and give your account",
+          "keywords": ["thane", "orsa", "warden", "account", "court", "verdict", "speak"],
+          "if": { "not": { "flag": "~ch1_verdict" } },
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "An auditor of this Consortium is gone, or dead, or was never there at all. A vault is a tenth hollow. And at the centre of the matter stands a stranger from Brightwater. Tell the court why we should not hang the matter on you.",
+              "options": [
+                {
+                  "id": "body",
+                  "label": "Point to the grey thing under the sheet: \"That was your auditor.\"",
+                  "once": true,
+                  "if": { "flag": "arc.crown.gilt_exposed" },
+                  "keywords": ["body", "sheet", "face", "thing", "point"],
+                  "outcome": { "flags": [{ "set": "~ch1_verdict" }, { "set": "~ch1_commission" }], "reputation": [{ "faction": "ironvault_consortium", "delta": 15 }] },
+                  "next": "hired"
+                },
+                {
+                  "id": "ledger",
+                  "label": "Read the false entry aloud, with its initials, O. V.",
+                  "once": true,
+                  "if": { "all": [{ "flag": "arc.crown.clue_4" }, { "not": { "flag": "arc.crown.gilt_exposed" } }] },
+                  "keywords": ["ledger", "entry", "read", "initials", "evidence"],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 12,
+                    "advantageIf": [
+                      { "if": { "flag": "~ch0_die_kept" }, "source": "The false die from Brightwater" },
+                      { "if": { "flag": "arc.crown.gilt_fled" }, "source": "Forty clerks saw the auditor's face run" }
+                    ],
+                    "success": { "flags": [{ "set": "~ch1_verdict" }, { "set": "~ch1_commission" }], "reputation": [{ "faction": "ironvault_consortium", "delta": 15 }] },
+                    "failure": { "flags": [{ "set": "~ch1_verdict" }, { "set": "~ch1_blamed" }, { "set": "world.player_outlawed" }], "reputation": [{ "faction": "ironvault_consortium", "delta": -10 }] }
+                  },
+                  "next": "hired",
+                  "nextOnFail": "blamed"
+                },
+                {
+                  "id": "plead",
+                  "label": "\"I came here with ash in my hand and nothing to gain. Judge me by that.\"",
+                  "once": true,
+                  "keywords": ["plead", "honest", "judge", "nothing", "gain"],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 15,
+                    "success": { "flags": [{ "set": "~ch1_verdict" }, { "set": "~ch1_commission" }], "reputation": [{ "faction": "ironvault_consortium", "delta": 10 }], "approval": [{ "companion": "brannoc", "delta": 5 }] },
+                    "failure": { "flags": [{ "set": "~ch1_verdict" }, { "set": "~ch1_blamed" }, { "set": "world.player_outlawed" }], "reputation": [{ "faction": "ironvault_consortium", "delta": -10 }] }
+                  },
+                  "next": "hired",
+                  "nextOnFail": "blamed"
+                },
+                {
+                  "id": "defy",
+                  "label": "\"A court that let a Face sign its coin does not get to judge me.\"",
+                  "once": true,
+                  "keywords": ["defy", "refuse", "court", "judge", "face"],
+                  "outcome": { "flags": [{ "set": "~ch1_verdict" }, { "set": "~ch1_blamed" }, { "set": "world.player_outlawed" }], "reputation": [{ "faction": "ironvault_consortium", "delta": -10 }] },
+                  "next": "blamed"
+                }
+              ]
+            },
+            {
+              "id": "hired",
+              "text": "The court has heard enough. The matter is the Consortium's shame, not yours. Take this commission under our seal: the Ironvault's doors open to you, and our smiths and stalls will treat you as one of us. Find whoever wrote those initials.",
+              "options": [{ "id": "accept", "label": "Take the commission" }]
+            },
+            {
+              "id": "blamed",
+              "text": "The court is not satisfied. A stranger arrives, an auditor vanishes, and the stranger's story is all we have. You will leave the Hold by the morning bell, and your name goes to the Crown's wardens as wanted in this matter. Pray you can prove otherwise.",
+              "options": [{ "id": "accept", "label": "Turn and walk out" }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ilse_npc",
+      "name": "Sister Ilse Varn",
+      "statBlock": "priest_acolyte",
+      "personality": "A soft-spoken, sleepless young sister of Veyra, sent by the Crown to witness the Ironvault court. She dreams things before they happen and writes every dream down before breakfast.",
+      "secrets": ["She has dreamed the hero's face for a week: standing before a sleeping forge with a crown that is not a crown."],
+      "voice": "Quiet temple Common; trails off mid-sentence when a dream returns.",
+      "factions": ["crown_of_aurelmark"],
+      "attitude": "friendly",
+      "schedule": [{ "scene": "ironvault_court", "from": 0, "to": 24, "if": { "any": [{ "flag": "world.ilse_status", "eq": "unmet" }, { "flag": "world.ilse_status", "eq": "met" }] } }],
+      "conversations": [
+        {
+          "id": "dreams",
+          "label": "Speak with the Crown witness in temple blue",
+          "keywords": ["ilse", "witness", "sister", "blue", "temple", "woman"],
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Forgive me for staring. I am Ilse Varn, Veyra's sister, here for the Crown. I have seen your face before. In a dream, a week ago, standing in front of a forge that was asleep. I write everything down. Here, look.",
+              "options": [
+                {
+                  "id": "share",
+                  "label": "Show her everything you have found: the ash, the ledger, the auditor",
+                  "once": true,
+                  "if": { "count": { "flags": ["arc.crown.clue_1", "arc.crown.clue_2", "arc.crown.clue_3", "arc.crown.clue_4"], "min": 2 } },
+                  "keywords": ["show", "share", "clues", "found", "everything", "ledger"],
+                  "outcome": { "recruit": "ilse", "approval": [{ "companion": "ilse", "delta": 10 }] },
+                  "next": "joined"
+                },
+                {
+                  "id": "persuade",
+                  "label": "\"Then come and see how the dream ends.\"",
+                  "once": true,
+                  "keywords": ["come", "join", "dream", "ends", "persuade"],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 13,
+                    "success": { "recruit": "ilse" },
+                    "failure": { "flags": [{ "set": "~ch1_ilse_declined" }] }
+                  },
+                  "next": "joined",
+                  "nextOnFail": "duty"
+                },
+                {
+                  "id": "read",
+                  "label": "Read the dream-book with her and ask what frightens her in it",
+                  "once": true,
+                  "keywords": ["read", "book", "frighten", "afraid", "insight"],
+                  "check": {
+                    "skill": "insight",
+                    "dc": 12,
+                    "success": { "recruit": "ilse" },
+                    "failure": { "text": "Ilse closes the book gently. \"Some of it I do not understand myself.\"" }
+                  },
+                  "next": "fear",
+                  "nextOnFail": "greet"
+                },
+                { "id": "bye", "label": "\"Another time, Sister.\"", "keywords": ["bye", "leave", "later"] }
+              ]
+            },
+            {
+              "id": "joined",
+              "text": "Then I will tell the Crown I am following the matter where it goes. They will believe that. It is even true.",
+              "options": [{ "id": "back", "label": "\"Welcome, Ilse.\"" }]
+            },
+            {
+              "id": "duty",
+              "text": "I am sworn to this court until its verdict is written. I am sorry. If the dream is true, we will meet again.",
+              "options": [{ "id": "back", "label": "\"Then we will.\"" }]
+            },
+            {
+              "id": "fear",
+              "text": "The faces. In the dream a woman counts faces like coins, and when she reaches the end of the count, there is a crown. I am afraid of what she does with the faces she does not need. I will come with you. Someone should write this down.",
+              "options": [{ "id": "back", "label": "\"Welcome, Ilse.\"" }]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "encounters": [
+    {
+      "id": "vault_guardians",
+      "name": "The Guardians of the Third Vault",
+      "monsters": [{ "id": "animated_armor", "count": 2 }],
+      "statOverrides": { "animated_armor": { "name": "Ironvault Guardian", "hpPercent": 70 } },
+      "map": "third_vault",
+      "room": "gallery",
+      "scaling": { "target": "moderate", "pool": ["animated_armor"] },
+      "win": { "text": "The second guardian falls apart with a clang that rings down the whole gallery. Beyond the racks, the ledger alcove stands open.", "flags": [{ "set": "~ch1_guardians_done" }] },
+      "lose": { "text": "Iron fists drive you back up the stair. You come round on the counting-house floor with clerks staring down at you.", "goto": "counting_house", "minutes": 120 },
+      "flee": { "text": "You scramble back up the vault stair, and the guardians stop at the bottom step." }
+    },
+    {
+      "id": "gilt_fight",
+      "name": "The False Auditor",
+      "monsters": [{ "id": "doppelganger", "count": 1 }, { "id": "guard", "count": 2, "if": { "not": { "flag": "~ch1_guards_convinced" } } }],
+      "allies": [{ "id": "guard", "count": 2, "if": { "flag": "~ch1_guards_convinced" } }],
+      "statOverrides": { "doppelganger": { "name": "Gilt", "hpPercent": 50 } },
+      "bosses": ["doppelganger"],
+      "scaling": { "target": "moderate", "pool": ["guard"] },
+      "win": {
+        "text": "Gilt goes down, and its shape gives up the auditor's face for good: grey, smooth, eyeless. The guards stare. Under the counting house they find the real Tavin Hesk in an ore cellar, thin and alive, asking for his daughter Marit.",
+        "flags": [{ "set": "arc.crown.gilt_exposed" }, { "set": "~ch1_hesk_done" }],
+        "approval": [{ "companion": "brannoc", "delta": 5 }],
+        "goto": "ironvault_court"
+      },
+      "lose": {
+        "text": "You wake in an Ironvault cell with a guard's boot in your ribs. The auditor, they say, ran out in the confusion and has not come back. Someone has called for the court.",
+        "flags": [{ "set": "arc.crown.gilt_fled" }, { "set": "~ch1_hesk_done" }],
+        "goto": "ironvault_court",
+        "minutes": 240
+      },
+      "flee": {
+        "text": "You break away, and in the chaos the false auditor goes out through a window and is gone into the terraces. The guards hold you for the court.",
+        "flags": [{ "set": "arc.crown.gilt_fled" }, { "set": "~ch1_hesk_done" }],
+        "goto": "ironvault_court",
+        "minutes": 60
+      }
+    }
+  ],
+  "beats": [
+    {
+      "id": "brannoc_ledger",
+      "text": "Brannoc reads the false entry over the hero's shoulder.",
+      "trigger": { "all": [{ "flag": "~ch1_ledger_found" }, { "flag": "world.brannoc_status", "eq": "in_party" }] },
+      "scenes": ["vault_audit", "counting_house"],
+      "outcome": { "text": "Brannoc reads the entry twice, his lips moving. \"Ten years,\" he says. \"Ten years the Ironvault has been weighing a lie and calling it gold.\"" }
+    },
+    {
+      "id": "orrin_after",
+      "text": "Orrin thanks the hero after Gilt is exposed.",
+      "trigger": { "all": [{ "flag": "arc.crown.gilt_exposed" }, { "flag": "~ch1_orrin_told" }] },
+      "scenes": ["ironvault_court"],
+      "outcome": { "text": "Young Orrin catches your sleeve at the court door. \"The real auditor asked for Marit first thing. He signs with his right hand.\" He is grinning like a boy.", "reputation": [{ "faction": "ironvault_consortium", "delta": 5 }] }
+    },
+    {
+      "id": "ilse_court",
+      "text": "Ilse notes the verdict.",
+      "trigger": { "all": [{ "flag": "~ch1_verdict" }, { "flag": "world.ilse_status", "eq": "in_party" }] },
+      "scenes": ["ironvault_court"],
+      "outcome": { "text": "Ilse writes the verdict down in her small, neat hand, and underlines the initials O. V. twice." }
+    }
+  ],
+  "quests": [
+    {
+      "id": "faces_in_the_ledger",
+      "name": "Faces in the Ledger",
+      "objectives": [
+        { "id": "gate", "text": "Get through the gates of Deepanvil Hold", "done": { "flag": "~ch1_gate_passed" } },
+        { "id": "access", "text": "Get into the Ironvault's third vault", "done": { "flag": "~ch1_vault_access" }, "if": { "flag": "~ch1_gate_passed" } },
+        { "id": "ledger", "text": "Find the false entry in the vault ledger", "done": { "flag": "~ch1_ledger_found" }, "if": { "flag": "~ch1_vault_access" } },
+        { "id": "hesk", "text": "Confront Auditor Hesk before the counting house", "done": { "flag": "~ch1_hesk_done" }, "if": { "flag": "~ch1_ledger_found" } },
+        { "id": "court", "text": "Give your account to the Ironvault court", "done": { "flag": "~ch1_verdict" }, "if": { "flag": "~ch1_hesk_done" } },
+        { "id": "rest", "text": "Rest at the Thane's Rest before the road south", "done": { "flag": "~ch1_rested" }, "if": { "flag": "~ch1_verdict" } }
+      ]
+    }
+  ],
+  "flags": [
+    { "id": "~ch0_dunmore_letter", "description": "Read from chapter 0: Mistress Dunmore's sealed letter to the Ironvault gatewardens." },
+    { "id": "~ch0_die_kept", "description": "Read from chapter 0: the hero kept a false Ironvault coin die as evidence." },
+    { "id": "~ch1_gate_passed", "description": "The gatewardens let the hero into Deepanvil Hold." },
+    { "id": "~ch1_letter_given", "description": "The hero gave Mistress Dunmore's letter to the gatewarden." },
+    { "id": "~ch1_brekka_hint", "description": "Gatewarden Brekka let slip that Hesk's couriers pass unweighed." },
+    { "id": "~ch1_saw_portrait", "description": "The hero saw the face-down portrait from Hesk's daughter Marit." },
+    { "id": "~ch1_orrin_told", "description": "The clerk Orrin told the hero that the auditor changed after the spring audit." },
+    { "id": "~ch1_vault_access", "description": "The hero may go down to the third vault." },
+    { "id": "~ch1_by_book", "description": "The hero won a vault audit under the Consortium charter." },
+    { "id": "~ch1_audit_tomorrow", "description": "Hesk promised a supervised audit at the next opening bell." },
+    { "id": "~ch1_bribed", "description": "The hero bribed the false auditor for the vault." },
+    { "id": "~ch1_broke_in", "description": "The hero slipped down the vault stair at night." },
+    { "id": "~ch1_guardians_done", "description": "The vault guardians were beaten or stood down." },
+    { "id": "~ch1_weighed", "description": "The hero weighed a hollow gold bar." },
+    { "id": "~ch1_seal_mark", "description": "Brannoc found his father's assay mark on the oldest rack (his personal quest)." },
+    { "id": "~ch1_ledger_found", "description": "The hero found the false ledger entry initialled O. V." },
+    { "id": "~ch1_guards_convinced", "description": "The counting-house guards sided with the hero against the false auditor." },
+    { "id": "~ch1_hesk_done", "description": "The false auditor was exposed, fled or escaped." },
+    { "id": "~ch1_verdict", "description": "The Ironvault court gave its verdict." },
+    { "id": "~ch1_commission", "description": "The Ironvault court hired the hero under its seal (chapter 3's Dawn Lance reads it)." },
+    { "id": "~ch1_blamed", "description": "The Ironvault court blamed the hero (also sets world.player_outlawed)." },
+    { "id": "~ch1_ilse_declined", "description": "Sister Ilse declined to leave the court." },
+    { "id": "~ch1_rested", "description": "The hero slept at the Thane's Rest (level 3 milestone)." },
+    { "id": "~ch1_ilse_dream", "description": "Ilse told the hero her dream of the sleeping forge." }
+  ],
+  "endings": [
+    {
+      "id": "ch1_to_fennicks",
+      "name": "The Road to Fennick's Rest",
+      "text": "The Ironvault's third vault was a tenth hollow, a Face sat at its auditor's desk, and the initials in the ledger were O. V. The hollow gold runs to the Brinescatter Isles, to the gambling halls of Fennick's Rest, where gold goes to be washed.",
+      "next": "arc2_ch2_gamblers_tide"
+    }
+  ]
+}
