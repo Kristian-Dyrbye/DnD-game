@@ -5,6 +5,7 @@
  */
 import { signal } from '@preact/signals';
 import type { Character } from '../../engine/core/creature';
+import { DEFAULT_CAMPAIGN } from '../../host/campaigns';
 
 export type Screen = 'title' | 'creator' | 'game' | 'combat';
 
@@ -29,6 +30,8 @@ export const settingsOpen = signal(false);
 
 /** Hardcore: the next hero continues the current world instead of starting a new one. */
 export const continueWorldNext = signal(false);
+/** Campaign the next new game starts (first-chapter adventure id; title screen + creator review pick it). */
+export const campaignChoice = signal<string>(DEFAULT_CAMPAIGN.adventure);
 
 export function startNewCharacter(): void {
   newCharacterRequests.value++;

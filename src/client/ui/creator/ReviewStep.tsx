@@ -8,6 +8,7 @@ import { coins, t } from '../i18n';
 import { creator } from './creatorState';
 import { groupNames, itemDisplayName } from '../text';
 import { srdText, abilityAbbr, itemText, skillText } from '../srdText';
+import { CampaignPicker } from '../CampaignPicker';
 
 export function ReviewStep() {
   const s = creator.value;
@@ -117,6 +118,7 @@ export function ReviewStep() {
       {s.personality.backstory && (
         <blockquote class="backstory">{s.personality.backstory}</blockquote>
       )}
+      <CampaignPicker class="review-campaign" />
     </section>
   );
 }

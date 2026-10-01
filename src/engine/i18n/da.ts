@@ -9,6 +9,7 @@ export const da: Partial<Record<EngineKey, string>> = {
 
   // Session
   'session.noGame': 'Der kører intet spil',
+  'session.noCampaign': 'Kampagnen "{id}" er ikke installeret',
   'session.noSaving': 'Du kan ikke gemme her',
   'session.noTravel': 'Rejser er ikke mulige',
   'session.notAvailable': 'Ikke muligt',

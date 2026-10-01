@@ -23,6 +23,8 @@ export interface SessionSaveMeta {
   location: string;
   mode: GameState['mode'];
   playTimeMinutes: number;
+  /** First-chapter adventure id of the campaign (B001). */
+  campaign?: string;
   /** Data URL of the hero picture (save browser). */
   thumbnail?: string;
 }
@@ -65,15 +67,18 @@ export type ExtensionCommand = Extract<ClientCommand, { type: 'equip' | 'unequip
 /** Parts of the old state a new Hardcore hero inherits: the world, not the character. */
 export function continueWorld(old: GameState, fresh: GameState): GameState {
   const { combat: _combat, ...extensions } = old.extensions;
-  return { ...fresh, campaignId: old.campaignId, time: old.time, flags: old.flags, extensions, location: old.location, journal: old.journal, summary: old.summary, summaryUpTo: old.summaryUpTo, log: old.log, nextId: old.nextId, rolls: old.rolls };
+  // The world keeps its campaign too (the story in progress continues with the new hero).
+  const campaign = old.campaign ?? fresh.campaign;
+  return { ...fresh, campaignId: old.campaignId, ...(campaign && { campaign }), time: old.time, flags: old.flags, extensions, location: old.location, journal: old.journal, summary: old.summary, summaryUpTo: old.summaryUpTo, log: old.log, nextId: old.nextId, rolls: old.rolls };
 }
 
-/** A fresh campaign state for a newly created hero. */
-export function newGameState(hero: Character, mode: GameState['mode'], seed: string | number): GameState {
+/** A fresh campaign state for a newly created hero. `campaign` = first-chapter adventure id (default: the host's starter). */
+export function newGameState(hero: Character, mode: GameState['mode'], seed: string | number, campaign?: string): GameState {
   const rng = Rng.fromSeed(seed);
   return GameStateSchema.parse({
     campaignId: `c-${String(seed).replace(/[^a-z0-9]/gi, '').slice(0, 24) || 'game'}`,
     mode,
+    ...(campaign && { campaign }),
     rng: rng.getState(),
     hero,
     location: { name: START_LOCATION },
@@ -193,6 +198,7 @@ export class GameSession {
       location: s.location.name,
       mode: s.mode,
       playTimeMinutes: Math.round(s.playTimeMinutes),
+      ...(s.campaign && { campaign: s.campaign }),
       ...(this.thumbnail && { thumbnail: this.thumbnail }),
     };
   }
@@ -226,7 +232,7 @@ export class GameSession {
         case 'new_game': {
           this.thumbnail = undefined;
           const seed = cmd.seed ?? this.ports.newSeed?.() ?? `${Date.now()}-${Math.random()}`;
-          const fresh = newGameState(cmd.hero, cmd.mode, seed);
+          const fresh = newGameState(cmd.hero, cmd.mode, seed, cmd.campaign);
           this.start(cmd.continueWorld && this.state ? continueWorld(this.current, fresh) : fresh);
           this.emit(this.snapshot());
           await this.ports.actions?.begin?.(this);

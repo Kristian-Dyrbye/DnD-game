@@ -52,6 +52,8 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
     seed: z.union([z.string(), z.number()]).optional(),
     /** Hardcore: a new hero continues in the same world (flags, map, reputation, time kept). */
     continueWorld: z.boolean().optional(),
+    /** Campaign to start = adventure id of its first chapter (src/host/campaigns.ts); default the starter arc. */
+    campaign: z.string().max(80).optional(),
   }),
   /** Level up the hero (choices as required by leveling.pendingChoices). */
   z.object({

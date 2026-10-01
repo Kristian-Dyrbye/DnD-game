@@ -18,7 +18,7 @@ REM --- Usage-limit mode (starts after the normal retries fail on a usage limit)
 REM Seconds between usage-limit retries (600 = 10 min)
 set LIMIT_WAIT=600
 REM Number of usage-limit retries (12 x 10 min = 2 hours)
-set LIMIT_MAX_TRIES=12
+set LIMIT_MAX_TRIES=30
 REM ==================================
 
 where claude >nul 2>nul

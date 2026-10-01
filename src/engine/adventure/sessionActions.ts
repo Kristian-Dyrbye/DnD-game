@@ -78,7 +78,8 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
   const ctxFor = (session: GameSession): RunContext => {
     // A just-accepted side quest has no progress yet; otherwise progress names the adventure.
     const pending = (session.current.extensions.sideQuests as { active?: { adventure: Adventure } } | undefined)?.active?.adventure.id;
-    const id = getProgress(session.current)?.adventureId ?? pending ?? defaultId;
+    // Before the story starts, the chosen campaign's first chapter (B001); the host's default otherwise.
+    const id = getProgress(session.current)?.adventureId ?? pending ?? session.current.campaign ?? defaultId;
     const adventure = adventures.get(id) ?? activeSideQuest(session.current, id);
     if (!adventure) throw new Error(`Adventure "${id}" is not installed`);
     return { state: session.current, adventure, rng: session.rng, msgs: session.msgs, ...(db && { db }), ...(opts.flags && { flags: opts.flags }), ...(opts.lore && { lore: opts.lore }), ...(opts.companions && { companions: opts.companions }) };

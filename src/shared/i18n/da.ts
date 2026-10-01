@@ -17,6 +17,13 @@ export const da: Partial<Record<MessageKey, string>> = {
   'title.loadGame': 'Indlæs spil',
   'title.settings': 'Indstillinger',
   'title.about': 'Om spillet',
+  'campaign.pick': 'Kampagne',
+  'campaign.levels': 'Niveau {from}–{to}',
+  'campaign.comingSoon': 'Kommer snart',
+  'campaign.seven_teeth.name': 'Vashkuls syv tænder',
+  'campaign.seven_teeth.blurb': 'Landsbyboere forsvinder fra Millbrook, og i mørket synges en salme, som ingen husker at have lært. Syv relikvier, en kult, der kalder sig et kor, og en sult under bakkerne. En hel kampagne fra niveau 1 til 10.',
+  'campaign.hollow_crown.name': 'Den hule krone',
+  'campaign.hollow_crown.blurb': 'Falske mønter suger livet ud af flodbyerne, og falskmøntneren bærer et nyt ansigt i hver eneste af dem. En kortere og skarpere fortælling om svindlere, proberere og en møntfabrik i Blightwood, fra niveau 1 til 5.',
 
   // Indstillinger
   'settings.title': 'Indstillinger',

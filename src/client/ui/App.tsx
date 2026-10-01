@@ -15,6 +15,7 @@ import { SettingsPanel } from './SettingsPanel';
 import { lazyScreen } from './lazyScreen';
 import { t } from './i18n';
 import { LanguagePicker } from './LanguagePicker';
+import { CampaignPicker } from './CampaignPicker';
 
 const Creator = lazyScreen(async () => (await import('./creator/Creator')).Creator, 'screen.creator');
 const GameScreen = lazyScreen(async () => (await import('./game/GameScreen')).GameScreen, 'screen.game');
@@ -28,6 +29,7 @@ function TitleScreen() {
     <main class="title-screen">
       <h1>{GAME_TITLE}</h1>
       <p>{t(WEB_EDITION ? 'title.taglineWeb' : 'title.taglineLocal')}</p>
+      <CampaignPicker />
       <div class="title-actions">
         <button type="button" class="primary" onClick={startNewCharacter}>
           {t('title.newGame')}

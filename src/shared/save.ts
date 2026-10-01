@@ -14,6 +14,8 @@ export const SaveMetaSchema = z.object({
   level: z.number().int().min(1).max(20),
   location: z.string(),
   mode: z.enum(['heroic', 'hardcore']),
+  /** First-chapter adventure id of the save's campaign (absent in old saves = the starter arc). */
+  campaign: z.string().optional(),
   playTimeMinutes: z.number().min(0).default(0),
   /** Small PNG/JPEG data URL of the 3D character (gear + scars). */
   thumbnail: z.string().optional(),

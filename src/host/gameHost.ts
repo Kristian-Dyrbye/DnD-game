@@ -26,9 +26,10 @@ import shopsJson from '../../data/world/shops.json';
 import sideQuestsJson from '../../data/tables/sidequests.json';
 import defeatsJson from '../../data/tables/defeat-outcomes.json';
 import companionsJson from '../../data/companions.json';
+import { CAMPAIGNS, DEFAULT_CAMPAIGN, type Campaign } from './campaigns';
 
-/** Adventure a new campaign starts with. */
-export const STARTING_ADVENTURE = 'millbrook_disappearances';
+/** Adventure a new game starts with when `new_game.campaign` is not given (the default campaign's first chapter). */
+export const STARTING_ADVENTURE = DEFAULT_CAMPAIGN.adventure;
 
 /** World data tables every edition bundles (small JSON, parsed once). */
 export interface WorldTables {
@@ -75,6 +76,8 @@ export interface GameHost {
   session: GameSession;
   /** Id of the adventure new games start with (undefined when no adventure loaded). */
   defaultAdventure: string | undefined;
+  /** Campaigns whose first chapter is loaded (what `new_game.campaign` may name). */
+  campaigns: readonly Campaign[];
   /** Queues a command; resolves once it (and everything queued before it) has run. */
   send(cmd: ClientCommand): Promise<void>;
   /** Parses a raw protocol message and queues it; returns an error event for the sender if it is invalid. */
@@ -128,11 +131,21 @@ export function createGameHost(opts: GameHostOptions): GameHost {
     ...(opts.saves && { saves: opts.saves }),
     ...opts.sessionPorts,
   });
+  const campaigns = CAMPAIGNS.filter((c) => adventures.has(c.adventure));
   let queue: Promise<void> = Promise.resolve();
-  const send = (cmd: ClientCommand): Promise<void> => (queue = queue.then(() => session.handle(cmd)));
+  const run = async (cmd: ClientCommand): Promise<void> => {
+    // A campaign names an installed first chapter; otherwise the game would start and then fail to find it.
+    if (cmd.type === 'new_game' && cmd.campaign !== undefined && !adventures.has(cmd.campaign)) {
+      session.emit({ type: 'error', message: session.msgs.m('session.noCampaign', { id: cmd.campaign }), ...(cmd.reqId && { reqId: cmd.reqId }) });
+      return;
+    }
+    await session.handle(cmd);
+  };
+  const send = (cmd: ClientCommand): Promise<void> => (queue = queue.then(() => run(cmd)));
   return {
     session,
     defaultAdventure,
+    campaigns,
     send,
     receive(raw) {
       const parsed = parseCommand(raw);

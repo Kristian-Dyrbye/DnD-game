@@ -10,6 +10,7 @@ export const en = {
 
   // Session
   'session.noGame': 'No game is running',
+  'session.noCampaign': 'Campaign "{id}" is not installed',
   'session.noSaving': 'Saving is not available',
   'session.noTravel': 'Travel is not available',
   'session.notAvailable': 'Not available',

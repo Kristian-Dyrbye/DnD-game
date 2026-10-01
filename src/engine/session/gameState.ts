@@ -37,6 +37,8 @@ export const GameStateSchema = z.object({
   /** Stable id for this campaign (same world flags continue after a Hardcore death). */
   campaignId: z.string(),
   mode: z.enum(['heroic', 'hardcore']),
+  /** First-chapter adventure id of the chosen campaign (B001); absent in old saves = the starter arc. */
+  campaign: z.string().optional(),
   rng: z.tuple([z.number(), z.number(), z.number(), z.number()]),
   hero: CharacterSchema,
   /** Companion characters (Phase 6). */

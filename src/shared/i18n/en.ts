@@ -15,6 +15,13 @@ export const en = {
   'title.loadGame': 'Load Game',
   'title.settings': 'Settings',
   'title.about': 'About',
+  'campaign.pick': 'Campaign',
+  'campaign.levels': 'Levels {from}–{to}',
+  'campaign.comingSoon': 'Coming soon',
+  'campaign.seven_teeth.name': 'The Seven Teeth of Vashkul',
+  'campaign.seven_teeth.blurb': 'Villagers vanish from Millbrook, and a hymn nobody remembers learning is sung in the dark. Seven relics, a cult that calls itself a choir, and a hunger beneath the hills. A full campaign from level 1 to 10.',
+  'campaign.hollow_crown.name': 'The Hollow Crown',
+  'campaign.hollow_crown.blurb': 'Counterfeit coin is bleeding the river towns dry, and the forger wears a different face in every one of them. A shorter, sharper tale of con artists, assayers and a mint in the Blightwood, from level 1 to 5.',
 
   // Settings panel
   'settings.title': 'Settings',
