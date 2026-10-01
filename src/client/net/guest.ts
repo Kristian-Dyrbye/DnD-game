@@ -20,6 +20,15 @@ export function joinCodeFrom(search: string): string | null {
   return code && /^[A-Z0-9]{4,12}$/.test(code) ? code : null;
 }
 
+/**
+ * The web edition's room id from a guest page's query string (`?room=solo-dnd-…&join=CODE`, C009b): the
+ * host page's address on the PeerJS broker. Null without a room or a join code (a normal page).
+ */
+export function roomFrom(search: string): string | null {
+  const room = new URLSearchParams(search).get('room')?.trim().toLowerCase();
+  return room && /^solo-dnd-[a-z0-9]{10}$/.test(room) && joinCodeFrom(search) ? room : null;
+}
+
 const KEY = 'solo-dnd.seat';
 
 interface Stored {

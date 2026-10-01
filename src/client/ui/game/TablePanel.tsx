@@ -1,11 +1,14 @@
 /**
  * The host's table panel (C006b, local edition): open the game to a friend on the network (join link + QR
  * code), see who sits at the table, release a seat, choose who decides the story, and lend companions to a
- * seated player. Seats/policy come live from `table` events, the door from GET /api/table.
+ * seated player. Seats/policy come live from `table` events, the door from GET /api/table (local edition)
+ * or the page's PeerJS room (web edition, net/webRoom.ts; the link carries room id + join code).
  */
 import { useEffect, useState } from 'preact/hooks';
 import { gameState, send, tableSeats } from '../../net/gameSocket';
 import { controlOptions, doorState, fetchTable, lendable, type TableInfo } from '../../net/tableInfo';
+import { roomTableInfo, webRoom } from '../../net/webRoom';
+import { WEB_EDITION } from '../../edition';
 import { qrMatrix, qrPath } from '../../qr';
 import { settings, updateSettings } from '../settingsState';
 import { t } from '../i18n';
@@ -23,17 +26,21 @@ function JoinQr({ url }: { url: string }) {
 }
 
 export function TablePanel({ onClose }: { onClose: () => void }) {
-  const [info, setInfo] = useState<TableInfo | null>(null);
+  const [served, setInfo] = useState<TableInfo | null>(null);
   const [failed, setFailed] = useState(false);
+  // The web edition has no /api/table: its door is the PeerJS room (C009b).
   const refresh = () =>
-    fetchTable()
-      .then((i) => (setInfo(i), setFailed(false)))
-      .catch(() => setFailed(true));
+    WEB_EDITION
+      ? Promise.resolve()
+      : fetchTable()
+          .then((i) => (setInfo(i), setFailed(false)))
+          .catch(() => setFailed(true));
   useEffect(() => void refresh(), []);
 
-  const allow = settings.value?.table.allowJoin ?? info?.allowJoin ?? false;
-  const seats = tableSeats.value?.seats ?? info?.seats ?? [];
-  const policy = tableSeats.value?.policy ?? info?.policy ?? 'host_decides';
+  const allow = settings.value?.table.allowJoin ?? served?.allowJoin ?? false;
+  const seats = tableSeats.value?.seats ?? served?.seats ?? [];
+  const policy = tableSeats.value?.policy ?? served?.policy ?? 'host_decides';
+  const info = WEB_EDITION ? roomTableInfo(webRoom.value, allow, location.href, seats, policy) : served;
   const door = info ? doorState({ ...info, allowJoin: allow }) : null;
   const state = gameState.value;
   const control = (state?.extensions.party as { control?: Record<string, string> } | undefined)?.control ?? {};
@@ -52,19 +59,22 @@ export function TablePanel({ onClose }: { onClose: () => void }) {
         <div class="about-body">
           <h3>{t('table.door')}</h3>
           <label class="table-toggle">
-            <input type="checkbox" checked={allow} onChange={() => void updateSettings({ table: { allowJoin: !allow } }).then(refresh)} /> {t('table.allowJoin')}
+            <input type="checkbox" checked={allow} onChange={() => void updateSettings({ table: { allowJoin: !allow } }).then(refresh)} /> {t(WEB_EDITION ? 'table.allowJoinWeb' : 'table.allowJoin')}
           </label>
           {failed && <p class="game-error">{t('table.loadFailed')}</p>}
           {door === 'closed' && <p class="hint small">{t('table.closedHint')}</p>}
           {door === 'restart' && <p class="hint">{t('table.restart')}</p>}
           {door === 'noNetwork' && <p class="hint">{t('table.noNetwork')}</p>}
+          {door === 'connecting' && <p class="hint small">{t('table.roomOpening')}</p>}
+          {door === 'brokerDown' && <p class="game-error">{t(webRoom.value.status === 'unsupported' ? 'table.noWebRtc' : 'table.brokerDown')}</p>}
+          {door === 'roomTaken' && <p class="game-error">{t('table.roomTaken')}</p>}
           {door === 'open' && info && (
             <div class="table-join">
               <div>
                 <p>
                   {t('table.code')} <strong class="join-code">{info.code}</strong>
                 </p>
-                <p class="small">{t('table.linkHint')}</p>
+                <p class="small">{t(WEB_EDITION ? 'table.linkHintWeb' : 'table.linkHint')}</p>
                 <ul class="plain-list">
                   {info.urls.map((u) => (
                     <li key={u}>
@@ -72,7 +82,14 @@ export function TablePanel({ onClose }: { onClose: () => void }) {
                     </li>
                   ))}
                 </ul>
-                <p class="hint small">{t('table.firewall')}</p>
+                {WEB_EDITION ? (
+                  <>
+                    <p class="hint small">{t('table.webKeepOpen')}</p>
+                    <p class="hint small">{t('table.webPrivacy')}</p>
+                  </>
+                ) : (
+                  <p class="hint small">{t('table.firewall')}</p>
+                )}
               </div>
               {info.urls[0] && <JoinQr url={info.urls[0]} />}
             </div>

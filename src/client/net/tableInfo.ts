@@ -14,6 +14,8 @@ export interface TableInfo {
   urls: string[];
   seats: Seat[];
   policy: TablePolicy;
+  /** Web edition (C009b): the room on the PeerJS broker (webRoom.ts RoomStatus); absent in the local edition. */
+  broker?: 'off' | 'opening' | 'open' | 'down' | 'taken' | 'unsupported';
 }
 
 export async function fetchTable(fetchFn: typeof fetch = fetch): Promise<TableInfo> {
@@ -22,9 +24,18 @@ export async function fetchTable(fetchFn: typeof fetch = fetch): Promise<TableIn
   return (await res.json()) as TableInfo;
 }
 
-/** What the table panel says about the door: closed, open but needs a restart, open with links, or no network found. */
-export function doorState(info: Pick<TableInfo, 'allowJoin' | 'lan' | 'urls'>): 'closed' | 'restart' | 'open' | 'noNetwork' {
+/**
+ * What the table panel says about the door: closed, open but needs a restart, open with links, or no
+ * network found; in the web edition also reaching the broker, broker down, room open in another tab.
+ */
+export function doorState(info: Pick<TableInfo, 'allowJoin' | 'lan' | 'urls' | 'broker'>): 'closed' | 'restart' | 'open' | 'noNetwork' | 'connecting' | 'brokerDown' | 'roomTaken' {
   if (!info.allowJoin) return 'closed';
+  if (info.broker) {
+    if (info.broker === 'open') return info.urls.length ? 'open' : 'connecting';
+    if (info.broker === 'down' || info.broker === 'unsupported') return 'brokerDown';
+    if (info.broker === 'taken') return 'roomTaken';
+    return 'connecting';
+  }
   if (!info.lan) return 'restart';
   return info.urls.length ? 'open' : 'noNetwork';
 }

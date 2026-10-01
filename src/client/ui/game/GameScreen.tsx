@@ -163,12 +163,10 @@ export function GameScreen() {
               <button type="button" onClick={() => (settingsOpen.value = true)}>
                 {t('game.settings')}
               </button>
-              {/* Co-op over the network is the local edition's for now (the web edition gets it with C009). */}
-              {!WEB_EDITION && (
-                <button type="button" title={t('game.tableTitle')} onClick={() => setTableOpen(true)}>
-                  {t('game.table')}
-                </button>
-              )}
+              {/* Co-op: LAN join code (local edition) or a PeerJS room link (web edition, C009b). */}
+              <button type="button" title={t('game.tableTitle')} onClick={() => setTableOpen(true)}>
+                {t('game.table')}
+              </button>
             </>
           )}
           <button type="button" onClick={() => (screen.value = 'title')}>

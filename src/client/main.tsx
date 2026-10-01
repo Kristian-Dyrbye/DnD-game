@@ -5,10 +5,17 @@
  */
 import { render } from 'preact';
 import { WEB_EDITION } from './edition';
+import { roomFrom } from './net/guest';
 import './styles.css';
 
 async function start(): Promise<void> {
-  if (WEB_EDITION) await (await import('./webEdition')).startWebEdition();
+  if (WEB_EDITION) {
+    const web = await import('./webEdition');
+    // A friend's room link (`?room=…&join=…`, C009b) plays the host's game; anything else runs its own.
+    const room = roomFrom(location.search);
+    if (room) await web.startWebGuest(room);
+    else await web.startWebEdition();
+  }
   const { App } = await import('./ui/App');
   const root = document.getElementById('app');
   if (root) render(<App />, root);

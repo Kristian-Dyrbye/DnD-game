@@ -26,6 +26,7 @@
     "@fastify/websocket": "^11.3.1",
     "@preact/signals": "^2.11.2",
     "fastify": "^5.12.5",
+    "peerjs": "1.5.5",
     "preact": "^10.29.8",
     "three": "^0.186.1",
     "zod": "^4.6.5"
