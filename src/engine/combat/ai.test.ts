@@ -7,7 +7,9 @@ import { monsterToCreature } from '../rules/monsters';
 import { attackSlots, executePlan, planTurn, takeAiTurn, type AiPlan } from './ai';
 import { hitChance, isFearless, moraleCheck, rankTargets } from './aiScore';
 import type { CombatContext, CombatState } from './combatState';
-import { createGrid, distanceFt, placeToken } from './grid';
+import { cellKey, createGrid, distanceFt, placeToken, setCell } from './grid';
+import { hasLineOfSight } from './los';
+import { reachableSquares } from './movement';
 import { currentId, livingSides, nextTurn, startCombat } from './turns';
 
 const db = loadSrd();
@@ -171,6 +173,40 @@ describe('planTurn: targeting and movement', () => {
     expect(plan.steps[0]).toEqual({ kind: 'dash' });
     const r = takeAiTurn(s, ctx(), 'z');
     expect(r.state.grid.tokens.z!.x).toBe(8);
+  });
+
+  // B008: a foe behind a wall had no square "closer" in a straight line and Dodged forever.
+  const behindWall = (statId: string) => {
+    const s = setup(
+      [
+        { c: mon(statId, 'm'), side: 'enemy', x: 4, y: 5 },
+        { c: hero('h'), side: 'party', x: 6, y: 5 },
+      ],
+      'm',
+    );
+    for (let y = 0; y <= 12; y++) setCell(s.grid, { x: 5, y }, { blocking: true });
+    return s;
+  };
+  const walkToHero = (s: CombatState, id: string) => {
+    const map = reachableSquares(s.grid, 'h', 1000, { ignore: [id] });
+    return map.get(cellKey(s.grid.tokens[id]!))!.costFt;
+  };
+
+  it('melee foe behind a wall walks around it instead of Dodging', () => {
+    const s = behindWall('zombie');
+    const plan = planTurn(s, ctx(), 'm');
+    expect(plan.intent).toBe('approach');
+    expect(plan.steps.some((x) => x.kind === 'dodge')).toBe(false);
+    const r = takeAiTurn(s, ctx(), 'm');
+    expect(r.ok).toBe(true);
+    expect(walkToHero(r.state, 'm')).toBeLessThan(walkToHero(s, 'm'));
+  });
+
+  it('ranged foe behind a wall walks to a square with line of sight', () => {
+    const s = behindWall('goblin_warrior');
+    expect(planTurn(s, ctx(), 'm').intent).toBe('approach');
+    const r = takeAiTurn(s, ctx(), 'm');
+    expect(hasLineOfSight(r.state.grid, 'm', 'h')).toBe(true);
   });
 });
 

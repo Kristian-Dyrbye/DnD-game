@@ -19,8 +19,8 @@
  * 4. Area actions (breath weapons: cone/line/cube/emanation from the monster) that are available
  *    (recharge/per-day): aimed at each hostile from each reachable square; never when an ally would
  *    be caught; used when ≥ 2 hostiles are in the area or it beats the attack's expected damage.
- * 5. Nothing in reach → Dash toward the preferred target (ranged: stop inside normal range);
- *    no progress possible → Dodge.
+ * 5. Nothing in reach → Dash toward the preferred target by walking distance, so walls are walked
+ *    around (ranged: stop inside normal range with line of sight); no progress possible → Dodge.
  *
  * `executePlan` carries a plan out through the normal action functions (economy, OAs via
  * moveCreature, resolveAttack with the Multiattack count, resolveAreaEffect), re-targeting when the
@@ -37,7 +37,8 @@ import { AI_TUNING, averageDamage, expectedAttackDamage, expectedSaveDamage, isD
 import { previewArea, templateFromCaster } from './aoe';
 import { resolveAreaEffect } from './aoeResolve';
 import { areHostile, cloneGridTokens, dbOf, withCreature, type ActionResult, type CombatContext, type CombatEvent, type CombatState, msgsOf } from './combatState';
-import { distanceFt, footprintSize, moveToken, type GridToken, type Point } from './grid';
+import { cellKey, distanceFt, footprintSize, moveToken, type GridToken, type Point } from './grid';
+import { hasLineOfSight } from './los';
 import { planMove, reachableSquares, standUpCost, type PathOptions } from './movement';
 import { addDash, canReact, movementLeft, spend, standUp } from './turns';
 import type { SlotChoice } from '../rules/spellcasting';
@@ -337,6 +338,22 @@ export function lexLess(a: readonly number[], b: readonly number[]): boolean {
   return false;
 }
 
+const WALK_TOKEN = '__ai_walk';
+
+/**
+ * Walking distance in feet from each square to `targetId` for a creature of the actor's size (walls,
+ * blocking squares and difficult terrain count; other creatures are ignored, they move). Squares
+ * with no way to the target are missing. Used so a foe behind a wall walks around it.
+ */
+export function walkDistances(p: Planner, targetId: string): (d: Point) => number {
+  const tt = p.state.grid.tokens[targetId];
+  if (!tt) return () => Infinity;
+  const grid = cloneGridTokens(p.state.grid);
+  grid.tokens[WALK_TOKEN] = { id: WALK_TOKEN, x: tt.x, y: tt.y, size: p.token.size };
+  const map = reachableSquares(grid, WALK_TOKEN, 100_000, { ignore: Object.keys(p.state.grid.tokens) });
+  return (d) => (d.x === tt.x && d.y === tt.y ? 0 : (map.get(cellKey(d))?.costFt ?? Infinity));
+}
+
 export function planApproach(p: Planner, prefix: AiStep[], budgetFt: number, rangedMind: boolean, slots: readonly AttackProfile[][]): AiPlan {
   const db = dbOf(p.ctx);
   const b = p.state.turns.budgets[p.id]!;
@@ -350,11 +367,14 @@ export function planApproach(p: Planner, prefix: AiStep[], budgetFt: number, ran
   const tt = p.state.grid.tokens[target.id]!;
   const dashFt = b.action ? movementLeft(addDash(p.state.turns, p.id), p.id, p.actor, { ...(p.ctx.table && { table: p.ctx.table }) }) - (movementLeft(p.state.turns, p.id, p.actor, { ...(p.ctx.table && { table: p.ctx.table }) }) - budgetFt) : budgetFt;
   const normal = Math.max(5, ...slots.flat().filter((x) => !x.melee).map((x) => x.range?.normal ?? 5));
+  const walk = walkDistances(p, target.id);
   let best: { key: number[]; d: Dest } | undefined;
   for (const d of destinations(p, dashFt)) {
     const dist = distanceFt(at(p, d), tt);
     const oa = oaCost(p, d.path, dashFt, b.disengaged);
-    const key = rangedMind ? [dist > normal ? dist : 0, dist <= normal ? -dist : 0, oa, d.costFt] : [dist, oa, d.costFt];
+    // Closer by path first (around walls), straight line breaks ties and covers an unreachable target.
+    const far = dist > normal || (rangedMind && !hasLineOfSight(p.state.grid, at(p, d), tt));
+    const key = rangedMind ? [far ? 1 : 0, far ? walk(d) : 0, far ? dist : -dist, oa, d.costFt] : [walk(d), dist, oa, d.costFt];
     if (!best || lexLess(key, best.key)) best = { key, d };
   }
   if (!best || best.d.path.length === 0) return defend;
