@@ -12,6 +12,8 @@ export interface InPageHostOptions {
   /** Save storage; defaults to in-memory slots (lost on reload). */
   saves?: SavePort;
   sessionPorts?: Partial<SessionPorts>;
+  /** The join code guests on peer channels must give (C009); undefined = the table is closed. */
+  joinCode?: () => string | undefined;
 }
 
 export function createInPageHost(opts: InPageHostOptions = {}): GameHost {
@@ -28,5 +30,6 @@ export function createInPageHost(opts: InPageHostOptions = {}): GameHost {
     translations: BUNDLED_TRANSLATIONS,
     saves: opts.saves ?? new MemorySaves(),
     ...(opts.sessionPorts && { sessionPorts: opts.sessionPorts }),
+    ...(opts.joinCode && { joinCode: opts.joinCode }),
   });
 }

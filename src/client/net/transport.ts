@@ -8,6 +8,9 @@ import type { GameHost } from '../../host/gameHost';
 
 export type Connection = 'connecting' | 'open' | 'closed';
 
+/** Close codes after which a page must not reconnect: 4001 = a newer page took the seat over, 1008 = refused (origin, too many wrong codes). */
+export const FINAL_CLOSE_CODES: readonly number[] = [4001, 1008];
+
 export interface TransportHandlers {
   onEvent(e: ServerEvent): void;
   onStatus(s: Connection): void;
@@ -49,9 +52,10 @@ export class WebSocketTransport implements Transport {
         // Ignore malformed server messages.
       }
     };
-    sock.onclose = () => {
+    sock.onclose = (ev) => {
       this.ws = null;
       handlers.onStatus('closed');
+      if (FINAL_CLOSE_CODES.includes(ev.code)) return;
       const delay = Math.min(10_000, 500 * 2 ** this.retry++);
       setTimeout(() => this.connect(handlers), delay);
     };
@@ -69,6 +73,7 @@ export class InPageTransport implements Transport {
   private host: GameHost | undefined;
   private starting = false;
   private readonly outbox: string[] = [];
+  private readonly waiting: ((host: GameHost) => void)[] = [];
 
   /** `load` creates the host; the default imports the web edition's host (a separate chunk). */
   constructor(private readonly load: () => Promise<GameHost> = async () => (await import('../../host/inPage')).createInPageHost()) {}
@@ -81,10 +86,12 @@ export class InPageTransport implements Transport {
       (host) => {
         this.host = host;
         // A JSON round trip, like the WebSocket: the UI never shares objects with the live game state.
-        host.on((e) => handlers.onEvent(JSON.parse(JSON.stringify(e)) as ServerEvent));
+        // Errors caused by another connection (a co-op guest's peer channel, C009) are that page's business.
+        host.on((e, from) => from === undefined && handlers.onEvent(JSON.parse(JSON.stringify(e)) as ServerEvent));
         handlers.onStatus('open');
         for (const cmd of handlers.onOpen?.() ?? []) this.deliver(JSON.stringify(cmd));
         while (this.outbox.length) this.deliver(this.outbox.shift()!);
+        for (const resolve of this.waiting.splice(0)) resolve(host);
       },
       (err: unknown) => {
         this.starting = false;
@@ -98,6 +105,11 @@ export class InPageTransport implements Transport {
     const raw = JSON.stringify(cmd);
     if (this.host) this.deliver(raw);
     else this.outbox.push(raw);
+  }
+
+  /** The running host once it has started (web co-op lets guests' peer channels in to it, C009). */
+  ready(): Promise<GameHost> {
+    return this.host ? Promise.resolve(this.host) : new Promise((resolve) => this.waiting.push(resolve));
   }
 
   /** Waits for everything sent so far (tests). */

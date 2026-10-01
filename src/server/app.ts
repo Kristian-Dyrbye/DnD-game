@@ -6,9 +6,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import Fastify, { type FastifyInstance, type FastifyRequest } from 'fastify';
-import { HOST_SEAT, seatOf, type SeatId } from '../engine/session/table';
-import { parseCommand, type ServerEvent } from '../shared/protocol';
+import { HOST_SEAT, type SeatId } from '../engine/session/table';
+import type { ServerEvent } from '../shared/protocol';
 import { newJoinCode } from '../host/joinDesk';
+import { tableDoor } from '../host/tableDoor';
 import { guestMayCall, isLocalRequest, joinUrls } from './lan';
 import fastifyStatic from '@fastify/static';
 import fastifyWebsocket from '@fastify/websocket';
@@ -241,8 +242,7 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
     tts.clear();
     return { ok: true };
   });
-  // The live connection of each guest seat: a reload that reclaims the seat replaces the old one.
-  const seated = new Map<SeatId, { close(code?: number, reason?: string): void }>();
+  const door = tableDoor(host);
   app.register(async (scope) => {
     scope.get('/ws', { websocket: true }, (socket, req) => {
       // Browsers let any web page open a WebSocket to localhost, so only pages served from this
@@ -255,76 +255,18 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
       }
       // This PC's own pages are the host; anyone else (a LAN guest, `?guest` for a second tab) must join (C005).
       const guestTab = 'guest' in ((req.query as object | undefined) ?? {});
-      let seat: SeatId | undefined = opts.seatFor ? opts.seatFor(req) : isLocal(req) && originAllowed(origin) && !guestTab ? HOST_SEAT : undefined;
-      let off: (() => void) | undefined;
-      let joins: Promise<void> = Promise.resolve();
-      let failedJoins = 0;
-      const send = (e: ServerEvent): void => socket.send(JSON.stringify(e));
-      const unseat = (): void => {
-        off?.();
-        off = undefined;
-        if (seat && seated.get(seat) === socket) seated.delete(seat);
-        seat = undefined;
-      };
-      const sit = (id: SeatId): void => {
-        seat = id;
-        if (id !== HOST_SEAT) {
-          const before = seated.get(id);
-          seated.set(id, socket);
-          if (before && before !== socket) before.close(4001, 'Seat taken over');
-        }
-        off = host.on((e, from) => {
-          // A refused or failed command is the sender's business only (C008b).
-          if (from !== undefined && from !== socket) return;
-          send(e);
-          // Released (by themselves or the host): the connection stays, without a seat, until it joins again.
-          if (e.type === 'table' && seat && !seatOf(session.table, seat)) unseat();
-        });
-      };
-      if (seat) {
-        sit(seat);
-        // A guest who drops out leaves their characters to the AI until they are back (C003).
-        if (seat !== HOST_SEAT) void host.setSeatAway(seat, false);
-      }
-      socket.on('close', () => {
-        const left = seat !== undefined && seat !== HOST_SEAT && seated.get(seat) === socket ? seat : undefined;
-        unseat();
-        if (left) void host.setSeatAway(left, true);
-      });
-      socket.on('message', (raw: Buffer) => {
-        const parsed = parseCommand(raw.toString());
-        if (!parsed.ok) return send({ type: 'error', message: parsed.error, ...(parsed.reqId && { reqId: parsed.reqId }) });
-        const cmd = parsed.command;
-        const reqId = cmd.reqId ? { reqId: cmd.reqId } : {};
-        if (seat) {
-          if (cmd.type === 'join') return send({ type: 'error', message: session.msgs.m('table.alreadySeated'), ...reqId });
-          void host.send(cmd, seat, socket);
-          return;
-        }
-        // No seat yet: only ping and join; the game's events start once seated.
-        if (cmd.type === 'ping') return send({ type: 'pong', ...reqId });
-        if (cmd.type !== 'join') return send({ type: 'error', message: session.msgs.m('table.noSeat'), ...reqId });
-        // One join at a time per connection (a second one waits and finds the seat taken).
-        joins = joins.then(async () => {
-          if (seat) return send({ type: 'error', message: session.msgs.m('table.alreadySeated'), ...reqId });
-          if (socket.readyState !== socket.OPEN) return;
-          const res = await host.join(cmd);
-          if (!res.ok) {
-            send({ type: 'error', message: res.message, ...reqId });
-            // Guessing codes: hang up after a few tries.
-            if (++failedJoins >= 5) socket.close(1008, 'Too many join attempts');
-            return;
-          }
-          if (socket.readyState !== socket.OPEN) {
-            void host.setSeatAway(res.seat, true);
-            return;
-          }
-          sit(res.seat);
-          send({ type: 'joined', seat: res.seat, role: res.role, token: res.token });
-          send({ type: 'table', seats: structuredClone(session.table.seats), policy: session.table.policy });
-          if (session.running) send(session.snapshot());
-        });
-      });
+      const seat: SeatId | undefined = opts.seatFor ? opts.seatFor(req) : isLocal(req) && originAllowed(origin) && !guestTab ? HOST_SEAT : undefined;
+      // Seats, joins, error routing and away marks: the door shared with the web edition's peers (C009).
+      const conn = door.open(
+        {
+          send: (e: ServerEvent) => socket.send(JSON.stringify(e)),
+          close: (code, reason) => socket.close(code, reason),
+          isOpen: () => socket.readyState === socket.OPEN,
+        },
+        seat,
+      );
+      socket.on('close', () => conn.closed());
+      socket.on('message', (raw: Buffer) => conn.receive(raw.toString()));
     });
   });
 
