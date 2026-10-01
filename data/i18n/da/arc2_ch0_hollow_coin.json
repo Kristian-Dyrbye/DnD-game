@@ -1,0 +1,1375 @@
+{
+  "$source": "data/adventures/arc2/ch0_hollow_coin.json",
+  "strings": {
+    "name": {
+      "hash": "b9f3962c",
+      "text": "Den Hule Mønt"
+    },
+    "summary": {
+      "hash": "7153b06f",
+      "text": "En guldkrone smuldrer til aske i heltens hånd på markedet i Brightwater. Byens guardein finder Jernhvælvets eget præglemærke i asken, og sporet fører ind under den gamle Silverrun-mølle, hvor en varrotte driver et hemmeligt møntværk for en, der betaler i ægte guld."
+    },
+    "chapters/ch0/name": {
+      "hash": "b9f3962c",
+      "text": "Den Hule Mønt"
+    },
+    "chapters/ch0/summary": {
+      "hash": "19763a5d",
+      "text": "Brightwater: askemønten, prøvehuset, møntværket under møllen og Korraths helligdom."
+    },
+    "chapters/ch0/scenes/brightwater_market/name": {
+      "hash": "33529338",
+      "text": "Markedet i Brightwater"
+    },
+    "chapters/ch0/scenes/brightwater_market/seed": {
+      "hash": "1d572e12",
+      "text": "Brightwaters marked fylder den brolagte kaj, hvor Silverrun løber stridt under møllerne. Pramme losser korn og uld, en vekselerers bod står under en stribet markise, boden Weir & Datter sælger reb og lampeolie, Brightwater-smedjen klinger ved toldbroen, og en lille stenhelligdom for Korrath, gud for smedjen og ærlig vægt, står ved jernlågen til den gamle møllestrøm."
+    },
+    "chapters/ch0/scenes/brightwater_market/variants/0/seed": {
+      "hash": "c7e612e9",
+      "text": "En grå stribe aske sidder stadig i din håndflade, hvor en guldkrone lå før."
+    },
+    "chapters/ch0/scenes/brightwater_market/variants/1/seed": {
+      "hash": "d3f162cd",
+      "text": "Rygtet om rotternes møntværk under den gamle mølle har bredt sig. Kræmmerne bider i hver mønt, du rækker dem, og nogle af dem nikker til dig."
+    },
+    "chapters/ch0/scenes/brightwater_market/variants/2/seed": {
+      "hash": "cd6f7437",
+      "text": "Folk hvisker om, at der er dukket grå aske op i tre pengeskuffer i denne uge. Den, der lavede det falske guld, er stadig derude."
+    },
+    "chapters/ch0/scenes/brightwater_market/revisitSeed": {
+      "hash": "cfa6bf28",
+      "text": [
+        "Kajen i Brightwater igen: pramme, måger, vekselererens markise og møllestrømmens brusen under broen.",
+        "Tilbage mellem markedsboderne ved Silverrun, hvor smedjen stadig klinger, og Korraths helligdom vogter sin vægt."
+      ]
+    },
+    "chapters/ch0/scenes/brightwater_market/onEnter/text": {
+      "hash": "ac45374b",
+      "text": "Du nåede Brightwater i morges med en prammeskippers løn i pungen: én tung guldkrone, nypræget, for en uges slæb med reb."
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/moneychanger/name": {
+      "hash": "b9a52d8a",
+      "text": "Vekselererens bod"
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/moneychanger/seed": {
+      "hash": "5823957c",
+      "text": "Oswin Harls bod: messingvægte, en prøvesten, stakke af sølv og kobber under en stribet markise."
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/moneychanger/actions/change_coin/label": {
+      "hash": "583e8522",
+      "text": "Veksl din guldkrone til sølv"
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/moneychanger/actions/change_coin/keywords": {
+      "hash": "756b2518",
+      "text": [
+        "veksl",
+        "veksle",
+        "mønt",
+        "mønten",
+        "krone",
+        "kronen",
+        "guldkrone",
+        "sølv",
+        "vekseler",
+        "vekselereren",
+        "guld"
+      ]
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/moneychanger/actions/change_coin/outcome/text": {
+      "hash": "32600fd1",
+      "text": "Oswin lader din krone klinge mod disken: den lyder ægte. Han vejer den: ægte. Han rækker den tilbage, så du kan bide i den, og mønten smuldrer mellem dine fingre til en knivspids fin, grå aske. Oswin bliver hvid i ansigtet. \"Det er den fjerde i denne måned,\" hvisker han og fejer asken ned i et lille papirhylster til dig. \"Tag den med til fru Dunmore i prøvehuset. I al stilhed.\""
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/weir_stall/name": {
+      "hash": "d06c6c80",
+      "text": "Weir & Datter"
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/weir_stall/seed": {
+      "hash": "dfa9ad70",
+      "text": "En bod med blandede varer, drevet af gamle Ebb Weir og hans skarpøjede datter Hetty: reb, fakler, proviant, lampeolie, rygter."
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/weir_stall/actions/buy_supplies/label": {
+      "hash": "3641264d",
+      "text": "Køb fakler og proviant (1 gm)"
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/weir_stall/actions/buy_supplies/keywords": {
+      "hash": "97e78f22",
+      "text": [
+        "køb",
+        "købe",
+        "fakler",
+        "fakkel",
+        "proviant",
+        "forsyninger",
+        "mad"
+      ]
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/weir_stall/actions/buy_supplies/outcome/text": {
+      "hash": "2dd4e432",
+      "text": "Hetty Weir binder tre fakler og to dages proviant sammen og bider i dit sølv, før hun tager imod det."
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/weir_stall/actions/ask_hetty/label": {
+      "hash": "100af37c",
+      "text": "Spørg Hetty Weir, hvad der er galt med den gamle mølle"
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/weir_stall/actions/ask_hetty/keywords": {
+      "hash": "291744fa",
+      "text": [
+        "hetty",
+        "mølle",
+        "møllen",
+        "rygte",
+        "rygter",
+        "sladder",
+        "rotter",
+        "rotterne"
+      ]
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/weir_stall/actions/ask_hetty/outcome/text": {
+      "hash": "30a6a3d7",
+      "text": "Hetty læner sig ind over rebrullerne. \"Den gamle Silverrun-mølle har været lukket i ti år. Men min far ser lys i møllestrømmen om natten, og rotterne dernede er store som hunde og går på række, som om de bærer på noget. Lågen til møllestrømmen er lænket. Fru Dunmore har den gamle nøgle, hendes mand drev møllen.\""
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/forge/name": {
+      "hash": "b338c948",
+      "text": "Brightwater-smedjen"
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/forge/seed": {
+      "hash": "26d6aa61",
+      "text": "En smedje fra Jernhvælvet ved toldbroen, med larmende ambolte og priserne slået op på dværgisk og fællessprog."
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/forge/actions/silver_blade/label": {
+      "hash": "5868c05a",
+      "text": "Køb sølvstøv, og lad smeden belægge dit våben (5 gm)"
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/forge/actions/silver_blade/keywords": {
+      "hash": "45dd18ba",
+      "text": [
+        "sølv",
+        "forsølvet",
+        "belæg",
+        "belægge",
+        "smed",
+        "smeden",
+        "klinge",
+        "våben"
+      ]
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/forge/actions/silver_blade/outcome/text": {
+      "hash": "724d5266",
+      "text": "Smeden gnider sølvstøv og harpiks ind i dit våbens æg og varmer det over kullene. \"Rottefolk i kældrene, hva'? Stål skærer dem, og så gror de sammen igen. Sølv husker de.\""
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/mill_race_gate/name": {
+      "hash": "072d47d3",
+      "text": "Lågen til møllestrømmen"
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/mill_race_gate/seed": {
+      "hash": "f3e25ca5",
+      "text": "En rusten jernlåge for den gamle møllestrøms sorte munding, lænket i. Kold luft og lugten af våd sten og rotte trænger ud mellem tremmerne."
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/mill_race_gate/actions/force_gate/label": {
+      "hash": "978e9808",
+      "text": "Vrid den rustne kæde af lågen"
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/mill_race_gate/actions/force_gate/keywords": {
+      "hash": "ae3e46ba",
+      "text": [
+        "tving",
+        "vrid",
+        "bryd",
+        "kæde",
+        "kæden",
+        "låge",
+        "lågen"
+      ]
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/mill_race_gate/actions/force_gate/check/success/text": {
+      "hash": "81cefd52",
+      "text": "De rustne led giver efter med et hvin. Lågen svinger ind over sort vand."
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/mill_race_gate/actions/force_gate/check/failure/text": {
+      "hash": "b10bf440",
+      "text": "Kæden holder, og larmen giver dig et stirrende blik fra en vægter på broen. Du får brug for nøglen eller en mere stille vej."
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/mill_race_gate/actions/pick_gate/label": {
+      "hash": "669ef298",
+      "text": "Dirk den gamle hængelås op"
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/mill_race_gate/actions/pick_gate/keywords": {
+      "hash": "317f2cc9",
+      "text": [
+        "dirk",
+        "dirke",
+        "lås",
+        "låsen",
+        "hængelås",
+        "hængelåsen"
+      ]
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/mill_race_gate/actions/pick_gate/check/success/text": {
+      "hash": "a8cf427b",
+      "text": "Hængelåsens rustne fjedre drejer under din klingespids. Lågen svinger ind over sort vand."
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/mill_race_gate/actions/pick_gate/check/failure/text": {
+      "hash": "d421afa1",
+      "text": "De rustne fjedre vil ikke dreje. Fru Dunmore har nøglen, sagde Hetty."
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/mill_race_gate/actions/unlock_gate/label": {
+      "hash": "e38eddd0",
+      "text": "Åbn lågen med fru Dunmores nøgle"
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/mill_race_gate/actions/unlock_gate/keywords": {
+      "hash": "e6e63a04",
+      "text": [
+        "nøgle",
+        "nøglen",
+        "lås",
+        "låse",
+        "åbn",
+        "åbne"
+      ]
+    },
+    "chapters/ch0/scenes/brightwater_market/pois/mill_race_gate/actions/unlock_gate/outcome/text": {
+      "hash": "8fdf832d",
+      "text": "Den gamle nøgle drejer stift. Lågen svinger ind over sort vand."
+    },
+    "chapters/ch0/scenes/brightwater_market/actions/rest_inn/label": {
+      "hash": "0313c84a",
+      "text": "Tag en seng på Slusevogterens Kro for natten (2 sm)"
+    },
+    "chapters/ch0/scenes/brightwater_market/actions/rest_inn/keywords": {
+      "hash": "b701e99d",
+      "text": [
+        "kro",
+        "kroen",
+        "sove",
+        "seng",
+        "hvil",
+        "hvile",
+        "nat",
+        "natten",
+        "værelse"
+      ]
+    },
+    "chapters/ch0/scenes/brightwater_market/actions/rest_inn/outcome/text": {
+      "hash": "8dc16816",
+      "text": "Slusevogterens Kro giver dig en smal seng over stemmeværket, og floden snakker dig i søvn."
+    },
+    "chapters/ch0/scenes/brightwater_market/exits/to_assay/label": {
+      "hash": "f81fca92",
+      "text": "Tag asken med til prøvehuset"
+    },
+    "chapters/ch0/scenes/brightwater_market/exits/to_shrine/label": {
+      "hash": "649e9879",
+      "text": "Træd ind i Korraths helligdom"
+    },
+    "chapters/ch0/scenes/brightwater_market/exits/to_cellars/label": {
+      "hash": "7de58457",
+      "text": "Klatr ned i møllestrømmen"
+    },
+    "chapters/ch0/scenes/brightwater_market/exits/to_road/label": {
+      "hash": "2f13af82",
+      "text": "Tag østvejen ud af Brightwater"
+    },
+    "chapters/ch0/scenes/assay_house/name": {
+      "hash": "69fb37b1",
+      "text": "Prøvehuset ved Silverrun"
+    },
+    "chapters/ch0/scenes/assay_house/seed": {
+      "hash": "917d6dcf",
+      "text": "Et smalt stenhus over floden med tremmer for vinduerne, en vægt under en glasklokke, en prøvesten, syrer i proppede glas og en bevilling fra Jernhvælvet indrammet ved døren. Fru Dunmore, byens guardein, holder ryggen mod væggen."
+    },
+    "chapters/ch0/scenes/assay_house/variants/0/seed": {
+      "hash": "057b470b",
+      "text": "Asken ligger på den sorte prøvesten, og ved siden af den Jernhvælvets lille præglemærke: en ambolt og en nøgle."
+    },
+    "chapters/ch0/scenes/assay_house/revisitSeed": {
+      "hash": "c58eae77",
+      "text": "Prøvehuset igen: glasklokken, syrerne og fru Dunmores omhyggelige, bange hænder."
+    },
+    "chapters/ch0/scenes/assay_house/pois/assay_bench/name": {
+      "hash": "cd0230c1",
+      "text": "Prøvebordet"
+    },
+    "chapters/ch0/scenes/assay_house/pois/assay_bench/seed": {
+      "hash": "0f154976",
+      "text": "En sort prøvesten, en juvelerlup, syrer og en messingvægt under en glasklokke."
+    },
+    "chapters/ch0/scenes/assay_house/pois/assay_bench/actions/assay_eye/label": {
+      "hash": "6e6f84ef",
+      "text": "Gennemsøg asken under luppen efter et præglemærke"
+    },
+    "chapters/ch0/scenes/assay_house/pois/assay_bench/actions/assay_eye/keywords": {
+      "hash": "c2b47942",
+      "text": [
+        "lup",
+        "luppen",
+        "gennemsøg",
+        "undersøg",
+        "præg",
+        "mærke",
+        "præglemærke",
+        "aske",
+        "asken"
+      ]
+    },
+    "chapters/ch0/scenes/assay_house/pois/assay_bench/actions/assay_eye/check/advantageIf/0/source": {
+      "hash": "19b0dba6",
+      "text": "Fru Dunmore fører din hånd"
+    },
+    "chapters/ch0/scenes/assay_house/pois/assay_bench/actions/assay_eye/check/success/text": {
+      "hash": "54870f85",
+      "text": "I den grå aske bærer ét flag stadig et genfærd af møntens ansigt: en lillebitte ambolt krydset af en nøgle. Det er Jernhvælv-konsortiets private præglemærke, som kun deres eget møntværk i Deepanvil Hold må præge."
+    },
+    "chapters/ch0/scenes/assay_house/pois/assay_bench/actions/assay_eye/check/failure/text": {
+      "hash": "227ab85e",
+      "text": "Under luppen er asken bare aske, grå og blød, og den fortæller dig intet."
+    },
+    "chapters/ch0/scenes/assay_house/pois/assay_bench/actions/assay_spell/label": {
+      "hash": "1f662374",
+      "text": "Læs den magi, der stadig hænger i asken"
+    },
+    "chapters/ch0/scenes/assay_house/pois/assay_bench/actions/assay_spell/keywords": {
+      "hash": "1630c5ef",
+      "text": [
+        "magi",
+        "magien",
+        "arkana",
+        "besværgelse",
+        "fortryllelse",
+        "læs"
+      ]
+    },
+    "chapters/ch0/scenes/assay_house/pois/assay_bench/actions/assay_spell/check/advantageIf/0/source": {
+      "hash": "19b0dba6",
+      "text": "Fru Dunmore fører din hånd"
+    },
+    "chapters/ch0/scenes/assay_house/pois/assay_bench/actions/assay_spell/check/success/text": {
+      "hash": "e636a97e",
+      "text": "En døende illusion klamrer sig stadig til asken, og et hjerteslag længe viser den den mønt, den lod som om den var: en guldkrone med en lillebitte ambolt krydset af en nøgle under Dronningens hage. Jernhvælv-konsortiets private præglemærke, præget ind i en løgn."
+    },
+    "chapters/ch0/scenes/assay_house/pois/assay_bench/actions/assay_spell/check/failure/text": {
+      "hash": "1ff2d955",
+      "text": "Den magi, der holdt mønten sammen, er sivet bort. Asken er kold."
+    },
+    "chapters/ch0/scenes/assay_house/actions/ask_letter/label": {
+      "hash": "56554c26",
+      "text": "Bed fru Dunmore om et brev til Jernhvælvet"
+    },
+    "chapters/ch0/scenes/assay_house/actions/ask_letter/keywords": {
+      "hash": "9de10da2",
+      "text": [
+        "brev",
+        "brevet",
+        "jernhvælvet",
+        "deepanvil",
+        "skriv",
+        "skrive"
+      ]
+    },
+    "chapters/ch0/scenes/assay_house/actions/ask_letter/outcome/text": {
+      "hash": "334d7f94",
+      "text": "Dunmore skriver tre omhyggelige linjer, forsegler dem med sit eget prøvestempel og trykker brevet i hånden på dig. \"Giv det til Jernhvælvets portvogtere i Deepanvil Hold, ingen lavere. Og fortæl dem ikke, at jeg var bange.\""
+    },
+    "chapters/ch0/scenes/assay_house/exits/to_market/label": {
+      "hash": "8a4d61d8",
+      "text": "Gå ned til markedet igen"
+    },
+    "chapters/ch0/scenes/mill_cellars/name": {
+      "hash": "e1d88e86",
+      "text": "Møllekældrene"
+    },
+    "chapters/ch0/scenes/mill_cellars/seed": {
+      "hash": "354b2dcd",
+      "text": "Den gamle møllestrøm løber knædyb og kold under Silverrun-møllen. Tunnelen munder ud i oversvømmede kældre, hvor kornsække rådner på hylderne, og et sted forude lyder et hammerslag, tik-tik-tik, og rotters piben."
+    },
+    "chapters/ch0/scenes/mill_cellars/variants/0/seed": {
+      "hash": "89349591",
+      "text": "Forbi rottegangen siver lampelys ud omkring en dør: tællegulvet, hvor nogen præger mønter."
+    },
+    "chapters/ch0/scenes/mill_cellars/variants/1/seed": {
+      "hash": "7d716024",
+      "text": "Der lyder ingen hammer nu. Kun rotterne er tilbage, og kældrene lugter af kolde kul og hastværk."
+    },
+    "chapters/ch0/scenes/mill_cellars/revisitSeed": {
+      "hash": "fd2d80e5",
+      "text": "Den kolde møllestrøm igen, det rådnende korn og flodens dryp gennem hvælvingen ovenover."
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/push_on/label": {
+      "hash": "b4a4f0f8",
+      "text": "Vad op ad rottegangen mod hamringen"
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/push_on/keywords": {
+      "hash": "abec0c57",
+      "text": [
+        "vad",
+        "fremad",
+        "videre",
+        "rotter",
+        "rotterne",
+        "kæmp",
+        "angrib"
+      ]
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/push_on/outcome/text": {
+      "hash": "7f9dbd52",
+      "text": "Øjne glimter i mørket over vandet. Fire rotter på størrelse med hunde springer ned fra hylderne mod dig."
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/sneak_past/label": {
+      "hash": "b3f23751",
+      "text": "List dig langs hylderne forbi rotterne"
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/sneak_past/keywords": {
+      "hash": "4d605fa9",
+      "text": [
+        "snig",
+        "list",
+        "stille",
+        "snigen",
+        "smut"
+      ]
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/sneak_past/check/advantageIf/0/source": {
+      "hash": "215af6c6",
+      "text": "Hetty sagde, at rotterne holder sig til deres rækker"
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/sneak_past/check/success/text": {
+      "hash": "8851d372",
+      "text": "Du lister langs de slimede hylder, mens rotterne skændes om en kornsæk. Ingen piber. Lampelys skinner omkring en dør forude."
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/sneak_past/check/failure/text": {
+      "hash": "0582a428",
+      "text": "En hylde giver efter under din vægt. Hver eneste rotte i kælderen vender sig."
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/storm_mint/label": {
+      "hash": "be8aaba3",
+      "text": "Spark døren til tællegulvet ind"
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/storm_mint/keywords": {
+      "hash": "6d78adbc",
+      "text": [
+        "spark",
+        "dør",
+        "døren",
+        "storm",
+        "angrib",
+        "møntværk",
+        "møntværket",
+        "kæmp"
+      ]
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/storm_mint/outcome/text": {
+      "hash": "4299b8aa",
+      "text": "Døren smækker ind til et langt rum fuld af møntpresser og smeltedigler. To banditter kaster deres hamre og griber klinger, og en krumbøjet mand i forklæde vender sig, griner og bliver ved med at grine, mens hans ansigt strækkes ud til en rottes."
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/storm_mint_silver/label": {
+      "hash": "35cdded2",
+      "text": "Spark døren ind med dit forsølvede våben parat"
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/storm_mint_silver/keywords": {
+      "hash": "5f421233",
+      "text": [
+        "spark",
+        "dør",
+        "døren",
+        "storm",
+        "angrib",
+        "møntværk",
+        "møntværket",
+        "kæmp",
+        "sølv",
+        "forsølvet"
+      ]
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/storm_mint_silver/outcome/text": {
+      "hash": "615d76cc",
+      "text": "Døren smækker ind til et langt rum fuld af møntpresser og smeltedigler. To banditter griber klinger, og den krumbøjede mand i forklædet forvandles til et rottevæsen og hvæser så ad sølvglansen på dit våben."
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/bluff_mint/label": {
+      "hash": "dc51b52b",
+      "text": "Bank på, og påstå at kvinden med de to skygger har sendt dig"
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/bluff_mint/keywords": {
+      "hash": "126fb0a0",
+      "text": [
+        "bluf",
+        "bluffe",
+        "bank",
+        "løgn",
+        "lyv",
+        "skygger",
+        "foregiv",
+        "bedrag",
+        "narre"
+      ]
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/bluff_mint/check/success/text": {
+      "hash": "2fdd2eff",
+      "text": "\"Hun siger, at Jernhvælvet ved det,\" hvæser du gennem døren. \"Løb.\" To banditter flygter ud ad flodlemmen med en sæk ægte guld. Manden i forklædet bliver, snuser efter dig, og hans ansigt glider over i en rottes: \"Hun sender aldrig nogen.\""
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/bluff_mint/check/failure/text": {
+      "hash": "79158ad9",
+      "text": "\"Sjovt,\" siger en pibende stemme bag døren. \"Hun sender aldrig nogen.\" Døren flyver op."
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/search_empty_mint/label": {
+      "hash": "c6e0d7c9",
+      "text": "Gennemsøg det forladte tællegulv"
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/search_empty_mint/keywords": {
+      "hash": "c2557c9d",
+      "text": [
+        "gennemsøg",
+        "søg",
+        "tomt",
+        "forladt",
+        "møntværk",
+        "møntværket",
+        "tællegulv"
+      ]
+    },
+    "chapters/ch0/scenes/mill_cellars/actions/search_empty_mint/outcome/text": {
+      "hash": "6b62fbca",
+      "text": "Presserne er kolde, og prægestemplerne er væk. Under en revnet smeltedigel finder du en kridtoptælling af prægede mønter, og fra hulen bagved hører du en mand kalde svagt om hjælp."
+    },
+    "chapters/ch0/scenes/mill_cellars/exits/to_den/label": {
+      "hash": "e54d1542",
+      "text": "Gå videre ind i hulen bag møntværket"
+    },
+    "chapters/ch0/scenes/mill_cellars/exits/to_market/label": {
+      "hash": "d412536f",
+      "text": "Vad tilbage ud til markedet"
+    },
+    "chapters/ch0/scenes/wererat_den_rest/name": {
+      "hash": "bc68c1cd",
+      "text": "Varrottens hule"
+    },
+    "chapters/ch0/scenes/wererat_den_rest/seed": {
+      "hash": "92a72dda",
+      "text": "Bag tællegulvet ligger et tørt rum med halm og stjålne tæpper, et fyrfad og en niche med tremmer. En tynd mand i en toldskrivers frakke er lænket til væggen, og en pengekiste står under halmen."
+    },
+    "chapters/ch0/scenes/wererat_den_rest/variants/0/seed": {
+      "hash": "6101fe6b",
+      "text": "Skeet, varrotten, sidder bundet i hjørnet i sin menneskeskikkelse, slikker sine tænder og holder øje med dig."
+    },
+    "chapters/ch0/scenes/wererat_den_rest/variants/1/seed": {
+      "hash": "2ad27a75",
+      "text": "Falskmønterne gik i hast: pengekisten er væk, og kun den lænkede skriver blev efterladt."
+    },
+    "chapters/ch0/scenes/wererat_den_rest/revisitSeed": {
+      "hash": "49832ee8",
+      "text": "Hulen bag møntværket: halm, et koldt fyrfad og lugten af rotte."
+    },
+    "chapters/ch0/scenes/wererat_den_rest/pois/presses/name": {
+      "hash": "3cfbfb3b",
+      "text": "Møntpresserne"
+    },
+    "chapters/ch0/scenes/wererat_den_rest/pois/presses/seed": {
+      "hash": "a53a4873",
+      "text": "To jernmøntpresser med prægestemplerne stadig i: en guldkrones ansigt, perfekt, i hårdt stål."
+    },
+    "chapters/ch0/scenes/wererat_den_rest/pois/presses/actions/smash_dies/label": {
+      "hash": "2cbb7876",
+      "text": "Smadr de falske prægestempler på ambolten"
+    },
+    "chapters/ch0/scenes/wererat_den_rest/pois/presses/actions/smash_dies/keywords": {
+      "hash": "2a98fd53",
+      "text": [
+        "smadr",
+        "knus",
+        "bryd",
+        "ødelæg",
+        "stempler",
+        "prægestempler"
+      ]
+    },
+    "chapters/ch0/scenes/wererat_den_rest/pois/presses/actions/smash_dies/outcome/text": {
+      "hash": "9e00fc93",
+      "text": "Du hamrer stemplerne mod ambolten, indtil Dronningens ansigt er en revne i stålet. Ingen skal præge endnu en falsk krone med dem."
+    },
+    "chapters/ch0/scenes/wererat_den_rest/pois/presses/actions/keep_die/label": {
+      "hash": "771f2b49",
+      "text": "Behold ét prægestempel som bevis for Jernhvælvet"
+    },
+    "chapters/ch0/scenes/wererat_den_rest/pois/presses/actions/keep_die/keywords": {
+      "hash": "1284def0",
+      "text": [
+        "behold",
+        "bevis",
+        "beviset",
+        "stempel",
+        "prægestempel",
+        "tag"
+      ]
+    },
+    "chapters/ch0/scenes/wererat_den_rest/pois/presses/actions/keep_die/outcome/text": {
+      "hash": "bfb08c67",
+      "text": "Du svøber et af stemplerne i en klud og pakker det væk. Jernhvælvet får svært ved at kalde det her et rygte."
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/free_clerk/label": {
+      "hash": "e913f3dd",
+      "text": "Befri den lænkede skriver"
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/free_clerk/keywords": {
+      "hash": "d109f92c",
+      "text": [
+        "befri",
+        "skriver",
+        "skriveren",
+        "lænke",
+        "lænker",
+        "hjælp",
+        "aldous"
+      ]
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/free_clerk/outcome/text": {
+      "hash": "58ba27fd",
+      "text": "Skriveren, Aldous Penn fra toldboden i Brightwater, gnider sine rå håndled og taler i én lang strøm. \"De tog mig, fordi jeg lagde mærke til, at prammenes told blev betalt i nyt guld. Rotterne fik også betaling, i ægte guld, rigtige mønter, af en kvinde, der kom herned to gange. En kvinde med to skygger. Jeg sværger det, den ene faldt, som lampen kastede den, og den anden faldt den modsatte vej.\""
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/search_mint/label": {
+      "hash": "7488bc78",
+      "text": "Åbn pengekisten under halmen"
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/search_mint/keywords": {
+      "hash": "2df52cc4",
+      "text": [
+        "pengekiste",
+        "pengekisten",
+        "kiste",
+        "bytte",
+        "gennemsøg",
+        "åbn"
+      ]
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/search_mint/outcome/text": {
+      "hash": "5c22fb5c",
+      "text": "Under halmen: rotternes løn, rigtigt sølv og guld, der klinger ægte og bliver ved med at være ægte, og en helbredende drik i et proppet hætteglas."
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/short_rest/label": {
+      "hash": "b8429988",
+      "text": "Spær døren, og hvil en time"
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/short_rest/keywords": {
+      "hash": "14a0de4e",
+      "text": [
+        "hvil",
+        "hvile",
+        "sid",
+        "pust",
+        "forbind",
+        "kort"
+      ]
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/short_rest/outcome/text": {
+      "hash": "95ff9398",
+      "text": "Du spærrer døren med håndtaget fra en møntpresse og får vejret igen ved fyrfadet."
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/short_rest/outcome/tip": {
+      "hash": "96fc62ce",
+      "text": "Et kort hvil lader dig bruge livsterninger til at hele. Et langt hvil på en kro genopretter alt."
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/hand_to_reeve/label": {
+      "hash": "c492f0d9",
+      "text": "Før Skeet op til fogedens vagtstue"
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/hand_to_reeve/keywords": {
+      "hash": "b1a651ec",
+      "text": [
+        "foged",
+        "fogeden",
+        "vagt",
+        "vagten",
+        "aflever",
+        "arrestér",
+        "retfærdighed",
+        "loven"
+      ]
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/hand_to_reeve/outcome/text": {
+      "hash": "224be8e9",
+      "text": "Brightwaters vagt låser Skeet inde i en celle med sølvtremmer, og fogeden trykker din hånd foran halvdelen af kajen."
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/let_go/label": {
+      "hash": "7ce09562",
+      "text": "Lad Skeet gå, hvis han navngiver kureren"
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/let_go/keywords": {
+      "hash": "b2ac09d3",
+      "text": [
+        "lad",
+        "gå",
+        "slip",
+        "løslad",
+        "aftale",
+        "kurer",
+        "kureren",
+        "navn"
+      ]
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/let_go/outcome/text": {
+      "hash": "38dbbb48",
+      "text": "Skeet slikker sine tænder. \"Mott Varrow. Rider ad østvejen til Deepanvil hver nymåne med hendes breve. Kvinden med de to skygger, ja, hun betalte os i ægte guld.\" Så er han en rotte igen og forsvundet ned i et afløb."
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/question_rat/label": {
+      "hash": "7121de2e",
+      "text": "Læg pres på Skeet for at få kurerens navn"
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/question_rat/keywords": {
+      "hash": "b68dc4be",
+      "text": [
+        "tru",
+        "pres",
+        "afhør",
+        "forhør",
+        "intimider",
+        "skræm"
+      ]
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/question_rat/check/success/text": {
+      "hash": "6b09c7f4",
+      "text": "Du holder din klinge tæt ved hans øre, indtil han piber. \"Mott Varrow! Rider ad østvejen til Deepanvil hver nymåne. Hun betaler i ægte guld, kvinden med de to skygger!\""
+    },
+    "chapters/ch0/scenes/wererat_den_rest/actions/question_rat/check/failure/text": {
+      "hash": "44d165b2",
+      "text": "Skeet blotter gule tænder og siger slet ingenting."
+    },
+    "chapters/ch0/scenes/wererat_den_rest/exits/to_cellars/label": {
+      "hash": "19a3893f",
+      "text": "Gå tilbage gennem tællegulvet"
+    },
+    "chapters/ch0/scenes/wererat_den_rest/exits/to_market/label": {
+      "hash": "5e7a8286",
+      "text": "Gå op ad den gamle møllertrappe til markedet"
+    },
+    "chapters/ch0/scenes/korrath_shrine_oath/name": {
+      "hash": "839083d5",
+      "text": "Korraths helligdom"
+    },
+    "chapters/ch0/scenes/korrath_shrine_oath/seed": {
+      "hash": "c8f6e48c",
+      "text": "En lille stenhelligdom for Korrath, dværgenes gud for smedjen og ærlig vægt. En stor messingvægt hænger foran en kold ambolt, og væggene er behængt med gamle prøvesegl, efterladt som offergaver. Dens vogter er en bred, gråskægget dværg med blæk på fingrene."
+    },
+    "chapters/ch0/scenes/korrath_shrine_oath/variants/0/seed": {
+      "hash": "fef3491e",
+      "text": "Vogterens blik går straks til den grå aske på din hånd."
+    },
+    "chapters/ch0/scenes/korrath_shrine_oath/variants/1/seed": {
+      "hash": "ffc6c1d8",
+      "text": "Brannoc passer helligdommens lampe, før han overlader den til en nabopige."
+    },
+    "chapters/ch0/scenes/korrath_shrine_oath/revisitSeed": {
+      "hash": "29b9b496",
+      "text": "Korraths helligdom igen, messingvægten stille og i lod foran ambolten."
+    },
+    "chapters/ch0/scenes/korrath_shrine_oath/onEnter/text": {
+      "hash": "b33f21e9",
+      "text": "\"Brannoc Stonecount,\" siger vogteren, \"vogter af Korraths vægt i denne våde by. Kom ind, kom ind. Enhver ærlig vægt er velkommen her.\""
+    },
+    "chapters/ch0/scenes/korrath_shrine_oath/pois/scales/name": {
+      "hash": "68ec89a3",
+      "text": "Korraths vægt"
+    },
+    "chapters/ch0/scenes/korrath_shrine_oath/pois/scales/seed": {
+      "hash": "7fd71fef",
+      "text": "En stor messingvægt foran en kold ambolt, hvor den ene vægtskål holder en enkelt ægte guldkrone som lod."
+    },
+    "chapters/ch0/scenes/korrath_shrine_oath/pois/scales/actions/kneel_scales/label": {
+      "hash": "78fb5e8d",
+      "text": "Læg det, du fandt, på Korraths vægt, og sværg at gøre det færdigt"
+    },
+    "chapters/ch0/scenes/korrath_shrine_oath/pois/scales/actions/kneel_scales/keywords": {
+      "hash": "3efdc919",
+      "text": [
+        "knæl",
+        "sværg",
+        "ed",
+        "eden",
+        "vægt",
+        "vægten",
+        "bed"
+      ]
+    },
+    "chapters/ch0/scenes/korrath_shrine_oath/pois/scales/actions/kneel_scales/outcome/text": {
+      "hash": "d9807fd1",
+      "text": "Du lægger asken i den ene skål på den store vægt. Den ægte krone i den anden skål synker, og asken vejer slet ingenting. Du sværger at finde den, der prægede den. Den kolde ambolt klinger én gang, skønt ingen rørte den."
+    },
+    "chapters/ch0/scenes/korrath_shrine_oath/pois/scales/actions/kneel_scales/outcome/tip": {
+      "hash": "75e5763b",
+      "text": "Du har erfaring nok til at nå niveau 2: brug knappen Stig i niveau på din helts kort."
+    },
+    "chapters/ch0/scenes/korrath_shrine_oath/exits/to_market/label": {
+      "hash": "1dd1b52c",
+      "text": "Gå ud til markedet igen"
+    },
+    "chapters/ch0/scenes/korrath_shrine_oath/exits/to_road/label": {
+      "hash": "2f13af82",
+      "text": "Tag østvejen ud af Brightwater"
+    },
+    "chapters/ch0/scenes/road_east/name": {
+      "hash": "e6cc4d91",
+      "text": "Østvejen"
+    },
+    "chapters/ch0/scenes/road_east/seed": {
+      "hash": "048627ab",
+      "text": "Østvejen forlader Brightwater over toldbroen og stiger mellem bygmarker mod Highcrown og, langt derude bagved, bjergportene til Deepanvil Hold. Jernhvælvets vogne rumler forbi under bevogtning, på vej samme sted hen."
+    },
+    "chapters/ch0/scenes/road_east/variants/0/seed": {
+      "hash": "8ad04cc9",
+      "text": "Brannoc går ved siden af dig med sin rejsevægt spændt fast på oppakningen og nynner en tællesang."
+    },
+    "chapters/ch0/scenes/road_east/variants/1/seed": {
+      "hash": "8d96787f",
+      "text": "Et sted på denne vej rider Mott Varrow, kureren, hver nymåne."
+    },
+    "chapters/ch0/scenes/road_east/onEnter/text": {
+      "hash": "4cd77fe3",
+      "text": "Svaret på asken ligger i Deepanvil Hold, hvor Jernhvælvet præger sine mønter."
+    },
+    "chapters/ch0/scenes/road_east/actions/join_caravan/label": {
+      "hash": "00351846",
+      "text": "Betal for at køre med en af Jernhvælvets vogntog (3 gm)"
+    },
+    "chapters/ch0/scenes/road_east/actions/join_caravan/keywords": {
+      "hash": "5606454d",
+      "text": [
+        "karavane",
+        "vogntog",
+        "vogn",
+        "vognen",
+        "kør",
+        "køre",
+        "betal"
+      ]
+    },
+    "chapters/ch0/scenes/road_east/actions/join_caravan/outcome/text": {
+      "hash": "5189ef32",
+      "text": "Vognmesteren tager dit sølv, bider i det to gange og giver dig en plads på en pengekiste. Tre dage med støv og dværgiske vejsange senere rejser Deepanvil Holds porte sig ud af bjerget."
+    },
+    "chapters/ch0/scenes/road_east/actions/walk_east/label": {
+      "hash": "d03ce9a6",
+      "text": "Gå den lange vej østpå til Deepanvil Hold"
+    },
+    "chapters/ch0/scenes/road_east/actions/walk_east/keywords": {
+      "hash": "229c1c20",
+      "text": [
+        "gå",
+        "østpå",
+        "øst",
+        "vej",
+        "vejen",
+        "deepanvil",
+        "afsted",
+        "rejs"
+      ]
+    },
+    "chapters/ch0/scenes/road_east/actions/walk_east/outcome/text": {
+      "hash": "ea517b93",
+      "text": "Fem dage til fods forbi Highcrown og ad bjergvejen, og så rejser Deepanvil Holds porte sig ud af klippen."
+    },
+    "chapters/ch0/scenes/road_east/exits/to_market/label": {
+      "hash": "f0a12823",
+      "text": "Vend tilbage til markedet"
+    },
+    "maps/mill_cellars/name": {
+      "hash": "b768c53a",
+      "text": "Kældrene under Silverrun-møllen"
+    },
+    "maps/mill_cellars/rooms/race_tunnel/name": {
+      "hash": "d2742c7c",
+      "text": "Møllestrømmen"
+    },
+    "maps/mill_cellars/rooms/rat_run/name": {
+      "hash": "b30a216a",
+      "text": "Rottegangen"
+    },
+    "maps/mill_cellars/rooms/counting_floor/name": {
+      "hash": "97d72dcb",
+      "text": "Tællegulvet"
+    },
+    "maps/mill_cellars/rooms/den/name": {
+      "hash": "2d4c4ab3",
+      "text": "Hulen"
+    },
+    "npcs/oswin_harl/name": {
+      "hash": "53250a7c",
+      "text": "Oswin Harl"
+    },
+    "npcs/oswin_harl/personality": {
+      "hash": "d73042b4",
+      "text": "En forsigtig, skaldet vekselerer, der stoler mere på vægte end på ansigter og er bange for at miste sin bevilling."
+    },
+    "npcs/oswin_harl/secrets": {
+      "hash": "b36a424b",
+      "text": [
+        "Han har allerede taget imod tre askemønter i denne måned uden at sige noget, i håb om at det ville holde op."
+      ]
+    },
+    "npcs/oswin_harl/voice": {
+      "hash": "9053c0a1",
+      "text": "Stille og hurtig, tæller halvhøjt for sig selv, mens han taler."
+    },
+    "npcs/hetty_weir/name": {
+      "hash": "e4e845a0",
+      "text": "Hetty Weir"
+    },
+    "npcs/hetty_weir/personality": {
+      "hash": "dccbdb68",
+      "text": "Skarpøjet og munter, sælger reb og rygter i lige mål og bider i hver eneste mønt."
+    },
+    "npcs/hetty_weir/voice": {
+      "hash": "84a3ca10",
+      "text": "Hurtig flodbysnak, ler af sine egne vittigheder."
+    },
+    "npcs/mistress_dunmore/name": {
+      "hash": "74246cf1",
+      "text": "Fru Dunmore"
+    },
+    "npcs/mistress_dunmore/personality": {
+      "hash": "82a80cb7",
+      "text": "Guardeinen i Brightwater: præcis, stolt af sit håndværk og frygtelig bange. Hun holder ryggen mod væggen."
+    },
+    "npcs/mistress_dunmore/secrets": {
+      "hash": "45968bbe",
+      "text": [
+        "Mænd fra Jernhvælvet sagde for en måned siden, at hun skulle godkende alle nye kroner uden at prøve dem, og hun adlød.",
+        "Hendes afdøde mand drev den gamle Silverrun-mølle; hun har stadig nøglen til lågen ved møllestrømmen."
+      ]
+    },
+    "npcs/mistress_dunmore/voice": {
+      "hash": "60bbd0ad",
+      "text": "Kort og nøjagtig, vejer hvert ord; hænderne ryster, når hun ikke holder et redskab."
+    },
+    "npcs/mistress_dunmore/conversations/assay/label": {
+      "hash": "a1d9291e",
+      "text": "Bed fru Dunmore om at prøve asken"
+    },
+    "npcs/mistress_dunmore/conversations/assay/keywords": {
+      "hash": "bdfb9041",
+      "text": [
+        "dunmore",
+        "guardein",
+        "guardeinen",
+        "prøv",
+        "prøve",
+        "spørg",
+        "prøvning"
+      ]
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/greet/text": {
+      "hash": "830de92e",
+      "text": "Aske. Selvfølgelig er det aske. Læg den der, på klædet, og lad være med at ånde på den. Hvorfor kom du med den til mig og ikke til vagten?"
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/greet/options/honest/label": {
+      "hash": "f49d5f46",
+      "text": "\"Fordi Oswin stoler på dig. Den smuldrede i min hånd for en time siden, og jeg vil vide, hvem der lavede den.\""
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/greet/options/honest/keywords": {
+      "hash": "7a58bfff",
+      "text": [
+        "ærlig",
+        "sandhed",
+        "sandheden",
+        "stoler",
+        "tillid",
+        "oswin"
+      ]
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/greet/options/bribe/label": {
+      "hash": "5b8ba3f9",
+      "text": "Skub to guldmønter hen over klædet: \"For din diskretion.\""
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/greet/options/bribe/keywords": {
+      "hash": "d4aba9bf",
+      "text": [
+        "bestik",
+        "bestikke",
+        "betal",
+        "guld",
+        "diskretion",
+        "penge"
+      ]
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/greet/options/read_fear/label": {
+      "hash": "6fa69f11",
+      "text": "Hold øje med hendes hænder, og spørg, hvad hun er bange for"
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/greet/options/read_fear/keywords": {
+      "hash": "f59781b8",
+      "text": [
+        "bange",
+        "frygt",
+        "hænder",
+        "hænderne",
+        "hvorfor",
+        "angst"
+      ]
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/greet/options/read_fear/check/failure/text": {
+      "hash": "cd3f3266",
+      "text": "Hun folder sine rystende hænder væk og giver dig intet."
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/greet/options/lean/label": {
+      "hash": "ae67d13d",
+      "text": "\"Du ved præcis, hvad det her er. Begynd at snakke.\""
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/greet/options/lean/keywords": {
+      "hash": "bd0e5b35",
+      "text": [
+        "tru",
+        "snak",
+        "ved",
+        "pres",
+        "intimider",
+        "skræm"
+      ]
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/greet/options/lean/check/failure/text": {
+      "hash": "b24b9dd3",
+      "text": "Dunmore rækker ud efter klokkestrengen, der ringer til vagtstuen, og du må trække dig og begynde forfra, mere blidt."
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/paid/text": {
+      "hash": "4d15814e",
+      "text": "Diskretion. Ja. Det var også det, de betalte for. Udmærket: bordet er dit, og luppen, og syrerne. Se selv efter, og du har aldrig hørt mit navn."
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/paid/options/to_bench/label": {
+      "hash": "682a3fba",
+      "text": "Gå hen til prøvebordet"
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/fear/text": {
+      "hash": "6f13ca32",
+      "text": "For en måned siden kom to mænd i Jernhvælvets grå hertil med en bevilling, jeg ikke kunne afvise, og sagde, at jeg skulle godkende alle nye kroner uden at prøve dem. Den ene havde en kvindes stemme, når han troede, jeg ikke kunne høre det. Siden da går rotterne under min mands gamle mølle på række. Her: hans nøgle til lågen ved møllestrømmen. Jeg kan ikke gå derned. Det kan du."
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/fear/options/take_key/label": {
+      "hash": "72b4512a",
+      "text": "Tag nøglen, og bed hende stille prøvebordet an"
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/cowed/text": {
+      "hash": "282aa8ad",
+      "text": "Nå da! Nå da. Mænd fra Jernhvælvet sagde, at jeg skulle godkende de nye kroner uprøvet, og det gjorde jeg. Der, bordet, prøv den selv, og forsvind så ud af mit hus."
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/cowed/options/to_bench/label": {
+      "hash": "682a3fba",
+      "text": "Gå hen til prøvebordet"
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/test/text": {
+      "hash": "c064346b",
+      "text": "Så gør vi det ordentligt. Prøvestenen, luppen, syrerne. Se nøje på flagerne: hvis et prægestempel har ramt den her, har det sat sit mærke. Jeg fortæller dig, hvad jeg ser, men du ser først. Og eftersom du var ærlig over for mig: min afdøde mands nøgle til den gamle møllestrøm. Rotterne dernede går på række."
+    },
+    "npcs/mistress_dunmore/conversations/assay/nodes/test/options/to_bench/label": {
+      "hash": "3f5d157a",
+      "text": "Tag nøglen, og gå hen til prøvebordet"
+    },
+    "npcs/brannoc_npc/name": {
+      "hash": "b657d0ea",
+      "text": "Brannoc Stonecount"
+    },
+    "npcs/brannoc_npc/personality": {
+      "hash": "c8253ad2",
+      "text": "En bred, tålmodig dværgepræst for Korrath, der vogter vægten i en lille helligdom i en flodby. Ærlig helt ind i kornet, sen til vrede og rasende over alt, der er falsk."
+    },
+    "npcs/brannoc_npc/secrets": {
+      "hash": "b48f491d",
+      "text": [
+        "Hans far var guardein for Jernhvælvet, og hans segl forsvandt i Deepanvil Hold for mange år siden."
+      ]
+    },
+    "npcs/brannoc_npc/voice": {
+      "hash": "a31e2353",
+      "text": "Dyb og langsom, tæller på dværgisk, når han tænker; kalder mønter 'små løgnere' eller 'ærlige vægte'."
+    },
+    "npcs/brannoc_npc/conversations/scales/label": {
+      "hash": "fcc165d7",
+      "text": "Tal med Brannoc om asken"
+    },
+    "npcs/brannoc_npc/conversations/scales/keywords": {
+      "hash": "e6b01b6d",
+      "text": [
+        "brannoc",
+        "dværg",
+        "dværgen",
+        "vogter",
+        "vogteren",
+        "præst",
+        "præsten",
+        "tal",
+        "aske",
+        "asken"
+      ]
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/greet/text": {
+      "hash": "5ec33d5e",
+      "text": "Guld, der klinger ægte og vejer ægte og så smuldrer. Korrath har et ord for den slags, og det er ikke et venligt ord. Hvad vil du en gammel helligdomsvogter?"
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/greet/options/ash/label": {
+      "hash": "cf561eb5",
+      "text": "\"Har du set askemønter før?\""
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/greet/options/ash/keywords": {
+      "hash": "889ac177",
+      "text": [
+        "set",
+        "før",
+        "mønter",
+        "askemønter"
+      ]
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/greet/options/persuade/label": {
+      "hash": "d6da1eda",
+      "text": "\"Kom med mig. Hjælp mig med at finde den, der prægede den.\""
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/greet/options/persuade/keywords": {
+      "hash": "7330f382",
+      "text": [
+        "kom",
+        "med",
+        "slut",
+        "hjælp"
+      ]
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/greet/options/oath/label": {
+      "hash": "2e5d97f9",
+      "text": "\"Møntværket under møllen er færdigt. Sværg sammen med mig, og kom med til Deepanvil.\""
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/greet/options/oath/keywords": {
+      "hash": "98efba73",
+      "text": [
+        "sværg",
+        "ed",
+        "eden",
+        "møntværk",
+        "møntværket",
+        "deepanvil",
+        "kom",
+        "slut"
+      ]
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/greet/options/donate/label": {
+      "hash": "d0da6c62",
+      "text": "Læg to guldmønter i helligdommens bøsse: \"Til Korrath, hvis du tager med.\""
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/greet/options/donate/keywords": {
+      "hash": "078c8b39",
+      "text": [
+        "donér",
+        "giv",
+        "guld",
+        "betal",
+        "mønter",
+        "bøsse",
+        "bøssen"
+      ]
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/greet/options/bye/label": {
+      "hash": "79da0f87",
+      "text": "\"En anden gang, vogter.\""
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/greet/options/bye/keywords": {
+      "hash": "332e12ae",
+      "text": [
+        "farvel",
+        "gå",
+        "senere"
+      ]
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/ash/text": {
+      "hash": "7bf87452",
+      "text": "To gange. En prammands løn og en enkes medgift, begge smuldret. Begge præget, så de lignede Jernhvælvets mønter, og den løgn tager jeg personligt: min far var guardein for Jernhvælvet, før hans segl forsvandt. Nogen i Deepanvil ved mere, end de siger."
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/ash/options/back/label": {
+      "hash": "7699baf4",
+      "text": "\"Så hjælp mig med at finde ud af hvem.\""
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/prove/text": {
+      "hash": "8ad31e41",
+      "text": "Ord er lette, min ven. Find møntværket først. Bring mig et bevis, der vejer noget, så kommer jeg."
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/prove/options/back/label": {
+      "hash": "69e59148",
+      "text": "\"Det skal jeg nok.\""
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/joined/text": {
+      "hash": "8fa3f0ec",
+      "text": "Så giv mig et øjeblik til at dække helligdommens lampe til. Korraths vægt tåler at rejse, og det gør jeg også."
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/joined/options/back/label": {
+      "hash": "11571a28",
+      "text": "\"Velkommen, Brannoc.\""
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/bought/text": {
+      "hash": "d6858b0e",
+      "text": "Korrath er ikke til salg, og det er jeg heller ikke. Men jeg vil hellere gå ved siden af et fjols med guld end lade dig gå efter de falskmøntnere alene. Jeg kommer med. Jeg lægger alligevel din mønt i bøssen."
+    },
+    "npcs/brannoc_npc/conversations/scales/nodes/bought/options/back/label": {
+      "hash": "55210319",
+      "text": "\"Fair nok.\""
+    },
+    "npcs/clerk_aldous/name": {
+      "hash": "32007344",
+      "text": "Aldous Penn"
+    },
+    "npcs/clerk_aldous/personality": {
+      "hash": "28473d1f",
+      "text": "En tynd, søvnløs toldskriver, der lagde mærke til for meget nyt guld i prammenes told og blev taget for det."
+    },
+    "npcs/clerk_aldous/voice": {
+      "hash": "abcf75aa",
+      "text": "Hæs og forjaget, undskylder hele tiden."
+    },
+    "npcs/skeet/name": {
+      "hash": "81437aeb",
+      "text": "Skeet"
+    },
+    "npcs/skeet/personality": {
+      "hash": "cca99b1e",
+      "text": "En varrotte og falskmønter, snu og fej, kun loyal over for den, der betalte sidst."
+    },
+    "npcs/skeet/secrets": {
+      "hash": "64ebef38",
+      "text": [
+        "Han kender kureren, der bærer betalingsmesterens breve: Mott Varrow."
+      ]
+    },
+    "npcs/skeet/voice": {
+      "hash": "31e189ec",
+      "text": "Pibende, våd, fniser på de forkerte tidspunkter."
+    },
+    "encounters/cellar_rats/name": {
+      "hash": "6be6e029",
+      "text": "Møllestrømmens rotter"
+    },
+    "encounters/cellar_rats/win/text": {
+      "hash": "9507c9f0",
+      "text": "Den sidste rotte glider ned under det sorte vand. Lampelys siver ud omkring en dør forude."
+    },
+    "encounters/cellar_rats/lose/text": {
+      "hash": "5a3b9d86",
+      "text": "Tænder og vand lukker sig om dig. Du vågner på kajen og hoster møllestrømmen op, hvor en prammand fiskede dig op."
+    },
+    "encounters/cellar_rats/flee/text": {
+      "hash": "2ac589c1",
+      "text": "Du plasker tilbage ned ad møllestrømmen med rotterne hvinende bag dig."
+    },
+    "encounters/mint_fight/name": {
+      "hash": "ee08ef3d",
+      "text": "Møntværket under møllen"
+    },
+    "encounters/mint_fight/statOverrides/wererat/name": {
+      "hash": "b9a20e28",
+      "text": "Skeet, møllerotten"
+    },
+    "encounters/mint_fight/win/text": {
+      "hash": "b125962b",
+      "text": "Skeet falder om i sin menneskeskikkelse, blødende og tiggende, og presserne bliver tavse."
+    },
+    "encounters/mint_fight/lose/text": {
+      "hash": "dba38624",
+      "text": "Du kommer til dig selv på kajen ved daggry, smidt der med din pung skåret op. Nogen hamrer stadig under møllen."
+    },
+    "encounters/mint_fight/flee/text": {
+      "hash": "87723911",
+      "text": "Du snubler tilbage ind i rottegangen med falskmøntnernes hånlatter bag dig."
+    },
+    "encounters/mint_fight_silver/name": {
+      "hash": "ee08ef3d",
+      "text": "Møntværket under møllen"
+    },
+    "encounters/mint_fight_silver/statOverrides/wererat/name": {
+      "hash": "b9a20e28",
+      "text": "Skeet, møllerotten"
+    },
+    "encounters/mint_fight_silver/win/text": {
+      "hash": "8de14418",
+      "text": "Sølv bider, hvor stål ikke ville, og Skeet falder om i sin menneskeskikkelse med hænderne om sår, der ikke vil gro sammen. Presserne bliver tavse."
+    },
+    "encounters/mint_fight_silver/lose/text": {
+      "hash": "dba38624",
+      "text": "Du kommer til dig selv på kajen ved daggry, smidt der med din pung skåret op. Nogen hamrer stadig under møllen."
+    },
+    "encounters/mint_fight_silver/flee/text": {
+      "hash": "87723911",
+      "text": "Du snubler tilbage ind i rottegangen med falskmøntnernes hånlatter bag dig."
+    },
+    "encounters/mint_fight_bluffed/name": {
+      "hash": "826d2ba8",
+      "text": "Skeet alene"
+    },
+    "encounters/mint_fight_bluffed/statOverrides/wererat/name": {
+      "hash": "b9a20e28",
+      "text": "Skeet, møllerotten"
+    },
+    "encounters/mint_fight_bluffed/win/text": {
+      "hash": "bd05728c",
+      "text": "Skeet falder om i sin menneskeskikkelse, blødende og tiggende. Hans banditter er for længst væk med guldet, men presserne er dine."
+    },
+    "encounters/mint_fight_bluffed/lose/text": {
+      "hash": "dba38624",
+      "text": "Du kommer til dig selv på kajen ved daggry, smidt der med din pung skåret op. Nogen hamrer stadig under møllen."
+    },
+    "encounters/mint_fight_bluffed/flee/text": {
+      "hash": "23349418",
+      "text": "Du snubler tilbage ind i rottegangen med Skeets fnisen bag dig."
+    },
+    "beats/brannoc_at_bench/text": {
+      "hash": "30868d53",
+      "text": "Brannoc studerer prøvestenen med en faglig rynke i panden og brummer anerkendende ad en omhyggelig prøve."
+    },
+    "beats/brannoc_at_bench/outcome/text": {
+      "hash": "256ac7ce",
+      "text": "Brannoc vender askeflaget med en fingernegl. \"Jernhvælvets eget mærke. Min far ville have spyttet.\""
+    },
+    "beats/brannoc_silver/text": {
+      "hash": "137321e8",
+      "text": "Brannoc bifalder det forsølvede våben."
+    },
+    "beats/brannoc_silver/outcome/text": {
+      "hash": "3a8d5609",
+      "text": "Brannoc stryger en tommelfinger langs din forsølvede æg. \"Godt. Rottefolk heler fra stål. De heler ikke fra sølv.\""
+    },
+    "deadlines/mint_moves/text": {
+      "hash": "3859c67d",
+      "text": "Find møntværket under møllen, før falskmøntnerne flytter det (to dage efter at mønten smuldrede)"
+    },
+    "deadlines/mint_moves/warning": {
+      "hash": "e756dce4",
+      "text": "Hetty Weir siger, at rotterne i møllestrømmen bar sække ud i nat. Hvem det end er under møllen, gør de sig klar til at gå."
+    },
+    "deadlines/mint_moves/missed/text": {
+      "hash": "3f81dcf7",
+      "text": "Ved daggry glider en pram væk fra den gamle mølle med lukkede luger. Ved middagstid er hamringen under møllen holdt op. Møntværket er flyttet."
+    },
+    "quests/hollow_coin/name": {
+      "hash": "b9f3962c",
+      "text": "Den Hule Mønt"
+    },
+    "quests/hollow_coin/objectives/change/text": {
+      "hash": "bb1593fd",
+      "text": "Veksl din guldkrone i vekselererens bod"
+    },
+    "quests/hollow_coin/objectives/assay/text": {
+      "hash": "845d167a",
+      "text": "Få asken prøvet i prøvehuset"
+    },
+    "quests/hollow_coin/objectives/gate/text": {
+      "hash": "05d3f887",
+      "text": "Kom igennem lågen til den gamle møllestrøm"
+    },
+    "quests/hollow_coin/objectives/mint/text": {
+      "hash": "c67008cf",
+      "text": "Find møntværket under den gamle mølle"
+    },
+    "quests/hollow_coin/objectives/oath/text": {
+      "hash": "6f3abbf6",
+      "text": "Læg det, du fandt, på Korraths vægt i helligdommen"
+    },
+    "quests/hollow_coin/objectives/road/text": {
+      "hash": "5a901e6e",
+      "text": "Tag østvejen til Deepanvil Hold"
+    },
+    "endings/ch0_to_deepanvil/name": {
+      "hash": "5d2e933f",
+      "text": "Vejen til Deepanvil"
+    },
+    "endings/ch0_to_deepanvil/text": {
+      "hash": "452f3218",
+      "text": "Askemønten bar Jernhvælvets eget mærke, og nogen, der kaster to skygger, betalte godt guld for at få den præget. Svarene ligger i Deepanvil Hold, bag Jernhvælvets døre."
+    }
+  }
+}

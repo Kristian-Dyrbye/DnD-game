@@ -140,8 +140,8 @@ describe('real content', () => {
         expect({ lang, key, stale: r.stale, orphan: r.orphan, broken: r.broken }).toEqual({ lang, key, stale: [], orphan: [], broken: [] });
       }
     }
-    // Complete Danish files (A142 demo, A143 starter arc, A144 ch1, A145 ch2, A146 ch3, A147 ch4, A148 ch5).
-    for (const key of ['millbrook_demo', 'millbrook_disappearances', 'ch1_whispering_fen', 'ch2_salt_and_treason', 'ch3_the_gilded_lie', 'ch4_wyrmfire', 'ch5_the_hungering_dark']) {
+    // Complete Danish files (A142 demo, A143 starter arc, A144 ch1, A145 ch2, A146 ch3, A147 ch4, A148 ch5, B009 arc 2 ch0).
+    for (const key of ['millbrook_demo', 'millbrook_disappearances', 'ch1_whispering_fen', 'ch2_salt_and_treason', 'ch3_the_gilded_lie', 'ch4_wyrmfire', 'ch5_the_hungering_dark', 'arc2_ch0_hollow_coin']) {
       const r = checkOverlay(BUNDLED_ADVENTURES.find((a) => (a.raw as { id: string }).id === key)!.raw, BUNDLED_TRANSLATIONS.da![key]);
       expect({ key, missing: r.missing }).toEqual({ key, missing: [] });
     }
@@ -277,6 +277,27 @@ describe('real content', () => {
     expect(events.filter((e) => e.type === 'error')).toEqual([]);
     expect(events.filter((e) => e.type === 'roll').length).toBe(rolls + 1);
     expect(logText()).toMatch(/løfter en lygte|for trætte til at håbe/);
+  });
+
+  it('the Danish Hollow Crown ch0: translated market, buttons, and Danish free text (B009)', async () => {
+    const host = createGameHost({ srd: db, adventures, flags: bundledFlagRegistry(), tables, translations: BUNDLED_TRANSLATIONS, sessionPorts: { newSeed: () => 'b009' } });
+    const events: ServerEvent[] = [];
+    host.on((e) => events.push(e));
+    const labels = () => (events.filter((e) => e.type === 'suggestions').at(-1) as Extract<ServerEvent, { type: 'suggestions' }>).actions.map((a) => a.label);
+    const logText = () => events.flatMap((e) => (e.type === 'log' ? [e.entry.text] : [])).join(' ');
+    const hero = buildCharacter(toBuildInput(quickBuild('fighter', db, Rng.fromSeed(1))), db);
+    await host.send({ type: 'set_language', language: 'da' });
+    await host.send({ type: 'new_game', hero, mode: 'heroic', campaign: 'arc2_ch0_hollow_coin' });
+    await host.idle();
+    expect(events.filter((e) => e.type === 'error')).toEqual([]);
+    expect(logText()).toContain('Du nåede Brightwater i morges');
+    expect(labels()).toContain('Veksl din guldkrone til sølv');
+    expect(labels()).toContain('Træd ind i Korraths helligdom');
+    await host.send({ type: 'say', text: 'jeg veksler kronen til sølv' });
+    await host.idle();
+    expect(events.filter((e) => e.type === 'error')).toEqual([]);
+    expect(logText()).toContain('smuldrer mellem dine fingre');
+    expect(labels()).toContain('Tag asken med til prøvehuset');
   });
 
   it('builds the translated content once per language; languages without overlays get English', () => {

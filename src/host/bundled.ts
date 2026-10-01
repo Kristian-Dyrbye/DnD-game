@@ -24,6 +24,7 @@ import daCh2 from '../../data/i18n/da/ch2_salt_and_treason.json';
 import daCh3 from '../../data/i18n/da/ch3_the_gilded_lie.json';
 import daCh4 from '../../data/i18n/da/ch4_wyrmfire.json';
 import daCh5 from '../../data/i18n/da/ch5_the_hungering_dark.json';
+import daArc2Ch0 from '../../data/i18n/da/arc2_ch0_hollow_coin.json';
 import daLore from '../../data/i18n/da/lore.json';
 import daTravelEvents from '../../data/i18n/da/travel-events.json';
 import daShops from '../../data/i18n/da/shops.json';
@@ -54,6 +55,7 @@ export const BUNDLED_TRANSLATIONS: ContentTranslations = {
     ch3_the_gilded_lie: parseOverlay(daCh3),
     ch4_wyrmfire: parseOverlay(daCh4),
     ch5_the_hungering_dark: parseOverlay(daCh5),
+    arc2_ch0_hollow_coin: parseOverlay(daArc2Ch0),
     lore: parseOverlay(daLore),
     'travel-events': parseOverlay(daTravelEvents),
     shops: parseOverlay(daShops),

@@ -342,3 +342,26 @@ Person names stay as they are (Brannoc Stonecount, Wren Thistle, Ferrin Salt, Gi
 | launderer | hvidvasker |
 | Captain Ferrin Salt | kaptajn Ferrin Salt |
 | the Hollow Crown | Den Hule Krone |
+
+## The Hollow Crown ch0 "The Hollow Coin" (B009)
+
+Brightwater, Silverrun, Deepanvil Hold, Highcrown and person names stay English. Everyone says "du" (Dunmore too: a frightened tradeswoman, not an official).
+
+| English | Danish |
+|---|---|
+| The Hollow Coin | Den Hule Mønt |
+| Ironvault (Consortium) | Jernhvælvet (Jernhvælv-konsortiet) |
+| gold crown (coin) | guldkrone |
+| assay house / assay bench / touchstone / loupe | prøvehuset / prøvebordet / prøvesten / lup |
+| die / die mark | prægestempel / præglemærke |
+| mint / coiner | møntværk / falskmønter |
+| mill-race / race gate | møllestrøm / lågen til møllestrømmen |
+| rat run / counting floor / den | rottegangen / tællegulvet / hulen |
+| wererat / rat-folk | varrotte / rottefolk |
+| Mistress Dunmore | fru Dunmore |
+| Weir & Daughter | Weir & Datter |
+| Lockkeeper's Inn | Slusevogterens Kro |
+| Korrath's scales | Korraths vægt |
+| the woman with two shadows | kvinden med de to skygger |
+| reeve's watch house | fogedens vagtstue |
+| courier | kurer |
