@@ -105,6 +105,40 @@ Person, town and region names stay as they are (Millbrook, Ravensgate, Brightwat
 | fen | sump |
 | cultist / lookout | kultist / udkig |
 
+## Content (A143b): lore, tables, companions
+Briarkin, Red Gull, Saltwind and Tidewright stay English inside compounds.
+
+| English | Dansk |
+|---|---|
+| Whispering Sickness | Den Hviskende Syge |
+| the Maw | Svælget |
+| Lantern Hold | Lygteborgen |
+| the Blightwood | Visneskoven |
+| Drowned Abbey | Det Druknede Kloster |
+| Singing Reef | Det Syngende Rev |
+| Isle of Brass Parrots | Messingpapegøjernes Ø |
+| Wreckers' Cove | Vragplyndrerbugten |
+| Fennick's Rest | Fennicks Hvile |
+| Ruins of Old Vaelthorn | Ruinerne af Gamle Vaelthorn |
+| Ashfall Winter | Askefaldsvinteren |
+| Long Dusk | Den Lange Skumring |
+| Order of the Dawn Lance | Daggrylansens Orden |
+| Crown of Aurelmark | Aurelmarks Krone |
+| Ironvault Consortium | Jernhvælv-konsortiet |
+| Saltwind Trading Company | Saltwind-handelskompagniet |
+| Red Gull Brotherhood | Red Gull-broderskabet |
+| Tidewright Guild | Tidewright-lauget |
+| Brinescatter Isles | Brinescatter-øerne |
+| Grandmother Wick | Bedstemor Wick |
+| Warden-Captain | Vogterkaptajn |
+| Harbormaster | Havnefoged |
+| Guildmistress | Laugsmester |
+| Lord-Commander | Øverstbefalende |
+| months | Frøvåg … Tømåne (see data/i18n/da/lore.json) |
+| weekdays | Gryningsdag, Smedjedag, Grøndag, Tidevandsdag, Månedag, Møntdag, Lysdag |
+
+Side-quest word lists: sites in definite form ("banditlejren i bakkerne"), antagonists indefinite, relatives/heirlooms common gender (fits the generator's templates).
+
 ## Content (A144): chapter 1 names
 Hollowmere, Ravensgate, Thornwife Hollow, Mirefold, Port Sorrel, Briarkin, Mireth and person names stay English.
 

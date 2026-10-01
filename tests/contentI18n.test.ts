@@ -145,6 +145,11 @@ describe('real content', () => {
       const r = checkOverlay(BUNDLED_ADVENTURES.find((a) => (a.raw as { id: string }).id === key)!.raw, BUNDLED_TRANSLATIONS.da![key]);
       expect({ key, missing: r.missing }).toEqual({ key, missing: [] });
     }
+    // Complete Danish world tables (A143b).
+    for (const key of Object.values(TABLE_KEYS)) {
+      const r = checkOverlay(JSON.parse(fs.readFileSync(path.join(process.cwd(), TABLE_SOURCES[key]!), 'utf8')), BUNDLED_TRANSLATIONS.da![key]);
+      expect({ key, missing: r.missing }).toEqual({ key, missing: [] });
+    }
   });
 
   it('the Danish starter arc: translated scene, buttons, and Danish free text with æøå keywords (A143)', async () => {
@@ -280,9 +285,9 @@ describe('real content', () => {
     expect(content('da')).toBe(content('da'));
     expect(content('da').adventures.get('millbrook_demo')!.name).toBe('Rotter i den gamle mølle');
     expect(adventures.get('millbrook_demo')!.name).toBe('Rats in the Old Mill');
-    // Untranslated files keep the English content (every adventure is translated since A148; the
-    // shops table has no bundled overlay until A143b lands — then pick another untranslated file).
-    expect(content('da').tables.shops).toEqual(tables.shops);
+    // Every file has a Danish overlay since A143b: a language without overlays keeps the English content.
+    expect(contentByLanguage(adventures, tables, { da: {} })('da').tables.shops).toEqual(tables.shops);
+    expect(content('da').tables.shops).not.toEqual(tables.shops);
   });
 
   it('a session in Danish plays the translated adventure; switching back gives English again', async () => {
