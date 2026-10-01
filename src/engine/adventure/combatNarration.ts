@@ -10,7 +10,7 @@
  * moments replace an older waiting job), so a slow model can't build up a backlog.
  */
 import type { GameSession } from '../session/GameSession';
-import { narrateInto, type NarrationJob, type Narrator } from './narration';
+import { narrateInto, type NarrationJob, type NarrationSink, type Narrator } from './narration';
 import { ENGLISH_MESSAGES, messages, type Messages } from '../i18n';
 import { LANGUAGES, type Language } from '../../shared/i18nCore';
 
@@ -133,11 +133,20 @@ interface Pending {
 }
 
 /** Runs combat narration in the background: one at a time, at most one waiting. */
+/** How long a fight's end waits for a narrator that ignores the abort before its late output is dropped. */
+export const SETTLE_TIMEOUT_MS = 2000;
+
 export class CombatNarrationQueue {
   private running: Promise<void> | undefined;
   private pending: Pending | undefined;
+  private current: { ctrl: AbortController; guard: { alive: boolean } } | undefined;
+  private generation = 0;
+  private settling = false;
 
-  constructor(private readonly narrator?: Narrator) {}
+  constructor(
+    private readonly narrator?: Narrator,
+    private readonly settleTimeoutMs = SETTLE_TIMEOUT_MS,
+  ) {}
 
   /** Queue a job; returns immediately. */
   push(session: GameSession, job: NarrationJob): void {
@@ -150,15 +159,62 @@ export class CombatNarrationQueue {
     while (this.running) await this.running;
   }
 
-  private async drain(): Promise<void> {
+  /**
+   * Fight over: stops the model mid-stream (the complete sentences so far are kept) and narrates the
+   * waiting job from its facts, so no combat line lands after the victory/defeat line. A narrator
+   * that ignores the abort is given settleTimeoutMs, then its late output is dropped.
+   */
+  async settle(): Promise<void> {
+    this.settling = true;
     try {
-      while (this.pending) {
-        const { session, job } = this.pending;
-        this.pending = undefined;
-        await narrateInto(session, job, this.narrator).catch(() => undefined);
-      }
+      this.current?.ctrl.abort();
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      const timeout = new Promise<'timeout'>((resolve) => (timer = setTimeout(() => resolve('timeout'), this.settleTimeoutMs)));
+      const result = await Promise.race([this.idle().then(() => 'idle' as const), timeout]);
+      clearTimeout(timer);
+      if (result === 'timeout') this.orphan();
     } finally {
-      this.running = undefined;
+      this.settling = false;
     }
   }
+
+  /** Abandons the stuck job: its late output is dropped and the queue starts afresh. */
+  private orphan(): void {
+    if (this.current) this.current.guard.alive = false;
+    this.generation++;
+    this.current = undefined;
+    this.pending = undefined;
+    this.running = undefined;
+  }
+
+  private async drain(): Promise<void> {
+    const gen = this.generation;
+    try {
+      while (this.pending && gen === this.generation) {
+        const { session, job } = this.pending;
+        this.pending = undefined;
+        const ctrl = new AbortController();
+        if (this.settling) ctrl.abort();
+        const guard = { alive: true };
+        this.current = { ctrl, guard };
+        await narrateInto(guarded(session, guard), job, this.narrator, ctrl.signal).catch(() => undefined);
+      }
+    } finally {
+      if (gen === this.generation) {
+        this.current = undefined;
+        this.running = undefined;
+      }
+    }
+  }
+}
+
+/** The session, or silence once the guard is dead (an orphaned job must not write after the fight). */
+function guarded(session: GameSession, guard: { alive: boolean }): NarrationSink {
+  return {
+    reserveId: () => session.reserveId(),
+    emit: (e) => {
+      if (guard.alive) session.emit(e);
+    },
+    addLog: (kind, text, speaker, id) => (guard.alive ? session.addLog(kind, text, speaker, id) : { id: id ?? -1, kind, text, ...(speaker !== undefined && { speaker }) }),
+  };
 }

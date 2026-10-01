@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createGrid, placeToken, setCell, setEdge } from '../../engine/combat/grid';
 import type { Creatures } from '../../engine/combat/turns';
-import { edgeSegments, hpColour, modelTokens, overlayFor, terrainOf, tokenCentre, worldToSquare } from './battle3d';
+import { edgeSegments, fitFactor, hpColour, modelTokens, overlayFor, terrainOf, tokenCentre, worldToSquare } from './battle3d';
 
 describe('3D battle map helpers', () => {
   it('maps squares and world points both ways', () => {
@@ -49,5 +49,15 @@ describe('3D battle map helpers', () => {
     expect([...modelTokens(g, creatures, sides, 1)]).toEqual(['hero']);
     expect(hpColour(10, 10)).toBe(0x6fd06f);
     expect(hpColour(1, 10)).toBe(0xe0483e);
+  });
+});
+
+describe('fitFactor', () => {
+  it('keeps the default framing on landscape views and backs off on narrow ones', () => {
+    expect(fitFactor(1400 / 520)).toBe(1);
+    expect(fitFactor(1.3)).toBe(1);
+    expect(fitFactor(390 / 584)).toBeCloseTo(1.947, 2);
+    expect(fitFactor(0)).toBe(1);
+    expect(fitFactor(Number.NaN)).toBe(1);
   });
 });

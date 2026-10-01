@@ -5272,7 +5272,7 @@
               "options": [
                 {
                   "id": "ring",
-                  "label": "Watch his hands on that very new ring (Insight DC 13)",
+                  "label": "Watch his hands on that very new ring",
                   "once": true,
                   "if": {
                     "all": [
@@ -5321,7 +5321,7 @@
                 },
                 {
                   "id": "buyer",
-                  "label": "Pose as a grain buyer and ask for a bonded-warehouse pass (Deception DC 14)",
+                  "label": "Pose as a grain buyer and ask for a bonded-warehouse pass",
                   "once": true,
                   "if": {
                     "all": [
@@ -5410,7 +5410,7 @@
                 },
                 {
                   "id": "warn",
-                  "label": "\"I know what is in that grain, Governor.\" (Intimidation DC 15)",
+                  "label": "\"I know what is in that grain, Governor.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5478,7 +5478,7 @@
               "options": [
                 {
                   "id": "ring",
-                  "label": "Watch his hands on that very new ring (Insight DC 13)",
+                  "label": "Watch his hands on that very new ring",
                   "once": true,
                   "if": {
                     "all": [
@@ -5527,7 +5527,7 @@
                 },
                 {
                   "id": "buyer",
-                  "label": "Pose as a grain buyer and ask for a bonded-warehouse pass (Deception DC 14)",
+                  "label": "Pose as a grain buyer and ask for a bonded-warehouse pass",
                   "once": true,
                   "if": {
                     "all": [
@@ -5616,7 +5616,7 @@
                 },
                 {
                   "id": "warn",
-                  "label": "\"I know what is in that grain, Governor.\" (Intimidation DC 15)",
+                  "label": "\"I know what is in that grain, Governor.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5684,7 +5684,7 @@
               "options": [
                 {
                   "id": "ring",
-                  "label": "Watch his hands on that very new ring (Insight DC 13)",
+                  "label": "Watch his hands on that very new ring",
                   "once": true,
                   "if": {
                     "all": [
@@ -5733,7 +5733,7 @@
                 },
                 {
                   "id": "buyer",
-                  "label": "Pose as a grain buyer and ask for a bonded-warehouse pass (Deception DC 14)",
+                  "label": "Pose as a grain buyer and ask for a bonded-warehouse pass",
                   "once": true,
                   "if": {
                     "all": [
@@ -5822,7 +5822,7 @@
                 },
                 {
                   "id": "warn",
-                  "label": "\"I know what is in that grain, Governor.\" (Intimidation DC 15)",
+                  "label": "\"I know what is in that grain, Governor.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5890,7 +5890,7 @@
               "options": [
                 {
                   "id": "ring",
-                  "label": "Watch his hands on that very new ring (Insight DC 13)",
+                  "label": "Watch his hands on that very new ring",
                   "once": true,
                   "if": {
                     "all": [
@@ -5939,7 +5939,7 @@
                 },
                 {
                   "id": "buyer",
-                  "label": "Pose as a grain buyer and ask for a bonded-warehouse pass (Deception DC 14)",
+                  "label": "Pose as a grain buyer and ask for a bonded-warehouse pass",
                   "once": true,
                   "if": {
                     "all": [
@@ -6028,7 +6028,7 @@
                 },
                 {
                   "id": "warn",
-                  "label": "\"I know what is in that grain, Governor.\" (Intimidation DC 15)",
+                  "label": "\"I know what is in that grain, Governor.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6096,7 +6096,7 @@
               "options": [
                 {
                   "id": "ring",
-                  "label": "Watch his hands on that very new ring (Insight DC 13)",
+                  "label": "Watch his hands on that very new ring",
                   "once": true,
                   "if": {
                     "all": [
@@ -6145,7 +6145,7 @@
                 },
                 {
                   "id": "buyer",
-                  "label": "Pose as a grain buyer and ask for a bonded-warehouse pass (Deception DC 14)",
+                  "label": "Pose as a grain buyer and ask for a bonded-warehouse pass",
                   "once": true,
                   "if": {
                     "all": [
@@ -6234,7 +6234,7 @@
                 },
                 {
                   "id": "warn",
-                  "label": "\"I know what is in that grain, Governor.\" (Intimidation DC 15)",
+                  "label": "\"I know what is in that grain, Governor.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6369,7 +6369,7 @@
               "options": [
                 {
                   "id": "pride",
-                  "label": "\"Finest drop in the Isles, Commander.\" (Persuasion DC 12)",
+                  "label": "\"Finest drop in the Isles, Commander.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6419,7 +6419,7 @@
                 },
                 {
                   "id": "watch",
-                  "label": "Get him bragging about his night rounds (Insight DC 14)",
+                  "label": "Get him bragging about his night rounds",
                   "once": true,
                   "if": {
                     "not": {
@@ -6453,7 +6453,7 @@
                 },
                 {
                   "id": "wager",
-                  "label": "Wager 20 gp at knucklebones for Rook's release papers (Insight DC 15)",
+                  "label": "Wager 20 gp at knucklebones for Rook's release papers",
                   "once": true,
                   "if": {
                     "coins": {
@@ -6506,7 +6506,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"Hang a Crown witness, Commander, and the Crown hangs you.\" (Intimidation DC 16)",
+                  "label": "\"Hang a Crown witness, Commander, and the Crown hangs you.\"",
                   "once": true,
                   "keywords": [
                     "threaten",
@@ -6557,7 +6557,7 @@
               "options": [
                 {
                   "id": "pride",
-                  "label": "\"Finest drop in the Isles, Commander.\" (Persuasion DC 12)",
+                  "label": "\"Finest drop in the Isles, Commander.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6607,7 +6607,7 @@
                 },
                 {
                   "id": "watch",
-                  "label": "Get him bragging about his night rounds (Insight DC 14)",
+                  "label": "Get him bragging about his night rounds",
                   "once": true,
                   "if": {
                     "not": {
@@ -6641,7 +6641,7 @@
                 },
                 {
                   "id": "wager",
-                  "label": "Wager 20 gp at knucklebones for Rook's release papers (Insight DC 15)",
+                  "label": "Wager 20 gp at knucklebones for Rook's release papers",
                   "once": true,
                   "if": {
                     "coins": {
@@ -6694,7 +6694,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"Hang a Crown witness, Commander, and the Crown hangs you.\" (Intimidation DC 16)",
+                  "label": "\"Hang a Crown witness, Commander, and the Crown hangs you.\"",
                   "once": true,
                   "keywords": [
                     "threaten",
@@ -6745,7 +6745,7 @@
               "options": [
                 {
                   "id": "pride",
-                  "label": "\"Finest drop in the Isles, Commander.\" (Persuasion DC 12)",
+                  "label": "\"Finest drop in the Isles, Commander.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6795,7 +6795,7 @@
                 },
                 {
                   "id": "watch",
-                  "label": "Get him bragging about his night rounds (Insight DC 14)",
+                  "label": "Get him bragging about his night rounds",
                   "once": true,
                   "if": {
                     "not": {
@@ -6829,7 +6829,7 @@
                 },
                 {
                   "id": "wager",
-                  "label": "Wager 20 gp at knucklebones for Rook's release papers (Insight DC 15)",
+                  "label": "Wager 20 gp at knucklebones for Rook's release papers",
                   "once": true,
                   "if": {
                     "coins": {
@@ -6882,7 +6882,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"Hang a Crown witness, Commander, and the Crown hangs you.\" (Intimidation DC 16)",
+                  "label": "\"Hang a Crown witness, Commander, and the Crown hangs you.\"",
                   "once": true,
                   "keywords": [
                     "threaten",
@@ -6937,7 +6937,7 @@
               "options": [
                 {
                   "id": "pride",
-                  "label": "\"Finest drop in the Isles, Commander.\" (Persuasion DC 12)",
+                  "label": "\"Finest drop in the Isles, Commander.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6987,7 +6987,7 @@
                 },
                 {
                   "id": "watch",
-                  "label": "Get him bragging about his night rounds (Insight DC 14)",
+                  "label": "Get him bragging about his night rounds",
                   "once": true,
                   "if": {
                     "not": {
@@ -7021,7 +7021,7 @@
                 },
                 {
                   "id": "wager",
-                  "label": "Wager 20 gp at knucklebones for Rook's release papers (Insight DC 15)",
+                  "label": "Wager 20 gp at knucklebones for Rook's release papers",
                   "once": true,
                   "if": {
                     "coins": {
@@ -7074,7 +7074,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"Hang a Crown witness, Commander, and the Crown hangs you.\" (Intimidation DC 16)",
+                  "label": "\"Hang a Crown witness, Commander, and the Crown hangs you.\"",
                   "once": true,
                   "keywords": [
                     "threaten",
@@ -7223,7 +7223,7 @@
                 },
                 {
                   "id": "promise",
-                  "label": "\"Give me your half of the map now, and I swear I'll come back for you.\" (Persuasion DC 13)",
+                  "label": "\"Give me your half of the map now, and I swear I'll come back for you.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7296,7 +7296,7 @@
                 },
                 {
                   "id": "bully",
-                  "label": "\"Talk, pirate, or I tell Lusk you tried to bribe me.\" (Intimidation DC 12)",
+                  "label": "\"Talk, pirate, or I tell Lusk you tried to bribe me.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -7377,7 +7377,7 @@
                 },
                 {
                   "id": "promise",
-                  "label": "\"Give me your half of the map now, and I swear I'll come back for you.\" (Persuasion DC 13)",
+                  "label": "\"Give me your half of the map now, and I swear I'll come back for you.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7450,7 +7450,7 @@
                 },
                 {
                   "id": "bully",
-                  "label": "\"Talk, pirate, or I tell Lusk you tried to bribe me.\" (Intimidation DC 12)",
+                  "label": "\"Talk, pirate, or I tell Lusk you tried to bribe me.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -7531,7 +7531,7 @@
                 },
                 {
                   "id": "promise",
-                  "label": "\"Give me your half of the map now, and I swear I'll come back for you.\" (Persuasion DC 13)",
+                  "label": "\"Give me your half of the map now, and I swear I'll come back for you.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7604,7 +7604,7 @@
                 },
                 {
                   "id": "bully",
-                  "label": "\"Talk, pirate, or I tell Lusk you tried to bribe me.\" (Intimidation DC 12)",
+                  "label": "\"Talk, pirate, or I tell Lusk you tried to bribe me.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -7685,7 +7685,7 @@
                 },
                 {
                   "id": "promise",
-                  "label": "\"Give me your half of the map now, and I swear I'll come back for you.\" (Persuasion DC 13)",
+                  "label": "\"Give me your half of the map now, and I swear I'll come back for you.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7758,7 +7758,7 @@
                 },
                 {
                   "id": "bully",
-                  "label": "\"Talk, pirate, or I tell Lusk you tried to bribe me.\" (Intimidation DC 12)",
+                  "label": "\"Talk, pirate, or I tell Lusk you tried to bribe me.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -7839,7 +7839,7 @@
                 },
                 {
                   "id": "promise",
-                  "label": "\"Give me your half of the map now, and I swear I'll come back for you.\" (Persuasion DC 13)",
+                  "label": "\"Give me your half of the map now, and I swear I'll come back for you.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7912,7 +7912,7 @@
                 },
                 {
                   "id": "bully",
-                  "label": "\"Talk, pirate, or I tell Lusk you tried to bribe me.\" (Intimidation DC 12)",
+                  "label": "\"Talk, pirate, or I tell Lusk you tried to bribe me.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -8043,7 +8043,7 @@
               "options": [
                 {
                   "id": "drink",
-                  "label": "Match her drink for drink (Constitution DC 14)",
+                  "label": "Match her drink for drink",
                   "once": true,
                   "if": {
                     "all": [
@@ -8194,7 +8194,7 @@
               "options": [
                 {
                   "id": "drink",
-                  "label": "Match her drink for drink (Constitution DC 14)",
+                  "label": "Match her drink for drink",
                   "once": true,
                   "if": {
                     "all": [
@@ -8349,7 +8349,7 @@
               "options": [
                 {
                   "id": "drink",
-                  "label": "Match her drink for drink (Constitution DC 14)",
+                  "label": "Match her drink for drink",
                   "once": true,
                   "if": {
                     "all": [
@@ -8500,7 +8500,7 @@
               "options": [
                 {
                   "id": "drink",
-                  "label": "Match her drink for drink (Constitution DC 14)",
+                  "label": "Match her drink for drink",
                   "once": true,
                   "if": {
                     "all": [
@@ -8717,7 +8717,7 @@
               "options": [
                 {
                   "id": "terms",
-                  "label": "\"A gunboat is a start. What else is the Company offering?\" (Persuasion DC 15)",
+                  "label": "\"A gunboat is a start. What else is the Company offering?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8760,7 +8760,7 @@
                 },
                 {
                   "id": "plan",
-                  "label": "\"And what happens to Gullhaven afterwards?\" (Insight DC 13)",
+                  "label": "\"And what happens to Gullhaven afterwards?\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -8793,7 +8793,7 @@
                 },
                 {
                   "id": "pell",
-                  "label": "\"Your Governor is the Choir's man.\" (Persuasion DC 14)",
+                  "label": "\"Your Governor is the Choir's man.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8861,7 +8861,7 @@
               "options": [
                 {
                   "id": "terms",
-                  "label": "\"A gunboat is a start. What else is the Company offering?\" (Persuasion DC 15)",
+                  "label": "\"A gunboat is a start. What else is the Company offering?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8904,7 +8904,7 @@
                 },
                 {
                   "id": "plan",
-                  "label": "\"And what happens to Gullhaven afterwards?\" (Insight DC 13)",
+                  "label": "\"And what happens to Gullhaven afterwards?\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -8937,7 +8937,7 @@
                 },
                 {
                   "id": "pell",
-                  "label": "\"Your Governor is the Choir's man.\" (Persuasion DC 14)",
+                  "label": "\"Your Governor is the Choir's man.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9051,7 +9051,7 @@
               "options": [
                 {
                   "id": "trade",
-                  "label": "\"I'll trade you what I know of Vey's grain for your tide-tables.\" (Persuasion DC 13)",
+                  "label": "\"I'll trade you what I know of Vey's grain for your tide-tables.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9106,7 +9106,7 @@
                 },
                 {
                   "id": "lean",
-                  "label": "\"The chart. Now.\" (Intimidation DC 13)",
+                  "label": "\"The chart. Now.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9181,7 +9181,7 @@
                 },
                 {
                   "id": "copy",
-                  "label": "Copy the chart while he talks tides (Sleight of Hand DC 15)",
+                  "label": "Copy the chart while he talks tides",
                   "once": true,
                   "if": {
                     "all": [
@@ -9237,7 +9237,7 @@
               "options": [
                 {
                   "id": "trade",
-                  "label": "\"I'll trade you what I know of Vey's grain for your tide-tables.\" (Persuasion DC 13)",
+                  "label": "\"I'll trade you what I know of Vey's grain for your tide-tables.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9292,7 +9292,7 @@
                 },
                 {
                   "id": "lean",
-                  "label": "\"The chart. Now.\" (Intimidation DC 13)",
+                  "label": "\"The chart. Now.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9367,7 +9367,7 @@
                 },
                 {
                   "id": "copy",
-                  "label": "Copy the chart while he talks tides (Sleight of Hand DC 15)",
+                  "label": "Copy the chart while he talks tides",
                   "once": true,
                   "if": {
                     "all": [
@@ -9488,7 +9488,7 @@
               "options": [
                 {
                   "id": "terms",
-                  "label": "\"What would it take for you to strike your colors?\" (Insight DC 13)",
+                  "label": "\"What would it take for you to strike your colors?\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -9521,7 +9521,7 @@
                 },
                 {
                   "id": "yield",
-                  "label": "\"Strike your colors before the marines land, and nobody burns.\" (Persuasion DC 15)",
+                  "label": "\"Strike your colors before the marines land, and nobody burns.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -9665,7 +9665,7 @@
               "options": [
                 {
                   "id": "terms",
-                  "label": "\"What would it take for you to strike your colors?\" (Insight DC 13)",
+                  "label": "\"What would it take for you to strike your colors?\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -9698,7 +9698,7 @@
                 },
                 {
                   "id": "yield",
-                  "label": "\"Strike your colors before the marines land, and nobody burns.\" (Persuasion DC 15)",
+                  "label": "\"Strike your colors before the marines land, and nobody burns.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -9907,7 +9907,7 @@
               "options": [
                 {
                   "id": "bluff",
-                  "label": "\"Vey sent me for the ledger.\" (Deception DC 15)",
+                  "label": "\"Vey sent me for the ledger.\"",
                   "once": true,
                   "keywords": [
                     "vey",
@@ -9989,7 +9989,7 @@
                 },
                 {
                   "id": "turn",
-                  "label": "\"When the Choir is fed, Vey will feed it you.\" (Persuasion DC 15)",
+                  "label": "\"When the Choir is fed, Vey will feed it you.\"",
                   "once": true,
                   "keywords": [
                     "choir",
@@ -10095,7 +10095,7 @@
               "options": [
                 {
                   "id": "haggle",
-                  "label": "\"A year is too dear, Auntie. A summer.\" (Persuasion DC 15)",
+                  "label": "\"A year is too dear, Auntie. A summer.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -10139,7 +10139,7 @@
                 },
                 {
                   "id": "trick",
-                  "label": "Offer her a year you never lived (Deception DC 16)",
+                  "label": "Offer her a year you never lived",
                   "once": true,
                   "keywords": [
                     "trick",
@@ -10334,7 +10334,7 @@
               "options": [
                 {
                   "id": "doubt",
-                  "label": "\"What did the Choir promise you, Vey?\" (Insight DC 14)",
+                  "label": "\"What did the Choir promise you, Vey?\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -10367,7 +10367,7 @@
                 },
                 {
                   "id": "walk",
-                  "label": "\"Take your diggers and go. The Tooth stays with me.\" (Persuasion DC 16)",
+                  "label": "\"Take your diggers and go. The Tooth stays with me.\"",
                   "once": true,
                   "keywords": [
                     "go",
@@ -10418,7 +10418,7 @@
                 },
                 {
                   "id": "duel",
-                  "label": "\"Your diggers stay out of it. You and me, Vey.\" (Intimidation DC 14)",
+                  "label": "\"Your diggers stay out of it. You and me, Vey.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -10472,7 +10472,7 @@
               "options": [
                 {
                   "id": "doubt",
-                  "label": "\"What did the Choir promise you, Vey?\" (Insight DC 14)",
+                  "label": "\"What did the Choir promise you, Vey?\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -10505,7 +10505,7 @@
                 },
                 {
                   "id": "walk",
-                  "label": "\"Take your diggers and go. The Tooth stays with me.\" (Persuasion DC 16)",
+                  "label": "\"Take your diggers and go. The Tooth stays with me.\"",
                   "once": true,
                   "keywords": [
                     "go",
@@ -10556,7 +10556,7 @@
                 },
                 {
                   "id": "duel",
-                  "label": "\"Your diggers stay out of it. You and me, Vey.\" (Intimidation DC 14)",
+                  "label": "\"Your diggers stay out of it. You and me, Vey.\"",
                   "once": true,
                   "if": {
                     "all": [

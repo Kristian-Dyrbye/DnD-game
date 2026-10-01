@@ -1,4 +1,4 @@
-# The Seven Teeth of Vashkul — a solo D&D adventure with a local AI Dungeon Master
+# Solo D&D — *The Seven Teeth of Vashkul*, a solo adventure with a local AI Dungeon Master
 
 A single-player Dungeons & Dragons game (SRD 5.2.1 rules) that runs entirely on your own Windows PC. The code resolves every rule, every roll and every fight; a small local language model (via Ollama) only narrates what already happened, voices NPCs and suggests ideas. No internet connection or account is needed once it is set up.
 
@@ -27,7 +27,7 @@ Your saves are in `saves/`, your settings in `userdata/settings.json`.
 
 ## Play in the browser
 
-There is also a **web edition** that runs entirely in your browser: no install, no server, no AI. The story uses written narration, every choice is a button (typed commands still work through keyword matching), and the voice uses your browser's built-in speech. Saves stay in the browser (IndexedDB); use *Export* / *Import* in the save browser to back them up or move them to the Windows edition.
+There is also a **web edition** that runs entirely in your browser: no install, no server, no AI. Play it at **https://kristian-dyrbye.github.io/DnD-game/**. The story uses written narration, every choice is a button (typed commands still work through keyword matching), and the voice uses your browser's built-in speech. Saves stay in the browser (IndexedDB); use *Export* / *Import* in the save browser to back them up or move them to the Windows edition.
 
 - **Hosted**: the workflow `.github/workflows/pages.yml` builds and publishes it to GitHub Pages on every push to `master` (or by hand from the Actions tab). It fetches the CC0 models and audio, runs the type check and tests, builds, and checks the site stays under the 1 GB Pages limit. One-time setup: in the repository's **Settings → Pages**, set **Source** to **GitHub Actions**. The game is then at `https://<user>.github.io/<repo>/`.
 - **Locally**: `npm run build:web` (writes `dist-web/`, about 100 MB with models and audio), then `npm run preview:web`, or put `dist-web/` on any static web host. `npm run site:size` prints the site size. Asset URLs are relative, so any folder works; set `WEB_BASE=/<repo>/` only if your host needs an absolute base.

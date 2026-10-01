@@ -1998,8 +1998,8 @@
       "text": "Grell læner sig mod brystværnet med sin lygte afskærmet. Ude i tågen bevæger noget sig, en hel masse noget. \"Tal hurtigt. Jeg regner ikke med at have megen tid til samtale efter i nat.\""
     },
     "npcs/maud_grell/conversations/council/nodes/greet/options/ledger/label": {
-      "hash": "c922a107",
-      "text": "\"Hvert navn i din bog over de brændte ser på dig i nat, kaptajn.\" (Overtalelse SG 14)"
+      "hash": "5e83b035",
+      "text": "\"Hvert navn i din bog over de brændte ser på dig i nat, kaptajn.\""
     },
     "npcs/maud_grell/conversations/council/nodes/greet/options/ledger/keywords": {
       "hash": "5d8a3bfe",
@@ -2026,8 +2026,8 @@
       "text": "\"De døde ser ikke på noget,\" siger Grell. \"Det er ligesom hele pointen med dem.\""
     },
     "npcs/maud_grell/conversations/council/nodes/greet/options/pyres/label": {
-      "hash": "14ca3654",
-      "text": "\"Hollowmere brændte på din ordre. Sig det til deres ansigter, før de døde gør det.\" (Intimidering SG 15)"
+      "hash": "79b830e3",
+      "text": "\"Hollowmere brændte på din ordre. Sig det til deres ansigter, før de døde gør det.\""
     },
     "npcs/maud_grell/conversations/council/nodes/greet/options/pyres/keywords": {
       "hash": "32d309c4",
@@ -2051,8 +2051,8 @@
       "text": "\"Forsvind fra min mur,\" siger Grell, meget stille. De vogtere, der stod nærmest, hørte hvert ord, og ingen af dem vil møde dit blik."
     },
     "npcs/maud_grell/conversations/council/nodes/greet/options/notice/label": {
-      "hash": "a476a3ef",
-      "text": "\"Du har allerede skrevet din egen dødsannonce, ikke?\" (Indsigt SG 15)"
+      "hash": "f09a8697",
+      "text": "\"Du har allerede skrevet din egen dødsannonce, ikke?\""
     },
     "npcs/maud_grell/conversations/council/nodes/greet/options/notice/keywords": {
       "hash": "92c9c7a6",
@@ -2082,8 +2082,8 @@
       "text": "\"Hvad ellers?\""
     },
     "npcs/maud_grell/conversations/council/nodes/more/options/ledger/label": {
-      "hash": "c922a107",
-      "text": "\"Hvert navn i din bog over de brændte ser på dig i nat, kaptajn.\" (Overtalelse SG 14)"
+      "hash": "5e83b035",
+      "text": "\"Hvert navn i din bog over de brændte ser på dig i nat, kaptajn.\""
     },
     "npcs/maud_grell/conversations/council/nodes/more/options/ledger/keywords": {
       "hash": "5d8a3bfe",
@@ -2110,8 +2110,8 @@
       "text": "\"De døde ser ikke på noget,\" siger Grell. \"Det er ligesom hele pointen med dem.\""
     },
     "npcs/maud_grell/conversations/council/nodes/more/options/pyres/label": {
-      "hash": "14ca3654",
-      "text": "\"Hollowmere brændte på din ordre. Sig det til deres ansigter, før de døde gør det.\" (Intimidering SG 15)"
+      "hash": "79b830e3",
+      "text": "\"Hollowmere brændte på din ordre. Sig det til deres ansigter, før de døde gør det.\""
     },
     "npcs/maud_grell/conversations/council/nodes/more/options/pyres/keywords": {
       "hash": "32d309c4",
@@ -2135,8 +2135,8 @@
       "text": "\"Forsvind fra min mur,\" siger Grell, meget stille. De vogtere, der stod nærmest, hørte hvert ord, og ingen af dem vil møde dit blik."
     },
     "npcs/maud_grell/conversations/council/nodes/more/options/notice/label": {
-      "hash": "a476a3ef",
-      "text": "\"Du har allerede skrevet din egen dødsannonce, ikke?\" (Indsigt SG 15)"
+      "hash": "f09a8697",
+      "text": "\"Du har allerede skrevet din egen dødsannonce, ikke?\""
     },
     "npcs/maud_grell/conversations/council/nodes/more/options/notice/keywords": {
       "hash": "92c9c7a6",
@@ -2227,8 +2227,8 @@
       "text": "Brask tæller blyskrin i hvælvingen under portbygningen og bevæger læberne. \"Kaptajnens ordre er at holde stand. Min er at sørge for, at der er noget tilbage, der er værd at holde. Hvad har du brug for?\""
     },
     "npcs/odo_brask/conversations/boxes/nodes/greet/options/lead/label": {
-      "hash": "d3e0f2e3",
-      "text": "\"Lån mig et af dine blyskrin til Tænderne, sergent.\" (Overtalelse SG 13)"
+      "hash": "59078f24",
+      "text": "\"Lån mig et af dine blyskrin til Tænderne, sergent.\""
     },
     "npcs/odo_brask/conversations/boxes/nodes/greet/options/lead/keywords": {
       "hash": "b494e255",
@@ -2279,8 +2279,8 @@
       "text": "Brask tager pungen uden et ord og lægger den i enkernes kiste. Så henter han et blyforet skrin i hvælvingen og lægger det i dine hænder."
     },
     "npcs/odo_brask/conversations/boxes/nodes/greet/options/postern/label": {
-      "hash": "ab247982",
-      "text": "\"Din gamle bagport. Vi smutter ud og rammer de døde bagfra, før de når muren.\" (Snigen SG 14)"
+      "hash": "86843216",
+      "text": "\"Din gamle bagport. Vi smutter ud og rammer de døde bagfra, før de når muren.\""
     },
     "npcs/odo_brask/conversations/boxes/nodes/greet/options/postern/keywords": {
       "hash": "456b9f2c",
@@ -2311,8 +2311,8 @@
       "text": "\"Andet?\""
     },
     "npcs/odo_brask/conversations/boxes/nodes/more/options/lead/label": {
-      "hash": "d3e0f2e3",
-      "text": "\"Lån mig et af dine blyskrin til Tænderne, sergent.\" (Overtalelse SG 13)"
+      "hash": "59078f24",
+      "text": "\"Lån mig et af dine blyskrin til Tænderne, sergent.\""
     },
     "npcs/odo_brask/conversations/boxes/nodes/more/options/lead/keywords": {
       "hash": "b494e255",
@@ -2363,8 +2363,8 @@
       "text": "Brask tager pungen uden et ord og lægger den i enkernes kiste. Så henter han et blyforet skrin i hvælvingen og lægger det i dine hænder."
     },
     "npcs/odo_brask/conversations/boxes/nodes/more/options/postern/label": {
-      "hash": "ab247982",
-      "text": "\"Din gamle bagport. Vi smutter ud og rammer de døde bagfra, før de når muren.\" (Snigen SG 14)"
+      "hash": "86843216",
+      "text": "\"Din gamle bagport. Vi smutter ud og rammer de døde bagfra, før de når muren.\""
     },
     "npcs/odo_brask/conversations/boxes/nodes/more/options/postern/keywords": {
       "hash": "456b9f2c",
@@ -2427,8 +2427,8 @@
       "text": "Moder Sallow sidder i grøftevandet med foldede hænder, som om hun venter på te. \"Nå, min ven? Spørg bare. Jeg har intet tilbage end svar.\""
     },
     "npcs/mother_sallow/conversations/last_words/nodes/greet/options/sentries/label": {
-      "hash": "45d0dc49",
-      "text": "\"Hvor stiller Kantoren sine vagtposter?\" (Intimidering SG 15)"
+      "hash": "f746d97c",
+      "text": "\"Hvor stiller Kantoren sine vagtposter?\""
     },
     "npcs/mother_sallow/conversations/last_words/nodes/greet/options/sentries/keywords": {
       "hash": "1c8d5324",
@@ -2450,8 +2450,8 @@
       "text": "\"Overalt, skat,\" siger Sallow. \"Overalt, hvor der er mørke.\""
     },
     "npcs/mother_sallow/conversations/last_words/nodes/greet/options/rite/label": {
-      "hash": "62be0ce0",
-      "text": "\"Dine druknede børn ved klosteret fortjener et ritual. Sig mig deres navne, så skal de få et.\" (Religion SG 14)"
+      "hash": "c77f3e68",
+      "text": "\"Dine druknede børn ved klosteret fortjener et ritual. Sig mig deres navne, så skal de få et.\""
     },
     "npcs/mother_sallow/conversations/last_words/nodes/greet/options/rite/keywords": {
       "hash": "803709b7",
@@ -2475,8 +2475,8 @@
       "text": "\"Du ville bare brænde dem,\" siger Sallow."
     },
     "npcs/mother_sallow/conversations/last_words/nodes/greet/options/hymn/label": {
-      "hash": "eff68d06",
-      "text": "\"Kantoren sendte mig for at bringe dig hjem, Moder. Syng hymnen for mig, så jeg ved, det virkelig er dig.\" (Bedrag SG 16)"
+      "hash": "12d1ad7c",
+      "text": "\"Kantoren sendte mig for at bringe dig hjem, Moder. Syng hymnen for mig, så jeg ved, det virkelig er dig.\""
     },
     "npcs/mother_sallow/conversations/last_words/nodes/greet/options/hymn/keywords": {
       "hash": "a0916577",
@@ -2510,8 +2510,8 @@
       "text": "\"Mere?\""
     },
     "npcs/mother_sallow/conversations/last_words/nodes/more/options/sentries/label": {
-      "hash": "45d0dc49",
-      "text": "\"Hvor stiller Kantoren sine vagtposter?\" (Intimidering SG 15)"
+      "hash": "f746d97c",
+      "text": "\"Hvor stiller Kantoren sine vagtposter?\""
     },
     "npcs/mother_sallow/conversations/last_words/nodes/more/options/sentries/keywords": {
       "hash": "1c8d5324",
@@ -2533,8 +2533,8 @@
       "text": "\"Overalt, skat,\" siger Sallow. \"Overalt, hvor der er mørke.\""
     },
     "npcs/mother_sallow/conversations/last_words/nodes/more/options/rite/label": {
-      "hash": "62be0ce0",
-      "text": "\"Dine druknede børn ved klosteret fortjener et ritual. Sig mig deres navne, så skal de få et.\" (Religion SG 14)"
+      "hash": "c77f3e68",
+      "text": "\"Dine druknede børn ved klosteret fortjener et ritual. Sig mig deres navne, så skal de få et.\""
     },
     "npcs/mother_sallow/conversations/last_words/nodes/more/options/rite/keywords": {
       "hash": "803709b7",
@@ -2558,8 +2558,8 @@
       "text": "\"Du ville bare brænde dem,\" siger Sallow."
     },
     "npcs/mother_sallow/conversations/last_words/nodes/more/options/hymn/label": {
-      "hash": "eff68d06",
-      "text": "\"Kantoren sendte mig for at bringe dig hjem, Moder. Syng hymnen for mig, så jeg ved, det virkelig er dig.\" (Bedrag SG 16)"
+      "hash": "12d1ad7c",
+      "text": "\"Kantoren sendte mig for at bringe dig hjem, Moder. Syng hymnen for mig, så jeg ved, det virkelig er dig.\""
     },
     "npcs/mother_sallow/conversations/last_words/nodes/more/options/hymn/keywords": {
       "hash": "a0916577",
@@ -2643,8 +2643,8 @@
       "text": "Wick binder en knude af tjørn og hår om dit håndled og trykker tommelfingeren mod dit øjenlåg. Noget varmt går ud af dig: en sommereftermiddag, et ansigt, du elskede. Du kan ikke længere huske hvis. \"Sådan,\" siger hun. \"Nu har du mindre, det kan trække i.\""
     },
     "npcs/grandmother_wick/conversations/rim_song/nodes/greet/options/below/label": {
-      "hash": "d3a71054",
-      "text": "\"Kom med os ned, Bedstemor. Syng Navnet ved selve Kæbestenen.\" (Overtalelse SG 16)"
+      "hash": "d35d3e56",
+      "text": "\"Kom med os ned, Bedstemor. Syng Navnet ved selve Kæbestenen.\""
     },
     "npcs/grandmother_wick/conversations/rim_song/nodes/greet/options/below/keywords": {
       "hash": "909e35d6",
@@ -2668,8 +2668,8 @@
       "text": "\"Fra sumpen,\" siger Wick. \"Jeg synger det fra sumpen, hvor jeg hører til.\""
     },
     "npcs/grandmother_wick/conversations/rim_song/nodes/greet/options/heart/label": {
-      "hash": "051bae7f",
-      "text": "\"Hvad har Nettle brug for ved hjertetræet?\" (Indsigt SG 14)"
+      "hash": "2c6287f2",
+      "text": "\"Hvad har Nettle brug for ved hjertetræet?\""
     },
     "npcs/grandmother_wick/conversations/rim_song/nodes/greet/options/heart/keywords": {
       "hash": "9702caab",
@@ -2720,8 +2720,8 @@
       "text": "Wick binder en knude af tjørn og hår om dit håndled og trykker tommelfingeren mod dit øjenlåg. Noget varmt går ud af dig: en sommereftermiddag, et ansigt, du elskede. Du kan ikke længere huske hvis. \"Sådan,\" siger hun. \"Nu har du mindre, det kan trække i.\""
     },
     "npcs/grandmother_wick/conversations/rim_song/nodes/more/options/below/label": {
-      "hash": "d3a71054",
-      "text": "\"Kom med os ned, Bedstemor. Syng Navnet ved selve Kæbestenen.\" (Overtalelse SG 16)"
+      "hash": "d35d3e56",
+      "text": "\"Kom med os ned, Bedstemor. Syng Navnet ved selve Kæbestenen.\""
     },
     "npcs/grandmother_wick/conversations/rim_song/nodes/more/options/below/keywords": {
       "hash": "909e35d6",
@@ -2745,8 +2745,8 @@
       "text": "\"Fra sumpen,\" siger Wick. \"Jeg synger det fra sumpen, hvor jeg hører til.\""
     },
     "npcs/grandmother_wick/conversations/rim_song/nodes/more/options/heart/label": {
-      "hash": "051bae7f",
-      "text": "\"Hvad har Nettle brug for ved hjertetræet?\" (Indsigt SG 14)"
+      "hash": "2c6287f2",
+      "text": "\"Hvad har Nettle brug for ved hjertetræet?\""
     },
     "npcs/grandmother_wick/conversations/rim_song/nodes/more/options/heart/keywords": {
       "hash": "9702caab",
@@ -2812,8 +2812,8 @@
       "text": "Abbed Cendric sidder på det tørre trin over den oversvømmede krypt med hænderne i ærmerne. Under ham er vandet sort og meget stille. \"Ved midnat kan man ringe med de døde klokker, hvis nogen er modig nok til at hente dem op. Hvad vil du spørge mig om først?\""
     },
     "npcs/abbot_cendric/conversations/vigil/nodes/greet/options/names/label": {
-      "hash": "cd199d59",
-      "text": "\"Lær mig klokkernes navne, fader, så jeg kan kalde dem op af vandet.\" (Religion SG 13)"
+      "hash": "f1ad635e",
+      "text": "\"Lær mig klokkernes navne, fader, så jeg kan kalde dem op af vandet.\""
     },
     "npcs/abbot_cendric/conversations/vigil/nodes/greet/options/names/keywords": {
       "hash": "73ca149b",
@@ -2840,8 +2840,8 @@
       "text": "De gamle ord glider af din tunge. \"Det gør ikke noget,\" siger Cendric mildt. \"Klokkerne er tålmodige.\""
     },
     "npcs/abbot_cendric/conversations/vigil/nodes/greet/options/drowned/label": {
-      "hash": "b17fccc1",
-      "text": "\"Hvem er de druknede i krypten, fader?\" (Historie SG 14)"
+      "hash": "63ce4390",
+      "text": "\"Hvem er de druknede i krypten, fader?\""
     },
     "npcs/abbot_cendric/conversations/vigil/nodes/greet/options/drowned/keywords": {
       "hash": "4baff050",
@@ -2863,8 +2863,8 @@
       "text": "\"Brødre,\" siger Cendric. \"Jeg kendte deres ansigter, ikke deres navne. Jeg beklager.\""
     },
     "npcs/abbot_cendric/conversations/vigil/nodes/greet/options/follow/label": {
-      "hash": "c85a8d97",
-      "text": "\"Når klokkerne har ringet, så kom med os ned i Svælget. Forseglingen får brug for din stemme.\" (Overtalelse SG 14)"
+      "hash": "2eb09605",
+      "text": "\"Når klokkerne har ringet, så kom med os ned i Svælget. Forseglingen får brug for din stemme.\""
     },
     "npcs/abbot_cendric/conversations/vigil/nodes/greet/options/follow/keywords": {
       "hash": "a00f1595",
@@ -2896,8 +2896,8 @@
       "text": "\"Spørg.\""
     },
     "npcs/abbot_cendric/conversations/vigil/nodes/more/options/names/label": {
-      "hash": "cd199d59",
-      "text": "\"Lær mig klokkernes navne, fader, så jeg kan kalde dem op af vandet.\" (Religion SG 13)"
+      "hash": "f1ad635e",
+      "text": "\"Lær mig klokkernes navne, fader, så jeg kan kalde dem op af vandet.\""
     },
     "npcs/abbot_cendric/conversations/vigil/nodes/more/options/names/keywords": {
       "hash": "73ca149b",
@@ -2924,8 +2924,8 @@
       "text": "De gamle ord glider af din tunge. \"Det gør ikke noget,\" siger Cendric mildt. \"Klokkerne er tålmodige.\""
     },
     "npcs/abbot_cendric/conversations/vigil/nodes/more/options/drowned/label": {
-      "hash": "b17fccc1",
-      "text": "\"Hvem er de druknede i krypten, fader?\" (Historie SG 14)"
+      "hash": "63ce4390",
+      "text": "\"Hvem er de druknede i krypten, fader?\""
     },
     "npcs/abbot_cendric/conversations/vigil/nodes/more/options/drowned/keywords": {
       "hash": "4baff050",
@@ -2947,8 +2947,8 @@
       "text": "\"Brødre,\" siger Cendric. \"Jeg kendte deres ansigter, ikke deres navne. Jeg beklager.\""
     },
     "npcs/abbot_cendric/conversations/vigil/nodes/more/options/follow/label": {
-      "hash": "c85a8d97",
-      "text": "\"Når klokkerne har ringet, så kom med os ned i Svælget. Forseglingen får brug for din stemme.\" (Overtalelse SG 14)"
+      "hash": "2eb09605",
+      "text": "\"Når klokkerne har ringet, så kom med os ned i Svælget. Forseglingen får brug for din stemme.\""
     },
     "npcs/abbot_cendric/conversations/vigil/nodes/more/options/follow/keywords": {
       "hash": "a00f1595",
@@ -3014,8 +3014,8 @@
       "text": "Heksens søster venter mellem træerne, tålmodig som en hejre. \"Nå? Min søster var altid den snakkesalige. Jeg foretrækker at blive betalt.\""
     },
     "npcs/hag_sister/conversations/midnight/nodes/greet/options/false_tooth/label": {
-      "hash": "9f92d365",
-      "text": "Ræk en hundehugtand frem, pakket ind i stof: \"Her. En Tand, som du bad om.\" (Bedrag SG 16)"
+      "hash": "aeb56ef7",
+      "text": "Ræk en hundehugtand frem, pakket ind i stof: \"Her. En Tand, som du bad om.\""
     },
     "npcs/hag_sister/conversations/midnight/nodes/greet/options/false_tooth/keywords": {
       "hash": "8f51b469",
@@ -3041,8 +3041,8 @@
       "text": "Hun pakker den ikke engang ud. Hun ser bare på dig, og et mareridt, du havde som barn, vender tilbage på én gang og bliver."
     },
     "npcs/hag_sister/conversations/midnight/nodes/greet/options/gold/label": {
-      "hash": "75fabf6d",
-      "text": "\"To hundrede guld for din families ulejlighed, og så går vi hver til sit.\" (Overtalelse SG 14)"
+      "hash": "47f676b7",
+      "text": "\"To hundrede guld for din families ulejlighed, og så går vi hver til sit.\""
     },
     "npcs/hag_sister/conversations/midnight/nodes/greet/options/gold/keywords": {
       "hash": "2e9d42d7",
@@ -3069,8 +3069,8 @@
       "text": "\"Jeg gik ikke op af havet for guld,\" siger hun."
     },
     "npcs/hag_sister/conversations/midnight/nodes/greet/options/dawn/label": {
-      "hash": "1387e23e",
-      "text": "\"Der er fire timer til daggry, heks. Sid hos mig, til det kommer, hvis du tør.\" (Intimidering SG 17)"
+      "hash": "314a8f4f",
+      "text": "\"Der er fire timer til daggry, heks. Sid hos mig, til det kommer, hvis du tør.\""
     },
     "npcs/hag_sister/conversations/midnight/nodes/greet/options/dawn/keywords": {
       "hash": "285342e8",
@@ -3100,8 +3100,8 @@
       "text": "\"Noget andet, så?\""
     },
     "npcs/hag_sister/conversations/midnight/nodes/more/options/false_tooth/label": {
-      "hash": "9f92d365",
-      "text": "Ræk en hundehugtand frem, pakket ind i stof: \"Her. En Tand, som du bad om.\" (Bedrag SG 16)"
+      "hash": "aeb56ef7",
+      "text": "Ræk en hundehugtand frem, pakket ind i stof: \"Her. En Tand, som du bad om.\""
     },
     "npcs/hag_sister/conversations/midnight/nodes/more/options/false_tooth/keywords": {
       "hash": "8f51b469",
@@ -3127,8 +3127,8 @@
       "text": "Hun pakker den ikke engang ud. Hun ser bare på dig, og et mareridt, du havde som barn, vender tilbage på én gang og bliver."
     },
     "npcs/hag_sister/conversations/midnight/nodes/more/options/gold/label": {
-      "hash": "75fabf6d",
-      "text": "\"To hundrede guld for din families ulejlighed, og så går vi hver til sit.\" (Overtalelse SG 14)"
+      "hash": "47f676b7",
+      "text": "\"To hundrede guld for din families ulejlighed, og så går vi hver til sit.\""
     },
     "npcs/hag_sister/conversations/midnight/nodes/more/options/gold/keywords": {
       "hash": "2e9d42d7",
@@ -3155,8 +3155,8 @@
       "text": "\"Jeg gik ikke op af havet for guld,\" siger hun."
     },
     "npcs/hag_sister/conversations/midnight/nodes/more/options/dawn/label": {
-      "hash": "1387e23e",
-      "text": "\"Der er fire timer til daggry, heks. Sid hos mig, til det kommer, hvis du tør.\" (Intimidering SG 17)"
+      "hash": "314a8f4f",
+      "text": "\"Der er fire timer til daggry, heks. Sid hos mig, til det kommer, hvis du tør.\""
     },
     "npcs/hag_sister/conversations/midnight/nodes/more/options/dawn/keywords": {
       "hash": "285342e8",
@@ -3221,8 +3221,8 @@
       "text": "Vosk står i helligdommens port med sine bøger stablet omkring sig som en mur. \"De kom stille. Godt. Det ville være synd at slutte dette med råb. Tal, hvis De vil.\""
     },
     "npcs/vosk/conversations/gate/nodes/greet/options/notes/label": {
-      "hash": "344fa102",
-      "text": "\"Du har læst de gamle tekster. Svælget gør ikke ende på sulten. Det er sult. Dine egne notater siger det.\" (Overtalelse SG 17)"
+      "hash": "96ca9033",
+      "text": "\"Du har læst de gamle tekster. Svælget gør ikke ende på sulten. Det er sult. Dine egne notater siger det.\""
     },
     "npcs/vosk/conversations/gate/nodes/greet/options/notes/keywords": {
       "hash": "f88239cc",
@@ -3252,8 +3252,8 @@
       "text": "\"Marginer,\" siger Vosk, \"er der, hvor lærde gemmer deres tvivl. Jeg har brændt mine.\" Han løfter hænderne, og luften knitrer."
     },
     "npcs/vosk/conversations/gate/nodes/greet/options/verse/label": {
-      "hash": "5fdd6ac3",
-      "text": "\"Før vi gør det færdigt: sig mig det sidste vers af den omvendte sang. En lærd burde ønske det skrevet ned.\" (Arkana SG 16)"
+      "hash": "f81f363e",
+      "text": "\"Før vi gør det færdigt: sig mig det sidste vers af den omvendte sang. En lærd burde ønske det skrevet ned.\""
     },
     "npcs/vosk/conversations/gate/nodes/greet/options/verse/keywords": {
       "hash": "dfc341a7",
@@ -3277,8 +3277,8 @@
       "text": "\"Det burde en lærd,\" medgiver Vosk, \"og det er jeg ikke længere.\""
     },
     "npcs/vosk/conversations/gate/nodes/greet/options/books/label": {
-      "hash": "1d5f184b",
-      "text": "\"Dine bøger brænder sammen med dig, Vosk. Hver eneste. Træd til side, så bærer jeg dem ud.\" (Intimidering SG 16)"
+      "hash": "94e54c3f",
+      "text": "\"Dine bøger brænder sammen med dig, Vosk. Hver eneste. Træd til side, så bærer jeg dem ud.\""
     },
     "npcs/vosk/conversations/gate/nodes/greet/options/books/keywords": {
       "hash": "d110a01d",
@@ -3310,8 +3310,8 @@
       "text": "\"Fortsæt.\""
     },
     "npcs/vosk/conversations/gate/nodes/more/options/notes/label": {
-      "hash": "344fa102",
-      "text": "\"Du har læst de gamle tekster. Svælget gør ikke ende på sulten. Det er sult. Dine egne notater siger det.\" (Overtalelse SG 17)"
+      "hash": "96ca9033",
+      "text": "\"Du har læst de gamle tekster. Svælget gør ikke ende på sulten. Det er sult. Dine egne notater siger det.\""
     },
     "npcs/vosk/conversations/gate/nodes/more/options/notes/keywords": {
       "hash": "f88239cc",
@@ -3341,8 +3341,8 @@
       "text": "\"Marginer,\" siger Vosk, \"er der, hvor lærde gemmer deres tvivl. Jeg har brændt mine.\" Han løfter hænderne, og luften knitrer."
     },
     "npcs/vosk/conversations/gate/nodes/more/options/verse/label": {
-      "hash": "5fdd6ac3",
-      "text": "\"Før vi gør det færdigt: sig mig det sidste vers af den omvendte sang. En lærd burde ønske det skrevet ned.\" (Arkana SG 16)"
+      "hash": "f81f363e",
+      "text": "\"Før vi gør det færdigt: sig mig det sidste vers af den omvendte sang. En lærd burde ønske det skrevet ned.\""
     },
     "npcs/vosk/conversations/gate/nodes/more/options/verse/keywords": {
       "hash": "dfc341a7",
@@ -3366,8 +3366,8 @@
       "text": "\"Det burde en lærd,\" medgiver Vosk, \"og det er jeg ikke længere.\""
     },
     "npcs/vosk/conversations/gate/nodes/more/options/books/label": {
-      "hash": "1d5f184b",
-      "text": "\"Dine bøger brænder sammen med dig, Vosk. Hver eneste. Træd til side, så bærer jeg dem ud.\" (Intimidering SG 16)"
+      "hash": "94e54c3f",
+      "text": "\"Dine bøger brænder sammen med dig, Vosk. Hver eneste. Træd til side, så bærer jeg dem ud.\""
     },
     "npcs/vosk/conversations/gate/nodes/more/options/books/keywords": {
       "hash": "d110a01d",
@@ -3440,8 +3440,8 @@
       "text": "Seraphine synger med hånden på Kæbestenen, og alligevel taler hun på en eller anden måde også til dig, varmt, sådan som hun talte til tiggerne ved Almisseembedets dør. \"Du er kommet hele denne lange vej. Sig det, du er kommet for at sige, min kære.\""
     },
     "npcs/seraphine_vell/conversations/jaw/nodes/greet/options/cinderdale/label": {
-      "hash": "b062b662",
-      "text": "\"Jeg kender til Cinderdale. Andre sultede også dér, og ikke én af dem ønskede dette.\" (Overtalelse SG 17)"
+      "hash": "05375253",
+      "text": "\"Jeg kender til Cinderdale. Andre sultede også dér, og ikke én af dem ønskede dette.\""
     },
     "npcs/seraphine_vell/conversations/jaw/nodes/greet/options/cinderdale/keywords": {
       "hash": "13408214",
@@ -3463,8 +3463,8 @@
       "text": "\"De ønskede brød,\" siger Seraphine, \"og ingen gav dem det. Jeg giver det til alle.\""
     },
     "npcs/seraphine_vell/conversations/jaw/nodes/greet/options/flaw/label": {
-      "hash": "76d15a8f",
-      "text": "Lyt efter fejlen i hendes sang (Arkana SG 17)"
+      "hash": "aeb59de1",
+      "text": "Lyt efter fejlen i hendes sang"
     },
     "npcs/seraphine_vell/conversations/jaw/nodes/greet/options/flaw/keywords": {
       "hash": "0473412f",
@@ -3487,8 +3487,8 @@
       "text": "Sangen er for stor til, at man kan høre dens form. Den fylder hulen og dine tænder."
     },
     "npcs/seraphine_vell/conversations/jaw/nodes/greet/options/taunt/label": {
-      "hash": "cb74060f",
-      "text": "Råb til hendes fanatikere: \"Hun fodrer det med jer først. Se på hende. Se!\" (Intimidering SG 16)"
+      "hash": "a10177e3",
+      "text": "Råb til hendes fanatikere: \"Hun fodrer det med jer først. Se på hende. Se!\""
     },
     "npcs/seraphine_vell/conversations/jaw/nodes/greet/options/taunt/keywords": {
       "hash": "8b1f1a18",
@@ -3519,8 +3519,8 @@
       "text": "\"Er der mere?\""
     },
     "npcs/seraphine_vell/conversations/jaw/nodes/more/options/cinderdale/label": {
-      "hash": "b062b662",
-      "text": "\"Jeg kender til Cinderdale. Andre sultede også dér, og ikke én af dem ønskede dette.\" (Overtalelse SG 17)"
+      "hash": "05375253",
+      "text": "\"Jeg kender til Cinderdale. Andre sultede også dér, og ikke én af dem ønskede dette.\""
     },
     "npcs/seraphine_vell/conversations/jaw/nodes/more/options/cinderdale/keywords": {
       "hash": "13408214",
@@ -3542,8 +3542,8 @@
       "text": "\"De ønskede brød,\" siger Seraphine, \"og ingen gav dem det. Jeg giver det til alle.\""
     },
     "npcs/seraphine_vell/conversations/jaw/nodes/more/options/flaw/label": {
-      "hash": "76d15a8f",
-      "text": "Lyt efter fejlen i hendes sang (Arkana SG 17)"
+      "hash": "aeb59de1",
+      "text": "Lyt efter fejlen i hendes sang"
     },
     "npcs/seraphine_vell/conversations/jaw/nodes/more/options/flaw/keywords": {
       "hash": "0473412f",
@@ -3566,8 +3566,8 @@
       "text": "Sangen er for stor til, at man kan høre dens form. Den fylder hulen og dine tænder."
     },
     "npcs/seraphine_vell/conversations/jaw/nodes/more/options/taunt/label": {
-      "hash": "cb74060f",
-      "text": "Råb til hendes fanatikere: \"Hun fodrer det med jer først. Se på hende. Se!\" (Intimidering SG 16)"
+      "hash": "a10177e3",
+      "text": "Råb til hendes fanatikere: \"Hun fodrer det med jer først. Se på hende. Se!\""
     },
     "npcs/seraphine_vell/conversations/jaw/nodes/more/options/taunt/keywords": {
       "hash": "8b1f1a18",
@@ -3627,8 +3627,8 @@
       "text": "Aurek står ved sin tantes side med en bog trykket mod brystet som et skjold. Han vil ikke se på dig. \"Vær sød,\" siger han. \"Vær sød at lade være.\""
     },
     "npcs/aurek/conversations/aunt/nodes/greet/options/father/label": {
-      "hash": "6e3e479d",
-      "text": "\"Din far skrev den omvendte sang for at standse dette, Aurek. Ikke for at begynde det.\" (Overtalelse SG 17)"
+      "hash": "0da5b48a",
+      "text": "\"Din far skrev den omvendte sang for at standse dette, Aurek. Ikke for at begynde det.\""
     },
     "npcs/aurek/conversations/aunt/nodes/greet/options/father/keywords": {
       "hash": "9e90d27b",
@@ -3656,8 +3656,8 @@
       "text": "\"Du forstod ham aldrig,\" siger Aurek. \"Det gjorde hun.\""
     },
     "npcs/aurek/conversations/aunt/nodes/greet/options/afraid/label": {
-      "hash": "fe4cbf48",
-      "text": "\"Du er ikke loyal over for hende. Du er bange for hende.\" (Indsigt SG 15)"
+      "hash": "f892ffd0",
+      "text": "\"Du er ikke loyal over for hende. Du er bange for hende.\""
     },
     "npcs/aurek/conversations/aunt/nodes/greet/options/afraid/keywords": {
       "hash": "e2a62447",
@@ -3677,8 +3677,8 @@
       "text": "Aurek ser væk og bliver ved med at synge."
     },
     "npcs/aurek/conversations/aunt/nodes/greet/options/lie/label": {
-      "hash": "84eb7e1a",
-      "text": "\"Hun har allerede sunget dit navn for Svælget, Aurek. Du er prisen for den første Tand.\" (Bedrag SG 16)"
+      "hash": "42daf7a0",
+      "text": "\"Hun har allerede sunget dit navn for Svælget, Aurek. Du er prisen for den første Tand.\""
     },
     "npcs/aurek/conversations/aunt/nodes/greet/options/lie/keywords": {
       "hash": "2e91dd13",

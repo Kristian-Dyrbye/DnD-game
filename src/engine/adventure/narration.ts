@@ -28,6 +28,9 @@ export type NarrationVisit = 'first' | 'return' | 'resume';
 /** Streams narration text for a job. Throwing or yielding nothing triggers the template. */
 export type Narrator = (job: NarrationJob, signal?: AbortSignal) => AsyncIterable<string>;
 
+/** Where narration lands: the session, or a guard around it that can drop late output. */
+export type NarrationSink = Pick<GameSession, 'reserveId' | 'emit' | 'addLog'>;
+
 /** Deterministic narration from data: facts on the way, the scene description, then arrival facts. */
 export function templateNarration(job: NarrationJob): string {
   const { m } = job.ctx.msgs ?? ENGLISH_MESSAGES;
@@ -38,15 +41,20 @@ export function templateNarration(job: NarrationJob): string {
   return [...job.facts.slice(0, cut), scene, ...job.facts.slice(cut)].join(' ');
 }
 
-/** Narrates a job into the session's story log (streaming if a narrator is given). Returns the text. */
-export async function narrateInto(session: GameSession, job: NarrationJob, narrator?: Narrator): Promise<string> {
+/**
+ * Narrates a job into the session's story log (streaming if a narrator is given). Returns the text.
+ * An aborted `signal` stops the stream (the complete sentences so far are kept) or, before it
+ * started, skips the model and logs the template text.
+ */
+export async function narrateInto(session: NarrationSink, job: NarrationJob, narrator?: Narrator, signal?: AbortSignal): Promise<string> {
   const id = session.reserveId();
   let text = '';
-  if (narrator) {
+  if (narrator && !signal?.aborted) {
     let started = false;
     let failed = false;
     try {
-      for await (const chunk of narrator(job)) {
+      for await (const chunk of narrator(job, signal)) {
+        if (signal?.aborted) throw new Error('aborted');
         if (!started) {
           session.emit({ type: 'narration', phase: 'start', entryId: id, text: '' });
           started = true;

@@ -5421,7 +5421,7 @@
               "options": [
                 {
                   "id": "haggle",
-                  "label": "\"Fifty gold is robbery, Master Moll. Twenty, and my thanks.\" (Persuasion DC 13)",
+                  "label": "\"Fifty gold is robbery, Master Moll. Twenty, and my thanks.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5487,7 +5487,7 @@
                 },
                 {
                   "id": "choir",
-                  "label": "\"You hate those singers as much as I do, don't you?\" (Insight DC 13)",
+                  "label": "\"You hate those singers as much as I do, don't you?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5542,7 +5542,7 @@
                 },
                 {
                   "id": "commandeer",
-                  "label": "\"These barges are needed by the Crown. Load them.\" (Intimidation DC 15)",
+                  "label": "\"These barges are needed by the Crown. Load them.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5618,7 +5618,7 @@
                 },
                 {
                   "id": "promise",
-                  "label": "\"Carry them now, and the Crown will pay you double when this is over.\" (Deception DC 14)",
+                  "label": "\"Carry them now, and the Crown will pay you double when this is over.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5692,7 +5692,7 @@
               "options": [
                 {
                   "id": "haggle",
-                  "label": "\"Fifty gold is robbery, Master Moll. Twenty, and my thanks.\" (Persuasion DC 13)",
+                  "label": "\"Fifty gold is robbery, Master Moll. Twenty, and my thanks.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5758,7 +5758,7 @@
                 },
                 {
                   "id": "choir",
-                  "label": "\"You hate those singers as much as I do, don't you?\" (Insight DC 13)",
+                  "label": "\"You hate those singers as much as I do, don't you?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5813,7 +5813,7 @@
                 },
                 {
                   "id": "commandeer",
-                  "label": "\"These barges are needed by the Crown. Load them.\" (Intimidation DC 15)",
+                  "label": "\"These barges are needed by the Crown. Load them.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5889,7 +5889,7 @@
                 },
                 {
                   "id": "promise",
-                  "label": "\"Carry them now, and the Crown will pay you double when this is over.\" (Deception DC 14)",
+                  "label": "\"Carry them now, and the Crown will pay you double when this is over.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6022,7 +6022,7 @@
               "options": [
                 {
                   "id": "plan",
-                  "label": "\"Wet the thatch and pull down the sheds on the southern lane. A firebreak.\" (Survival DC 13)",
+                  "label": "\"Wet the thatch and pull down the sheds on the southern lane. A firebreak.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6089,7 +6089,7 @@
                 },
                 {
                   "id": "fears",
-                  "label": "\"What are they really afraid of, Reeve?\" (Insight DC 14)",
+                  "label": "\"What are they really afraid of, Reeve?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6180,7 +6180,7 @@
                 },
                 {
                   "id": "hymn",
-                  "label": "\"Who started the humming? Who did the Choir reach first?\" (Insight DC 14)",
+                  "label": "\"Who started the humming? Who did the Choir reach first?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6242,7 +6242,7 @@
                 },
                 {
                   "id": "shame",
-                  "label": "\"You failed them once, Reeve. Do not fail them again.\" (Intimidation DC 13)",
+                  "label": "\"You failed them once, Reeve. Do not fail them again.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6374,7 +6374,7 @@
               "options": [
                 {
                   "id": "plan",
-                  "label": "\"Wet the thatch and pull down the sheds on the southern lane. A firebreak.\" (Survival DC 13)",
+                  "label": "\"Wet the thatch and pull down the sheds on the southern lane. A firebreak.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6441,7 +6441,7 @@
                 },
                 {
                   "id": "fears",
-                  "label": "\"What are they really afraid of, Reeve?\" (Insight DC 14)",
+                  "label": "\"What are they really afraid of, Reeve?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6532,7 +6532,7 @@
                 },
                 {
                   "id": "hymn",
-                  "label": "\"Who started the humming? Who did the Choir reach first?\" (Insight DC 14)",
+                  "label": "\"Who started the humming? Who did the Choir reach first?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6594,7 +6594,7 @@
                 },
                 {
                   "id": "shame",
-                  "label": "\"You failed them once, Reeve. Do not fail them again.\" (Intimidation DC 13)",
+                  "label": "\"You failed them once, Reeve. Do not fail them again.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6832,7 +6832,7 @@
               "options": [
                 {
                   "id": "lore",
-                  "label": "\"You fought her kin in the Ashfall Winter. Where is a red dragon weakest?\" (History DC 14)",
+                  "label": "\"You fought her kin in the Ashfall Winter. Where is a red dragon weakest?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6882,7 +6882,7 @@
                 },
                 {
                   "id": "captains",
-                  "label": "Ask to address Thane's doubtful captains yourself (Persuasion DC 14)",
+                  "label": "Ask to address Thane's doubtful captains yourself",
                   "once": true,
                   "if": {
                     "all": [
@@ -6941,7 +6941,7 @@
                 },
                 {
                   "id": "millbrook",
-                  "label": "\"Lend me knights for Millbrook. The Choir is marching on it.\" (Persuasion DC 15)",
+                  "label": "\"Lend me knights for Millbrook. The Choir is marching on it.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7024,7 +7024,7 @@
               "options": [
                 {
                   "id": "lore",
-                  "label": "\"You fought her kin in the Ashfall Winter. Where is a red dragon weakest?\" (History DC 14)",
+                  "label": "\"You fought her kin in the Ashfall Winter. Where is a red dragon weakest?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7074,7 +7074,7 @@
                 },
                 {
                   "id": "captains",
-                  "label": "Ask to address Thane's doubtful captains yourself (Persuasion DC 14)",
+                  "label": "Ask to address Thane's doubtful captains yourself",
                   "once": true,
                   "if": {
                     "all": [
@@ -7133,7 +7133,7 @@
                 },
                 {
                   "id": "millbrook",
-                  "label": "\"Lend me knights for Millbrook. The Choir is marching on it.\" (Persuasion DC 15)",
+                  "label": "\"Lend me knights for Millbrook. The Choir is marching on it.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7280,7 +7280,7 @@
               "options": [
                 {
                   "id": "plea",
-                  "label": "\"I saved the Crown from the Almoner. Let the Crown stop hunting me.\" (Persuasion DC 17)",
+                  "label": "\"I saved the Crown from the Almoner. Let the Crown stop hunting me.\"",
                   "once": true,
                   "if": {
                     "flag": "world.player_outlawed"
@@ -7337,7 +7337,7 @@
                 },
                 {
                   "id": "flatter",
-                  "label": "\"The royal guard would follow the Chamberlain's word, surely?\" (Persuasion DC 13)",
+                  "label": "\"The royal guard would follow the Chamberlain's word, surely?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7397,7 +7397,7 @@
                 },
                 {
                   "id": "purse",
-                  "label": "\"The Crown's treasury should pay the Deepanvil mercenaries, not me.\" (Persuasion DC 16)",
+                  "label": "\"The Crown's treasury should pay the Deepanvil mercenaries, not me.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7457,7 +7457,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"Sign the order, or I tell the Queen you ignored every warning I gave.\" (Intimidation DC 15)",
+                  "label": "\"Sign the order, or I tell the Queen you ignored every warning I gave.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7531,7 +7531,7 @@
               "options": [
                 {
                   "id": "plea",
-                  "label": "\"I saved the Crown from the Almoner. Let the Crown stop hunting me.\" (Persuasion DC 17)",
+                  "label": "\"I saved the Crown from the Almoner. Let the Crown stop hunting me.\"",
                   "once": true,
                   "if": {
                     "flag": "world.player_outlawed"
@@ -7588,7 +7588,7 @@
                 },
                 {
                   "id": "flatter",
-                  "label": "\"The royal guard would follow the Chamberlain's word, surely?\" (Persuasion DC 13)",
+                  "label": "\"The royal guard would follow the Chamberlain's word, surely?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7648,7 +7648,7 @@
                 },
                 {
                   "id": "purse",
-                  "label": "\"The Crown's treasury should pay the Deepanvil mercenaries, not me.\" (Persuasion DC 16)",
+                  "label": "\"The Crown's treasury should pay the Deepanvil mercenaries, not me.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7708,7 +7708,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"Sign the order, or I tell the Queen you ignored every warning I gave.\" (Intimidation DC 15)",
+                  "label": "\"Sign the order, or I tell the Queen you ignored every warning I gave.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7845,7 +7845,7 @@
               "options": [
                 {
                   "id": "read",
-                  "label": "\"What does the Consortium really want from this war?\" (Insight DC 14)",
+                  "label": "\"What does the Consortium really want from this war?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7929,7 +7929,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"When the Choir wins, it will eat your vaults first.\" (Intimidation DC 16)",
+                  "label": "\"When the Choir wins, it will eat your vaults first.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -7986,7 +7986,7 @@
               "options": [
                 {
                   "id": "read",
-                  "label": "\"What does the Consortium really want from this war?\" (Insight DC 14)",
+                  "label": "\"What does the Consortium really want from this war?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8070,7 +8070,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"When the Choir wins, it will eat your vaults first.\" (Intimidation DC 16)",
+                  "label": "\"When the Choir wins, it will eat your vaults first.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -8293,7 +8293,7 @@
               "options": [
                 {
                   "id": "stone",
-                  "label": "\"What is that black stone your people sing to?\" (Insight DC 15)",
+                  "label": "\"What is that black stone your people sing to?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8348,7 +8348,7 @@
                 },
                 {
                   "id": "callers",
-                  "label": "Call to his dragon-callers: \"She will burn you first. She remembers who hurt her.\" (Persuasion DC 16)",
+                  "label": "Call to his dragon-callers: \"She will burn you first. She remembers who hurt her.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8403,7 +8403,7 @@
                 },
                 {
                   "id": "plan",
-                  "label": "With his circle broken: \"Where does the Choir strike next, Vosk?\" (Intimidation DC 15)",
+                  "label": "With his circle broken: \"Where does the Choir strike next, Vosk?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8471,7 +8471,7 @@
               "options": [
                 {
                   "id": "stone",
-                  "label": "\"What is that black stone your people sing to?\" (Insight DC 15)",
+                  "label": "\"What is that black stone your people sing to?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8526,7 +8526,7 @@
                 },
                 {
                   "id": "callers",
-                  "label": "Call to his dragon-callers: \"She will burn you first. She remembers who hurt her.\" (Persuasion DC 16)",
+                  "label": "Call to his dragon-callers: \"She will burn you first. She remembers who hurt her.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8581,7 +8581,7 @@
                 },
                 {
                   "id": "plan",
-                  "label": "With his circle broken: \"Where does the Choir strike next, Vosk?\" (Intimidation DC 15)",
+                  "label": "With his circle broken: \"Where does the Choir strike next, Vosk?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8712,7 +8712,7 @@
               "options": [
                 {
                   "id": "turn",
-                  "label": "\"The Choir eats its own last, Vey. Is that the deal you want?\" (Persuasion DC 16)",
+                  "label": "\"The Choir eats its own last, Vey. Is that the deal you want?\"",
                   "once": true,
                   "keywords": [
                     "deal",
@@ -8802,7 +8802,7 @@
                 },
                 {
                   "id": "taunt",
-                  "label": "Shout to his crew: \"Your captain's already bought his passage out. Did he buy yours?\" (Intimidation DC 15)",
+                  "label": "Shout to his crew: \"Your captain's already bought his passage out. Did he buy yours?\"",
                   "once": true,
                   "keywords": [
                     "crew",
@@ -8920,7 +8920,7 @@
               "options": [
                 {
                   "id": "apologise",
-                  "label": "\"I was wrong, Corwin. Ride with me again.\" (Persuasion DC 15)",
+                  "label": "\"I was wrong, Corwin. Ride with me again.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -9086,7 +9086,7 @@
               "options": [
                 {
                   "id": "lucid",
-                  "label": "Speak past the hunger, to the dragon under it (Insight DC 16)",
+                  "label": "Speak past the hunger, to the dragon under it",
                   "once": true,
                   "if": {
                     "all": [
@@ -9136,7 +9136,7 @@
                 },
                 {
                   "id": "flatter",
-                  "label": "\"Queen of Emberpeak, eldest of the red, the Choir is not worthy of you.\" (Persuasion DC 17)",
+                  "label": "\"Queen of Emberpeak, eldest of the red, the Choir is not worthy of you.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9206,7 +9206,7 @@
                 },
                 {
                   "id": "cow",
-                  "label": "Raise Dawnbreaker: \"You remember this lance. Hold still.\" (Intimidation DC 16)",
+                  "label": "Raise Dawnbreaker: \"You remember this lance. Hold still.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9288,7 +9288,7 @@
               "options": [
                 {
                   "id": "lucid",
-                  "label": "Speak past the hunger, to the dragon under it (Insight DC 16)",
+                  "label": "Speak past the hunger, to the dragon under it",
                   "once": true,
                   "if": {
                     "all": [
@@ -9338,7 +9338,7 @@
                 },
                 {
                   "id": "flatter",
-                  "label": "\"Queen of Emberpeak, eldest of the red, the Choir is not worthy of you.\" (Persuasion DC 17)",
+                  "label": "\"Queen of Emberpeak, eldest of the red, the Choir is not worthy of you.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9408,7 +9408,7 @@
                 },
                 {
                   "id": "cow",
-                  "label": "Raise Dawnbreaker: \"You remember this lance. Hold still.\" (Intimidation DC 16)",
+                  "label": "Raise Dawnbreaker: \"You remember this lance. Hold still.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9542,7 +9542,7 @@
               "options": [
                 {
                   "id": "reward",
-                  "label": "\"The Crown's gratitude is kind, Majesty. The Crown's gold would be kinder.\" (Persuasion DC 14)",
+                  "label": "\"The Crown's gratitude is kind, Majesty. The Crown's gold would be kinder.\"",
                   "once": true,
                   "keywords": [
                     "reward",
@@ -9651,7 +9651,7 @@
               "options": [
                 {
                   "id": "reward",
-                  "label": "\"The Crown's gratitude is kind, Majesty. The Crown's gold would be kinder.\" (Persuasion DC 14)",
+                  "label": "\"The Crown's gratitude is kind, Majesty. The Crown's gold would be kinder.\"",
                   "once": true,
                   "keywords": [
                     "reward",

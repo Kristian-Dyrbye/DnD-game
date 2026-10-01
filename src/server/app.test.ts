@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import type { FastifyInstance } from 'fastify';
-import { buildApp } from './app';
+import { buildApp, originAllowed } from './app';
 import { MockLlm } from '../llm/mock';
 import { GAME_VERSION } from '../shared/version';
 import { buildCharacter } from '../engine/character/builder';
@@ -114,5 +114,25 @@ describe('asset serving', () => {
       await a.close();
       fs.rmSync(dir, { recursive: true, force: true });
     }
+  });
+});
+
+describe('game channel origin check', () => {
+  it('allows no origin and local pages, refuses foreign sites', () => {
+    expect(originAllowed(undefined)).toBe(true);
+    expect(originAllowed('http://127.0.0.1:3210')).toBe(true);
+    expect(originAllowed('http://localhost:5173')).toBe(true);
+    expect(originAllowed('https://evil.example')).toBe(false);
+    expect(originAllowed('http://127.0.0.1.evil.example')).toBe(false);
+    expect(originAllowed('not a url')).toBe(false);
+  });
+
+  it('closes a WebSocket opened by a foreign web page before any command runs', async () => {
+    app = await buildApp({ services: { llm: new MockLlm() } });
+    await app.ready();
+    const ws = await app.injectWS('/ws', { headers: { origin: 'https://evil.example' } });
+    const closed = new Promise<number>((resolve) => ws.once('close', (code) => resolve(code)));
+    ws.send(JSON.stringify({ type: 'ping', reqId: 'p1' }));
+    expect(await closed).toBe(1008);
   });
 });

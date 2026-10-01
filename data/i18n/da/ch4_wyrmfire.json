@@ -2358,8 +2358,8 @@
       "text": "En bred kvinde i et tjæreplettet forklæde står på anløbsbroen og tæller sække. \"Hvis du er her for at tigge, er svaret halvtreds guld. Hvis du er her for at købe, er svaret også halvtreds guld.\""
     },
     "npcs/barge_master_moll/conversations/barges/nodes/greet/options/haggle/label": {
-      "hash": "92223440",
-      "text": "\"Halvtreds guld er røveri, Mester Moll. Tyve, og min tak.\" (Overtalelse SG 13)"
+      "hash": "22a8b21d",
+      "text": "\"Halvtreds guld er røveri, Mester Moll. Tyve, og min tak.\""
     },
     "npcs/barge_master_moll/conversations/barges/nodes/greet/options/haggle/keywords": {
       "hash": "d9f0fc66",
@@ -2381,8 +2381,8 @@
       "text": "\"Halvtreds,\" siger Moll, \"eller svøm.\""
     },
     "npcs/barge_master_moll/conversations/barges/nodes/greet/options/choir/label": {
-      "hash": "8efabcd9",
-      "text": "\"Du hader de sangere lige så meget som jeg, gør du ikke?\" (Indsigt SG 13)"
+      "hash": "476d4393",
+      "text": "\"Du hader de sangere lige så meget som jeg, gør du ikke?\""
     },
     "npcs/barge_master_moll/conversations/barges/nodes/greet/options/choir/keywords": {
       "hash": "285fa5ce",
@@ -2405,8 +2405,8 @@
       "text": "\"Jeg hader spild,\" siger Moll. \"Og du spilder min formiddag.\""
     },
     "npcs/barge_master_moll/conversations/barges/nodes/greet/options/commandeer/label": {
-      "hash": "d1822487",
-      "text": "\"Kronen har brug for disse pramme. Læs dem.\" (Intimidering SG 15)"
+      "hash": "b7d7cbc6",
+      "text": "\"Kronen har brug for disse pramme. Læs dem.\""
     },
     "npcs/barge_master_moll/conversations/barges/nodes/greet/options/commandeer/keywords": {
       "hash": "2242d807",
@@ -2429,8 +2429,8 @@
       "text": "Moll ler dig op i ansigtet, kapper sin fortøjning og stager sig ud i strømmen. Hendes pramme er væk ned ad floden, tomme."
     },
     "npcs/barge_master_moll/conversations/barges/nodes/greet/options/promise/label": {
-      "hash": "6be74f0b",
-      "text": "\"Sejl dem nu, så betaler Kronen dig det dobbelte, når det her er overstået.\" (Bedrag SG 14)"
+      "hash": "14ea6d1f",
+      "text": "\"Sejl dem nu, så betaler Kronen dig det dobbelte, når det her er overstået.\""
     },
     "npcs/barge_master_moll/conversations/barges/nodes/greet/options/promise/keywords": {
       "hash": "0196c590",
@@ -2462,8 +2462,8 @@
       "text": "\"Andet? Floden venter ikke, og det gør jeg heller ikke.\""
     },
     "npcs/barge_master_moll/conversations/barges/nodes/more/options/haggle/label": {
-      "hash": "92223440",
-      "text": "\"Halvtreds guld er røveri, Mester Moll. Tyve, og min tak.\" (Overtalelse SG 13)"
+      "hash": "22a8b21d",
+      "text": "\"Halvtreds guld er røveri, Mester Moll. Tyve, og min tak.\""
     },
     "npcs/barge_master_moll/conversations/barges/nodes/more/options/haggle/keywords": {
       "hash": "d9f0fc66",
@@ -2485,8 +2485,8 @@
       "text": "\"Halvtreds,\" siger Moll, \"eller svøm.\""
     },
     "npcs/barge_master_moll/conversations/barges/nodes/more/options/choir/label": {
-      "hash": "8efabcd9",
-      "text": "\"Du hader de sangere lige så meget som jeg, gør du ikke?\" (Indsigt SG 13)"
+      "hash": "476d4393",
+      "text": "\"Du hader de sangere lige så meget som jeg, gør du ikke?\""
     },
     "npcs/barge_master_moll/conversations/barges/nodes/more/options/choir/keywords": {
       "hash": "285fa5ce",
@@ -2509,8 +2509,8 @@
       "text": "\"Jeg hader spild,\" siger Moll. \"Og du spilder min formiddag.\""
     },
     "npcs/barge_master_moll/conversations/barges/nodes/more/options/commandeer/label": {
-      "hash": "d1822487",
-      "text": "\"Kronen har brug for disse pramme. Læs dem.\" (Intimidering SG 15)"
+      "hash": "b7d7cbc6",
+      "text": "\"Kronen har brug for disse pramme. Læs dem.\""
     },
     "npcs/barge_master_moll/conversations/barges/nodes/more/options/commandeer/keywords": {
       "hash": "2242d807",
@@ -2533,8 +2533,8 @@
       "text": "Moll ler dig op i ansigtet, kapper sin fortøjning og stager sig ud i strømmen. Hendes pramme er væk ned ad floden, tomme."
     },
     "npcs/barge_master_moll/conversations/barges/nodes/more/options/promise/label": {
-      "hash": "6be74f0b",
-      "text": "\"Sejl dem nu, så betaler Kronen dig det dobbelte, når det her er overstået.\" (Bedrag SG 14)"
+      "hash": "14ea6d1f",
+      "text": "\"Sejl dem nu, så betaler Kronen dig det dobbelte, når det her er overstået.\""
     },
     "npcs/barge_master_moll/conversations/barges/nodes/more/options/promise/keywords": {
       "hash": "0196c590",
@@ -2603,8 +2603,8 @@
       "text": "Foged Tamsin ser ældre ud, end da du sidst så ham. \"Dragen og Koret, begge på én gang. Sig mig, hvad jeg skal gøre, så vil jeg prøve at gøre det.\""
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/greet/options/plan/label": {
-      "hash": "3ce8da70",
-      "text": "\"Væd stråtagene og riv skurene ned langs den sydlige vej. Et brandbælte.\" (Overlevelse SG 13)"
+      "hash": "3c608b30",
+      "text": "\"Væd stråtagene og riv skurene ned langs den sydlige vej. Et brandbælte.\""
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/greet/options/plan/keywords": {
       "hash": "9e3da3e6",
@@ -2628,8 +2628,8 @@
       "text": "Du vælger den forkerte vej at rydde. Da du opdager det, er halvdelen af spandene tomme."
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/greet/options/fears/label": {
-      "hash": "143fedd1",
-      "text": "\"Hvad er de i virkeligheden bange for, foged?\" (Indsigt SG 14)"
+      "hash": "0f4226a4",
+      "text": "\"Hvad er de i virkeligheden bange for, foged?\""
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/greet/options/fears/keywords": {
       "hash": "dcbee085",
@@ -2650,8 +2650,8 @@
       "text": "\"Drager,\" siger Tamsin fladt. \"Hvad ellers?\""
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/greet/options/hymn/label": {
-      "hash": "086824c3",
-      "text": "\"Hvem begyndte at nynne? Hvem nåede Koret først?\" (Indsigt SG 14)"
+      "hash": "e758e2ce",
+      "text": "\"Hvem begyndte at nynne? Hvem nåede Koret først?\""
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/greet/options/hymn/keywords": {
       "hash": "632934e6",
@@ -2675,8 +2675,8 @@
       "text": "Tamsin ryster bare på hovedet og går sin vej ned ad vejen."
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/greet/options/shame/label": {
-      "hash": "e3c2bc22",
-      "text": "\"Du svigtede dem én gang, foged. Svigt dem ikke igen.\" (Intimidering SG 13)"
+      "hash": "505b8c1f",
+      "text": "\"Du svigtede dem én gang, foged. Svigt dem ikke igen.\""
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/greet/options/shame/keywords": {
       "hash": "c9dc0e94",
@@ -2725,8 +2725,8 @@
       "text": "\"Hvad ellers?\""
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/more/options/plan/label": {
-      "hash": "3ce8da70",
-      "text": "\"Væd stråtagene og riv skurene ned langs den sydlige vej. Et brandbælte.\" (Overlevelse SG 13)"
+      "hash": "3c608b30",
+      "text": "\"Væd stråtagene og riv skurene ned langs den sydlige vej. Et brandbælte.\""
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/more/options/plan/keywords": {
       "hash": "9e3da3e6",
@@ -2750,8 +2750,8 @@
       "text": "Du vælger den forkerte vej at rydde. Da du opdager det, er halvdelen af spandene tomme."
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/more/options/fears/label": {
-      "hash": "143fedd1",
-      "text": "\"Hvad er de i virkeligheden bange for, foged?\" (Indsigt SG 14)"
+      "hash": "0f4226a4",
+      "text": "\"Hvad er de i virkeligheden bange for, foged?\""
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/more/options/fears/keywords": {
       "hash": "dcbee085",
@@ -2772,8 +2772,8 @@
       "text": "\"Drager,\" siger Tamsin fladt. \"Hvad ellers?\""
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/more/options/hymn/label": {
-      "hash": "086824c3",
-      "text": "\"Hvem begyndte at nynne? Hvem nåede Koret først?\" (Indsigt SG 14)"
+      "hash": "e758e2ce",
+      "text": "\"Hvem begyndte at nynne? Hvem nåede Koret først?\""
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/more/options/hymn/keywords": {
       "hash": "632934e6",
@@ -2797,8 +2797,8 @@
       "text": "Tamsin ryster bare på hovedet og går sin vej ned ad vejen."
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/more/options/shame/label": {
-      "hash": "e3c2bc22",
-      "text": "\"Du svigtede dem én gang, foged. Svigt dem ikke igen.\" (Intimidering SG 13)"
+      "hash": "505b8c1f",
+      "text": "\"Du svigtede dem én gang, foged. Svigt dem ikke igen.\""
     },
     "npcs/reeve_tamsin/conversations/firebreak/nodes/more/options/shame/keywords": {
       "hash": "c9dc0e94",
@@ -2916,8 +2916,8 @@
       "text": "Thane læner sig over krigsbordet, over et kort over Emberpeak, der holdes nede af dolke. \"Tal. Vi har til daggry.\""
     },
     "npcs/aldric_thane/conversations/war_table/nodes/greet/options/lore/label": {
-      "hash": "23f6236a",
-      "text": "\"De kæmpede mod hendes slægt i Askefaldsvinteren. Hvor er en rød drage svagest?\" (Historie SG 14)"
+      "hash": "855c4cdb",
+      "text": "\"De kæmpede mod hendes slægt i Askefaldsvinteren. Hvor er en rød drage svagest?\""
     },
     "npcs/aldric_thane/conversations/war_table/nodes/greet/options/lore/keywords": {
       "hash": "04a3793b",
@@ -2941,8 +2941,8 @@
       "text": "\"I hjertet,\" siger Thane tørt, \"som alt andet.\""
     },
     "npcs/aldric_thane/conversations/war_table/nodes/greet/options/captains/label": {
-      "hash": "e9c99aba",
-      "text": "Bed om selv at tale til Thanes tvivlende kaptajner (Overtalelse SG 14)"
+      "hash": "bffd12de",
+      "text": "Bed om selv at tale til Thanes tvivlende kaptajner"
     },
     "npcs/aldric_thane/conversations/war_table/nodes/greet/options/captains/keywords": {
       "hash": "9f3ab495",
@@ -2963,8 +2963,8 @@
       "text": "Kaptajnerne hører dig til ende i stenhård tavshed. En af dem gaber."
     },
     "npcs/aldric_thane/conversations/war_table/nodes/greet/options/millbrook/label": {
-      "hash": "93c98d00",
-      "text": "\"Lån mig riddere til Millbrook. Koret marcherer mod den.\" (Overtalelse SG 15)"
+      "hash": "e2565d77",
+      "text": "\"Lån mig riddere til Millbrook. Koret marcherer mod den.\""
     },
     "npcs/aldric_thane/conversations/war_table/nodes/greet/options/millbrook/keywords": {
       "hash": "4a174fb6",
@@ -2998,8 +2998,8 @@
       "text": "\"Hvad ellers?\""
     },
     "npcs/aldric_thane/conversations/war_table/nodes/more/options/lore/label": {
-      "hash": "23f6236a",
-      "text": "\"De kæmpede mod hendes slægt i Askefaldsvinteren. Hvor er en rød drage svagest?\" (Historie SG 14)"
+      "hash": "855c4cdb",
+      "text": "\"De kæmpede mod hendes slægt i Askefaldsvinteren. Hvor er en rød drage svagest?\""
     },
     "npcs/aldric_thane/conversations/war_table/nodes/more/options/lore/keywords": {
       "hash": "04a3793b",
@@ -3023,8 +3023,8 @@
       "text": "\"I hjertet,\" siger Thane tørt, \"som alt andet.\""
     },
     "npcs/aldric_thane/conversations/war_table/nodes/more/options/captains/label": {
-      "hash": "e9c99aba",
-      "text": "Bed om selv at tale til Thanes tvivlende kaptajner (Overtalelse SG 14)"
+      "hash": "bffd12de",
+      "text": "Bed om selv at tale til Thanes tvivlende kaptajner"
     },
     "npcs/aldric_thane/conversations/war_table/nodes/more/options/captains/keywords": {
       "hash": "9f3ab495",
@@ -3045,8 +3045,8 @@
       "text": "Kaptajnerne hører dig til ende i stenhård tavshed. En af dem gaber."
     },
     "npcs/aldric_thane/conversations/war_table/nodes/more/options/millbrook/label": {
-      "hash": "93c98d00",
-      "text": "\"Lån mig riddere til Millbrook. Koret marcherer mod den.\" (Overtalelse SG 15)"
+      "hash": "e2565d77",
+      "text": "\"Lån mig riddere til Millbrook. Koret marcherer mod den.\""
     },
     "npcs/aldric_thane/conversations/war_table/nodes/more/options/millbrook/keywords": {
       "hash": "4a174fb6",
@@ -3114,8 +3114,8 @@
       "text": "Kammerherre Hale sidder i det kongelige telt med en skrivepult på knæene, som om krigen var et spørgsmål om korrespondance. \"Kammerherren lytter.\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/greet/options/plea/label": {
-      "hash": "469fc05b",
-      "text": "\"Jeg reddede Kronen fra almisseforvalteren. Lad Kronen holde op med at jage mig.\" (Overtalelse SG 17)"
+      "hash": "16274510",
+      "text": "\"Jeg reddede Kronen fra almisseforvalteren. Lad Kronen holde op med at jage mig.\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/greet/options/plea/keywords": {
       "hash": "9c25200d",
@@ -3145,8 +3145,8 @@
       "text": "Hale ringer med en lille klokke, og to kongelige gardister dukker op ved teltdøren. \"Kammerherren foreslår, at De går, før han kommer i tanke om sin pligt.\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/greet/options/flatter/label": {
-      "hash": "8afd0355",
-      "text": "\"Den kongelige garde ville vel følge kammerherrens ord?\" (Overtalelse SG 13)"
+      "hash": "66677e7e",
+      "text": "\"Den kongelige garde ville vel følge kammerherrens ord?\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/greet/options/flatter/keywords": {
       "hash": "a091dbb4",
@@ -3168,8 +3168,8 @@
       "text": "\"Den kongelige garde følger dronningen,\" siger Hale koldt, \"som De burde vide.\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/greet/options/purse/label": {
-      "hash": "8bca1605",
-      "text": "\"Kronens skatkammer bør betale lejesoldaterne fra Deepanvil, ikke mig.\" (Overtalelse SG 16)"
+      "hash": "3612cee9",
+      "text": "\"Kronens skatkammer bør betale lejesoldaterne fra Deepanvil, ikke mig.\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/greet/options/purse/keywords": {
       "hash": "1847ca3a",
@@ -3192,8 +3192,8 @@
       "text": "\"Skatkammeret er tomt,\" siger Hale, \"som hele hoffet ved. Det er vel netop problemet.\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/greet/options/threaten/label": {
-      "hash": "91f10b26",
-      "text": "\"Underskriv ordren, eller jeg fortæller dronningen, at De ignorerede hver advarsel, jeg gav.\" (Intimidering SG 15)"
+      "hash": "26dab9c9",
+      "text": "\"Underskriv ordren, eller jeg fortæller dronningen, at De ignorerede hver advarsel, jeg gav.\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/greet/options/threaten/keywords": {
       "hash": "2afdfe61",
@@ -3222,8 +3222,8 @@
       "text": "\"Er der mere?\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/more/options/plea/label": {
-      "hash": "469fc05b",
-      "text": "\"Jeg reddede Kronen fra almisseforvalteren. Lad Kronen holde op med at jage mig.\" (Overtalelse SG 17)"
+      "hash": "16274510",
+      "text": "\"Jeg reddede Kronen fra almisseforvalteren. Lad Kronen holde op med at jage mig.\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/more/options/plea/keywords": {
       "hash": "9c25200d",
@@ -3253,8 +3253,8 @@
       "text": "Hale ringer med en lille klokke, og to kongelige gardister dukker op ved teltdøren. \"Kammerherren foreslår, at De går, før han kommer i tanke om sin pligt.\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/more/options/flatter/label": {
-      "hash": "8afd0355",
-      "text": "\"Den kongelige garde ville vel følge kammerherrens ord?\" (Overtalelse SG 13)"
+      "hash": "66677e7e",
+      "text": "\"Den kongelige garde ville vel følge kammerherrens ord?\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/more/options/flatter/keywords": {
       "hash": "a091dbb4",
@@ -3276,8 +3276,8 @@
       "text": "\"Den kongelige garde følger dronningen,\" siger Hale koldt, \"som De burde vide.\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/more/options/purse/label": {
-      "hash": "8bca1605",
-      "text": "\"Kronens skatkammer bør betale lejesoldaterne fra Deepanvil, ikke mig.\" (Overtalelse SG 16)"
+      "hash": "3612cee9",
+      "text": "\"Kronens skatkammer bør betale lejesoldaterne fra Deepanvil, ikke mig.\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/more/options/purse/keywords": {
       "hash": "1847ca3a",
@@ -3300,8 +3300,8 @@
       "text": "\"Skatkammeret er tomt,\" siger Hale, \"som hele hoffet ved. Det er vel netop problemet.\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/more/options/threaten/label": {
-      "hash": "91f10b26",
-      "text": "\"Underskriv ordren, eller jeg fortæller dronningen, at De ignorerede hver advarsel, jeg gav.\" (Intimidering SG 15)"
+      "hash": "26dab9c9",
+      "text": "\"Underskriv ordren, eller jeg fortæller dronningen, at De ignorerede hver advarsel, jeg gav.\""
     },
     "npcs/chamberlain_hale/conversations/envoy/nodes/more/options/threaten/keywords": {
       "hash": "2afdfe61",
@@ -3367,8 +3367,8 @@
       "text": "Ashgrove sidder på en kasse ballistabolte med sin regnskabsbog åben på knæene. \"Seks ballistaer med besætning. Spørgsmålet er, hvem der betaler.\""
     },
     "npcs/brunhild_ashgrove/conversations/ballistae/nodes/greet/options/read/label": {
-      "hash": "fe4d6205",
-      "text": "\"Hvad vil konsortiet i virkeligheden have ud af denne krig?\" (Indsigt SG 14)"
+      "hash": "bdc66d00",
+      "text": "\"Hvad vil konsortiet i virkeligheden have ud af denne krig?\""
     },
     "npcs/brunhild_ashgrove/conversations/ballistae/nodes/greet/options/read/keywords": {
       "hash": "b10a4949",
@@ -3410,8 +3410,8 @@
       "text": "Ashgroves øjne glimter. \"Skriftligt.\" Hun udfærdiger kontrakten på stedet: seks ballistaer nu, fem hundrede guld fra skatten bagefter, og konsortiet tilgiver ikke en brudt kontrakt."
     },
     "npcs/brunhild_ashgrove/conversations/ballistae/nodes/greet/options/threaten/label": {
-      "hash": "b4c5a41f",
-      "text": "\"Når Koret vinder, æder det jeres hvælvinger først.\" (Intimidering SG 16)"
+      "hash": "8ae7bb53",
+      "text": "\"Når Koret vinder, æder det jeres hvælvinger først.\""
     },
     "npcs/brunhild_ashgrove/conversations/ballistae/nodes/greet/options/threaten/keywords": {
       "hash": "4bc6e19e",
@@ -3441,8 +3441,8 @@
       "text": "\"Hvad ellers?\""
     },
     "npcs/brunhild_ashgrove/conversations/ballistae/nodes/more/options/read/label": {
-      "hash": "fe4d6205",
-      "text": "\"Hvad vil konsortiet i virkeligheden have ud af denne krig?\" (Indsigt SG 14)"
+      "hash": "bdc66d00",
+      "text": "\"Hvad vil konsortiet i virkeligheden have ud af denne krig?\""
     },
     "npcs/brunhild_ashgrove/conversations/ballistae/nodes/more/options/read/keywords": {
       "hash": "b10a4949",
@@ -3484,8 +3484,8 @@
       "text": "Ashgroves øjne glimter. \"Skriftligt.\" Hun udfærdiger kontrakten på stedet: seks ballistaer nu, fem hundrede guld fra skatten bagefter, og konsortiet tilgiver ikke en brudt kontrakt."
     },
     "npcs/brunhild_ashgrove/conversations/ballistae/nodes/more/options/threaten/label": {
-      "hash": "b4c5a41f",
-      "text": "\"Når Koret vinder, æder det jeres hvælvinger først.\" (Intimidering SG 16)"
+      "hash": "8ae7bb53",
+      "text": "\"Når Koret vinder, æder det jeres hvælvinger først.\""
     },
     "npcs/brunhild_ashgrove/conversations/ballistae/nodes/more/options/threaten/keywords": {
       "hash": "4bc6e19e",
@@ -3606,8 +3606,8 @@
       "text": "Vosk vender sine sammensyede øjne mod dig på tværs af krateret. \"De igen. Bliver De aldrig træt af at komme for sent?\""
     },
     "npcs/vosk/conversations/crater/nodes/greet/options/stone/label": {
-      "hash": "24c0e44f",
-      "text": "\"Hvad er den sorte sten, dit folk synger for?\" (Indsigt SG 15)"
+      "hash": "5c53de37",
+      "text": "\"Hvad er den sorte sten, dit folk synger for?\""
     },
     "npcs/vosk/conversations/crater/nodes/greet/options/stone/keywords": {
       "hash": "ea5d202d",
@@ -3630,8 +3630,8 @@
       "text": "\"En sten,\" siger Vosk. \"Den synger. Gør De?\""
     },
     "npcs/vosk/conversations/crater/nodes/greet/options/callers/label": {
-      "hash": "3e03f04a",
-      "text": "Råb til hans dragekaldere: \"Hun brænder jer først. Hun husker, hvem der sårede hende.\" (Overtalelse SG 16)"
+      "hash": "194865f4",
+      "text": "Råb til hans dragekaldere: \"Hun brænder jer først. Hun husker, hvem der sårede hende.\""
     },
     "npcs/vosk/conversations/crater/nodes/greet/options/callers/keywords": {
       "hash": "47c08528",
@@ -3654,8 +3654,8 @@
       "text": "Dragekalderne synger højere."
     },
     "npcs/vosk/conversations/crater/nodes/greet/options/plan/label": {
-      "hash": "571f3668",
-      "text": "Med hans kreds brudt: \"Hvor slår Koret til næste gang, Vosk?\" (Intimidering SG 15)"
+      "hash": "c1d205e7",
+      "text": "Med hans kreds brudt: \"Hvor slår Koret til næste gang, Vosk?\""
     },
     "npcs/vosk/conversations/crater/nodes/greet/options/plan/keywords": {
       "hash": "444fb4b8",
@@ -3685,8 +3685,8 @@
       "text": "\"Andet?\" siger Vosk og nynner en takt af hymnen."
     },
     "npcs/vosk/conversations/crater/nodes/more/options/stone/label": {
-      "hash": "24c0e44f",
-      "text": "\"Hvad er den sorte sten, dit folk synger for?\" (Indsigt SG 15)"
+      "hash": "5c53de37",
+      "text": "\"Hvad er den sorte sten, dit folk synger for?\""
     },
     "npcs/vosk/conversations/crater/nodes/more/options/stone/keywords": {
       "hash": "ea5d202d",
@@ -3709,8 +3709,8 @@
       "text": "\"En sten,\" siger Vosk. \"Den synger. Gør De?\""
     },
     "npcs/vosk/conversations/crater/nodes/more/options/callers/label": {
-      "hash": "3e03f04a",
-      "text": "Råb til hans dragekaldere: \"Hun brænder jer først. Hun husker, hvem der sårede hende.\" (Overtalelse SG 16)"
+      "hash": "194865f4",
+      "text": "Råb til hans dragekaldere: \"Hun brænder jer først. Hun husker, hvem der sårede hende.\""
     },
     "npcs/vosk/conversations/crater/nodes/more/options/callers/keywords": {
       "hash": "47c08528",
@@ -3733,8 +3733,8 @@
       "text": "Dragekalderne synger højere."
     },
     "npcs/vosk/conversations/crater/nodes/more/options/plan/label": {
-      "hash": "571f3668",
-      "text": "Med hans kreds brudt: \"Hvor slår Koret til næste gang, Vosk?\" (Intimidering SG 15)"
+      "hash": "c1d205e7",
+      "text": "Med hans kreds brudt: \"Hvor slår Koret til næste gang, Vosk?\""
     },
     "npcs/vosk/conversations/crater/nodes/more/options/plan/keywords": {
       "hash": "444fb4b8",
@@ -3798,8 +3798,8 @@
       "text": "Harrow Vey læner sig op ad paladsets springvand med sine pirater omkring sig. \"Lille verden. Kommet for at snakke eller kommet for at dø?\""
     },
     "npcs/harrow_vey/conversations/court/nodes/greet/options/turn/label": {
-      "hash": "123f697e",
-      "text": "\"Koret æder sine egne til sidst, Vey. Er det den handel, du vil have?\" (Overtalelse SG 16)"
+      "hash": "16d9c4f0",
+      "text": "\"Koret æder sine egne til sidst, Vey. Er det den handel, du vil have?\""
     },
     "npcs/harrow_vey/conversations/court/nodes/greet/options/turn/keywords": {
       "hash": "166c3424",
@@ -3844,8 +3844,8 @@
       "text": "Vey vejer pungen i hånden, griner og bukker. \"Altid en fornøjelse at gøre forretninger, min kære.\" Han og hans pirater opløses i røgen."
     },
     "npcs/harrow_vey/conversations/court/nodes/greet/options/taunt/label": {
-      "hash": "3c979270",
-      "text": "Råb til hans mandskab: \"Jeres kaptajn har allerede købt sin egen overfart ud herfra. Har han købt jeres?\" (Intimidering SG 15)"
+      "hash": "e437d03f",
+      "text": "Råb til hans mandskab: \"Jeres kaptajn har allerede købt sin egen overfart ud herfra. Har han købt jeres?\""
     },
     "npcs/harrow_vey/conversations/court/nodes/greet/options/taunt/keywords": {
       "hash": "2b02a4d4",
@@ -3916,8 +3916,8 @@
       "text": "Ser Corwin står blandt ordenens riddere i en lånt våbenkjortel. \"Du ønskede at tale med mig?\""
     },
     "npcs/ser_corwin/conversations/amends/nodes/greet/options/apologise/label": {
-      "hash": "3dc39c9d",
-      "text": "\"Jeg tog fejl, Corwin. Rid med mig igen.\" (Overtalelse SG 15)"
+      "hash": "9d583800",
+      "text": "\"Jeg tog fejl, Corwin. Rid med mig igen.\""
     },
     "npcs/ser_corwin/conversations/amends/nodes/greet/options/apologise/keywords": {
       "hash": "3807cdb5",
@@ -4027,8 +4027,8 @@
       "text": "Det store røde hoved svinger mod dig, og skatten flytter sig som et tidevand af mønter. \"Tal, lille ting, før jeg kommer i tanke om, at jeg er sulten.\""
     },
     "npcs/pyrraxis/conversations/wyrm/nodes/greet/options/lucid/label": {
-      "hash": "8e5fec68",
-      "text": "Tal forbi sulten, til dragen under den (Indsigt SG 16)"
+      "hash": "37129bd3",
+      "text": "Tal forbi sulten, til dragen under den"
     },
     "npcs/pyrraxis/conversations/wyrm/nodes/greet/options/lucid/keywords": {
       "hash": "e3ebe262",
@@ -4050,8 +4050,8 @@
       "text": "Der er intet i hendes øjne ud over ild."
     },
     "npcs/pyrraxis/conversations/wyrm/nodes/greet/options/flatter/label": {
-      "hash": "dc2a0a15",
-      "text": "\"Dronning af Emberpeak, ældst af de røde, Koret er dig ikke værdigt.\" (Overtalelse SG 17)"
+      "hash": "a64d33a2",
+      "text": "\"Dronning af Emberpeak, ældst af de røde, Koret er dig ikke værdigt.\""
     },
     "npcs/pyrraxis/conversations/wyrm/nodes/greet/options/flatter/keywords": {
       "hash": "797720cc",
@@ -4073,8 +4073,8 @@
       "text": "\"Smiger,\" hvæser Pyrraxis, \"fra en tyv i mit hus.\" Hendes hale piskes gennem mønterne og rammer dig."
     },
     "npcs/pyrraxis/conversations/wyrm/nodes/greet/options/cow/label": {
-      "hash": "39722cb9",
-      "text": "Løft Daggrybryderen: \"Du husker denne lanse. Hold dig i ro.\" (Intimidering SG 16)"
+      "hash": "409e049d",
+      "text": "Løft Daggrybryderen: \"Du husker denne lanse. Hold dig i ro.\""
     },
     "npcs/pyrraxis/conversations/wyrm/nodes/greet/options/cow/keywords": {
       "hash": "48857b3f",
@@ -4104,8 +4104,8 @@
       "text": "\"Nå?\""
     },
     "npcs/pyrraxis/conversations/wyrm/nodes/more/options/lucid/label": {
-      "hash": "8e5fec68",
-      "text": "Tal forbi sulten, til dragen under den (Indsigt SG 16)"
+      "hash": "37129bd3",
+      "text": "Tal forbi sulten, til dragen under den"
     },
     "npcs/pyrraxis/conversations/wyrm/nodes/more/options/lucid/keywords": {
       "hash": "e3ebe262",
@@ -4127,8 +4127,8 @@
       "text": "Der er intet i hendes øjne ud over ild."
     },
     "npcs/pyrraxis/conversations/wyrm/nodes/more/options/flatter/label": {
-      "hash": "dc2a0a15",
-      "text": "\"Dronning af Emberpeak, ældst af de røde, Koret er dig ikke værdigt.\" (Overtalelse SG 17)"
+      "hash": "a64d33a2",
+      "text": "\"Dronning af Emberpeak, ældst af de røde, Koret er dig ikke værdigt.\""
     },
     "npcs/pyrraxis/conversations/wyrm/nodes/more/options/flatter/keywords": {
       "hash": "797720cc",
@@ -4150,8 +4150,8 @@
       "text": "\"Smiger,\" hvæser Pyrraxis, \"fra en tyv i mit hus.\" Hendes hale piskes gennem mønterne og rammer dig."
     },
     "npcs/pyrraxis/conversations/wyrm/nodes/more/options/cow/label": {
-      "hash": "39722cb9",
-      "text": "Løft Daggrybryderen: \"Du husker denne lanse. Hold dig i ro.\" (Intimidering SG 16)"
+      "hash": "409e049d",
+      "text": "Løft Daggrybryderen: \"Du husker denne lanse. Hold dig i ro.\""
     },
     "npcs/pyrraxis/conversations/wyrm/nodes/more/options/cow/keywords": {
       "hash": "48857b3f",
@@ -4214,8 +4214,8 @@
       "text": "Isolde sidder på trinene til sin tronforhøjning med sod på kjolen. \"Sæt Dem, hvis De vil. Der er ingen ceremonier tilbage i dag.\""
     },
     "npcs/queen_isolde/conversations/aftermath/nodes/greet/options/reward/label": {
-      "hash": "6e9a2b3e",
-      "text": "\"Kronens taknemmelighed er venlig, Majestæt. Kronens guld ville være venligere.\" (Overtalelse SG 14)"
+      "hash": "4ed2feba",
+      "text": "\"Kronens taknemmelighed er venlig, Majestæt. Kronens guld ville være venligere.\""
     },
     "npcs/queen_isolde/conversations/aftermath/nodes/greet/options/reward/keywords": {
       "hash": "76937f46",
@@ -4279,8 +4279,8 @@
       "text": "\"Er der mere?\""
     },
     "npcs/queen_isolde/conversations/aftermath/nodes/more/options/reward/label": {
-      "hash": "6e9a2b3e",
-      "text": "\"Kronens taknemmelighed er venlig, Majestæt. Kronens guld ville være venligere.\" (Overtalelse SG 14)"
+      "hash": "4ed2feba",
+      "text": "\"Kronens taknemmelighed er venlig, Majestæt. Kronens guld ville være venligere.\""
     },
     "npcs/queen_isolde/conversations/aftermath/nodes/more/options/reward/keywords": {
       "hash": "76937f46",

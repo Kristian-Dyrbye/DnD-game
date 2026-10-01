@@ -201,7 +201,14 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
     return { ok: true };
   });
   app.register(async (scope) => {
-    scope.get('/ws', { websocket: true }, (socket) => {
+    scope.get('/ws', { websocket: true }, (socket, req) => {
+      // Browsers let any web page open a WebSocket to localhost, so only pages served from this
+      // machine may drive the game (non-browser clients send no Origin).
+      if (!originAllowed(req.headers.origin)) {
+        app.log.warn({ origin: req.headers.origin }, 'Refused a game channel from a foreign origin');
+        socket.close(1008, 'Origin not allowed');
+        return;
+      }
       const off = host.on((e) => socket.send(JSON.stringify(e)));
       socket.on('close', off);
       socket.on('message', (raw: Buffer) => {
@@ -233,6 +240,17 @@ export async function buildApp(opts: AppOptions = {}): Promise<FastifyInstance> 
   }
 
   return app;
+}
+
+/** True for no Origin header (non-browser clients) or a page served from this machine (any port). */
+export function originAllowed(origin: string | undefined): boolean {
+  if (origin === undefined) return true;
+  try {
+    const host = new URL(origin).hostname;
+    return host === 'localhost' || host === '127.0.0.1' || host === '[::1]' || host === '::1';
+  } catch {
+    return false;
+  }
 }
 
 declare module 'fastify' {

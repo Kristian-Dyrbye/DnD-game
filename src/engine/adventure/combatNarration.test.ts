@@ -124,3 +124,66 @@ describe('combat narration in the session', () => {
     expect(jobs).toEqual([]);
   });
 });
+
+describe('settling the queue when a fight ends', () => {
+  it('stops the running job at its last full sentence, narrates the waiting job from its facts, and logs both before the caller continues', async () => {
+    const logged: string[] = [];
+    const session = { reserveId: () => logged.length + 1, emit: () => undefined, addLog: (_k: string, text: string) => logged.push(text) } as unknown as GameSession;
+    const job = (f: string): NarrationJob => ({ kind: 'combat', facts: [f], ctx: { msgs: undefined } as unknown as NarrationJob['ctx'] });
+    let aborted = false;
+    const narrator: Narrator = async function* (job: NarrationJob, signal?: AbortSignal) {
+      if (job.facts[0] === 'Round two.') {
+        yield 'Round two.';
+        return;
+      }
+      yield 'The ogre swings. ';
+      yield 'The club lands';
+      await new Promise<void>((resolve) => signal?.addEventListener('abort', () => resolve(), { once: true }));
+      aborted = true;
+      throw new Error('aborted');
+    };
+    const q = new CombatNarrationQueue(narrator);
+    q.push(session, job('Ogre hits Sabine.'));
+    await new Promise((r) => setTimeout(r, 0));
+    q.push(session, job('Sabine falls.'));
+    await q.settle();
+    expect(aborted).toBe(true);
+    expect(logged).toEqual(['The ogre swings.', 'Sabine falls.']);
+    // The queue works again afterwards (the next fight).
+    q.push(session, job('Round two.'));
+    await q.idle();
+    expect(logged.at(-1)).toBe('Round two.');
+  });
+});
+
+describe('settling with a narrator that ignores the abort', () => {
+  it('gives up after the settle timeout and drops the late output', async () => {
+    const logged: string[] = [];
+    const session = { reserveId: () => logged.length + 1, emit: () => undefined, addLog: (_k: string, text: string) => logged.push(text) } as unknown as GameSession;
+    const job = (f: string): NarrationJob => ({ kind: 'combat', facts: [f], ctx: { msgs: undefined } as unknown as NarrationJob['ctx'] });
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    const stubborn: Narrator = async function* (j: NarrationJob) {
+      if (j.facts[0] === 'Stuck.') {
+        yield 'Still thinking. ';
+        await gate; // ignores the signal
+        yield 'Too late.';
+        return;
+      }
+      yield j.facts.join(' ');
+    };
+    const q = new CombatNarrationQueue(stubborn, 50);
+    q.push(session, job('Stuck.'));
+    await new Promise((r) => setTimeout(r, 0));
+    const started = Date.now();
+    await q.settle();
+    expect(Date.now() - started).toBeLessThan(1000);
+    expect(logged).toEqual([]);
+    // The next fight's narration works, and the stuck job's late text never lands.
+    q.push(session, job('Next fight.'));
+    await q.idle();
+    release();
+    await new Promise((r) => setTimeout(r, 0));
+    expect(logged).toEqual(['Next fight.']);
+  });
+});

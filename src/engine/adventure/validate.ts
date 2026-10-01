@@ -9,6 +9,9 @@ import type { SrdDatabase } from '../data/srd';
 import { FlagRegistry, isNamespaced, resolveAdventureFlags, type FlagValue } from '../world/flags';
 import { AdventureSchema, type Action, type Adventure, type Outcome, type Scene } from './schema';
 
+/** A trailing "(Skill DC n)" / "(Færdighed SG n)" tag in an authored label (the runner adds its own). */
+const CHECK_TAG = /\s*\([^()]*\b(?:DC|SG) \d+\)\s*$/;
+
 export interface ValidationResult {
   ok: boolean;
   adventure?: Adventure;
@@ -72,8 +75,14 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
     if (o.texts && o.texts.some((t) => !t.trim())) errors.push(`${where}: empty entry in texts`);
     for (const c of o.conditions) if (c.remove && c.minutes) warnings.push(`${where}: condition ${c.condition} has minutes but removes it`);
   };
+  // The game appends "(Skill DC n)" to every button with a check; a label that already ends with
+  // such a tag would show it twice (review 2026-10-01: 95 labels did).
+  const checkTag = (label: string, id: string, where: string) => {
+    if (CHECK_TAG.test(label)) errors.push(`${where}: "${id}" label ends with a check tag "${label.match(CHECK_TAG)![0].trim()}"; the game adds the skill and DC itself`);
+  };
   const action = (a: Action, where: string) => {
     if (!a.check && !a.outcome) warnings.push(`${where}: action "${a.id}" has no check or outcome`);
+    checkTag(a.label, a.id, where);
     outcome(a.outcome, `${where}.${a.id}`);
     outcome(a.check?.success, `${where}.${a.id}.success`);
     outcome(a.check?.failure, `${where}.${a.id}.failure`);
@@ -85,6 +94,7 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
     for (const n of s.npcs) if (!npcIds.has(n)) errors.push(`${where}: unknown npc "${n}"`);
     for (const e of s.exits) {
       if (!sceneIds.has(e.to)) errors.push(`${where}: exit "${e.id}" leads to unknown scene "${e.to}"`);
+      checkTag(e.label, `exit.${e.id}`, where);
       outcome(e.check?.failure, `${where}.exit.${e.id}.failure`);
     }
     for (const a of s.actions) action(a, where);
@@ -143,6 +153,7 @@ export function validateAdventure(raw: unknown, db?: SrdDatabase, registry?: Fla
           const at = `${where} node ${node.id} option ${o.id}`;
           for (const target of [o.next, o.nextOnFail]) if (target && !nodeIds.has(target)) errors.push(`${at}: next node "${target}" does not exist`);
           if (o.nextOnFail && !o.check) warnings.push(`${at}: nextOnFail without a check`);
+          checkTag(o.label, o.id, `${where} node ${node.id} option`);
           outcome(o.outcome, at);
           outcome(o.check?.success, `${at}.success`);
           outcome(o.check?.failure, `${at}.failure`);

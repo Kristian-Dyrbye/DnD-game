@@ -195,6 +195,8 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
   };
 
   const endFight = async (session: GameSession, ctx: RunContext, how: FightEnd) => {
+    // Background combat narration must not land after the victory/defeat line (review 2026-10-01).
+    await combatVoice.settle();
     const res = finishFight(ctx, how, { db: db!, rng: session.rng, ...(opts.lore && { lore: opts.lore }), ...(opts.flags && { flags: opts.flags }), ...(opts.defeats && { defeats: opts.defeats }) });
     emitFight(session);
     const { m } = session.msgs;

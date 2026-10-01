@@ -5013,7 +5013,7 @@
               "options": [
                 {
                   "id": "godmother",
-                  "label": "\"How well do you know Lady Seraphine, Majesty?\" (Insight DC 14)",
+                  "label": "\"How well do you know Lady Seraphine, Majesty?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5062,7 +5062,7 @@
                 },
                 {
                   "id": "debt",
-                  "label": "\"The Crown owes the Ironvault, Majesty. Let me carry your word to them.\" (Persuasion DC 15)",
+                  "label": "\"The Crown owes the Ironvault, Majesty. Let me carry your word to them.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5118,7 +5118,7 @@
                 },
                 {
                   "id": "warn",
-                  "label": "\"Someone close to you serves the Choir, Majesty. Guard your cup.\" (Persuasion DC 16)",
+                  "label": "\"Someone close to you serves the Choir, Majesty. Guard your cup.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5237,7 +5237,7 @@
               "options": [
                 {
                   "id": "godmother",
-                  "label": "\"How well do you know Lady Seraphine, Majesty?\" (Insight DC 14)",
+                  "label": "\"How well do you know Lady Seraphine, Majesty?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5286,7 +5286,7 @@
                 },
                 {
                   "id": "debt",
-                  "label": "\"The Crown owes the Ironvault, Majesty. Let me carry your word to them.\" (Persuasion DC 15)",
+                  "label": "\"The Crown owes the Ironvault, Majesty. Let me carry your word to them.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5342,7 +5342,7 @@
                 },
                 {
                   "id": "warn",
-                  "label": "\"Someone close to you serves the Choir, Majesty. Guard your cup.\" (Persuasion DC 16)",
+                  "label": "\"Someone close to you serves the Choir, Majesty. Guard your cup.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5541,7 +5541,7 @@
               "options": [
                 {
                   "id": "almonry",
-                  "label": "\"Tell me about the Almonry's work, my lady.\" (Insight DC 15)",
+                  "label": "\"Tell me about the Almonry's work, my lady.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5591,7 +5591,7 @@
                 },
                 {
                   "id": "winter",
-                  "label": "\"Where were you in the Ashfall Winter, my lady?\" (History DC 14)",
+                  "label": "\"Where were you in the Ashfall Winter, my lady?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5641,7 +5641,7 @@
                 },
                 {
                   "id": "grateful",
-                  "label": "Play the grateful hero: \"Might the Almonry help fund my hunt?\" (Deception DC 15)",
+                  "label": "Play the grateful hero: \"Might the Almonry help fund my hunt?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5772,7 +5772,7 @@
               "options": [
                 {
                   "id": "almonry",
-                  "label": "\"Tell me about the Almonry's work, my lady.\" (Insight DC 15)",
+                  "label": "\"Tell me about the Almonry's work, my lady.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5822,7 +5822,7 @@
                 },
                 {
                   "id": "winter",
-                  "label": "\"Where were you in the Ashfall Winter, my lady?\" (History DC 14)",
+                  "label": "\"Where were you in the Ashfall Winter, my lady?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5872,7 +5872,7 @@
                 },
                 {
                   "id": "grateful",
-                  "label": "Play the grateful hero: \"Might the Almonry help fund my hunt?\" (Deception DC 15)",
+                  "label": "Play the grateful hero: \"Might the Almonry help fund my hunt?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6055,7 +6055,7 @@
               "options": [
                 {
                   "id": "flatter",
-                  "label": "\"The Chamberlain's good sense is spoken of even in the Isles.\" (Persuasion DC 13)",
+                  "label": "\"The Chamberlain's good sense is spoken of even in the Isles.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6104,7 +6104,7 @@
                 },
                 {
                   "id": "almonry",
-                  "label": "\"You have doubts about the Almonry's spending, don't you?\" (Insight DC 14)",
+                  "label": "\"You have doubts about the Almonry's spending, don't you?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6154,7 +6154,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"Keep whispering about my pirate friends, Chamberlain, and they may come to visit.\" (Intimidation DC 15)",
+                  "label": "\"Keep whispering about my pirate friends, Chamberlain, and they may come to visit.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6266,7 +6266,7 @@
               "options": [
                 {
                   "id": "flatter",
-                  "label": "\"The Chamberlain's good sense is spoken of even in the Isles.\" (Persuasion DC 13)",
+                  "label": "\"The Chamberlain's good sense is spoken of even in the Isles.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6315,7 +6315,7 @@
                 },
                 {
                   "id": "almonry",
-                  "label": "\"You have doubts about the Almonry's spending, don't you?\" (Insight DC 14)",
+                  "label": "\"You have doubts about the Almonry's spending, don't you?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6365,7 +6365,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"Keep whispering about my pirate friends, Chamberlain, and they may come to visit.\" (Intimidation DC 15)",
+                  "label": "\"Keep whispering about my pirate friends, Chamberlain, and they may come to visit.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6477,7 +6477,7 @@
               "options": [
                 {
                   "id": "flatter",
-                  "label": "\"The Chamberlain's good sense is spoken of even in the Isles.\" (Persuasion DC 13)",
+                  "label": "\"The Chamberlain's good sense is spoken of even in the Isles.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6526,7 +6526,7 @@
                 },
                 {
                   "id": "almonry",
-                  "label": "\"You have doubts about the Almonry's spending, don't you?\" (Insight DC 14)",
+                  "label": "\"You have doubts about the Almonry's spending, don't you?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6576,7 +6576,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"Keep whispering about my pirate friends, Chamberlain, and they may come to visit.\" (Intimidation DC 15)",
+                  "label": "\"Keep whispering about my pirate friends, Chamberlain, and they may come to visit.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6688,7 +6688,7 @@
               "options": [
                 {
                   "id": "flatter",
-                  "label": "\"The Chamberlain's good sense is spoken of even in the Isles.\" (Persuasion DC 13)",
+                  "label": "\"The Chamberlain's good sense is spoken of even in the Isles.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6737,7 +6737,7 @@
                 },
                 {
                   "id": "almonry",
-                  "label": "\"You have doubts about the Almonry's spending, don't you?\" (Insight DC 14)",
+                  "label": "\"You have doubts about the Almonry's spending, don't you?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6787,7 +6787,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"Keep whispering about my pirate friends, Chamberlain, and they may come to visit.\" (Intimidation DC 15)",
+                  "label": "\"Keep whispering about my pirate friends, Chamberlain, and they may come to visit.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6971,7 +6971,7 @@
               "options": [
                 {
                   "id": "father",
-                  "label": "\"Your father studied the Teeth, didn't he?\" (History DC 13)",
+                  "label": "\"Your father studied the Teeth, didn't he?\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -7017,7 +7017,7 @@
                 },
                 {
                   "id": "aunt",
-                  "label": "\"Does your aunt know you are talking to me?\" (Insight DC 14)",
+                  "label": "\"Does your aunt know you are talking to me?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7066,7 +7066,7 @@
                 },
                 {
                   "id": "scare",
-                  "label": "\"Your aunt is the Cantor, boy. Choose a side.\" (Intimidation DC 12)",
+                  "label": "\"Your aunt is the Cantor, boy. Choose a side.\"",
                   "once": true,
                   "if": {
                     "any": [
@@ -7127,7 +7127,7 @@
               "options": [
                 {
                   "id": "father",
-                  "label": "\"Your father studied the Teeth, didn't he?\" (History DC 13)",
+                  "label": "\"Your father studied the Teeth, didn't he?\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -7173,7 +7173,7 @@
                 },
                 {
                   "id": "aunt",
-                  "label": "\"Does your aunt know you are talking to me?\" (Insight DC 14)",
+                  "label": "\"Does your aunt know you are talking to me?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7222,7 +7222,7 @@
                 },
                 {
                   "id": "scare",
-                  "label": "\"Your aunt is the Cantor, boy. Choose a side.\" (Intimidation DC 12)",
+                  "label": "\"Your aunt is the Cantor, boy. Choose a side.\"",
                   "once": true,
                   "if": {
                     "any": [
@@ -7379,7 +7379,7 @@
               "options": [
                 {
                   "id": "read",
-                  "label": "\"Why does a scholar serve hunger, Vosk?\" (Insight DC 15)",
+                  "label": "\"Why does a scholar serve hunger, Vosk?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7428,7 +7428,7 @@
                 },
                 {
                   "id": "fanatics",
-                  "label": "Speak past him to his fanatics: \"He will feed you to it first.\" (Persuasion DC 16)",
+                  "label": "Speak past him to his fanatics: \"He will feed you to it first.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7477,7 +7477,7 @@
                 },
                 {
                   "id": "walk",
-                  "label": "\"You cannot lift the lance, and you will not take the Tooth. Walk away.\" (Intimidation DC 17)",
+                  "label": "\"You cannot lift the lance, and you will not take the Tooth. Walk away.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7523,7 +7523,7 @@
                 },
                 {
                   "id": "trade",
-                  "label": "\"Keep the Tooth, then. Leave the lance.\" (Persuasion DC 14)",
+                  "label": "\"Keep the Tooth, then. Leave the lance.\"",
                   "once": true,
                   "if": {
                     "flag": "~ch3_race_lost"
@@ -7585,7 +7585,7 @@
               "options": [
                 {
                   "id": "read",
-                  "label": "\"Why does a scholar serve hunger, Vosk?\" (Insight DC 15)",
+                  "label": "\"Why does a scholar serve hunger, Vosk?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7634,7 +7634,7 @@
                 },
                 {
                   "id": "fanatics",
-                  "label": "Speak past him to his fanatics: \"He will feed you to it first.\" (Persuasion DC 16)",
+                  "label": "Speak past him to his fanatics: \"He will feed you to it first.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7683,7 +7683,7 @@
                 },
                 {
                   "id": "walk",
-                  "label": "\"You cannot lift the lance, and you will not take the Tooth. Walk away.\" (Intimidation DC 17)",
+                  "label": "\"You cannot lift the lance, and you will not take the Tooth. Walk away.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7729,7 +7729,7 @@
                 },
                 {
                   "id": "trade",
-                  "label": "\"Keep the Tooth, then. Leave the lance.\" (Persuasion DC 14)",
+                  "label": "\"Keep the Tooth, then. Leave the lance.\"",
                   "once": true,
                   "if": {
                     "flag": "~ch3_race_lost"
@@ -7834,7 +7834,7 @@
               "options": [
                 {
                   "id": "winter",
-                  "label": "\"Tell me about the Ashfall Winter, Lord-Commander.\" (Insight DC 15)",
+                  "label": "\"Tell me about the Ashfall Winter, Lord-Commander.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7889,7 +7889,7 @@
                 },
                 {
                   "id": "corwin",
-                  "label": "\"Ser Corwin did what the Order would not. Hear him out.\" (Persuasion DC 14)",
+                  "label": "\"Ser Corwin did what the Order would not. Hear him out.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7953,7 +7953,7 @@
                 },
                 {
                   "id": "muster",
-                  "label": "\"When the Choir moves, will the Lance ride with me?\" (Persuasion DC 15)",
+                  "label": "\"When the Choir moves, will the Lance ride with me?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8028,7 +8028,7 @@
                 },
                 {
                   "id": "rebuke",
-                  "label": "\"You left Cinderdale to starve. Do not leave Highcrown.\" (Intimidation DC 14)",
+                  "label": "\"You left Cinderdale to starve. Do not leave Highcrown.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8103,7 +8103,7 @@
               "options": [
                 {
                   "id": "winter",
-                  "label": "\"Tell me about the Ashfall Winter, Lord-Commander.\" (Insight DC 15)",
+                  "label": "\"Tell me about the Ashfall Winter, Lord-Commander.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8158,7 +8158,7 @@
                 },
                 {
                   "id": "corwin",
-                  "label": "\"Ser Corwin did what the Order would not. Hear him out.\" (Persuasion DC 14)",
+                  "label": "\"Ser Corwin did what the Order would not. Hear him out.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8222,7 +8222,7 @@
                 },
                 {
                   "id": "muster",
-                  "label": "\"When the Choir moves, will the Lance ride with me?\" (Persuasion DC 15)",
+                  "label": "\"When the Choir moves, will the Lance ride with me?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8297,7 +8297,7 @@
                 },
                 {
                   "id": "rebuke",
-                  "label": "\"You left Cinderdale to starve. Do not leave Highcrown.\" (Intimidation DC 14)",
+                  "label": "\"You left Cinderdale to starve. Do not leave Highcrown.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8675,7 +8675,7 @@
               "options": [
                 {
                   "id": "fear",
-                  "label": "\"The Almonry's loans frighten you. Why?\" (Insight DC 14)",
+                  "label": "\"The Almonry's loans frighten you. Why?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8730,7 +8730,7 @@
                 },
                 {
                   "id": "haggle",
-                  "label": "\"Clearing a mine is worth double, Guildmistress.\" (Persuasion DC 15)",
+                  "label": "\"Clearing a mine is worth double, Guildmistress.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8785,7 +8785,7 @@
                 },
                 {
                   "id": "bluff",
-                  "label": "\"The Queen sent me to audit the Consortium.\" (Deception DC 16)",
+                  "label": "\"The Queen sent me to audit the Consortium.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8895,7 +8895,7 @@
               "options": [
                 {
                   "id": "fear",
-                  "label": "\"The Almonry's loans frighten you. Why?\" (Insight DC 14)",
+                  "label": "\"The Almonry's loans frighten you. Why?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8950,7 +8950,7 @@
                 },
                 {
                   "id": "haggle",
-                  "label": "\"Clearing a mine is worth double, Guildmistress.\" (Persuasion DC 15)",
+                  "label": "\"Clearing a mine is worth double, Guildmistress.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9005,7 +9005,7 @@
                 },
                 {
                   "id": "bluff",
-                  "label": "\"The Queen sent me to audit the Consortium.\" (Deception DC 16)",
+                  "label": "\"The Queen sent me to audit the Consortium.\"",
                   "once": true,
                   "if": {
                     "all": [

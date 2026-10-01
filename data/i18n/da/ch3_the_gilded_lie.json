@@ -2172,8 +2172,8 @@
       "text": "Isolde vifter sine hofdamer et par skridt tilbage. \"De har et kvarter. Hale vil sige, at jeg ikke har tid til det.\""
     },
     "npcs/queen_isolde/conversations/petition/nodes/greet/options/godmother/label": {
-      "hash": "7110da6e",
-      "text": "\"Hvor godt kender Deres Majestæt lady Seraphine?\" (Indsigt SG 14)"
+      "hash": "d3aea07b",
+      "text": "\"Hvor godt kender Deres Majestæt lady Seraphine?\""
     },
     "npcs/queen_isolde/conversations/petition/nodes/greet/options/godmother/keywords": {
       "hash": "b226bd28",
@@ -2194,8 +2194,8 @@
       "text": "\"Hun opdrog mig,\" siger dronningen, og dermed er den sag slut."
     },
     "npcs/queen_isolde/conversations/petition/nodes/greet/options/debt/label": {
-      "hash": "cbed65fe",
-      "text": "\"Kronen skylder Jernhvælvet penge, Majestæt. Lad mig bringe dem Deres ord.\" (Overtalelse SG 15)"
+      "hash": "989b68d1",
+      "text": "\"Kronen skylder Jernhvælvet penge, Majestæt. Lad mig bringe dem Deres ord.\""
     },
     "npcs/queen_isolde/conversations/petition/nodes/greet/options/debt/keywords": {
       "hash": "ee7eca8f",
@@ -2217,8 +2217,8 @@
       "text": "Dronningens ansigt lukker sig. \"Kronens gæld er Kronens sag.\" Hoffet hørte dig spørge."
     },
     "npcs/queen_isolde/conversations/petition/nodes/greet/options/warn/label": {
-      "hash": "3599acf0",
-      "text": "\"En af Deres nærmeste tjener Koret, Majestæt. Vogt Deres bæger.\" (Overtalelse SG 16)"
+      "hash": "9b84d24a",
+      "text": "\"En af Deres nærmeste tjener Koret, Majestæt. Vogt Deres bæger.\""
     },
     "npcs/queen_isolde/conversations/petition/nodes/greet/options/warn/keywords": {
       "hash": "876d1b08",
@@ -2268,8 +2268,8 @@
       "text": "\"Er der mere?\""
     },
     "npcs/queen_isolde/conversations/petition/nodes/more/options/godmother/label": {
-      "hash": "7110da6e",
-      "text": "\"Hvor godt kender Deres Majestæt lady Seraphine?\" (Indsigt SG 14)"
+      "hash": "d3aea07b",
+      "text": "\"Hvor godt kender Deres Majestæt lady Seraphine?\""
     },
     "npcs/queen_isolde/conversations/petition/nodes/more/options/godmother/keywords": {
       "hash": "b226bd28",
@@ -2290,8 +2290,8 @@
       "text": "\"Hun opdrog mig,\" siger dronningen, og dermed er den sag slut."
     },
     "npcs/queen_isolde/conversations/petition/nodes/more/options/debt/label": {
-      "hash": "cbed65fe",
-      "text": "\"Kronen skylder Jernhvælvet penge, Majestæt. Lad mig bringe dem Deres ord.\" (Overtalelse SG 15)"
+      "hash": "989b68d1",
+      "text": "\"Kronen skylder Jernhvælvet penge, Majestæt. Lad mig bringe dem Deres ord.\""
     },
     "npcs/queen_isolde/conversations/petition/nodes/more/options/debt/keywords": {
       "hash": "ee7eca8f",
@@ -2313,8 +2313,8 @@
       "text": "Dronningens ansigt lukker sig. \"Kronens gæld er Kronens sag.\" Hoffet hørte dig spørge."
     },
     "npcs/queen_isolde/conversations/petition/nodes/more/options/warn/label": {
-      "hash": "3599acf0",
-      "text": "\"En af Deres nærmeste tjener Koret, Majestæt. Vogt Deres bæger.\" (Overtalelse SG 16)"
+      "hash": "9b84d24a",
+      "text": "\"En af Deres nærmeste tjener Koret, Majestæt. Vogt Deres bæger.\""
     },
     "npcs/queen_isolde/conversations/petition/nodes/more/options/warn/keywords": {
       "hash": "876d1b08",
@@ -2402,8 +2402,8 @@
       "text": "\"De må være så træt efter Øerne. Sid ned, vær så venlig. Hvordan kan Almisseembedet hjælpe Dem?\""
     },
     "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/almonry/label": {
-      "hash": "78e92dd5",
-      "text": "\"Fortæl mig om Almisseembedets arbejde, frue.\" (Indsigt SG 15)"
+      "hash": "6185b69d",
+      "text": "\"Fortæl mig om Almisseembedets arbejde, frue.\""
     },
     "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/almonry/keywords": {
       "hash": "ecfa615c",
@@ -2425,8 +2425,8 @@
       "text": "Hun fortæller om suppekøkkener og feberstuer, og du tror på hvert ord."
     },
     "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/winter/label": {
-      "hash": "a5539d1a",
-      "text": "\"Hvor var De under Askefaldsvinteren, frue?\" (Historie SG 14)"
+      "hash": "df71328b",
+      "text": "\"Hvor var De under Askefaldsvinteren, frue?\""
     },
     "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/winter/keywords": {
       "hash": "2fafa416",
@@ -2449,8 +2449,8 @@
       "text": "\"Å, her og der,\" siger hun, \"og gjorde, hvad jeg kunne.\""
     },
     "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/grateful/label": {
-      "hash": "db067817",
-      "text": "Spil den taknemmelige helt: \"Kunne Almisseembedet mon støtte min jagt?\" (Bedrag SG 15)"
+      "hash": "f7177496",
+      "text": "Spil den taknemmelige helt: \"Kunne Almisseembedet mon støtte min jagt?\""
     },
     "npcs/seraphine_vell/conversations/almoner/nodes/greet/options/grateful/keywords": {
       "hash": "7215ddf6",
@@ -2500,8 +2500,8 @@
       "text": "\"Hvad vil De ellers gerne vide, min kære?\""
     },
     "npcs/seraphine_vell/conversations/almoner/nodes/more/options/almonry/label": {
-      "hash": "78e92dd5",
-      "text": "\"Fortæl mig om Almisseembedets arbejde, frue.\" (Indsigt SG 15)"
+      "hash": "6185b69d",
+      "text": "\"Fortæl mig om Almisseembedets arbejde, frue.\""
     },
     "npcs/seraphine_vell/conversations/almoner/nodes/more/options/almonry/keywords": {
       "hash": "ecfa615c",
@@ -2523,8 +2523,8 @@
       "text": "Hun fortæller om suppekøkkener og feberstuer, og du tror på hvert ord."
     },
     "npcs/seraphine_vell/conversations/almoner/nodes/more/options/winter/label": {
-      "hash": "a5539d1a",
-      "text": "\"Hvor var De under Askefaldsvinteren, frue?\" (Historie SG 14)"
+      "hash": "df71328b",
+      "text": "\"Hvor var De under Askefaldsvinteren, frue?\""
     },
     "npcs/seraphine_vell/conversations/almoner/nodes/more/options/winter/keywords": {
       "hash": "2fafa416",
@@ -2547,8 +2547,8 @@
       "text": "\"Å, her og der,\" siger hun, \"og gjorde, hvad jeg kunne.\""
     },
     "npcs/seraphine_vell/conversations/almoner/nodes/more/options/grateful/label": {
-      "hash": "db067817",
-      "text": "Spil den taknemmelige helt: \"Kunne Almisseembedet mon støtte min jagt?\" (Bedrag SG 15)"
+      "hash": "f7177496",
+      "text": "Spil den taknemmelige helt: \"Kunne Almisseembedet mon støtte min jagt?\""
     },
     "npcs/seraphine_vell/conversations/almoner/nodes/more/options/grateful/keywords": {
       "hash": "7215ddf6",
@@ -2631,8 +2631,8 @@
       "text": "\"Kammerherren fører dronningens kalender, og dronningens kalender er fuld. Frem med Deres ærinde.\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/flatter/label": {
-      "hash": "59695cb9",
-      "text": "\"Kammerherrens sunde fornuft omtales selv på Øerne.\" (Overtalelse SG 13)"
+      "hash": "eebaa0e2",
+      "text": "\"Kammerherrens sunde fornuft omtales selv på Øerne.\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/flatter/keywords": {
       "hash": "0729adbc",
@@ -2653,8 +2653,8 @@
       "text": "\"Kammerherren,\" siger Hale, \"er blevet smigret af bedre løgnere.\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/almonry/label": {
-      "hash": "98a814a0",
-      "text": "\"De tvivler på Almisseembedets forbrug, gør De ikke?\" (Indsigt SG 14)"
+      "hash": "3e05fc35",
+      "text": "\"De tvivler på Almisseembedets forbrug, gør De ikke?\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/almonry/keywords": {
       "hash": "e284a658",
@@ -2675,8 +2675,8 @@
       "text": "\"Almisseembedets regnskaber er et anliggende for Kronen,\" siger Hale stift."
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/threaten/label": {
-      "hash": "f12ee138",
-      "text": "\"Bliv De ved med at hviske om mine piratvenner, kammerherre, så kommer de måske på besøg.\" (Intimidering SG 15)"
+      "hash": "66ec5a17",
+      "text": "\"Bliv De ved med at hviske om mine piratvenner, kammerherre, så kommer de måske på besøg.\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/greet/options/threaten/keywords": {
       "hash": "603158bb",
@@ -2724,8 +2724,8 @@
       "text": "\"Er der andet, eller må kammerherren vende tilbage til sine pligter?\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/flatter/label": {
-      "hash": "59695cb9",
-      "text": "\"Kammerherrens sunde fornuft omtales selv på Øerne.\" (Overtalelse SG 13)"
+      "hash": "eebaa0e2",
+      "text": "\"Kammerherrens sunde fornuft omtales selv på Øerne.\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/flatter/keywords": {
       "hash": "0729adbc",
@@ -2746,8 +2746,8 @@
       "text": "\"Kammerherren,\" siger Hale, \"er blevet smigret af bedre løgnere.\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/almonry/label": {
-      "hash": "98a814a0",
-      "text": "\"De tvivler på Almisseembedets forbrug, gør De ikke?\" (Indsigt SG 14)"
+      "hash": "3e05fc35",
+      "text": "\"De tvivler på Almisseembedets forbrug, gør De ikke?\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/almonry/keywords": {
       "hash": "e284a658",
@@ -2768,8 +2768,8 @@
       "text": "\"Almisseembedets regnskaber er et anliggende for Kronen,\" siger Hale stift."
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/threaten/label": {
-      "hash": "f12ee138",
-      "text": "\"Bliv De ved med at hviske om mine piratvenner, kammerherre, så kommer de måske på besøg.\" (Intimidering SG 15)"
+      "hash": "66ec5a17",
+      "text": "\"Bliv De ved med at hviske om mine piratvenner, kammerherre, så kommer de måske på besøg.\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/more/options/threaten/keywords": {
       "hash": "603158bb",
@@ -2817,8 +2817,8 @@
       "text": "\"Kammerherren vil se, hvad der kan gøres.\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/flatter/label": {
-      "hash": "59695cb9",
-      "text": "\"Kammerherrens sunde fornuft omtales selv på Øerne.\" (Overtalelse SG 13)"
+      "hash": "eebaa0e2",
+      "text": "\"Kammerherrens sunde fornuft omtales selv på Øerne.\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/flatter/keywords": {
       "hash": "0729adbc",
@@ -2839,8 +2839,8 @@
       "text": "\"Kammerherren,\" siger Hale, \"er blevet smigret af bedre løgnere.\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/almonry/label": {
-      "hash": "98a814a0",
-      "text": "\"De tvivler på Almisseembedets forbrug, gør De ikke?\" (Indsigt SG 14)"
+      "hash": "3e05fc35",
+      "text": "\"De tvivler på Almisseembedets forbrug, gør De ikke?\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/almonry/keywords": {
       "hash": "e284a658",
@@ -2861,8 +2861,8 @@
       "text": "\"Almisseembedets regnskaber er et anliggende for Kronen,\" siger Hale stift."
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/threaten/label": {
-      "hash": "f12ee138",
-      "text": "\"Bliv De ved med at hviske om mine piratvenner, kammerherre, så kommer de måske på besøg.\" (Intimidering SG 15)"
+      "hash": "66ec5a17",
+      "text": "\"Bliv De ved med at hviske om mine piratvenner, kammerherre, så kommer de måske på besøg.\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/won/options/threaten/keywords": {
       "hash": "603158bb",
@@ -2910,8 +2910,8 @@
       "text": "\"Nå, er der andet?\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/flatter/label": {
-      "hash": "59695cb9",
-      "text": "\"Kammerherrens sunde fornuft omtales selv på Øerne.\" (Overtalelse SG 13)"
+      "hash": "eebaa0e2",
+      "text": "\"Kammerherrens sunde fornuft omtales selv på Øerne.\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/flatter/keywords": {
       "hash": "0729adbc",
@@ -2932,8 +2932,8 @@
       "text": "\"Kammerherren,\" siger Hale, \"er blevet smigret af bedre løgnere.\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/almonry/label": {
-      "hash": "98a814a0",
-      "text": "\"De tvivler på Almisseembedets forbrug, gør De ikke?\" (Indsigt SG 14)"
+      "hash": "3e05fc35",
+      "text": "\"De tvivler på Almisseembedets forbrug, gør De ikke?\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/almonry/keywords": {
       "hash": "e284a658",
@@ -2954,8 +2954,8 @@
       "text": "\"Almisseembedets regnskaber er et anliggende for Kronen,\" siger Hale stift."
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/threaten/label": {
-      "hash": "f12ee138",
-      "text": "\"Bliv De ved med at hviske om mine piratvenner, kammerherre, så kommer de måske på besøg.\" (Intimidering SG 15)"
+      "hash": "66ec5a17",
+      "text": "\"Bliv De ved med at hviske om mine piratvenner, kammerherre, så kommer de måske på besøg.\""
     },
     "npcs/chamberlain_hale/conversations/protocol/nodes/ally/options/threaten/keywords": {
       "hash": "603158bb",
@@ -3041,8 +3041,8 @@
       "text": "\"Undskyld, at jeg trænger mig på. Fodnote: Jeg undskylder altid. Må jeg spørge dig om Tænderne? Eller du kunne spørge mig om noget. Enten-eller.\""
     },
     "npcs/aurek/conversations/readings/nodes/greet/options/father/label": {
-      "hash": "29a07685",
-      "text": "\"Din far studerede Tænderne, ikke?\" (Historie SG 13)"
+      "hash": "472187fb",
+      "text": "\"Din far studerede Tænderne, ikke?\""
     },
     "npcs/aurek/conversations/readings/nodes/greet/options/father/keywords": {
       "hash": "e4988cfe",
@@ -3064,8 +3064,8 @@
       "text": "Du blander to veyranske lærde sammen, og Aurek retter dig så høfligt, at I begge ønsker at synke gennem gulvet."
     },
     "npcs/aurek/conversations/readings/nodes/greet/options/aunt/label": {
-      "hash": "f4a6faa6",
-      "text": "\"Ved din tante, at du taler med mig?\" (Indsigt SG 14)"
+      "hash": "9accdcd3",
+      "text": "\"Ved din tante, at du taler med mig?\""
     },
     "npcs/aurek/conversations/readings/nodes/greet/options/aunt/keywords": {
       "hash": "e6ea9b53",
@@ -3086,8 +3086,8 @@
       "text": "\"Å, hun ved alting,\" siger Aurek og ler, og du kan ikke afgøre, om det er en spøg."
     },
     "npcs/aurek/conversations/readings/nodes/greet/options/scare/label": {
-      "hash": "5323465d",
-      "text": "\"Din tante er Kantoren, knægt. Vælg side.\" (Intimidering SG 12)"
+      "hash": "1138f6d5",
+      "text": "\"Din tante er Kantoren, knægt. Vælg side.\""
     },
     "npcs/aurek/conversations/readings/nodes/greet/options/scare/keywords": {
       "hash": "fe30bded",
@@ -3117,8 +3117,8 @@
       "text": "\"Var der, øh, andet?\""
     },
     "npcs/aurek/conversations/readings/nodes/more/options/father/label": {
-      "hash": "29a07685",
-      "text": "\"Din far studerede Tænderne, ikke?\" (Historie SG 13)"
+      "hash": "472187fb",
+      "text": "\"Din far studerede Tænderne, ikke?\""
     },
     "npcs/aurek/conversations/readings/nodes/more/options/father/keywords": {
       "hash": "e4988cfe",
@@ -3140,8 +3140,8 @@
       "text": "Du blander to veyranske lærde sammen, og Aurek retter dig så høfligt, at I begge ønsker at synke gennem gulvet."
     },
     "npcs/aurek/conversations/readings/nodes/more/options/aunt/label": {
-      "hash": "f4a6faa6",
-      "text": "\"Ved din tante, at du taler med mig?\" (Indsigt SG 14)"
+      "hash": "9accdcd3",
+      "text": "\"Ved din tante, at du taler med mig?\""
     },
     "npcs/aurek/conversations/readings/nodes/more/options/aunt/keywords": {
       "hash": "e6ea9b53",
@@ -3162,8 +3162,8 @@
       "text": "\"Å, hun ved alting,\" siger Aurek og ler, og du kan ikke afgøre, om det er en spøg."
     },
     "npcs/aurek/conversations/readings/nodes/more/options/scare/label": {
-      "hash": "5323465d",
-      "text": "\"Din tante er Kantoren, knægt. Vælg side.\" (Intimidering SG 12)"
+      "hash": "1138f6d5",
+      "text": "\"Din tante er Kantoren, knægt. Vælg side.\""
     },
     "npcs/aurek/conversations/readings/nodes/more/options/scare/keywords": {
       "hash": "fe30bded",
@@ -3234,8 +3234,8 @@
       "text": "Vosk bøjer hovedet mod dig, skønt hans øjne er syet til. \"Skal vi tale sammen først? Vold er så uordentligt i et bibliotek.\""
     },
     "npcs/vosk/conversations/parley/nodes/greet/options/read/label": {
-      "hash": "c3133b7f",
-      "text": "\"Hvorfor tjener en lærd sulten, Vosk?\" (Indsigt SG 15)"
+      "hash": "3f6dffa7",
+      "text": "\"Hvorfor tjener en lærd sulten, Vosk?\""
     },
     "npcs/vosk/conversations/parley/nodes/greet/options/read/keywords": {
       "hash": "cbb92a4c",
@@ -3257,8 +3257,8 @@
       "text": "Vosk nynner Korets melodi og svarer intet."
     },
     "npcs/vosk/conversations/parley/nodes/greet/options/fanatics/label": {
-      "hash": "1455c349",
-      "text": "Tal forbi ham til hans fanatikere: \"Han fodrer den med jer først.\" (Overtalelse SG 16)"
+      "hash": "adab4355",
+      "text": "Tal forbi ham til hans fanatikere: \"Han fodrer den med jer først.\""
     },
     "npcs/vosk/conversations/parley/nodes/greet/options/fanatics/keywords": {
       "hash": "8079c1ee",
@@ -3280,8 +3280,8 @@
       "text": "Fanatikerne nynner med på deres herres melodi."
     },
     "npcs/vosk/conversations/parley/nodes/greet/options/walk/label": {
-      "hash": "16575c25",
-      "text": "\"Du kan ikke løfte lansen, og du får ikke Tanden. Gå din vej.\" (Intimidering SG 17)"
+      "hash": "5272cce2",
+      "text": "\"Du kan ikke løfte lansen, og du får ikke Tanden. Gå din vej.\""
     },
     "npcs/vosk/conversations/parley/nodes/greet/options/walk/keywords": {
       "hash": "c4d3765f",
@@ -3302,8 +3302,8 @@
       "text": "\"Nej,\" siger Vosk høfligt og løfter hænderne."
     },
     "npcs/vosk/conversations/parley/nodes/greet/options/trade/label": {
-      "hash": "f62862c5",
-      "text": "\"Så behold Tanden. Lad lansen blive.\" (Overtalelse SG 14)"
+      "hash": "f966272f",
+      "text": "\"Så behold Tanden. Lad lansen blive.\""
     },
     "npcs/vosk/conversations/parley/nodes/greet/options/trade/keywords": {
       "hash": "20b67cb5",
@@ -3334,8 +3334,8 @@
       "text": "\"Andet?\" Vosk nynner en takt af hymnen."
     },
     "npcs/vosk/conversations/parley/nodes/more/options/read/label": {
-      "hash": "c3133b7f",
-      "text": "\"Hvorfor tjener en lærd sulten, Vosk?\" (Indsigt SG 15)"
+      "hash": "3f6dffa7",
+      "text": "\"Hvorfor tjener en lærd sulten, Vosk?\""
     },
     "npcs/vosk/conversations/parley/nodes/more/options/read/keywords": {
       "hash": "cbb92a4c",
@@ -3357,8 +3357,8 @@
       "text": "Vosk nynner Korets melodi og svarer intet."
     },
     "npcs/vosk/conversations/parley/nodes/more/options/fanatics/label": {
-      "hash": "1455c349",
-      "text": "Tal forbi ham til hans fanatikere: \"Han fodrer den med jer først.\" (Overtalelse SG 16)"
+      "hash": "adab4355",
+      "text": "Tal forbi ham til hans fanatikere: \"Han fodrer den med jer først.\""
     },
     "npcs/vosk/conversations/parley/nodes/more/options/fanatics/keywords": {
       "hash": "8079c1ee",
@@ -3380,8 +3380,8 @@
       "text": "Fanatikerne nynner med på deres herres melodi."
     },
     "npcs/vosk/conversations/parley/nodes/more/options/walk/label": {
-      "hash": "16575c25",
-      "text": "\"Du kan ikke løfte lansen, og du får ikke Tanden. Gå din vej.\" (Intimidering SG 17)"
+      "hash": "5272cce2",
+      "text": "\"Du kan ikke løfte lansen, og du får ikke Tanden. Gå din vej.\""
     },
     "npcs/vosk/conversations/parley/nodes/more/options/walk/keywords": {
       "hash": "c4d3765f",
@@ -3402,8 +3402,8 @@
       "text": "\"Nej,\" siger Vosk høfligt og løfter hænderne."
     },
     "npcs/vosk/conversations/parley/nodes/more/options/trade/label": {
-      "hash": "f62862c5",
-      "text": "\"Så behold Tanden. Lad lansen blive.\" (Overtalelse SG 14)"
+      "hash": "f966272f",
+      "text": "\"Så behold Tanden. Lad lansen blive.\""
     },
     "npcs/vosk/conversations/parley/nodes/more/options/trade/keywords": {
       "hash": "20b67cb5",
@@ -3474,8 +3474,8 @@
       "text": "Thane løfter ikke blikket fra alteret. \"Tal.\""
     },
     "npcs/aldric_thane/conversations/vigil/nodes/greet/options/winter/label": {
-      "hash": "1fc4c93c",
-      "text": "\"Fortæl mig om Askefaldsvinteren, øverstbefalende.\" (Indsigt SG 15)"
+      "hash": "eda20b0c",
+      "text": "\"Fortæl mig om Askefaldsvinteren, øverstbefalende.\""
     },
     "npcs/aldric_thane/conversations/vigil/nodes/greet/options/winter/keywords": {
       "hash": "d1088b78",
@@ -3497,8 +3497,8 @@
       "text": "\"Det var en hård vinter,\" siger Thane, og intet mere."
     },
     "npcs/aldric_thane/conversations/vigil/nodes/greet/options/corwin/label": {
-      "hash": "e57582bb",
-      "text": "\"Ser Corwin gjorde, hvad Ordenen ikke ville. Hør ham til ende.\" (Overtalelse SG 14)"
+      "hash": "d28b9d91",
+      "text": "\"Ser Corwin gjorde, hvad Ordenen ikke ville. Hør ham til ende.\""
     },
     "npcs/aldric_thane/conversations/vigil/nodes/greet/options/corwin/keywords": {
       "hash": "554f04c9",
@@ -3518,8 +3518,8 @@
       "text": "\"Ser Corwin kan tale for sig selv,\" siger Thane. Det gør Corwin ikke."
     },
     "npcs/aldric_thane/conversations/vigil/nodes/greet/options/muster/label": {
-      "hash": "9d23a579",
-      "text": "\"Når Koret slår til, vil Lansen så ride med mig?\" (Overtalelse SG 15)"
+      "hash": "43aad584",
+      "text": "\"Når Koret slår til, vil Lansen så ride med mig?\""
     },
     "npcs/aldric_thane/conversations/vigil/nodes/greet/options/muster/keywords": {
       "hash": "e0cce4a9",
@@ -3551,8 +3551,8 @@
       "text": "\"Ordenen rider for Ordenen,\" siger Thane."
     },
     "npcs/aldric_thane/conversations/vigil/nodes/greet/options/rebuke/label": {
-      "hash": "dc4ab61a",
-      "text": "\"De lod Cinderdale sulte. Lad ikke Highcrown i stikken.\" (Intimidering SG 14)"
+      "hash": "2a1410f6",
+      "text": "\"De lod Cinderdale sulte. Lad ikke Highcrown i stikken.\""
     },
     "npcs/aldric_thane/conversations/vigil/nodes/greet/options/rebuke/keywords": {
       "hash": "2c23f0d2",
@@ -3581,8 +3581,8 @@
       "text": "\"Var det alt?\""
     },
     "npcs/aldric_thane/conversations/vigil/nodes/more/options/winter/label": {
-      "hash": "1fc4c93c",
-      "text": "\"Fortæl mig om Askefaldsvinteren, øverstbefalende.\" (Indsigt SG 15)"
+      "hash": "eda20b0c",
+      "text": "\"Fortæl mig om Askefaldsvinteren, øverstbefalende.\""
     },
     "npcs/aldric_thane/conversations/vigil/nodes/more/options/winter/keywords": {
       "hash": "d1088b78",
@@ -3604,8 +3604,8 @@
       "text": "\"Det var en hård vinter,\" siger Thane, og intet mere."
     },
     "npcs/aldric_thane/conversations/vigil/nodes/more/options/corwin/label": {
-      "hash": "e57582bb",
-      "text": "\"Ser Corwin gjorde, hvad Ordenen ikke ville. Hør ham til ende.\" (Overtalelse SG 14)"
+      "hash": "d28b9d91",
+      "text": "\"Ser Corwin gjorde, hvad Ordenen ikke ville. Hør ham til ende.\""
     },
     "npcs/aldric_thane/conversations/vigil/nodes/more/options/corwin/keywords": {
       "hash": "554f04c9",
@@ -3625,8 +3625,8 @@
       "text": "\"Ser Corwin kan tale for sig selv,\" siger Thane. Det gør Corwin ikke."
     },
     "npcs/aldric_thane/conversations/vigil/nodes/more/options/muster/label": {
-      "hash": "9d23a579",
-      "text": "\"Når Koret slår til, vil Lansen så ride med mig?\" (Overtalelse SG 15)"
+      "hash": "43aad584",
+      "text": "\"Når Koret slår til, vil Lansen så ride med mig?\""
     },
     "npcs/aldric_thane/conversations/vigil/nodes/more/options/muster/keywords": {
       "hash": "e0cce4a9",
@@ -3658,8 +3658,8 @@
       "text": "\"Ordenen rider for Ordenen,\" siger Thane."
     },
     "npcs/aldric_thane/conversations/vigil/nodes/more/options/rebuke/label": {
-      "hash": "dc4ab61a",
-      "text": "\"De lod Cinderdale sulte. Lad ikke Highcrown i stikken.\" (Intimidering SG 14)"
+      "hash": "2a1410f6",
+      "text": "\"De lod Cinderdale sulte. Lad ikke Highcrown i stikken.\""
     },
     "npcs/aldric_thane/conversations/vigil/nodes/more/options/rebuke/keywords": {
       "hash": "2c23f0d2",
@@ -3883,8 +3883,8 @@
       "text": "\"Tal hurtigt. Tid er penge, og du bruger af mine.\""
     },
     "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/fear/label": {
-      "hash": "a109dadd",
-      "text": "\"Almisseembedets lån skræmmer dig. Hvorfor?\" (Indsigt SG 14)"
+      "hash": "05843cb8",
+      "text": "\"Almisseembedets lån skræmmer dig. Hvorfor?\""
     },
     "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/fear/keywords": {
       "hash": "c6dba785",
@@ -3906,8 +3906,8 @@
       "text": "\"Frygt er dårligt for forretningen,\" siger Ashgrove. \"Det samme er sladder.\""
     },
     "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/haggle/label": {
-      "hash": "3bee967b",
-      "text": "\"At rydde en mine er det dobbelte værd, laugsmester.\" (Overtalelse SG 15)"
+      "hash": "fcde30fa",
+      "text": "\"At rydde en mine er det dobbelte værd, laugsmester.\""
     },
     "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/haggle/keywords": {
       "hash": "4eeb1087",
@@ -3930,8 +3930,8 @@
       "text": "\"Et job er det værd, jeg betaler for det,\" siger Ashgrove."
     },
     "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/bluff/label": {
-      "hash": "9325c0ca",
-      "text": "\"Dronningen har sendt mig for at revidere konsortiet.\" (Bedrag SG 16)"
+      "hash": "81710c90",
+      "text": "\"Dronningen har sendt mig for at revidere konsortiet.\""
     },
     "npcs/brunhild_ashgrove/conversations/counting/nodes/greet/options/bluff/keywords": {
       "hash": "ac1dccd2",
@@ -3980,8 +3980,8 @@
       "text": "\"Hvad ellers?\""
     },
     "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/fear/label": {
-      "hash": "a109dadd",
-      "text": "\"Almisseembedets lån skræmmer dig. Hvorfor?\" (Indsigt SG 14)"
+      "hash": "05843cb8",
+      "text": "\"Almisseembedets lån skræmmer dig. Hvorfor?\""
     },
     "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/fear/keywords": {
       "hash": "c6dba785",
@@ -4003,8 +4003,8 @@
       "text": "\"Frygt er dårligt for forretningen,\" siger Ashgrove. \"Det samme er sladder.\""
     },
     "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/haggle/label": {
-      "hash": "3bee967b",
-      "text": "\"At rydde en mine er det dobbelte værd, laugsmester.\" (Overtalelse SG 15)"
+      "hash": "fcde30fa",
+      "text": "\"At rydde en mine er det dobbelte værd, laugsmester.\""
     },
     "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/haggle/keywords": {
       "hash": "4eeb1087",
@@ -4027,8 +4027,8 @@
       "text": "\"Et job er det værd, jeg betaler for det,\" siger Ashgrove."
     },
     "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/bluff/label": {
-      "hash": "9325c0ca",
-      "text": "\"Dronningen har sendt mig for at revidere konsortiet.\" (Bedrag SG 16)"
+      "hash": "81710c90",
+      "text": "\"Dronningen har sendt mig for at revidere konsortiet.\""
     },
     "npcs/brunhild_ashgrove/conversations/counting/nodes/more/options/bluff/keywords": {
       "hash": "ac1dccd2",

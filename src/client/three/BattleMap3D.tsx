@@ -21,7 +21,7 @@ import { cellKey, footprintSize } from '../../engine/combat/grid';
 import type { BattleMapProps } from '../ui/combat/BattleMap';
 import { settings } from '../ui/settingsState';
 import { t } from '../ui/i18n';
-import { SIDE_COLOURS, edgeSegments, hpColour, modelTokens, overlayFor, terrainOf, tokenCentre, worldToSquare } from './battle3d';
+import { SIDE_COLOURS, edgeSegments, fitFactor, hpColour, modelTokens, overlayFor, terrainOf, tokenCentre, worldToSquare } from './battle3d';
 import { buildCharacterModel, type CharacterModel } from './characterModel';
 
 interface Holder {
@@ -89,13 +89,24 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
     const camera = new THREE.PerspectiveCamera(45, el.clientWidth / height, 0.1, 200);
     const cx = grid.width / 2;
     const cz = grid.height / 2;
-    camera.position.set(cx, Math.max(grid.width, grid.height) * 0.85, cz + Math.max(grid.width, grid.height) * 0.75);
+    const span = Math.max(grid.width, grid.height);
+    camera.position.set(cx, span * 0.85, cz + span * 0.75);
+    // Narrow viewports (phones) see less of the board sideways: back the camera off along its
+    // current line of sight until the board fits (review 2026-10-01).
+    const fitCamera = () => {
+      const factor = fitFactor(el.clientWidth / height);
+      if (factor <= 1) return;
+      const target = new THREE.Vector3(cx, 0, cz);
+      const dir = camera.position.clone().sub(target);
+      const wanted = span * 1.134 * factor;
+      if (dir.length() < wanted) camera.position.copy(target).addScaledVector(dir.normalize(), wanted);
+    };
+    fitCamera();
     scene.add(new THREE.HemisphereLight(0xfff2dd, 0x2a2016, 1.4));
     const sun = new THREE.DirectionalLight(0xffffff, 1.6);
     sun.position.set(cx - 6, 14, cz - 4);
     sun.castShadow = renderer.shadowMap.enabled;
     sun.shadow.mapSize.set(perf?.shadows === 'high' ? 2048 : 1024, perf?.shadows === 'high' ? 2048 : 1024);
-    const span = Math.max(grid.width, grid.height);
     Object.assign(sun.shadow.camera, { left: -span, right: span, top: span, bottom: -span });
     sun.target.position.set(cx, 0, cz);
     scene.add(sun, sun.target);
@@ -104,7 +115,7 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
     controls.target.set(cx, 0, cz);
     controls.maxPolarAngle = Math.PI * 0.45;
     controls.minDistance = 3;
-    controls.maxDistance = span * 2.2;
+    controls.maxDistance = span * 3;
     controls.update();
 
     const board = new THREE.Group();
@@ -172,6 +183,8 @@ export function BattleMap3D(p: BattleMapProps & { onUnavailable?: () => void }) 
       renderer.setSize(el.clientWidth, height);
       camera.aspect = el.clientWidth / height;
       camera.updateProjectionMatrix();
+      fitCamera();
+      controls.update();
       if (holder.current) holder.current.dirty = true;
     };
     window.addEventListener('resize', onResize);

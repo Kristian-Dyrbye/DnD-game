@@ -2353,8 +2353,8 @@
       "text": "En ven af Kompagniet! Pas på feberkornet på kajen: piratvarer, hele bundtet. Hvordan kan guvernøren være Dem til tjeneste?"
     },
     "npcs/governor_pell/conversations/welcome/nodes/greet/options/ring/label": {
-      "hash": "ad3a4c2e",
-      "text": "Hold øje med hans hænder på den meget nye ring (Indsigt SG 13)"
+      "hash": "f288c074",
+      "text": "Hold øje med hans hænder på den meget nye ring"
     },
     "npcs/governor_pell/conversations/welcome/nodes/greet/options/ring/keywords": {
       "hash": "2c1cd378",
@@ -2376,8 +2376,8 @@
       "text": "Pell fanger dit blik og gemmer hånden i ærmet."
     },
     "npcs/governor_pell/conversations/welcome/nodes/greet/options/buyer/label": {
-      "hash": "d20d1230",
-      "text": "Udgiv dig for kornopkøber og bed om et pas til toldpakhuset (Bedrag SG 14)"
+      "hash": "2b24d154",
+      "text": "Udgiv dig for kornopkøber og bed om et pas til toldpakhuset"
     },
     "npcs/governor_pell/conversations/welcome/nodes/greet/options/buyer/keywords": {
       "hash": "baf526ec",
@@ -2418,8 +2418,8 @@
       "text": "Femogtyve guld i en parfumeret pung. Pell klapper dig på hånden. \"Nu er vi venner.\""
     },
     "npcs/governor_pell/conversations/welcome/nodes/greet/options/warn/label": {
-      "hash": "2c9d236d",
-      "text": "\"Jeg ved, hvad der er i det korn, guvernør.\" (Intimidering SG 15)"
+      "hash": "cbc7c7d0",
+      "text": "\"Jeg ved, hvad der er i det korn, guvernør.\""
     },
     "npcs/governor_pell/conversations/welcome/nodes/greet/options/warn/keywords": {
       "hash": "56c170e0",
@@ -2454,8 +2454,8 @@
       "text": "\"Er der andet, jeg kan gøre for en ven af Kompagniet?\""
     },
     "npcs/governor_pell/conversations/welcome/nodes/ring/options/ring/label": {
-      "hash": "ad3a4c2e",
-      "text": "Hold øje med hans hænder på den meget nye ring (Indsigt SG 13)"
+      "hash": "f288c074",
+      "text": "Hold øje med hans hænder på den meget nye ring"
     },
     "npcs/governor_pell/conversations/welcome/nodes/ring/options/ring/keywords": {
       "hash": "2c1cd378",
@@ -2477,8 +2477,8 @@
       "text": "Pell fanger dit blik og gemmer hånden i ærmet."
     },
     "npcs/governor_pell/conversations/welcome/nodes/ring/options/buyer/label": {
-      "hash": "d20d1230",
-      "text": "Udgiv dig for kornopkøber og bed om et pas til toldpakhuset (Bedrag SG 14)"
+      "hash": "2b24d154",
+      "text": "Udgiv dig for kornopkøber og bed om et pas til toldpakhuset"
     },
     "npcs/governor_pell/conversations/welcome/nodes/ring/options/buyer/keywords": {
       "hash": "baf526ec",
@@ -2519,8 +2519,8 @@
       "text": "Femogtyve guld i en parfumeret pung. Pell klapper dig på hånden. \"Nu er vi venner.\""
     },
     "npcs/governor_pell/conversations/welcome/nodes/ring/options/warn/label": {
-      "hash": "2c9d236d",
-      "text": "\"Jeg ved, hvad der er i det korn, guvernør.\" (Intimidering SG 15)"
+      "hash": "cbc7c7d0",
+      "text": "\"Jeg ved, hvad der er i det korn, guvernør.\""
     },
     "npcs/governor_pell/conversations/welcome/nodes/ring/options/warn/keywords": {
       "hash": "56c170e0",
@@ -2555,8 +2555,8 @@
       "text": "\"Er der noget andet?\""
     },
     "npcs/governor_pell/conversations/welcome/nodes/more/options/ring/label": {
-      "hash": "ad3a4c2e",
-      "text": "Hold øje med hans hænder på den meget nye ring (Indsigt SG 13)"
+      "hash": "f288c074",
+      "text": "Hold øje med hans hænder på den meget nye ring"
     },
     "npcs/governor_pell/conversations/welcome/nodes/more/options/ring/keywords": {
       "hash": "2c1cd378",
@@ -2578,8 +2578,8 @@
       "text": "Pell fanger dit blik og gemmer hånden i ærmet."
     },
     "npcs/governor_pell/conversations/welcome/nodes/more/options/buyer/label": {
-      "hash": "d20d1230",
-      "text": "Udgiv dig for kornopkøber og bed om et pas til toldpakhuset (Bedrag SG 14)"
+      "hash": "2b24d154",
+      "text": "Udgiv dig for kornopkøber og bed om et pas til toldpakhuset"
     },
     "npcs/governor_pell/conversations/welcome/nodes/more/options/buyer/keywords": {
       "hash": "baf526ec",
@@ -2620,8 +2620,8 @@
       "text": "Femogtyve guld i en parfumeret pung. Pell klapper dig på hånden. \"Nu er vi venner.\""
     },
     "npcs/governor_pell/conversations/welcome/nodes/more/options/warn/label": {
-      "hash": "2c9d236d",
-      "text": "\"Jeg ved, hvad der er i det korn, guvernør.\" (Intimidering SG 15)"
+      "hash": "cbc7c7d0",
+      "text": "\"Jeg ved, hvad der er i det korn, guvernør.\""
     },
     "npcs/governor_pell/conversations/welcome/nodes/more/options/warn/keywords": {
       "hash": "56c170e0",
@@ -2656,8 +2656,8 @@
       "text": "\"Vis vagten det, så lader de Dem kigge stablerne igennem i ro og mag.\""
     },
     "npcs/governor_pell/conversations/welcome/nodes/pass/options/ring/label": {
-      "hash": "ad3a4c2e",
-      "text": "Hold øje med hans hænder på den meget nye ring (Indsigt SG 13)"
+      "hash": "f288c074",
+      "text": "Hold øje med hans hænder på den meget nye ring"
     },
     "npcs/governor_pell/conversations/welcome/nodes/pass/options/ring/keywords": {
       "hash": "2c1cd378",
@@ -2679,8 +2679,8 @@
       "text": "Pell fanger dit blik og gemmer hånden i ærmet."
     },
     "npcs/governor_pell/conversations/welcome/nodes/pass/options/buyer/label": {
-      "hash": "d20d1230",
-      "text": "Udgiv dig for kornopkøber og bed om et pas til toldpakhuset (Bedrag SG 14)"
+      "hash": "2b24d154",
+      "text": "Udgiv dig for kornopkøber og bed om et pas til toldpakhuset"
     },
     "npcs/governor_pell/conversations/welcome/nodes/pass/options/buyer/keywords": {
       "hash": "baf526ec",
@@ -2721,8 +2721,8 @@
       "text": "Femogtyve guld i en parfumeret pung. Pell klapper dig på hånden. \"Nu er vi venner.\""
     },
     "npcs/governor_pell/conversations/welcome/nodes/pass/options/warn/label": {
-      "hash": "2c9d236d",
-      "text": "\"Jeg ved, hvad der er i det korn, guvernør.\" (Intimidering SG 15)"
+      "hash": "cbc7c7d0",
+      "text": "\"Jeg ved, hvad der er i det korn, guvernør.\""
     },
     "npcs/governor_pell/conversations/welcome/nodes/pass/options/warn/keywords": {
       "hash": "56c170e0",
@@ -2757,8 +2757,8 @@
       "text": "\"Hvert eneste lille rygte, husk det. Kompagniet betaler for rygter.\""
     },
     "npcs/governor_pell/conversations/welcome/nodes/paid/options/ring/label": {
-      "hash": "ad3a4c2e",
-      "text": "Hold øje med hans hænder på den meget nye ring (Indsigt SG 13)"
+      "hash": "f288c074",
+      "text": "Hold øje med hans hænder på den meget nye ring"
     },
     "npcs/governor_pell/conversations/welcome/nodes/paid/options/ring/keywords": {
       "hash": "2c1cd378",
@@ -2780,8 +2780,8 @@
       "text": "Pell fanger dit blik og gemmer hånden i ærmet."
     },
     "npcs/governor_pell/conversations/welcome/nodes/paid/options/buyer/label": {
-      "hash": "d20d1230",
-      "text": "Udgiv dig for kornopkøber og bed om et pas til toldpakhuset (Bedrag SG 14)"
+      "hash": "2b24d154",
+      "text": "Udgiv dig for kornopkøber og bed om et pas til toldpakhuset"
     },
     "npcs/governor_pell/conversations/welcome/nodes/paid/options/buyer/keywords": {
       "hash": "baf526ec",
@@ -2822,8 +2822,8 @@
       "text": "Femogtyve guld i en parfumeret pung. Pell klapper dig på hånden. \"Nu er vi venner.\""
     },
     "npcs/governor_pell/conversations/welcome/nodes/paid/options/warn/label": {
-      "hash": "2c9d236d",
-      "text": "\"Jeg ved, hvad der er i det korn, guvernør.\" (Intimidering SG 15)"
+      "hash": "cbc7c7d0",
+      "text": "\"Jeg ved, hvad der er i det korn, guvernør.\""
     },
     "npcs/governor_pell/conversations/welcome/nodes/paid/options/warn/keywords": {
       "hash": "56c170e0",
@@ -2897,8 +2897,8 @@
       "text": "\"Kommet for at se hængningen? I morgen middag. Den bedste udsigt er fra havmuren.\""
     },
     "npcs/commander_lusk/conversations/gallows/nodes/greet/options/pride/label": {
-      "hash": "1d7a0349",
-      "text": "\"Øernes fineste galgefald, kommandant.\" (Overtalelse SG 12)"
+      "hash": "20e51bc9",
+      "text": "\"Øernes fineste galgefald, kommandant.\""
     },
     "npcs/commander_lusk/conversations/gallows/nodes/greet/options/pride/keywords": {
       "hash": "973fa39e",
@@ -2920,8 +2920,8 @@
       "text": "Lusk hører smigeren for det, den er."
     },
     "npcs/commander_lusk/conversations/gallows/nodes/greet/options/watch/label": {
-      "hash": "f328b7d5",
-      "text": "Få ham til at prale af sine natlige runder (Indsigt SG 14)"
+      "hash": "73f5bb90",
+      "text": "Få ham til at prale af sine natlige runder"
     },
     "npcs/commander_lusk/conversations/gallows/nodes/greet/options/watch/keywords": {
       "hash": "43fd192e",
@@ -2942,8 +2942,8 @@
       "text": "Lusk taler længe og fortæller dig intet."
     },
     "npcs/commander_lusk/conversations/gallows/nodes/greet/options/wager/label": {
-      "hash": "0456a8dd",
-      "text": "Sæt 20 gm på knoklespil om Rooks løsladelsespapirer (Indsigt SG 15)"
+      "hash": "3a69e385",
+      "text": "Sæt 20 gm på knoklespil om Rooks løsladelsespapirer"
     },
     "npcs/commander_lusk/conversations/gallows/nodes/greet/options/wager/keywords": {
       "hash": "0cc48541",
@@ -2965,8 +2965,8 @@
       "text": "Lusks knogler viser seksere. Han stikker dine tyve guld i lommen og ønsker dig bedre held til hængningen."
     },
     "npcs/commander_lusk/conversations/gallows/nodes/greet/options/threaten/label": {
-      "hash": "23e3d543",
-      "text": "\"Hæng et kronvidne, kommandant, og Kronen hænger Dem.\" (Intimidering SG 16)"
+      "hash": "3912e947",
+      "text": "\"Hæng et kronvidne, kommandant, og Kronen hænger Dem.\""
     },
     "npcs/commander_lusk/conversations/gallows/nodes/greet/options/threaten/keywords": {
       "hash": "47351b7a",
@@ -2996,8 +2996,8 @@
       "text": "\"Ingen sætter pris på et godt fald længere. Nå, hvad vil De?\""
     },
     "npcs/commander_lusk/conversations/gallows/nodes/proud/options/pride/label": {
-      "hash": "1d7a0349",
-      "text": "\"Øernes fineste galgefald, kommandant.\" (Overtalelse SG 12)"
+      "hash": "20e51bc9",
+      "text": "\"Øernes fineste galgefald, kommandant.\""
     },
     "npcs/commander_lusk/conversations/gallows/nodes/proud/options/pride/keywords": {
       "hash": "973fa39e",
@@ -3019,8 +3019,8 @@
       "text": "Lusk hører smigeren for det, den er."
     },
     "npcs/commander_lusk/conversations/gallows/nodes/proud/options/watch/label": {
-      "hash": "f328b7d5",
-      "text": "Få ham til at prale af sine natlige runder (Indsigt SG 14)"
+      "hash": "73f5bb90",
+      "text": "Få ham til at prale af sine natlige runder"
     },
     "npcs/commander_lusk/conversations/gallows/nodes/proud/options/watch/keywords": {
       "hash": "43fd192e",
@@ -3041,8 +3041,8 @@
       "text": "Lusk taler længe og fortæller dig intet."
     },
     "npcs/commander_lusk/conversations/gallows/nodes/proud/options/wager/label": {
-      "hash": "0456a8dd",
-      "text": "Sæt 20 gm på knoklespil om Rooks løsladelsespapirer (Indsigt SG 15)"
+      "hash": "3a69e385",
+      "text": "Sæt 20 gm på knoklespil om Rooks løsladelsespapirer"
     },
     "npcs/commander_lusk/conversations/gallows/nodes/proud/options/wager/keywords": {
       "hash": "0cc48541",
@@ -3064,8 +3064,8 @@
       "text": "Lusks knogler viser seksere. Han stikker dine tyve guld i lommen og ønsker dig bedre held til hængningen."
     },
     "npcs/commander_lusk/conversations/gallows/nodes/proud/options/threaten/label": {
-      "hash": "23e3d543",
-      "text": "\"Hæng et kronvidne, kommandant, og Kronen hænger Dem.\" (Intimidering SG 16)"
+      "hash": "3912e947",
+      "text": "\"Hæng et kronvidne, kommandant, og Kronen hænger Dem.\""
     },
     "npcs/commander_lusk/conversations/gallows/nodes/proud/options/threaten/keywords": {
       "hash": "47351b7a",
@@ -3095,8 +3095,8 @@
       "text": "\"Andet? Jeg har en hængning at planlægge.\""
     },
     "npcs/commander_lusk/conversations/gallows/nodes/bored/options/pride/label": {
-      "hash": "1d7a0349",
-      "text": "\"Øernes fineste galgefald, kommandant.\" (Overtalelse SG 12)"
+      "hash": "20e51bc9",
+      "text": "\"Øernes fineste galgefald, kommandant.\""
     },
     "npcs/commander_lusk/conversations/gallows/nodes/bored/options/pride/keywords": {
       "hash": "973fa39e",
@@ -3118,8 +3118,8 @@
       "text": "Lusk hører smigeren for det, den er."
     },
     "npcs/commander_lusk/conversations/gallows/nodes/bored/options/watch/label": {
-      "hash": "f328b7d5",
-      "text": "Få ham til at prale af sine natlige runder (Indsigt SG 14)"
+      "hash": "73f5bb90",
+      "text": "Få ham til at prale af sine natlige runder"
     },
     "npcs/commander_lusk/conversations/gallows/nodes/bored/options/watch/keywords": {
       "hash": "43fd192e",
@@ -3140,8 +3140,8 @@
       "text": "Lusk taler længe og fortæller dig intet."
     },
     "npcs/commander_lusk/conversations/gallows/nodes/bored/options/wager/label": {
-      "hash": "0456a8dd",
-      "text": "Sæt 20 gm på knoklespil om Rooks løsladelsespapirer (Indsigt SG 15)"
+      "hash": "3a69e385",
+      "text": "Sæt 20 gm på knoklespil om Rooks løsladelsespapirer"
     },
     "npcs/commander_lusk/conversations/gallows/nodes/bored/options/wager/keywords": {
       "hash": "0cc48541",
@@ -3163,8 +3163,8 @@
       "text": "Lusks knogler viser seksere. Han stikker dine tyve guld i lommen og ønsker dig bedre held til hængningen."
     },
     "npcs/commander_lusk/conversations/gallows/nodes/bored/options/threaten/label": {
-      "hash": "23e3d543",
-      "text": "\"Hæng et kronvidne, kommandant, og Kronen hænger Dem.\" (Intimidering SG 16)"
+      "hash": "3912e947",
+      "text": "\"Hæng et kronvidne, kommandant, og Kronen hænger Dem.\""
     },
     "npcs/commander_lusk/conversations/gallows/nodes/bored/options/threaten/keywords": {
       "hash": "47351b7a",
@@ -3198,8 +3198,8 @@
       "text": "\"En runde til? Nej? Så goddag.\""
     },
     "npcs/commander_lusk/conversations/gallows/nodes/lost/options/pride/label": {
-      "hash": "1d7a0349",
-      "text": "\"Øernes fineste galgefald, kommandant.\" (Overtalelse SG 12)"
+      "hash": "20e51bc9",
+      "text": "\"Øernes fineste galgefald, kommandant.\""
     },
     "npcs/commander_lusk/conversations/gallows/nodes/lost/options/pride/keywords": {
       "hash": "973fa39e",
@@ -3221,8 +3221,8 @@
       "text": "Lusk hører smigeren for det, den er."
     },
     "npcs/commander_lusk/conversations/gallows/nodes/lost/options/watch/label": {
-      "hash": "f328b7d5",
-      "text": "Få ham til at prale af sine natlige runder (Indsigt SG 14)"
+      "hash": "73f5bb90",
+      "text": "Få ham til at prale af sine natlige runder"
     },
     "npcs/commander_lusk/conversations/gallows/nodes/lost/options/watch/keywords": {
       "hash": "43fd192e",
@@ -3243,8 +3243,8 @@
       "text": "Lusk taler længe og fortæller dig intet."
     },
     "npcs/commander_lusk/conversations/gallows/nodes/lost/options/wager/label": {
-      "hash": "0456a8dd",
-      "text": "Sæt 20 gm på knoklespil om Rooks løsladelsespapirer (Indsigt SG 15)"
+      "hash": "3a69e385",
+      "text": "Sæt 20 gm på knoklespil om Rooks løsladelsespapirer"
     },
     "npcs/commander_lusk/conversations/gallows/nodes/lost/options/wager/keywords": {
       "hash": "0cc48541",
@@ -3266,8 +3266,8 @@
       "text": "Lusks knogler viser seksere. Han stikker dine tyve guld i lommen og ønsker dig bedre held til hængningen."
     },
     "npcs/commander_lusk/conversations/gallows/nodes/lost/options/threaten/label": {
-      "hash": "23e3d543",
-      "text": "\"Hæng et kronvidne, kommandant, og Kronen hænger Dem.\" (Intimidering SG 16)"
+      "hash": "3912e947",
+      "text": "\"Hæng et kronvidne, kommandant, og Kronen hænger Dem.\""
     },
     "npcs/commander_lusk/conversations/gallows/nodes/lost/options/threaten/keywords": {
       "hash": "47351b7a",
@@ -3353,8 +3353,8 @@
       ]
     },
     "npcs/rook/conversations/cell/nodes/bars/options/promise/label": {
-      "hash": "6875a374",
-      "text": "\"Giv mig din halvdel af kortet nu, så sværger jeg, at jeg kommer tilbage efter dig.\" (Overtalelse SG 13)"
+      "hash": "b67bde91",
+      "text": "\"Giv mig din halvdel af kortet nu, så sværger jeg, at jeg kommer tilbage efter dig.\""
     },
     "npcs/rook/conversations/cell/nodes/bars/options/promise/keywords": {
       "hash": "49ed05d1",
@@ -3390,8 +3390,8 @@
       ]
     },
     "npcs/rook/conversations/cell/nodes/bars/options/bully/label": {
-      "hash": "acbfc2c6",
-      "text": "\"Snak, pirat, eller jeg fortæller Lusk, at du prøvede at bestikke mig.\" (Intimidering SG 12)"
+      "hash": "ca50d90c",
+      "text": "\"Snak, pirat, eller jeg fortæller Lusk, at du prøvede at bestikke mig.\""
     },
     "npcs/rook/conversations/cell/nodes/bars/options/bully/keywords": {
       "hash": "5da82799",
@@ -3432,8 +3432,8 @@
       ]
     },
     "npcs/rook/conversations/cell/nodes/story/options/promise/label": {
-      "hash": "6875a374",
-      "text": "\"Giv mig din halvdel af kortet nu, så sværger jeg, at jeg kommer tilbage efter dig.\" (Overtalelse SG 13)"
+      "hash": "b67bde91",
+      "text": "\"Giv mig din halvdel af kortet nu, så sværger jeg, at jeg kommer tilbage efter dig.\""
     },
     "npcs/rook/conversations/cell/nodes/story/options/promise/keywords": {
       "hash": "49ed05d1",
@@ -3469,8 +3469,8 @@
       ]
     },
     "npcs/rook/conversations/cell/nodes/story/options/bully/label": {
-      "hash": "acbfc2c6",
-      "text": "\"Snak, pirat, eller jeg fortæller Lusk, at du prøvede at bestikke mig.\" (Intimidering SG 12)"
+      "hash": "ca50d90c",
+      "text": "\"Snak, pirat, eller jeg fortæller Lusk, at du prøvede at bestikke mig.\""
     },
     "npcs/rook/conversations/cell/nodes/story/options/bully/keywords": {
       "hash": "5da82799",
@@ -3511,8 +3511,8 @@
       ]
     },
     "npcs/rook/conversations/cell/nodes/promised/options/promise/label": {
-      "hash": "6875a374",
-      "text": "\"Giv mig din halvdel af kortet nu, så sværger jeg, at jeg kommer tilbage efter dig.\" (Overtalelse SG 13)"
+      "hash": "b67bde91",
+      "text": "\"Giv mig din halvdel af kortet nu, så sværger jeg, at jeg kommer tilbage efter dig.\""
     },
     "npcs/rook/conversations/cell/nodes/promised/options/promise/keywords": {
       "hash": "49ed05d1",
@@ -3548,8 +3548,8 @@
       ]
     },
     "npcs/rook/conversations/cell/nodes/promised/options/bully/label": {
-      "hash": "acbfc2c6",
-      "text": "\"Snak, pirat, eller jeg fortæller Lusk, at du prøvede at bestikke mig.\" (Intimidering SG 12)"
+      "hash": "ca50d90c",
+      "text": "\"Snak, pirat, eller jeg fortæller Lusk, at du prøvede at bestikke mig.\""
     },
     "npcs/rook/conversations/cell/nodes/promised/options/bully/keywords": {
       "hash": "5da82799",
@@ -3590,8 +3590,8 @@
       ]
     },
     "npcs/rook/conversations/cell/nodes/grin/options/promise/label": {
-      "hash": "6875a374",
-      "text": "\"Giv mig din halvdel af kortet nu, så sværger jeg, at jeg kommer tilbage efter dig.\" (Overtalelse SG 13)"
+      "hash": "b67bde91",
+      "text": "\"Giv mig din halvdel af kortet nu, så sværger jeg, at jeg kommer tilbage efter dig.\""
     },
     "npcs/rook/conversations/cell/nodes/grin/options/promise/keywords": {
       "hash": "49ed05d1",
@@ -3627,8 +3627,8 @@
       ]
     },
     "npcs/rook/conversations/cell/nodes/grin/options/bully/label": {
-      "hash": "acbfc2c6",
-      "text": "\"Snak, pirat, eller jeg fortæller Lusk, at du prøvede at bestikke mig.\" (Intimidering SG 12)"
+      "hash": "ca50d90c",
+      "text": "\"Snak, pirat, eller jeg fortæller Lusk, at du prøvede at bestikke mig.\""
     },
     "npcs/rook/conversations/cell/nodes/grin/options/bully/keywords": {
       "hash": "5da82799",
@@ -3669,8 +3669,8 @@
       ]
     },
     "npcs/rook/conversations/cell/nodes/tell/options/promise/label": {
-      "hash": "6875a374",
-      "text": "\"Giv mig din halvdel af kortet nu, så sværger jeg, at jeg kommer tilbage efter dig.\" (Overtalelse SG 13)"
+      "hash": "b67bde91",
+      "text": "\"Giv mig din halvdel af kortet nu, så sværger jeg, at jeg kommer tilbage efter dig.\""
     },
     "npcs/rook/conversations/cell/nodes/tell/options/promise/keywords": {
       "hash": "49ed05d1",
@@ -3706,8 +3706,8 @@
       ]
     },
     "npcs/rook/conversations/cell/nodes/tell/options/bully/label": {
-      "hash": "acbfc2c6",
-      "text": "\"Snak, pirat, eller jeg fortæller Lusk, at du prøvede at bestikke mig.\" (Intimidering SG 12)"
+      "hash": "ca50d90c",
+      "text": "\"Snak, pirat, eller jeg fortæller Lusk, at du prøvede at bestikke mig.\""
     },
     "npcs/rook/conversations/cell/nodes/tell/options/bully/keywords": {
       "hash": "5da82799",
@@ -3773,8 +3773,8 @@
       "text": "*Hun letter på den øverste hat og så på den nedenunder.* \"Én for den formue, jeg vandt, én for den formue, jeg tabte. Hvad skal du have?\""
     },
     "npcs/marisol_quint/conversations/hats/nodes/hats/options/drink/label": {
-      "hash": "91d915ba",
-      "text": "Drik hende til bords glas for glas (Konstitution SG 14)"
+      "hash": "a09ccc7a",
+      "text": "Drik hende til bords glas for glas"
     },
     "npcs/marisol_quint/conversations/hats/nodes/hats/options/drink/keywords": {
       "hash": "46adebfa",
@@ -3839,8 +3839,8 @@
       "text": "\"Se, det,\" siger Quint, \"er en, jeg kunne sejle med.\""
     },
     "npcs/marisol_quint/conversations/hats/nodes/respect/options/drink/label": {
-      "hash": "91d915ba",
-      "text": "Drik hende til bords glas for glas (Konstitution SG 14)"
+      "hash": "a09ccc7a",
+      "text": "Drik hende til bords glas for glas"
     },
     "npcs/marisol_quint/conversations/hats/nodes/respect/options/drink/keywords": {
       "hash": "46adebfa",
@@ -3909,8 +3909,8 @@
       "text": "\"Vey? Køn og hul som en tromme. Han gemmer sit korn i hulerne ved Vragplyndrerbugten, bag de falske lys: de to lygter i kæder. Andet?\""
     },
     "npcs/marisol_quint/conversations/hats/nodes/vey/options/drink/label": {
-      "hash": "91d915ba",
-      "text": "Drik hende til bords glas for glas (Konstitution SG 14)"
+      "hash": "a09ccc7a",
+      "text": "Drik hende til bords glas for glas"
     },
     "npcs/marisol_quint/conversations/hats/nodes/vey/options/drink/keywords": {
       "hash": "46adebfa",
@@ -3975,8 +3975,8 @@
       "text": "\"Gode øjne.\" Hun løfter et bæger for dig. \"Øerne husker en ven.\""
     },
     "npcs/marisol_quint/conversations/hats/nodes/exposed/options/drink/label": {
-      "hash": "91d915ba",
-      "text": "Drik hende til bords glas for glas (Konstitution SG 14)"
+      "hash": "a09ccc7a",
+      "text": "Drik hende til bords glas for glas"
     },
     "npcs/marisol_quint/conversations/hats/nodes/exposed/options/drink/keywords": {
       "hash": "46adebfa",
@@ -4093,8 +4093,8 @@
       "text": "\"De har et godt øje. Sid ned, vær så venlig. Kompagniet kan altid bruge gode øjne.\""
     },
     "npcs/factor_ashcombe/conversations/factor/nodes/greet/options/terms/label": {
-      "hash": "f9d5a1dc",
-      "text": "\"En kanonbåd er en begyndelse. Hvad tilbyder Kompagniet ellers?\" (Overtalelse SG 15)"
+      "hash": "eb35dd2b",
+      "text": "\"En kanonbåd er en begyndelse. Hvad tilbyder Kompagniet ellers?\""
     },
     "npcs/factor_ashcombe/conversations/factor/nodes/greet/options/terms/keywords": {
       "hash": "cc144c1a",
@@ -4115,8 +4115,8 @@
       "text": "\"Kompagniets vilkår er Kompagniets vilkår.\""
     },
     "npcs/factor_ashcombe/conversations/factor/nodes/greet/options/plan/label": {
-      "hash": "eead78f0",
-      "text": "\"Og hvad sker der så med Gullhaven bagefter?\" (Indsigt SG 13)"
+      "hash": "f6f2ff32",
+      "text": "\"Og hvad sker der så med Gullhaven bagefter?\""
     },
     "npcs/factor_ashcombe/conversations/factor/nodes/greet/options/plan/keywords": {
       "hash": "6170317e",
@@ -4137,8 +4137,8 @@
       "text": "\"Orden, handel og velstand,\" siger Ashcombe og mener intet med det."
     },
     "npcs/factor_ashcombe/conversations/factor/nodes/greet/options/pell/label": {
-      "hash": "91a09762",
-      "text": "\"Deres guvernør er Korets mand.\" (Overtalelse SG 14)"
+      "hash": "ea1f0c66",
+      "text": "\"Deres guvernør er Korets mand.\""
     },
     "npcs/factor_ashcombe/conversations/factor/nodes/greet/options/pell/keywords": {
       "hash": "2346b33a",
@@ -4172,8 +4172,8 @@
       "text": "Ashcombe folder hænderne. \"Er der mere?\""
     },
     "npcs/factor_ashcombe/conversations/factor/nodes/more/options/terms/label": {
-      "hash": "f9d5a1dc",
-      "text": "\"En kanonbåd er en begyndelse. Hvad tilbyder Kompagniet ellers?\" (Overtalelse SG 15)"
+      "hash": "eb35dd2b",
+      "text": "\"En kanonbåd er en begyndelse. Hvad tilbyder Kompagniet ellers?\""
     },
     "npcs/factor_ashcombe/conversations/factor/nodes/more/options/terms/keywords": {
       "hash": "cc144c1a",
@@ -4194,8 +4194,8 @@
       "text": "\"Kompagniets vilkår er Kompagniets vilkår.\""
     },
     "npcs/factor_ashcombe/conversations/factor/nodes/more/options/plan/label": {
-      "hash": "eead78f0",
-      "text": "\"Og hvad sker der så med Gullhaven bagefter?\" (Indsigt SG 13)"
+      "hash": "f6f2ff32",
+      "text": "\"Og hvad sker der så med Gullhaven bagefter?\""
     },
     "npcs/factor_ashcombe/conversations/factor/nodes/more/options/plan/keywords": {
       "hash": "6170317e",
@@ -4216,8 +4216,8 @@
       "text": "\"Orden, handel og velstand,\" siger Ashcombe og mener intet med det."
     },
     "npcs/factor_ashcombe/conversations/factor/nodes/more/options/pell/label": {
-      "hash": "91a09762",
-      "text": "\"Deres guvernør er Korets mand.\" (Overtalelse SG 14)"
+      "hash": "ea1f0c66",
+      "text": "\"Deres guvernør er Korets mand.\""
     },
     "npcs/factor_ashcombe/conversations/factor/nodes/more/options/pell/keywords": {
       "hash": "2346b33a",
@@ -4283,8 +4283,8 @@
       "text": "\"Hvert tidevand og hvert rygte, min ven, begge til salg. Hvad køber du?\""
     },
     "npcs/oswin_tull/conversations/tides/nodes/greet/options/trade/label": {
-      "hash": "116cbf37",
-      "text": "\"Jeg bytter det, jeg ved om Veys korn, for dine tidevandstabeller.\" (Overtalelse SG 13)"
+      "hash": "1fb528f8",
+      "text": "\"Jeg bytter det, jeg ved om Veys korn, for dine tidevandstabeller.\""
     },
     "npcs/oswin_tull/conversations/tides/nodes/greet/options/trade/keywords": {
       "hash": "5d1fbbaf",
@@ -4310,8 +4310,8 @@
       "text": "\"Rygter er billige i Gullhaven, min ven. Tidevand er ikke.\""
     },
     "npcs/oswin_tull/conversations/tides/nodes/greet/options/lean/label": {
-      "hash": "4b433729",
-      "text": "\"Søkortet. Nu.\" (Intimidering SG 13)"
+      "hash": "1ce5bc02",
+      "text": "\"Søkortet. Nu.\""
     },
     "npcs/oswin_tull/conversations/tides/nodes/greet/options/lean/keywords": {
       "hash": "abda4a9e",
@@ -4333,8 +4333,8 @@
       "text": "Tull fløjter, og fire Tidewright-prammænd fylder døråbningen. Du går uden søkortet."
     },
     "npcs/oswin_tull/conversations/tides/nodes/greet/options/copy/label": {
-      "hash": "ef374f9b",
-      "text": "Kopiér søkortet, mens han snakker tidevand (Fingerfærdighed SG 15)"
+      "hash": "e9f3dd8b",
+      "text": "Kopiér søkortet, mens han snakker tidevand"
     },
     "npcs/oswin_tull/conversations/tides/nodes/greet/options/copy/keywords": {
       "hash": "bed072bd",
@@ -4363,8 +4363,8 @@
       "text": "Tull gnider sine runde hænder. \"Hvad ellers?\""
     },
     "npcs/oswin_tull/conversations/tides/nodes/more/options/trade/label": {
-      "hash": "116cbf37",
-      "text": "\"Jeg bytter det, jeg ved om Veys korn, for dine tidevandstabeller.\" (Overtalelse SG 13)"
+      "hash": "1fb528f8",
+      "text": "\"Jeg bytter det, jeg ved om Veys korn, for dine tidevandstabeller.\""
     },
     "npcs/oswin_tull/conversations/tides/nodes/more/options/trade/keywords": {
       "hash": "5d1fbbaf",
@@ -4390,8 +4390,8 @@
       "text": "\"Rygter er billige i Gullhaven, min ven. Tidevand er ikke.\""
     },
     "npcs/oswin_tull/conversations/tides/nodes/more/options/lean/label": {
-      "hash": "4b433729",
-      "text": "\"Søkortet. Nu.\" (Intimidering SG 13)"
+      "hash": "1ce5bc02",
+      "text": "\"Søkortet. Nu.\""
     },
     "npcs/oswin_tull/conversations/tides/nodes/more/options/lean/keywords": {
       "hash": "abda4a9e",
@@ -4413,8 +4413,8 @@
       "text": "Tull fløjter, og fire Tidewright-prammænd fylder døråbningen. Du går uden søkortet."
     },
     "npcs/oswin_tull/conversations/tides/nodes/more/options/copy/label": {
-      "hash": "ef374f9b",
-      "text": "Kopiér søkortet, mens han snakker tidevand (Fingerfærdighed SG 15)"
+      "hash": "e9f3dd8b",
+      "text": "Kopiér søkortet, mens han snakker tidevand"
     },
     "npcs/oswin_tull/conversations/tides/nodes/more/options/copy/keywords": {
       "hash": "bed072bd",
@@ -4497,8 +4497,8 @@
       "text": "\"Du er Kompagniets nye skødehund. Sig, hvad du har at sige, før jeg får dig smidt i lagunen.\""
     },
     "npcs/iron_jenny/conversations/colors/nodes/greet/options/terms/label": {
-      "hash": "9ced0ec9",
-      "text": "\"Hvad skal der til, før du stryger flaget?\" (Indsigt SG 13)"
+      "hash": "7aa6bc83",
+      "text": "\"Hvad skal der til, før du stryger flaget?\""
     },
     "npcs/iron_jenny/conversations/colors/nodes/greet/options/terms/keywords": {
       "hash": "4bae03fd",
@@ -4518,8 +4518,8 @@
       "text": "Jennys ansigt giver dig intet andet end ar."
     },
     "npcs/iron_jenny/conversations/colors/nodes/greet/options/yield/label": {
-      "hash": "118d133d",
-      "text": "\"Stryg flaget, før marinesoldaterne går i land, så brænder ingen.\" (Overtalelse SG 15)"
+      "hash": "218b3860",
+      "text": "\"Stryg flaget, før marinesoldaterne går i land, så brænder ingen.\""
     },
     "npcs/iron_jenny/conversations/colors/nodes/greet/options/yield/keywords": {
       "hash": "a7f8c563",
@@ -4576,8 +4576,8 @@
       "text": "\"Andet, skødehund?\""
     },
     "npcs/iron_jenny/conversations/colors/nodes/more/options/terms/label": {
-      "hash": "9ced0ec9",
-      "text": "\"Hvad skal der til, før du stryger flaget?\" (Indsigt SG 13)"
+      "hash": "7aa6bc83",
+      "text": "\"Hvad skal der til, før du stryger flaget?\""
     },
     "npcs/iron_jenny/conversations/colors/nodes/more/options/terms/keywords": {
       "hash": "4bae03fd",
@@ -4597,8 +4597,8 @@
       "text": "Jennys ansigt giver dig intet andet end ar."
     },
     "npcs/iron_jenny/conversations/colors/nodes/more/options/yield/label": {
-      "hash": "118d133d",
-      "text": "\"Stryg flaget, før marinesoldaterne går i land, så brænder ingen.\" (Overtalelse SG 15)"
+      "hash": "218b3860",
+      "text": "\"Stryg flaget, før marinesoldaterne går i land, så brænder ingen.\""
     },
     "npcs/iron_jenny/conversations/colors/nodes/more/options/yield/keywords": {
       "hash": "a7f8c563",
@@ -4695,8 +4695,8 @@
       "text": "\"Faret vild, skat? Vejen ud er bag dig. Vejen ind går gennem mig.\""
     },
     "npcs/salt_eye_mora/conversations/dice/nodes/greet/options/bluff/label": {
-      "hash": "b62a2e49",
-      "text": "\"Vey sendte mig efter regnskabsbogen.\" (Bedrag SG 15)"
+      "hash": "b6b040f0",
+      "text": "\"Vey sendte mig efter regnskabsbogen.\""
     },
     "npcs/salt_eye_mora/conversations/dice/nodes/greet/options/bluff/keywords": {
       "hash": "367fbc7e",
@@ -4740,8 +4740,8 @@
       "text": "Tredive guld, talt to gange. Mora overrækker Korets regnskabsbog og går fløjtende med sit mandskab. Hun fortæller det selvfølgelig til Vey; hun er ærlig på den måde."
     },
     "npcs/salt_eye_mora/conversations/dice/nodes/greet/options/turn/label": {
-      "hash": "e983bf9f",
-      "text": "\"Når Koret er mættet, fodrer Vey det med dig.\" (Overtalelse SG 15)"
+      "hash": "d1ac1ae6",
+      "text": "\"Når Koret er mættet, fodrer Vey det med dig.\""
     },
     "npcs/salt_eye_mora/conversations/dice/nodes/greet/options/turn/keywords": {
       "hash": "f6e4adbf",
@@ -4812,8 +4812,8 @@
       "text": "*Krukker med havvand klirrer på hver hylde i hendes koralhytte, hver med et minde, der svømmer rundt i den.* \"Noget at bytte med, skat?\""
     },
     "npcs/auntie_brackwater/conversations/jars/nodes/jars/options/haggle/label": {
-      "hash": "b2416c18",
-      "text": "\"Et år er for dyrt, tante. En sommer.\" (Overtalelse SG 15)"
+      "hash": "fe27b18f",
+      "text": "\"Et år er for dyrt, tante. En sommer.\""
     },
     "npcs/auntie_brackwater/conversations/jars/nodes/jars/options/haggle/keywords": {
       "hash": "a97dde96",
@@ -4833,8 +4833,8 @@
       "text": "\"Et år, skat, eller ingenting. Jeg er ingen fiskerkone.\""
     },
     "npcs/auntie_brackwater/conversations/jars/nodes/jars/options/trick/label": {
-      "hash": "9e4bb66f",
-      "text": "Tilbyd hende et år, du aldrig har levet (Bedrag SG 16)"
+      "hash": "74273fdd",
+      "text": "Tilbyd hende et år, du aldrig har levet"
     },
     "npcs/auntie_brackwater/conversations/jars/nodes/jars/options/trick/keywords": {
       "hash": "aa42235d",
@@ -4925,8 +4925,8 @@
       "text": "\"Dagens helt! Du har gjort alt det hårde arbejde, min kære. Giv mig Tanden, så kan vi begge gå hjem.\""
     },
     "npcs/harrow_vey/conversations/parley/nodes/greet/options/doubt/label": {
-      "hash": "2b6828ec",
-      "text": "\"Hvad lovede Koret dig, Vey?\" (Indsigt SG 14)"
+      "hash": "16f4f129",
+      "text": "\"Hvad lovede Koret dig, Vey?\""
     },
     "npcs/harrow_vey/conversations/parley/nodes/greet/options/doubt/keywords": {
       "hash": "389d284d",
@@ -4948,8 +4948,8 @@
       "text": "\"Alt, min kære. Hvad lovede dine dig?\""
     },
     "npcs/harrow_vey/conversations/parley/nodes/greet/options/walk/label": {
-      "hash": "29c13578",
-      "text": "\"Tag dine gravere og gå. Tanden bliver hos mig.\" (Overtalelse SG 16)"
+      "hash": "a110cf52",
+      "text": "\"Tag dine gravere og gå. Tanden bliver hos mig.\""
     },
     "npcs/harrow_vey/conversations/parley/nodes/greet/options/walk/keywords": {
       "hash": "961e2d1a",
@@ -4977,8 +4977,8 @@
       "text": "\"Åh, min kære. Nej.\""
     },
     "npcs/harrow_vey/conversations/parley/nodes/greet/options/duel/label": {
-      "hash": "5abab706",
-      "text": "\"Dine gravere holder sig udenfor. Dig og mig, Vey.\" (Intimidering SG 14)"
+      "hash": "82f3c632",
+      "text": "\"Dine gravere holder sig udenfor. Dig og mig, Vey.\""
     },
     "npcs/harrow_vey/conversations/parley/nodes/greet/options/duel/keywords": {
       "hash": "b6daa62b",
@@ -5008,8 +5008,8 @@
       "text": "Vey snurrer en pistol rundt. \"Andet, før vi går i gang?\""
     },
     "npcs/harrow_vey/conversations/parley/nodes/more/options/doubt/label": {
-      "hash": "2b6828ec",
-      "text": "\"Hvad lovede Koret dig, Vey?\" (Indsigt SG 14)"
+      "hash": "16f4f129",
+      "text": "\"Hvad lovede Koret dig, Vey?\""
     },
     "npcs/harrow_vey/conversations/parley/nodes/more/options/doubt/keywords": {
       "hash": "389d284d",
@@ -5031,8 +5031,8 @@
       "text": "\"Alt, min kære. Hvad lovede dine dig?\""
     },
     "npcs/harrow_vey/conversations/parley/nodes/more/options/walk/label": {
-      "hash": "29c13578",
-      "text": "\"Tag dine gravere og gå. Tanden bliver hos mig.\" (Overtalelse SG 16)"
+      "hash": "a110cf52",
+      "text": "\"Tag dine gravere og gå. Tanden bliver hos mig.\""
     },
     "npcs/harrow_vey/conversations/parley/nodes/more/options/walk/keywords": {
       "hash": "961e2d1a",
@@ -5060,8 +5060,8 @@
       "text": "\"Åh, min kære. Nej.\""
     },
     "npcs/harrow_vey/conversations/parley/nodes/more/options/duel/label": {
-      "hash": "5abab706",
-      "text": "\"Dine gravere holder sig udenfor. Dig og mig, Vey.\" (Intimidering SG 14)"
+      "hash": "82f3c632",
+      "text": "\"Dine gravere holder sig udenfor. Dig og mig, Vey.\""
     },
     "npcs/harrow_vey/conversations/parley/nodes/more/options/duel/keywords": {
       "hash": "b6daa62b",

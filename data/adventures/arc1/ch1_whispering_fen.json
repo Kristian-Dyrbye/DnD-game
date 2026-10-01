@@ -3847,7 +3847,7 @@
               "options": [
                 {
                   "id": "order",
-                  "label": "\"You don't like this burning order, do you?\" (Insight DC 12)",
+                  "label": "\"You don't like this burning order, do you?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -3945,7 +3945,7 @@
                 },
                 {
                   "id": "witness",
-                  "label": "\"Say that to Captain Grell at her tribunal.\" (Persuasion DC 12)",
+                  "label": "\"Say that to Captain Grell at her tribunal.\"",
                   "if": {
                     "all": [
                       {
@@ -4070,7 +4070,7 @@
                 },
                 {
                   "id": "lean",
-                  "label": "\"Open the gate, Sergeant, or I open it myself.\" (Intimidation DC 15)",
+                  "label": "\"Open the gate, Sergeant, or I open it myself.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -4150,7 +4150,7 @@
               "options": [
                 {
                   "id": "order",
-                  "label": "\"You don't like this burning order, do you?\" (Insight DC 12)",
+                  "label": "\"You don't like this burning order, do you?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -4248,7 +4248,7 @@
                 },
                 {
                   "id": "witness",
-                  "label": "\"Say that to Captain Grell at her tribunal.\" (Persuasion DC 12)",
+                  "label": "\"Say that to Captain Grell at her tribunal.\"",
                   "if": {
                     "all": [
                       {
@@ -4373,7 +4373,7 @@
                 },
                 {
                   "id": "lean",
-                  "label": "\"Open the gate, Sergeant, or I open it myself.\" (Intimidation DC 15)",
+                  "label": "\"Open the gate, Sergeant, or I open it myself.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -4457,7 +4457,7 @@
               "options": [
                 {
                   "id": "order",
-                  "label": "\"You don't like this burning order, do you?\" (Insight DC 12)",
+                  "label": "\"You don't like this burning order, do you?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -4555,7 +4555,7 @@
                 },
                 {
                   "id": "witness",
-                  "label": "\"Say that to Captain Grell at her tribunal.\" (Persuasion DC 12)",
+                  "label": "\"Say that to Captain Grell at her tribunal.\"",
                   "if": {
                     "all": [
                       {
@@ -4680,7 +4680,7 @@
                 },
                 {
                   "id": "lean",
-                  "label": "\"Open the gate, Sergeant, or I open it myself.\" (Intimidation DC 15)",
+                  "label": "\"Open the gate, Sergeant, or I open it myself.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -4760,7 +4760,7 @@
               "options": [
                 {
                   "id": "order",
-                  "label": "\"You don't like this burning order, do you?\" (Insight DC 12)",
+                  "label": "\"You don't like this burning order, do you?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -4858,7 +4858,7 @@
                 },
                 {
                   "id": "witness",
-                  "label": "\"Say that to Captain Grell at her tribunal.\" (Persuasion DC 12)",
+                  "label": "\"Say that to Captain Grell at her tribunal.\"",
                   "if": {
                     "all": [
                       {
@@ -4983,7 +4983,7 @@
                 },
                 {
                   "id": "lean",
-                  "label": "\"Open the gate, Sergeant, or I open it myself.\" (Intimidation DC 15)",
+                  "label": "\"Open the gate, Sergeant, or I open it myself.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5063,7 +5063,7 @@
               "options": [
                 {
                   "id": "order",
-                  "label": "\"You don't like this burning order, do you?\" (Insight DC 12)",
+                  "label": "\"You don't like this burning order, do you?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5161,7 +5161,7 @@
                 },
                 {
                   "id": "witness",
-                  "label": "\"Say that to Captain Grell at her tribunal.\" (Persuasion DC 12)",
+                  "label": "\"Say that to Captain Grell at her tribunal.\"",
                   "if": {
                     "all": [
                       {
@@ -5286,7 +5286,7 @@
                 },
                 {
                   "id": "lean",
-                  "label": "\"Open the gate, Sergeant, or I open it myself.\" (Intimidation DC 15)",
+                  "label": "\"Open the gate, Sergeant, or I open it myself.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5366,7 +5366,7 @@
               "options": [
                 {
                   "id": "order",
-                  "label": "\"You don't like this burning order, do you?\" (Insight DC 12)",
+                  "label": "\"You don't like this burning order, do you?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5464,7 +5464,7 @@
                 },
                 {
                   "id": "witness",
-                  "label": "\"Say that to Captain Grell at her tribunal.\" (Persuasion DC 12)",
+                  "label": "\"Say that to Captain Grell at her tribunal.\"",
                   "if": {
                     "all": [
                       {
@@ -5589,7 +5589,7 @@
                 },
                 {
                   "id": "lean",
-                  "label": "\"Open the gate, Sergeant, or I open it myself.\" (Intimidation DC 15)",
+                  "label": "\"Open the gate, Sergeant, or I open it myself.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5724,7 +5724,7 @@
               "options": [
                 {
                   "id": "list",
-                  "label": "Watch her as she signs: what does it cost her? (Insight DC 14)",
+                  "label": "Watch her as she signs: what does it cost her?",
                   "once": true,
                   "if": {
                     "all": [
@@ -5803,7 +5803,7 @@
                 },
                 {
                   "id": "spores",
-                  "label": "\"Someone is spreading the Sickness: Sallow's bread.\" (Persuasion DC 13)",
+                  "label": "\"Someone is spreading the Sickness: Sallow's bread.\"",
                   "if": {
                     "all": [
                       {
@@ -5878,7 +5878,7 @@
                 },
                 {
                   "id": "healthy",
-                  "label": "\"If you must burn, let the healthy walk out first.\" (Persuasion DC 13)",
+                  "label": "\"If you must burn, let the healthy walk out first.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -5949,7 +5949,7 @@
               "options": [
                 {
                   "id": "list",
-                  "label": "Watch her as she signs: what does it cost her? (Insight DC 14)",
+                  "label": "Watch her as she signs: what does it cost her?",
                   "once": true,
                   "if": {
                     "all": [
@@ -6028,7 +6028,7 @@
                 },
                 {
                   "id": "spores",
-                  "label": "\"Someone is spreading the Sickness: Sallow's bread.\" (Persuasion DC 13)",
+                  "label": "\"Someone is spreading the Sickness: Sallow's bread.\"",
                   "if": {
                     "all": [
                       {
@@ -6103,7 +6103,7 @@
                 },
                 {
                   "id": "healthy",
-                  "label": "\"If you must burn, let the healthy walk out first.\" (Persuasion DC 13)",
+                  "label": "\"If you must burn, let the healthy walk out first.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6174,7 +6174,7 @@
               "options": [
                 {
                   "id": "list",
-                  "label": "Watch her as she signs: what does it cost her? (Insight DC 14)",
+                  "label": "Watch her as she signs: what does it cost her?",
                   "once": true,
                   "if": {
                     "all": [
@@ -6253,7 +6253,7 @@
                 },
                 {
                   "id": "spores",
-                  "label": "\"Someone is spreading the Sickness: Sallow's bread.\" (Persuasion DC 13)",
+                  "label": "\"Someone is spreading the Sickness: Sallow's bread.\"",
                   "if": {
                     "all": [
                       {
@@ -6328,7 +6328,7 @@
                 },
                 {
                   "id": "healthy",
-                  "label": "\"If you must burn, let the healthy walk out first.\" (Persuasion DC 13)",
+                  "label": "\"If you must burn, let the healthy walk out first.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6399,7 +6399,7 @@
               "options": [
                 {
                   "id": "list",
-                  "label": "Watch her as she signs: what does it cost her? (Insight DC 14)",
+                  "label": "Watch her as she signs: what does it cost her?",
                   "once": true,
                   "if": {
                     "all": [
@@ -6478,7 +6478,7 @@
                 },
                 {
                   "id": "spores",
-                  "label": "\"Someone is spreading the Sickness: Sallow's bread.\" (Persuasion DC 13)",
+                  "label": "\"Someone is spreading the Sickness: Sallow's bread.\"",
                   "if": {
                     "all": [
                       {
@@ -6553,7 +6553,7 @@
                 },
                 {
                   "id": "healthy",
-                  "label": "\"If you must burn, let the healthy walk out first.\" (Persuasion DC 13)",
+                  "label": "\"If you must burn, let the healthy walk out first.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6624,7 +6624,7 @@
               "options": [
                 {
                   "id": "list",
-                  "label": "Watch her as she signs: what does it cost her? (Insight DC 14)",
+                  "label": "Watch her as she signs: what does it cost her?",
                   "once": true,
                   "if": {
                     "all": [
@@ -6703,7 +6703,7 @@
                 },
                 {
                   "id": "spores",
-                  "label": "\"Someone is spreading the Sickness: Sallow's bread.\" (Persuasion DC 13)",
+                  "label": "\"Someone is spreading the Sickness: Sallow's bread.\"",
                   "if": {
                     "all": [
                       {
@@ -6778,7 +6778,7 @@
                 },
                 {
                   "id": "healthy",
-                  "label": "\"If you must burn, let the healthy walk out first.\" (Persuasion DC 13)",
+                  "label": "\"If you must burn, let the healthy walk out first.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -6849,7 +6849,7 @@
               "options": [
                 {
                   "id": "list",
-                  "label": "Watch her as she signs: what does it cost her? (Insight DC 14)",
+                  "label": "Watch her as she signs: what does it cost her?",
                   "once": true,
                   "if": {
                     "all": [
@@ -6928,7 +6928,7 @@
                 },
                 {
                   "id": "spores",
-                  "label": "\"Someone is spreading the Sickness: Sallow's bread.\" (Persuasion DC 13)",
+                  "label": "\"Someone is spreading the Sickness: Sallow's bread.\"",
                   "if": {
                     "all": [
                       {
@@ -7003,7 +7003,7 @@
                 },
                 {
                   "id": "healthy",
-                  "label": "\"If you must burn, let the healthy walk out first.\" (Persuasion DC 13)",
+                  "label": "\"If you must burn, let the healthy walk out first.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7074,7 +7074,7 @@
               "options": [
                 {
                   "id": "list",
-                  "label": "Watch her as she signs: what does it cost her? (Insight DC 14)",
+                  "label": "Watch her as she signs: what does it cost her?",
                   "once": true,
                   "if": {
                     "all": [
@@ -7153,7 +7153,7 @@
                 },
                 {
                   "id": "spores",
-                  "label": "\"Someone is spreading the Sickness: Sallow's bread.\" (Persuasion DC 13)",
+                  "label": "\"Someone is spreading the Sickness: Sallow's bread.\"",
                   "if": {
                     "all": [
                       {
@@ -7228,7 +7228,7 @@
                 },
                 {
                   "id": "healthy",
-                  "label": "\"If you must burn, let the healthy walk out first.\" (Persuasion DC 13)",
+                  "label": "\"If you must burn, let the healthy walk out first.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7474,7 +7474,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\" (Intimidation DC 18)",
+                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\"",
                   "once": true,
                   "keywords": [
                     "threaten",
@@ -7617,7 +7617,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\" (Intimidation DC 18)",
+                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\"",
                   "once": true,
                   "keywords": [
                     "threaten",
@@ -7760,7 +7760,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\" (Intimidation DC 18)",
+                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\"",
                   "once": true,
                   "keywords": [
                     "threaten",
@@ -7817,7 +7817,7 @@
               "options": [
                 {
                   "id": "ask_name",
-                  "label": "\"She is ready. Give it to her.\" (Persuasion DC 14)",
+                  "label": "\"She is ready. Give it to her.\"",
                   "keywords": [
                     "ready",
                     "give",
@@ -7868,7 +7868,7 @@
                 },
                 {
                   "id": "steal_name",
-                  "label": "Palm the jar while she fusses with the kettle (Sleight of Hand DC 15)",
+                  "label": "Palm the jar while she fusses with the kettle",
                   "keywords": [
                     "palm",
                     "steal",
@@ -8033,7 +8033,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\" (Intimidation DC 18)",
+                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\"",
                   "once": true,
                   "keywords": [
                     "threaten",
@@ -8176,7 +8176,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\" (Intimidation DC 18)",
+                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\"",
                   "once": true,
                   "keywords": [
                     "threaten",
@@ -8319,7 +8319,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\" (Intimidation DC 18)",
+                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\"",
                   "once": true,
                   "keywords": [
                     "threaten",
@@ -8462,7 +8462,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\" (Intimidation DC 18)",
+                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\"",
                   "once": true,
                   "keywords": [
                     "threaten",
@@ -8605,7 +8605,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\" (Intimidation DC 18)",
+                  "label": "\"No more bargains, old woman. Help Hollowmere or I burn this shelf myself.\"",
                   "once": true,
                   "keywords": [
                     "threaten",
@@ -8797,7 +8797,7 @@
                 },
                 {
                   "id": "convert",
-                  "label": "\"I want to hear the Choir sing. Where do your boats come in?\" (Deception DC 14)",
+                  "label": "\"I want to hear the Choir sing. Where do your boats come in?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8847,7 +8847,7 @@
                 },
                 {
                   "id": "accuse",
-                  "label": "Turn to the sick and name her bread for poison (Intimidation DC 14)",
+                  "label": "Turn to the sick and name her bread for poison",
                   "once": true,
                   "if": {
                     "any": [
@@ -8973,7 +8973,7 @@
                 },
                 {
                   "id": "convert",
-                  "label": "\"I want to hear the Choir sing. Where do your boats come in?\" (Deception DC 14)",
+                  "label": "\"I want to hear the Choir sing. Where do your boats come in?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9023,7 +9023,7 @@
                 },
                 {
                   "id": "accuse",
-                  "label": "Turn to the sick and name her bread for poison (Intimidation DC 14)",
+                  "label": "Turn to the sick and name her bread for poison",
                   "once": true,
                   "if": {
                     "any": [
@@ -9149,7 +9149,7 @@
                 },
                 {
                   "id": "convert",
-                  "label": "\"I want to hear the Choir sing. Where do your boats come in?\" (Deception DC 14)",
+                  "label": "\"I want to hear the Choir sing. Where do your boats come in?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9199,7 +9199,7 @@
                 },
                 {
                   "id": "accuse",
-                  "label": "Turn to the sick and name her bread for poison (Intimidation DC 14)",
+                  "label": "Turn to the sick and name her bread for poison",
                   "once": true,
                   "if": {
                     "any": [
@@ -9414,7 +9414,7 @@
               "options": [
                 {
                   "id": "watch",
-                  "label": "Watch him: is he still sure? (Insight DC 13)",
+                  "label": "Watch him: is he still sure?",
                   "once": true,
                   "if": {
                     "not": {
@@ -9446,7 +9446,7 @@
                 },
                 {
                   "id": "mercy",
-                  "label": "\"The Choir will spend you the way it spent Millbrook's children. Walk away.\" (Persuasion DC 15)",
+                  "label": "\"The Choir will spend you the way it spent Millbrook's children. Walk away.\"",
                   "if": {
                     "not": {
                       "flag": "~ch1_ashby_spurned"
@@ -9501,7 +9501,7 @@
                 },
                 {
                   "id": "taunt",
-                  "label": "\"You ran from Millbrook. You'll run from me again.\" (Intimidation DC 13)",
+                  "label": "\"You ran from Millbrook. You'll run from me again.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -9554,7 +9554,7 @@
               "options": [
                 {
                   "id": "watch",
-                  "label": "Watch him: is he still sure? (Insight DC 13)",
+                  "label": "Watch him: is he still sure?",
                   "once": true,
                   "if": {
                     "not": {
@@ -9586,7 +9586,7 @@
                 },
                 {
                   "id": "mercy",
-                  "label": "\"The Choir will spend you the way it spent Millbrook's children. Walk away.\" (Persuasion DC 15)",
+                  "label": "\"The Choir will spend you the way it spent Millbrook's children. Walk away.\"",
                   "if": {
                     "not": {
                       "flag": "~ch1_ashby_spurned"
@@ -9641,7 +9641,7 @@
                 },
                 {
                   "id": "taunt",
-                  "label": "\"You ran from Millbrook. You'll run from me again.\" (Intimidation DC 13)",
+                  "label": "\"You ran from Millbrook. You'll run from me again.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -9776,7 +9776,7 @@
               "options": [
                 {
                   "id": "help",
-                  "label": "Hold the lamp and help her lance the black veins (Medicine DC 12)",
+                  "label": "Hold the lamp and help her lance the black veins",
                   "once": true,
                   "if": {
                     "all": [
@@ -9826,7 +9826,7 @@
                 },
                 {
                   "id": "truth",
-                  "label": "Show her your Warden pass and tell her you are nobody's pyre-man (Persuasion DC 14)",
+                  "label": "Show her your Warden pass and tell her you are nobody's pyre-man",
                   "once": true,
                   "if": {
                     "all": [
@@ -9964,7 +9964,7 @@
               "options": [
                 {
                   "id": "help",
-                  "label": "Hold the lamp and help her lance the black veins (Medicine DC 12)",
+                  "label": "Hold the lamp and help her lance the black veins",
                   "once": true,
                   "if": {
                     "all": [
@@ -10014,7 +10014,7 @@
                 },
                 {
                   "id": "truth",
-                  "label": "Show her your Warden pass and tell her you are nobody's pyre-man (Persuasion DC 14)",
+                  "label": "Show her your Warden pass and tell her you are nobody's pyre-man",
                   "once": true,
                   "if": {
                     "all": [
@@ -10156,7 +10156,7 @@
               "options": [
                 {
                   "id": "help",
-                  "label": "Hold the lamp and help her lance the black veins (Medicine DC 12)",
+                  "label": "Hold the lamp and help her lance the black veins",
                   "once": true,
                   "if": {
                     "all": [
@@ -10206,7 +10206,7 @@
                 },
                 {
                   "id": "truth",
-                  "label": "Show her your Warden pass and tell her you are nobody's pyre-man (Persuasion DC 14)",
+                  "label": "Show her your Warden pass and tell her you are nobody's pyre-man",
                   "once": true,
                   "if": {
                     "all": [
@@ -10344,7 +10344,7 @@
               "options": [
                 {
                   "id": "help",
-                  "label": "Hold the lamp and help her lance the black veins (Medicine DC 12)",
+                  "label": "Hold the lamp and help her lance the black veins",
                   "once": true,
                   "if": {
                     "all": [
@@ -10394,7 +10394,7 @@
                 },
                 {
                   "id": "truth",
-                  "label": "Show her your Warden pass and tell her you are nobody's pyre-man (Persuasion DC 14)",
+                  "label": "Show her your Warden pass and tell her you are nobody's pyre-man",
                   "once": true,
                   "if": {
                     "all": [
@@ -10585,7 +10585,7 @@
                 },
                 {
                   "id": "bless",
-                  "label": "Ask for the Drowned Lady's blessing before you swim (Religion DC 12)",
+                  "label": "Ask for the Drowned Lady's blessing before you swim",
                   "once": true,
                   "if": {
                     "all": [
@@ -10627,7 +10627,7 @@
                 },
                 {
                   "id": "letter",
-                  "label": "\"Write to Captain Grell. She will listen to a priest of Mireth.\" (Persuasion DC 13)",
+                  "label": "\"Write to Captain Grell. She will listen to a priest of Mireth.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -10676,7 +10676,7 @@
                 },
                 {
                   "id": "divers",
-                  "label": "\"What would the Choir want in your reliquary?\" (History DC 12)",
+                  "label": "\"What would the Choir want in your reliquary?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -10739,7 +10739,7 @@
                 },
                 {
                   "id": "bless",
-                  "label": "Ask for the Drowned Lady's blessing before you swim (Religion DC 12)",
+                  "label": "Ask for the Drowned Lady's blessing before you swim",
                   "once": true,
                   "if": {
                     "all": [
@@ -10781,7 +10781,7 @@
                 },
                 {
                   "id": "letter",
-                  "label": "\"Write to Captain Grell. She will listen to a priest of Mireth.\" (Persuasion DC 13)",
+                  "label": "\"Write to Captain Grell. She will listen to a priest of Mireth.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -10830,7 +10830,7 @@
                 },
                 {
                   "id": "divers",
-                  "label": "\"What would the Choir want in your reliquary?\" (History DC 12)",
+                  "label": "\"What would the Choir want in your reliquary?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -10893,7 +10893,7 @@
                 },
                 {
                   "id": "bless",
-                  "label": "Ask for the Drowned Lady's blessing before you swim (Religion DC 12)",
+                  "label": "Ask for the Drowned Lady's blessing before you swim",
                   "once": true,
                   "if": {
                     "all": [
@@ -10935,7 +10935,7 @@
                 },
                 {
                   "id": "letter",
-                  "label": "\"Write to Captain Grell. She will listen to a priest of Mireth.\" (Persuasion DC 13)",
+                  "label": "\"Write to Captain Grell. She will listen to a priest of Mireth.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -10984,7 +10984,7 @@
                 },
                 {
                   "id": "divers",
-                  "label": "\"What would the Choir want in your reliquary?\" (History DC 12)",
+                  "label": "\"What would the Choir want in your reliquary?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -11047,7 +11047,7 @@
                 },
                 {
                   "id": "bless",
-                  "label": "Ask for the Drowned Lady's blessing before you swim (Religion DC 12)",
+                  "label": "Ask for the Drowned Lady's blessing before you swim",
                   "once": true,
                   "if": {
                     "all": [
@@ -11089,7 +11089,7 @@
                 },
                 {
                   "id": "letter",
-                  "label": "\"Write to Captain Grell. She will listen to a priest of Mireth.\" (Persuasion DC 13)",
+                  "label": "\"Write to Captain Grell. She will listen to a priest of Mireth.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -11138,7 +11138,7 @@
                 },
                 {
                   "id": "divers",
-                  "label": "\"What would the Choir want in your reliquary?\" (History DC 12)",
+                  "label": "\"What would the Choir want in your reliquary?\"",
                   "once": true,
                   "if": {
                     "all": [

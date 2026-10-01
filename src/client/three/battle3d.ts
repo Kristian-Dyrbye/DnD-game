@@ -80,3 +80,13 @@ export function hpColour(hp: number, maxHp: number): number {
   const f = Math.max(0, Math.min(1, hp / Math.max(1, maxHp)));
   return f > 0.5 ? 0x6fd06f : f > 0.25 ? 0xe0b040 : 0xe0483e;
 }
+
+/**
+ * How much farther than the default the camera must sit so the whole board fits a viewport of this
+ * aspect ratio (width / height). 1 for landscape views; grows as the view narrows (phones).
+ */
+export function fitFactor(aspect: number): number {
+  if (!Number.isFinite(aspect) || aspect <= 0) return 1;
+  // The default distance frames the board for an aspect of about 1.3; narrower views see less sideways.
+  return Math.max(1, 1.3 / aspect);
+}

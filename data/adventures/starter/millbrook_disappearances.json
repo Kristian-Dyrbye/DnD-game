@@ -105,7 +105,7 @@
                 },
                 {
                   "id": "sigil_lore",
-                  "label": "Recall what the sigil means (Religion DC 10)",
+                  "label": "Recall what the sigil means",
                   "if": {
                     "flag": "~sigil_found"
                   },
@@ -129,7 +129,7 @@
                 },
                 {
                   "id": "footprints",
-                  "label": "Study the wet footprints (Investigation DC 12)",
+                  "label": "Study the wet footprints",
                   "once": true,
                   "keywords": [
                     "footprints",
@@ -372,7 +372,7 @@
           "actions": [
             {
               "id": "persuade_reeve",
-              "label": "Ask the Reeve for help (Persuasion DC 12)",
+              "label": "Ask the Reeve for help",
               "if": {
                 "not": {
                   "flag": "~barrow_key"
@@ -422,7 +422,7 @@
             },
             {
               "id": "intimidate_reeve",
-              "label": "Demand the barrow key (Intimidation DC 10)",
+              "label": "Demand the barrow key",
               "if": {
                 "not": {
                   "flag": "~barrow_key"
@@ -484,7 +484,7 @@
             },
             {
               "id": "insight_oda",
-              "label": "Watch Miller Oda (Insight DC 13)",
+              "label": "Watch Miller Oda",
               "once": true,
               "check": {
                 "dc": 13,
@@ -510,7 +510,7 @@
             },
             {
               "id": "oda_confess",
-              "label": "Gently ask Oda what she's hiding (Persuasion DC 11)",
+              "label": "Gently ask Oda what she's hiding",
               "if": {
                 "flag": "~oda_guilty"
               },
@@ -744,7 +744,7 @@
           "actions": [
             {
               "id": "track",
-              "label": "Follow the barefoot tracks (Survival DC 12)",
+              "label": "Follow the barefoot tracks",
               "once": true,
               "check": {
                 "dc": 12,
@@ -782,7 +782,7 @@
             },
             {
               "id": "ford_athletics",
-              "label": "Wade the millrace (Athletics DC 10)",
+              "label": "Wade the millrace",
               "if": {
                 "all": [
                   {
@@ -824,7 +824,7 @@
             },
             {
               "id": "ford_acrobatics",
-              "label": "Hop across on the stones (Acrobatics DC 12)",
+              "label": "Hop across on the stones",
               "if": {
                 "all": [
                   {
@@ -866,7 +866,7 @@
             },
             {
               "id": "sneak",
-              "label": "Creep up on the barrow (Stealth DC 13)",
+              "label": "Creep up on the barrow",
               "if": {
                 "all": [
                   {
@@ -971,7 +971,7 @@
             },
             {
               "id": "force",
-              "label": "Force the barrow gate (Athletics DC 14)",
+              "label": "Force the barrow gate",
               "to": "barrow_of_the_first_sheaf",
               "if": {
                 "all": [
@@ -1134,7 +1134,7 @@
             },
             {
               "id": "slip_chains",
-              "label": "Work the chains loose (Strength DC 12)",
+              "label": "Work the chains loose",
               "if": {
                 "flag": "~chained"
               },
@@ -1235,7 +1235,7 @@
             },
             {
               "id": "free_fast",
-              "label": "Break the captives' chains before the altar feeds again (Athletics DC 12)",
+              "label": "Break the captives' chains before the altar feeds again",
               "if": {
                 "all": [
                   {
@@ -1294,7 +1294,7 @@
             },
             {
               "id": "free_tools",
-              "label": "Pick the shackles with thieves' tools (Dexterity DC 12)",
+              "label": "Pick the shackles with thieves' tools",
               "if": {
                 "all": [
                   {
@@ -1348,7 +1348,7 @@
             },
             {
               "id": "chase",
-              "label": "Chase Brother Ashby into the collapsing tunnel (Athletics DC 13)",
+              "label": "Chase Brother Ashby into the collapsing tunnel",
               "if": {
                 "all": [
                   {
@@ -1479,7 +1479,7 @@
           "actions": [
             {
               "id": "rekindle",
-              "label": "Rekindle the antler-brazier (Religion DC 10)",
+              "label": "Rekindle the antler-brazier",
               "keywords": [
                 "relight",
                 "rekindle",
@@ -1513,7 +1513,7 @@
             },
             {
               "id": "rekindle_nature",
-              "label": "Coax a fire from the old tinder (Nature DC 12)",
+              "label": "Coax a fire from the old tinder",
               "keywords": [
                 "tinder",
                 "coax",
@@ -1663,7 +1663,7 @@
             },
             {
               "id": "recruit_cruel",
-              "label": "Ask Corwin to ride with you (Persuasion DC 10)",
+              "label": "Ask Corwin to ride with you",
               "if": {
                 "all": [
                   {
@@ -1875,7 +1875,7 @@
             },
             {
               "id": "talk_down",
-              "label": "Talk them out of it (Persuasion DC 12)",
+              "label": "Talk them out of it",
               "if": {
                 "not": {
                   "flag": "~bridge_done"
@@ -1915,7 +1915,7 @@
             },
             {
               "id": "expose_clerk",
-              "label": "Say \"the Cantor\" and watch the clerk's face (Insight DC 12)",
+              "label": "Say \"the Cantor\" and watch the clerk's face",
               "once": true,
               "if": {
                 "all": [
@@ -2200,7 +2200,7 @@
                 },
                 {
                   "id": "read",
-                  "label": "Watch him: what is he really afraid of? (Insight DC 11)",
+                  "label": "Watch him: what is he really afraid of?",
                   "once": true,
                   "if": {
                     "not": {
@@ -2267,7 +2267,7 @@
                 },
                 {
                   "id": "lie",
-                  "label": "\"I'm here on the Crown's business. The key, Reeve.\" (Deception DC 13)",
+                  "label": "\"I'm here on the Crown's business. The key, Reeve.\"",
                   "if": {
                     "not": {
                       "flag": "~reeve_tried_lie"
@@ -2356,7 +2356,7 @@
                 },
                 {
                   "id": "read",
-                  "label": "Watch him: what is he really afraid of? (Insight DC 11)",
+                  "label": "Watch him: what is he really afraid of?",
                   "once": true,
                   "if": {
                     "not": {
@@ -2423,7 +2423,7 @@
                 },
                 {
                   "id": "lie",
-                  "label": "\"I'm here on the Crown's business. The key, Reeve.\" (Deception DC 13)",
+                  "label": "\"I'm here on the Crown's business. The key, Reeve.\"",
                   "if": {
                     "not": {
                       "flag": "~reeve_tried_lie"
@@ -2512,7 +2512,7 @@
                 },
                 {
                   "id": "read",
-                  "label": "Watch him: what is he really afraid of? (Insight DC 11)",
+                  "label": "Watch him: what is he really afraid of?",
                   "once": true,
                   "if": {
                     "not": {
@@ -2579,7 +2579,7 @@
                 },
                 {
                   "id": "lie",
-                  "label": "\"I'm here on the Crown's business. The key, Reeve.\" (Deception DC 13)",
+                  "label": "\"I'm here on the Crown's business. The key, Reeve.\"",
                   "if": {
                     "not": {
                       "flag": "~reeve_tried_lie"
@@ -2691,7 +2691,7 @@
                 },
                 {
                   "id": "apologise",
-                  "label": "\"I was hard on you before. I'm sorry.\" (Persuasion DC 12)",
+                  "label": "\"I was hard on you before. I'm sorry.\"",
                   "once": true,
                   "if": {
                     "flag": "arc.starter.reeve_attitude",
@@ -2831,7 +2831,7 @@
                 },
                 {
                   "id": "apologise",
-                  "label": "\"I was hard on you before. I'm sorry.\" (Persuasion DC 12)",
+                  "label": "\"I was hard on you before. I'm sorry.\"",
                   "once": true,
                   "if": {
                     "flag": "arc.starter.reeve_attitude",
@@ -2971,7 +2971,7 @@
                 },
                 {
                   "id": "apologise",
-                  "label": "\"I was hard on you before. I'm sorry.\" (Persuasion DC 12)",
+                  "label": "\"I was hard on you before. I'm sorry.\"",
                   "once": true,
                   "if": {
                     "flag": "arc.starter.reeve_attitude",
@@ -3115,7 +3115,7 @@
                 },
                 {
                   "id": "apologise",
-                  "label": "\"I was hard on you before. I'm sorry.\" (Persuasion DC 12)",
+                  "label": "\"I was hard on you before. I'm sorry.\"",
                   "once": true,
                   "if": {
                     "flag": "arc.starter.reeve_attitude",
@@ -3328,7 +3328,7 @@
                 },
                 {
                   "id": "read",
-                  "label": "Watch her: does she know the ring is gone? (Insight DC 10)",
+                  "label": "Watch her: does she know the ring is gone?",
                   "once": true,
                   "if": {
                     "all": [
@@ -3365,7 +3365,7 @@
                 },
                 {
                   "id": "sell",
-                  "label": "\"I found something of yours. Fifteen gold and it's back on your finger.\" (Persuasion DC 12)",
+                  "label": "\"I found something of yours. Fifteen gold and it's back on your finger.\"",
                   "if": {
                     "all": [
                       {
@@ -3422,7 +3422,7 @@
                 },
                 {
                   "id": "extort",
-                  "label": "\"Your ring came from a cult's altar. Twenty gold, or it goes to a pawnbroker in Brightwater.\" (Intimidation DC 11)",
+                  "label": "\"Your ring came from a cult's altar. Twenty gold, or it goes to a pawnbroker in Brightwater.\"",
                   "if": {
                     "all": [
                       {
@@ -3559,7 +3559,7 @@
                 },
                 {
                   "id": "read",
-                  "label": "Watch her: does she know the ring is gone? (Insight DC 10)",
+                  "label": "Watch her: does she know the ring is gone?",
                   "once": true,
                   "if": {
                     "all": [
@@ -3596,7 +3596,7 @@
                 },
                 {
                   "id": "sell",
-                  "label": "\"I found something of yours. Fifteen gold and it's back on your finger.\" (Persuasion DC 12)",
+                  "label": "\"I found something of yours. Fifteen gold and it's back on your finger.\"",
                   "if": {
                     "all": [
                       {
@@ -3653,7 +3653,7 @@
                 },
                 {
                   "id": "extort",
-                  "label": "\"Your ring came from a cult's altar. Twenty gold, or it goes to a pawnbroker in Brightwater.\" (Intimidation DC 11)",
+                  "label": "\"Your ring came from a cult's altar. Twenty gold, or it goes to a pawnbroker in Brightwater.\"",
                   "if": {
                     "all": [
                       {
@@ -3790,7 +3790,7 @@
                 },
                 {
                   "id": "read",
-                  "label": "Watch her: does she know the ring is gone? (Insight DC 10)",
+                  "label": "Watch her: does she know the ring is gone?",
                   "once": true,
                   "if": {
                     "all": [
@@ -3827,7 +3827,7 @@
                 },
                 {
                   "id": "sell",
-                  "label": "\"I found something of yours. Fifteen gold and it's back on your finger.\" (Persuasion DC 12)",
+                  "label": "\"I found something of yours. Fifteen gold and it's back on your finger.\"",
                   "if": {
                     "all": [
                       {
@@ -3884,7 +3884,7 @@
                 },
                 {
                   "id": "extort",
-                  "label": "\"Your ring came from a cult's altar. Twenty gold, or it goes to a pawnbroker in Brightwater.\" (Intimidation DC 11)",
+                  "label": "\"Your ring came from a cult's altar. Twenty gold, or it goes to a pawnbroker in Brightwater.\"",
                   "if": {
                     "all": [
                       {
@@ -4067,7 +4067,7 @@
               "options": [
                 {
                   "id": "lance",
-                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "label": "Ask why the Dawn Lance dismissed him",
                   "once": true,
                   "keywords": [
                     "lance",
@@ -4258,7 +4258,7 @@
               "options": [
                 {
                   "id": "lance",
-                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "label": "Ask why the Dawn Lance dismissed him",
                   "once": true,
                   "keywords": [
                     "lance",
@@ -4449,7 +4449,7 @@
               "options": [
                 {
                   "id": "lance",
-                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "label": "Ask why the Dawn Lance dismissed him",
                   "once": true,
                   "keywords": [
                     "lance",
@@ -4640,7 +4640,7 @@
               "options": [
                 {
                   "id": "lance",
-                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "label": "Ask why the Dawn Lance dismissed him",
                   "once": true,
                   "keywords": [
                     "lance",
@@ -4831,7 +4831,7 @@
               "options": [
                 {
                   "id": "lance",
-                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "label": "Ask why the Dawn Lance dismissed him",
                   "once": true,
                   "keywords": [
                     "lance",
@@ -5022,7 +5022,7 @@
               "options": [
                 {
                   "id": "lance",
-                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "label": "Ask why the Dawn Lance dismissed him",
                   "once": true,
                   "keywords": [
                     "lance",
@@ -5213,7 +5213,7 @@
               "options": [
                 {
                   "id": "lance",
-                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "label": "Ask why the Dawn Lance dismissed him",
                   "once": true,
                   "keywords": [
                     "lance",
@@ -5404,7 +5404,7 @@
               "options": [
                 {
                   "id": "lance",
-                  "label": "Ask why the Dawn Lance dismissed him (Insight DC 12)",
+                  "label": "Ask why the Dawn Lance dismissed him",
                   "once": true,
                   "keywords": [
                     "lance",
@@ -5663,7 +5663,7 @@
                 },
                 {
                   "id": "surrender",
-                  "label": "\"It's over, Ashby. Come quietly and you will get a fair trial.\" (Persuasion DC 13)",
+                  "label": "\"It's over, Ashby. Come quietly and you will get a fair trial.\"",
                   "keywords": [
                     "surrender",
                     "trial",
@@ -5705,7 +5705,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "Level your weapon at him: \"One more step and you die.\" (Intimidation DC 12)",
+                  "label": "Level your weapon at him: \"One more step and you die.\"",
                   "keywords": [
                     "threaten",
                     "step",
@@ -5739,7 +5739,7 @@
                 },
                 {
                   "id": "bluff",
-                  "label": "\"The Cantor sent me to take the Tooth, Brother.\" (Deception DC 12)",
+                  "label": "\"The Cantor sent me to take the Tooth, Brother.\"",
                   "if": {
                     "flag": "~posed_as_choir"
                   },
@@ -5821,7 +5821,7 @@
                 },
                 {
                   "id": "surrender",
-                  "label": "\"It's over, Ashby. Come quietly and you will get a fair trial.\" (Persuasion DC 13)",
+                  "label": "\"It's over, Ashby. Come quietly and you will get a fair trial.\"",
                   "keywords": [
                     "surrender",
                     "trial",
@@ -5863,7 +5863,7 @@
                 },
                 {
                   "id": "threaten",
-                  "label": "Level your weapon at him: \"One more step and you die.\" (Intimidation DC 12)",
+                  "label": "Level your weapon at him: \"One more step and you die.\"",
                   "keywords": [
                     "threaten",
                     "step",
@@ -5897,7 +5897,7 @@
                 },
                 {
                   "id": "bluff",
-                  "label": "\"The Cantor sent me to take the Tooth, Brother.\" (Deception DC 12)",
+                  "label": "\"The Cantor sent me to take the Tooth, Brother.\"",
                   "if": {
                     "flag": "~posed_as_choir"
                   },
@@ -6052,7 +6052,7 @@
                 },
                 {
                   "id": "charm",
-                  "label": "Trade stories with her until she warms up (Persuasion DC 11)",
+                  "label": "Trade stories with her until she warms up",
                   "if": {
                     "all": [
                       {
@@ -6102,7 +6102,7 @@
                 },
                 {
                   "id": "lean",
-                  "label": "\"Somebody in this room is feeding that hill. Who?\" (Intimidation DC 12)",
+                  "label": "\"Somebody in this room is feeding that hill. Who?\"",
                   "if": {
                     "not": {
                       "flag": "~maud_told"
@@ -6209,7 +6209,7 @@
                 },
                 {
                   "id": "charm",
-                  "label": "Trade stories with her until she warms up (Persuasion DC 11)",
+                  "label": "Trade stories with her until she warms up",
                   "if": {
                     "all": [
                       {
@@ -6259,7 +6259,7 @@
                 },
                 {
                   "id": "lean",
-                  "label": "\"Somebody in this room is feeding that hill. Who?\" (Intimidation DC 12)",
+                  "label": "\"Somebody in this room is feeding that hill. Who?\"",
                   "if": {
                     "not": {
                       "flag": "~maud_told"
@@ -6370,7 +6370,7 @@
                 },
                 {
                   "id": "charm",
-                  "label": "Trade stories with her until she warms up (Persuasion DC 11)",
+                  "label": "Trade stories with her until she warms up",
                   "if": {
                     "all": [
                       {
@@ -6420,7 +6420,7 @@
                 },
                 {
                   "id": "lean",
-                  "label": "\"Somebody in this room is feeding that hill. Who?\" (Intimidation DC 12)",
+                  "label": "\"Somebody in this room is feeding that hill. Who?\"",
                   "if": {
                     "not": {
                       "flag": "~maud_told"
@@ -6531,7 +6531,7 @@
                 },
                 {
                   "id": "charm",
-                  "label": "Trade stories with her until she warms up (Persuasion DC 11)",
+                  "label": "Trade stories with her until she warms up",
                   "if": {
                     "all": [
                       {
@@ -6581,7 +6581,7 @@
                 },
                 {
                   "id": "lean",
-                  "label": "\"Somebody in this room is feeding that hill. Who?\" (Intimidation DC 12)",
+                  "label": "\"Somebody in this room is feeding that hill. Who?\"",
                   "if": {
                     "not": {
                       "flag": "~maud_told"
@@ -6703,7 +6703,7 @@
               "options": [
                 {
                   "id": "watch",
-                  "label": "Watch them: are they both true believers? (Insight DC 10)",
+                  "label": "Watch them: are they both true believers?",
                   "once": true,
                   "if": {
                     "not": {
@@ -6735,7 +6735,7 @@
                 },
                 {
                   "id": "believer",
-                  "label": "\"Hunger ends. The Brother is expecting me.\" (Deception DC 13)",
+                  "label": "\"Hunger ends. The Brother is expecting me.\"",
                   "keywords": [
                     "hunger",
                     "brother",
@@ -6781,7 +6781,7 @@
                 },
                 {
                   "id": "scare",
-                  "label": "\"Run. Now. And never come back to Millbrook.\" (Intimidation DC 13)",
+                  "label": "\"Run. Now. And never come back to Millbrook.\"",
                   "keywords": [
                     "run",
                     "scare",
@@ -6823,7 +6823,7 @@
                 },
                 {
                   "id": "turn",
-                  "label": "\"There are children chained under that hill. Is that what your god wants?\" (Persuasion DC 14)",
+                  "label": "\"There are children chained under that hill. Is that what your god wants?\"",
                   "keywords": [
                     "children",
                     "god",
@@ -6904,7 +6904,7 @@
               "options": [
                 {
                   "id": "watch",
-                  "label": "Watch them: are they both true believers? (Insight DC 10)",
+                  "label": "Watch them: are they both true believers?",
                   "once": true,
                   "if": {
                     "not": {
@@ -6936,7 +6936,7 @@
                 },
                 {
                   "id": "believer",
-                  "label": "\"Hunger ends. The Brother is expecting me.\" (Deception DC 13)",
+                  "label": "\"Hunger ends. The Brother is expecting me.\"",
                   "keywords": [
                     "hunger",
                     "brother",
@@ -6982,7 +6982,7 @@
                 },
                 {
                   "id": "scare",
-                  "label": "\"Run. Now. And never come back to Millbrook.\" (Intimidation DC 13)",
+                  "label": "\"Run. Now. And never come back to Millbrook.\"",
                   "keywords": [
                     "run",
                     "scare",
@@ -7024,7 +7024,7 @@
                 },
                 {
                   "id": "turn",
-                  "label": "\"There are children chained under that hill. Is that what your god wants?\" (Persuasion DC 14)",
+                  "label": "\"There are children chained under that hill. Is that what your god wants?\"",
                   "keywords": [
                     "children",
                     "god",

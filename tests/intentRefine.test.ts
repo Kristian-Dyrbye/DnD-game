@@ -131,7 +131,7 @@ describe('intent prompt', () => {
   it("names each action's check when the label doesn't", () => {
     const ictx = intentContext(at('millbrook_arrival'));
     const text = intentMessages('x', ictx)[1]!.content;
-    expect(text).toContain('well.footprints: Study the wet footprints (Investigation DC 12)\n');
+    expect(text).toContain('well.footprints: Study the wet footprints [skill: investigation]\n');
     expect(ictx.actions.find((a) => a.id === 'well.footprints')).toMatchObject({ poi: 'well', skill: 'investigation' });
     const crypt = intentContext(at('barrow_sheaf_crypt', 'slip_chains'));
     expect(crypt.actions.find((a) => a.id === 'slip_chains')).toMatchObject({ ability: 'str' });

@@ -7852,7 +7852,7 @@
               "options": [
                 {
                   "id": "ledger",
-                  "label": "\"Every name in your ledger of the burned is watching you tonight, Captain.\" (Persuasion DC 14)",
+                  "label": "\"Every name in your ledger of the burned is watching you tonight, Captain.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7920,7 +7920,7 @@
                 },
                 {
                   "id": "pyres",
-                  "label": "\"Hollowmere burned on your order. Say it to their faces, before the dead do.\" (Intimidation DC 15)",
+                  "label": "\"Hollowmere burned on your order. Say it to their faces, before the dead do.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -7994,7 +7994,7 @@
                 },
                 {
                   "id": "notice",
-                  "label": "\"You have already written your own death notice, haven't you?\" (Insight DC 15)",
+                  "label": "\"You have already written your own death notice, haven't you?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8059,7 +8059,7 @@
               "options": [
                 {
                   "id": "ledger",
-                  "label": "\"Every name in your ledger of the burned is watching you tonight, Captain.\" (Persuasion DC 14)",
+                  "label": "\"Every name in your ledger of the burned is watching you tonight, Captain.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8127,7 +8127,7 @@
                 },
                 {
                   "id": "pyres",
-                  "label": "\"Hollowmere burned on your order. Say it to their faces, before the dead do.\" (Intimidation DC 15)",
+                  "label": "\"Hollowmere burned on your order. Say it to their faces, before the dead do.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8201,7 +8201,7 @@
                 },
                 {
                   "id": "notice",
-                  "label": "\"You have already written your own death notice, haven't you?\" (Insight DC 15)",
+                  "label": "\"You have already written your own death notice, haven't you?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8341,7 +8341,7 @@
               "options": [
                 {
                   "id": "lead",
-                  "label": "\"Lend me one of your lead boxes for the Teeth, Sergeant.\" (Persuasion DC 13)",
+                  "label": "\"Lend me one of your lead boxes for the Teeth, Sergeant.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8453,7 +8453,7 @@
                 },
                 {
                   "id": "postern",
-                  "label": "\"Your old postern. We slip out and hit the dead from behind before they reach the wall.\" (Stealth DC 14)",
+                  "label": "\"Your old postern. We slip out and hit the dead from behind before they reach the wall.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8525,7 +8525,7 @@
               "options": [
                 {
                   "id": "lead",
-                  "label": "\"Lend me one of your lead boxes for the Teeth, Sergeant.\" (Persuasion DC 13)",
+                  "label": "\"Lend me one of your lead boxes for the Teeth, Sergeant.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8637,7 +8637,7 @@
                 },
                 {
                   "id": "postern",
-                  "label": "\"Your old postern. We slip out and hit the dead from behind before they reach the wall.\" (Stealth DC 14)",
+                  "label": "\"Your old postern. We slip out and hit the dead from behind before they reach the wall.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8761,7 +8761,7 @@
               "options": [
                 {
                   "id": "sentries",
-                  "label": "\"Where does the Cantor post her sentries?\" (Intimidation DC 15)",
+                  "label": "\"Where does the Cantor post her sentries?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8811,7 +8811,7 @@
                 },
                 {
                   "id": "rite",
-                  "label": "\"Your drowned children at the Abbey deserve a rite. Tell me their names and they will have one.\" (Religion DC 14)",
+                  "label": "\"Your drowned children at the Abbey deserve a rite. Tell me their names and they will have one.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8873,7 +8873,7 @@
                 },
                 {
                   "id": "hymn",
-                  "label": "\"The Cantor sent me to bring you home, Mother. Sing me the hymn so I know it is really you.\" (Deception DC 16)",
+                  "label": "\"The Cantor sent me to bring you home, Mother. Sing me the hymn so I know it is really you.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8940,7 +8940,7 @@
               "options": [
                 {
                   "id": "sentries",
-                  "label": "\"Where does the Cantor post her sentries?\" (Intimidation DC 15)",
+                  "label": "\"Where does the Cantor post her sentries?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -8990,7 +8990,7 @@
                 },
                 {
                   "id": "rite",
-                  "label": "\"Your drowned children at the Abbey deserve a rite. Tell me their names and they will have one.\" (Religion DC 14)",
+                  "label": "\"Your drowned children at the Abbey deserve a rite. Tell me their names and they will have one.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9052,7 +9052,7 @@
                 },
                 {
                   "id": "hymn",
-                  "label": "\"The Cantor sent me to bring you home, Mother. Sing me the hymn so I know it is really you.\" (Deception DC 16)",
+                  "label": "\"The Cantor sent me to bring you home, Mother. Sing me the hymn so I know it is really you.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9193,7 +9193,7 @@
                 },
                 {
                   "id": "below",
-                  "label": "\"Come down with us, Grandmother. Sing the Name at the Jaw-Stone itself.\" (Persuasion DC 16)",
+                  "label": "\"Come down with us, Grandmother. Sing the Name at the Jaw-Stone itself.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9250,7 +9250,7 @@
                 },
                 {
                   "id": "heart",
-                  "label": "\"What does Nettle need, at the heart-tree?\" (Insight DC 14)",
+                  "label": "\"What does Nettle need, at the heart-tree?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9347,7 +9347,7 @@
                 },
                 {
                   "id": "below",
-                  "label": "\"Come down with us, Grandmother. Sing the Name at the Jaw-Stone itself.\" (Persuasion DC 16)",
+                  "label": "\"Come down with us, Grandmother. Sing the Name at the Jaw-Stone itself.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9404,7 +9404,7 @@
                 },
                 {
                   "id": "heart",
-                  "label": "\"What does Nettle need, at the heart-tree?\" (Insight DC 14)",
+                  "label": "\"What does Nettle need, at the heart-tree?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9513,7 +9513,7 @@
               "options": [
                 {
                   "id": "names",
-                  "label": "\"Teach me the bells' names, Father, so I can call them up from the water.\" (Religion DC 13)",
+                  "label": "\"Teach me the bells' names, Father, so I can call them up from the water.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9576,7 +9576,7 @@
                 },
                 {
                   "id": "drowned",
-                  "label": "\"Who are the drowned in the undercroft, Father?\" (History DC 14)",
+                  "label": "\"Who are the drowned in the undercroft, Father?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9631,7 +9631,7 @@
                 },
                 {
                   "id": "follow",
-                  "label": "\"When the bells are rung, come down into the Maw with us. The seal will need your voice.\" (Persuasion DC 14)",
+                  "label": "\"When the bells are rung, come down into the Maw with us. The seal will need your voice.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9698,7 +9698,7 @@
               "options": [
                 {
                   "id": "names",
-                  "label": "\"Teach me the bells' names, Father, so I can call them up from the water.\" (Religion DC 13)",
+                  "label": "\"Teach me the bells' names, Father, so I can call them up from the water.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9761,7 +9761,7 @@
                 },
                 {
                   "id": "drowned",
-                  "label": "\"Who are the drowned in the undercroft, Father?\" (History DC 14)",
+                  "label": "\"Who are the drowned in the undercroft, Father?\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9816,7 +9816,7 @@
                 },
                 {
                   "id": "follow",
-                  "label": "\"When the bells are rung, come down into the Maw with us. The seal will need your voice.\" (Persuasion DC 14)",
+                  "label": "\"When the bells are rung, come down into the Maw with us. The seal will need your voice.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -9936,7 +9936,7 @@
               "options": [
                 {
                   "id": "false_tooth",
-                  "label": "Hold out a dog's fang wrapped in cloth: \"Here. A Tooth, as you asked.\" (Deception DC 16)",
+                  "label": "Hold out a dog's fang wrapped in cloth: \"Here. A Tooth, as you asked.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -9994,7 +9994,7 @@
                 },
                 {
                   "id": "gold",
-                  "label": "\"Two hundred gold, for your family's trouble, and we go our ways.\" (Persuasion DC 14)",
+                  "label": "\"Two hundred gold, for your family's trouble, and we go our ways.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -10058,7 +10058,7 @@
                 },
                 {
                   "id": "dawn",
-                  "label": "\"Dawn is four hours off, hag. Sit with me until it comes, if you dare.\" (Intimidation DC 17)",
+                  "label": "\"Dawn is four hours off, hag. Sit with me until it comes, if you dare.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -10115,7 +10115,7 @@
               "options": [
                 {
                   "id": "false_tooth",
-                  "label": "Hold out a dog's fang wrapped in cloth: \"Here. A Tooth, as you asked.\" (Deception DC 16)",
+                  "label": "Hold out a dog's fang wrapped in cloth: \"Here. A Tooth, as you asked.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -10173,7 +10173,7 @@
                 },
                 {
                   "id": "gold",
-                  "label": "\"Two hundred gold, for your family's trouble, and we go our ways.\" (Persuasion DC 14)",
+                  "label": "\"Two hundred gold, for your family's trouble, and we go our ways.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -10237,7 +10237,7 @@
                 },
                 {
                   "id": "dawn",
-                  "label": "\"Dawn is four hours off, hag. Sit with me until it comes, if you dare.\" (Intimidation DC 17)",
+                  "label": "\"Dawn is four hours off, hag. Sit with me until it comes, if you dare.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -10354,7 +10354,7 @@
               "options": [
                 {
                   "id": "notes",
-                  "label": "\"You read the old texts. The Maw does not end hunger. It is hunger. Your own notes say so.\" (Persuasion DC 17)",
+                  "label": "\"You read the old texts. The Maw does not end hunger. It is hunger. Your own notes say so.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -10421,7 +10421,7 @@
                 },
                 {
                   "id": "verse",
-                  "label": "\"Before we finish this: tell me the reverse-song's last verse. A scholar should want it written down.\" (Arcana DC 16)",
+                  "label": "\"Before we finish this: tell me the reverse-song's last verse. A scholar should want it written down.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -10471,7 +10471,7 @@
                 },
                 {
                   "id": "books",
-                  "label": "\"Your books burn with you, Vosk. Every one. Step aside and I will carry them out.\" (Intimidation DC 16)",
+                  "label": "\"Your books burn with you, Vosk. Every one. Step aside and I will carry them out.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -10527,7 +10527,7 @@
               "options": [
                 {
                   "id": "notes",
-                  "label": "\"You read the old texts. The Maw does not end hunger. It is hunger. Your own notes say so.\" (Persuasion DC 17)",
+                  "label": "\"You read the old texts. The Maw does not end hunger. It is hunger. Your own notes say so.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -10594,7 +10594,7 @@
                 },
                 {
                   "id": "verse",
-                  "label": "\"Before we finish this: tell me the reverse-song's last verse. A scholar should want it written down.\" (Arcana DC 16)",
+                  "label": "\"Before we finish this: tell me the reverse-song's last verse. A scholar should want it written down.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -10644,7 +10644,7 @@
                 },
                 {
                   "id": "books",
-                  "label": "\"Your books burn with you, Vosk. Every one. Step aside and I will carry them out.\" (Intimidation DC 16)",
+                  "label": "\"Your books burn with you, Vosk. Every one. Step aside and I will carry them out.\"",
                   "once": true,
                   "if": {
                     "not": {
@@ -10788,7 +10788,7 @@
               "options": [
                 {
                   "id": "cinderdale",
-                  "label": "\"I know about Cinderdale. Others starved there too, and not one of them wanted this.\" (Persuasion DC 17)",
+                  "label": "\"I know about Cinderdale. Others starved there too, and not one of them wanted this.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -10841,7 +10841,7 @@
                 },
                 {
                   "id": "flaw",
-                  "label": "Listen for the flaw in her song (Arcana DC 17)",
+                  "label": "Listen for the flaw in her song",
                   "once": true,
                   "if": {
                     "all": [
@@ -10891,7 +10891,7 @@
                 },
                 {
                   "id": "taunt",
-                  "label": "Shout to her fanatics: \"She will feed you to it first. Look at her. Look!\" (Intimidation DC 16)",
+                  "label": "Shout to her fanatics: \"She will feed you to it first. Look at her. Look!\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -10951,7 +10951,7 @@
               "options": [
                 {
                   "id": "cinderdale",
-                  "label": "\"I know about Cinderdale. Others starved there too, and not one of them wanted this.\" (Persuasion DC 17)",
+                  "label": "\"I know about Cinderdale. Others starved there too, and not one of them wanted this.\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -11004,7 +11004,7 @@
                 },
                 {
                   "id": "flaw",
-                  "label": "Listen for the flaw in her song (Arcana DC 17)",
+                  "label": "Listen for the flaw in her song",
                   "once": true,
                   "if": {
                     "all": [
@@ -11054,7 +11054,7 @@
                 },
                 {
                   "id": "taunt",
-                  "label": "Shout to her fanatics: \"She will feed you to it first. Look at her. Look!\" (Intimidation DC 16)",
+                  "label": "Shout to her fanatics: \"She will feed you to it first. Look at her. Look!\"",
                   "once": true,
                   "if": {
                     "all": [
@@ -11176,7 +11176,7 @@
               "options": [
                 {
                   "id": "father",
-                  "label": "\"Your father wrote the reverse-song to stop this, Aurek. Not to start it.\" (Persuasion DC 17)",
+                  "label": "\"Your father wrote the reverse-song to stop this, Aurek. Not to start it.\"",
                   "once": true,
                   "keywords": [
                     "father",
@@ -11218,7 +11218,7 @@
                 },
                 {
                   "id": "afraid",
-                  "label": "\"You are not loyal to her. You are afraid of her.\" (Insight DC 15)",
+                  "label": "\"You are not loyal to her. You are afraid of her.\"",
                   "once": true,
                   "keywords": [
                     "afraid",
@@ -11251,7 +11251,7 @@
                 },
                 {
                   "id": "lie",
-                  "label": "\"She has already sung your name to the Maw, Aurek. You are the first Tooth's price.\" (Deception DC 16)",
+                  "label": "\"She has already sung your name to the Maw, Aurek. You are the first Tooth's price.\"",
                   "once": true,
                   "keywords": [
                     "name",
