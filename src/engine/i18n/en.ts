@@ -35,6 +35,8 @@ export const en = {
   'table.hostStays': 'The host’s seat can’t be released',
   'table.joined': '{name} sits down at the table.',
   'table.left': '{name} leaves the table; their characters follow the party on their own.',
+  'table.policyAnyone': 'From now on every player at the table may act in the story.',
+  'table.policyHost': 'From now on the host decides in the story; the others suggest.',
 
   // Story results
   'story.received': 'Received: {list}',

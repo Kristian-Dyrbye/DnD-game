@@ -121,9 +121,9 @@ type CommandType = ClientCommand['type'];
 
 /** Anyone at the table, spectators included (`join` itself is the transport's job; the session refuses it). */
 const OPEN: ReadonlySet<CommandType> = new Set(['ping', 'get_state', 'join']);
-/** The host alone: the game itself, its saves, its language and who plays which companion. */
-const HOST_ONLY: ReadonlySet<CommandType> = new Set(['new_game', 'load', 'save', 'set_language', 'thumbnail', 'companion_control']);
-/** Story actions a guest may only propose under host_decides (the rest of the story commands are refused). */
+/** The host alone: the game itself, its saves, its language, the table's policy and who plays which companion. */
+const HOST_ONLY: ReadonlySet<CommandType> = new Set(['new_game', 'load', 'save', 'set_language', 'set_policy', 'thumbnail', 'companion_control']);
+/** Story actions a guest may only propose under host_decides, and a spectator always (the rest of the story commands are refused). */
 const PROPOSALS: ReadonlySet<CommandType> = new Set(['say', 'choose']);
 /** Fight commands: decided by who owns the creature whose turn it is. */
 const COMBAT: ReadonlySet<CommandType> = new Set(['combat_act', 'combat_flee']);
@@ -149,7 +149,8 @@ export function allows(table: Table, cmd: Pick<ClientCommand, 'type'> & { charac
   // Anyone may leave; only the host may free someone else's seat (C005).
   if (cmd.type === 'release_seat') return cmd.seat === undefined || cmd.seat === seat.id || seat.role === 'host' ? { ok: true } : { ok: false, key: 'table.hostOnly' };
   if (HOST_ONLY.has(cmd.type)) return seat.role === 'host' ? { ok: true } : { ok: false, key: 'table.hostOnly' };
-  if (seat.role === 'spectator') return { ok: false, key: 'table.spectator' };
+  // A spectator (coach) watches, but may still suggest a move to the host (COOP_PLAN §3).
+  if (seat.role === 'spectator') return PROPOSALS.has(cmd.type) ? { ok: false, key: 'table.proposeOnly', propose: true } : { ok: false, key: 'table.spectator' };
   if (PLAYERS.has(cmd.type)) return { ok: true };
   if (cmd.type === 'level_up') {
     if (!state) return { ok: true };

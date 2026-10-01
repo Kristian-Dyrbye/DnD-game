@@ -7,7 +7,8 @@ import type { DialogueView } from '../../engine/adventure/conversation';
 import { effect, signal } from '@preact/signals';
 import { language } from '../ui/i18n';
 import type { GameState, LogEntry, RollRecord } from '../../engine/session/gameState';
-import type { ClientCommand, ServerEvent, SuggestedAction } from '../../shared/protocol';
+import type { ClientCommand, ProposalEvent, ServerEvent, SuggestedAction } from '../../shared/protocol';
+import { forgetSeat, joinCodeFrom, openCommands, rememberSeat, type SeatStore } from './guest';
 import type { ShopView } from '../../engine/world/shops';
 import type { Encounter } from '../../engine/combat/encounter';
 import { audio } from '../audio/AudioManager';
@@ -38,6 +39,13 @@ export const waitingFor = signal<Extract<ServerEvent, { type: 'waiting' }> | nul
 /** Co-op (C005): who sits at the table, and this connection's own seat after a `join` (C006 shows both). */
 export const tableSeats = signal<Omit<Extract<ServerEvent, { type: 'table' }>, 'type'> | null>(null);
 export const mySeat = signal<Omit<Extract<ServerEvent, { type: 'joined' }>, 'type'> | null>(null);
+/** Co-op (C006): the join code when this page is a guest's (`?join=CODE`); null on the host's own pages. */
+export const joinCode = signal<string | null>(typeof location !== 'undefined' ? joinCodeFrom(location.search) : null);
+/** Guests' and spectators' suggestions for the host, newest last (cleared when the story moves on). */
+export const proposals = signal<ProposalEvent[]>([]);
+const MAX_PROPOSALS = 5;
+/** Story commands whose ack means the story moved on (old proposals no longer fit). */
+const STORY_MOVES: ReadonlySet<string> = new Set(['say', 'choose', 'travel']);
 /** Hardcore: name of the hero who just died (shows the "continue this world" screen). */
 export const heroFallen = signal<string | null>(null);
 /** The open shop's offer (server-computed prices). */
@@ -62,10 +70,21 @@ export function applyEvent(e: ServerEvent): void {
       return;
     case 'table':
       tableSeats.value = { seats: e.seats, policy: e.policy };
-      if (mySeat.value && !e.seats.some((s) => s.id === mySeat.value?.seat)) mySeat.value = null;
+      if (mySeat.value && !e.seats.some((s) => s.id === mySeat.value?.seat)) {
+        // Released (by us or the host): the token is dead, the next join takes a new seat.
+        mySeat.value = null;
+        forgetSeat(seatStore);
+      }
       return;
     case 'joined':
       mySeat.value = { seat: e.seat, role: e.role, token: e.token };
+      if (joinCode.value) rememberSeat(seatStore, joinCode.value, e.token, guestProfile.name);
+      return;
+    case 'proposal':
+      proposals.value = [...proposals.value, e].slice(-MAX_PROPOSALS);
+      return;
+    case 'ack':
+      if (STORY_MOVES.has(e.command)) proposals.value = [];
       return;
     case 'hero_fallen':
       heroFallen.value = e.name;
@@ -118,7 +137,27 @@ export function applyEvent(e: ServerEvent): void {
   }
 }
 
-let transport: Transport = new WebSocketTransport();
+/** Hides a proposal (the host read it and won't take it up). */
+export function dismissProposal(id: number): void {
+  proposals.value = proposals.value.filter((p) => p.id !== id);
+}
+
+let transport: Transport = new WebSocketTransport(joinCode.peek() !== null);
+
+/** Where a guest page keeps its seat token (none outside a browser; tests inject one). */
+let seatStore: SeatStore | undefined = (() => {
+  try {
+    return typeof window !== 'undefined' ? window.localStorage : undefined;
+  } catch {
+    return undefined;
+  }
+})();
+let guestProfile: { name?: string; role?: 'player' | 'spectator' } = {};
+
+/** Tests: the storage for seat tokens. */
+export function setSeatStore(store: SeatStore | undefined): void {
+  seatStore = store;
+}
 
 /** Picks how the client reaches the game (WebSocket to the server, or the in-page host). Call before connect(). */
 export function setTransport(t: Transport): void {
@@ -129,15 +168,29 @@ export function connect(): void {
   transport.connect({
     onEvent: applyEvent,
     onStatus: (s) => (connection.value = s),
-    // The engine writes its lines in the player's language; after a reconnect, ask for a fresh snapshot.
-    onOpen: () => [{ type: 'set_language', language: language.peek() }, ...(gameState.value ? [{ type: 'get_state' } as const] : [])],
+    // The host's engine writes its lines in the player's language and re-sends the state after a
+    // reconnect; a guest sits down again instead (the join answer brings the state).
+    onOpen: () => openCommands({ code: joinCode.peek(), store: seatStore, ...guestProfile, language: language.peek(), hasState: gameState.peek() !== null }),
   });
 }
 
+/**
+ * A guest sits down at the table (C006): as a player or spectator, under the given name. Joins on
+ * every (re)connect from now on; a stored seat token reclaims the same seat after a reload.
+ */
+export function joinTable(profile: { name?: string; role?: 'player' | 'spectator' } = {}): void {
+  guestProfile = profile;
+  const code = joinCode.peek();
+  if (!code) return;
+  if (connection.peek() === 'open') transport.send(openCommands({ code, store: seatStore, ...profile, language: language.peek(), hasState: false })[0]!);
+  else connect();
+}
+
 // A language switch while connected reaches the engine at once (new lines only; old ones stay).
+// Guests don't: the table speaks the host's language (set_language is the host's).
 effect(() => {
   const lang = language.value;
-  if (connection.peek() === 'open') transport.send({ type: 'set_language', language: lang });
+  if (connection.peek() === 'open' && !joinCode.peek()) transport.send({ type: 'set_language', language: lang });
 });
 
 /** Sends a command, connecting first if needed (commands wait in the transport's outbox until open). */

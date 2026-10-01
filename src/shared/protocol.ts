@@ -72,6 +72,8 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
   }),
   /** Leave the table (own seat), or the host frees a guest's seat; its characters fall back to the AI. */
   z.object({ ...base, type: z.literal('release_seat'), seat: z.string().regex(/^(host|guest-[1-9][0-9]?)$/).optional() }),
+  /** Host only (C006): who acts in the story — the host alone (guests propose) or any player seat. */
+  z.object({ ...base, type: z.literal('set_policy'), policy: z.enum(['host_decides', 'anyone']) }),
   /** A second player-made hero joins the party (C002): a co-op guest's character, or the host's own in duo mode. */
   z.object({ ...base, type: z.literal('add_hero'), hero: CharacterSchema }),
   /** Level up the hero, or `characterId`'s player-made hero (choices as required by leveling.pendingChoices). */
@@ -134,6 +136,19 @@ export interface SuggestedAction {
   actors?: { id: string; name: string; bonus?: number }[];
 }
 
+export interface ProposalEvent {
+  type: 'proposal';
+  id: number;
+  seat: string;
+  /** Who proposes: the seat's player name, else their hero's name, else the seat id. */
+  name: string;
+  command: 'say' | 'choose';
+  text?: string;
+  actionId?: string;
+  label?: string;
+  actor?: string;
+}
+
 export type ServerEvent =
   | { type: 'pong'; reqId?: string }
   | { type: 'ack'; reqId?: string; command: ClientCommand['type'] }
@@ -165,6 +180,12 @@ export type ServerEvent =
   | { type: 'table'; seats: Seat[]; policy: TablePolicy }
   /** Co-op (C005), to the joining connection only: its seat and the token that reclaims it after a reload. */
   | { type: 'joined'; seat: string; role: 'player' | 'spectator'; token: string }
+  /**
+   * Co-op (C006): a guest's or spectator's `say`/`choose` the table policy turned into a suggestion for
+   * the host ("Kim suggests: Study the ledger"). Sent to everyone; the host may take it up or ignore it.
+   * `label` = the button's text when the action was on offer; `actor` as in `choose`.
+   */
+  | ProposalEvent
   /** Hardcore: the hero died; a new hero can continue in this world. */
   | { type: 'hero_fallen'; name: string }
   /** Music mood + ambience bed for the current place (the client crossfades). */

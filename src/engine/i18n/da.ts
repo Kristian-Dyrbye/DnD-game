@@ -34,6 +34,8 @@ export const da: Partial<Record<EngineKey, string>> = {
   'table.hostStays': 'Værtens plads kan ikke frigives',
   'table.joined': '{name} sætter sig ved bordet.',
   'table.left': '{name} forlader bordet; vedkommendes figurer følger selv med selskabet.',
+  'table.policyAnyone': 'Fra nu af må alle spillere ved bordet handle i historien.',
+  'table.policyHost': 'Fra nu af bestemmer værten i historien; de andre kommer med forslag.',
 
   // Historien
   'story.received': 'Modtaget: {list}',

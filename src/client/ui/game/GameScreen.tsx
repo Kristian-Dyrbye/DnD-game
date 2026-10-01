@@ -12,7 +12,7 @@ import { timeOfDay } from '../../../engine/world/clock';
 import { weatherEffects, type WeatherState } from '../../../engine/world/weather';
 import { CharacterPreview } from '../../three/LazyCharacterPreview';
 import { useEffect, useState } from 'preact/hooks';
-import { connection, dungeon, fight, gameState, heroFallen, lastError, objective, send, storyLog, streaming } from '../../net/gameSocket';
+import { connection, dungeon, fight, gameState, heroFallen, joinCode, lastError, objective, send, storyLog, streaming } from '../../net/gameSocket';
 import { DungeonPanel } from './DungeonPanel';
 
 /** Previews (reachable squares, attack checks) need a context; they never roll. */
@@ -47,6 +47,7 @@ export function GameScreen() {
   useEffect(() => {
     void loadSettings();
   }, []);
+  const guest = joinCode.value !== null;
   const hintOn = settings.value?.gameplay.objectiveHint ?? false;
   const voiceOn = settings.value?.tts.enabled ?? false;
   const [journalOpen, setJournalOpen] = useState(false);
@@ -125,31 +126,36 @@ export function GameScreen() {
               {s.name}
             </button>
           ))}
-          <button
-            type="button"
-            aria-pressed={hintOn}
-            title={t('game.hintTitle')}
-            onClick={() => void updateSettings({ gameplay: { objectiveHint: !hintOn } })}
-          >
-            {t('game.hint', { state: t(hintOn ? 'common.on' : 'common.off') })}
-          </button>
-          <button type="button" aria-pressed={voiceOn} title={t(WEB_EDITION ? 'game.voiceTitleWeb' : 'game.voiceTitleLocal')} onClick={() => void updateSettings({ tts: { enabled: !voiceOn } })}>
-            {t('game.voice', { state: t(voiceOn ? 'common.on' : 'common.off') })}
-          </button>
-          {speaking.value && (
-            <button type="button" onClick={() => ttsPlayer.skip()} title={t('game.skipVoiceTitle')}>
-              {t('game.skipVoice')}
-            </button>
+          {/* Settings, saves and voice are the host's (a guest's page may not change them, C006). */}
+          {!guest && (
+            <>
+              <button
+                type="button"
+                aria-pressed={hintOn}
+                title={t('game.hintTitle')}
+                onClick={() => void updateSettings({ gameplay: { objectiveHint: !hintOn } })}
+              >
+                {t('game.hint', { state: t(hintOn ? 'common.on' : 'common.off') })}
+              </button>
+              <button type="button" aria-pressed={voiceOn} title={t(WEB_EDITION ? 'game.voiceTitleWeb' : 'game.voiceTitleLocal')} onClick={() => void updateSettings({ tts: { enabled: !voiceOn } })}>
+                {t('game.voice', { state: t(voiceOn ? 'common.on' : 'common.off') })}
+              </button>
+              {speaking.value && (
+                <button type="button" onClick={() => ttsPlayer.skip()} title={t('game.skipVoiceTitle')}>
+                  {t('game.skipVoice')}
+                </button>
+              )}
+              <button type="button" disabled={!state || connection.value !== 'open'} onClick={() => send({ type: 'save', slot: 'quicksave', name: t('game.quickSave') })}>
+                {t('game.quickSave')}
+              </button>
+              <button type="button" disabled={!state || connection.value !== 'open'} onClick={() => setSavesOpen(true)}>
+                {t('game.saveLoad')}
+              </button>
+              <button type="button" onClick={() => (settingsOpen.value = true)}>
+                {t('game.settings')}
+              </button>
+            </>
           )}
-          <button type="button" disabled={!state || connection.value !== 'open'} onClick={() => send({ type: 'save', slot: 'quicksave', name: t('game.quickSave') })}>
-            {t('game.quickSave')}
-          </button>
-          <button type="button" disabled={!state || connection.value !== 'open'} onClick={() => setSavesOpen(true)}>
-            {t('game.saveLoad')}
-          </button>
-          <button type="button" onClick={() => (settingsOpen.value = true)}>
-            {t('game.settings')}
-          </button>
           <button type="button" onClick={() => (screen.value = 'title')}>
             {t('game.menu')}
           </button>

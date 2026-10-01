@@ -125,11 +125,19 @@ describe('who may do what (allows)', () => {
     }
   });
 
-  it('anyone: player seats act in the story; spectators still only watch', () => {
+  it('anyone: player seats act in the story; spectators still only watch and propose', () => {
     const t = coopTable('anyone');
-    for (const type of ['say', 'choose', 'travel', 'shop_buy', 'journal_save'] as const) {
-      expect(allows(t, cmd(type), 'guest-1')).toEqual({ ok: true });
-      expect(allows(t, cmd(type), 'guest-2')).toEqual({ ok: false, key: 'table.spectator' });
+    for (const type of ['say', 'choose', 'travel', 'shop_buy', 'journal_save'] as const) expect(allows(t, cmd(type), 'guest-1')).toEqual({ ok: true });
+    for (const type of ['say', 'choose'] as const) expect(allows(t, cmd(type), 'guest-2')).toEqual({ ok: false, key: 'table.proposeOnly', propose: true });
+    for (const type of ['travel', 'shop_buy', 'journal_save'] as const) expect(allows(t, cmd(type), 'guest-2')).toEqual({ ok: false, key: 'table.spectator' });
+  });
+
+  it('only the host sets the table policy (C006)', () => {
+    for (const policy of ['host_decides', 'anyone'] as const) {
+      const t = coopTable(policy);
+      expect(allows(t, cmd('set_policy'), 'host')).toEqual({ ok: true });
+      expect(allows(t, cmd('set_policy'), 'guest-1')).toEqual({ ok: false, key: 'table.hostOnly' });
+      expect(allows(t, cmd('set_policy'), 'guest-2')).toEqual({ ok: false, key: 'table.hostOnly' });
     }
   });
 
@@ -173,7 +181,8 @@ describe('GameSession with a table', () => {
     addSeat(s.table, 'player');
     const before = JSON.stringify(s.current);
     await s.handle({ type: 'choose', actionId: 'hire', reqId: 'g1' }, 'guest-1');
-    expect(events.at(-1)).toEqual({ type: 'error', message: 'The host decides the story: propose it to them instead', reqId: 'g1' });
+    // Under host_decides a guest's choice is a proposal for the host (C006), not an error.
+    expect(events.at(-1)).toMatchObject({ type: 'proposal', seat: 'guest-1', command: 'choose', actionId: 'hire' });
     await s.handle({ type: 'save', slot: 'quicksave', reqId: 'g2' }, 'guest-1');
     expect(events.at(-1)).toEqual({ type: 'error', message: 'Only the host can do that', reqId: 'g2' });
     s.language = 'da';

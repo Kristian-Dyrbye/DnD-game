@@ -22,17 +22,19 @@ export interface Transport {
   send(cmd: ClientCommand): void;
 }
 
-/** The local server's /ws game channel; reconnects with backoff. */
+/** The local server's /ws game channel; reconnects with backoff. `guest` = a co-op guest page (C006): never the host's seat, even on the host's PC. */
 export class WebSocketTransport implements Transport {
   private ws: WebSocket | null = null;
   private retry = 0;
   private readonly outbox: string[] = [];
 
+  constructor(private readonly guest = false) {}
+
   connect(handlers: TransportHandlers): void {
     if (this.ws || typeof WebSocket === 'undefined') return;
     handlers.onStatus('connecting');
     const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-    const sock = new WebSocket(`${proto}://${location.host}/ws`);
+    const sock = new WebSocket(`${proto}://${location.host}/ws${this.guest ? '?guest' : ''}`);
     this.ws = sock;
     sock.onopen = () => {
       handlers.onStatus('open');

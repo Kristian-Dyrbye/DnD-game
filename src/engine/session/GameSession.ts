@@ -151,6 +151,9 @@ export class GameSession {
   language: Language = 'en';
   /** Who sits at the game and what they may send (co-op, C001). Session memory only, never saved. */
   table: Table = soloTable();
+  /** The buttons last offered (proposal labels, C006). */
+  private offered: SuggestedAction[] = [];
+  private proposals = 0;
 
   constructor(private readonly ports: SessionPorts = {}) {}
 
@@ -231,7 +234,22 @@ export class GameSession {
   }
 
   suggest(actions: SuggestedAction[]): void {
+    this.offered = actions;
     this.emit({ type: 'suggestions', actions });
+  }
+
+  /**
+   * A guest's (or spectator's) say/choose the policy doesn't let through becomes a proposal for the
+   * host (C006): nothing happens in the story, everyone sees "<name> suggests …".
+   */
+  private propose(cmd: Extract<ClientCommand, { type: 'say' | 'choose' }>, seatId: SeatId): void {
+    const seat = seatOf(this.table, seatId);
+    const s = this.state;
+    const hero = s ? extraHeroes(s).find((c) => ownerOf(this.table, s, c.id) === seatId) : undefined;
+    const base = { type: 'proposal' as const, id: ++this.proposals, seat: seatId, name: seat?.name ?? hero?.name ?? seatId };
+    if (cmd.type === 'say') return this.emit({ ...base, command: 'say', text: cmd.text });
+    const offered = this.offered.find((a) => a.id === cmd.actionId);
+    this.emit({ ...base, command: 'choose', actionId: cmd.actionId, ...(offered && { label: offered.label }), ...(cmd.actor && { actor: cmd.actor }) });
   }
 
   saveMeta(name?: string): SessionSaveMeta {
@@ -264,7 +282,10 @@ export class GameSession {
   async handle(cmd: ClientCommand, seat: SeatId = HOST_SEAT): Promise<void> {
     const reqId = cmd.reqId;
     const verdict = allows(this.table, cmd, seat, this.state ?? undefined);
-    if (!verdict.ok) return this.fail(this.msgs.m(verdict.key), reqId);
+    if (!verdict.ok) {
+      if (verdict.propose && (cmd.type === 'say' || cmd.type === 'choose') && this.running) return this.propose(cmd, seat);
+      return this.fail(this.msgs.m(verdict.key), reqId);
+    }
     if (cmd.type === 'companion_control' && cmd.control.startsWith('seat:') && !seatOf(this.table, cmd.control.slice(5))) return this.fail(this.msgs.m('table.noSeat'), reqId);
     try {
       switch (cmd.type) {
@@ -314,6 +335,14 @@ export class GameSession {
           this.releaseSeat(cmd.seat ?? seat);
           await this.seatsChanged();
           if (this.running) this.emit(this.snapshot());
+          this.emit({ type: 'ack', command: cmd.type, ...(reqId && { reqId }) });
+          return;
+        case 'set_policy':
+          if (this.table.policy !== cmd.policy) {
+            this.table.policy = cmd.policy;
+            if (this.running) this.addLog('system', this.msgs.m(cmd.policy === 'anyone' ? 'table.policyAnyone' : 'table.policyHost'));
+            this.emitTable();
+          }
           this.emit({ type: 'ack', command: cmd.type, ...(reqId && { reqId }) });
           return;
         case 'add_hero':
