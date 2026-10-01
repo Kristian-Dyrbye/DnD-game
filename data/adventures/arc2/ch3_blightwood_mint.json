@@ -1,0 +1,1088 @@
+{
+  "formatVersion": 1,
+  "id": "arc2_ch3_blightwood_mint",
+  "name": "The Blightwood Mint",
+  "arcId": "crown",
+  "kind": "arc",
+  "levelRange": [4, 5],
+  "regionId": "gloamfen",
+  "summary": "The faces and the hollow gold lead to the ruins of Old Vaelthorn, where Master Assayer Ondra Vexx has woken an imperial foundry under the Blightwood to forge a crown. Borrow a knight at Dawnspire, keep the path through a forest that moves after dark, cool the foundry's moulds, stop the coronation of a Face, and decide what the Hollow Crown is worth.",
+  "start": { "chapter": "ch3", "scene": "dawnspire_muster_lite" },
+  "improvisedDifficulty": "medium",
+  "chapters": [
+    {
+      "id": "ch3",
+      "name": "The Blightwood Mint",
+      "summary": "Dawnspire Keep, the Blightwood, the foundry of Old Vaelthorn, the coronation that must not happen, the choice of the Hollow Crown and the Ironvault court's last verdict.",
+      "start": "dawnspire_muster_lite",
+      "scenes": [
+        {
+          "id": "dawnspire_muster_lite",
+          "name": "Dawnspire Keep",
+          "locationId": "dawnspire_keep",
+          "mood": "heroic",
+          "seed": "Dawnspire Keep stands white on its hill above the north road, the Dawn Lance's sunburst banners snapping on every tower. Knights drill in the yard, squires run with buckets, and in the hall the Knight-Captain keeps a map of the Blightwood pinned with black pins: one for every patrol that went in after dark and did not come out.",
+          "variants": [
+            { "if": { "flag": "world.queen_alive", "eq": false }, "seed": "The banners fly at half-mast for a Queen who is dead, and the knights speak of the Regent with careful voices." },
+            { "if": { "flag": "world.player_outlawed" }, "seed": "An Ironvault broadsheet with your likeness on it is nailed by the gate. The sentries look at it, and at you, and say nothing yet." },
+            { "if": { "flag": "~ch3_knight" }, "seed": "Ser Hallam Brightwater is saddling a grey destrier in the yard, ready to ride with you." }
+          ],
+          "revisitSeed": "Dawnspire's white walls and sunburst banners, and the clatter of knights in the yard.",
+          "npcs": ["captain_ashe", "corwin_cameo"],
+          "onEnter": {
+            "text": "The gate sergeant reads your road-dust and your weapons and waves you through. \"The Blightwood? The Knight-Captain will want a word, before you get yourself killed in it.\"",
+            "discover": ["dawnspire_keep", "blightwood", "ruins_of_old_vaelthorn"]
+          },
+          "pois": [
+            {
+              "id": "chapel",
+              "name": "The dawn chapel",
+              "seed": "A small chapel of white stone where knights keep vigil before a sunburst of beaten gold, the only real gold in the keep.",
+              "actions": [
+                {
+                  "id": "pilgrim",
+                  "label": "Ask the pilgrim at the altar what she saw in the Blightwood",
+                  "once": true,
+                  "keywords": ["pilgrim", "altar", "ask", "saw", "forest", "chapel"],
+                  "outcome": {
+                    "text": "\"A procession,\" the pilgrim whispers. \"Carts of gold going into the trees at night, and a priest in grey singing at the front of them. Brother Pale, they called him. He said the gold was hunger made solid, and the forest opened its paths for him.\"",
+                    "flags": [{ "set": "~ch3_pale_known" }]
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "id": "rest_keep",
+              "label": "Sleep in the keep's guest hall",
+              "keywords": ["sleep", "rest", "bed", "hall", "night"],
+              "outcome": { "text": "The guest hall is cold and clean, and the knights' prayers at dawn wake you rested.", "rest": "long" }
+            }
+          ],
+          "exits": [
+            { "id": "to_blightwood", "label": "Ride north into the Blightwood", "to": "blightwood_paths", "minutes": 1440 }
+          ]
+        },
+        {
+          "id": "blightwood_paths",
+          "name": "The Blightwood",
+          "locationId": "blightwood",
+          "mood": "dread",
+          "map": { "id": "blightwood_map", "room": "forest_edge" },
+          "seed": "The Blightwood is a forest of grey, leafless trees that weep black sap. Nothing sings in it. The paths are pale ribbons of old cart-track between the trunks, and they do not stay where they were: look away and look back, and a path that ran north runs east. Somewhere beyond them lie the broken towers of Old Vaelthorn.",
+          "variants": [
+            { "if": { "timeOfDay": ["dusk", "night"] }, "seed": "It is dark under the trees, and the paths are moving: you can hear them, a dry whisper like leaves on stone." },
+            { "if": { "flag": "world.maw_state", "eq": "stirring" }, "seed": "The black sap runs faster here than it should, and under the silence there is something like a voice far beneath the fen, humming." },
+            { "if": { "flag": "~ch3_path_kept" }, "seed": "You have the path now: a pale track that holds still under your feet and runs toward the towers." }
+          ],
+          "revisitSeed": "Grey trees, black sap, and paths that never lie where you left them.",
+          "onEnter": { "text": "Far off among the trees, something howls, and something else answers it.", "discover": ["blightwood"] },
+          "pois": [
+            {
+              "id": "weeping_trees",
+              "name": "The weeping trees",
+              "seed": "Grey trunks running with black sap that pools at their roots and then, very slowly, flows uphill.",
+              "actions": [
+                {
+                  "id": "read_sap",
+                  "label": "Read which way the black sap weeps",
+                  "once": true,
+                  "keywords": ["sap", "read", "weep", "nature", "trees", "black"],
+                  "check": {
+                    "skill": "nature",
+                    "dc": 12,
+                    "success": {
+                      "text": "The sap does not flow downhill; it flows toward heat. Every trickle in the wood is creeping the same way, toward something burning under the ruins.",
+                      "flags": [{ "set": "~ch3_sap_read" }],
+                      "revealRoom": { "map": "blightwood_map", "room": "sap_grove" }
+                    },
+                    "failure": { "text": "The sap runs every way at once, and the longer you look at it the less you like it." }
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "id": "keep_path",
+              "label": "Fix the path in your mind and follow it without looking away",
+              "once": true,
+              "if": { "not": { "flag": "~ch3_path_kept" } },
+              "keywords": ["path", "follow", "keep", "survival", "track", "trail"],
+              "check": {
+                "skill": "survival",
+                "dc": 13,
+                "advantageIf": [
+                  { "if": { "flag": "~ch3_sap_read" }, "source": "The sap weeps toward the forge" },
+                  { "if": { "flag": "~ch3_paths_warned" }, "source": "The Dawn Lance's warning about the paths" }
+                ],
+                "disadvantageIf": [{ "if": { "timeOfDay": ["dusk", "night"] }, "source": "The paths move after dark" }],
+                "success": {
+                  "text": "You never take your eyes off the pale track, and it cannot move while you watch it. By the time the towers of Old Vaelthorn show over the trees, the path is running straight at them.",
+                  "flags": [{ "set": "~ch3_path_kept" }],
+                  "revealRoom": { "map": "blightwood_map", "room": "foundry_approach" },
+                  "xp": 100,
+                  "minutes": 240
+                },
+                "failure": {
+                  "text": "You blink, and the path is gone. You are somewhere deep among the grey trees, and the howling is close now, and it has company.",
+                  "encounter": "blightwood_pack",
+                  "minutes": 120
+                }
+              }
+            },
+            {
+              "id": "push_on",
+              "label": "Push straight through the trees toward the ruins",
+              "if": { "not": { "flag": "~ch3_path_kept" } },
+              "keywords": ["push", "straight", "through", "fight", "ruins", "force"],
+              "outcome": { "text": "You strike out straight for the towers, path or no path. Grey shapes keep pace with you among the trees, and then the worgs come in, goblins on their backs.", "encounter": "blightwood_pack" }
+            },
+            {
+              "id": "wait_light",
+              "label": "Camp at the forest edge until daylight stills the paths",
+              "once": true,
+              "if": { "not": { "flag": "~ch3_path_kept" } },
+              "keywords": ["wait", "camp", "daylight", "dawn", "morning", "light"],
+              "outcome": { "text": "You make a cold camp at the edge of the trees to wait for the light. In the dark, the howling comes closer, and closer, and then the pack is in the camp.", "encounter": "blightwood_pack", "minutes": 360 }
+            },
+            {
+              "id": "bind_wounds",
+              "label": "Sleep in shifts in the shelter of the fallen tower stones",
+              "keywords": ["sleep", "wounds", "rest", "shifts", "bandage", "stones"],
+              "outcome": { "text": "You put your back to a fallen block of imperial stone, bind your wounds and sleep in shifts while the forest whispers. Nothing comes near the old stones.", "rest": "long" }
+            }
+          ],
+          "exits": [
+            { "id": "day_trail", "label": "Follow the pale path to the ruins while the light holds it still", "to": "vaelthorn_foundry", "if": { "all": [{ "flag": "~ch3_path_kept" }, { "hours": { "from": 6, "to": 18 } }] }, "minutes": 120 },
+            { "id": "night_trail", "label": "Follow the path in the dark, never looking away from it", "to": "vaelthorn_foundry", "if": { "all": [{ "flag": "~ch3_path_kept" }, { "hours": { "from": 18, "to": 6 } }] }, "minutes": 180 }
+          ]
+        },
+        {
+          "id": "vaelthorn_foundry",
+          "name": "The Foundry of Old Vaelthorn",
+          "locationId": "ruins_of_old_vaelthorn",
+          "mood": "eerie",
+          "map": { "id": "vaelthorn_foundry", "room": "gate_hall" },
+          "seed": "Under the broken sky-towers of Old Vaelthorn, an imperial construct-foundry has been woken: a vaulted hall of black iron and red light, rivers of molten gold running in stone channels to rows of moulds. Three assay stations stand around the mould floor, each with its brass scales and its sealed crucible, and in the shadows between them suits of empty armour stand to attention, waiting for a hand on a lever.",
+          "variants": [
+            { "if": { "flag": "~ch3_moulds_cooled" }, "seed": "The moulds have gone dark and grey. The armour stands still as statues, and the heat has gone out of the hall." },
+            { "if": { "flag": "~ch3_guardians_done" }, "seed": "Pieces of animated armour lie scattered across the mould floor, still twitching." },
+            { "if": { "flag": "world.brannoc_status", "eq": "in_party" }, "seed": "Brannoc stops at the first station and touches the scales, very gently, the way you would touch a grave." }
+          ],
+          "revisitSeed": "Black iron, red light, and the rivers of gold in their channels.",
+          "onEnter": { "text": "The doors grind shut behind you. On the far side of the hall, behind a curtain of heat, you hear singing: a coronation hymn." },
+          "pois": [
+            {
+              "id": "stations",
+              "name": "The three assay stations",
+              "seed": "Three brass stations around the mould floor: a crucible sealed with arcane sigils, a ledger of imperial weights and measures, and an anvil altar where an old assayer's rite would once have blessed the metal.",
+              "if": { "all": [{ "not": { "flag": "~ch3_moulds_cooled" } }, { "not": { "flag": "~ch3_station_failed" } }] },
+              "actions": [
+                {
+                  "id": "arcane",
+                  "label": "Unpick the sigils on the sealed crucible",
+                  "once": true,
+                  "keywords": ["sigils", "crucible", "arcana", "unpick", "magic", "seal"],
+                  "check": {
+                    "skill": "arcana",
+                    "dc": 14,
+                    "advantageIf": [{ "if": { "flag": "world.ilse_status", "eq": "in_party" }, "source": "Ilse has dreamed this crucible" }],
+                    "success": { "text": "The sigils come apart under your fingers one by one, and the crucible's glow sinks from white to red to dull orange.", "flags": [{ "set": "~ch3_station_arcane" }], "xp": 50 },
+                    "failure": { "text": "A sigil flares under your hand. All around the hall, empty helms turn toward you.", "flags": [{ "set": "~ch3_station_failed" }], "encounter": "foundry_guardians" }
+                  }
+                },
+                {
+                  "id": "ledger",
+                  "label": "Find the true weights in the imperial ledger and set the scales",
+                  "once": true,
+                  "keywords": ["ledger", "weights", "scales", "investigation", "measures", "set"],
+                  "check": {
+                    "skill": "investigation",
+                    "dc": 13,
+                    "advantageIf": [{ "if": { "flag": "arc.crown.clue_4" }, "source": "You have read Vexx's false ledger before" }],
+                    "success": { "text": "Vexx has set the scales a tenth light, the way she set the Ironvault's. You set them true, and the gold in the channels slows and thickens.", "flags": [{ "set": "~ch3_station_ledger" }], "xp": 50 },
+                    "failure": { "text": "You set the wrong weight. The scales slam down, a bell rings somewhere in the iron, and the armour steps off its plinths.", "flags": [{ "set": "~ch3_station_failed" }], "encounter": "foundry_guardians" }
+                  }
+                },
+                {
+                  "id": "rite",
+                  "label": "Ask Brannoc to speak Korrath's rite of true weight over the anvil",
+                  "once": true,
+                  "if": { "flag": "world.brannoc_status", "eq": "in_party" },
+                  "keywords": ["brannoc", "rite", "korrath", "anvil", "pray", "bless"],
+                  "outcome": {
+                    "text": "Brannoc lays his hammer on the anvil altar and speaks the old assayers' rite in a voice like stones settling. The anvil rings once, true, and the moulds nearest it go grey.",
+                    "flags": [{ "set": "~ch3_station_rite" }],
+                    "approval": [{ "companion": "brannoc", "delta": 10 }],
+                    "xp": 50
+                  }
+                },
+                {
+                  "id": "rite_alone",
+                  "label": "Speak the assayers' rite over the anvil yourself",
+                  "once": true,
+                  "if": { "not": { "flag": "world.brannoc_status", "eq": "in_party" } },
+                  "keywords": ["rite", "korrath", "anvil", "pray", "religion", "bless"],
+                  "check": {
+                    "skill": "religion",
+                    "dc": 14,
+                    "success": { "text": "You remember enough of Korrath's rite from the shrine at Brightwater. The anvil rings once, true, and the moulds nearest it go grey.", "flags": [{ "set": "~ch3_station_rite" }], "xp": 50 },
+                    "failure": { "text": "You stumble over the words. The anvil rings false, and every helm in the hall turns toward you.", "flags": [{ "set": "~ch3_station_failed" }], "encounter": "foundry_guardians" }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "seal",
+              "name": "The imperial seal",
+              "seed": "A great bronze seal set in the floor at the head of the mould floor: the old Vaelthorn crown-in-a-sunburst, cut deep, and fresh gold still in its grooves.",
+              "if": { "any": [{ "flag": "~ch3_moulds_cooled" }, { "flag": "~ch3_guardians_done" }] },
+              "actions": [
+                {
+                  "id": "compare",
+                  "label": "Compare the imperial seal with the empty crown mould",
+                  "once": true,
+                  "keywords": ["compare", "seal", "mould", "crown", "examine", "imperial"],
+                  "outcome": {
+                    "text": "The crown mould on the last bench is cut from the same seal: the old emperors' own regalia, copied line for line. Whoever wears what came out of it will look, to every court in Aurelmark, like the true heir of Vaelthorn.",
+                    "flags": [{ "set": "arc.crown.clue_6" }],
+                    "xp": 50
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": [
+            {
+              "id": "storm_floor",
+              "label": "Ignore the stations and cross the mould floor with steel drawn",
+              "if": { "all": [{ "not": { "flag": "~ch3_moulds_cooled" } }, { "not": { "flag": "~ch3_guardians_done" } }] },
+              "keywords": ["cross", "steel", "fight", "attack", "armour", "charge"],
+              "outcome": { "text": "You stride out onto the mould floor. Levers fall by themselves, and the armour steps down from its plinths, and a shadow with stone wings unfolds from the rafters.", "flags": [{ "set": "~ch3_station_failed" }], "encounter": "foundry_guardians" }
+            },
+            {
+              "id": "catch_breath",
+              "label": "Bar the gate hall and sleep in the cool by the doors",
+              "keywords": ["sleep", "rest", "bar", "bandage", "wounds", "breath"],
+              "outcome": { "text": "You bar the gate hall and sleep where the air is cooler, while the hymn beyond the heat goes on and on: a coronation is a long rite.", "rest": "long" }
+            }
+          ],
+          "exits": [
+            { "id": "to_coronation", "label": "Go through the curtain of heat toward the coronation hymn", "to": "coronation", "if": { "any": [{ "flag": "~ch3_moulds_cooled" }, { "flag": "~ch3_guardians_done" }] }, "minutes": 10 }
+          ]
+        },
+        {
+          "id": "coronation",
+          "name": "The Coronation",
+          "locationId": "ruins_of_old_vaelthorn",
+          "mood": "boss",
+          "map": { "id": "vaelthorn_foundry", "room": "throne_hall" },
+          "seed": "Beyond the foundry lies the old emperors' throne hall, roofless to a grey sky. A bought court of nobles and merchants kneels on the broken floor in borrowed finery. Brother Pale, a grey-robed priest of hunger, sings the hymn. On the dais a Face sits on the cracked imperial throne, and beside it a slim woman in an assayer's black coat lifts the Hollow Crown: new gold, perfect, the old emperors' regalia line for line. Ondra Vexx.",
+          "variants": [
+            { "if": { "flag": "world.queen_alive", "eq": false }, "seed": "The Face on the throne wears the Regent's own features, down to the mole on the cheek. Once it is crowned, it will sign the kingdom's debts to the Thousand Faces." },
+            { "if": { "flag": "world.queen_alive", "eq": true }, "seed": "The Face on the throne wears the shape of the Queen's own envoy. Once it is crowned, Queen Isolde's seal will mean whatever the Thousand Faces want it to mean." },
+            { "if": { "not": { "flag": "arc.crown.gilt_exposed" } }, "seed": "Behind the throne stands a clerk you know: Auditor Hesk's face, Gilt's smile." },
+            { "if": { "flag": "~ch2_market_burned" }, "seed": "At the edge of the court, knitting, sits a stout old woman in a shawl. Mother Tallow has come to see her best customer crowned, and to settle a debt with you." },
+            { "if": { "flag": "~ch3_knight" }, "seed": "Ser Hallam stands at your shoulder with his lance lowered, the sunburst of the Dawn Lance bright on his shield." },
+            { "if": { "flag": "world.maw_state", "eq": "stirring" }, "seed": "Brother Pale's hymn has a second voice under it, from very far down: the voice under the fen, singing along." }
+          ],
+          "npcs": ["ondra_vexx", "brother_pale"],
+          "actions": [
+            {
+              "id": "name_vexx",
+              "label": "Stand before the bought court and name Ondra Vexx, with your proof",
+              "once": true,
+              "if": { "count": { "flags": ["arc.crown.clue_1", "arc.crown.clue_2", "arc.crown.clue_3", "arc.crown.clue_4", "arc.crown.clue_5", "arc.crown.clue_6"], "min": 3 } },
+              "keywords": ["name", "vexx", "proof", "accuse", "court", "expose"],
+              "outcome": {
+                "text": "Your voice rings off the broken roof. The die mark, the woman with two shadows, the auditor who forgot his daughter, the ledger, the book of the unmade, the imperial seal: one by one, you lay out the assay of Ondra Vexx. The bought court looks at the woman with the crown and sees what she is. Two of the hired guards turn their spears on her. Vexx smiles, and lets her face slide off like wax, and the hymn becomes a scream.",
+                "flags": [{ "set": "~ch3_named" }],
+                "approval": [{ "companion": "ilse", "delta": 10 }, { "companion": "brannoc", "delta": 5 }],
+                "encounter": "coronation_fight"
+              }
+            },
+            {
+              "id": "wear_face",
+              "label": "Put on the face you bought from Mother Tallow and walk among them",
+              "once": true,
+              "if": { "flag": "arc.crown.borrowed_face" },
+              "keywords": ["face", "wear", "disguise", "borrowed", "walk", "among", "deception"],
+              "check": {
+                "skill": "deception",
+                "dc": 12,
+                "success": {
+                  "text": "Tallow's face settles over yours like warm wax. You walk up the aisle as one of the Thousand Faces, and Brother Pale's fanatics bow you past, and when you tell them the Lance is at the gates they run to hold it. You are three steps from Vexx when she looks into your borrowed eyes and knows.",
+                  "flags": [{ "set": "~ch3_face_used" }, { "clear": "arc.crown.borrowed_face" }],
+                  "encounter": "coronation_fight"
+                },
+                "failure": {
+                  "text": "The face slips at the corner of your mouth, and Brother Pale sees it. \"A borrowed face!\" he cries. \"Hollow! Hollow!\" The fanatics close in, and the face, spent, flakes away from your skin.",
+                  "flags": [{ "set": "~ch3_face_failed" }, { "clear": "arc.crown.borrowed_face" }],
+                  "encounter": "coronation_fight"
+                }
+              }
+            },
+            {
+              "id": "storm",
+              "label": "Charge the dais before the crown comes down",
+              "keywords": ["charge", "dais", "attack", "fight", "crown", "stop", "storm"],
+              "outcome": { "text": "You go up the aisle at a run. The bought court scatters, the hymn breaks, and the Thousand Faces turn to meet you.", "encounter": "coronation_fight" }
+            }
+          ],
+          "exits": []
+        },
+        {
+          "id": "hollow_crown_choice",
+          "name": "The Hollow Crown",
+          "locationId": "ruins_of_old_vaelthorn",
+          "mood": "solemn",
+          "map": { "id": "vaelthorn_foundry", "room": "throne_hall" },
+          "seed": "The throne hall is quiet. The bought court has fled, the hymn is over, and the Hollow Crown lies on the broken floor of the dais where it fell: new gold, perfect, warm to the touch. It is real enough to work. Whoever wears it will look like an emperor's heir to anyone who sees them.",
+          "variants": [
+            { "if": { "flag": "arc.crown.vexx_fate", "eq": "at_large" }, "seed": "Ondra Vexx is gone from the dais. Among the fleeing courtiers, one of them walks a little too calmly." },
+            { "if": { "flag": "~ch3_vexx_caught" }, "seed": "Ondra Vexx kneels by the throne with her wrists bound, her face her own again: thin, tired, older than you expected." },
+            { "if": { "flag": "arc.crown.vexx_fate", "eq": "unmasked" }, "seed": "The court's guards hold Ondra Vexx in chains for the Ironvault, and the whole bought court has seen her true face." },
+            { "if": { "flag": "arc.crown.vexx_fate", "eq": "escaped" }, "seed": "Somewhere out there, Ondra Vexx is walking away in somebody else's face." }
+          ],
+          "revisitSeed": "The roofless throne hall, the broken dais, and the crown of new gold.",
+          "npcs": ["ondra_vexx"],
+          "actions": [
+            {
+              "id": "catch_vexx",
+              "label": "Pick out which fleeing courtier is Vexx in a stolen face",
+              "once": true,
+              "if": { "all": [{ "flag": "arc.crown.vexx_fate", "eq": "at_large" }, { "not": { "flag": "~ch3_named" } }] },
+              "keywords": ["catch", "vexx", "courtier", "fleeing", "perception", "spot", "face"],
+              "check": {
+                "skill": "perception",
+                "dc": 14,
+                "advantageIf": [
+                  { "if": { "flag": "world.ilse_status", "eq": "in_party" }, "source": "Ilse has dreamed Vexx's true face" },
+                  { "if": { "flag": "~ch3_face_used" }, "source": "You have worn a borrowed face yourself" }
+                ],
+                "success": {
+                  "text": "One courtier walks too calmly, and her shadow does not match her face. You catch her at the door. Under your hand the borrowed face slides off, and Ondra Vexx looks up at you with her own tired eyes.",
+                  "flags": [{ "set": "~ch3_vexx_caught" }]
+                },
+                "failure": {
+                  "text": "Faces, faces, all of them frightened, all of them running. By the time you have looked at every one, she is gone, and somewhere out in the Blightwood a woman you have never seen is walking calmly north.",
+                  "flags": [{ "set": "arc.crown.vexx_fate", "value": "escaped" }]
+                }
+              }
+            },
+            {
+              "id": "vexx_court",
+              "label": "Bind Vexx for the Ironvault court",
+              "once": true,
+              "if": { "all": [{ "flag": "~ch3_vexx_caught" }, { "flag": "arc.crown.vexx_fate", "eq": "at_large" }] },
+              "keywords": ["bind", "court", "ironvault", "justice", "trial", "chains"],
+              "outcome": {
+                "text": "You bind her wrists with a strap from the throne. \"Weighed and found wanting,\" Vexx says, almost amused. \"It was always going to be a ledger that did it.\"",
+                "flags": [{ "set": "arc.crown.vexx_fate", "value": "unmasked" }],
+                "approval": [{ "companion": "brannoc", "delta": 5 }, { "companion": "wren", "delta": -5 }]
+              }
+            },
+            {
+              "id": "vexx_kill",
+              "label": "End Ondra Vexx here, before she can wear another face",
+              "once": true,
+              "if": { "all": [{ "flag": "~ch3_vexx_caught" }, { "flag": "arc.crown.vexx_fate", "eq": "at_large" }] },
+              "keywords": ["kill", "end", "execute", "finish", "slay"],
+              "outcome": {
+                "text": "It is quick. She does not beg. When it is done, her face does not slide or change: it stays her own, thin and tired, as if it had been waiting a long time to be allowed to.",
+                "flags": [{ "set": "arc.crown.vexx_fate", "value": "killed" }],
+                "approval": [{ "companion": "ilse", "delta": -10 }, { "companion": "wren", "delta": 5 }]
+              }
+            },
+            {
+              "id": "vexx_bargain",
+              "label": "Hear the bargain Vexx offers: every Face's true name, for the one face she cannot forge",
+              "once": true,
+              "if": { "all": [{ "flag": "~ch3_vexx_caught" }, { "flag": "arc.crown.vexx_fate", "eq": "at_large" }] },
+              "keywords": ["bargain", "deal", "names", "offer", "trade", "hear"],
+              "outcome": {
+                "text": "\"Every Face in Aurelmark,\" Vexx says, \"every clerk and captain I replaced, and where the real ones are buried or kept. And I melt the crown myself, here, now. The price is your face. Not a copy. Yours.\" You agree. Her fingers are cold on your cheek, and then she is wearing you, and smiling with your mouth, and walking out of the hall, and the crown is running as liquid gold between the flagstones. In the dark mirror of the throne a stranger looks back at you.",
+                "flags": [{ "set": "arc.crown.vexx_fate", "value": "bargained" }, { "set": "world.hollow_crown", "value": "destroyed" }, { "set": "~ch3_names_given" }],
+                "scar": { "description": "a stranger in the mirror", "location": "left_cheek" },
+                "conditions": [{ "condition": "frightened", "minutes": 1440 }],
+                "approval": [{ "companion": "brannoc", "delta": -10 }, { "companion": "ilse", "delta": -5 }]
+              }
+            },
+            {
+              "id": "crown_destroy",
+              "label": "Break the Hollow Crown on the anvil with Korrath's hammer",
+              "once": true,
+              "if": { "all": [{ "flag": "world.hollow_crown", "eq": "none" }, { "not": { "flag": "arc.crown.vexx_fate", "eq": "at_large" } }] },
+              "keywords": ["break", "destroy", "hammer", "anvil", "smash", "korrath"],
+              "outcome": {
+                "text": "You carry the crown back to the foundry's anvil altar and bring the hammer down. The new gold does not bend; it crumbles, as every hollow coin crumbled, into grey ash that the foundry's last heat lifts and scatters.",
+                "flags": [{ "set": "world.hollow_crown", "value": "destroyed" }],
+                "approval": [{ "companion": "brannoc", "delta": 20 }, { "companion": "wren", "delta": -5 }]
+              }
+            },
+            {
+              "id": "crown_hand",
+              "label": "Wrap the crown in a banner and carry it to the Crown of Aurelmark",
+              "once": true,
+              "if": { "all": [{ "flag": "world.hollow_crown", "eq": "none" }, { "not": { "flag": "arc.crown.vexx_fate", "eq": "at_large" } }] },
+              "keywords": ["hand", "crown", "aurelmark", "carry", "banner", "queen", "regent"],
+              "outcome": {
+                "text": "You wrap the Hollow Crown in a torn banner and tie it to your saddle. The Crown of Aurelmark will want to see it, and lock it away, and perhaps, one day, look at it for a long time.",
+                "flags": [{ "set": "world.hollow_crown", "value": "crown" }],
+                "reputation": [{ "faction": "crown_of_aurelmark", "delta": 20 }],
+                "approval": [{ "companion": "ilse", "delta": -10 }]
+              }
+            },
+            {
+              "id": "crown_keep",
+              "label": "Keep the Hollow Crown for yourself",
+              "once": true,
+              "if": { "all": [{ "flag": "world.hollow_crown", "eq": "none" }, { "not": { "flag": "arc.crown.vexx_fate", "eq": "at_large" } }] },
+              "keywords": ["keep", "mine", "take", "myself", "wear", "pack"],
+              "outcome": {
+                "text": "You put the Hollow Crown in your pack. It is warm through the leather, and very light, and you find you do not want to tell anyone it is there.",
+                "flags": [{ "set": "world.hollow_crown", "value": "player" }],
+                "approval": [{ "companion": "brannoc", "delta": -20 }, { "companion": "wren", "delta": 5 }]
+              }
+            },
+            {
+              "id": "camp",
+              "label": "Make camp in the ruins and sleep",
+              "once": true,
+              "if": { "all": [{ "not": { "flag": "world.hollow_crown", "eq": "none" } }, { "not": { "flag": "~ch3_rested" } }] },
+              "keywords": ["camp", "sleep", "rest", "night", "ruins"],
+              "outcome": {
+                "text": "You sleep among the broken towers of Old Vaelthorn with the foundry ticking as it cools. When you wake, the Blightwood's paths, the foundry, the throne hall and the crown have settled into something you understand: you are better at this than you were.",
+                "flags": [{ "set": "~ch3_rested" }],
+                "rest": "long",
+                "xp": 3800,
+                "minutes": 60,
+                "tip": "You have enough experience to reach level 5: use the Level up button on your hero's card."
+              }
+            }
+          ],
+          "exits": [
+            { "id": "to_deepanvil", "label": "Ride for Deepanvil Hold and the Ironvault court", "to": "epilogue_deepanvil", "if": { "flag": "~ch3_rested" }, "minutes": 4320 }
+          ]
+        },
+        {
+          "id": "epilogue_deepanvil",
+          "name": "The Last Assay",
+          "locationId": "deepanvil_hold",
+          "mood": "solemn",
+          "seed": "The Ironvault court sits once more under the mountain: the Thane-Warden on her iron chair, the masters of the Consortium in their black and silver, the great scales of Deepanvil hanging over the floor. Every assay ends on a scale. Today, the thing being weighed is the Hollow Crown, and the one who carried it there.",
+          "variants": [
+            { "if": { "flag": "arc.crown.crowned" }, "seed": "The court is half empty. Messengers come and go with sealed letters under a new crowned seal, and the masters do not meet your eyes." },
+            { "if": { "flag": "arc.crown.vexx_fate", "eq": "unmasked" }, "seed": "Ondra Vexx stands in chains at the bar of the court, in her own face, and looks up at the scales she was struck from." },
+            { "if": { "flag": "world.queen_alive", "eq": false }, "seed": "A rider in the Regent's colours waits at the side of the hall for the verdict." }
+          ],
+          "npcs": ["thane_orsa"],
+          "onEnter": { "text": "The Thane-Warden raises her iron rod, and the court falls silent to hear you.", "discover": ["deepanvil_hold"] },
+          "actions": [
+            {
+              "id": "read_thane",
+              "label": "Read the Thane-Warden's face as she weighs your account",
+              "once": true,
+              "keywords": ["read", "thane", "face", "insight", "weigh"],
+              "check": {
+                "skill": "insight",
+                "dc": 12,
+                "disadvantageIf": [{ "if": { "flag": "arc.crown.vexx_fate", "eq": "bargained" }, "source": "A stranger in the mirror" }],
+                "success": { "text": "Behind the iron rod and the old judge's frown, the Thane-Warden is relieved, and tired, and a little afraid of what her own vaults will show when they are opened." },
+                "failure": { "text": "The Thane-Warden's face gives you nothing. Faces have stopped giving you very much at all." }
+              }
+            },
+            {
+              "id": "end_false_coin",
+              "label": "Hear the verdict on a kingdom with a false crown",
+              "if": { "flag": "arc.crown.crowned" },
+              "keywords": ["verdict", "end", "hear", "false", "coin"],
+              "outcome": { "ending": "ending_false_coin" }
+            },
+            {
+              "id": "end_true_weight",
+              "label": "Lay the account of the Hollow Crown before the scales",
+              "if": {
+                "all": [
+                  { "not": { "flag": "arc.crown.crowned" } },
+                  { "any": [{ "flag": "world.hollow_crown", "eq": "destroyed" }, { "flag": "world.hollow_crown", "eq": "crown" }] },
+                  { "any": [{ "flag": "arc.crown.vexx_fate", "eq": "unmasked" }, { "flag": "arc.crown.vexx_fate", "eq": "killed" }] }
+                ]
+              },
+              "keywords": ["verdict", "end", "account", "scales", "true", "weight"],
+              "outcome": { "ending": "ending_true_weight" }
+            },
+            {
+              "id": "end_hollow_keeper",
+              "label": "Tell the court the crown is gone, with its warmth in your pack",
+              "if": { "all": [{ "not": { "flag": "arc.crown.crowned" } }, { "flag": "world.hollow_crown", "eq": "player" }] },
+              "keywords": ["verdict", "end", "gone", "keeper", "lie", "pack"],
+              "outcome": { "ending": "ending_hollow_king" }
+            },
+            {
+              "id": "end_stranger",
+              "label": "Give the court Vexx's list of names, in a stranger's face",
+              "if": { "all": [{ "not": { "flag": "arc.crown.crowned" } }, { "flag": "arc.crown.vexx_fate", "eq": "bargained" }, { "not": { "flag": "world.hollow_crown", "eq": "player" } }] },
+              "keywords": ["verdict", "end", "names", "list", "stranger"],
+              "outcome": { "ending": "ending_stranger" }
+            },
+            {
+              "id": "end_thousand_faces",
+              "label": "Tell the court that Ondra Vexx is still out there",
+              "if": {
+                "all": [
+                  { "not": { "flag": "arc.crown.crowned" } },
+                  { "flag": "arc.crown.vexx_fate", "eq": "escaped" },
+                  { "not": { "flag": "world.hollow_crown", "eq": "player" } }
+                ]
+              },
+              "keywords": ["verdict", "end", "escaped", "out", "there", "faces"],
+              "outcome": { "ending": "ending_thousand_faces" }
+            }
+          ],
+          "exits": []
+        }
+      ]
+    }
+  ],
+  "maps": [
+    {
+      "id": "blightwood_map",
+      "name": "The Blightwood Paths",
+      "width": 24,
+      "height": 12,
+      "rooms": [
+        { "id": "forest_edge", "name": "The Forest Edge", "x": 1, "y": 3, "w": 5, "h": 6, "blocking": [{ "x": 3, "y": 5 }] },
+        { "id": "sap_grove", "name": "The Weeping Grove", "x": 6, "y": 1, "w": 6, "h": 4, "difficult": [{ "x": 8, "y": 2 }, { "x": 9, "y": 3 }] },
+        { "id": "black_trail", "name": "The Black Trail", "x": 6, "y": 5, "w": 8, "h": 6, "blocking": [{ "x": 9, "y": 7 }, { "x": 11, "y": 9 }], "difficult": [{ "x": 7, "y": 6 }, { "x": 12, "y": 6 }] },
+        { "id": "foundry_approach", "name": "Under the Towers", "x": 14, "y": 4, "w": 9, "h": 6, "blocking": [{ "x": 18, "y": 6 }] }
+      ],
+      "doors": [
+        { "x": 5, "y": 4, "side": "E" },
+        { "x": 5, "y": 7, "side": "E" },
+        { "x": 13, "y": 7, "side": "E" }
+      ]
+    },
+    {
+      "id": "vaelthorn_foundry",
+      "name": "The Foundry of Old Vaelthorn",
+      "width": 28,
+      "height": 12,
+      "rooms": [
+        { "id": "gate_hall", "name": "The Gate Hall", "x": 1, "y": 3, "w": 5, "h": 6 },
+        { "id": "mould_floor", "name": "The Mould Floor", "x": 6, "y": 1, "w": 10, "h": 10, "blocking": [{ "x": 9, "y": 4 }, { "x": 12, "y": 4 }, { "x": 9, "y": 7 }, { "x": 12, "y": 7 }], "difficult": [{ "x": 10, "y": 5 }, { "x": 11, "y": 5 }, { "x": 10, "y": 6 }, { "x": 11, "y": 6 }] },
+        { "id": "throne_hall", "name": "The Throne Hall", "x": 16, "y": 2, "w": 11, "h": 8, "blocking": [{ "x": 25, "y": 5 }] }
+      ],
+      "doors": [
+        { "x": 5, "y": 5, "side": "E" },
+        { "x": 15, "y": 5, "side": "E" }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "id": "captain_ashe",
+      "name": "Knight-Captain Bertrand Ashe",
+      "statBlock": "knight",
+      "personality": "The Dawn Lance's Knight-Captain at Dawnspire: grey-bearded, blunt, tired of losing patrols to the Blightwood, and quietly ashamed that the Order has not gone in after them.",
+      "secrets": ["Two of his own knights rode into the Blightwood after Brother Pale's procession and never came back."],
+      "voice": "Short sentences, a parade-ground voice he forgets to lower indoors; calls the hero 'traveller' until they earn a name.",
+      "factions": ["order_of_the_dawn_lance"],
+      "attitude": "indifferent",
+      "conversations": [
+        {
+          "id": "lance",
+          "label": "Ask Knight-Captain Ashe for a knight to ride with you",
+          "keywords": ["ashe", "captain", "knight", "lance", "ask", "help", "ride"],
+          "if": { "not": { "flag": "~ch3_knight" } },
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Traveller. You want the Blightwood. Everyone who wants the Blightwood these days wants a knight to go in with them, and I have lost two already. Give me a reason to lose a third.",
+              "options": [
+                {
+                  "id": "commission",
+                  "label": "Show him the Ironvault court's commission",
+                  "once": true,
+                  "if": { "flag": "~ch1_commission" },
+                  "keywords": ["commission", "ironvault", "seal", "show", "letter"],
+                  "outcome": { "flags": [{ "set": "~ch3_knight" }], "reputation": [{ "faction": "order_of_the_dawn_lance", "delta": 5 }] },
+                  "next": "lent"
+                },
+                {
+                  "id": "standing",
+                  "label": "\"The Dawn Lance knows my name.\"",
+                  "once": true,
+                  "if": { "reputation": { "faction": "order_of_the_dawn_lance", "gte": 20 } },
+                  "keywords": ["name", "know", "friend", "order", "standing"],
+                  "outcome": { "flags": [{ "set": "~ch3_knight" }] },
+                  "next": "lent"
+                },
+                {
+                  "id": "persuade",
+                  "label": "\"The gold going into that forest is forging a crown. Your patrols died for it. Help me end it.\"",
+                  "once": true,
+                  "keywords": ["persuade", "crown", "gold", "patrols", "end", "convince"],
+                  "check": {
+                    "skill": "persuasion",
+                    "dc": 14,
+                    "advantageIf": [{ "if": { "count": { "flags": ["arc.crown.clue_1", "arc.crown.clue_2", "arc.crown.clue_3", "arc.crown.clue_4", "arc.crown.clue_5"], "min": 3 } }, "source": "You lay out the evidence of the Thousand Faces" }],
+                    "disadvantageIf": [{ "if": { "flag": "world.player_outlawed" }, "source": "Your face is on the Ironvault broadsheets" }],
+                    "success": { "flags": [{ "set": "~ch3_knight" }] },
+                    "failure": { "flags": [{ "set": "~ch3_lance_refused" }] }
+                  },
+                  "next": "lent",
+                  "nextOnFail": "refused"
+                },
+                {
+                  "id": "paths",
+                  "label": "Ask what his patrols learned about the Blightwood's paths",
+                  "once": true,
+                  "keywords": ["paths", "patrols", "learned", "forest", "advice", "warn"],
+                  "outcome": { "flags": [{ "set": "~ch3_paths_warned" }] },
+                  "next": "paths"
+                },
+                { "id": "bye", "label": "\"I'll manage alone.\"", "keywords": ["bye", "alone", "leave", "manage"] }
+              ]
+            },
+            {
+              "id": "lent",
+              "text": "Then you'll have Ser Hallam Brightwater. Best lance I have left, and the most stubborn. Bring him back, traveller, or bring back what killed him.",
+              "options": [{ "id": "thanks", "label": "\"I will.\"" }]
+            },
+            {
+              "id": "refused",
+              "text": "Pretty words, and I believe half of them. Not enough to send a man to die. Go, if you must, and if you come back I'll listen to the other half.",
+              "options": [{ "id": "back", "label": "\"Fair enough.\"" }]
+            },
+            {
+              "id": "paths",
+              "text": "The paths move when nobody watches them. My knights who came back said the same thing: pick one, fix your eyes on it, and never look away. The ones who looked away are still in there.",
+              "options": [{ "id": "back", "label": "\"About that knight.\"", "next": "greet" }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "corwin_cameo",
+      "name": "Ser Corwin",
+      "statBlock": "knight",
+      "personality": "Ser Corwin of the Dawn Lance, older now and greyer, a hero of the war against the Choir who trains squires at Dawnspire and misses the road.",
+      "secrets": [],
+      "voice": "Warm, wry, a soldier's plain words; still says 'hold the line' when he means 'be careful'.",
+      "factions": ["order_of_the_dawn_lance"],
+      "attitude": "friendly",
+      "schedule": [
+        {
+          "scene": "dawnspire_muster_lite",
+          "from": 0,
+          "to": 24,
+          "if": { "all": [{ "flag": "world.corwin_quest_done" }, { "any": [{ "flag": "world.corwin_status", "eq": "in_party" }, { "flag": "world.corwin_status", "eq": "left" }] }] }
+        }
+      ],
+      "conversations": [
+        {
+          "id": "old_road",
+          "label": "Talk to the grey-haired knight drilling the squires",
+          "keywords": ["corwin", "knight", "grey", "squires", "talk", "old"],
+          "once": true,
+          "start": "greet",
+          "nodes": [
+            {
+              "id": "greet",
+              "text": "Another one riding into the dark for the rest of us. I did that once, with a friend who went down into the Maw. A year ago, now. Hold the line in there, and when you come back, come and tell an old knight about it.",
+              "options": [{ "id": "go", "label": "\"I will, Ser Corwin.\"", "outcome": { "flags": [{ "set": "~ch3_corwin_met" }] } }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ondra_vexx",
+      "name": "Ondra Vexx",
+      "statBlock": "spy",
+      "personality": "Master Assayer Ondra Vexx, struck from the Ironvault rolls for an error that was the Consortium's: precise, quiet, contemptuous of anyone who believes a ledger. She built the Thousand Faces to prove that worth is only ever what the books say.",
+      "secrets": ["She found the Ironvault already a tenth hollow and was silenced for it.", "She bought her face from Mother Tallow for the memory of the day she was struck from the rolls."],
+      "voice": "Soft, dry, exact; weighs every word like coin; never raises her voice.",
+      "factions": [],
+      "attitude": "hostile"
+    },
+    {
+      "id": "brother_pale",
+      "name": "Brother Pale",
+      "statBlock": "cultist_fanatic",
+      "personality": "A grey-robed priest of Vashkul's hunger who sees hollow gold as hunger made solid and sings it into crowns; gentle-voiced and entirely mad.",
+      "secrets": ["He has heard of the Hollow Choir only as a rumour, and longs to be heard by it."],
+      "voice": "A sweet tenor; speaks in hymn fragments; calls everyone 'hungry one'.",
+      "factions": [],
+      "attitude": "hostile"
+    },
+    {
+      "id": "thane_orsa",
+      "name": "Thane-Warden Orsa Ironhand",
+      "statBlock": "noble",
+      "personality": "The Thane-Warden of Deepanvil Hold and judge of the Ironvault court: old, iron-grey, scrupulous, and painfully aware that her own vaults were hollow before Vexx ever touched them.",
+      "secrets": ["She signed the order that struck Ondra Vexx from the rolls, and knew why."],
+      "voice": "Slow and heavy, like a scale settling; uses the hero's full name.",
+      "factions": ["ironvault_consortium"],
+      "attitude": "indifferent"
+    }
+  ],
+  "encounters": [
+    {
+      "id": "blightwood_pack",
+      "name": "The Blightwood Pack",
+      "monsters": [
+        { "id": "worg", "count": 2 },
+        { "id": "goblin_warrior", "count": 1 },
+        {
+          "id": "goblin_warrior",
+          "count": 2,
+          "if": { "any": [{ "flag": "world.brannoc_status", "eq": "in_party" }, { "flag": "world.ilse_status", "eq": "in_party" }, { "flag": "world.wren_status", "eq": "in_party" }] }
+        },
+        { "id": "ghoul", "count": 2, "if": { "flag": "world.maw_state", "eq": "stirring" } }
+      ],
+      "statOverrides": { "worg": { "hpPercent": 60 } },
+      "map": "blightwood_map",
+      "room": "black_trail",
+      "scaling": { "target": "moderate", "pool": ["goblin_warrior"] },
+      "win": {
+        "text": "The last worg runs howling into the grey trees with its rider dragging from a stirrup. The pack came from somewhere and was going somewhere: a trail of paw-prints and cart-ruts runs straight through the moving paths toward the towers of Old Vaelthorn, and does not move.",
+        "flags": [{ "set": "~ch3_path_kept" }, { "set": "~ch3_pack_done" }],
+        "revealRoom": { "map": "blightwood_map", "room": "foundry_approach" }
+      },
+      "lose": { "text": "You come to at the forest edge, dragged there by who knows what, bitten and bleeding. The paths have moved again.", "minutes": 240 },
+      "flee": { "text": "You run until the grey trees thin, and find yourself back at the forest edge, with the howling behind you." }
+    },
+    {
+      "id": "foundry_guardians",
+      "name": "The Foundry Guardians",
+      "monsters": [
+        { "id": "animated_armor", "count": 3 },
+        { "id": "gargoyle", "count": 1 }
+      ],
+      "statOverrides": { "gargoyle": { "hpPercent": 60 } },
+      "bosses": ["gargoyle"],
+      "map": "vaelthorn_foundry",
+      "room": "mould_floor",
+      "scaling": { "target": "moderate", "pool": ["animated_armor"] },
+      "win": {
+        "text": "The gargoyle shatters on the mould floor, and the last suit of armour falls apart at the joints. The foundry is yours, and through the heat beyond it the coronation hymn goes on, unhurried.",
+        "flags": [{ "set": "~ch3_guardians_done" }]
+      },
+      "lose": { "text": "You crawl back to the gate hall with your armour dented and your ears ringing. The guardians step back onto their plinths, waiting.", "minutes": 60 },
+      "flee": { "text": "You fall back to the gate hall. The guardians do not follow past the mould floor." }
+    },
+    {
+      "id": "coronation_fight",
+      "name": "The Thousand Faces",
+      "monsters": [
+        { "id": "spy", "count": 1 },
+        { "id": "cultist_fanatic", "count": 2, "if": { "not": { "flag": "~ch3_face_used" } } },
+        { "id": "doppelganger", "count": 1, "if": { "not": { "flag": "arc.crown.gilt_exposed" } } },
+        { "id": "night_hag", "count": 1, "if": { "flag": "~ch2_market_burned" } }
+      ],
+      "statOverrides": {
+        "spy": { "name": "Ondra Vexx", "hpPercent": 150 },
+        "doppelganger": { "name": "Gilt", "hpPercent": 60 },
+        "night_hag": { "name": "Mother Tallow", "hpPercent": 50 }
+      },
+      "bosses": ["spy"],
+      "allies": [
+        { "id": "knight", "count": 1, "if": { "flag": "~ch3_knight" } },
+        { "id": "guard", "count": 2, "if": { "flag": "~ch3_named" } }
+      ],
+      "map": "vaelthorn_foundry",
+      "room": "throne_hall",
+      "scaling": { "target": "high", "pool": [] },
+      "win": {
+        "text": "Vexx goes down on the steps of the dais, and the Hollow Crown rolls out of her hands and rings on the broken floor. The Faces that are left run, wearing whatever faces they can, and the bought court runs with them.",
+        "flags": [{ "set": "~ch3_vexx_beaten" }],
+        "goto": "hollow_crown_choice"
+      },
+      "lose": {
+        "text": "The last thing you see is the crown coming down on the Face's head, and the bought court rising to cheer. You wake on a cart on the Deepanvil road, days later, alive because nobody bothered to finish you: a new crowned seal is already on every letter in the kingdom.",
+        "flags": [{ "set": "arc.crown.crowned" }, { "set": "arc.crown.vexx_fate", "value": "escaped" }],
+        "xp": 3800,
+        "goto": "epilogue_deepanvil",
+        "minutes": 4320
+      },
+      "flee": {
+        "text": "You get out of the throne hall alive, and behind you the hymn rises, and the bought court cheers, and the crown comes down. By the time you reach the Deepanvil road, a new crowned seal is on every letter in the kingdom.",
+        "flags": [{ "set": "arc.crown.crowned" }, { "set": "arc.crown.vexx_fate", "value": "escaped" }],
+        "xp": 3800,
+        "goto": "epilogue_deepanvil",
+        "minutes": 4320
+      }
+    }
+  ],
+  "beats": [
+    {
+      "id": "moulds_cooled",
+      "text": "Two of the three assay stations are set true and the moulds cool.",
+      "trigger": { "count": { "flags": ["~ch3_station_arcane", "~ch3_station_ledger", "~ch3_station_rite"], "min": 2 } },
+      "scenes": ["vaelthorn_foundry"],
+      "outcome": {
+        "text": "With a long hiss the rivers of gold in their channels slow, and thicken, and go grey. The moulds cool. The armour on the plinths lowers its heads.",
+        "flags": [{ "set": "~ch3_moulds_cooled" }],
+        "revealRoom": { "map": "vaelthorn_foundry", "room": "throne_hall" },
+        "xp": 100
+      }
+    },
+    {
+      "id": "named_unmasked",
+      "text": "Vexx, named before the court, is held for the Ironvault.",
+      "trigger": { "all": [{ "flag": "~ch3_vexx_beaten" }, { "flag": "~ch3_named" }, { "flag": "arc.crown.vexx_fate", "eq": "at_large" }] },
+      "scenes": ["hollow_crown_choice"],
+      "outcome": {
+        "text": "The guards who turned their spears on her hold Ondra Vexx down by the throne. The whole bought court saw her true face; there is nowhere left for her to hide it.",
+        "flags": [{ "set": "arc.crown.vexx_fate", "value": "unmasked" }]
+      }
+    },
+    {
+      "id": "pale_falls",
+      "text": "Brother Pale's last hymn.",
+      "trigger": { "flag": "~ch3_vexx_beaten" },
+      "scenes": ["hollow_crown_choice"],
+      "outcome": { "text": "Brother Pale lies by the throne with his hymn-book open on his chest. \"Hungry one,\" he whispers, \"it was only ever hunger,\" and then nothing more." }
+    },
+    {
+      "id": "knight_salute",
+      "text": "Ser Hallam salutes after the fight.",
+      "trigger": { "all": [{ "flag": "~ch3_vexx_beaten" }, { "flag": "~ch3_knight" }] },
+      "scenes": ["hollow_crown_choice"],
+      "outcome": { "text": "Ser Hallam leans on his lance, breathing hard, and raises his gauntlet to you. \"Dawnspire will hear of this. Every word.\"" }
+    },
+    {
+      "id": "ilse_crown",
+      "text": "Ilse speaks over the crown.",
+      "trigger": { "all": [{ "flag": "~ch3_vexx_beaten" }, { "flag": "world.ilse_status", "eq": "in_party" }] },
+      "scenes": ["hollow_crown_choice"],
+      "outcome": { "text": "Ilse kneels by the crown without touching it. \"I dreamed this,\" she says. \"Every face in Tallow's book is in this gold. Please don't give it to anyone who would wear it.\"" }
+    },
+    {
+      "id": "brannoc_crown",
+      "text": "Brannoc weighs the crown with his eyes.",
+      "trigger": { "all": [{ "flag": "~ch3_vexx_beaten" }, { "flag": "world.brannoc_status", "eq": "in_party" }] },
+      "scenes": ["hollow_crown_choice"],
+      "outcome": { "text": "Brannoc looks at the crown the way he looked at the first ash coin in Brightwater. \"Korrath's anvil is still hot in there,\" he says. \"One blow. That's all it needs.\"" }
+    },
+    {
+      "id": "wren_crown",
+      "text": "Wren eyes the crown.",
+      "trigger": { "all": [{ "flag": "~ch3_vexx_beaten" }, { "flag": "world.wren_status", "eq": "in_party" }] },
+      "scenes": ["hollow_crown_choice"],
+      "outcome": { "text": "Wren whistles low. \"That's the biggest marker anyone ever drew, friend. Whoever holds it, everyone else owes.\"" }
+    },
+    {
+      "id": "ep_outlaw_cleared",
+      "text": "Epilogue: the hero's name is cleared.",
+      "trigger": { "all": [{ "flag": "world.player_outlawed" }, { "not": { "flag": "arc.crown.crowned" } }] },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": {
+        "text": "The Thane-Warden strikes the broadsheet with your face on it from the Ironvault's rolls with one line of red ink. Your name is clean in Deepanvil Hold again.",
+        "flags": [{ "set": "world.player_outlawed", "value": false }]
+      }
+    },
+    {
+      "id": "ep_ironvault_honest",
+      "text": "Epilogue: the Ironvault opens its books.",
+      "trigger": { "all": [{ "not": { "flag": "arc.crown.crowned" } }, { "any": [{ "flag": "arc.crown.vexx_fate", "eq": "unmasked" }, { "flag": "arc.crown.vexx_fate", "eq": "killed" }] }] },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "The Ironvault Consortium opens its vaults to an honest audit for the first time in a generation, and admits in public what Ondra Vexx found: the tenth that was hollow before she ever touched it. The scales of Deepanvil weigh true again." }
+    },
+    {
+      "id": "ep_ironvault_austerity",
+      "text": "Epilogue: the Ironvault tightens its belt.",
+      "trigger": { "any": [{ "flag": "arc.crown.crowned" }, { "flag": "arc.crown.vexx_fate", "eq": "escaped" }, { "flag": "arc.crown.vexx_fate", "eq": "bargained" }] },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "The Ironvault Consortium calls in its loans, shuts its lesser vaults and weighs every coin twice. Prices rise from Deepanvil to the sea, and nobody quite trusts gold this year." }
+    },
+    {
+      "id": "ep_crown_queen",
+      "text": "Epilogue: the Queen's seal is safe.",
+      "trigger": { "all": [{ "not": { "flag": "arc.crown.crowned" } }, { "flag": "world.queen_alive", "eq": true }] },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "Queen Isolde's envoy, the real one, is found alive in a cellar under the Blightwood with forty other replaced clerks and captains. The Queen's seal means what it says again." }
+    },
+    {
+      "id": "ep_crown_regent",
+      "text": "Epilogue: the Regent rules on.",
+      "trigger": { "all": [{ "not": { "flag": "arc.crown.crowned" } }, { "flag": "world.queen_alive", "eq": false }] },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "The Regent rules on in a kingdom without a Queen, and has every courtier's face checked against a portrait twice a year. The joke in Highcrown is that the Regent checks the mirror too." }
+    },
+    {
+      "id": "ep_crown_false",
+      "text": "Epilogue: a false crown rules.",
+      "trigger": { "flag": "arc.crown.crowned" },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "Under the new crowned seal, the kingdom's debts are signed over one by one to a consortium nobody has heard of. Somewhere, a woman in an assayer's black coat is balancing the books." }
+    },
+    {
+      "id": "ep_hand_crown",
+      "text": "Epilogue: the crown in the treasury.",
+      "trigger": { "flag": "world.hollow_crown", "eq": "crown" },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "The Hollow Crown goes into the Highcrown treasury under three locks, and the Crown of Aurelmark's ministers find reasons to visit it more often than they should." }
+    },
+    {
+      "id": "ep_salt_unpaid",
+      "text": "Epilogue: Salt still holds the marker.",
+      "trigger": { "flag": "arc.crown.salt_unpaid" },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "In Fennick's Rest, Captain Ferrin Salt tells anyone who will buy him a drink that a certain hero still owes him a ship. The Red Gull are still looking for his berth." }
+    },
+    {
+      "id": "ep_salt_handed",
+      "text": "Epilogue: Salt's sentence.",
+      "trigger": { "flag": "~ch2_salt_handed" },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "The Red Gull keep Captain Ferrin Salt chained to an oar on their flagship. He still calls everyone 'cargo'." }
+    },
+    {
+      "id": "ep_knight",
+      "text": "Epilogue: the Lance's knight comes home.",
+      "trigger": { "flag": "~ch3_knight" },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": {
+        "text": "Ser Hallam Brightwater rides home to Dawnspire and tells the story at the Knight-Captain's table, and the Dawn Lance sends patrols into the Blightwood again, by daylight, watching the paths.",
+        "reputation": [{ "faction": "order_of_the_dawn_lance", "delta": 10 }]
+      }
+    },
+    {
+      "id": "ep_brannoc",
+      "text": "Epilogue: Brannoc.",
+      "trigger": { "flag": "world.brannoc_status", "eq": "in_party" },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "Brannoc Stonecount takes his father's assay seal back to the shrine of Korrath at Brightwater and hangs it over the altar, and weighs every coin brought to him there for free." }
+    },
+    {
+      "id": "ep_ilse",
+      "text": "Epilogue: Ilse.",
+      "trigger": { "flag": "world.ilse_status", "eq": "in_party" },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "Sister Ilse Varn goes looking for the book of the unmade, to give the names in it back one by one. She dreams less of forges now, and more of faces." }
+    },
+    {
+      "id": "ep_wren",
+      "text": "Epilogue: Wren.",
+      "trigger": { "flag": "world.wren_status", "eq": "in_party" },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "Wren Thistle goes back to Fennick's Rest to collect a month's winnings from Quillon Vane, plus interest. Rumour says she collected them honestly. Nobody believes the rumour." }
+    },
+    {
+      "id": "ep_brightwater",
+      "text": "Epilogue: Brightwater's assay house.",
+      "trigger": { "not": { "flag": "arc.crown.crowned" } },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "In Brightwater, Mistress Dunmore hangs a new sign over her assay house: 'Every coin weighed. Every face too.' Business is good." }
+    },
+    {
+      "id": "ep_memory",
+      "text": "Epilogue: the memory sold to Tallow.",
+      "trigger": { "all": [{ "flag": "world.hag_bargain" }, { "not": { "flag": "arc.crown.memory_restored" } }] },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "Some nights you still reach for a name that is not there. It is written in a book somewhere, in a hag's careful hand." }
+    },
+    {
+      "id": "ep_memory_restored",
+      "text": "Epilogue: the memory returned.",
+      "trigger": { "all": [{ "flag": "world.hag_bargain" }, { "flag": "arc.crown.memory_restored" }] },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "The name Mother Tallow took from you is yours again. You say it aloud sometimes, just to hear it." }
+    },
+    {
+      "id": "ep_defeats",
+      "text": "Epilogue: the hero's habit of losing.",
+      "trigger": { "flag": "world.times_defeated", "gte": 3 },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "The Ironvault's clerks keep a private ledger of how many times you were knocked down on the way. They agree it balances: you always got up one more time than you fell." }
+    },
+    {
+      "id": "ep_maw_stirring",
+      "text": "Epilogue (imported world): the Maw still stirs.",
+      "trigger": { "flag": "world.maw_state", "eq": "stirring" },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "Brother Pale's hymn-book goes to the Lantern Wardens, who read it by lamplight and say nothing. Under the fen, the voice that sang along with him has not stopped." }
+    },
+    {
+      "id": "ep_corwin",
+      "text": "Epilogue (imported world): Ser Corwin hears the story.",
+      "trigger": { "flag": "~ch3_corwin_met" },
+      "scenes": ["epilogue_deepanvil"],
+      "outcome": { "text": "At Dawnspire, Ser Corwin hears your story to the end and laughs, and says it is the second time a stranger has saved the kingdom under his nose, and he would like to be asked along next time." }
+    }
+  ],
+  "quests": [
+    {
+      "id": "the_blightwood_mint",
+      "name": "The Blightwood Mint",
+      "objectives": [
+        { "id": "ride", "text": "Ride into the Blightwood toward the ruins of Old Vaelthorn", "done": { "visited": "blightwood_paths" } },
+        { "id": "path", "text": "Find a path through the Blightwood that stays put", "done": { "flag": "~ch3_path_kept" }, "if": { "visited": "blightwood_paths" } },
+        { "id": "foundry", "text": "Get past the foundry's moulds and guardians", "done": { "any": [{ "flag": "~ch3_moulds_cooled" }, { "flag": "~ch3_guardians_done" }] }, "if": { "visited": "vaelthorn_foundry" } },
+        { "id": "coronation", "text": "Stop the coronation of the Face", "done": { "any": [{ "flag": "~ch3_vexx_beaten" }, { "flag": "arc.crown.crowned" }] }, "if": { "visited": "coronation" } },
+        { "id": "crown", "text": "Decide what becomes of the Hollow Crown", "done": { "not": { "flag": "world.hollow_crown", "eq": "none" } }, "if": { "visited": "hollow_crown_choice" } },
+        { "id": "court", "text": "Bring the account to the Ironvault court", "done": { "visited": "epilogue_deepanvil" }, "if": { "flag": "~ch3_rested" } }
+      ]
+    }
+  ],
+  "flags": [
+    { "id": "~ch1_commission", "description": "Read from chapter 1: the Ironvault court hired the hero under its seal." },
+    { "id": "~ch2_market_burned", "description": "Read from chapter 2: the hero burned Mother Tallow's market (she joins the coronation fight)." },
+    { "id": "~ch2_salt_handed", "description": "Read from chapter 2: the hero handed Captain Salt to the Red Gull." },
+    { "id": "~ch3_pale_known", "description": "A pilgrim told the hero about Brother Pale's procession." },
+    { "id": "~ch3_knight", "description": "The Dawn Lance lent Ser Hallam Brightwater (a knight ally at the coronation)." },
+    { "id": "~ch3_lance_refused", "description": "Knight-Captain Ashe refused the hero's speech." },
+    { "id": "~ch3_paths_warned", "description": "Knight-Captain Ashe told the hero how to keep a Blightwood path." },
+    { "id": "~ch3_corwin_met", "description": "Imported world: Ser Corwin's cameo at Dawnspire." },
+    { "id": "~ch3_sap_read", "description": "The hero read which way the black sap weeps (toward the forge)." },
+    { "id": "~ch3_path_kept", "description": "The hero has a Blightwood path that holds still toward the ruins." },
+    { "id": "~ch3_pack_done", "description": "The hero beat the Blightwood pack and followed its trail." },
+    { "id": "~ch3_station_arcane", "description": "The crucible's sigils were unpicked." },
+    { "id": "~ch3_station_ledger", "description": "The foundry scales were set to true weight." },
+    { "id": "~ch3_station_rite", "description": "Korrath's rite was spoken over the anvil." },
+    { "id": "~ch3_station_failed", "description": "A station failed (or was skipped) and the foundry guardians woke." },
+    { "id": "~ch3_moulds_cooled", "description": "Two assay stations set true: the moulds cooled without a fight." },
+    { "id": "~ch3_guardians_done", "description": "The hero beat the foundry guardians." },
+    { "id": "~ch3_named", "description": "The hero named Ondra Vexx before the bought court with three clues or more." },
+    { "id": "~ch3_face_used", "description": "The hero walked into the coronation in Mother Tallow's borrowed face (the fanatics were sent away)." },
+    { "id": "~ch3_face_failed", "description": "The borrowed face slipped at the coronation (spent anyway)." },
+    { "id": "~ch3_vexx_beaten", "description": "The hero won the coronation fight." },
+    { "id": "~ch3_vexx_caught", "description": "The hero caught Vexx in her stolen face after the fight." },
+    { "id": "~ch3_names_given", "description": "Vexx gave the hero every Face's true name as her side of the bargain." },
+    { "id": "~ch3_rested", "description": "The hero slept in the ruins after the crown choice (level 5 milestone)." }
+  ],
+  "endings": [
+    {
+      "id": "ending_false_coin",
+      "name": "The False Coin",
+      "text": "A Face wears the Hollow Crown, and its seal is on every letter in Aurelmark. The kingdom's debts flow quietly into the ledgers of the Thousand Faces, and the coins in every purse ring true, and pass every assay, and nobody can say any more which of them are hollow. Ondra Vexx proved her point: worth is only ever what the ledger says, and now she keeps the ledger."
+    },
+    {
+      "id": "ending_true_weight",
+      "name": "True Weight",
+      "text": "The Hollow Crown is gone from the world's reach, and Ondra Vexx has answered for it. The Ironvault weighs its gold honestly again, the replaced clerks and captains come home to their own faces, and in Deepanvil they cut a new mark into the great scales: yours. Coins ring true across Aurelmark this year, and when they do, people think of you."
+    },
+    {
+      "id": "ending_hollow_king",
+      "name": "The Hollow Keeper",
+      "text": "The Thousand Faces are broken, and the court thanks you, and believes you when you say the crown is gone. It is in your pack. It is warm. Some nights you take it out and look at it, and it shows you a face that every court in Aurelmark would kneel to. You have not put it on. Yet."
+    },
+    {
+      "id": "ending_stranger",
+      "name": "A Stranger in the Mirror",
+      "text": "With Vexx's list, the Ironvault finds every Face in the kingdom, one by one, and the true clerks and captains come home. The crown is ash. The price was your face: somewhere, Ondra Vexx is wearing it, and every mirror shows you a stranger who has your eyes. The people you saved do not always recognise you. You recognise them."
+    },
+    {
+      "id": "ending_thousand_faces",
+      "name": "The Thousand Faces",
+      "text": "The coronation failed and the Hollow Crown never sat on a Face's head, but Ondra Vexx walked out of the throne hall in somebody else's face and was never found. The Ironvault patches its books, the Crown checks its clerks, and every so often a coin turns to ash in somebody's hand, somewhere, to remind them that she is still out there, balancing her accounts."
+    }
+  ]
+}

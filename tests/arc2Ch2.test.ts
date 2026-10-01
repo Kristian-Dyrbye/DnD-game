@@ -449,8 +449,8 @@ describe('arc2_ch2_gamblers_tide: policy playthrough through the game host', () 
     const errors = events.filter((e) => e.type === 'error');
     expect(errors, JSON.stringify(errors.slice(0, 3))).toEqual([]);
     expect(fights).toBeGreaterThan(0);
-    // The ending has no installed next chapter yet (B007), so the chapter ends here.
-    expect(getProgress(session.current)!.ending, `${getProgress(session.current)!.sceneId}: ${session.current.log.slice(-4).map((l) => l.text).join(' | ')}`).toBe('ch2_to_blightwood');
+    // The ending chained straight into chapter 3 (B007).
+    expect(getProgress(session.current)!.adventureId, `${getProgress(session.current)!.sceneId}: ${session.current.log.slice(-4).map((l) => l.text).join(' | ')}`).toBe('arc2_ch3_blightwood_mint');
     expect(session.current.flags).toMatchObject({ [`${L}passage`]: true, [`${L}reef_cleared`]: true, [`${L}market_done`]: true, [`${L}rested`]: true });
     // Level 4 milestone.
     expect(session.current.hero.xp).toBeGreaterThanOrEqual(2700);

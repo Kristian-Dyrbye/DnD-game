@@ -18,6 +18,7 @@ import ch5 from '../../data/adventures/arc1/ch5_the_hungering_dark.json';
 import arc2Ch0 from '../../data/adventures/arc2/ch0_hollow_coin.json';
 import arc2Ch1 from '../../data/adventures/arc2/ch1_faces.json';
 import arc2Ch2 from '../../data/adventures/arc2/ch2_gamblers_tide.json';
+import arc2Ch3 from '../../data/adventures/arc2/ch3_blightwood_mint.json';
 import { parseOverlay, type ContentTranslations } from '../shared/contentI18n';
 import daDemo from '../../data/i18n/da/millbrook_demo.json';
 import daStarter from '../../data/i18n/da/millbrook_disappearances.json';
@@ -48,6 +49,7 @@ export const BUNDLED_ADVENTURES: AdventureSource[] = [
   { file: 'arc2/ch0_hollow_coin.json', raw: arc2Ch0 },
   { file: 'arc2/ch1_faces.json', raw: arc2Ch1 },
   { file: 'arc2/ch2_gamblers_tide.json', raw: arc2Ch2 },
+  { file: 'arc2/ch3_blightwood_mint.json', raw: arc2Ch3 },
 ];
 
 /** Bundled content translations (data/i18n/<lang>/<key>.json), same keys as the server loads.
