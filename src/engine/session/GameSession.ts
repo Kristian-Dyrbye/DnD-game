@@ -44,10 +44,11 @@ export interface SavePort {
 /** Handles player input once a game is running (scene runner / intent parsing / narration). */
 export interface ActionPort {
   say(session: GameSession, text: string): Promise<void>;
-  choose(session: GameSession, actionId: string): Promise<void>;
+  /** `actor` = character id of the hero who attempts the check / opens the talk (C004; default the hero). */
+  choose(session: GameSession, actionId: string, actor?: string): Promise<void>;
   /** Called after new_game and load so the scene can present itself. */
   begin?(session: GameSession): Promise<void>;
-  /** Offers the current buttons again without acting (after a language switch). */
+  /** Offers the current buttons again without acting (after a language switch or a hero joining). */
   refresh?(session: GameSession): Promise<void>;
   /** World-map travel to a known lore location. */
   travel?(session: GameSession, to: string, pace: 'slow' | 'normal' | 'fast'): Promise<void>;
@@ -309,6 +310,8 @@ export class GameSession {
         case 'add_hero':
           if (!this.running) return this.fail(this.msgs.m('session.noGame'), reqId);
           this.addHero(cmd.hero, seat);
+          // Re-offer the buttons: check actions now list who may attempt them (C004).
+          await this.ports.actions?.refresh?.(this);
           this.emit(this.snapshot());
           this.emit({ type: 'ack', command: cmd.type, ...(reqId && { reqId }) });
           this.autosave();
@@ -363,7 +366,7 @@ export class GameSession {
           return;
         case 'choose':
           if (!this.running) return this.fail(this.msgs.m('session.noGame'), reqId);
-          await (this.ports.actions ?? fallbackActions).choose(this, cmd.actionId);
+          await (this.ports.actions ?? fallbackActions).choose(this, cmd.actionId, cmd.actor);
           this.emit(this.snapshot());
           this.emit({ type: 'ack', command: cmd.type, ...(reqId && { reqId }) });
           return;

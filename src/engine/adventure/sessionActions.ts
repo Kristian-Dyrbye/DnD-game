@@ -35,7 +35,7 @@ import type { SideQuestTables } from './sidequestTables';
 import type { SuggestedAction } from '../../shared/protocol';
 import { MINUTES_PER_DAY } from '../world/clock';
 import { moodFor } from '../world/mood';
-import { dataSuggestions, mergeSuggestions, type SuggestionIdea } from './suggestions';
+import { button, dataSuggestions, mergeSuggestions, type SuggestionIdea } from './suggestions';
 import { updateSummary, type Summarizer } from './summary';
 
 export interface AdventurePortOptions {
@@ -246,7 +246,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
     session.emit({ type: 'dialogue', view: dialogueView(ctx.adventure, talk) });
     const offered = availableActions(ctx);
     // In a conversation the options stay authored: no job buttons, no model ideas.
-    if (talk) return session.suggest(offered.map((a) => ({ id: a.id, label: a.check ? `${a.label} (${a.check})` : a.label })));
+    if (talk) return session.suggest(offered.map(button));
     const jobs = jobButtons(session);
     session.suggest([...dataSuggestions(offered, session.msgs), ...jobs]);
     if (!opts.suggester || offered.length === 0) return;
@@ -503,7 +503,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       const view = shopView(sctx, cmd.shopId);
       if (view) session.emit({ type: 'shop', shop: view });
     },
-    async choose(session, actionId) {
+    async choose(session, actionId, actor) {
       if (activeFight(session.current)) throw new Error(session.msgs.m('story.inFight'));
       if (actionId.startsWith('sq:')) return sideQuestChoice(session, actionId);
       const ctx = ctxFor(session);
@@ -511,7 +511,7 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
       // A picked conversation reply shows as the hero's line.
       if (label && actionId.startsWith(DIALOGUE_PREFIX) && actionId !== LEAVE_TALK) session.addLog('player', label);
       const before = ctx.state.time;
-      const r = perform(ctx, actionId);
+      const r = perform(ctx, actionId, actor === undefined ? {} : { actor });
       await finish(session, ctx, r, label);
       session.timePassed(before);
     },

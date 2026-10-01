@@ -41,6 +41,7 @@ export const en = {
   'story.fightStillOn': 'The fight is still on!',
   'story.youAreIn': 'You are in {name}. {summary}',
   'story.cantAfford': "You can't afford that ({coins} needed).",
+  'story.badActor': "That character can't attempt this now.",
   'story.scar': '{name} will carry a scar: {scar}.',
   'story.exhaustion': 'Exhaustion {n}.',
   'story.damage': '{name} takes {amount} {type} damage.',

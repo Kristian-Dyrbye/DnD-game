@@ -83,8 +83,8 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
   z.object({ ...base, type: z.literal('get_state') }),
   /** Free text from the input box (goes through intent parsing in A054). */
   z.object({ ...base, type: z.literal('say'), text: z.string().min(1).max(500) }),
-  /** A suggested action button. */
-  z.object({ ...base, type: z.literal('choose'), actionId: z.string().min(1).max(80) }),
+  /** A suggested action button; `actor` = the hero who attempts its check / opens the talk (one of SuggestedAction.actors). */
+  z.object({ ...base, type: z.literal('choose'), actionId: z.string().min(1).max(80), actor: z.string().min(1).max(40).optional() }),
   z.object({ ...base, type: z.literal('save'), slot: z.string().regex(SLOT_ID_PATTERN), name: z.string().max(80).optional() }),
   /** A small picture of the hero (gear + scars) the client rendered; used as the save thumbnail. */
   z.object({ ...base, type: z.literal('thumbnail'), data: z.string().max(120_000).regex(/^data:image\/(png|jpeg|webp);base64,/) }),
@@ -115,6 +115,8 @@ export interface SuggestedAction {
   label: string;
   /** Free-text suggestion: clicking sends this as a `say` command instead of `choose`. */
   say?: string;
+  /** Heroes who may attempt it (only with two or more heroes); the first is the default. `bonus` = check modifier. */
+  actors?: { id: string; name: string; bonus?: number }[];
 }
 
 export type ServerEvent =

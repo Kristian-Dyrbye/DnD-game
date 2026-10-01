@@ -17,7 +17,7 @@ import { roll } from '../core/dice';
 import { totalLevel, type Character } from '../core/creature';
 import { Rng } from '../core/rng';
 import type { SrdDatabase } from '../data/srd';
-import { abilityCheck, savingThrow, type D20TestResult } from '../rules/checks';
+import { abilityCheck, checkModifiers, saveModifiers, savingThrow, type D20TestResult } from '../rules/checks';
 import { extraHeroes, type GameState } from '../session/gameState';
 import { applyFlagWrites, evalCondition, inHours, timeOfDay, type ConditionContext } from './conditions';
 import type { Action, Adventure, Check, Condition, Outcome, Scene } from './schema';
@@ -116,6 +116,23 @@ export interface AvailableAction {
   kind: 'action' | 'poi' | 'exit' | 'talk' | 'dialogue';
   /** Shown before rolling ("Athletics DC 12"). */
   check?: string;
+  /**
+   * Who may attempt it (co-op, C004): listed only when more than one player-made hero could. The
+   * first entry is the one used when no `actor` is sent (the hero, or the hero who opened the talk).
+   */
+  actors?: CheckActor[];
+}
+
+/** A hero who may make a check (or open a talk); `bonus` = the check's total modifier for them. */
+export interface CheckActor {
+  id: string;
+  name: string;
+  bonus?: number;
+}
+
+export interface PerformOptions {
+  /** Character id of the hero who makes the check / opens the talk (default the hero; see AvailableAction.actors). */
+  actor?: string;
 }
 
 export class AdventureError extends Error {}
@@ -234,24 +251,57 @@ export function availableActions(ctx: RunContext): AvailableAction[] {
   const s = currentScene(ctx);
   const cc = conditionContext(ctx.state, p, flagsFor(ctx));
   const msgs = ctx.msgs ?? ENGLISH_MESSAGES;
+  const heroes = actorHeroes(ctx.state);
+  const checkInfo = (c: Check | undefined, first?: string) => {
+    if (!c) return {};
+    const actors = c.group || heroes.length < 2 ? [] : checkActors(heroes, c, first);
+    return { check: checkLabel(c, msgs), ...(actors.length > 1 && { actors }) };
+  };
   if (p.talk) {
     // In a conversation: its options, plus a way out.
-    const opts = openOptions(ctx.adventure, p.talk, cc).map(({ id, option }): AvailableAction => ({ id, label: option.label, kind: 'dialogue', ...(option.check && { check: checkLabel(option.check, msgs) }) }));
+    const opts = openOptions(ctx.adventure, p.talk, cc).map(({ id, option }): AvailableAction => ({ id, label: option.label, kind: 'dialogue', ...checkInfo(option.check, p.talk!.actor) }));
     return [...opts, { id: LEAVE_TALK, label: msgs.m('dialogue.end'), kind: 'dialogue' }];
   }
   const open = (a: Action, id: string) => evalCondition(a.if, cc) && !(a.once && p.done.includes(`${s.id}/${id}`));
   const out: AvailableAction[] = [];
-  for (const a of s.actions) if (open(a, a.id)) out.push({ id: a.id, label: a.label, kind: 'action', ...(a.check && { check: checkLabel(a.check, msgs) }) });
+  for (const a of s.actions) if (open(a, a.id)) out.push({ id: a.id, label: a.label, kind: 'action', ...checkInfo(a.check) });
   for (const poi of s.pois) {
     if (!evalCondition(poi.if, cc)) continue;
     for (const a of poi.actions) {
       const id = `${poi.id}.${a.id}`;
-      if (open(a, id)) out.push({ id, label: a.label, kind: 'poi', ...(a.check && { check: checkLabel(a.check, msgs) }) });
+      if (open(a, id)) out.push({ id, label: a.label, kind: 'poi', ...checkInfo(a.check) });
     }
   }
-  for (const t of conversationOffers(ctx.adventure, npcsHere(ctx), cc, p.done)) out.push({ id: t.id, label: t.label, kind: 'talk' });
-  for (const e of s.exits) if (evalCondition(e.if, cc)) out.push({ id: `exit.${e.id}`, label: e.label, kind: 'exit', ...(e.check && { check: checkLabel(e.check, msgs) }) });
+  const talkers = heroes.map((h) => ({ id: h.id, name: h.name }));
+  for (const t of conversationOffers(ctx.adventure, npcsHere(ctx), cc, p.done)) out.push({ id: t.id, label: t.label, kind: 'talk', ...(talkers.length > 1 && { actors: talkers }) });
+  for (const e of s.exits) if (evalCondition(e.if, cc)) out.push({ id: `exit.${e.id}`, label: e.label, kind: 'exit', ...checkInfo(e.check) });
   return out;
+}
+
+/** Player-made heroes who can act in the story now: the hero first, then conscious extra heroes (C002). */
+function actorHeroes(state: GameState): Character[] {
+  return [state.hero, ...extraHeroes(state).filter((h) => !h.dead && h.hp > 0)];
+}
+
+/** The heroes who may make a (non-group) check with their total modifiers; `first` (an id) is moved to the front. */
+function checkActors(heroes: readonly Character[], c: Check, first?: string): CheckActor[] {
+  const list = heroes.map((h) => ({ id: h.id, name: h.name, bonus: checkBonus(h, c) }));
+  const i = first ? list.findIndex((a) => a.id === first) : -1;
+  return i > 0 ? [list[i]!, ...list.slice(0, i), ...list.slice(i + 1)] : list;
+}
+
+/** Total modifier of a check for one character (no advantage; exhaustion included). */
+export function checkBonus(who: Character, c: Check): number {
+  const mods = c.save ? saveModifiers(who, c.save) : checkModifiers(who, c.ability ?? (c.skill ? SKILL_ABILITY[c.skill] : 'str'), c.skill);
+  return mods.reduce((sum, m) => sum + m.value, 0) - 2 * who.exhaustion;
+}
+
+/** The character an `actor` id names, if they may act now; throws for anyone else. */
+function actorFor(ctx: RunContext, actor: string | undefined): Character | undefined {
+  if (actor === undefined) return undefined;
+  const who = actorHeroes(ctx.state).find((h) => h.id === actor);
+  if (!who) throw new AdventureError((ctx.msgs ?? ENGLISH_MESSAGES).m('story.badActor'));
+  return who;
 }
 
 /** Whether one action id is offered now (same rules as availableActions, without building the list). */
@@ -274,21 +324,22 @@ function isAvailable(ctx: RunContext, actionId: string): boolean {
 }
 
 /** Performs one available action. Throws AdventureError for unknown or unavailable ids. */
-export function perform(ctx: RunContext, actionId: string): StepResult {
+export function perform(ctx: RunContext, actionId: string, opts: PerformOptions = {}): StepResult {
   const p = getProgress(ctx.state);
   if (!p) throw new AdventureError('No adventure is running');
   if (!isAvailable(ctx, actionId)) throw new AdventureError(`"${actionId}" is not possible here`);
+  const actor = actorFor(ctx, opts.actor);
   const s = currentScene(ctx);
   const result = emptyResult();
   if (actionId.startsWith(TALK_PREFIX) || actionId.startsWith(DIALOGUE_PREFIX)) {
-    converse(ctx, p, actionId, result);
+    converse(ctx, p, actionId, result, actor);
     return result;
   }
 
   if (actionId.startsWith('exit.')) {
     const exit = s.exits.find((e) => `exit.${e.id}` === actionId)!;
     if (exit.check) {
-      const r = resolveCheck(ctx, exit.check);
+      const r = resolveCheck(ctx, exit.check, actor);
       result.rolls.push(...r.rolls);
       if (!r.success) {
         applyOutcome(ctx, exit.check.failure, result);
@@ -308,7 +359,7 @@ export function perform(ctx: RunContext, actionId: string): StepResult {
   if (action.once) p.done.push(`${s.id}/${actionId}`);
   ctx.state.time += TIME_COSTS.explore_action;
   if (action.check) {
-    const r = resolveCheck(ctx, action.check);
+    const r = resolveCheck(ctx, action.check, actor);
     result.rolls.push(...r.rolls);
     applyOutcome(ctx, r.success ? action.check.success : action.check.failure, result);
   }
@@ -321,8 +372,9 @@ export function perform(ctx: RunContext, actionId: string): StepResult {
  * Conversation steps: `talk.<npc>.<conv>` opens a talk at its start node; `dlg.<node>.<option>`
  * resolves the option (check, outcome) and moves to its next node; `dlg.bye` or an option without
  * `next` ends it. A step that moves the story on (scene change, fight, ending) also ends it.
+ * The hero who opens a talk (`actor`) keeps it: option checks are theirs unless a reply names another.
  */
-function converse(ctx: RunContext, p: AdventureProgress, actionId: string, result: StepResult): void {
+function converse(ctx: RunContext, p: AdventureProgress, actionId: string, result: StepResult, actor?: Character): void {
   const say = () => {
     const at = p.talk && talkNode(ctx.adventure, p.talk);
     if (!at) return void delete p.talk;
@@ -338,7 +390,7 @@ function converse(ctx: RunContext, p: AdventureProgress, actionId: string, resul
   if (start) {
     if (start.conv.once) p.done.push(talkDoneKey(start.npc.id, start.conv.id));
     ctx.state.time += TIME_COSTS.explore_action;
-    p.talk = { npc: start.npc.id, conversation: start.conv.id, node: start.conv.start, chosen: [] };
+    p.talk = { npc: start.npc.id, conversation: start.conv.id, node: start.conv.start, chosen: [], ...(actor && actor !== ctx.state.hero && { actor: actor.id }) };
     say();
     fireBeats(ctx, result);
     return;
@@ -350,7 +402,9 @@ function converse(ctx: RunContext, p: AdventureProgress, actionId: string, resul
   ctx.state.time += TIME_COSTS.quick_action;
   let next = option.next;
   if (option.check) {
-    const r = resolveCheck(ctx, option.check);
+    // The opener rolls unless another hero is named (one who has since dropped falls back to the hero).
+    const opener = talk.actor ? actorHeroes(ctx.state).find((h) => h.id === talk.actor) : undefined;
+    const r = resolveCheck(ctx, option.check, actor ?? opener);
     result.rolls.push(...r.rolls);
     applyOutcome(ctx, r.success ? option.check.success : option.check.failure, result);
     if (!r.success && option.nextOnFail) next = option.nextOnFail;
@@ -428,10 +482,11 @@ function cap(s: string): string {
 }
 
 /**
- * Rolls an authored check for the hero, or for the hero and every conscious companion when it is a
- * group check (SRD: the group succeeds if at least half its members succeed).
+ * Rolls an authored check for the hero (or the `actor` hero), or for the hero and every conscious
+ * companion when it is a group check (SRD: the group succeeds if at least half its members succeed;
+ * the actor plays no part there).
  */
-function resolveCheck(ctx: RunContext, c: Check): { success: boolean; rolls: D20TestResult[] } {
+function resolveCheck(ctx: RunContext, c: Check, actor?: Character): { success: boolean; rolls: D20TestResult[] } {
   const cc = conditionContext(ctx.state, getProgress(ctx.state), flagsFor(ctx));
   const advantage = c.advantageIf.filter((x) => evalCondition(x.if, cc)).map((x) => x.source);
   const disadvantage = c.disadvantageIf.filter((x) => evalCondition(x.if, cc)).map((x) => x.source);
@@ -443,8 +498,9 @@ function resolveCheck(ctx: RunContext, c: Check): { success: boolean; rolls: D20
   };
   const hero = ctx.state.hero;
   if (!c.group) {
-    const r = one(hero);
-    return { success: !!r.success, rolls: [r] };
+    const who = actor ?? hero;
+    const r = one(who);
+    return { success: !!r.success, rolls: [who === hero ? r : { ...r, label: `${who.name}: ${r.label}`, text: `${who.name}: ${r.text}` }] };
   }
   const members = [hero, ...ctx.state.companions.filter((m) => !m.dead && m.hp > 0)];
   const rolls = members.map((m) => {

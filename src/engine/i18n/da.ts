@@ -40,6 +40,7 @@ export const da: Partial<Record<EngineKey, string>> = {
   'story.fightStillOn': 'Kampen er stadig i gang!',
   'story.youAreIn': 'Du er i {name}. {summary}',
   'story.cantAfford': 'Det har du ikke råd til ({coins} kræves).',
+  'story.badActor': 'Den figur kan ikke forsøge det nu.',
   'story.scar': '{name} vil bære et ar: {scar}.',
   'story.exhaustion': 'Udmattelse {n}.',
   'story.damage': '{name} tager {amount} skade ({type}).',

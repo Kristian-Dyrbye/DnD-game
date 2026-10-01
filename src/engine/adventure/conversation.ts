@@ -14,6 +14,8 @@ export interface TalkProgress {
   node: string;
   /** Option ids (`dlg.…`) of once-per-talk options already picked. */
   chosen: string[];
+  /** Character id of the extra hero who opened the talk (C004); absent = the hero. */
+  actor?: string;
 }
 
 /** What the client's dialogue panel shows. */

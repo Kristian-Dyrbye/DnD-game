@@ -122,7 +122,7 @@ export function createGameHost(opts: GameHostOptions): GameHost {
   const actions: ActionPort | undefined = defaultAdventure
     ? {
         say: (s, text) => portFor(s.language).say(s, text),
-        choose: (s, id) => portFor(s.language).choose(s, id),
+        choose: (s, id, actor) => portFor(s.language).choose(s, id, actor),
         begin: (s) => portFor(s.language).begin?.(s) ?? Promise.resolve(),
         refresh: (s) => portFor(s.language).refresh?.(s) ?? Promise.resolve(),
         travel: (s, to, pace) => portFor(s.language).travel?.(s, to, pace) ?? Promise.resolve(),

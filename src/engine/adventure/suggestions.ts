@@ -20,7 +20,8 @@ export interface SuggestionIdea {
 export const MAX_SUGGESTIONS = 7;
 const MAX_LABEL = 60;
 
-const button = (a: AvailableAction): SuggestedAction => ({ id: a.id, label: a.check ? `${a.label} (${a.check})` : a.label });
+/** The button for an offered action (check label appended; actor choices passed on for the chooser). */
+export const button = (a: AvailableAction): SuggestedAction => ({ id: a.id, label: a.check ? `${a.label} (${a.check})` : a.label, ...(a.actors && { actors: a.actors }) });
 
 /** Offered actions first (non-exits, then exits), padded with "Look around" when there are fewer than 3. */
 export function dataSuggestions(offered: AvailableAction[], msgs: Messages = ENGLISH_MESSAGES): SuggestedAction[] {
