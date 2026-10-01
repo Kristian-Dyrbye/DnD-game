@@ -36,6 +36,21 @@ There is also a **web edition** that runs entirely in your browser: no install, 
 - **Hosted**: the workflow `.github/workflows/pages.yml` builds and publishes it to GitHub Pages on every push to `master` (or by hand from the Actions tab). It fetches the CC0 models and audio, runs the type check and tests, builds, and checks the site stays under the 1 GB Pages limit. One-time setup: in the repository's **Settings → Pages**, set **Source** to **GitHub Actions**. The game is then at `https://<user>.github.io/<repo>/`.
 - **Locally**: `npm run build:web` (writes `dist-web/`, about 100 MB with models and audio), then `npm run preview:web`, or put `dist-web/` on any static web host. `npm run site:size` prints the site size. Asset URLs are relative, so any folder works; set `WEB_BASE=/<repo>/` only if your host needs an absolute base.
 
+## Play with a friend
+
+The Windows edition can seat friends on the same network (home Wi-Fi or cable) at your table. The game still runs on your PC; your friends only need a browser (a phone works too).
+
+1. In the game, open **Table** in the menu bar and tick **Allow a friend on this network to join**. Then close the game window and run `Start Game.bat` again: the game only opens to the network when it starts with this setting on. (If Windows Firewall asks, allow Node.js on *private* networks.)
+2. Open **Table** again. It shows a **join code**, a link like `http://192.168.1.20:3210/?join=ABC234` and a QR code of that link. Your friend opens the link (or scans the QR code with a phone camera). The console window prints the same link.
+3. Your friend types a name and joins as a **Player** (builds their own hero in the creator, who joins your party) or a **Spectator** (watches and suggests).
+4. **Who decides** (Table panel): *Only me (others suggest)* is the default: your friend's buttons and typed text arrive on your screen as highlighted "Kim suggests: …" buttons that you can take (click) or dismiss (✕). *Anyone* lets every player choose for the party.
+5. **Checks**: with two heroes, buttons that roll a check get a hero chooser (the best bonus is picked for you). **Fights**: each player plays their own hero's turns; the other screen shows "Waiting for Kim's player". If a friend's connection drops, the companion AI plays their hero until they are back (reloading the page takes the same seat again).
+6. In the Table panel you can also lend one of your companions to a friend, release a seat, or close the door again. A friend leaves with **Menu → Leave the table**; their hero then fights on as an AI companion.
+
+Saves, settings, voice and the AI stay with the host. **Duo mode**: no friend at hand? Click **+ Add a hero** in the party panel to play two heroes yourself.
+
+The web edition (GitHub Pages) has no co-op yet.
+
 ## How to play
 
 - **Story**: read the narration, then click a suggested action or type what you want to do in your own words ("I ask the Reeve about the missing children", "I climb the wall"). The game decides what's possible and rolls the dice; the roll and its math appear in the dice tray.
@@ -71,6 +86,8 @@ npm run build:web    # web edition (no server, no AI) in dist-web/
 ```
 
 Test shortcuts in the browser: `#creator`, `#quickbuild-<class>`, `#play-<class>` (start at once), `#play-<class>+map`, `#play-<class>+scars`, `#combat-<class>` (combat sandbox), `#load` (save browser).
+
+Co-op check with two headless Edge pages (host + guest, mock AI, temp saves): `npm run build`, then `npx tsx scripts/coop-screens.ts`. It joins a guest, adds their hero, sends a suggestion the host takes, and writes screenshots to `userdata/shots/coop-*.png`. Things it can't do (scan the QR code with a real phone, a second PC on the network) are in the manual checklist in [COOP_PLAN.md](COOP_PLAN.md) §9.
 
 - **Architecture**: see [ARCHITECTURE.md](ARCHITECTURE.md). The rules engine (`src/engine`) is pure TypeScript shared by server and client; the server owns the game session; the client only renders.
 - **Writing adventures**: see [ADVENTURE_FORMAT.md](ADVENTURE_FORMAT.md). Adventures are JSON files in `data/adventures/`, validated at load time. Campaigns are listed in `src/host/campaigns.ts` (see "Campaigns" in the format guide); the campaign bibles are `data/adventures/DESIGN.md` and `DESIGN_ARC2.md`.

@@ -86,3 +86,27 @@ Rough size: 8 assignments for B, 1–2 more for C.
 1. **Host decides story, guest proposes** (default) versus **anyone acts**: ship both as a table setting, default to host-decides?
 2. **Second hero in solo saves**: should a host be able to add a second hero and play both alone (a "duo" mode)? It falls out of C002 for free and makes a party of two without companions possible.
 3. **Web edition co-op**: worth a third-party signalling broker, or wait for a self-hosted relay?
+
+(Decided 2026-10-01: both policies as a table setting with host-decides the default; duo mode yes; PeerJS broker for the web edition, C009.)
+
+## 9. Two-browser checklist (C008)
+
+Automated part: `npm run build`, then `npx tsx scripts/coop-screens.ts` (two isolated headless Edge pages + a phone-sized page against a real server on 127.0.0.1:4211 with the mock AI; screenshots in `userdata/shots/coop-*.png`; exits 1 on a failed step or a page error). Run 2026-10-01: every step ok, 0 page errors. It found one bug, fixed in C008: a guest page sent the host-only `thumbnail` command, so both pages showed "Only the host can do that".
+
+| # | Step | How | Result 2026-10-01 |
+|---|------|-----|-------------------|
+| 1 | Host opens Table: allow-join on, code, link, QR | script (coop-02) | ok |
+| 2 | Guest opens `?join=CODE`: join screen (name, player/spectator) | script (coop-03; phone size coop-12) | ok |
+| 3 | Guest joins as player → creator in add-hero mode → Quick Build → Review "Add to the party" | script (coop-04, -05) | ok |
+| 4 | Both screens list the guest's hero (Hero tag); log "Kim sits down at the table", "<hero> joins the party as a hero" | script (coop-06, -07) | ok |
+| 5 | No error banner on either page after joining | script | ok (after the thumbnail fix) |
+| 6 | Guest buttons read "Suggest: …"; a click reaches the host as "Kim suggests: …" | script (coop-06, -08) | ok |
+| 7 | Host clicks the proposal: the action runs, both pages see the roll + result | script (coop-09, -10) | ok |
+| 8 | Table panel lists the guest seat (player, Release seat) | script (coop-11) | ok |
+| 9 | Scan the QR code with a real phone camera; the phone opens the join page | owner, by hand | not run (no phone in an unattended session; the encoder is checked by an independent decoder in src/client/qr.test.ts) |
+| 10 | A second PC/phone on the same Wi-Fi joins over the LAN address (Start Game.bat with allow-join on; firewall prompt) | owner, by hand | not run (listening on 0.0.0.0 would raise a firewall prompt unattended) |
+| 11 | A fight with both heroes: each page acts only on its own hero's turn; "Waiting for Kim's player" | owner, by hand | covered by src/server/coopFight.test.ts, not clicked |
+| 12 | Guest reloads the page: same seat again; guest closes the tab mid-fight: AI plays their hero | owner, by hand | covered by tests (coopJoin/combatSeats), not clicked |
+| 13 | Spectator joins: suggest only, no level-up/toggles | owner, by hand | covered by coopView.test.ts |
+
+Seen in the run, queued as C008b: the guest's hero view (right column) shows the host's hero, not the guest's own (the Character screen probably too; not checked); refused commands' error events go to every page, not just the sender's.

@@ -202,7 +202,7 @@ export function GameScreen() {
       {shopId && <ShopPanel shopId={shopId} onClose={() => setShopId(null)} />}
       <aside class="game-side">
         {dungeon.value && h && <DungeonPanel view={dungeon.value} hero={h} />}
-        <div class="hero-view">{h && <CharacterPreview appearance={h.appearance} size={h.size} height={240} look={equipmentLook(h, db)} wounds={woundLevel(h.hp, h.maxHp)} seed={h.id} scars={h.scars.map((s) => s.location)} wear={armorWear(h)} onSnapshot={(data) => send({ type: 'thumbnail', data })} />}</div>
+        <div class="hero-view">{h && <CharacterPreview appearance={h.appearance} size={h.size} height={240} look={equipmentLook(h, db)} wounds={woundLevel(h.hp, h.maxHp)} seed={h.id} scars={h.scars.map((s) => s.location)} wear={armorWear(h)} onSnapshot={guest ? undefined : (data) => send({ type: 'thumbnail', data })} />}</div>
         <DiceTray />
       </aside>
     </div>
