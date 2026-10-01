@@ -1,6 +1,6 @@
 # Co-op Plan: playing with a friend
 
-> Status: **proposal** (2026-10-01). Nothing here is built. This document weighs the ways a second player could join and proposes the one to build first, with the engine changes and a queue the build loop can execute.
+> Status: **approved and queued** (owner, 2026-10-01) as Phase 18 (C001–C009 in brain.md), after the arc. Decisions (§8): host decides + guest proposes is the default table setting; duo mode allowed; web co-op uses the public PeerJS broker. Nothing is built yet. This document weighs the ways a second player could join and proposes the one to build first, with the engine changes and a queue the build loop can execute.
 
 ## 1. What exists today
 
