@@ -14,6 +14,7 @@ import type { Language } from '../../shared/i18nCore';
 import { messages, type Messages } from '../i18n';
 import { MINUTES_PER_DAY } from '../world/clock';
 import { deletePage, reorderPages, savePage } from './journal';
+import { allows, HOST_SEAT, seatOf, soloTable, type SeatId, type Table } from './table';
 import { GameStateSchema, LOG_LIMIT, ROLL_LIMIT, type GameState, type LogEntry, type RollRecord } from './gameState';
 
 /** Metadata the session provides for a save; the store adds slot id, kind and timestamp. */
@@ -144,6 +145,8 @@ export class GameSession {
   private listeners = new Set<(e: ServerEvent) => void>();
   /** Language of the lines the engine writes from now on (the player's setting; old lines stay as written). */
   language: Language = 'en';
+  /** Who sits at the game and what they may send (co-op, C001). Session memory only, never saved. */
+  table: Table = soloTable();
 
   constructor(private readonly ports: SessionPorts = {}) {}
 
@@ -250,9 +253,15 @@ export class GameSession {
     return meta;
   }
 
-  /** Handles one validated command. Errors become `error` events; this never throws. */
-  async handle(cmd: ClientCommand): Promise<void> {
+  /**
+   * Handles one validated command sent from `seat` (default the host: solo play). The table policy
+   * decides first; refusals and errors become `error` events; this never throws.
+   */
+  async handle(cmd: ClientCommand, seat: SeatId = HOST_SEAT): Promise<void> {
     const reqId = cmd.reqId;
+    const verdict = allows(this.table, cmd, seat, this.state ?? undefined);
+    if (!verdict.ok) return this.fail(this.msgs.m(verdict.key), reqId);
+    if (cmd.type === 'companion_control' && cmd.control.startsWith('seat:') && !seatOf(this.table, cmd.control.slice(5))) return this.fail(this.msgs.m('table.noSeat'), reqId);
     try {
       switch (cmd.type) {
         case 'ping':

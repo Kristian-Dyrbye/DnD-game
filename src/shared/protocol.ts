@@ -72,7 +72,7 @@ export const ClientCommandSchema = z.discriminatedUnion('type', [
     skills: z.array(z.string().max(40)).max(4).optional(),
   }),
   /** Toggle a companion between AI and player control (outside combat). */
-  z.object({ ...base, type: z.literal('companion_control'), companionId: z.string().max(40), control: z.enum(['ai', 'player']) }),
+  z.object({ ...base, type: z.literal('companion_control'), companionId: z.string().max(40), control: z.union([z.enum(['ai', 'player']), z.custom<`seat:${string}`>((v) => typeof v === 'string' && /^seat:(host|guest-[1-9][0-9]?)$/.test(v))]) }),
   /** Combat: one hero action on the battle map, or fleeing the fight. */
   z.object({ ...base, type: z.literal('combat_act'), action: PlayerActionSchema }),
   z.object({ ...base, type: z.literal('combat_flee') }),

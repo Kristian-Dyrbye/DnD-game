@@ -5,6 +5,7 @@
  * keyword intents, data buttons). Commands run one at a time, in order, like on the server.
  */
 import { GameSession, type ActionPort, type SavePort, type SessionPorts } from '../engine/session/GameSession';
+import { HOST_SEAT, type SeatId } from '../engine/session/table';
 import { adventureActionPort, type AdventureActionPort, type AdventurePortOptions } from '../engine/adventure/sessionActions';
 import type { ContentTranslations } from '../shared/contentI18n';
 import { contentByLanguage, type LocalizedContent } from './translations';
@@ -79,10 +80,10 @@ export interface GameHost {
   defaultAdventure: string | undefined;
   /** Campaigns whose first chapter is loaded (what `new_game.campaign` may name). */
   campaigns: readonly Campaign[];
-  /** Queues a command; resolves once it (and everything queued before it) has run. */
-  send(cmd: ClientCommand): Promise<void>;
-  /** Parses a raw protocol message and queues it; returns an error event for the sender if it is invalid. */
-  receive(raw: string): ServerEvent | undefined;
+  /** Queues a command from `seat` (default the host); resolves once it (and everything queued before it) has run. */
+  send(cmd: ClientCommand, seat?: SeatId): Promise<void>;
+  /** Parses a raw protocol message from `seat` and queues it; returns an error event for the sender if it is invalid. */
+  receive(raw: string, seat?: SeatId): ServerEvent | undefined;
   /** Subscribes to session events; returns the unsubscribe function. */
   on(listener: (e: ServerEvent) => void): () => void;
   /** Waits for queued commands and background suggestion/summary work (tests). */
@@ -136,7 +137,7 @@ export function createGameHost(opts: GameHostOptions): GameHost {
   });
   const campaigns = CAMPAIGNS.filter((c) => adventures.has(c.adventure));
   let queue: Promise<void> = Promise.resolve();
-  const run = async (cmd: ClientCommand): Promise<void> => {
+  const run = async (cmd: ClientCommand, seat: SeatId): Promise<void> => {
     // A campaign names an installed first chapter; otherwise the game would start and then fail to find it.
     if (cmd.type === 'new_game' && cmd.campaign !== undefined && !adventures.has(cmd.campaign)) {
       session.emit({ type: 'error', message: session.msgs.m('session.noCampaign', { id: cmd.campaign }), ...(cmd.reqId && { reqId: cmd.reqId }) });
@@ -147,18 +148,18 @@ export function createGameHost(opts: GameHostOptions): GameHost {
       session.emit({ type: 'error', message: session.msgs.m('session.noWorldImport'), ...(cmd.reqId && { reqId: cmd.reqId }) });
       return;
     }
-    await session.handle(cmd);
+    await session.handle(cmd, seat);
   };
-  const send = (cmd: ClientCommand): Promise<void> => (queue = queue.then(() => run(cmd)));
+  const send = (cmd: ClientCommand, seat: SeatId = HOST_SEAT): Promise<void> => (queue = queue.then(() => run(cmd, seat)));
   return {
     session,
     defaultAdventure,
     campaigns,
     send,
-    receive(raw) {
+    receive(raw, seat) {
       const parsed = parseCommand(raw);
       if (!parsed.ok) return { type: 'error', message: parsed.error, ...(parsed.reqId && { reqId: parsed.reqId }) };
-      void send(parsed.command);
+      void send(parsed.command, seat);
       return undefined;
     },
     on: (listener) => session.on(listener),

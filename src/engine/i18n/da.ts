@@ -19,6 +19,13 @@ export const da: Partial<Record<EngineKey, string>> = {
   'session.noEngine': 'Historiemotoren er ikke tilsluttet endnu.',
   'session.noAction': 'Handlingen "{id}" findes ikke endnu.',
 
+  // Bordet (co-op)
+  'table.noSeat': 'Du har ikke en plads ved bordet',
+  'table.hostOnly': 'Kun værten kan gøre det',
+  'table.spectator': 'Tilskuere kan kun se med',
+  'table.proposeOnly': 'Værten bestemmer historien: foreslå det i stedet',
+  'table.notYourTurn': 'Det er ikke din figurs tur',
+
   // Historien
   'story.received': 'Modtaget: {list}',
   'story.item': '{qty}× {item}',
@@ -73,6 +80,7 @@ export const da: Partial<Record<EngineKey, string>> = {
   'companion.dead': '{name} er død.',
   'companion.controlPlayer': 'Du styrer nu {name} i kamp.',
   'companion.controlAi': 'AI’en styrer nu {name} i kamp.',
+  'companion.controlSeat': '{name} spilles nu af {seat}.',
   'companion.controlOutsideCombat': 'Skift styring uden for kamp.',
   'companion.notInParty': 'Den følgesvend er ikke i din gruppe.',
   'companion.already': '{name} er allerede med dig.',

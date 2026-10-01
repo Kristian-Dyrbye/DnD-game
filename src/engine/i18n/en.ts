@@ -20,6 +20,13 @@ export const en = {
   'session.noEngine': 'The story engine is not connected yet.',
   'session.noAction': 'Action "{id}" is not available yet.',
 
+  // Table (co-op)
+  'table.noSeat': 'You have no seat at this table',
+  'table.hostOnly': 'Only the host can do that',
+  'table.spectator': 'Spectators can only watch',
+  'table.proposeOnly': 'The host decides the story: propose it to them instead',
+  'table.notYourTurn': 'It is not your character’s turn',
+
   // Story results
   'story.received': 'Received: {list}',
   'story.item': '{qty}× {item}',
@@ -74,6 +81,7 @@ export const en = {
   'companion.dead': '{name} is dead.',
   'companion.controlPlayer': '{name} is now controlled by you in combat.',
   'companion.controlAi': '{name} is now controlled by the AI in combat.',
+  'companion.controlSeat': '{name} is now played by {seat}.',
   'companion.controlOutsideCombat': 'Change control outside of combat.',
   'companion.notInParty': 'That companion is not in your party.',
   'companion.already': '{name} is already with you.',

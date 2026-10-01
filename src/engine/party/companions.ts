@@ -234,12 +234,18 @@ export function changeApproval(state: GameState, def: CompanionDef, delta: numbe
 
 // ---------------------------------------------------------------- control toggle (A087)
 
-export type Control = 'ai' | 'player';
+/** 'player' = the host plays it; `seat:<id>` = a co-op seat plays it (C001, see session/table.ts). */
+export type Control = 'ai' | 'player' | `seat:${string}`;
 
-/** Companions the player controls in combat (default: AI). Stored in extensions.party.control. */
-export function playerControlled(state: GameState): string[] {
+/**
+ * Companions people control in combat (default: AI). Stored in extensions.party.control.
+ * With a seat: only that seat's ('player' counts as the host's); without: every human-controlled one.
+ */
+export function playerControlled(state: GameState, seat?: string): string[] {
   const control = (state.extensions.party as { control?: Record<string, Control> } | undefined)?.control ?? {};
-  return state.companions.filter((c) => control[c.id] === 'player').map((c) => c.id);
+  const mine = (c: Control | undefined): boolean =>
+    c !== undefined && c !== 'ai' && (seat === undefined || c === `seat:${seat}` || (c === 'player' && seat === 'host'));
+  return state.companions.filter((c) => mine(control[c.id])).map((c) => c.id);
 }
 
 export function setControl(state: GameState, companionId: string, control: Control, msgs: Messages = ENGLISH_MESSAGES): void {

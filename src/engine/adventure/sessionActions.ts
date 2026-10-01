@@ -381,7 +381,8 @@ export function adventureActionPort(adventures: ReadonlyMap<string, Adventure>, 
         if (activeFight(session.current)) throw new Error(m('companion.controlOutsideCombat'));
         setControl(session.current, cmd.companionId, cmd.control, session.msgs);
         const c = session.current.companions.find((x) => x.id === cmd.companionId)!;
-        session.addLog('system', m(cmd.control === 'player' ? 'companion.controlPlayer' : 'companion.controlAi', { name: c.name }));
+        if (cmd.control.startsWith('seat:')) session.addLog('system', m('companion.controlSeat', { name: c.name, seat: cmd.control.slice(5) }));
+        else session.addLog('system', m(cmd.control === 'player' ? 'companion.controlPlayer' : 'companion.controlAi', { name: c.name }));
         return;
       }
       if (cmd.type === 'level_up') {
